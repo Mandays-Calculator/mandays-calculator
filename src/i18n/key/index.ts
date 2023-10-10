@@ -1,5 +1,7 @@
 const LocalizationKey = {
-  loginManagement: "login.management",
+  login: {
+    management: "login.management",
+  },
 };
 
 export default LocalizationKey;
