@@ -1,9 +1,10 @@
-import type { ReactElement } from 'react'
+import type { ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 
 const ODCManagement = (): ReactElement => {
-  return (
-    <div>ODC Management</div>
-  )
-}
+  const { t } = useTranslation();
 
-export default ODCManagement
+  return <div>{t("odc.management")}</div>;
+};
+
+export default ODCManagement;
