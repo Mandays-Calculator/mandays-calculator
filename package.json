@@ -25,6 +25,7 @@
     "formik": "^2.4.5",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-http-backend": "^2.2.2",
     "keycloak-js": "^22.0.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",

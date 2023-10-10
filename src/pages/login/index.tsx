@@ -1,9 +1,10 @@
-import type { ReactElement } from 'react'
+import type { ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 
 const Login = (): ReactElement => {
-  return (
-    <div>Login</div>
-  )
-}
+  const { t } = useTranslation();
 
-export default Login
+  return <div>{t("login.management")}</div>;
+};
+
+export default Login;

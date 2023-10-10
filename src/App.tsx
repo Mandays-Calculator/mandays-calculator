@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from '~/pages/login';
+import Login from "~/pages/login";
 import ODCManagement from "./pages/odc-management";
 import UserManagement from "./pages/user-management";
 import ProjectManagement from "./pages/project-management";
