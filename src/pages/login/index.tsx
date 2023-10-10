@@ -13,15 +13,15 @@ const Login = (): ReactElement => {
   const loginState: LoginState = useSelector((state: RootState) => state.login);
   const { t } = useTranslation();
 
-  console.log(loginState);
-
   const onLogin = (): void => {
     dispatch(loginUser());
   };
 
   return (
     <div>
-      <h1>{`${t(login.management)}  ${loginState.isLoggedIn}`}</h1>
+      <h1>{`${t(login.management)} Page`}</h1>
+      <h2>User is logged in: {loginState.isLoggedIn ? "Yes" : "No"}</h2>
+      <h2>API status: {loginState.loading ? "Loading" : "Not loading"} </h2>
       <button onClick={onLogin}>Test dispatch login</button>
     </div>
   );
