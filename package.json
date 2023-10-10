@@ -12,7 +12,9 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.12",
     "@react-keycloak/web": "^3.4.0",
+    "@reduxjs/toolkit": "^1.9.7",
     "@types/axios": "^0.14.0",
     "@types/lodash": "^4.14.199",
     "@types/moment": "^2.13.0",
