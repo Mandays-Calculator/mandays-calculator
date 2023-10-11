@@ -1,0 +1,17 @@
+{
+  "common": {
+    "user": "",
+    "submit": "",
+    "confirm": "",
+    "dashboard": ""
+  },
+  "login": {
+    "management": ""
+  },
+  "odc": {
+    "management": ""
+  },
+  "project": {
+    "management": ""
+  }
+}

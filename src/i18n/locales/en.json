@@ -1,0 +1,20 @@
+{
+  "common": {
+    "user": "User",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "dashboard": "Dashboard"
+  },
+  "login": {
+    "management": "Login Management"
+  },
+  "odc": {
+    "management": "ODC Management"
+  },
+  "project": {
+    "management": "Project Management"
+  },
+  "footer": {
+    "label": "© 2023 Lenovo PCCW Solutions Philippines Inc. All rights reserved."
+  }
+}
