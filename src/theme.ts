@@ -10,6 +10,7 @@ const theme = createTheme({
     },
     secondary: {
       main: "#D54147",
+      light: "#EAF3F4",
     },
     background: {
       default: "#FEFEFE",
@@ -26,7 +27,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: "Montserrat, sans-serif",
     h1: {
       fontSize: "2rem",
       fontWeight: 600,
