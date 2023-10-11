@@ -1,7 +1,8 @@
 import type { ReactElement } from "react";
+import Title from "~/components/title/Title";
 
 const ProjectManagement = (): ReactElement => {
-  return <div>Project Management</div>;
+  return <Title title="Project Management" />;
 };
 
 export default ProjectManagement;
