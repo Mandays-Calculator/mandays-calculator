@@ -1,21 +1,28 @@
 import type { ReactElement } from "react";
 import type { RouteType } from "~/routes";
-import { useNavigate } from "react-router-dom";
 
-import Drawer from "@mui/material/Drawer";
-import { List } from "@mui/material";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
+import { Divider, Box, IconButton } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import { useTranslation } from "react-i18next";
 import { routesConfig } from "~/routes";
 import {
-  StyledDrawerContent,
+  StyledDrawer,
+  DrawerHeader,
   StyledItemText,
-  StyledListItem,
   StyledListItemIcon,
+  StyledListItem,
+  StyledList,
 } from ".";
 
-const Sidebar = (): ReactElement => {
+const Drawer = (): ReactElement => {
+  const [open, setOpen] = useState<boolean>(true);
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -23,34 +30,42 @@ const Sidebar = (): ReactElement => {
     navigate(`${routeItem.path}`);
   };
 
+  const isActivePath = (path: string): boolean => {
+    return location.pathname.includes(path);
+  };
+
   return (
-    <Drawer
-      variant="permanent"
-      anchor="left"
-      open={false}
-      sx={{
-        flex: 1,
-        maxWidth: 390,
-      }}
-    >
-      <StyledDrawerContent>
-        <List>
+    <Box sx={{ display: "flex" }}>
+      <StyledDrawer variant="permanent" open={open}>
+        <DrawerHeader>
+          <IconButton onClick={() => setOpen(!open)}>
+            {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <StyledList isOpen={open}>
           {routesConfig.map((routeItem: RouteType) => {
             if (!routeItem.hideOnSidebar === true) {
               return (
-                <StyledListItem onClick={() => handleNavigate(routeItem)}>
+                <StyledListItem
+                  isActive={isActivePath(routeItem.path || "")}
+                  onClick={() => handleNavigate(routeItem)}
+                  isOpen={open}
+                >
                   <StyledListItemIcon>
-                    <AccountCircleIcon />
+                    <AccountCircleIcon fontSize="large" />
                   </StyledListItemIcon>
-                  <StyledItemText primary={t(routeItem.label || "")} />
+                  {open && (
+                    <StyledItemText primary={t(routeItem.label || "")} />
+                  )}
                 </StyledListItem>
               );
             }
           })}
-        </List>
-      </StyledDrawerContent>
-    </Drawer>
+        </StyledList>
+      </StyledDrawer>
+    </Box>
   );
 };
 
-export default Sidebar;
+export default Drawer;

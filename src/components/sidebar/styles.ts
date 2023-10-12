@@ -1,33 +1,88 @@
-import { ListItem, ListItemText, ListItemIcon } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Drawer,
+  List,
+} from "@mui/material";
+import { CSSObject, Theme, styled } from "@mui/material/styles";
 
-const StyledDrawerContent = styled("div")`
-  padding: 66px 10px;
-  display: flex;
-  flex-direction: column;
-  max-width: 390px;
-`;
+const drawerWidth = 320;
 
-const StyledListItemIcon = styled(ListItemIcon)`
-  min-width: 22px;
-  margin-right: 15px;
-`;
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
 
-const StyledListItem = styled(ListItem)`
-  width: 370px;
-  margin: 10px 0;
-  cursor: pointer;
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
 
-  :hover {
-    & span,
-    div {
-      color: ${({ theme }) => theme.palette.background.default};
-    }
+const StyledDrawer = styled(Drawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  maxWidth: 390,
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
+}));
 
-    border-radius: 10px;
-    background-color: ${({ theme }) => theme.palette.primary.main};
+const StyledListItemIcon = styled(ListItemIcon)``;
+
+const StyledListItem = styled(ListItem)<{ isOpen: boolean; isActive: boolean }>(
+  ({ isOpen, theme, isActive }) =>
+    `
+margin: 10px 0;
+min-height: 48px;
+cursor: pointer;
+
+:hover {
+  & span,
+  div {
+    color: ${theme.palette.background.default};
   }
-`;
+
+  border-radius: ${isOpen ? "10px" : "0"};
+  background-color: ${theme.palette.primary.main};
+}
+
+${
+  isActive &&
+  `& span,
+  div {
+  color: ${theme.palette.background.default};
+  }
+  border-radius: ${isOpen ? "10px" : "0"};
+  background-color: ${theme.palette.primary.main};`
+}`
+);
+
+const StyledList = styled(List, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<{ isOpen: boolean }>(({ isOpen }) => ({
+  padding: isOpen ? "0 10px" : 0,
+}));
 
 const StyledItemText = styled(ListItemText)`
   & span {
@@ -37,9 +92,19 @@ const StyledItemText = styled(ListItemText)`
   }
 `;
 
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  height: 70,
+  alignItems: "center",
+  justifyContent: "flex-end",
+  padding: theme.spacing(1, 1),
+}));
+
 export {
   StyledItemText,
   StyledListItem,
-  StyledDrawerContent,
+  DrawerHeader,
   StyledListItemIcon,
+  StyledDrawer,
+  StyledList,
 };
