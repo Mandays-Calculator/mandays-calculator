@@ -31,28 +31,19 @@ const theme = createTheme({
     h1: {
       fontSize: "2rem",
       fontWeight: 600,
-      color: "#333",
+      color: "#414145",
     },
     h2: {
       fontSize: "1.5rem",
       fontWeight: 500,
-      color: "#555",
+      color: "#414145",
     },
     body1: {
       fontSize: "1rem",
-      color: "#777",
+      color: "#414145",
     },
   },
   spacing: 8,
-  // components: {
-  //   MuiContainer: {
-  //     styleOverrides: {
-  //       root: {
-  //         padding: "0 0 10px 0 !important",
-  //       },
-  //     },
-  //   },
-  // },
 });
 
 export default theme;

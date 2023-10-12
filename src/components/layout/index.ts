@@ -1,2 +1,6 @@
 export { default as Layout } from "./Layout";
-export { StyledLayoutContainer, StyledLayoutContent } from "./styles";
+export {
+  StyledLayoutContainer,
+  StyledLayoutContent,
+  ContentContainer,
+} from "./styles";
