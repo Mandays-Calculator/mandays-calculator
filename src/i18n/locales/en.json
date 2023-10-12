@@ -6,15 +6,34 @@
     "dashboard": "Dashboard"
   },
   "login": {
-    "management": "Login Management"
+    "management": {
+      "label": "Login management"
+    }
   },
   "odc": {
-    "management": "ODC Management"
+    "management": {
+      "label": "ODC Management"
+    }
   },
   "project": {
-    "management": "Project Management"
+    "management": {
+      "label": "Project Management"
+    }
+  },
+  "user": {
+    "management": {
+      "label": "User management"
+    }
+  },
+  "settings:": {
+    "label": "Settings"
+  },
+  "account": {
+    "info": {
+      "label": "Account Information"
+    }
   },
   "footer": {
-    "label": "© 2023 Lenovo PCCW Solutions Philippines Inc. All rights reserved."
+    "label": "Lenovo PCCW Solutions Philippines Inc. All rights reserved."
   }
 }
