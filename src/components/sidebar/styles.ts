@@ -51,20 +51,11 @@ const StyledDrawer = styled(Drawer, {
 const StyledListItemIcon = styled(ListItemIcon)``;
 
 const StyledListItem = styled(ListItem)<{ isOpen: boolean; isActive: boolean }>(
-  ({ isOpen, theme, isActive }) => `
+  ({ isOpen, theme, isActive }) =>
+    `
 margin: 10px 0;
 min-height: 48px;
 cursor: pointer;
-
-${
-  isActive &&
-  `& span,
-    div {
-      color: ${theme.palette.background.default};
-    }
-    border-radius: ${isOpen ? "10px" : "0"};
-    background-color: ${theme.palette.primary.main};`
-}
 
 :hover {
   & span,
@@ -74,6 +65,16 @@ ${
 
   border-radius: ${isOpen ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};
+}
+
+${
+  isActive &&
+  `& span,
+  div {
+  color: ${theme.palette.background.default};
+  }
+  border-radius: ${isOpen ? "10px" : "0"};
+  background-color: ${theme.palette.primary.main};`
 }`
 );
 
