@@ -6,9 +6,11 @@ const StyledLayoutContainer = styled("div")({
 });
 
 const StyledLayoutContent = styled("div")`
-  flex-grow: 1;
-  padding: 32px;
+  flex-grow: 2;
   background-color: ${({ theme }) => theme.palette.secondary.light};
 `;
 
-export { StyledLayoutContainer, StyledLayoutContent };
+const ContentContainer = styled("div")`
+  padding: 32px;
+`;
+export { StyledLayoutContainer, StyledLayoutContent, ContentContainer };

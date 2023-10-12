@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import { SvgIcon } from "~/components";
 import Title from "~/components/title/Title";
+import { PageContainer } from "~/components/page-container";
 
 const ProjectManagement = (): ReactElement => {
   return (
@@ -11,6 +12,9 @@ const ProjectManagement = (): ReactElement => {
         $size={4}
         color="primary"
       />
+      <PageContainer>
+        <p>test</p>
+      </PageContainer>
     </>
   );
 };

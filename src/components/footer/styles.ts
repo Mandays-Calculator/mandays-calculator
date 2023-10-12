@@ -9,7 +9,6 @@ const StyledFooterContainer = styled(Container)`
   padding: 22px 24px;
   margin: 0;
   text-align: center;
-  z-index: 1300;
 `;
 
 const StyledFooterText = styled(Typography)`
