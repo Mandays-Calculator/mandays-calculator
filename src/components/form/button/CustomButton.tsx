@@ -9,7 +9,8 @@ type ColorVariants =
   | "secondary"
   | "error"
   | "warning"
-  | "success";
+  | "success"
+  | "neutral";
 
 interface StyledButtonProps extends ButtonProps {
   colorVariant: ColorVariants;
@@ -25,6 +26,7 @@ const StyledButton = styled(Button)<StyledButtonProps>(
       error: theme.palette.error.main,
       warning: theme.palette.warning.main,
       success: theme.palette.success.main,
+      neutral: "#FFFFFF",
     };
     const contrastTextMap: Record<ColorVariants, string> = {
       primary: theme.palette.primary.contrastText,
@@ -34,6 +36,7 @@ const StyledButton = styled(Button)<StyledButtonProps>(
       error: theme.palette.primary.contrastText,
       warning: theme.palette.primary.contrastText,
       success: theme.palette.primary.contrastText,
+      neutral: "#000000",
     };
 
     return {
