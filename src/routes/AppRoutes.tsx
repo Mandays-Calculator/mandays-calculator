@@ -7,7 +7,11 @@ const AppRoutes = () => {
   return (
     <Routes>
       {routesConfig.map((routeItem: RouteType) => (
-        <Route path={routeItem.path} element={routeItem.element} />
+        <Route
+          path={routeItem.path}
+          element={routeItem.element}
+          key={routeItem.path}
+        />
       ))}
     </Routes>
   );

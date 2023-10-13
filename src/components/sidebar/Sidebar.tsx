@@ -43,14 +43,15 @@ const Drawer = (): ReactElement => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <StyledList isOpen={open}>
-          {routesConfig.map((routeItem: RouteType) => {
+        <StyledList open={open}>
+          {routesConfig.map((routeItem: RouteType, index: number) => {
             if (!routeItem.hideOnSidebar === true) {
               return (
                 <StyledListItem
-                  isActive={isActivePath(routeItem.path || "")}
+                  key={index}
+                  activepath={isActivePath(routeItem.path || "")}
                   onClick={() => handleNavigate(routeItem)}
-                  isOpen={open}
+                  open={open}
                 >
                   <StyledListItemIcon>
                     <AccountCircleIcon fontSize="large" />

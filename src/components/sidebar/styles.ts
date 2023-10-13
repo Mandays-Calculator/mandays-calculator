@@ -50,8 +50,8 @@ const StyledDrawer = styled(Drawer, {
 
 const StyledListItemIcon = styled(ListItemIcon)``;
 
-const StyledListItem = styled(ListItem)<{ isOpen: boolean; isActive: boolean }>(
-  ({ isOpen, theme, isActive }) =>
+const StyledListItem = styled(ListItem)<{ open: boolean; activepath: boolean }>(
+  ({ open, theme, activepath }) =>
     `
 margin: 10px 0;
 min-height: 48px;
@@ -63,25 +63,26 @@ cursor: pointer;
     color: ${theme.palette.background.default};
   }
 
-  border-radius: ${isOpen ? "10px" : "0"};
+  border-radius: ${open ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};
 }
 
 ${
-  isActive &&
-  `& span,
+  activepath
+    ? `& span,
   div {
   color: ${theme.palette.background.default};
   }
-  border-radius: ${isOpen ? "10px" : "0"};
+  border-radius: ${open ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};`
+    : ""
 }`
 );
 
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== "open",
-})<{ isOpen: boolean }>(({ isOpen }) => ({
-  padding: isOpen ? "0 10px" : 0,
+})<{ open: boolean }>(({ open }) => ({
+  padding: open ? "0 10px" : 0,
 }));
 
 const StyledItemText = styled(ListItemText)`
