@@ -8,7 +8,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 import Form from "~/components/form/Form";
-import { Button } from "~/components/form/button";
+import { CustomButton as Button } from "~/components/form/button";
 import PasswordInput from "./components/password-input/PasswordInput";
 import { StyledTitle, StyledLabel } from "./components/auth-container";
 import { changePasswordSchema } from "./schema";

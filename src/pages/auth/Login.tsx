@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { Grid } from "@mui/material";
 
 import Form from "~/components/form/Form";
-import { Button } from "~/components/form/button";
+import { CustomButton as Button } from "~/components/form/button";
 import { ControlledTextField } from "~/components/form/controlled";
 
 // import { loginUser } from "~/redux/reducers/login";

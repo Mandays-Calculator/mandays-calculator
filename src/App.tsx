@@ -3,7 +3,7 @@ import { Auth } from "./pages/auth";
 import AuthenticatedApp from "./AuthenticatedApp";
 
 const App = (): ReactElement => {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   return <>{isAuthenticated ? <AuthenticatedApp /> : <Auth />}</>;
 };
 

@@ -10,6 +10,7 @@ import App from "~/App.tsx";
 import { store } from "~/redux/store";
 import "~/i18n";
 import "react-datepicker/dist/react-datepicker.css";
+import "virtual:svg-icons-register";
 import "./app.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
