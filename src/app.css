@@ -1,0 +1,15 @@
+*,
+div {
+  box-sizing: border-box;
+}
+
+a {
+  color: #2c8ed1;
+  font-family: inherit;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #4699d2;
+}

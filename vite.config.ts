@@ -1,13 +1,13 @@
-import { defineConfig, UserConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-const config: UserConfig = defineConfig({
+const config = defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '~': new URL('./src', import.meta.url).pathname,
+      "~": new URL("./src", import.meta.url).pathname,
     },
   },
-})
+});
 
-export default config
+export default config;
