@@ -57,10 +57,20 @@ margin: 10px 0;
 min-height: 48px;
 cursor: pointer;
 
+div {
+  svg {
+    color: #414145;
+  }
+}
+
 :hover {
   & span,
   div {
     color: ${theme.palette.background.default};
+
+    svg {
+      color: ${theme.palette.background.default};
+    }
   }
 
   border-radius: ${open ? "10px" : "0"};
@@ -70,9 +80,13 @@ cursor: pointer;
 ${
   activepath
     ? `& span,
-  div {
-  color: ${theme.palette.background.default};
-  }
+    div {
+      color: ${theme.palette.background.default};
+  
+      svg {
+        color: ${theme.palette.background.default};
+      }
+    }
   border-radius: ${open ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};`
     : ""

@@ -7,11 +7,7 @@ const ProjectManagement = (): ReactElement => {
   return (
     <>
       <Title title="Project Management" />
-      <SvgIcon
-        name="settings"
-        $size={4}
-        color="primary"
-      />
+      <SvgIcon name="settings" $size={4} color="primary" />
       <PageContainer>
         <p>test</p>
       </PageContainer>

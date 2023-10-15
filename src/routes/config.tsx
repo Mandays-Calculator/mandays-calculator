@@ -9,25 +9,30 @@ export const routes: RouteType[] = [
     path: "project-management",
     label: "project.management.label",
     element: <ProjectManagement />,
+    icon: "project_management",
   },
   {
     path: "odc-management",
     label: "odc.management.label",
     element: <ODCManagement />,
+    icon: "odc_management",
   },
   {
     path: "user-management",
     label: "user.management.label",
     element: <UserManagement />,
+    icon: "user_management",
   },
   {
     path: "settings",
     label: "settings.label",
     element: <Outlet />,
+    icon: "settings",
   },
   {
     path: "account-info",
     label: "account.info.label",
     element: <Outlet />,
+    icon: "person",
   },
 ];
