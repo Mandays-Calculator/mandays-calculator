@@ -1,4 +1,7 @@
 {
+  "settings:": {
+    "label": "Settings"
+  },
   "common": {
     "user": "User",
     "submit": "Submit",
@@ -24,9 +27,6 @@
     "management": {
       "label": "User management"
     }
-  },
-  "settings:": {
-    "label": "Settings"
   },
   "account": {
     "info": {

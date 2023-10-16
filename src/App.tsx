@@ -1,13 +1,10 @@
 import type { ReactElement } from "react";
-import { Layout } from "~/components/layout";
-import AppRoutes from "~/routes/AppRoutes";
+import { Auth } from "./pages/auth";
+import AuthenticatedApp from "./AuthenticatedApp";
 
 const App = (): ReactElement => {
-  return (
-    <Layout>
-      <AppRoutes />
-    </Layout>
-  );
+  const isAuthenticated = true;
+  return <>{isAuthenticated ? <AuthenticatedApp /> : <Auth />}</>;
 };
 
 export default App;

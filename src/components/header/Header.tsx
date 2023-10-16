@@ -16,6 +16,7 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import CompanyLogo from "~/assets/img/company-logo.png";
+import AvatarImg from "~/assets/img/avatar.png";
 import { StyledAppBar, StyledToolBarContainer } from ".";
 
 const AppBarHeader = (): ReactElement => {
@@ -44,7 +45,7 @@ const AppBarHeader = (): ReactElement => {
               <Tooltip title="Open settings">
                 <Grid container spacing={1} alignItems="center">
                   <Grid item xs={3}>
-                    <Avatar alt={name} src="/static/images/avatar/2.jpg" />
+                    <Avatar alt={name} src={AvatarImg} />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography textAlign="center" fontSize={14}>

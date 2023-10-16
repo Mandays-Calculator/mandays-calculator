@@ -10,6 +10,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+import { SvgIcon } from "~/components";
 import { routesConfig } from "~/routes";
 import {
   StyledDrawer,
@@ -42,18 +43,27 @@ const Drawer = (): ReactElement => {
             {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
-        <StyledList isOpen={open}>
-          {routesConfig.map((routeItem: RouteType) => {
+        <Divider sx={{ mb: 7 }} />
+        <StyledList open={open}>
+          {routesConfig.map((routeItem: RouteType, index: number) => {
             if (!routeItem.hideOnSidebar === true) {
               return (
                 <StyledListItem
-                  isActive={isActivePath(routeItem.path || "")}
+                  key={index}
+                  activepath={isActivePath(routeItem.path || "")}
                   onClick={() => handleNavigate(routeItem)}
-                  isOpen={open}
+                  open={open}
                 >
                   <StyledListItemIcon>
-                    <AccountCircleIcon fontSize="large" />
+                    {routeItem.icon ? (
+                      <SvgIcon
+                        name={routeItem.icon}
+                        $size={4}
+                        color="primary"
+                      />
+                    ) : (
+                      <AccountCircleIcon fontSize="large" />
+                    )}
                   </StyledListItemIcon>
                   {open && (
                     <StyledItemText primary={t(routeItem.label || "")} />

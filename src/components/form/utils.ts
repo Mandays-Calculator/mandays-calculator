@@ -1,3 +1,4 @@
+import type { FormErrors } from "./types";
 import { defaultTo, get } from "lodash";
 
 export const getOption = <Type extends object>(
@@ -6,4 +7,13 @@ export const getOption = <Type extends object>(
   return (option: Type) => {
     return defaultTo(get(option, path), "");
   };
+};
+
+export const getFieldError = (
+  errors: FormErrors | undefined,
+  name: string
+): string | undefined => {
+  if (errors) {
+    return get(errors, name);
+  }
 };

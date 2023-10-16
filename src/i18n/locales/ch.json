@@ -13,5 +13,8 @@
   },
   "project": {
     "management": ""
+  },
+  "settings:": {
+    "label": "Settings"
   }
 }
