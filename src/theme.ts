@@ -44,6 +44,19 @@ const theme = createTheme({
     },
   },
   spacing: 8,
+  components: {
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: "#2c8ed1",
+          textDecoration: "none",
+          "&:hover": {
+            color: "#4699D2",
+          },
+        },
+      },
+    },
+  },
 });
 
 export default theme;

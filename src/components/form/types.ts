@@ -31,3 +31,11 @@ export interface WithInputControllerValueProp {
   startDate?: string;
   endDate?: string;
 }
+
+type FormValues = {
+  [key: string]: any;
+};
+
+export type FormErrors = {
+  [key in keyof FormValues]?: string;
+};
