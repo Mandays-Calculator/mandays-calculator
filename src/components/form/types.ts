@@ -22,6 +22,7 @@ export type BaseInputPropsWithAdornment<Type = object> = Type & {
   label?: string;
   endAdornment?: ReactElement;
   readOnly?: boolean;
+  placeholder?: string;
 };
 
 export interface WithInputControllerValueProp {

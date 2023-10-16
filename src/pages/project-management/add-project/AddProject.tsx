@@ -1,54 +1,75 @@
-import { useFormik } from "formik";
-import type { ReactElement } from "react";
-import { Form } from "~/components";
-import {
-  ControlledCheckBox,
-  ControlledCheckBoxGroup,
-  ControlledDatePicker,
-  ControlledTextField,
-} from "~/components/form/controlled";
-interface TestForm {
-  testing: string;
-  dateTest: string;
-  choice: boolean;
-  groupChoice: string;
-}
-const AddProject = (): ReactElement => {
-  const testForm = useFormik<TestForm>({
-    initialValues: { testing: "", dateTest: "", choice: false, groupChoice: "" },
-    onSubmit: (values) => console.log(values),
-  });
-  return (
-    <div>
-      <Form instance={testForm}>
-        <ControlledTextField
-          name="testing"
-          label="Just a label"
-          placeholder="Just a Placeholder"
-        />
-        <ControlledDatePicker name="dateTest" />
-        <ControlledCheckBox
-          name="choice"
-          label="checkbox"
-        />
-        <ControlledCheckBoxGroup
-          name="groupChoice"
-          label="Group"
-          options={[
-            {
-              label: "Test 1",
-              value: "test",
-            },
-            {
-              label: "Test 2",
-              value: "test2",
-            },
-          ]}
-        />
+import { useState, type ReactElement } from "react";
+import type { AddTeamForm as AddTeamFormType } from "./types";
 
-        <button type="submit"> Submit </button>
+import { useFormik } from "formik";
+
+import { PageContainer } from "~/components/page-container";
+import { ControlledTextField } from "~/components/form/controlled";
+import { Form, SvgIcon } from "~/components";
+import { StyledContainer } from "./components/TeamListCard/TeamListCard";
+import { CustomButton } from "~/components/form/button";
+
+import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
+
+import { addFormInitValue } from "./utils";
+
+import AddTeamForm from "./add-team-form";
+import TeamList from "./team-list";
+
+const StyledTextField = styled(ControlledTextField)(() => ({
+  width: "50%",
+}));
+const AddProject = (): ReactElement => {
+  const projectForm = useFormik<AddTeamFormType>({
+    initialValues: addFormInitValue,
+    onSubmit: (val) => console.log(val),
+  });
+  const [showTeamForm, setShowTeamForm] = useState<boolean>(false);
+  return (
+    <PageContainer>
+      <Form instance={projectForm}>
+        <StyledTextField
+          name="projectName"
+          placeholder="Enter keyword here..."
+          label="Project Name"
+        />
+        <TeamList />
+        <Grid paddingY={2}></Grid>
+
+        {showTeamForm ? (
+          <AddTeamForm onCancel={() => setShowTeamForm(false)} />
+        ) : (
+          <StyledContainer
+            $isDefault
+            $isAdd
+          >
+            <IconButton onClick={() => setShowTeamForm(true)}>
+              <SvgIcon
+                name="add"
+                color="primary"
+              />
+
+              <Typography>Add Team</Typography>
+            </IconButton>
+          </StyledContainer>
+        )}
+        <Stack
+          direction="row"
+          display="flex"
+          justifyContent="flex-end"
+          padding={2}
+          spacing={2}
+        >
+          <CustomButton
+            colorVariant="secondary"
+            type="button"
+          >
+            Cancel
+          </CustomButton>
+          <CustomButton type="submit">Add Project</CustomButton>
+        </Stack>
       </Form>
-    </div>
+    </PageContainer>
   );
 };
 
