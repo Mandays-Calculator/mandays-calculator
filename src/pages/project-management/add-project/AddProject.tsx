@@ -35,7 +35,6 @@ const AddProject = (): ReactElement => {
         />
         <TeamList />
         <Grid paddingY={2}></Grid>
-
         {showTeamForm ? (
           <AddTeamForm onCancel={() => setShowTeamForm(false)} />
         ) : (
