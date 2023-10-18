@@ -99,13 +99,19 @@ const StyledList = styled(List, {
   padding: open ? "0 10px" : 0,
 }));
 
-const StyledItemText = styled(ListItemText)`
-  & span {
-    color: #414145;
-    font-size: 18px;
-    font-weight: normal;
-  }
-`;
+const StyledItemText = styled(ListItemText)(({ theme }) => ({
+  "& span": {
+    color: "#414145",
+    fontSize: "18px",
+    fontWeight: "normal",
+  },
+
+  [theme.breakpoints.down('xl')]: {
+    "& span": {
+      fontSize: "14px",
+    },
+  },
+}));
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
