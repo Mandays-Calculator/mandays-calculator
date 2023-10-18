@@ -6,7 +6,11 @@ import { useCallback } from "react";
 
 import { keyBy } from "lodash";
 
-import { Box, Chip, FormControl, MenuItem, SxProps } from "@mui/material";
+import { SxProps } from "@mui/material";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 import MuiSelect from "@mui/material/Select";
 
 import { getOption } from "../utils";
@@ -46,7 +50,7 @@ const Select = (props: SelectProps): ReactElement => {
     }
 
     if (multiple) {
-      const selectedItems = selected as string[];
+      const selectedItems = (selected as string[]) ?? [];
       return (
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
           {selectedItems?.map((value) => (
@@ -81,11 +85,7 @@ const Select = (props: SelectProps): ReactElement => {
 
   const renderSearchOptions = useCallback((): ReactNode => {
     return options.map((opt) => {
-      if (typeof getOptionLabel(opt) === "object") {
-        return renderOptions(getOptionValue(opt), getOptionLabel(opt));
-      } else {
-        return renderOptions(getOptionValue(opt), getOptionLabel(opt));
-      }
+      return renderOptions(getOptionValue(opt), getOptionLabel(opt));
     });
   }, [options]);
 
