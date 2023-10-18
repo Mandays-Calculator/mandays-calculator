@@ -26,6 +26,15 @@ const theme = createTheme({
       main: "#FF4545",
     },
   },
+  breakpoints: {
+    values: {
+        xs: 0,
+        sm: 600,
+        md: 1024,
+        lg: 1280,
+        xl: 1367,
+    },
+},
   typography: {
     fontFamily: "Montserrat, sans-serif",
     h1: {
