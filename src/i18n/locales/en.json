@@ -1,12 +1,10 @@
 {
-  "settings:": {
-    "label": "Settings"
-  },
   "common": {
     "user": "User",
     "submit": "Submit",
     "confirm": "Confirm",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "settings": "Settings"
   },
   "login": {
     "management": {
@@ -25,7 +23,7 @@
   },
   "user": {
     "management": {
-      "label": "User management"
+      "label": "User Management"
     }
   },
   "account": {
@@ -34,6 +32,6 @@
     }
   },
   "footer": {
-    "label": "Lenovo PCCW Solutions Philippines Inc. All rights reserved."
+    "label": "All rights reserved."
   }
 }

@@ -1,20 +1,39 @@
 {
-  "common": {
-    "user": "",
-    "submit": "",
-    "confirm": "",
-    "dashboard": ""
-  },
-  "login": {
-    "management": ""
-  },
-  "odc": {
-    "management": ""
-  },
-  "project": {
-    "management": ""
-  },
   "settings:": {
     "label": "Settings"
+  },
+  "common": {
+    "user": "User",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "dashboard": "Dashboard"
+  },
+  "login": {
+    "management": {
+      "label": "Login management"
+    }
+  },
+  "odc": {
+    "management": {
+      "label": "ODC Management"
+    }
+  },
+  "project": {
+    "management": {
+      "label": "Project Management"
+    }
+  },
+  "user": {
+    "management": {
+      "label": "User Management"
+    }
+  },
+  "account": {
+    "info": {
+      "label": "Account Information"
+    }
+  },
+  "footer": {
+    "label": "All rights reserved."
   }
 }

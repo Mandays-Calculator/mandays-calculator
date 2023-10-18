@@ -84,7 +84,6 @@ const ValidationResult = ({ values }: any): ReactNode => {
 const ChangePassword = (): ReactElement => {
   const location = useLocation();
   const { state } = location;
-  console.log(location, "locatio");
   console.log(state.usernameOrEmail, "username or email");
   const changePasswordForm = useFormik({
     initialValues: {

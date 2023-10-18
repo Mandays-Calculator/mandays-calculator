@@ -37,7 +37,7 @@ const AppBarHeader = (): ReactElement => {
   return (
     <StyledAppBar position="sticky">
       <Container maxWidth={false} disableGutters={true}>
-        <StyledToolBarContainer style={{ padding: "0 32px" }}>
+        <StyledToolBarContainer>
           <Toolbar sx={{ justifyContent: "space-between" }}>
             {/* Logo image template holder*/}
             <img src={CompanyLogo} width={135} height={51} alt="company-logo" />
@@ -68,7 +68,6 @@ const AppBarHeader = (): ReactElement => {
                   </Grid>
                 </Grid>
               </Tooltip>
-
               <Menu
                 sx={{ mt: "50px" }}
                 id="menu-appbar"
