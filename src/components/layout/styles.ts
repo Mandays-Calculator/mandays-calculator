@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 const StyledLayoutContainer = styled("div")({
   display: "flex",
   height: "100vh",
+  overflow: "scroll",
 });
 
 const StyledLayoutContent = styled("div")`
