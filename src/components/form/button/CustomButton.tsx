@@ -43,6 +43,9 @@ const StyledButton = styled(Button)<StyledButtonProps>(
       backgroundColor: colorsMap[colorVariant],
       color: contrastTextMap[colorVariant],
       textTransform: "none",
+      borderRadius: "0.5rem",
+      paddingLeft: "20px",
+      paddingRight: "20px",
       "&:hover": {
         backgroundColor: colorsMap[colorVariant], // Keep the same background color on hover
         opacity: 0.9,
