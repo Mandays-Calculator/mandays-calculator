@@ -1,43 +1,21 @@
 import type { ReactElement } from "react";
-import { Grid, TableContainer, TextField, styled } from "@mui/material";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-} from "@mui/material";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import { Column } from "react-table";
+import { Grid, TextField, IconButton, styled, Box } from "@mui/material";
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
-import { SvgIcon } from "~/components";
+import { SvgIcon, Table } from "~/components";
+
+type DataType = {
+  odcName: string;
+  location: string;
+  abbreviation: string;
+  noHolidays: number;
+};
+
+type ColumnType = Column<DataType> & { id?: string };
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
-}));
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#D0DEEA",
-    color: theme.palette.common.black,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: "#FAFCFD",
-  },
-  "&:nth-of-type(even)": {
-    backgroundColor: "#F5F7FA",
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
 }));
 
 const ViewODC = (): ReactElement => {
@@ -56,6 +34,39 @@ const ViewODC = (): ReactElement => {
     },
   ];
 
+  const columns: ColumnType[] = [
+    {
+      Header: "ODC Name",
+      accessor: "odcName",
+    },
+    {
+      Header: "Location",
+      accessor: "location",
+    },
+    {
+      Header: "Abbreviation",
+      accessor: "abbreviation",
+    },
+    {
+      Header: "No. Holidays",
+      accessor: "noHolidays",
+    },
+    {
+      Header: "",
+      id: "actions",
+      Cell: () => (
+        <>
+          <IconButton color="primary">
+            <SvgIcon name="edit" color="primary" $size={2} />
+          </IconButton>
+          <IconButton>
+            <SvgIcon name="delete" color="error" $size={2} />
+          </IconButton>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
       <PageContainer sx={{ background: "#FFFFFF" }}>
@@ -68,37 +79,9 @@ const ViewODC = (): ReactElement => {
           </Grid>
         </Grid>
 
-        <TableContainer component={Paper} sx={{ marginTop: "14px" }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>ODC Name</StyledTableCell>
-                <StyledTableCell>Location</StyledTableCell>
-                <StyledTableCell>Abbreviation</StyledTableCell>
-                <StyledTableCell>No. Holidays</StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell>{row.odcName}</StyledTableCell>
-                  <StyledTableCell>{row.location}</StyledTableCell>
-                  <StyledTableCell>{row.abbreviation}</StyledTableCell>
-                  <StyledTableCell>{row.noHolidays}</StyledTableCell>
-                  <StyledTableCell>
-                    <IconButton color="primary">
-                      <SvgIcon name="edit" color="primary" $size={2} />
-                    </IconButton>
-                    <IconButton>
-                      <SvgIcon name="delete" color="error" $size={2} />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Box marginTop="14px">
+          <Table name="ODCTable" columns={columns} data={rows} />
+        </Box>
       </PageContainer>
     </>
   );
