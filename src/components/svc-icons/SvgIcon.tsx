@@ -11,7 +11,7 @@ const StyledSvgIcon = styled(MuiSvgIcon, {
   fontSize: theme.spacing($size),
 
   [theme.breakpoints.down("xl")]: {
-    fontSize: theme.spacing(3),
+    fontSize: theme.spacing($size),
   },
 }));
 
@@ -19,7 +19,12 @@ export const SvgIcon = (props: SvgIconsProps): ReactElement => {
   const { name, sx, $size = 4, onClick, color } = props;
 
   return (
-    <StyledSvgIcon $size={$size} sx={sx} onClick={onClick} color={color}>
+    <StyledSvgIcon
+      $size={$size}
+      sx={sx}
+      onClick={onClick}
+      color={color}
+    >
       <svg aria-hidden="true">
         <use href={`#icon-${name}`} />
       </svg>
