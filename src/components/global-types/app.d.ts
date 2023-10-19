@@ -11,3 +11,10 @@ export type ReactDatePickerFormat =
   | "yyyy"
   | "MM/yyyy"
   | "dd-MM-yyyy";
+
+declare global {
+  interface SelectObject {
+    label: string;
+    value: string;
+  }
+}
