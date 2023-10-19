@@ -28,15 +28,16 @@ const theme = createTheme({
   },
   breakpoints: {
     values: {
-        xs: 0,
-        sm: 600,
-        md: 1024,
-        lg: 1280,
-        xl: 1367,
+      xs: 0,
+      sm: 600,
+      md: 1024,
+      lg: 1280,
+      xl: 1367,
     },
-},
+  },
   typography: {
     fontFamily: "Montserrat, sans-serif",
+    htmlFontSize: 14,
     h1: {
       fontSize: "2rem",
       fontWeight: 600,
@@ -52,7 +53,7 @@ const theme = createTheme({
       color: "#414145",
     },
   },
-  spacing: 8,
+  spacing: (factor: number) => `${0.5 * factor}rem`,
   components: {
     MuiLink: {
       styleOverrides: {
