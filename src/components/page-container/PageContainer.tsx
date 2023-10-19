@@ -9,6 +9,10 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   marginTop: 24,
   background: theme.palette.background.paper,
   boxShadow: "0 8px 6px -6px rgba(0, 0, 0, 0.4)",
+
+  [theme.breakpoints.down("xl")]: {
+    zoom: "80%",
+  },
 }));
 
 type PageContainerProps = ContainerProps;

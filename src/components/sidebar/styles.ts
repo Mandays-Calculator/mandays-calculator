@@ -53,13 +53,13 @@ const StyledListItemIcon = styled(ListItemIcon)``;
 const StyledListItem = styled(ListItem)<{ open: boolean; activepath: boolean }>(
   ({ open, theme, activepath }) =>
     `
-margin: 10px 0;
+margin: ${theme.spacing(1.3, 0)};
 min-height: 48px;
 cursor: pointer;
 
 div {
   svg {
-    color: #414145;
+    color: ${theme.palette.primary.dark};
   }
 }
 
@@ -81,7 +81,7 @@ ${
   activepath
     ? `& span,
     div {
-      color: ${theme.palette.background.default};
+      color: ${theme.palette.background.default} !important;
   
       svg {
         color: ${theme.palette.background.default};
@@ -96,26 +96,27 @@ ${
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== "open",
 })<{ open: boolean }>(({ open }) => ({
-  padding: open ? "0 10px" : 0,
+  padding: open ? "0 0.7rem" : 0,
 }));
 
 const StyledItemText = styled(ListItemText)(({ theme }) => ({
   "& span": {
-    color: "#414145",
-    fontSize: "18px",
+    color: theme.palette.primary.dark,
+    fontSize: "1.15rem",
     fontWeight: "normal",
   },
 
-  [theme.breakpoints.down('xl')]: {
+  [theme.breakpoints.down("xl")]: {
     "& span": {
-      fontSize: "14px",
+      fontSize: "1rem",
     },
   },
 }));
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
-  height: 70,
+  maxHeight: 70,
+  minHeight: 64,
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(1, 1),
