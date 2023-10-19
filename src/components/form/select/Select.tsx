@@ -24,7 +24,7 @@ interface SelectProps extends BaseInputProps<MuiSelectProps> {
   sx?: SxProps;
 }
 
-const Select = (props: SelectProps): ReactElement => {
+export const Select = (props: SelectProps): ReactElement => {
   const {
     name,
     options = [],
@@ -43,7 +43,10 @@ const Select = (props: SelectProps): ReactElement => {
   const renderSelectedValue = (selected: unknown): ReactNode => {
     if (!selected || !(selected as string[]).length) {
       return (
-        <MenuItem disabled>
+        <MenuItem
+          disabled
+          sx={{ minHeight: "1em", lineHeight: "0.3em" }}
+        >
           <em>{placeholder}</em>
         </MenuItem>
       );
