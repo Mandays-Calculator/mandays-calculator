@@ -102,7 +102,7 @@ const StyledList = styled(List, {
 const StyledItemText = styled(ListItemText)(({ theme }) => ({
   "& span": {
     color: theme.palette.primary.dark,
-    fontSize: "1.5rem",
+    fontSize: "1.15rem",
     fontWeight: "normal",
   },
 
