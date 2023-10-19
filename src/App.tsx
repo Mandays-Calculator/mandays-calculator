@@ -19,7 +19,7 @@ const App = (): ReactElement => {
 
   return (
     <>
-      {!config ? (
+      {config ? (
         <KeycloakApp />
       ) : (
         // Will be replace by loader component
