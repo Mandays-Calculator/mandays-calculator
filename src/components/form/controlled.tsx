@@ -1,6 +1,4 @@
-// import { TextField, CheckBox, CheckboxGroup, DatePicker } from ".";
-
-import { CheckBox, CheckboxGroup, DatePicker, TextField } from ".";
+import { CheckBox, CheckboxGroup, DatePicker, SearchSelect, TextField } from ".";
 import { withInputController } from "./hocs";
 import Select from "./select/Select";
 
@@ -12,3 +10,7 @@ export const ControlledCheckBoxGroup = withInputController(
 ) as typeof CheckboxGroup;
 export const ControlledDatePicker = withInputController(DatePicker, "date-picker");
 export const ControlledSelect = withInputController(Select);
+export const ControlledSearchSelect = withInputController(
+  SearchSelect,
+  "autocomplete"
+) as typeof SearchSelect;
