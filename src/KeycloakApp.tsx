@@ -8,7 +8,7 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 const KeycloakApp = (): ReactElement => {
   const config = getEnvConfig();
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   const kcConfig: RealmConfigType = config.rhsso;
   const kcClient = new Keycloak({
