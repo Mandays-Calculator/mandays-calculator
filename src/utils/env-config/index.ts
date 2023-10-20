@@ -1,2 +1,2 @@
-export type { ConfigType } from "./types";
-export { loadConfig } from "./envConfig";
+export type { ConfigType, RealmConfigType } from "./types";
+export { loadConfig, getEnvConfig, keycloakOptions } from "./envConfig";

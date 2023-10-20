@@ -1,3 +1,10 @@
+export type RealmConfigType = {
+  url: string;
+  realm: string;
+  clientId: string;
+};
+
 export type ConfigType = {
-  environment?: string;
+  environment: string;
+  rhsso: RealmConfigType;
 };
