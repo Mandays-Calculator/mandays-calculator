@@ -66,6 +66,16 @@ const theme = createTheme({
         },
       },
     },
+    MuiCssBaseline: {
+      styleOverrides: {
+        html: {
+          fontSize: "16px",
+          "@media (min-width:1280px)": {
+            fontSize: "14px",
+          },
+        },
+      },
+    },
   },
 });
 
