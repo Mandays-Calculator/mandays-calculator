@@ -15,7 +15,6 @@ import { addFormInitValue } from "./utils";
 
 import AddTeamForm from "./add-team-form";
 import TeamList from "./team-list";
-import { SearchSelect } from "~/components/form";
 
 const StyledTextField = styled(ControlledTextField)(() => ({
   width: "50%",
@@ -36,19 +35,7 @@ const AddProject = (): ReactElement => {
         />
         <TeamList />
         <Grid paddingY={2}></Grid>
-        <SearchSelect
-          name="Test"
-          options={[
-            {
-              label: "test 1",
-              value: "1",
-            },
-            {
-              label: "test 2",
-              value: "1",
-            },
-          ]}
-        />
+
         {showTeamForm ? (
           <AddTeamForm onCancel={() => setShowTeamForm(false)} />
         ) : (
