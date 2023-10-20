@@ -22,7 +22,7 @@ import {
 } from ".";
 
 const Drawer = (): ReactElement => {
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();

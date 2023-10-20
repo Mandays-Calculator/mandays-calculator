@@ -22,3 +22,12 @@ export const loadConfig = async (): Promise<ConfigType | null> => {
       return config;
     });
 };
+
+export const getEnvConfig = (): ConfigType => {
+  return config as ConfigType;
+};
+
+export const keycloakOptions = {
+  onLoad: "login-required",
+  pkceMethod: "S256",
+};

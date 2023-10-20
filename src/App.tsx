@@ -1,22 +1,42 @@
 import type { ReactElement } from "react";
+import type { ConfigType } from "~/utils/env-config";
+
 import { useEffect, useState } from "react";
-import { Auth } from "./pages/auth";
-import AuthenticatedApp from "./AuthenticatedApp";
-import { loadConfig, ConfigType } from "./utils/env-config";
+import { Typography } from "@mui/material";
+import { loadConfig } from "~/utils/env-config";
+import KeycloakApp from "~/KeycloakApp";
 
 const App = (): ReactElement => {
-  const [config, setConfig] = useState<ConfigType | null>(null);
+  const [config, setConfig] = useState<ConfigType | undefined>(undefined);
 
   useEffect(() => {
     loadConfig().then((res: ConfigType | null) => {
-      setConfig(res);
+      if (res) {
+        setConfig(res);
+      }
     });
   }, []);
 
-  console.log(config, "config check");
-  const isAuthenticated = true;
-
-  return <>{isAuthenticated ? <AuthenticatedApp /> : <Auth />}</>;
+  return (
+    <>
+      {config ? (
+        <KeycloakApp />
+      ) : (
+        // Will be replace by loader component
+        <Typography
+          variant="h1"
+          justifyContent="center"
+          textAlign="center"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          height="100vh"
+        >
+          Loading ..
+        </Typography>
+      )}
+    </>
+  );
 };
 
 export default App;
