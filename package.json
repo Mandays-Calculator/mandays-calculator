@@ -8,7 +8,9 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "jest --config=jest.config.ts"
+    "test": "jest --config=jest.config.ts --ci --runInBand --coverage --silent --forceExit --detectOpenHandles",
+    "test-dev": "jest --config=jest.config.ts",
+    "coverage": "jest --coverage --silent"
   },
   "jest": {
     "verbose": true
