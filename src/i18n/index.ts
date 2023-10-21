@@ -8,11 +8,8 @@ import translations from "./locales";
 const i18nConfig = {
   resources: translations,
   fallbackLng: "en",
-  debug: true,
+  debug: false,
   defaultNS: "translations",
-  interpolation: {
-    escapeValue: false, // not needed for react as it escapes by default
-  },
 };
 
 i18n.use(Backend).use(LanguageDetector).use(initReactI18next).init(i18nConfig);

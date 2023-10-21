@@ -1,6 +1,4 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
-// Providers
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -14,14 +12,12 @@ import "virtual:svg-icons-register";
 import "./app.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
+  </Provider>
 );

@@ -25,7 +25,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "settings",
-    label: "settings.label",
+    label: "common.settings",
     element: <Outlet />,
     icon: "settings",
   },

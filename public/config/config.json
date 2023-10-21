@@ -1,7 +1,7 @@
 {
   "environment": "dev",
   "rhsso": {
-    "url": "http://localhost:8080",
+    "url": "http://localhost:8080/auth",
     "realm": "mandays-calculator",
     "clientId": "mc-client"
   }
