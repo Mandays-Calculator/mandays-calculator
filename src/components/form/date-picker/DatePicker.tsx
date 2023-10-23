@@ -47,7 +47,7 @@ export const DatePicker = (props: DatePickerProps): ReactElement => {
     return;
   };
 
-  const handleChange = (date: Date, event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (date: Date | null, event: React.ChangeEvent<HTMLInputElement>): void => {
     if (date) {
       date.setHours((-1 * date.getTimezoneOffset()) / 60);
     }
@@ -69,6 +69,7 @@ export const DatePicker = (props: DatePickerProps): ReactElement => {
       placeholderText={placeholderText}
       showPopperArrow={showPopperArrow}
       renderCustomHeader={(customeHeaderProps) => <Header {...customeHeaderProps} />}
+      data-testid="date-picker-component"
       customInput={
         <TextField
           id={name}
