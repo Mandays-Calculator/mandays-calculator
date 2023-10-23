@@ -4,23 +4,25 @@ import type { ConfigType } from "~/utils/env-config";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import { loadConfig } from "~/utils/env-config";
-import KeycloakApp from "~/KeycloakApp";
+import AuthenticatedApp from "./AuthenticatedApp";
 
 const App = (): ReactElement => {
+  const environment = import.meta.env.VITE_ENVIRONMENT;
   const [config, setConfig] = useState<ConfigType | undefined>(undefined);
-
   useEffect(() => {
-    loadConfig().then((res: ConfigType | null) => {
-      if (res) {
-        setConfig(res);
-      }
-    });
+    if (environment) {
+      loadConfig(environment).then((res: ConfigType | null) => {
+        if (res) {
+          setConfig(res);
+        }
+      });
+    }
   }, []);
 
   return (
     <>
       {config ? (
-        <KeycloakApp />
+        <AuthenticatedApp />
       ) : (
         // Will be replace by loader component
         <Typography

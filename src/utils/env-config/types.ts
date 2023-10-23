@@ -1,10 +1,13 @@
-export type RealmConfigType = {
-  url: string;
+export type OIDCConfigType = {
+  authority: string;
   realm: string;
-  clientId: string;
+  client_id: string;
+  redirect_uri: string;
+  response_type: string;
+  scope: string;
 };
 
 export type ConfigType = {
   environment: string;
-  rhsso: RealmConfigType;
+  apiBasePath: string;
 };
