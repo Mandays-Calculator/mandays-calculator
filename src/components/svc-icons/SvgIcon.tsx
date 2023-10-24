@@ -24,6 +24,7 @@ export const SvgIcon = (props: SvgIconsProps): ReactElement => {
       sx={sx}
       onClick={onClick}
       color={color}
+      data-testid="svg-component"
     >
       <svg aria-hidden="true">
         <use href={`#icon-${name}`} />

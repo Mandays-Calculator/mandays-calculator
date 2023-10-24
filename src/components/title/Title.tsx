@@ -13,6 +13,7 @@ const Title = (props: TitleProps): ReactElement => {
       color={color}
       fontSize={40}
       fontWeight="600"
+      data-testid="title-component"
     >
       {title}
     </Typography>
