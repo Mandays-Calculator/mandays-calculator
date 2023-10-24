@@ -29,12 +29,12 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
 
   const rows = [
     {
-      prjName: "Philippines ODC",
+      prjName: "eMPF",
       noOfTeams: 1,
       noOfUsers: 2,
     },
     {
-      prjName: "Philippines ODC",
+      prjName: "eMPF",
       noOfTeams: 1,
       noOfUsers: 2,
     },
