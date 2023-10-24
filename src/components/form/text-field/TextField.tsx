@@ -19,6 +19,7 @@ export const TextField = (props: TextFieldProps): ReactElement => {
         id={name}
         placeholder={placeholder}
         InputProps={{ endAdornment: endAdornment, readOnly: readOnly }}
+        data-testid="text-field-component"
         {...rest}
       />
     </Stack>

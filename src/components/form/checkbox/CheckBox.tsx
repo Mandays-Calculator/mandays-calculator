@@ -20,6 +20,7 @@ export const CheckBox = (props: CheckBoxProps): ReactElement => {
         label={label}
         checked={Boolean(value)}
         name={name}
+        data-testid="checkbox-component"
         control={
           <MuiCheckBox
             inputProps={{

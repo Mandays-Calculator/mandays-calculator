@@ -68,6 +68,7 @@ const theme = createTheme({
     },
     MuiCssBaseline: {
       styleOverrides: {
+        spacing: (factor: number) => `${0.4 * factor}rem`,
         html: {
           fontSize: "16px",
           "@media (min-width:1280px)": {

@@ -2,8 +2,8 @@ import { ConfigType } from ".";
 
 let config: ConfigType | null = null;
 
-export const loadConfig = async (): Promise<ConfigType | null> => {
-  return await fetch(`config/config.json`, {
+export const loadConfig = async (env: string): Promise<ConfigType | null> => {
+  return await fetch(`config/config-${env}.json`, {
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",
@@ -25,9 +25,4 @@ export const loadConfig = async (): Promise<ConfigType | null> => {
 
 export const getEnvConfig = (): ConfigType => {
   return config as ConfigType;
-};
-
-export const keycloakOptions = {
-  onLoad: "login-required",
-  pkceMethod: "S256",
 };

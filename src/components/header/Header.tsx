@@ -15,7 +15,6 @@ import {
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-import CompanyLogo from "~/assets/img/company-logo.png";
 import AvatarImg from "~/assets/img/avatar.png";
 import { StyledAppBar, StyledToolBarContainer } from ".";
 
@@ -38,9 +37,7 @@ const AppBarHeader = (): ReactElement => {
     <StyledAppBar position="sticky">
       <Container maxWidth={false} disableGutters={true}>
         <StyledToolBarContainer>
-          <Toolbar sx={{ justifyContent: "space-between" }}>
-            {/* Logo image template holder*/}
-            <img src={CompanyLogo} width={135} height={51} alt="company-logo" />
+          <Toolbar sx={{ justifyContent: "right" }}>
             <Box sx={{ flexGrow: 0, alignItems: "right" }}>
               <Tooltip title="Open settings">
                 <Grid container spacing={1} alignItems="center">

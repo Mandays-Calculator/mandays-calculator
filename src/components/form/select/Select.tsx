@@ -46,6 +46,7 @@ export const Select = (props: SelectProps): ReactElement => {
         <MenuItem
           disabled
           sx={{ minHeight: "1em", lineHeight: "0.3em" }}
+          data-testid="select-placeholder"
         >
           <em>{placeholder}</em>
         </MenuItem>
@@ -81,6 +82,7 @@ export const Select = (props: SelectProps): ReactElement => {
     const filteredProps = {
       key: valueOption,
       value: valueOption,
+      "data-testid": `select-options-${valueOption}`,
     };
 
     return <MenuItem {...filteredProps}>{labelOption}</MenuItem>;
@@ -118,6 +120,7 @@ export const Select = (props: SelectProps): ReactElement => {
         MenuProps={{
           autoFocus: false,
         }}
+        data-testid="select-component"
         {...rest}
       >
         {renderSearchOptions()}
