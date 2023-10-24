@@ -19,7 +19,14 @@ import TeamList from "./team-list";
 const StyledTextField = styled(ControlledTextField)(() => ({
   width: "50%",
 }));
-const AddProject = (): ReactElement => {
+
+interface ProjectListProps {
+  handleAddProject: () => void;
+  // Other props
+}
+
+const AddProject = (props: ProjectListProps): ReactElement => {
+  const { handleAddProject } = props;
   const projectForm = useFormik<AddTeamFormType>({
     initialValues: addFormInitValue,
     onSubmit: (val) => console.log(val),
@@ -39,15 +46,9 @@ const AddProject = (): ReactElement => {
         {showTeamForm ? (
           <AddTeamForm onCancel={() => setShowTeamForm(false)} />
         ) : (
-          <StyledContainer
-            $isDefault
-            $isAdd
-          >
+          <StyledContainer $isDefault $isAdd>
             <IconButton onClick={() => setShowTeamForm(true)}>
-              <SvgIcon
-                name="add"
-                color="primary"
-              />
+              <SvgIcon name="add" color="primary" />
 
               <Typography>Add Team</Typography>
             </IconButton>
@@ -63,6 +64,7 @@ const AddProject = (): ReactElement => {
           <CustomButton
             colorVariant="secondary"
             type="button"
+            onClick={handleAddProject}
           >
             Cancel
           </CustomButton>
