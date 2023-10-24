@@ -1,22 +1,14 @@
 import type { ReactElement } from "react";
+
 import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
+
+import { Auth } from "~/pages/auth";
 import { Layout } from "~/components/layout";
 import AppRoutes from "~/routes/AppRoutes";
-import { Auth } from "./pages/auth";
 import axiosInit from "~/api/axios.config";
-import { User } from "oidc-client-ts";
 
-function getUser() {
-  const oidcStorage = localStorage.getItem(
-    `oidc.user:<your authority>:<your client id>`
-  );
-  if (!oidcStorage) {
-    return null;
-  }
-
-  return User.fromStorageString(oidcStorage);
-}
+import { getUser } from "~/utils/oidc-utils";
 
 const AuthenticatedApp = (): ReactElement => {
   const auth = useAuth();
@@ -41,7 +33,6 @@ const AuthenticatedApp = (): ReactElement => {
     return <div>Oops... {auth.error.message}</div>;
   }
 
-  console.log(auth, "auth");
   if (!auth.isAuthenticated) {
     return (
       <Layout>

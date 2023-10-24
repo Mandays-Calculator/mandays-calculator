@@ -10,4 +10,5 @@ export type OIDCConfigType = {
 export type ConfigType = {
   environment: string;
   apiBasePath: string;
+  oidcConfig: OIDCConfigType;
 };
