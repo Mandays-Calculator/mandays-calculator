@@ -14,7 +14,7 @@ const StyledTitle = styled(Typography)`
 const Title = (props: TitleProps): ReactElement => {
   const { title, color = "primary" } = props;
   return (
-    <StyledTitle color={color} fontWeight="600">
+    <StyledTitle color={color} fontWeight="600" data-testid="title-component">
       {title}
     </StyledTitle>
   );
