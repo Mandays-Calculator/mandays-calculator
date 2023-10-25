@@ -1,11 +1,11 @@
 import type { Dispatch, SetStateAction } from "react";
 
-import { Column } from "react-table";
+import { Column, CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 
 import { SvgIcon } from "~/components";
 
-type DataType = {
+export type DataType = {
   odcName: string;
   location: string;
   abbreviation: string;
@@ -21,7 +21,10 @@ type ODCColumnType = Column<DataType> & { id?: string };
 type HolidayColumnType = Column<HolidayType>;
 
 export const ODCColumns = (
-  setDeleteModalOpen: Dispatch<SetStateAction<boolean>>
+  setAddODC: Dispatch<SetStateAction<boolean>>,
+  setDeleteModalOpen: Dispatch<SetStateAction<boolean>>,
+  setIsEdit: Dispatch<SetStateAction<boolean>>,
+  setIdx: Dispatch<SetStateAction<number>>
 ): ODCColumnType[] => {
   return [
     {
@@ -43,13 +46,19 @@ export const ODCColumns = (
     {
       Header: "",
       id: "actions",
-      Cell: () => (
+      Cell: ({ row }: CellProps<DataType>) => (
         <>
-          <IconButton color="primary">
-            <SvgIcon name="edit" color="primary" $size={2} />
+          <IconButton
+            onClick={() => {
+              setAddODC(true);
+              setIsEdit(true);
+              setIdx(row.index);
+            }}
+          >
+            <SvgIcon name="edit" $size={2} />
           </IconButton>
           <IconButton onClick={() => setDeleteModalOpen(true)}>
-            <SvgIcon name="delete" color="error" $size={2} />
+            <SvgIcon name="delete" $size={2} />
           </IconButton>
         </>
       ),

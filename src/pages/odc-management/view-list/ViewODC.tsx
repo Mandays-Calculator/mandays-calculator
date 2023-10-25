@@ -1,6 +1,8 @@
 import type { ReactElement, Dispatch, SetStateAction } from "react";
+import type { IntValues } from "../utils/interface";
 
 import { Grid, TextField, styled, Box } from "@mui/material";
+import { useFormikContext } from "formik";
 
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
@@ -15,24 +17,18 @@ const StyledTextField = styled(TextField)(() => ({
 type ViewProps = {
   setAddODC: Dispatch<SetStateAction<boolean>>;
   setDeleteModalOpen: Dispatch<SetStateAction<boolean>>;
+  setIsEdit: Dispatch<SetStateAction<boolean>>;
+  setIdx: Dispatch<SetStateAction<number>>;
 };
 
 const ViewODC = (props: ViewProps): ReactElement => {
+  const { setAddODC, setDeleteModalOpen, setIsEdit, setIdx } = props;
+  const { values } = useFormikContext<IntValues>();
 
-  const rows = [
-    {
-      odcName: "Philippines ODC",
-      location: "Philippines",
-      abbreviation: "PH ODC",
-      noHolidays: 26,
-    },
-    {
-      odcName: "Philippines ODC",
-      location: "Philippines",
-      abbreviation: "PH ODC",
-      noHolidays: 26,
-    },
-  ];
+  const handleAdd = () => {
+    setAddODC(true);
+    setIsEdit(false);
+  };
 
   return (
     <>
@@ -42,12 +38,15 @@ const ViewODC = (props: ViewProps): ReactElement => {
             <StyledTextField size="small" placeholder="Enter keyword here..." />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
-            <CustomButton type="button" onClick={() => props.setAddODC(true)}>Add ODC</CustomButton>
+            <CustomButton type="button" onClick={handleAdd}>Add ODC</CustomButton>
           </Grid>
         </Grid>
 
         <Box marginTop="14px">
-          <Table name="ODCTable" columns={ODCColumns(props.setDeleteModalOpen)} data={rows} />
+          <Table name="ODCTable"
+            columns={ODCColumns(setAddODC,setDeleteModalOpen,setIsEdit,setIdx)}
+            data={values.odcList}
+          />
         </Box>
       </PageContainer>
     </>
