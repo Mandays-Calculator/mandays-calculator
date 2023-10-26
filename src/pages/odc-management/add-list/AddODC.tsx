@@ -1,104 +1,86 @@
 import type { ReactElement, Dispatch, SetStateAction } from "react";
+import type { IntValues } from "../utils/interface"
 
 import { useTranslation } from "react-i18next";
 
 import { Grid, Box } from "@mui/material";
+import { useFormikContext } from "formik";
 
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
-import { TextField } from "~/components/form";
+import { ControlledTextField } from "~/components/form/controlled";
 
 import { HolidayColumn } from "../utils/columns";
+import { InitialODCValues, HolidayData } from "../utils/data";
 
 type AddProps = {
   setAddODC: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
+  idx: number;
 };
 
 const AddODC = (props: AddProps): ReactElement => {
   const { t } = useTranslation();
+  const { idx, isEdit, setAddODC } = props;
 
-  const rows = [
-    {
-      holidayDate: "01/01/2023",
-      holidayName: "New Year's Day",
-    },
-    {
-      holidayDate: "25/02/2023",
-      holidayName: "EDSA People Power Revolution Anniversary",
-    },
-    {
-      holidayDate: "06/04/2023",
-      holidayName: "Maundy Thursday",
-    },
-    {
-      holidayDate: "07/04/2023",
-      holidayName: "Good Friday",
-    },
-    {
-      holidayDate: "08/04/2023",
-      holidayName: "Black Saturday",
-    },
-    {
-      holidayDate: "10/04/2023",
-      holidayName: "Araw ng Kagitingan",
-    },
-    {
-      holidayDate: "21/04/2023",
-      holidayName: "Eid'l Fitr",
-    },
-    {
-      holidayDate: "01/05/2023",
-      holidayName: "Labor Day",
-    },
-    {
-      holidayDate: "12/06/2023",
-      holidayName: "Independence Day",
-    },
-    {
-      holidayDate: "28/06/2023",
-      holidayName: "Eid'l Adha",
-    },
-  ];
+  const { values, resetForm } = useFormikContext<IntValues>();
+
+  const handleClose = () => {
+    if (isEdit) {
+      const obj: IntValues = values;
+      obj.odcList[idx] = InitialODCValues.odcList[idx];
+      resetForm({ values: obj });
+    } else {
+      resetForm();
+    }
+    setAddODC(false);
+  };
 
   return (
     <>
       <PageContainer sx={{ background: "#FFFFFF" }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={6}>
-            <TextField
-              name="odcName"
+            <ControlledTextField
+              name={`odcList.${idx}.odcName`}
               label={t('odc.form.odcName')}
+              id="odcName"
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              name="abbr"
+            <ControlledTextField
+              name={`odcList.${idx}.abbreviation`}
               label={t('odc.form.abbr')}
+              id="abbreviation"
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              name="location"
+            <ControlledTextField
+              name={`odcList.${idx}.location`}
               label={t('odc.form.loc')}
+              id="location"
             />
           </Grid>
         </Grid>
 
         <Box marginTop="14px">
-          <Table name="HolidayTable" columns={HolidayColumn} data={rows} />
+          <Table name="HolidayTable" columns={HolidayColumn} data={HolidayData} />
         </Box>
 
         <Grid container spacing={2} alignItems="center"mt={1}>
           <Grid item xs={12} container justifyContent="flex-end">
-            {props.isEdit ? (
+            {isEdit ? (
               <>
-                <CustomButton type="button" sx={{ mr: 2 }}>Edit</CustomButton>
-                <CustomButton type="button">Cancel</CustomButton>
+                <CustomButton
+                  type="button"
+                  sx={{ mr: 2 }}
+                  onClick={() => setAddODC(false)}
+                >Save</CustomButton>
+                <CustomButton type="button" onClick={handleClose}>Cancel</CustomButton>
               </>
             ) : (
-              <CustomButton type="button" onClick={() => props.setAddODC(false)}>Add ODC</CustomButton>
+              <CustomButton type="button" onClick={() => setAddODC(false)}>Add ODC</CustomButton>
             )}
           </Grid>
         </Grid>
