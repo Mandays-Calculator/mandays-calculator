@@ -56,15 +56,15 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   };
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
-      <Stack width={"45rem"} padding={"2rem"}>
+      <Stack width={"53rem"} padding={"2rem"}>
         <StyledModalTitle>Add User</StyledModalTitle>
         <Grid container columnSpacing={1.5} rowGap={1}>
-          <Grid item xs={4}>
+          <Grid item xs={3.5}>
             <Stack>
               <img height="175px" width="175px" alt={"name"} src={AvatarImg} />
             </Stack>
           </Grid>
-          <Grid container item xs={8} columnSpacing={1.5} rowGap={0.5}>
+          <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>
             <Grid item xs={6}>
               <ControlledTextField
                 name="lastName"
@@ -153,7 +153,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={4}>
-            <StyledTitle>Role</StyledTitle>
+            <StyledTitle mb={1}>Role</StyledTitle>
             <ControlledSelect name="roleName" placeholder="Sprint Manager" />
           </Grid>
         </Grid>
