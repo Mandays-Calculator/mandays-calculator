@@ -1,18 +1,15 @@
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig, AxiosError } from "axios";
 
-const axiosInstance = axios.create();
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const keycloakToken = localStorage.getItem("kcToken");
-    if (keycloakToken) {
-      config.headers["Authorization"] = `Bearer ${keycloakToken}`;
+const init = async (kcToken: string | undefined): Promise<void> => {
+  axios.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
+      config.headers.Authorization = `Bearer ${kcToken}`;
+      return config;
+    },
+    (error: AxiosError) => {
+      return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+  );
+};
 
-export default axiosInstance;
+export default init;

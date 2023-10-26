@@ -64,12 +64,12 @@ export const Table = <Type extends object>(props: TableProps<Type>): ReactElemen
 
   return (
     <Stack gap={2}>
-      {title && (
-        <Typography variant='h5'>
-          {title}
-        </Typography>
-      )}
       <TableContainer component={Paper}>
+        {title && (
+          <Typography variant='h5'>
+            {title}
+          </Typography>
+        )}
         <MuiTable {...getTableProps()} size='small' aria-label={name}>
           <TableHead>
             {headerGroups.map((headerGroup) => {

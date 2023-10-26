@@ -39,12 +39,13 @@ export const CheckboxGroup = <Type extends object>(
     <FormControl
       component="fieldset"
       error={error}
+      data-testid="checkbox-group-component"
     >
       {label ? <InputLabel>{label}</InputLabel> : null}
       {options?.map((option) => {
         const currVal = props.value as string[];
         const valSingle = (): string[] => {
-          return currVal.length > 1 ? currVal.splice(1, 1) : currVal;
+          return currVal.length > 1 ? [...currVal.slice(1)] : currVal;
         };
         const isChecked = multiple
           ? currVal?.includes(getOptionValue(option))

@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Svg Icon Component renders the svg icon 1`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-delete"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 2`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-edit"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 3`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-check"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 4`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-add"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 5`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-cross"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 6`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-eyball_1"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 7`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-odc_management"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 8`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-people"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 9`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-person"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 10`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-project_management"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 11`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-settings"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`Svg Icon Component renders the svg icon 12`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+    data-testid="svg-component"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <use
+      href="#icon-user_management"
+    />
+  </svg>
+</DocumentFragment>
+`;

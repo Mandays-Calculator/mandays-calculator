@@ -40,6 +40,7 @@ export const SearchSelect = <
       id={name}
       options={options}
       fullWidth
+      data-testid="search-select-component"
       PopperComponent={(props) => (
         <Popper
           {...props}

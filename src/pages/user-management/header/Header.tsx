@@ -1,4 +1,5 @@
-import { useState, type ReactElement } from "react";
+import { useState } from "react";
+import type { ReactElement } from "react";
 
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material";
@@ -6,6 +7,7 @@ import { styled } from "@mui/material";
 import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { AddUserModal } from "~/components/modal/user-management";
+import { BulkUserModal } from "~/components/modal/user-management/bulk-user-modal";
 
 const StyledButton = styled(CustomButton, {
   shouldForwardProp: (propsName) => propsName !== "noBorder",
@@ -13,8 +15,10 @@ const StyledButton = styled(CustomButton, {
   border: noBorder ? "none" : "1px solid #414145",
   height: "100%",
 }));
+
 const Header = (): ReactElement => {
-  const [openModal, setOpenModal] = useState(false);
+  const [addModal, setAddModal] = useState(false);
+  const [modal, setModal] = useState(false);
   return (
     <>
       <Grid container gap={1}>
@@ -45,7 +49,11 @@ const Header = (): ReactElement => {
           </StyledButton>
         </Grid>
         <Grid xs={2} item>
-          <StyledButton colorVariant="neutral" fullWidth>
+          <StyledButton
+            colorVariant="neutral"
+            fullWidth
+            onClick={() => setModal(true)}
+          >
             Bulk Upload
           </StyledButton>
         </Grid>
@@ -54,19 +62,28 @@ const Header = (): ReactElement => {
             colorVariant="primary"
             fullWidth
             noBorder
-            onClick={() => setOpenModal(true)}
+            onClick={() => setAddModal(true)}
           >
             Add User
           </StyledButton>
         </Grid>
+        <BulkUserModal
+          onBulkConfirm={() => {
+            setModal(false);
+          }}
+          open={modal}
+          onClose={() => {
+            setModal(false);
+          }}
+        />
+        <AddUserModal
+          open={addModal}
+          onAddUser={() => {
+            alert("success");
+          }}
+          onClose={() => setAddModal(false)}
+        />
       </Grid>
-      <AddUserModal
-        open={openModal}
-        onAddUser={() => {
-          alert("success");
-        }}
-        onClose={() => setOpenModal(false)}
-      />
     </>
   );
 };
