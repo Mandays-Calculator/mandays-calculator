@@ -2,6 +2,8 @@ import type { Column } from "react-table";
 import { UserListHeader } from "./types";
 import { Stack } from "@mui/material";
 import { SvgIcon } from "~/components";
+import { useState } from "react";
+import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
 
 export const userListColum: Column<UserListHeader>[] = [
   {
@@ -23,20 +25,25 @@ export const userListColum: Column<UserListHeader>[] = [
   {
     Header: "Action",
     Cell: () => {
+      const [editModal, setEditModal] = useState(false);
       return (
-        <Stack
-          direction="row"
-          spacing={2}
-        >
+        <Stack direction="row" spacing={2}>
           <SvgIcon
+            onClick={() => {
+              setEditModal(true);
+            }}
             name="edit"
             color="primary"
             $size={2}
           />
-          <SvgIcon
-            name="delete"
-            color="error"
-            $size={2}
+
+          <SvgIcon name="delete" color="error" $size={2} />
+          <EditUserModal
+            open={editModal}
+            onEditUser={() => {
+              alert("success");
+            }}
+            onClose={() => setEditModal(false)}
           />
         </Stack>
       );
