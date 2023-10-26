@@ -1,13 +1,12 @@
 import { type ReactElement, useState, ChangeEvent } from "react";
 import { Column } from "react-table";
-
 import { useFormikContext } from "formik";
-
-import { Grid, Typography, Stack, Box, IconButton } from "@mui/material";
+import { Grid, Typography, Stack, Box, IconButton, Divider, Avatar } from "@mui/material";
 
 import { CustomButton } from "~/components/form/button";
 import { AddTeamForm as AddTeamFormType } from "../types";
-import { Table, TextField, SvgIcon } from "~/components";
+import { Table, TextField, SvgIcon, Select } from "~/components";
+import { Modal } from "~/components/modal";
 
 type DataType = {
   name: string;
@@ -34,6 +33,11 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const [projectNameError, setProjectNameError] = useState<boolean>(false);
   const [teamNameError, setTeamNameError] = useState<boolean>(false);
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
+  const [showMemberDialog, setMemberDialog] = useState(false);
+
+  const toggleDialog = () => {
+    setMemberDialog(!showMemberDialog);
+  };
 
   const editTeam = (): void => {
     if (projectName === "") {
@@ -121,6 +125,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   ];
 
   return (
+    <>
     <Stack direction="column" gap={2}>
       <Typography padding={{ padding: "0 1rem 0 1rem" }} fontWeight="bold">
         Edit Team
@@ -175,7 +180,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
           />
         </Grid>
         <Grid item xs={7} container justifyContent="flex-end">
-          <CustomButton type="button">Add Members</CustomButton>
+          <CustomButton type="button" onClick={toggleDialog}>Add Members</CustomButton>
         </Grid>
       </Grid>
 
@@ -201,6 +206,83 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
         <CustomButton onClick={editTeam}>Done</CustomButton>
       </Stack>
     </Stack>
+    <Modal open={showMemberDialog} title='Search User' maxWidth='sm' onClose={toggleDialog}>
+        <Stack direction='column'>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField name='teamName' label='Name' fullWidth />
+            </Grid>
+            <Grid item xs={6}>
+              <Stack direction='column' gap={1}>
+                <Typography>ODC</Typography>
+                <Select
+                  name='teamLead'
+                  placeholder='ODC'
+                  fullWidth
+                  options={[
+                    {
+                      value: '1',
+                      label: 'Filter 1',
+                    },
+                    {
+                      value: '2',
+                      label: 'Filter 2',
+                    },
+                  ]}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+        </Stack>
+        <Divider style={{'marginTop': '10px'}}/>
+        <br />
+        <Stack direction={'row'} gap={4} spacing={2} padding={{ padding: "0 1rem 1rem 1rem" }}>
+          <Grid item xs={6} sx={{display: 'flex', alignItems: 'center'}}>
+            <Avatar alt="Remy Sharp" />
+            <div style={{marginLeft: '10px'}}>
+              <Typography>Dela Cruz, Juan</Typography>
+              <Typography>PH ODC</Typography>
+              <Typography>I03</Typography>
+            </div>
+          </Grid>
+          <Grid item xs={6} sx={{display: 'flex', alignItems: 'center'}}>
+            <Avatar alt="Remy Sharp" />
+            <div style={{marginLeft: '10px'}}>
+              <Typography>Dela Cruz, Juan</Typography>
+              <Typography>PH ODC</Typography>
+              <Typography>I03</Typography>
+            </div>
+          </Grid>
+        </Stack>
+        <Stack direction={'row'} gap={4} spacing={2} padding={{ padding: "0 1rem 1rem 1rem" }}>
+          <Grid item xs={6} sx={{display: 'flex', alignItems: 'center'}}>
+            <Avatar alt="Remy Sharp" />
+            <div style={{marginLeft: '10px'}}>
+              <Typography>Dela Cruz, Juan</Typography>
+              <Typography>PH ODC</Typography>
+              <Typography>I03</Typography>
+            </div>
+          </Grid>
+          <Grid item xs={6} sx={{display: 'flex', alignItems: 'center'}}>
+            <Avatar alt="Remy Sharp" />
+            <div style={{marginLeft: '10px'}}>
+              <Typography>Dela Cruz, Juan</Typography>
+              <Typography>PH ODC</Typography>
+              <Typography>I03</Typography>
+            </div>
+          </Grid>
+        </Stack>
+        
+        <Stack direction='row' display='flex' justifyContent='flex-end' gap={1}>
+          <CustomButton type='button' colorVariant='secondary' onClick={toggleDialog}>
+            Cancel
+          </CustomButton>
+          <CustomButton type='button' colorVariant='primary' onClick={toggleDialog}>
+            Select
+          </CustomButton>
+        </Stack>
+      </Modal>
+    </>
   );
 };
 
