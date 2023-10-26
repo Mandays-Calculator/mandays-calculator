@@ -4,9 +4,9 @@
     "durationUntilPromptSeconds": "600",
     "confirmationWindowSeconds": "300"
   },
-  "apiBasePath": "http://localhost:18000",
+  "apiBasePath": "http://192.168.150.74:18000",
   "oidcConfig": {
-    "authority": "http://localhost:8080/auth/realms/mandays-calculator",
+    "authority": "http://192.168.150.74:8080/auth/realms/mandays-calculator",
     "realm": "mandays-calculator",
     "client_id": "mc-client",
     "response_type": "code",
