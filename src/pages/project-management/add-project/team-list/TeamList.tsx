@@ -6,7 +6,12 @@ import { useFormikContext } from "formik";
 import { Stack } from "@mui/material";
 import TeamListCard from "../components/TeamListCard";
 
-const TeamList = (): ReactElement => {
+interface TeamListProps {
+  toggleEdit: (teamIndex: number) => any;
+}
+
+const TeamList = (props: TeamListProps): ReactElement => {
+  const { toggleEdit } = props;
   const { values } = useFormikContext<AddTeamFormType>();
   return (
     <Stack
@@ -26,6 +31,7 @@ const TeamList = (): ReactElement => {
           key={index}
           teamIndex={index}
           teamObject={_team}
+          toggleEdit={(teamIndex) => toggleEdit(teamIndex)}
         />
       ))}
     </Stack>

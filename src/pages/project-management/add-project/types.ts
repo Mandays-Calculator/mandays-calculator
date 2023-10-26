@@ -6,4 +6,11 @@ export interface AddTeamForm {
 export interface TeamObject {
   teamName: string;
   teamLead: string;
+  // members: MemberObject[];
+}
+
+export interface MemberObject {
+  name: string;
+  odc: string;
+  careerStep: string;
 }
