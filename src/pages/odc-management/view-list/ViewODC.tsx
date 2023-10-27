@@ -1,31 +1,36 @@
 import type { ReactElement, Dispatch, SetStateAction } from "react";
+import type { IntValues } from "../utils/interface";
+
+import { useTranslation } from "react-i18next";
 
 import { Grid, TextField, styled, Box } from "@mui/material";
+import { useFormikContext } from "formik";
 
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
 
-import { DataType, ODCColumns } from "../utils/columns";
+import { ODCColumns } from "../utils/columns";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
 }));
 
 type ViewProps = {
-  setAddODC: Dispatch<SetStateAction<boolean>>;
+  setIsAdd: Dispatch<SetStateAction<boolean>>;
   setDeleteModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
   setIdx: Dispatch<SetStateAction<number>>;
-  data: DataType[];
-  onDeleteRow: (index: number) => void;
+  setDelIdx: Dispatch<SetStateAction<number | null>>;
 };
 
 const ViewODC = (props: ViewProps): ReactElement => {
-  const { setAddODC, setDeleteModalOpen, setIsEdit, setIdx } = props;
+  const { t } = useTranslation();
+  const { setIsAdd, setDeleteModalOpen, setIsEdit, setIdx, setDelIdx } = props;
+  const { values } = useFormikContext<IntValues>();
 
-  const handleAdd = () => {
-    setAddODC(true);
+  const handleAdd = (): void => {
+    setIsAdd(true);
     setIsEdit(false);
   };
 
@@ -38,7 +43,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
             <CustomButton type="button" onClick={handleAdd}>
-              Add ODC
+              {t('odc.button.add')}
             </CustomButton>
           </Grid>
         </Grid>
@@ -47,13 +52,13 @@ const ViewODC = (props: ViewProps): ReactElement => {
           <Table
             name="ODCTable"
             columns={ODCColumns(
-              setAddODC,
-              setDeleteModalOpen,
+              setIsAdd,
               setIsEdit,
               setIdx,
-              props.onDeleteRow
+              setDelIdx,
+              setDeleteModalOpen,
             )}
-            data={props.data}
+            data={values.odcList}
           />
         </Box>
       </PageContainer>

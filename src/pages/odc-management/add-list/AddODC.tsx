@@ -1,9 +1,4 @@
-import {
-  type ReactElement,
-  type Dispatch,
-  type SetStateAction,
-  useState,
-} from "react";
+import type { ReactElement, Dispatch, SetStateAction } from "react";
 import type { IntValues } from "../utils/interface";
 
 import { useTranslation } from "react-i18next";
@@ -20,17 +15,16 @@ import { HolidayColumn } from "../utils/columns";
 import { InitialODCValues, HolidayData } from "../utils/data";
 
 type AddProps = {
-  setAddODC: Dispatch<SetStateAction<boolean>>;
+  setIsAdd: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
   idx: number;
 };
 
 const AddODC = (props: AddProps): ReactElement => {
   const { t } = useTranslation();
-  const { idx, isEdit, setAddODC } = props;
+  const { idx, isEdit, setIsAdd } = props;
 
   const { values, resetForm } = useFormikContext<IntValues>();
-  const formikContext = useFormikContext<IntValues>();
 
   const handleClose = () => {
     if (isEdit) {
@@ -40,31 +34,7 @@ const AddODC = (props: AddProps): ReactElement => {
     } else {
       resetForm();
     }
-    setAddODC(false);
-  };
-
-  const [fieldValues, setFieldValues] = useState({
-    odcName: isEdit ? values.odcList[idx].odcName : "",
-    abbreviation: isEdit ? values.odcList[idx].abbreviation : "",
-    location: isEdit ? values.odcList[idx].location : "",
-  });
-
-  const handleFieldChange = (fieldName: string, value: string) => {
-    setFieldValues({ ...fieldValues, [fieldName]: value });
-  };
-
-  const handleAddODC = () => {
-    const updatedValues = { ...values };
-    const newODC = {
-      odcName: fieldValues.odcName,
-      abbreviation: fieldValues.abbreviation,
-      location: fieldValues.location,
-      noHolidays: 0,
-    };
-
-    updatedValues.odcList = [...updatedValues.odcList, newODC];
-    formikContext.setValues(updatedValues);
-    setAddODC(false);
+    setIsAdd(false);
   };
 
   return (
@@ -76,10 +46,6 @@ const AddODC = (props: AddProps): ReactElement => {
               name={`odcList.${idx}.odcName`}
               label={t("odc.form.odcName")}
               id="odcName"
-              value={fieldValues.odcName}
-              onChange={(event) =>
-                handleFieldChange("odcName", event.target.value)
-              }
             />
           </Grid>
           <Grid item xs={6}>
@@ -87,10 +53,6 @@ const AddODC = (props: AddProps): ReactElement => {
               name={`odcList.${idx}.abbreviation`}
               label={t("odc.form.abbr")}
               id="abbreviation"
-              value={fieldValues.abbreviation}
-              onChange={(event) =>
-                handleFieldChange("abbreviation", event.target.value)
-              }
             />
           </Grid>
           <Grid item xs={6}>
@@ -98,44 +60,29 @@ const AddODC = (props: AddProps): ReactElement => {
               name={`odcList.${idx}.location`}
               label={t("odc.form.loc")}
               id="location"
-              value={fieldValues.location}
-              onChange={(event) =>
-                handleFieldChange("location", event.target.value)
-              }
             />
           </Grid>
         </Grid>
 
-        <Box marginTop="14px">
-          <Table
-            name="HolidayTable"
-            columns={HolidayColumn}
-            data={HolidayData}
-          />
-        </Box>
-
-        <Grid container spacing={2} alignItems="center" mt={1}>
-          <Grid item xs={12} container justifyContent="flex-end">
-            {isEdit ? (
-              <>
-                <CustomButton
-                  type="button"
-                  sx={{ mr: 2 }}
-                  onClick={() => setAddODC(false)}
-                >
-                  Save
-                </CustomButton>
-                <CustomButton type="button" onClick={handleClose}>
-                  Cancel
-                </CustomButton>
-              </>
-            ) : (
-              <CustomButton type="button" onClick={handleAddODC}>
-                Add ODC
-              </CustomButton>
-            )}
+        <Box margin="14px 0px">
+          <Table name="HolidayTable" columns={HolidayColumn} data={isEdit ? HolidayData : []} />
+          <Grid container spacing={2} alignItems="center"mt={1}>
+            <Grid item xs={12} container justifyContent="flex-end">
+              {isEdit ? (
+                <>
+                  <CustomButton
+                    type="button"
+                    sx={{ mr: 2 }}
+                    onClick={() => setIsAdd(false)}
+                  >{t('odc.button.save')}</CustomButton>
+                  <CustomButton type="button" onClick={handleClose}>{t('odc.button.cancel')}</CustomButton>
+                </>
+              ) : (
+                <CustomButton type="button" onClick={() => setIsAdd(false)}>{t('odc.button.add')}</CustomButton>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </PageContainer>
     </>
   );

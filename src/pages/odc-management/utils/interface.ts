@@ -1,4 +1,4 @@
-import type { DataType } from "./columns";
+import type { DataType } from "./type";
 
 export interface IntValues {
   odcList: DataType[];

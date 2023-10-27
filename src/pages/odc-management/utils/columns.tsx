@@ -1,31 +1,20 @@
 import type { Dispatch, SetStateAction } from "react";
+import type { DataType, HolidayType } from "./type";
 
 import { Column, CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 
 import { SvgIcon } from "~/components";
 
-export type DataType = {
-  odcName: string;
-  location: string;
-  abbreviation: string;
-  noHolidays: number;
-};
-
-type HolidayType = {
-  holidayDate: string;
-  holidayName: string;
-};
-
 type ODCColumnType = Column<DataType> & { id?: string };
 type HolidayColumnType = Column<HolidayType>;
 
 export const ODCColumns = (
-  setAddODC: Dispatch<SetStateAction<boolean>>,
-  setDeleteModalOpen: Dispatch<SetStateAction<boolean>>,
+  setIsAdd: Dispatch<SetStateAction<boolean>>,
   setIsEdit: Dispatch<SetStateAction<boolean>>,
   setIdx: Dispatch<SetStateAction<number>>,
-  onDeleteRow: (index: number) => void
+  setDelIdx: Dispatch<SetStateAction<number | null>>,
+  setDeleteModalOpen: Dispatch<SetStateAction<boolean>>,
 ): ODCColumnType[] => {
   return [
     {
@@ -51,7 +40,7 @@ export const ODCColumns = (
         <>
           <IconButton
             onClick={() => {
-              setAddODC(true);
+              setIsAdd(true);
               setIsEdit(true);
               setIdx(row.index);
             }}
@@ -61,7 +50,7 @@ export const ODCColumns = (
           <IconButton
             onClick={() => {
               setDeleteModalOpen(true);
-              onDeleteRow(row.index);
+              setDelIdx(row.index);
             }}
           >
             <SvgIcon name="delete" $size={2} />

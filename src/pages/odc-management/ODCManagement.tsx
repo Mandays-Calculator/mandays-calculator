@@ -11,62 +11,61 @@ import { Form } from "~/components/form";
 
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
-import { InitialODCValues } from "./utils/data";
+import { InitialODCValues, NewODCData } from "./utils/data";
+import { IntValuesSchema } from "./utils/schema";
 
 const ODCManagement = (): ReactElement => {
-  const [isAddODC, setIsAddODC] = useState<boolean>(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [isAdd, setIsAdd] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [idx, setIdx] = useState<number>(0);
-  const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [delIdx, setDelIdx] = useState<number | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   const ODCForm = useFormik<IntValues>({
     initialValues: InitialODCValues,
+    validationSchema: IntValuesSchema,
     enableReinitialize: true,
     onSubmit: (): void => {},
   });
 
-  const [rows, setRows] = useState(ODCForm.initialValues.odcList);
-
   useEffect(() => {
-    setRows(ODCForm.values.odcList);
-  }, [ODCForm.values.odcList]);
-
-  const handleDeleteRow = (rowIndex: number) => {
-    setSelectedRow(rowIndex);
-  };
+    if (isAdd === true && isEdit === false) {
+      const arr = InitialODCValues.odcList;
+      arr.push(NewODCData);
+      setIdx(arr.length - 1);
+      ODCForm.setFieldValue(`odcList`, arr);
+    }
+  }, [isAdd]);
 
   return (
     <>
       <Title title="ODC Management" />
 
       <Form instance={ODCForm}>
-        {isAddODC ? (
-          <AddODC setAddODC={setIsAddODC} isEdit={isEdit} idx={idx} />
+        {isAdd ? (
+          <AddODC setIsAdd={setIsAdd} isEdit={isEdit} idx={idx} />
         ) : (
           <ViewODC
-            setAddODC={setIsAddODC}
+            setIsAdd={setIsAdd}
             setDeleteModalOpen={setDeleteModalOpen}
             setIsEdit={setIsEdit}
             setIdx={setIdx}
-            data={rows}
-            onDeleteRow={handleDeleteRow}
+            setDelIdx={setDelIdx}
           />
         )}
       </Form>
 
       <DeleteModal
-        onDeleteConfirm={(rowIndex) => {
-          if (rowIndex !== -1) {
-            const updatedRows = rows.filter((_, index) => index !== rowIndex);
-            setRows(updatedRows);
-          }
-          setSelectedRow(null);
+        onDeleteConfirm={(): void => {
+          const dIdx = delIdx || 0;
+          const arr = ODCForm.values.odcList;
+          arr.splice(dIdx, 1);
+          ODCForm.setFieldValue(`odc`, arr);
           setDeleteModalOpen(false);
         }}
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        selectedRow={selectedRow}
+        selectedRow={delIdx}
       />
     </>
   );
