@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { useState, ReactElement } from "react";
 import { Column } from "react-table";
 
 import { Grid, TextField, styled, Box, IconButton } from "@mui/material";
@@ -27,19 +27,10 @@ const StyledTextField = styled(TextField)(() => ({
 const ProjectList = (props: ProjectListProps): ReactElement => {
   const { handleAddProject } = props;
 
-  const rows = [
-    {
-      prjName: "eMPF",
-      noOfTeams: 1,
-      noOfUsers: 2,
-    },
-    {
-      prjName: "eMPF",
-      noOfTeams: 1,
-      noOfUsers: 2,
-    },
-  ];
+  const [filterText, setFilterText] = useState("");
 
+  const rows: DataType[] = [];
+  
   const columns: ColumnType[] = [
     {
       Header: "Project",
@@ -69,11 +60,19 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
     },
   ];
 
+  const filteredRows = rows.filter((row) =>
+    row.prjName.toLowerCase().includes(filterText.toLowerCase())
+  );
+
   return (
     <PageContainer>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={5}>
-          <StyledTextField size="small" placeholder="Enter keyword here..." />
+          <StyledTextField
+            size="small"
+            placeholder="Enter keyword here..."
+            onChange={(e) => setFilterText(e.target.value)}
+          />
         </Grid>
         <Grid item xs={7} container justifyContent="flex-end">
           <CustomButton type="button" onClick={handleAddProject}>
@@ -82,7 +81,7 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
         </Grid>
       </Grid>
       <Box marginTop="14px">
-        <Table name="ODCTable" columns={columns} data={rows} />
+        <Table name="ODCTable" columns={columns} data={filteredRows} />
       </Box>
     </PageContainer>
   );

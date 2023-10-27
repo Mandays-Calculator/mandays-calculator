@@ -78,7 +78,9 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             >
               Cancel
             </CustomButton>
-            <CustomButton type="submit">Add Project</CustomButton>
+            <CustomButton type="submit" onClick={handleAddProject}>
+              Add Project
+            </CustomButton>
           </Stack>
         </Form>
       ) : (

@@ -39,6 +39,8 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
         ...values,
         teams: [...values.teams, { teamName: teamName, teamLead: teamLead }],
       });
+      setTeamName("");
+      setTeamLead("");
     }
   };
 
