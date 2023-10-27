@@ -3,7 +3,7 @@
 exports[`Title Component renders the title component 1`] = `
 <DocumentFragment>
   <p
-    class="MuiTypography-root MuiTypography-body1 css-g6ng2y-MuiTypography-root"
+    class="MuiTypography-root MuiTypography-body1 css-p7npm1-MuiTypography-root"
     data-testid="title-component"
   >
     Title Component
