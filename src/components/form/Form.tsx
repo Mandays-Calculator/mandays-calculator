@@ -10,6 +10,7 @@ export const Form = <FormValues extends object>(props: FormProps<FormValues>): R
   return (
     <FormikProvider value={instance}>
       <form
+        data-testid="form-component"
         {...rest}
         onSubmit={instance.handleSubmit}
       >

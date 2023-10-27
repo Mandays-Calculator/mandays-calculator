@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Error Page Component renders something went wrong 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiContainer-root css-1wl6626-MuiContainer-root"
+  >
+    <div
+      class="css-1fjz3lj"
+    >
+      <div
+        class="css-xvh1cf"
+      >
+        <h5
+          class="MuiTypography-root MuiTypography-h5 css-bezmlo-MuiTypography-root"
+        >
+          SOMETHING WENT WRONG
+        </h5>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1d3njat-MuiTypography-root"
+        >
+          Please contact the administrator. You can send a report at this email sample@email.com
+        </p>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+          tabindex="0"
+          type="button"
+        >
+          GO BACK HOME
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="css-xvh1cf"
+      >
+        <img
+          alt="error"
+          height="500"
+          src="something_wrong.png"
+          width="550"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Error Page Component renders the page without breaking 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiContainer-root css-1wl6626-MuiContainer-root"
+  >
+    <div
+      class="css-1fjz3lj"
+    >
+      <div
+        class="css-xvh1cf"
+      >
+        <h5
+          class="MuiTypography-root MuiTypography-h5 css-bezmlo-MuiTypography-root"
+        >
+          PAGE NOT FOUND
+        </h5>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-1d3njat-MuiTypography-root"
+        >
+          The page you're looking for does not exist.
+        </p>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+          tabindex="0"
+          type="button"
+        >
+          GO BACK HOME
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="css-xvh1cf"
+      >
+        <img
+          alt="error"
+          height="500"
+          src="page_not_found.png"
+          width="550"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
