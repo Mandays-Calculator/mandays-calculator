@@ -27,10 +27,10 @@ const StyledTextField = styled(TextField)(() => ({
 const ProjectList = (props: ProjectListProps): ReactElement => {
   const { handleAddProject } = props;
 
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState<string>("");
 
   const rows: DataType[] = [];
-  
+
   const columns: ColumnType[] = [
     {
       Header: "Project",
