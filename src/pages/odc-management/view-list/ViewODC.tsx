@@ -1,14 +1,12 @@
 import type { ReactElement, Dispatch, SetStateAction } from "react";
-import type { IntValues } from "../utils/interface";
 
 import { Grid, TextField, styled, Box } from "@mui/material";
-import { useFormikContext } from "formik";
 
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
 
-import { ODCColumns } from "../utils/columns";
+import { DataType, ODCColumns } from "../utils/columns";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
@@ -19,11 +17,12 @@ type ViewProps = {
   setDeleteModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
   setIdx: Dispatch<SetStateAction<number>>;
+  data: DataType[];
+  onDeleteRow: (index: number) => void;
 };
 
 const ViewODC = (props: ViewProps): ReactElement => {
   const { setAddODC, setDeleteModalOpen, setIsEdit, setIdx } = props;
-  const { values } = useFormikContext<IntValues>();
 
   const handleAdd = () => {
     setAddODC(true);
@@ -38,14 +37,23 @@ const ViewODC = (props: ViewProps): ReactElement => {
             <StyledTextField size="small" placeholder="Enter keyword here..." />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
-            <CustomButton type="button" onClick={handleAdd}>Add ODC</CustomButton>
+            <CustomButton type="button" onClick={handleAdd}>
+              Add ODC
+            </CustomButton>
           </Grid>
         </Grid>
 
         <Box marginTop="14px">
-          <Table name="ODCTable"
-            columns={ODCColumns(setAddODC,setDeleteModalOpen,setIsEdit,setIdx)}
-            data={values.odcList}
+          <Table
+            name="ODCTable"
+            columns={ODCColumns(
+              setAddODC,
+              setDeleteModalOpen,
+              setIsEdit,
+              setIdx,
+              props.onDeleteRow
+            )}
+            data={props.data}
           />
         </Box>
       </PageContainer>

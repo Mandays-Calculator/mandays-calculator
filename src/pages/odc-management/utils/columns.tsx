@@ -24,7 +24,8 @@ export const ODCColumns = (
   setAddODC: Dispatch<SetStateAction<boolean>>,
   setDeleteModalOpen: Dispatch<SetStateAction<boolean>>,
   setIsEdit: Dispatch<SetStateAction<boolean>>,
-  setIdx: Dispatch<SetStateAction<number>>
+  setIdx: Dispatch<SetStateAction<number>>,
+  onDeleteRow: (index: number) => void
 ): ODCColumnType[] => {
   return [
     {
@@ -57,7 +58,12 @@ export const ODCColumns = (
           >
             <SvgIcon name="edit" $size={2} />
           </IconButton>
-          <IconButton onClick={() => setDeleteModalOpen(true)}>
+          <IconButton
+            onClick={() => {
+              setDeleteModalOpen(true);
+              onDeleteRow(row.index);
+            }}
+          >
             <SvgIcon name="delete" $size={2} />
           </IconButton>
         </>
