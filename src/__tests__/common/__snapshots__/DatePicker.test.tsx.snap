@@ -92,7 +92,7 @@ exports[`Date Picker Component renders date picker component 1`] = `
             name="date-picker"
             placeholder="Please Input"
             type="text"
-            value="10/23/2023"
+            value="10/27/2023"
           />
           <svg
             aria-hidden="true"

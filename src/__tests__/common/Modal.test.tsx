@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/react";
 import { Modal } from "~/components/modal";
-import ProviderWrapper from "./utils/ProviderWrapper";
+import ProviderWrapper from "./../utils/ProviderWrapper";
 import Button from "@mui/material/Button";
 
 jest.mock("~/hooks/modal", () => ({
