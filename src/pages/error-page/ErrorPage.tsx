@@ -6,18 +6,17 @@ import PageNotFound from "~/assets/img/page_not_found.png";
 import SomethingWentWrong from "~/assets/img/something_wrong.png";
 
 import { CustomButton } from "~/components/form/button";
-import { PageContainer } from "~/components/page-container";
 import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled("div")(() => ({
   display: "flex",
   padding: "2rem",
+  flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
   gap: "1rem",
   flex: "1 0 0",
   alignSelf: "stretch",
-  height: "70vh",
 }));
 
 const StyledChildContainer = styled("div")(() => ({
@@ -25,7 +24,7 @@ const StyledChildContainer = styled("div")(() => ({
   width: "27rem",
   paddingLeft: "0px",
   flexDirection: "column",
-  alignItems: "flex-start",
+  alignItems: "center",
   gap: "1.375rem",
   textAlign: "center",
 }));
@@ -56,7 +55,7 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
             variant="body2"
             fontWeight="bold"
           >
-            The page you're looking for does not exist.
+            Couldn't find that. Try something else or go back home.
           </Typography>
           <CustomButton
             type="button"
@@ -81,7 +80,7 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
             variant="body2"
             fontWeight="bold"
           >
-            Please contact the administrator. You can send a report at this email sample@email.com
+            Relax, you didn't break the internet. You may try refreshing the page.
           </Typography>
           <CustomButton
             type="button"
@@ -96,19 +95,17 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
     return null;
   };
   return (
-    <PageContainer>
-      <StyledContainer>
-        <StyledChildContainer>{renderDetails()}</StyledChildContainer>
-        <StyledChildContainer>
-          <img
-            src={type === "not-found" ? PageNotFound : SomethingWentWrong}
-            alt="error"
-            width={550}
-            height={500}
-          />
-        </StyledChildContainer>
-      </StyledContainer>
-    </PageContainer>
+    <StyledContainer>
+      <StyledChildContainer>
+        <img
+          src={type === "not-found" ? PageNotFound : SomethingWentWrong}
+          alt="error"
+          width={330}
+          height={280}
+        />
+      </StyledChildContainer>
+      <StyledChildContainer>{renderDetails()}</StyledChildContainer>
+    </StyledContainer>
   );
 };
 
