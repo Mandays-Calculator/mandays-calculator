@@ -14,7 +14,9 @@ describe("Error Page Component", () => {
     const { asFragment, getByText } = render(<ErrorPage type="not-found" />);
 
     expect(getByText("PAGE NOT FOUND")).toBeInTheDocument();
-    expect(getByText("The page you're looking for does not exist.")).toBeInTheDocument();
+    expect(
+      getByText("Couldn't find that. Try something else or go back home.")
+    ).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();
   });
 
@@ -22,9 +24,7 @@ describe("Error Page Component", () => {
     const { asFragment, getByText } = render(<ErrorPage type="something-went-wrong" />);
     expect(getByText("SOMETHING WENT WRONG")).toBeInTheDocument();
     expect(
-      getByText(
-        "Please contact the administrator. You can send a report at this email sample@email.com"
-      )
+      getByText("Relax, you didn't break the internet. You may try refreshing the page.")
     ).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();
   });
