@@ -4,16 +4,17 @@ import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 
 import { Auth } from "~/pages/auth";
-import { PageLoader } from "./components";
-import { Layout } from "~/components/layout";
+import { PageLoader, Layout } from "~/components";
 import AppRoutes from "~/routes/AppRoutes";
 import axiosInit from "~/api/axios.config";
 
 import { getUser } from "~/utils/oidc-utils";
+import { getEnvConfig } from "~/utils/env-config";
 
 const AuthenticatedApp = (): ReactElement => {
   const auth = useAuth();
   const user = getUser();
+  const config = getEnvConfig();
 
   useEffect(() => {
     axiosInit(user?.access_token);
@@ -30,18 +31,22 @@ const AuthenticatedApp = (): ReactElement => {
     return <PageLoader />;
   }
 
-  if (auth.error) {
-    return <div>Oops... {auth.error.message}</div>;
-  }
-
-  if (!auth.isAuthenticated) {
+  if (!config.enableAuth) {
     return (
       <Layout>
         <AppRoutes />
       </Layout>
     );
+  } else {
+    if (auth.isAuthenticated) {
+      return (
+        <Layout>
+          <AppRoutes />
+        </Layout>
+      );
+    }
+    return <Auth />;
   }
-  return <Auth />;
 };
 
 export default AuthenticatedApp;

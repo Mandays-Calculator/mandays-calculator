@@ -1,11 +1,13 @@
 import type { ReactElement } from "react";
 import type { ConfigType } from "~/utils/env-config";
-import _ from "lodash";
+
 import { useEffect, useState } from "react";
-import { PageLoader } from "./components";
-import { loadConfig } from "~/utils/env-config";
-import AuthenticatedApp from "./AuthenticatedApp";
 import { AuthProvider } from "react-oidc-context";
+import _ from "lodash";
+
+import { loadConfig } from "~/utils/env-config";
+import { PageLoader } from "./components";
+import AuthenticatedApp from "./AuthenticatedApp";
 
 const App = (): ReactElement => {
   const environment = import.meta.env.VITE_ENVIRONMENT;
@@ -24,6 +26,7 @@ const App = (): ReactElement => {
   if (!_.isUndefined(config)) {
     const OIDCConfig = {
       ...config.oidcConfig,
+      client_secret: import.meta.env.VITE_SECRET_KEY,
       redirect_uri: window.location.origin,
     };
 

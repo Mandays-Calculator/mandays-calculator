@@ -5,8 +5,9 @@
     "confirmationWindowSeconds": "300"
   },
   "apiBasePath": "http://192.168.150.74:18000",
+  "enableAuth": true,
   "oidcConfig": {
-    "authority": "http://192.168.150.74:8080/auth/realms/mandays-calculator",
+    "authority": "http://192.168.150.74:8080/realms/mandays-calculator",
     "realm": "mandays-calculator",
     "client_id": "mc-client",
     "response_type": "code",

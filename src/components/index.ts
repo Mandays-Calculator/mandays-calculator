@@ -7,3 +7,4 @@ export * from "./table";
 export * from "./page-loader";
 export * from "./page-container";
 export * from "./modal";
+export * from "./layout";

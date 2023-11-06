@@ -1,8 +1,8 @@
 import { User } from "oidc-client-ts";
 
 export const getUser = (): User | null => {
-  const oidcStorage = localStorage.getItem(
-    `oidc.user:<your authority>:<your client id>`
+  const oidcStorage = sessionStorage.getItem(
+    `oidc.user:http://localhost:8080/realms/mandays-calculator:mc-client`
   );
   if (!oidcStorage) {
     return null;
