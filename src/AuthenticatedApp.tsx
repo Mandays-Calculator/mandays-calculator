@@ -33,7 +33,7 @@ const AuthenticatedApp = (): ReactElement => {
     return <div>Oops... {auth.error.message}</div>;
   }
 
-  if (!auth.isAuthenticated) {
+  if (auth.isAuthenticated) {
     return (
       <Layout>
         <AppRoutes />
