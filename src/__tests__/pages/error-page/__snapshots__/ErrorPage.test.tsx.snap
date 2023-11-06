@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Error Page Component renders something went wrong 1`] = `
+<DocumentFragment>
+  <div
+    class="css-rejgk9"
+  >
+    <div
+      class="css-108k6cn"
+    >
+      <img
+        alt="error"
+        height="280"
+        src="something_wrong.png"
+        width="330"
+      />
+    </div>
+    <div
+      class="css-108k6cn"
+    >
+      <h5
+        class="MuiTypography-root MuiTypography-h5 css-bezmlo-MuiTypography-root"
+      >
+        SOMETHING WENT WRONG
+      </h5>
+      <p
+        class="MuiTypography-root MuiTypography-body2 css-1d3njat-MuiTypography-root"
+      >
+        Relax, you didn't break the internet. You may try refreshing the page.
+      </p>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        GO BACK HOME
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Error Page Component renders the page without breaking 1`] = `
+<DocumentFragment>
+  <div
+    class="css-rejgk9"
+  >
+    <div
+      class="css-108k6cn"
+    >
+      <img
+        alt="error"
+        height="280"
+        src="page_not_found.png"
+        width="330"
+      />
+    </div>
+    <div
+      class="css-108k6cn"
+    >
+      <h5
+        class="MuiTypography-root MuiTypography-h5 css-bezmlo-MuiTypography-root"
+      >
+        PAGE NOT FOUND
+      </h5>
+      <p
+        class="MuiTypography-root MuiTypography-body2 css-1d3njat-MuiTypography-root"
+      >
+        Couldn't find that. Try something else or go back home.
+      </p>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        GO BACK HOME
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
