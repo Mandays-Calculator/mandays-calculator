@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import type { ConfigType } from "~/utils/env-config";
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
+import { PageLoader } from "./components";
 import { loadConfig } from "~/utils/env-config";
 import AuthenticatedApp from "./AuthenticatedApp";
 import { AuthProvider } from "react-oidc-context";
@@ -33,20 +33,7 @@ const App = (): ReactElement => {
       </AuthProvider>
     );
   }
-  // Will be replace by loader component
-  return (
-    <Typography
-      variant="h1"
-      justifyContent="center"
-      textAlign="center"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      height="100vh"
-    >
-      Loading ..
-    </Typography>
-  );
+  return <PageLoader />;
 };
 
 export default App;

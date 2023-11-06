@@ -46,7 +46,7 @@ const Drawer = (): ReactElement => {
         <Divider sx={{ mb: 7 }} />
         <StyledList open={open}>
           {routesConfig.map((routeItem: RouteType, index: number) => {
-            if (!routeItem.hideOnSidebar === true) {
+            if (routeItem.icon) {
               return (
                 <StyledListItem
                   key={index}

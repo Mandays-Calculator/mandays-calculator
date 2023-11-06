@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 
 import { Auth } from "~/pages/auth";
+import { PageLoader } from "./components";
 import { Layout } from "~/components/layout";
 import AppRoutes from "~/routes/AppRoutes";
 import axiosInit from "~/api/axios.config";
@@ -26,7 +27,7 @@ const AuthenticatedApp = (): ReactElement => {
   }
 
   if (auth.isLoading) {
-    return <div>Loading...</div>;
+    return <PageLoader />;
   }
 
   if (auth.error) {
