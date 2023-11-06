@@ -11,14 +11,13 @@ const config: Config = {
   modulePaths: ["<rootDir>"],
   moduleDirectories: ["node_modules", "src"],
   moduleFileExtensions: ["js", "jsx", "ts", "tsx", "node"],
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
+  transform: { "^.+\\.tsx?$": "ts-jest", },
 
   // Test Matching & Path Resolution
   testMatch: ["<rootDir>/src/**/*.test.tsx"], // Explicitly looking in 'src' directory
   moduleNameMapper: {
     "\\.css$": "identity-obj-proxy",
+    "^.+\\.svg$": "<rootDir>/src/__tests__/__mocks__/svgMock.ts",
     "^~/(.*)": "<rootDir>/src/$1",
     "@mui/system/(.*)": "<rootDir>/node_modules/@mui/system/$1",
   },
