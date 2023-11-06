@@ -9,7 +9,7 @@ import ProjectList from "./project-list";
 const ProjectManagement = (): ReactElement => {
   const [showAddProject, setShowAddProject] = useState<boolean>(false);
 
-  const handleAddProject = () => {
+  const handleAddProject: () => void = () => {
     setShowAddProject(!showAddProject);
   };
   return (
