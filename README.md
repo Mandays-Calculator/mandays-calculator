@@ -1,94 +1,119 @@
-# React + TypeScript + Vite
+# 📊 Mandays Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A software tool designed to assist project managers and team leaders in estimating and tracking the manpower required to complete a project.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage & Contributing](#usage--contributing)
+- [Tech Stack](#tech-stack)
+- [VS Code Extensions](#vs-code-extensions)
 
-## Expanding the ESLint configuration
+## Overview
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-
-# Mandays Calculator
-
-The Mandays Calculator is a software tool designed to assist project managers and team leaders in estimating and tracking the manpower required to complete a project. It is particularly useful in industries where projects are planned and executed based on the number of working days required (mandays) for completion.
+It is particularly useful in industries where projects are planned and executed based on the number of working days required (mandays) for completion.
 
 ## Getting Started
 
-To get started with this project on your local machine, follow these steps:
-
 ### Prerequisites
 
-- [Node.js] (https://nodejs.org/)
-- [npm] comes with nodejs.
+- [Node.js](https://nodejs.org/)
+- npm (comes with Node.js)
 
 ### Installation
 
-1. Clone the repository to your local machine:
-
-   git clone https://github.com/Mandays-Calculator/mandays-calculator.git   
+1. Clone the repository:
+   `git clone https://github.com/Mandays-Calculator/mandays-calculator.git`
 
 2. Navigate to the project directory:
-   
-   cd mandays-calculator
+   `cd mandays-calculator`
 
 3. Install the project dependencies:
+   `npm install`
 
-   npm install   
+4. Update the Secret Key from Keycloak Configuration:
 
-4. Start the development server:
-   
-   npm run dev
-   
+- Access [Mandays Calculator Realm](http://localhost:8080/admin/master/console/#/mandays-calculator)
+- Locate the Clients Tab and select the mc-client.
+- Copy the Secret Key and update `VITE_SECRET_KEY` in your Vite .env file.
 
-The application will be running at [http://127.0.0.1:5173](http://127.0.0.1:5173).
+5. Start the development server:
+   `npm run dev`
 
-**Note**: The environment can be changed in [<rootDirectory>/.env]
+> **Note**: The environment can be changed in the `.env` file. Use the `VITE_ENVIRONMENT` variable to set your desired environment.
 
-## Usage and Contributing
+## Usage & Contributing
 
-- [/src/components] : All reusable React components 
+Before making any contributions, please read our [coding standards](./CODING_STANDARDS.md).
 
-- [/src/pages]      : Components that represents individual pages
-
-- Use [i18n]Internalization for all text and labels (refer to [src/i18n])
-
-- Make sure to create a test file with a >80% coverage for all feature/component/screen development
-
-- For development branch, make sure to use [dev] branch as a base branch
-
-- Use the standard branch naming in creating a new feature branch [feature/${feature-name}]
-
-- Make sure you have two or more approvers on your PR before merging your branch to [dev]
+- Components: `/src/components`
+- Pages: `/src/pages`
+- Internationalization: Use i18n for all text and labels. Refer to [src/i18n].
+- Testing: Ensure >80% coverage for all features/components/screens.
+- Development: Use [dev] as the base branch.
+- Branch Naming: Follow the pattern `[feature/${feature-name}]`.
 
 ## Tech Stack
 
-- [React]
-- [TypeScript]
-- [MUI]
-- [Jest]
-- [Redux]
+#### Core Technologies
+
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [MUI](https://mui.com/)
+- [Jest](https://jestjs.io/)
+- [Redux](https://redux.js.org/)
+
+#### **Routing:**
+
+- [react-router-dom](https://reactrouter.com/web/guides/quick-start)
+
+#### **Authentication:**
+
+- [keycloak-js](https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter)
+- [React-oidc-context](https://github.com/AxaGuilDEv/react-oidc-context)
+
+#### **API Integration:**
+
+- [react-query](https://tanstack.com/query/v3/)
+- [axios](https://axios-http.com/)
+
+#### **Utilities:**
+
+- [lodash](https://lodash.com/)
+- [moment](https://momentjs.com/)
+
+#### **Validations and Form Handling:**
+
+- [yup](https://github.com/jquense/yup)
+- [formik](https://formik.org/)
+
+#### **State Management:**
+
+- [react-redux](https://react-redux.js.org/)
+
+#### **Translation & Internationalization:**
+
+- [i18next](https://www.i18next.com/)
+- [react-i18next](https://react.i18next.com/)
+- [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector)
+
+#### **UI & Styling:**
+
+- [MUI](https://mui.com/)
+- [@emotion/react](https://emotion.sh/docs/@emotion/react)
+- [@emotion/styled](https://emotion.sh/docs/@emotion/styled) or [styled-components](https://styled-components.com/)
 
 ## VS Code Extensions
 
-- [ESLint]
-- [Prettier]
-- [React]
-- [GitLens]
+To enhance your development experience, consider using these VS Code extensions:
+
+- [**ESLint**](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint): Integrates ESLint JavaScript into VS Code.
+- [**Prettier**](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode): Code formatter using prettier.
+- [**React**](https://marketplace.visualstudio.com/items?itemName=msjsdiag.vscode-react-native): Provides IntelliSense, debugging, and more for React.
+- [**GitLens**](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens): Supercharge the Git capabilities built into Visual Studio Code.
+- [**ES7+ React/Redux/React-Native snippets**](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets): Provides JavaScript and React/Redux snippets in ES7 with Babel plugin features
+
+By using these extensions, you can ensure code consistency and enhance productivity when working on the project.

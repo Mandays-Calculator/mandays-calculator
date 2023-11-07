@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
+import ErrorPage from "~/pages/error-page";
 
 export const routes: RouteType[] = [
   {
@@ -34,5 +35,9 @@ export const routes: RouteType[] = [
     label: "account.info.label",
     element: <Outlet />,
     icon: "person",
+  },
+  {
+    path: "*",
+    element: <ErrorPage type="not-found" />,
   },
 ];

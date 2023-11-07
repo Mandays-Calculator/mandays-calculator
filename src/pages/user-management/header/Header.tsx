@@ -7,7 +7,7 @@ import { styled } from "@mui/material";
 import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { AddUserModal } from "~/components/modal/user-management/add-user-modal";
-import { BulkUserModal } from "~/components/modal/user-management/bulk-user-modal";
+// import { BulkUserModal } from "~/components/modal/user-management/bulk-user-modal";
 
 const StyledButton = styled(CustomButton, {
   shouldForwardProp: (propsName) => propsName !== "noBorder",
@@ -18,7 +18,7 @@ const StyledButton = styled(CustomButton, {
 
 const Header = (): ReactElement => {
   const [addModal, setAddModal] = useState(false);
-  const [modal, setModal] = useState(false);
+  // const [bulkmodal, setBulkModal] = useState(false);
   return (
     <>
       <Grid container gap={1}>
@@ -44,18 +44,18 @@ const Header = (): ReactElement => {
         </Grid>
         <Grid item xs={1.9}></Grid>
         <Grid xs={1} item>
-          <StyledButton colorVariant="neutral" fullWidth>
+          {/* <StyledButton colorVariant="neutral" fullWidth>
             Sync
-          </StyledButton>
+          </StyledButton> */}
         </Grid>
         <Grid xs={2} item>
-          <StyledButton
+          {/* <StyledButton
             colorVariant="neutral"
             fullWidth
-            onClick={() => setModal(true)}
+            onClick={() => setBulkModal(true)}
           >
             Bulk Upload
-          </StyledButton>
+          </StyledButton> */}
         </Grid>
         <Grid xs={2} item>
           <StyledButton
@@ -67,15 +67,15 @@ const Header = (): ReactElement => {
             Add User
           </StyledButton>
         </Grid>
-        <BulkUserModal
+        {/* <BulkUserModal
           onBulkConfirm={() => {
-            setModal(false);
+            setBulkModal(false);
           }}
           open={modal}
           onClose={() => {
-            setModal(false);
+            setBulkModal(false);
           }}
-        />
+        /> */}
         <AddUserModal
           open={addModal}
           onAddUser={() => setAddModal(false)}
