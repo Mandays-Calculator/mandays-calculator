@@ -17,8 +17,11 @@ const AuthenticatedApp = (): ReactElement => {
   const config = getEnvConfig();
 
   useEffect(() => {
-    axiosInit(user?.access_token);
-  }, [auth]);
+    if (user) {
+      console.log("Token refreshed"); //For monitoring purposes
+      axiosInit(user.access_token);
+    }
+  }, [user]);
 
   switch (auth.activeNavigator) {
     case "signinSilent":
