@@ -1,11 +1,15 @@
 import type { RouteType } from ".";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
-import ErrorPage from "~/pages/error-page";
+import ErrorPage from "~/pages/common/error-page";
 
 export const routes: RouteType[] = [
+  {
+    path: "/",
+    element: <Navigate to="/project-management" replace />,
+  },
   {
     path: "project-management",
     label: "project.management.label",

@@ -1,22 +1,23 @@
 import { ReactElement } from "react";
-// import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
 
 import Form from "~/components/form/Form";
+import LocalizationKey from "~/i18n/key";
 import { CustomButton as Button } from "~/components/form/button";
 import { ControlledTextField } from "~/components/form/controlled";
+import { getFieldError } from "~/components/form/utils";
 
-// import { loginUser } from "~/redux/reducers/login";
 import PasswordInput from "./components/password-input/PasswordInput";
 import { loginSchema } from "./schema";
 import { StyledLabel, StyledTitle } from "./components/auth-container";
-import { getFieldError } from "~/components/form/utils";
-import { Link } from "react-router-dom";
 
 const Login = (): ReactElement => {
-  // const dispatch = useDispatch();
-  // const loginState = useSelector((state) => state.login);
+  const { t } = useTranslation();
+  const auth = useAuth();
 
   const loginForm = useFormik({
     initialValues: {
@@ -25,15 +26,20 @@ const Login = (): ReactElement => {
     },
     validationSchema: loginSchema,
     validateOnChange: false,
-    onSubmit: (values) => console.log("values", values),
+    onSubmit: async (values) => {
+      await auth.signinResourceOwnerCredentials({
+        username: values.username,
+        password: values.password,
+      });
+    },
   });
 
   return (
     <Form instance={loginForm}>
       <Grid container>
-        <StyledTitle>Sign In</StyledTitle>
+        <StyledTitle>{t(LocalizationKey.login.label.signIn)}</StyledTitle>
         <Grid item xs={12}>
-          <StyledLabel>Username</StyledLabel>
+          <StyledLabel>{t(LocalizationKey.login.label.userName)}</StyledLabel>
           <ControlledTextField
             fullWidth
             placeholder="Input username"
@@ -42,14 +48,17 @@ const Login = (): ReactElement => {
           />
         </Grid>
         <Grid item xs={12} pt={1} mb={3}>
-          <StyledLabel>Password</StyledLabel>
+          <StyledLabel>{t(LocalizationKey.login.label.password)}</StyledLabel>
           <PasswordInput
             placeholder="Input password"
             name="password"
             helperText={getFieldError(loginForm.errors, "password")}
           />
-          <Link to={"/forgot-password"}>Forgot Password</Link>
+          <Link to={"/forgot-password"}>
+            {t(LocalizationKey.login.label.forgotPassword)}
+          </Link>
         </Grid>
+        {auth.error?.message}
         <Grid item xs={12}>
           <Button fullWidth type="submit">
             Sign In

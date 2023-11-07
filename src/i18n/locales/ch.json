@@ -1,16 +1,31 @@
 {
-  "settings:": {
-    "label": "Settings"
-  },
   "common": {
     "user": "User",
     "submit": "Submit",
     "confirm": "Confirm",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "button": {
+      "goBackHome": "GO BACK HOME"
+    },
+    "somethingWentWrong": {
+      "title": "SOMETHING WENT WRONG",
+      "description": "Relax, you didn't break the internet. You may try refreshing the page."
+    },
+    "notFound": {
+      "title": "PAGE NOT FOUND",
+      "description": "Couldn't find that. Try something else or go back home."
+    }
   },
   "login": {
     "management": {
       "label": "Login management"
+    },
+    "label": {
+      "signIn": "Sign In",
+      "userName": "Username",
+      "password": "Password",
+      "forgotPassword": "Forgot Password"
     }
   },
   "odc": {

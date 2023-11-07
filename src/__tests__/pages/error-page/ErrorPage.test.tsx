@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import ErrorPage from "~/pages/error-page";
+import ErrorPage from "~/pages/common/error-page";
 
 jest.mock("~/assets/img/page_not_found.png", () => "page_not_found.png");
 jest.mock("~/assets/img/something_wrong.png", () => "something_wrong.png");
@@ -21,17 +21,23 @@ describe("Error Page Component", () => {
   });
 
   it("renders something went wrong", () => {
-    const { asFragment, getByText } = render(<ErrorPage type="something-went-wrong" />);
+    const { asFragment, getByText } = render(
+      <ErrorPage type="something-went-wrong" />
+    );
     expect(getByText("SOMETHING WENT WRONG")).toBeInTheDocument();
     expect(
-      getByText("Relax, you didn't break the internet. You may try refreshing the page.")
+      getByText(
+        "Relax, you didn't break the internet. You may try refreshing the page."
+      )
     ).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("clicked go back button", () => {
     const navigate = jest.fn();
-    jest.spyOn(require("react-router-dom"), "useNavigate").mockReturnValue(navigate);
+    jest
+      .spyOn(require("react-router-dom"), "useNavigate")
+      .mockReturnValue(navigate);
 
     const { getByText } = render(
       <Router>
