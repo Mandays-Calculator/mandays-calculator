@@ -35,6 +35,16 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   open,
   onClose,
 }): ReactElement => {
+  const rolesDummyData = [
+    {
+      label: "User",
+      value: "User",
+    },
+    {
+      label: "Sprint Manager",
+      value: "Sprint Manager",
+    },
+  ];
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"53rem"} padding={"2rem"}>
@@ -82,42 +92,62 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               />
             </Grid>
           </Grid>
-          <Grid item xs={8.5} mt={1}>
+          <Grid item xs={10} mt={1}>
             <ControlledTextField
               name="emailAddress"
               label="Email Address"
               placeholder="juandelacruz103@gmail.com"
             />
           </Grid>
-          <Grid item xs={3.5} mt={1}>
+          <Grid item xs={2} mt={1}>
             <ControlledTextField
               name="carrerStep"
               label="Carrer Step"
               placeholder="I03"
             />
           </Grid>
-          <Grid item xs={2.4} fontSize={"5px"}>
+          <Grid item xs={5}>
+            <ControlledTextField
+              name="EmployeeId"
+              label="Employee Id"
+              placeholder="82000000"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <ControlledTextField
+              name="Odc"
+              label="ODC"
+              placeholder="philippines"
+            />
+          </Grid>
+
+          <Grid item xs={2} fontSize={"5px"}>
             <StyledTitle mb={1}>Joining Date</StyledTitle>
 
             <ControlledDatePicker name="date" placeholderText="01/01/23" />
           </Grid>
-          <Grid item xs={6.8}>
+          <Grid item xs={7.7}>
             <ControlledTextField
               name="projectName"
               label="Project"
               placeholder="eMPF"
             />
           </Grid>
-          <Grid item xs={2.8}>
+          <Grid item xs={4.3}>
             <ControlledTextField
               name="teamName"
               label="Team"
               placeholder="Developer Team"
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <StyledTitle mb={1}>Role</StyledTitle>
-            <ControlledSelect name="roleName" placeholder="Sprint Manager" />
+            <ControlledSelect
+              multiple
+              options={rolesDummyData}
+              name="roleName"
+              placeholder="Sprint Manager"
+            />
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" my={2}>

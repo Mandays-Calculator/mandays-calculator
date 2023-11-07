@@ -18,6 +18,8 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
+import { useFormikContext } from "formik";
+import { AddUserManagement } from "~/pages/user-management/types";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -45,7 +47,6 @@ interface AddUserModalProps {
 }
 
 export const AddUserModal: React.FC<AddUserModalProps> = ({
-  onAddUser,
   open,
   onClose,
 }): ReactElement => {
@@ -54,6 +55,30 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
+  const { values } = useFormikContext<AddUserManagement>();
+  const AddUserForm: AddUserManagement = {
+    firstName: values.firstName,
+    lastName: values.lastName,
+    middleName: values.middleName,
+    suffix: values.suffix,
+    gender: values.gender,
+    email: values.email,
+    careerStep: values.careerStep,
+    // joiningDate: "",
+    // projectId: values.projectName,
+    // teamId: values.teamName,
+    // roles: ["ROLE_SYS_ADMIN"],
+  };
+  const rolesDummyData = [
+    {
+      label: "User",
+      value: "User",
+    },
+    {
+      label: "Sprint Manager",
+      value: "Sprint Manager",
+    },
+  ];
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"53rem"} padding={"2rem"}>
@@ -115,7 +140,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               placeholder="I03"
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} mb={1}>
             <FormControl>
               <RadioGroup
                 name="controlled-radio-buttons-group"
@@ -138,23 +163,42 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               </Stack>
             </FormControl>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={3.5}>
+            <ControlledTextField
+              name="EmployeeId"
+              label="Employee Id"
+              placeholder="82000000"
+            />
+          </Grid>
+          <Grid item xs={3.5}>
+            <ControlledTextField
+              name="Odc"
+              label="ODC"
+              placeholder="philippines"
+            />
+          </Grid>
+          <Grid item xs={5}>
+            <StyledTitle mb={1}>Role</StyledTitle>
+            <ControlledSelect
+              multiple
+              options={rolesDummyData}
+              name="roleName"
+              placeholder="Sprint Manager"
+            />
+          </Grid>
+          <Grid item xs={7}>
             <ControlledTextField
               name="projectName"
               label="Project"
               placeholder="eMPF"
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <ControlledTextField
               name="teamName"
               label="Team"
               placeholder="Developer Team"
             />
-          </Grid>
-          <Grid item xs={4}>
-            <StyledTitle mb={1}>Role</StyledTitle>
-            <ControlledSelect name="roleName" placeholder="Sprint Manager" />
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" my={2}>
@@ -166,7 +210,13 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           >
             Cancel
           </CustomButton>
-          <CustomButton variant="contained" color="primary" onClick={onAddUser}>
+          <CustomButton
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              console.log(AddUserForm);
+            }}
+          >
             Add User
           </CustomButton>
         </Box>

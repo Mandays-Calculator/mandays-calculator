@@ -78,9 +78,7 @@ const Header = (): ReactElement => {
         />
         <AddUserModal
           open={addModal}
-          onAddUser={() => {
-            alert("success");
-          }}
+          onAddUser={() => setAddModal(false)}
           onClose={() => setAddModal(false)}
         />
       </Grid>
