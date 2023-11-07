@@ -55,6 +55,21 @@ const theme = createTheme({
   },
   spacing: (factor: number) => `${0.5 * factor}rem`,
   components: {
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          color: "#7A7A7D",
+          borderWidth: 2,
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          height: 5,
+        },
+      },
+    },
     MuiLink: {
       styleOverrides: {
         root: {

@@ -1,0 +1,65 @@
+import type { CustomTabsProps } from ".";
+import { useState, ReactElement, SyntheticEvent } from "react";
+
+import { Divider } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+
+/* *
+  Sample usage of Tabs:
+  <CustomTab
+      defaultActiveTab={1}
+      tabs={[
+        {
+          label: "Test 1",
+          content: <h1>Tab 1</h1>,
+        },
+        {
+          label: "Test 2",
+          content: <h1>Tab 2</h1>,
+        },
+      ]}
+    />
+  *
+*/
+
+const CustomTabs = ({
+  defaultActiveTab = 0,
+  onTabChange,
+  tabs,
+}: CustomTabsProps): ReactElement => {
+  const [value, setValue] = useState<number>(defaultActiveTab);
+
+  const handleChange = (event: SyntheticEvent, newValue: number): void => {
+    setValue(newValue);
+    if (onTabChange) {
+      onTabChange(event, newValue);
+    }
+  };
+
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="custom tabs"
+        style={{ width: 228 }}
+      >
+        {tabs.map((tab, index) => (
+          <Tab label={tab.label} key={index} value={index} />
+        ))}
+      </Tabs>
+      <Divider sx={{ borderWidth: 2 }} />
+      {tabs.map((tab, index) =>
+        value === index ? (
+          <Box key={index} p={3}>
+            {tab.content}
+          </Box>
+        ) : null
+      )}
+    </Box>
+  );
+};
+
+export default CustomTabs;
