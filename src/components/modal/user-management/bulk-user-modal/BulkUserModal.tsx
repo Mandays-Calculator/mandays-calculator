@@ -219,13 +219,13 @@ export const BulkUserModal: React.FC<BulkModalProps> = ({
             </Stack>
 
             <RequirementContainer container>
-              <Grid xs={12}>
+              <Grid item xs={12}>
                 <ul>
                   <li>File Formats: .xls, .xlsx, .csv, .json</li>
                   <li>Each object should have the following fields:</li>
                 </ul>
               </Grid>
-              <Grid xs={6}>
+              <Grid item xs={6}>
                 <ul>
                   <li>MANDATORY</li>
                   <li>LastName</li>
@@ -238,7 +238,7 @@ export const BulkUserModal: React.FC<BulkModalProps> = ({
                   <li>ODC</li>
                 </ul>
               </Grid>
-              <Grid xs={6}>
+              <Grid item xs={6}>
                 <ul>
                   <li>OPTIONAL</li>
                   <li>Prefix</li>
