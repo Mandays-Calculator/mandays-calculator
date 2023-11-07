@@ -17,8 +17,9 @@ const AuthenticatedApp = (): ReactElement => {
   const config = getEnvConfig();
 
   useEffect(() => {
-    if (user?.access_token) {
-      axiosInit(user?.access_token);
+    if (user) {
+      console.log("Token refreshed"); //For monitoring purposes
+      axiosInit(user.access_token);
     }
   }, [user]);
 
