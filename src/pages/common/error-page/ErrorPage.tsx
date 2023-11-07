@@ -30,13 +30,22 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
     if (type === "not-found") {
       return (
         <>
-          <Typography variant="h5" fontWeight="bold">
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+          >
             {t(common.pageNotFoundTitle)}
           </Typography>
-          <Typography variant="body2" fontWeight="bold">
+          <Typography
+            variant="body2"
+            fontWeight="bold"
+          >
             {t(common.pageNotFoundDesc)}
           </Typography>
-          <CustomButton type="button" onClick={goBack}>
+          <CustomButton
+            type="button"
+            onClick={goBack}
+          >
             {t(common.goBackHomeBtnLabel)}
           </CustomButton>
         </>
@@ -46,13 +55,22 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
     if (type === "something-went-wrong") {
       return (
         <>
-          <Typography variant="h5" fontWeight="bold">
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+          >
+            {t(common.somethingWentWrongTitle)}
+          </Typography>
+          <Typography
+            variant="body2"
+            fontWeight="bold"
+          >
             {t(common.somethingWentWrongDesc)}
           </Typography>
-          <Typography variant="body2" fontWeight="bold">
-            {t(common.somethingWentWrongDesc)}
-          </Typography>
-          <CustomButton type="button" onClick={goBack}>
+          <CustomButton
+            type="button"
+            onClick={goBack}
+          >
             {t(common.goBackHomeBtnLabel)}
           </CustomButton>
         </>
