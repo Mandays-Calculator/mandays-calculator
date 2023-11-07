@@ -13,6 +13,7 @@ import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
 import { InitialODCValues, NewODCData } from "./utils/data";
 import { IntValuesSchema } from "./utils/schema";
+import { getODCList } from "~/api/odc";
 
 const ODCManagement = (): ReactElement => {
   const [isAdd, setIsAdd] = useState<boolean>(false);
@@ -36,6 +37,10 @@ const ODCManagement = (): ReactElement => {
       ODCForm.setFieldValue(`odcList`, arr);
     }
   }, [isAdd]);
+
+  const data = getODCList();
+
+  console.log(data, "ODC Data");
 
   return (
     <>
