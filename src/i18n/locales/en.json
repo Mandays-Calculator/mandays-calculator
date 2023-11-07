@@ -14,6 +14,19 @@
   "odc": {
     "management": {
       "label": "ODC Management"
+    },
+    "form": {
+      "odcName": "ODC Name",
+      "abbr": "Abbreviation",
+      "loc": "Location"
+    },
+    "modal": {
+      "deleteLabel": "Are you sure you want to delete this ODC?"
+    },
+    "button": {
+      "add": "Add ODC",
+      "save": "Save",
+      "cancel": "Cancel"
     }
   },
   "project": {
