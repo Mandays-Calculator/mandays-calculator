@@ -8,4 +8,5 @@ export * from "./page-loader";
 export * from "./page-container";
 export * from "./modal";
 export * from "./layout";
+export * from "./tab";
 export * from "./card";

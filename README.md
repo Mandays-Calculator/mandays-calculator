@@ -45,6 +45,14 @@ It is particularly useful in industries where projects are planned and executed 
 
 > **Note**: The environment can be changed in the `.env` file. Use the `VITE_ENVIRONMENT` variable to set your desired environment.
 
+### Creating and Running Tests
+
+1. Create a test file for page or component under `src/__tests__`
+   example: ComponentToBeTest.test.tsx
+
+2. Test your test file via:
+   `npm run test` or `npm run test-dev` [Generates a coverage]
+
 ## Usage & Contributing
 
 Before making any contributions, please read our [coding standards](./CODING_STANDARDS.md).
@@ -105,6 +113,11 @@ Before making any contributions, please read our [coding standards](./CODING_STA
 - [MUI](https://mui.com/)
 - [@emotion/react](https://emotion.sh/docs/@emotion/react)
 - [@emotion/styled](https://emotion.sh/docs/@emotion/styled) or [styled-components](https://styled-components.com/)
+
+#### **Unit testing**
+
+- [Jest](https://jestjs.io/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
 ## VS Code Extensions
 

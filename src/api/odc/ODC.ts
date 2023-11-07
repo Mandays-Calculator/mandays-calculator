@@ -2,8 +2,8 @@ import axios from "axios";
 import { getEnvConfig } from "~/utils/env-config";
 import { ODCListResponse } from ".";
 
-export const getODCList = async () => {
+export const getODCList = async (): Promise<ODCListResponse[]> => {
   const { apiBasePath } = getEnvConfig();
-  const res = await axios.get<ODCListResponse>(`${apiBasePath}/odcs`);
-  return res;
+  const response = await axios.get<ODCListResponse[]>(`${apiBasePath}/odcs`);
+  return response.data;
 };
