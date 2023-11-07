@@ -6,7 +6,7 @@ const LocalizationKey = {
       userName: "login.label.userName",
       password: "login.label.password",
       forgotPassword: "login.label.forgotPassword",
-    }
+    },
   },
   footerLabel: "footer.label",
   common: {
@@ -15,6 +15,9 @@ const LocalizationKey = {
     pageNotFoundTitle: "common.notFound.title",
     pageNotFoundDesc: "common.notFound.description",
     goBackHomeBtnLabel: "common.button.goBackHome",
+  },
+  mandaysCalculator: {
+    label: "mandaysCalculator.label",
   },
 };
 

@@ -63,5 +63,8 @@
   },
   "footer": {
     "label": "All rights reserved."
+  },
+  "mandaysCalculator": {
+    "label": "Current Estimation"
   }
 }

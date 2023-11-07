@@ -3,6 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
+import { MandaysCalculator } from "~/pages/mandays-calculator";
 import ErrorPage from "~/pages/common/error-page";
 
 export const routes: RouteType[] = [
@@ -38,6 +39,12 @@ export const routes: RouteType[] = [
     path: "account-info",
     label: "account.info.label",
     element: <Outlet />,
+    icon: "person",
+  },
+  {
+    path: "mandays-calculator",
+    label: "account.info.label",
+    element: <MandaysCalculator />,
     icon: "person",
   },
   {
