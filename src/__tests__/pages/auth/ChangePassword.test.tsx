@@ -1,150 +1,152 @@
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Formik } from 'formik';
-import ProviderWrapper from '~/__tests__/utils/ProviderWrapper';
 
 import { ChangePassword } from '~/pages/auth';
 
-const handleSubmit = jest.fn()
+import { cleanAllCallback } from './utils/auth-utils';
 
-afterEach(cleanup);
+const handleSubmit = jest.fn();
 
-afterAll(cleanup);
+afterEach((done) => {
+    cleanAllCallback(done);
+});
+
+afterAll((done) => {
+    cleanAllCallback(done);
+});
 
 describe('GIVEN user changes password,', () => {
-    test('WHEN the passwords entered by the user are matched and valid, THEN all validations are passed', async () => {
-        renderChangePassword();
-        const user = userEvent.setup();
+    interface TestConfig {
+        title: string;
+        password: string;
+        confirmPassword: string;
+        expectedResults: Record<string, boolean>;
+    }
 
-        await user.type(screen.getByPlaceholderText('Input Password'), 'Passw0rd!');
-        await user.type(screen.getByPlaceholderText('Confirm Password'), 'Passw0rd!');
+    const testCases: TestConfig[] = [
+        {
+            title: 'WHEN the passwords entered by the user are matched and valid, THEN all validations are passed',
+            password: 'Passw0rd!',
+            confirmPassword: 'Passw0rd!',
+            expectedResults: {
+                'green-icon-password-length': true,
+                'green-icon-password-uppecase': true,
+                'green-icon-password-lowercase': true,
+                'green-icon-password-number': true,
+                'green-icon-password-symbol': true,
+                'green-icon-password-match': true,
+            },
+        },
+        {
+            title: 'WHEN the passwords entered by the user is less than the minimum characters, THEN `length` validation must be red',
+            password: 'P0d!',
+            confirmPassword: 'P0d!',
+            expectedResults: {
+                'red-icon-password-length': true,
+                'green-icon-password-uppecase': true,
+                'green-icon-password-lowercase': true,
+                'green-icon-password-number': true,
+                'green-icon-password-symbol': true,
+                'green-icon-password-match': true,
+            },
+        },
+        {
+            title: 'WHEN the passwords entered by the user has no uppercase, THEN `no uppercase` validation must be red',
+            password: 'passw0rd!',
+            confirmPassword: 'passw0rd!',
+            expectedResults: {
+                'green-icon-password-length': true,
+                'red-icon-password-uppecase': true,
+                'green-icon-password-lowercase': true,
+                'green-icon-password-number': true,
+                'green-icon-password-symbol': true,
+                'green-icon-password-match': true,
+            },
+        },
+        {
+            title: 'WHEN the passwords entered by the user has no lowercase, THEN `no lowercase` validation must be red',
+            password: 'PASSW0RD!',
+            confirmPassword: 'PASSW0RD!',
+            expectedResults: {
+                'green-icon-password-length': true,
+                'green-icon-password-uppecase': true,
+                'red-icon-password-lowercase': true,
+                'green-icon-password-number': true,
+                'green-icon-password-symbol': true,
+                'green-icon-password-match': true,
+            },
+        },
+        {
+            title: 'WHEN the passwords entered by the user has no number, THEN `no number` validation must be red',
+            password: 'Password!',
+            confirmPassword: 'Password!',
+            expectedResults: {
+                'green-icon-password-length': true,
+                'green-icon-password-uppecase': true,
+                'green-icon-password-lowercase': true,
+                'red-icon-password-number': true,
+                'green-icon-password-symbol': true,
+                'green-icon-password-match': true,
+            },
+        },
+        {
+            title: 'WHEN the passwords entered by the user has no symbol, THEN `no symbol` validation must be red',
+            password: 'Passw0rd1',
+            confirmPassword: 'Passw0rd1',
+            expectedResults: {
+                'green-icon-password-length': true,
+                'green-icon-password-uppecase': true,
+                'green-icon-password-lowercase': true,
+                'green-icon-password-number': true,
+                'red-icon-password-symbol': true,
+                'green-icon-password-match': true,
+            },
+        },
+        {
+            title: 'WHEN the passwords entered by the user are not matched, THEN `not match` validation must be red',
+            password: 'Passw0rd!',
+            confirmPassword: 'Passw0rd!!',
+            expectedResults: {
+                'green-icon-password-length': true,
+                'green-icon-password-uppecase': true,
+                'green-icon-password-lowercase': true,
+                'green-icon-password-number': true,
+                'green-icon-password-symbol': true,
+                'red-icon-password-match': true,
+            },
+        },
+    ];
 
-        await waitFor(() => {
-            expect(screen.getByTestId('green-icon-password-length')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-uppecase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-lowercase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-number')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-symbol')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-match')).toBeInTheDocument();
-        });
-    });
+    test.each(testCases)(
+        `%s`,
+        async ({ password, confirmPassword, expectedResults }) => {
+            renderChangePassword();
+            const user = userEvent.setup();
 
-    test('WHEN the passwords entered by the user is less than the minimum characters, THEN `length` validation must be red', async () => {
-        renderChangePassword();
-        const user = userEvent.setup();
+            await user.type(screen.getByPlaceholderText('Input Password'), password);
+            await user.type(screen.getByPlaceholderText('Confirm Password'), confirmPassword);
+            await user.click(screen.getByRole('button', { name: /Change Password/i }));
 
-        await user.type(screen.getByPlaceholderText('Input Password'), 'P0d!');
-        await user.type(screen.getByPlaceholderText('Confirm Password'), 'P0d!');
-        await user.click(screen.getByRole('button', {name: /Change Password/i}));
-
-        await waitFor(() => {
-            expect(screen.getByTestId('red-icon-password-length')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-uppecase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-lowercase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-number')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-symbol')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-match')).toBeInTheDocument();
-        });
-    });
-
-    test('WHEN the passwords entered by the user has no uppercase, THEN `no uppercase` validation must be red', async () => {
-        renderChangePassword();
-        const user = userEvent.setup();
-
-        await user.type(screen.getByPlaceholderText('Input Password'), 'passw0rd!');
-        await user.type(screen.getByPlaceholderText('Confirm Password'), 'passw0rd!');
-        await user.click(screen.getByRole('button', {name: /Change Password/i}));
-
-        await waitFor(() => {
-            expect(screen.getByTestId('green-icon-password-length')).toBeInTheDocument();
-            expect(screen.getByTestId('red-icon-password-uppecase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-lowercase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-number')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-symbol')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-match')).toBeInTheDocument();
-        });
-    });
-
-    test('WHEN the passwords entered by the user has no lowercase, THEN `no lowercase` validation must be red', async () => {
-        renderChangePassword();
-        const user = userEvent.setup();
-
-        await user.type(screen.getByPlaceholderText('Input Password'), 'PASSW0RD!');
-        await user.type(screen.getByPlaceholderText('Confirm Password'), 'PASSW0RD!');
-        await user.click(screen.getByRole('button', {name: /Change Password/i}));
-
-        await waitFor(() => {
-            expect(screen.getByTestId('green-icon-password-length')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-uppecase')).toBeInTheDocument();
-            expect(screen.getByTestId('red-icon-password-lowercase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-number')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-symbol')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-match')).toBeInTheDocument();
-        });
-    });
-
-    test('WHEN the passwords entered by the user has no number, THEN `no number` validation must be red', async () => {
-        renderChangePassword();
-        const user = userEvent.setup();
-
-        await user.type(screen.getByPlaceholderText('Input Password'), 'Password!');
-        await user.type(screen.getByPlaceholderText('Confirm Password'), 'Password!');
-        await user.click(screen.getByRole('button', {name: /Change Password/i}));
-
-        await waitFor(() => {
-            expect(screen.getByTestId('green-icon-password-length')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-uppecase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-lowercase')).toBeInTheDocument();
-            expect(screen.getByTestId('red-icon-password-number')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-symbol')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-match')).toBeInTheDocument();
-        });
-    });
-
-    test('WHEN the passwords entered by the user has no symbol, THEN `no symbol` validation must be red', async () => {
-        renderChangePassword();
-        const user = userEvent.setup();
-
-        await user.type(screen.getByPlaceholderText('Input Password'), 'Passw0rd1');
-        await user.type(screen.getByPlaceholderText('Confirm Password'), 'Passw0rd1');
-        await user.click(screen.getByRole('button', {name: /Change Password/i}));
-
-        await waitFor(() => {
-            expect(screen.getByTestId('green-icon-password-length')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-uppecase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-lowercase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-number')).toBeInTheDocument();
-            expect(screen.getByTestId('red-icon-password-symbol')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-match')).toBeInTheDocument();
-        });
-    });
-
-    test('WHEN the passwords entered by the user are not matched, THEN `not match` validation must be red', async () => {
-        renderChangePassword();
-        const user = userEvent.setup();
-
-        await user.type(screen.getByPlaceholderText('Input Password'), 'Passw0rd!');
-        await user.type(screen.getByPlaceholderText('Confirm Password'), 'Passw0rd!!');
-        await user.click(screen.getByRole('button', {name: /Change Password/i}));
-
-        await waitFor(() => {
-            expect(screen.getByTestId('green-icon-password-length')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-uppecase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-lowercase')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-number')).toBeInTheDocument();
-            expect(screen.getByTestId('green-icon-password-symbol')).toBeInTheDocument();
-            expect(screen.getByTestId('red-icon-password-match')).toBeInTheDocument();
-        });
-    });
+            await waitFor(() => {
+                Object.entries(expectedResults).forEach(([testId, shouldExist]) => {
+                    const element = screen.queryByTestId(testId);
+                    if (shouldExist) {
+                        expect(element).toBeInTheDocument();
+                    } else {
+                        expect(element).not.toBeInTheDocument();
+                    }
+                });
+            });
+        }
+    );
 });
 
 const renderChangePassword = () => {
     render(
-        <ProviderWrapper>
-            <Formik initialValues={{}} onSubmit={handleSubmit}>
-                <ChangePassword />
-            </Formik>
-        </ProviderWrapper>
+        <Formik initialValues={{}} onSubmit={handleSubmit}>
+            <ChangePassword />
+        </Formik>
     );
-}
+};

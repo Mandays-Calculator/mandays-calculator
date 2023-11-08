@@ -1,82 +1,81 @@
-import type { ReactElement, ReactNode } from "react";
+import { ReactElement } from 'react';
 
-import { useFormik } from "formik";
+import { useFormik } from 'formik';
 
-import { Grid, ListItem, ListItemIcon } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Grid, ListItem, ListItemIcon } from '@mui/material';
+import CancelIcon from '@mui/icons-material/Cancel';
 
-import Form from "~/components/form/Form";
-import { CustomButton as Button } from "~/components/form/button";
-import PasswordInput from "./components/password-input/PasswordInput";
-import { StyledTitle, StyledLabel } from "./components/auth-container";
-import { changePasswordSchema } from "./schema";
+import { StyledTitle, StyledLabel } from './components/auth-container';
+import PasswordInput from './components/password-input/PasswordInput';
+import { CustomButton as Button } from '~/components/form/button';
+import { changePasswordSchema } from './schema';
+import Form from '~/components/form/Form';
 
-const ValidationResult = ({ values }: any): ReactNode => {
+type ValidationResultProps = {
+  values: { password: string; confirmPassword: string };
+};
+
+const ValidationResult = ({ values }: ValidationResultProps) => {
+  const checkValidation = (
+    test: boolean,
+    label: string,
+    dataTestId: string
+  ): ReactElement => {
+    const GREEN_COLOR = 'green-';
+    const RED_COLOR = 'red-';
+
+    return (
+      <ListItem>
+        <ListItemIcon>
+          {test ? (
+            <CheckCircleIcon style={{ color: 'green' }} data-testid={GREEN_COLOR + dataTestId} />
+          ) : (
+            <CancelIcon style={{ color: 'red' }} data-testid={RED_COLOR + dataTestId} />
+          )}
+        </ListItemIcon>
+        {label}
+      </ListItem>
+    )
+  };
+
   return (
     <>
-      <ListItem>
-        <ListItemIcon>
-          {values.password.length >= 8 ? (
-            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-length"/>
-          ) : (
-            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-length"/>
-          )}
-        </ListItemIcon>
-        Password must be at least 8 characters long
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          {/[A-Z]/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-uppecase"/>
-          ) : (
-            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-uppecase"/>
-          )}
-        </ListItemIcon>
-        Password must contain an uppercase letter
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          {/[a-z]/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-lowercase"/>
-          ) : (
-            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-lowercase"/>
-          )}
-        </ListItemIcon>
-        Password must contain a lowercase letter
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          {/[0-9]/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-number"/>
-          ) : (
-            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-number"/>
-          )}
-        </ListItemIcon>
-        Password must contain a number
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          // regex 
-          {/(?=.*\W)/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-symbol"/>
-          ) : (
-            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-symbol"/>
-          )}
-        </ListItemIcon>
-        Password must contain one of the following symbols (#$-_!)
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          {values.password === values.confirmPassword &&
-          values.password !== "" ? (
-            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-match"/>
-          ) : (
-            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-match"/>
-          )}
-        </ListItemIcon>
-        New password and confirm new password must match.
-      </ListItem>
+      {checkValidation(
+        values.password.length >= 8,
+        'Password must be at least 8 characters long',
+        'icon-password-length'
+      )}
+
+      {checkValidation(
+        /[A-Z]/.test(values.password),
+        'Password must contain an uppercase letter',
+        'icon-password-uppecase'
+      )}
+
+      {checkValidation(
+        /[a-z]/.test(values.password),
+        'Password must contain a lowercase letter',
+        'icon-password-lowercase'
+      )}
+
+      {checkValidation(
+        /[0-9]/.test(values.password),
+        'Password must contain a number',
+        'icon-password-number'
+      )}
+
+      {checkValidation(
+        /(?=.*\W)/.test(values.password),
+        'Password must contain one of the following symbols (#$-_!)',
+        'icon-password-symbol'
+      )}
+
+      {checkValidation(
+        values.password === values.confirmPassword && values.password !== '',
+        'New password and confirm new password must match.',
+        'icon-password-match'
+      )}
     </>
   );
 };
@@ -84,16 +83,14 @@ const ValidationResult = ({ values }: any): ReactNode => {
 const ChangePassword = (): ReactElement => {
   const changePasswordForm = useFormik({
     initialValues: {
-      password: "",
-      confirmPassword: "",
+      password: '',
+      confirmPassword: '',
     },
     validationSchema: changePasswordSchema,
     validateOnChange: true,
-    // onSubmit: (values) => console.log("values", values),
-    onSubmit: () => {},
+    onSubmit: () => { },
   });
 
-  const { values } = changePasswordForm;
   return (
     <Form instance={changePasswordForm}>
       <StyledTitle>Create New Password</StyledTitle>
@@ -110,7 +107,7 @@ const ChangePassword = (): ReactElement => {
           />
         </Grid>
         <Grid item xs={12} mt={2}>
-          <ValidationResult values={values} />
+          <ValidationResult values={changePasswordForm.values} />
         </Grid>
         <Grid item xs={12} mt={3}>
           <Button type="submit" fullWidth>
