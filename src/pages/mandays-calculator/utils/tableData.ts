@@ -33,3 +33,32 @@ export const mandaysCalculatorData = {
     },
   ],
 };
+
+export const estimationDetailsData = {
+  columns: [
+    {
+      Header: "Functionality",
+      accessor: "functionality",
+    },
+    {
+      Header: "Total Man Hours",
+      accessor: "totalManHours",
+    },
+    {
+      Header: "Total Man Days",
+      accessor: "totalManDays",
+    },
+  ],
+  data: [
+    {
+      functionality: "(PMO)",
+      totalManHours: "40",
+      totalManDays: "40",
+    },
+    {
+      functionality: "(PMO)",
+      totalManHours: "39",
+      totalManDays: "41",
+    },
+  ],
+};

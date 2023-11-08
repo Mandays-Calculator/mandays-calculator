@@ -1,20 +1,17 @@
 import type { ReactElement } from "react";
-import type { RouteType } from "~/routes";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Divider, Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { SvgIcon } from "~/components";
-import { routesConfig } from "~/routes";
 import LocalizationKey from "~/i18n/key";
 
 import {
   StyledDrawer,
-  DrawerHeader,
   StyledCollapsibleItem,
   StyledItemText,
   StyledListItemIcon,
@@ -22,48 +19,50 @@ import {
   StyledList,
 } from ".";
 
+import { getSidebarConfig, SideBarItemType } from "./config";
+
 const Drawer = (): ReactElement => {
   const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const { common } = LocalizationKey;
-  const handleNavigate = (routeItem: RouteType): void => {
+  const handleNavigate = (routeItem: SideBarItemType): void => {
     navigate(`${routeItem.path}`);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <StyledDrawer variant="permanent" open={open}>
-        <DrawerHeader></DrawerHeader>
-        <Divider sx={{ mb: 7 }} />
-        <StyledList open={open}>
-          {routesConfig.map((routeItem: RouteType, index: number) => {
-            if (routeItem.icon) {
-              return (
-                <StyledListItem
-                  key={index}
-                  onClick={() => handleNavigate(routeItem)}
-                  open={open}
-                >
-                  <StyledListItemIcon>
-                    {routeItem.icon ? (
-                      <SvgIcon
-                        name={routeItem.icon}
-                        $size={4}
-                        color="primary"
-                      />
-                    ) : (
-                      <AccountCircleIcon fontSize="large" />
+        <StyledList open={open} sx={{ mt: 7 }}>
+          {getSidebarConfig("sprint_manager").map(
+            (routeItem: SideBarItemType, index: number) => {
+              if (routeItem.icon) {
+                return (
+                  <StyledListItem
+                    key={index}
+                    onClick={() => handleNavigate(routeItem)}
+                    open={open}
+                  >
+                    <StyledListItemIcon>
+                      {routeItem.icon ? (
+                        <SvgIcon
+                          name={routeItem.icon}
+                          $size={3}
+                          color="primary"
+                        />
+                      ) : (
+                        <AccountCircleIcon fontSize="large" />
+                      )}
+                    </StyledListItemIcon>
+                    {open && (
+                      <StyledItemText primary={t(routeItem.label || "")} />
                     )}
-                  </StyledListItemIcon>
-                  {open && (
-                    <StyledItemText primary={t(routeItem.label || "")} />
-                  )}
-                </StyledListItem>
-              );
+                  </StyledListItem>
+                );
+              }
             }
-          })}
+          )}
         </StyledList>
         <StyledCollapsibleItem open={open}>
           <IconButton onClick={() => setOpen(!open)}>

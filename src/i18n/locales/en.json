@@ -7,6 +7,7 @@
     "dashboard": "Dashboard",
     "settings": "Settings",
     "history": "History",
+    "task": "Task",
     "button": {
       "goBackHome": "GO BACK HOME",
       "collapse": "Collapse"
