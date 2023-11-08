@@ -59,7 +59,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: "#7A7A7D",
-          borderWidth: 2,
+          borderWidth: 1,
         },
       },
     },

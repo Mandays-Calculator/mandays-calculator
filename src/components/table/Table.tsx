@@ -1,51 +1,76 @@
-import { useTable, useSortBy, Column } from "react-table";
+import type { ReactElement } from "react";
+import type { TableProps, CustomHeaderGroup } from ".";
 
-import { styled } from "@mui/material/styles";
+import { useTable, useSortBy } from "react-table";
+import { useTranslation } from "react-i18next";
+
 import MuiTable from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 
-interface TableProps<Type extends object> {
-  name: string;
-  title?: string;
-  columns: Column<Type>[];
-  data?: Type[];
-}
+import { SvgIcon } from "~/components";
+import LocalizationKey from "~/i18n/key";
 
-interface HeaderColumn {
-  getSortByToggleProps: void;
-}
+import { StyledCell, StyledHeader, StyledStripeRow } from ".";
 
-const StyledHeader = styled(TableRow)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.light,
-  "& th": {
-    cursor: "pointer",
-  },
-}));
+/* *
+  Sample usage of the Table component:
+  Import the necessary dependencies at the beginning of your file:
 
-const StyledCell = styled(TableCell)({
-  padding: "16px 12px",
-});
+  import { Table, Column } from "./Table";
 
-const StyledStripeRow = styled(TableRow)({
-  "&:nth-of-type(odd)": {
-    backgroundColor: "#FEFEFE",
-  },
-  "&:nth-of-type(even)": {
-    backgroundColor: "#EAF3F4",
-  },
-});
+  Define your data columns using the Column interface:
+  
+  const columns: Column<YourDataType>[] = [
+    {
+      Header: "Name",        // The column header label
+      accessor: "name",      // The key in your data that corresponds to this column
+    },
+    {
+      Header: "Team",
+      accessor: "team",
+      disableSortBy: true,   // To disable sorting for this specific column
+    },
+  ];
+
+  Define your data in an array of objects with the corresponding keys:
+  const data: YourDataType[] = [
+    {
+      name: "Joe",
+      team: "Enrollment",
+      startedDate: "30/01/2023",
+      status: "On going",
+    },
+  ];
+
+  Finally, render the Table component with the defined columns and data:
+
+  <Table
+    columns={columns}
+    data={data}
+  />
+
+  Customize the Table component by passing additional props as needed, such as a title or a label for when there's no data.
+  Example with a title and a custom "No Data" label:
+  <Table
+    columns={columns}
+    data={data}
+    title="Employee List"
+    noDataLabel="No employees found"
+  />
+  *
+*/
 
 export const Table = <Type extends object>(
   props: TableProps<Type>
 ): ReactElement => {
-  const { name, title, columns, data = [] } = props;
+  const { common } = LocalizationKey;
+  const { name, title, columns, data = [], noDataLabel } = props;
+  const { t } = useTranslation();
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable<Type>(
@@ -70,16 +95,26 @@ export const Table = <Type extends object>(
               <StyledHeader {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <StyledCell
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    {...column.getHeaderProps(
+                      (column as CustomHeaderGroup<Type>).getSortByToggleProps()
+                    )}
                   >
                     <Typography fontWeight="bold">
                       {column.render("Header")}
                       <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? " 🔽"
-                            : " 🔼"
-                          : ""}
+                        {(column as CustomHeaderGroup<Type>).isSorted ? (
+                          (column as CustomHeaderGroup<Type>).isSortedDesc ? (
+                            <SvgIcon
+                              name="arrow_down"
+                              $size={1}
+                              sx={{ ml: 1 }}
+                            />
+                          ) : (
+                            <SvgIcon name="arrow_up" $size={1} sx={{ ml: 1 }} />
+                          )
+                        ) : (
+                          ""
+                        )}
                       </span>
                     </Typography>
                   </StyledCell>
@@ -103,7 +138,9 @@ export const Table = <Type extends object>(
             {rows.length === 0 && (
               <StyledStripeRow>
                 <StyledCell colSpan={columns.length}>
-                  <Typography textAlign="center">No Data</Typography>
+                  <Typography textAlign="center">
+                    {noDataLabel || t(common.noDataLabel)}
+                  </Typography>
                 </StyledCell>
               </StyledStripeRow>
             )}

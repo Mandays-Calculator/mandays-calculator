@@ -18,6 +18,12 @@ export const routes: RouteType[] = [
     icon: "project_management",
   },
   {
+    path: "dashboard",
+    label: "common.dashboard",
+    element: <Outlet />,
+    icon: "dashboard",
+  },
+  {
     path: "odc-management",
     label: "odc.management.label",
     element: <ODCManagement />,
@@ -28,6 +34,12 @@ export const routes: RouteType[] = [
     label: "user.management.label",
     element: <UserManagement />,
     icon: "user_management",
+  },
+  {
+    path: "complexity",
+    label: "common.complexity",
+    element: <Outlet />,
+    icon: "complexity",
   },
   {
     path: "settings",
@@ -43,9 +55,15 @@ export const routes: RouteType[] = [
   },
   {
     path: "mandays-calculator",
-    label: "account.info.label",
+    label: "mandaysCalculator.title",
     element: <MandaysCalculator />,
-    icon: "person",
+    icon: "settings",
+  },
+  {
+    path: "history",
+    label: "common.history",
+    element: <Outlet />,
+    icon: "history",
   },
   {
     path: "*",

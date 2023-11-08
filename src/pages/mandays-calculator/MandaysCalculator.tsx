@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
-import { Title } from "~/components";
+import { SvgIcon, Title } from "~/components";
 import { PageContainer } from "~/components";
 import { Typography, Grid } from "@mui/material";
 import { mandaysCalculatorData } from "./utils/tableData";
@@ -23,7 +23,10 @@ const MandaysCalculator = (): ReactElement => {
             </Typography>
           </Grid>
           <Grid>
-            <CustomButton>Add Estimation</CustomButton>
+            <CustomButton>
+              <SvgIcon name="add_v2" $size={2} sx={{ mr: 1 }} />
+              Add Estimation
+            </CustomButton>
           </Grid>
         </Grid>
         <Table columns={columns} data={data} name="mandays-calculator" />

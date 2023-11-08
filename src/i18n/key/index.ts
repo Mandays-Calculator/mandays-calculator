@@ -10,11 +10,13 @@ const LocalizationKey = {
   },
   footerLabel: "footer.label",
   common: {
+    noDataLabel: "common.noData",
     somethingWentWrongTitle: "common.somethingWentWrong.title",
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
     pageNotFoundDesc: "common.notFound.description",
     goBackHomeBtnLabel: "common.button.goBackHome",
+    collapse: "common.button.collapse",
   },
   mandaysCalculator: {
     label: "mandaysCalculator.label",

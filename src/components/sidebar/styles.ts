@@ -50,8 +50,10 @@ const StyledDrawer = styled(Drawer, {
 
 const StyledListItemIcon = styled(ListItemIcon)``;
 
-const StyledListItem = styled(ListItem)<{ open: boolean; activepath: boolean }>(
-  ({ open, theme, activepath }) =>
+const StyledListItem = styled(ListItem)<{
+  open: boolean;
+}>(
+  ({ open, theme }) =>
     `
 margin: ${theme.spacing(1.3, 0)};
 min-height: 48px;
@@ -75,21 +77,6 @@ div {
 
   border-radius: ${open ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};
-}
-
-${
-  activepath
-    ? `& span,
-    div {
-      color: ${theme.palette.background.default} !important;
-  
-      svg {
-        color: ${theme.palette.background.default};
-      }
-    }
-  border-radius: ${open ? "10px" : "0"};
-  background-color: ${theme.palette.primary.main};`
-    : ""
 }`
 );
 
@@ -122,6 +109,30 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   padding: theme.spacing(1, 1),
 }));
 
+const StyledCollapsibleItem = styled("div", {
+  shouldForwardProp: (prop) => prop !== "open",
+})<{ open: boolean }>`
+  display: flex;
+  position: absolute;
+  left:  ${({ open }) => (open ? `16px;` : `0;`)}
+  bottom: 24px; 
+  justify-content: center;
+  min-height: 48px;
+  cursor: pointer;
+  align-items: center;
+  & svg {
+    margin-right: ${({ theme }) => theme.spacing(2.1)};
+  }
+
+  & p {
+    font-size: 1.15rem;
+  }
+  
+  & button {
+    padding: ${({ theme }) => theme.spacing(2, 0, 2, 2)};
+  }
+`;
+
 export {
   StyledItemText,
   StyledListItem,
@@ -129,4 +140,5 @@ export {
   StyledListItemIcon,
   StyledDrawer,
   StyledList,
+  StyledCollapsibleItem,
 };
