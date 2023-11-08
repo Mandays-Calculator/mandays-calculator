@@ -1,4 +1,4 @@
-const LocalizationKey = {
+export const i18nMock = {
   login: {
     management: "login.management",
     label: {
@@ -6,7 +6,7 @@ const LocalizationKey = {
       userName: "login.label.userName",
       password: "login.label.password",
       forgotPassword: "login.label.forgotPassword",
-    }
+    },
   },
   footerLabel: "footer.label",
   common: {
@@ -17,5 +17,3 @@ const LocalizationKey = {
     goBackHomeBtnLabel: "common.button.goBackHome",
   },
 };
-
-export default LocalizationKey;

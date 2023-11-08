@@ -1,7 +1,10 @@
 import type { ReactElement } from "react";
-import { Routes, Route } from "react-router-dom";
-import { AuthContainer } from "./components/auth-container";
+
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import { Footer } from "~/components/footer";
+
+import { AuthContainer } from "./components/auth-container";
 import { Login, ForgotPassword, ChangePassword } from ".";
 
 const Auth = (): ReactElement => {
@@ -13,6 +16,7 @@ const Auth = (): ReactElement => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/" element={<Login />} />
+          <Route path="/*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthContainer>
       <Footer />

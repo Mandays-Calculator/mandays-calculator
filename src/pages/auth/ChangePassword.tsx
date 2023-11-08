@@ -1,6 +1,5 @@
 import type { ReactElement, ReactNode } from "react";
 
-import { useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { Grid, ListItem, ListItemIcon } from "@mui/material";
@@ -19,9 +18,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
       <ListItem>
         <ListItemIcon>
           {values.password.length >= 8 ? (
-            <CheckCircleIcon style={{ color: "green" }} />
+            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-length"/>
           ) : (
-            <CancelIcon style={{ color: "red" }} />
+            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-length"/>
           )}
         </ListItemIcon>
         Password must be at least 8 characters long
@@ -29,9 +28,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
       <ListItem>
         <ListItemIcon>
           {/[A-Z]/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} />
+            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-uppecase"/>
           ) : (
-            <CancelIcon style={{ color: "red" }} />
+            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-uppecase"/>
           )}
         </ListItemIcon>
         Password must contain an uppercase letter
@@ -39,9 +38,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
       <ListItem>
         <ListItemIcon>
           {/[a-z]/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} />
+            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-lowercase"/>
           ) : (
-            <CancelIcon style={{ color: "red" }} />
+            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-lowercase"/>
           )}
         </ListItemIcon>
         Password must contain a lowercase letter
@@ -49,19 +48,20 @@ const ValidationResult = ({ values }: any): ReactNode => {
       <ListItem>
         <ListItemIcon>
           {/[0-9]/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} />
+            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-number"/>
           ) : (
-            <CancelIcon style={{ color: "red" }} />
+            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-number"/>
           )}
         </ListItemIcon>
         Password must contain a number
       </ListItem>
       <ListItem>
         <ListItemIcon>
-          {/[#$-_!]/.test(values.password) ? (
-            <CheckCircleIcon style={{ color: "green" }} />
+          // regex 
+          {/(?=.*\W)/.test(values.password) ? (
+            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-symbol"/>
           ) : (
-            <CancelIcon style={{ color: "red" }} />
+            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-symbol"/>
           )}
         </ListItemIcon>
         Password must contain one of the following symbols (#$-_!)
@@ -70,9 +70,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
         <ListItemIcon>
           {values.password === values.confirmPassword &&
           values.password !== "" ? (
-            <CheckCircleIcon style={{ color: "green" }} />
+            <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-match"/>
           ) : (
-            <CancelIcon style={{ color: "red" }} />
+            <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-match"/>
           )}
         </ListItemIcon>
         New password and confirm new password must match.
@@ -82,9 +82,6 @@ const ValidationResult = ({ values }: any): ReactNode => {
 };
 
 const ChangePassword = (): ReactElement => {
-  const location = useLocation();
-  const { state } = location;
-  console.log(state.usernameOrEmail, "username or email");
   const changePasswordForm = useFormik({
     initialValues: {
       password: "",
@@ -92,7 +89,8 @@ const ChangePassword = (): ReactElement => {
     },
     validationSchema: changePasswordSchema,
     validateOnChange: true,
-    onSubmit: (values) => console.log("values", values),
+    // onSubmit: (values) => console.log("values", values),
+    onSubmit: () => {},
   });
 
   const { values } = changePasswordForm;
