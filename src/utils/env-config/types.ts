@@ -12,4 +12,5 @@ export type ConfigType = {
   apiBasePath: string;
   enableAuth: boolean;
   oidcConfig: OIDCConfigType;
+  sessionStorageOidcKey: string;
 };

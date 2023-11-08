@@ -12,5 +12,6 @@
     "client_id": "mc-client",
     "response_type": "code",
     "scope": "openid profile"
-  }
+  },
+  "sessionStorageOidcKey": "oidc.user:http://localhost:8080/realms/mandays-calculator:mc-client"
 }
