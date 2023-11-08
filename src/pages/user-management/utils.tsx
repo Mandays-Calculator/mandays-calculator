@@ -4,13 +4,14 @@ export const AddUserManagementFormValues: AddUserManagement = {
   lastName: "",
   firstName: "",
   middleName: "",
-  suffix: "",
-  gender: "",
+  suffix: 0,
+  gender: 0,
   email: "",
   careerStep: "",
-  projectName: "",
-  teamName: "",
-  role: "",
+  projectId: "",
+  joiningDate: "",
+  teamId: "",
+  roles: [""],
 };
 
 export const AddUserManagementSchema = yup.object({

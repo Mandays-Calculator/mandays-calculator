@@ -20,6 +20,7 @@ import {
 } from "~/components/form/controlled";
 import { useFormikContext } from "formik";
 import { AddUserManagement } from "~/pages/user-management/types";
+import { useAddUser } from "~/queries/user-management/UserManagement";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -52,6 +53,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
 }): ReactElement => {
   const [value, setValue] = useState("");
 
+  const AddUser = useAddUser();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
@@ -64,10 +66,10 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     gender: values.gender,
     email: values.email,
     careerStep: values.careerStep,
-    // joiningDate: "",
-    // projectId: values.projectName,
-    // teamId: values.teamName,
-    // roles: ["ROLE_SYS_ADMIN"],
+    joiningDate: values.joiningDate,
+    projectId: values.projectId,
+    teamId: values.teamId,
+    roles: ["ROLE_SYS_ADMIN"],
   };
   const rolesDummyData = [
     {
@@ -128,14 +130,14 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           </Grid>
           <Grid item xs={9} mt={1}>
             <ControlledTextField
-              name="emailAddress"
+              name="email"
               label="Email Address"
               placeholder="juandelacruz103@gmail.com"
             />
           </Grid>
           <Grid item xs={3} mt={1}>
             <ControlledTextField
-              name="carrerStep"
+              name="careerStep"
               label="Carrer Step"
               placeholder="I03"
             />
@@ -159,7 +161,10 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 />
               </RadioGroup>
               <Stack ml={4.3}>
-                <ControlledDatePicker name="date" placeholderText="01/01/23" />
+                <ControlledDatePicker
+                  name="joiningDate"
+                  placeholderText="01/01/23"
+                />
               </Stack>
             </FormControl>
           </Grid>
@@ -188,14 +193,14 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           </Grid>
           <Grid item xs={7}>
             <ControlledTextField
-              name="projectName"
+              name="projectId"
               label="Project"
               placeholder="eMPF"
             />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
-              name="teamName"
+              name="teamId"
               label="Team"
               placeholder="Developer Team"
             />
@@ -214,7 +219,13 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              console.log(AddUserForm);
+              // console.log(AddUserForm);
+
+              AddUser.mutate(AddUserForm, {
+                onSuccess: (data) => {
+                  console.log("test", data);
+                },
+              });
             }}
           >
             Add User
