@@ -39,6 +39,8 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
         ...values,
         teams: [...values.teams, { teamName: teamName, teamLead: teamLead }],
       });
+      setTeamName("");
+      setTeamLead("");
     }
   };
 
@@ -51,25 +53,12 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
   };
 
   return (
-    <Stack
-      direction="column"
-      gap={2}
-    >
-      <Typography
-        padding={{ padding: "0 1rem 0 1rem" }}
-        fontWeight="bold"
-      >
+    <Stack direction="column" gap={2}>
+      <Typography padding={{ padding: "0 1rem 0 1rem" }} fontWeight="bold">
         Add Team
       </Typography>
-      <Grid
-        container
-        spacing={2}
-        sx={{ padding: "0 1rem 0 1rem" }}
-      >
-        <Grid
-          item
-          xs={6}
-        >
+      <Grid container spacing={2} sx={{ padding: "0 1rem 0 1rem" }}>
+        <Grid item xs={6}>
           <TextField
             name="teamName"
             label="Team Name"
@@ -80,10 +69,7 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
             helperText={teamNameError && "Please Input Team Name."}
           />
         </Grid>
-        <Grid
-          item
-          xs={6}
-        >
+        <Grid item xs={6}>
           <TextField
             name="teamLead"
             label="Team Lead"
@@ -102,18 +88,10 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
         gap={1}
         sx={{ padding: "0 1rem 0 1rem" }}
       >
-        <CustomButton
-          type="button"
-          colorVariant="secondary"
-          onClick={onCancel}
-        >
+        <CustomButton type="button" colorVariant="secondary" onClick={onCancel}>
           Cancel
         </CustomButton>
-        <CustomButton
-          type="button"
-          colorVariant="primary"
-          onClick={addTeam}
-        >
+        <CustomButton type="button" colorVariant="primary" onClick={addTeam}>
           Add
         </CustomButton>
       </Stack>
