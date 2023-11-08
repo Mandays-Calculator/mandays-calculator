@@ -4,6 +4,7 @@ import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import ErrorPage from "~/pages/common/error-page";
+import { ChangePassword } from "~/pages/auth";
 
 export const routes: RouteType[] = [
   {
@@ -39,6 +40,11 @@ export const routes: RouteType[] = [
     label: "account.info.label",
     element: <Outlet />,
     icon: "person",
+  },
+  {
+    path: "change-password",
+    label: "account.info.label",
+    element: <ChangePassword />,
   },
   {
     path: "*",
