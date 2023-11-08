@@ -3,7 +3,7 @@ import { ConfigType } from ".";
 let config: ConfigType | null = null;
 
 export const loadConfig = async (env: string): Promise<ConfigType | null> => {
-  return await fetch(`config/config-${env}.json`, {
+  return await fetch(`/config/config-${env}.json`, {
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",

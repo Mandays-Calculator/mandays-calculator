@@ -7,11 +7,50 @@ import { Typography, Grid } from "@mui/material";
 import { mandaysCalculatorData } from "./utils/tableData";
 import { Table } from "~/components";
 import { CustomButton } from "~/components/form/button";
+import { IconButton } from "@mui/material";
 
 const MandaysCalculator = (): ReactElement => {
-  const { columns, data }: any = mandaysCalculatorData;
+  const { data }: any = mandaysCalculatorData;
   const { mandaysCalculator } = LocalizationKey;
   const { t } = useTranslation();
+
+  const tableColumns = [
+    {
+      Header: "Sprint Name",
+      accessor: "sprintName",
+    },
+    {
+      Header: "Team",
+      accessor: "team",
+    },
+    {
+      Header: "Started Date",
+      accessor: "startedDate",
+    },
+    {
+      Header: "Status",
+      accessor: "status",
+      disableSortBy: true,
+    },
+    {
+      Header: "",
+      id: "actions",
+      Cell: ({ row }: any) => (
+        <>
+          <IconButton onClick={() => console.log(row)}>
+            <SvgIcon name="history" $size={2} color="primary" />
+          </IconButton>
+          <IconButton onClick={() => console.log(row)}>
+            <SvgIcon name="edit" $size={2} color="primary" />
+          </IconButton>
+          <IconButton onClick={() => console.log(row)}>
+            <SvgIcon name="delete" $size={2} color="error" />
+          </IconButton>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
       <Title title={t(mandaysCalculator.label)} />
@@ -29,7 +68,7 @@ const MandaysCalculator = (): ReactElement => {
             </CustomButton>
           </Grid>
         </Grid>
-        <Table columns={columns} data={data} name="mandays-calculator" />
+        <Table columns={tableColumns} data={data} name="mandays-calculator" />
       </PageContainer>
     </>
   );
