@@ -4,16 +4,46 @@
     "submit": "Submit",
     "confirm": "Confirm",
     "dashboard": "Dashboard",
-    "settings": "Settings"
+    "settings": "Settings",
+    "button": {
+      "goBackHome": "GO BACK HOME"
+    },
+    "somethingWentWrong": {
+      "title": "SOMETHING WENT WRONG",
+      "description": "Relax, you didn't break the internet. You may try refreshing the page."
+    },
+    "notFound": {
+      "title": "PAGE NOT FOUND",
+      "description": "Couldn't find that. Try something else or go back home."
+    }
   },
   "login": {
     "management": {
       "label": "Login management"
+    },
+    "label": {
+      "signIn": "Sign In",
+      "userName": "Username",
+      "password": "Password",
+      "forgotPassword": "Forgot Password"
     }
   },
   "odc": {
     "management": {
       "label": "ODC Management"
+    },
+    "form": {
+      "odcName": "ODC Name",
+      "abbr": "Abbreviation",
+      "loc": "Location"
+    },
+    "modal": {
+      "deleteLabel": "Are you sure you want to delete this ODC?"
+    },
+    "button": {
+      "add": "Add ODC",
+      "save": "Save",
+      "cancel": "Cancel"
     }
   },
   "project": {

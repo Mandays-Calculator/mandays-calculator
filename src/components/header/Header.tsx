@@ -1,5 +1,7 @@
 import type { ReactElement, MouseEvent } from "react";
+
 import { useState } from "react";
+import { useAuth } from "react-oidc-context";
 import {
   Box,
   Toolbar,
@@ -12,15 +14,18 @@ import {
   Avatar,
   Tooltip,
 } from "@mui/material";
-
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import AvatarImg from "~/assets/img/avatar.png";
+import { getUser } from "~/utils/oidc-utils";
+
 import { StyledAppBar, StyledToolBarContainer } from ".";
 
 const AppBarHeader = (): ReactElement => {
-  const userSettings = ["Profile", "Change Password ", "Logout"];
-  const name = "Dela Cruz, Juan";
+  const auth = useAuth();
+  const user = getUser();
+  // const userSettings = ["Profile", "Change Password ", "Logout"];
+  const name = user?.profile.name;
   const position = "Sprint Manager";
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -31,6 +36,10 @@ const AppBarHeader = (): ReactElement => {
 
   const handleCloseUserMenu = (): void => {
     setAnchorElUser(null);
+  };
+
+  const handleLogoutUserMenu = (): void => {
+    auth.removeUser()
   };
 
   return (
@@ -45,10 +54,10 @@ const AppBarHeader = (): ReactElement => {
                     <Avatar alt={name} src={AvatarImg} />
                   </Grid>
                   <Grid item xs={8}>
-                    <Typography textAlign="center" fontSize={14}>
+                    <Typography textAlign="left" fontSize={14}>
                       {name}
                     </Typography>
-                    <Typography textAlign="center" fontSize={10}>
+                    <Typography textAlign="left" fontSize={10}>
                       {position}
                     </Typography>
                   </Grid>
@@ -81,11 +90,20 @@ const AppBarHeader = (): ReactElement => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {userSettings.map((setting) => (
+                {/* {userSettings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
-                ))}
+                ))} */}
+                <MenuItem key="Profile" onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
+                <MenuItem key="Change Password" onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Change Password</Typography>
+                </MenuItem>
+                <MenuItem key="Logout" onClick={handleLogoutUserMenu}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>

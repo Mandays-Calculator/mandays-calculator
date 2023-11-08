@@ -1,6 +1,7 @@
 import { fireEvent, render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import ErrorPage from "~/pages/error-page";
+import ErrorPage from "~/pages/common/error-page";
+import { i18nMock } from "~/__tests__/__mocks__/i18nMocks";
 
 jest.mock("~/assets/img/page_not_found.png", () => "page_not_found.png");
 jest.mock("~/assets/img/something_wrong.png", () => "something_wrong.png");
@@ -11,25 +12,24 @@ jest.mock("react-router-dom", () => ({
 
 describe("Error Page Component", () => {
   it("renders the page without breaking", () => {
+    const { common } = i18nMock;
     const { asFragment, getByText } = render(<ErrorPage type="not-found" />);
 
-    expect(getByText("PAGE NOT FOUND")).toBeInTheDocument();
-    expect(
-      getByText("Couldn't find that. Try something else or go back home.")
-    ).toBeInTheDocument();
+    expect(getByText(common.pageNotFoundTitle)).toBeInTheDocument();
+    expect(getByText(common.pageNotFoundDesc)).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders something went wrong", () => {
+    const { common } = i18nMock;
     const { asFragment, getByText } = render(<ErrorPage type="something-went-wrong" />);
-    expect(getByText("SOMETHING WENT WRONG")).toBeInTheDocument();
-    expect(
-      getByText("Relax, you didn't break the internet. You may try refreshing the page.")
-    ).toBeInTheDocument();
+    expect(getByText(common.somethingWentWrongTitle)).toBeInTheDocument();
+    expect(getByText(common.somethingWentWrongDesc)).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("clicked go back button", () => {
+    const { common } = i18nMock;
     const navigate = jest.fn();
     jest.spyOn(require("react-router-dom"), "useNavigate").mockReturnValue(navigate);
 
@@ -39,7 +39,7 @@ describe("Error Page Component", () => {
       </Router>
     );
 
-    fireEvent.click(getByText("GO BACK HOME"));
+    fireEvent.click(getByText(common.goBackHomeBtnLabel));
     expect(navigate).toHaveBeenCalledWith(-1);
   });
 });
