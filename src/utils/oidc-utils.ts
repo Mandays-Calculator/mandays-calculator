@@ -1,9 +1,9 @@
 import { User } from "oidc-client-ts";
+import { getEnvConfig } from "./env-config";
 
 export const getUser = (): User | null => {
-  const oidcStorage = sessionStorage.getItem(
-    `oidc.user:http://localhost:8080/realms/mandays-calculator:mc-client`
-  );
+  const { sessionStorageOidcKey } = getEnvConfig();
+  const oidcStorage = sessionStorage.getItem(sessionStorageOidcKey);
   if (!oidcStorage) {
     return null;
   }
