@@ -2,19 +2,20 @@ import type { ReactElement } from "react";
 import type { RouteType } from "~/routes";
 
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Divider, Box, IconButton } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Divider, Box, Typography, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { SvgIcon } from "~/components";
 import { routesConfig } from "~/routes";
+import LocalizationKey from "~/i18n/key";
+
 import {
   StyledDrawer,
   DrawerHeader,
+  StyledCollapsibleItem,
   StyledItemText,
   StyledListItemIcon,
   StyledListItem,
@@ -23,26 +24,18 @@ import {
 
 const Drawer = (): ReactElement => {
   const [open, setOpen] = useState<boolean>(false);
-  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const { common } = LocalizationKey;
   const handleNavigate = (routeItem: RouteType): void => {
     navigate(`${routeItem.path}`);
-  };
-
-  const isActivePath = (path: string): boolean => {
-    return location.pathname.includes(path);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <StyledDrawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={() => setOpen(!open)}>
-            {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
+        <DrawerHeader></DrawerHeader>
         <Divider sx={{ mb: 7 }} />
         <StyledList open={open}>
           {routesConfig.map((routeItem: RouteType, index: number) => {
@@ -50,7 +43,6 @@ const Drawer = (): ReactElement => {
               return (
                 <StyledListItem
                   key={index}
-                  activepath={isActivePath(routeItem.path || "")}
                   onClick={() => handleNavigate(routeItem)}
                   open={open}
                 >
@@ -73,6 +65,12 @@ const Drawer = (): ReactElement => {
             }
           })}
         </StyledList>
+        <StyledCollapsibleItem open={open}>
+          <IconButton onClick={() => setOpen(!open)}>
+            <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
+          </IconButton>
+          {open && <Typography>{t(common.collapse)}</Typography>}
+        </StyledCollapsibleItem>
       </StyledDrawer>
     </Box>
   );
