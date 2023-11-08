@@ -1,7 +1,10 @@
 import type { ReactElement } from "react";
+
 import { Routes, Route, Navigate } from "react-router-dom";
-import { AuthContainer } from "./components/auth-container";
+
 import { Footer } from "~/components/footer";
+
+import { AuthContainer } from "./components/auth-container";
 import { Login, ForgotPassword, ChangePassword } from ".";
 
 const Auth = (): ReactElement => {

@@ -54,10 +54,10 @@ const AppBarHeader = (): ReactElement => {
                     <Avatar alt={name} src={AvatarImg} />
                   </Grid>
                   <Grid item xs={8}>
-                    <Typography textAlign="center" fontSize={14}>
+                    <Typography textAlign="left" fontSize={14}>
                       {name}
                     </Typography>
-                    <Typography textAlign="center" fontSize={10}>
+                    <Typography textAlign="left" fontSize={10}>
                       {position}
                     </Typography>
                   </Grid>
