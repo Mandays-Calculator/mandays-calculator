@@ -15,6 +15,7 @@ export const mandaysCalculatorData = {
     {
       Header: "Status",
       accessor: "status",
+      disableSortBy: true,
     },
   ],
   data: [
