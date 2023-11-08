@@ -37,11 +37,7 @@ const TeamListCard = (props: TeamListCardProps): ReactElement => {
       teams: values.teams.filter((_val, index) => index !== teamIndex),
     });
   };
-  return isDefault ? (
-    <StyledContainer $isDefault={isDefault}>
-      <Typography fontWeight="bold">Default</Typography>
-    </StyledContainer>
-  ) : (
+  return (
     <StyledContainer
       $isDefault={isDefault}
       onClick={() => toggleEdit(teamIndex)}

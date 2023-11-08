@@ -3,8 +3,9 @@ import type { AddTeamForm as AddTeamFormType } from "../types";
 
 import { useFormikContext } from "formik";
 
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import TeamListCard from "../components/TeamListCard";
+import { StyledContainer } from "../components/TeamListCard/TeamListCard";
 
 interface TeamListProps {
   toggleEdit: (teamIndex: number) => any;
@@ -25,15 +26,25 @@ const TeamList = (props: TeamListProps): ReactElement => {
         },
       }}
     >
-      {values?.teams?.map((_team, index) => (
-        <TeamListCard
-          isDefault={index === 0}
-          key={index}
-          teamIndex={index}
-          teamObject={_team}
-          toggleEdit={(teamIndex) => toggleEdit(teamIndex)}
-        />
-      ))}
+      {values?.teams?.map((_team, index) => {
+        if (index > 0) {
+          return (
+            <TeamListCard
+              isDefault={false}
+              key={index}
+              teamIndex={index}
+              teamObject={_team}
+              toggleEdit={(teamIndex) => toggleEdit(teamIndex)}
+            />
+          );
+        } else if (values.teams.length === 1) {
+          return (
+            <StyledContainer $isDefault={true}>
+              <Typography fontWeight='bold'>Default</Typography>
+            </StyledContainer>
+          );
+        }
+      })}
     </Stack>
   );
 };
