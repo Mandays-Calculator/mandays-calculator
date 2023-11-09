@@ -81,6 +81,15 @@
           "status": "Status"
         }
       }
+    },
+    "resourceList": {
+      "table": {
+        "columns":{
+          "odc": "ODC",
+          "resourceCount": "RESOURCE COUNT",
+          "annualLeaves": "ANNUAL LEAVES"
+        }
+      }
     }
   }
 }

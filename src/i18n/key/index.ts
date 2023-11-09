@@ -22,9 +22,15 @@ const LocalizationKey = {
     label: "mandaysCalculator.label",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
-      team: "mandaysCalculator.sprintList.table.team",
-      startedDate: "mandaysCalculator.sprintList.table.startedDate",
-      status: "mandaysCalculator.sprintList.table.status",
+      team: "mandaysCalculator.sprintList.table.columns.team",
+      startedDate: "mandaysCalculator.sprintList.table.columns.startedDate",
+      status: "mandaysCalculator.sprintList.table.columns.status",
+    },
+    resourceListTableColumns: {
+      odc: "mandaysCalculator.resourceList.table.columns.odc",
+      resourceCount:
+        "mandaysCalculator.resourceList.table.columns.resourceCount",
+      annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
   },
 };

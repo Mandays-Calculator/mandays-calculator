@@ -5,6 +5,7 @@ import { Typography, Grid, Stack } from "@mui/material";
 
 import { CustomTab } from "~/components";
 import { CustomButton } from "~/components/form/button";
+import { ResourcesTab } from "../ResourcesTab";
 
 import Summary from "./summary";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +58,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Resources",
-              content: <h1>Resources here</h1>,
+              content: <ResourcesTab />,
             },
             {
               label: "Legend",

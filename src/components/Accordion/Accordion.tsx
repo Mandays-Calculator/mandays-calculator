@@ -57,7 +57,7 @@ export const Accordion = (props: AccordionProps): ReactElement => {
   const renderTitle = (): ReactNode => {
     if (typeof title === "string") {
       return (
-        <Typography variant="h5" fontWeight="bold" color="primary">
+        <Typography variant="h6" fontWeight="bold" color="primary">
           {title}
         </Typography>
       );
