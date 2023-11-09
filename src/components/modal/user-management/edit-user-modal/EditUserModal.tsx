@@ -8,6 +8,7 @@ import {
   ControlledTextField,
 } from "~/components/form/controlled";
 import { UserListData } from "~/api/user-management/types";
+import { genders, rolesData } from "../utils";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -38,20 +39,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   onClose,
   currentUser,
 }): ReactElement => {
-  const rolesData = [
-    {
-      label: "System Admin",
-      value: "ROLE_SYS_ADMIN",
-    },
-    {
-      label: "Sprint Manager",
-      value: "ROLE_SPRINT_MANAGER",
-    },
-    {
-      label: "User",
-      value: "ROLE_USER",
-    },
-  ];
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -92,9 +79,10 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               />
             </Grid>
             <Grid item xs={3}>
-              <ControlledTextField
+              <StyledTitle mb={0.5}>Gender</StyledTitle>
+              <ControlledSelect
                 name="gender"
-                label="Gender"
+                options={genders}
                 placeholder={currentUser?.gender}
               />
             </Grid>

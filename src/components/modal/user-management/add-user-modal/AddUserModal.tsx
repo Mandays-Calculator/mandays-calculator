@@ -21,6 +21,7 @@ import {
 import { useFormikContext } from "formik";
 import { AddUserManagement } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
+import { genders, rolesData } from "../utils";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -73,20 +74,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     teamId: values.teamId,
     roles: values.roles,
   };
-  const rolesData = [
-    {
-      label: "System Admin",
-      value: "ROLE_SYS_ADMIN",
-    },
-    {
-      label: "Sprint Manager",
-      value: "ROLE_SPRINT_MANAGER",
-    },
-    {
-      label: "User",
-      value: "ROLE_USER",
-    },
-  ];
 
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
@@ -128,9 +115,10 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               />
             </Grid>
             <Grid item xs={3}>
-              <ControlledTextField
+              <StyledTitle mb={0.5}>Gender</StyledTitle>
+              <ControlledSelect
                 name="gender"
-                label="Gender"
+                options={genders}
                 placeholder="Male"
               />
             </Grid>
@@ -191,7 +179,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={5}>
-            <StyledTitle mb={1}>Role</StyledTitle>
+            <StyledTitle mb={0.5}>Role</StyledTitle>
             <ControlledSelect
               multiple
               options={rolesData}
