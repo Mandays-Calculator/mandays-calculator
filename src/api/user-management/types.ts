@@ -3,7 +3,7 @@ export interface UserListResponse {
   data: UserListData[];
 }
 
-interface UserListData {
+export interface UserListData {
   id: string;
   odc: {
     id: string;
@@ -20,7 +20,7 @@ interface UserListData {
   email: string;
   careerStep: string;
   joiningDate: string;
-  roles: string;
+  roles: string[];
   active: boolean;
 }
 export interface AddUserResponse {

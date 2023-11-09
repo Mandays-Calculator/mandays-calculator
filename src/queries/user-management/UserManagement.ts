@@ -1,11 +1,15 @@
+import type {
+  UserListResponse,
+  AddUserResponse,
+  AddUserParams,
+} from "~/api/user-management";
 import { AxiosError } from "axios";
 import { useMutation, useQuery } from "react-query";
 
 import { AddUser, getUserList } from "~/api/user-management/UserManagement";
-import { AddUserParams, AddUserResponse } from "~/api/user-management/types";
 
 export const useUserList = () => {
-  return useQuery("userlist", () => getUserList());
+  return useQuery<UserListResponse, Error>("userList", getUserList);
 };
 
 export const useAddUser = () => {

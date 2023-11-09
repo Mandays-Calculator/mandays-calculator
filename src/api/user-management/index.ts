@@ -1,2 +1,2 @@
 export { getUserList } from "./UserManagement";
-export type { UserListResponse } from "./types";
+export type { UserListResponse, AddUserParams, AddUserResponse } from "./types";
