@@ -44,3 +44,12 @@ export interface AddUserParams {
   teamId: string;
   roles: string[];
 }
+
+export interface DeleteUserResponse {
+  status: number;
+  data: boolean;
+}
+
+export interface DeleteUserParam {
+  id: string;
+}
