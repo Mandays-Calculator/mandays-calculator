@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
 
@@ -32,11 +32,13 @@ const ForgotPassword = (): ReactElement => {
   return (
     <Form instance={forgotPasswordForm}>
       <Grid container>
-        <StyledLabel textAlign="center">
-          Please enter your username or email. <br />A link will be sent to your
-          email in order for you to reset your password.
-        </StyledLabel>
-        <Grid item xs={12} mt={2} mb={2}>
+        <Grid item xs={12}>
+          <StyledLabel textAlign="center">
+            Please enter your username or email. <br />A link will be sent to your
+            email in order for you to reset your password.
+          </StyledLabel>
+        </Grid>
+        <Grid item xs={12} mt={2} mb={1}>
           <ControlledTextField
             fullWidth
             placeholder="Input Username or Email"
@@ -46,6 +48,11 @@ const ForgotPassword = (): ReactElement => {
               "usernameOrEmail"
             )}
           />
+        </Grid>
+        <Grid item xs={12} mb={2}>
+          <Link to={"/"}>
+            &lt;&lt;&lt; Back to Login
+          </Link>
         </Grid>
         <Grid item xs={12}>
           <Button fullWidth type="submit">

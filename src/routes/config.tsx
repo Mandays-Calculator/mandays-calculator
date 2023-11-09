@@ -4,6 +4,7 @@ import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import ErrorPage from "~/pages/common/error-page";
+import { ChangePassword } from "~/pages/auth";
 import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
 
 export const routes: RouteType[] = [
@@ -38,6 +39,11 @@ export const routes: RouteType[] = [
   {
     path: "account-info",
     element: <Outlet />,
+  },
+  {
+    path: "change-password",
+    label: "account.info.label",
+    element: <ChangePassword />,
   },
   {
     element: <Outlet />,

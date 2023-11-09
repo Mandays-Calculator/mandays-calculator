@@ -47,13 +47,15 @@ const Login = (): ReactElement => {
             helperText={getFieldError(loginForm.errors, "username")}
           />
         </Grid>
-        <Grid item xs={12} pt={1} mb={3}>
+        <Grid item xs={12} pt={1} mb={1}>
           <StyledLabel>{t(LocalizationKey.login.label.password)}</StyledLabel>
           <PasswordInput
             placeholder="Input password"
             name="password"
             helperText={getFieldError(loginForm.errors, "password")}
           />
+        </Grid>
+        <Grid item xs={12} mb={2}>
           <Link to={"/forgot-password"}>
             {t(LocalizationKey.login.label.forgotPassword)}
           </Link>
