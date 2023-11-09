@@ -15,6 +15,7 @@ export interface UserListData {
   firstName: string;
   lastName: string;
   middleName?: string;
+  employeeId: string;
   suffix?: string;
   gender: string;
   email: string;

@@ -34,13 +34,15 @@ export const userListColum: Column<UserListData>[] = [
   },
   {
     Header: "Action",
-    Cell: () => {
+    Cell: ({ row }: CellProps<UserListData>) => {
       const [editModal, setEditModal] = useState(false);
+      const [currentUser, setCurrentUser] = useState<UserListData>();
       return (
         <Stack direction="row" spacing={2}>
           <SvgIcon
             onClick={() => {
               setEditModal(true);
+              setCurrentUser(row.original);
             }}
             name="edit"
             color="primary"
@@ -50,6 +52,7 @@ export const userListColum: Column<UserListData>[] = [
           <SvgIcon name="delete" color="error" $size={2} />
           <EditUserModal
             open={editModal}
+            currentUser={currentUser}
             onEditUser={() => {
               alert("success");
             }}

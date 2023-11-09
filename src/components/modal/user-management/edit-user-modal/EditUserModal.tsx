@@ -7,6 +7,7 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
+import { UserListData } from "~/api/user-management/types";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -28,26 +29,32 @@ interface EditUserModalProps {
   onEditUser: () => void;
   open: boolean;
   onClose: () => void;
+  currentUser?: UserListData;
 }
 
 export const EditUserModal: React.FC<EditUserModalProps> = ({
   onEditUser,
   open,
   onClose,
+  currentUser,
 }): ReactElement => {
-  const rolesDummyData = [
+  const rolesData = [
     {
-      label: "User",
-      value: "User",
+      label: "System Admin",
+      value: "ROLE_SYS_ADMIN",
     },
     {
       label: "Sprint Manager",
-      value: "Sprint Manager",
+      value: "ROLE_SPRINT_MANAGER",
+    },
+    {
+      label: "User",
+      value: "ROLE_USER",
     },
   ];
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
-      <Stack width={"53rem"} padding={"2rem"}>
+      <Stack width={"58rem"} padding={"2rem"}>
         <StyledModalTitle>Edit User</StyledModalTitle>
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
@@ -60,35 +67,35 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               <ControlledTextField
                 name="lastName"
                 label="Last Name"
-                placeholder="Dela Cruz"
+                placeholder={currentUser?.lastName}
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
                 name="firstName"
                 label="First Name"
-                placeholder="Juan"
+                placeholder={currentUser?.firstName}
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
                 name="middleName"
                 label="Middle Name"
-                placeholder="Jose"
+                placeholder={currentUser?.middleName}
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
                 name="suffix"
                 label="Suffix"
-                placeholder="Jr"
+                placeholder={currentUser?.suffix}
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
                 name="gender"
                 label="Gender"
-                placeholder="Male"
+                placeholder={currentUser?.gender}
               />
             </Grid>
           </Grid>
@@ -96,21 +103,21 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <ControlledTextField
               name="emailAddress"
               label="Email Address"
-              placeholder="juandelacruz103@gmail.com"
+              placeholder={currentUser?.email}
             />
           </Grid>
           <Grid item xs={2} mt={1}>
             <ControlledTextField
               name="carrerStep"
               label="Carrer Step"
-              placeholder="I03"
+              placeholder={currentUser?.careerStep}
             />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
               name="EmployeeId"
               label="Employee Id"
-              placeholder="82000000"
+              placeholder={currentUser?.employeeId}
             />
           </Grid>
           <Grid item xs={5}>
@@ -124,7 +131,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           <Grid item xs={2} fontSize={"5px"}>
             <StyledTitle mb={1}>Joining Date</StyledTitle>
 
-            <ControlledDatePicker name="date" placeholderText="01/01/23" />
+            <ControlledDatePicker
+              name="date"
+              placeholderText={currentUser?.joiningDate}
+              dateFormat="yyyy/MM/dd"
+            />
           </Grid>
           <Grid item xs={7.7}>
             <ControlledTextField
@@ -144,9 +155,9 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <StyledTitle mb={1}>Role</StyledTitle>
             <ControlledSelect
               multiple
-              options={rolesDummyData}
-              name="roleName"
-              placeholder="Sprint Manager"
+              options={rolesData}
+              name="roles"
+              placeholder="Sprint manager"
             />
           </Grid>
         </Grid>

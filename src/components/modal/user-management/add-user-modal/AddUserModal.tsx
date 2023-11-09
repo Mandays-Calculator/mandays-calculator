@@ -73,7 +73,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     teamId: values.teamId,
     roles: values.roles,
   };
-  const rolesDummyData = [
+  const rolesData = [
     {
       label: "System Admin",
       value: "ROLE_SYS_ADMIN",
@@ -90,7 +90,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
 
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
-      <Stack width={"53rem"} padding={"2rem"}>
+      <Stack width={"58rem"} padding={"2rem"}>
         <StyledModalTitle>Add User</StyledModalTitle>
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
@@ -194,7 +194,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <StyledTitle mb={1}>Role</StyledTitle>
             <ControlledSelect
               multiple
-              options={rolesDummyData}
+              options={rolesData}
               name="roles"
               placeholder="Sprint Manager"
             />
