@@ -23,29 +23,29 @@ interface TeamListCardProps {
   isDefault: boolean;
   teamIndex: number;
   teamObject: TeamObject;
+  toggleEdit: (teamIndex: number) => void;
 }
 
 const TeamListCard = (props: TeamListCardProps): ReactElement => {
-  const { isDefault, teamIndex, teamObject } = props;
+  const { isDefault, teamIndex, teamObject, toggleEdit } = props;
   const { values, setValues } = useFormikContext<AddTeamFormType>();
 
-  const handleDeleteCard = (): void => {
-    setValues({ ...values, teams: values.teams.filter((_val, index) => index !== teamIndex) });
+  const handleDeleteCard = (event: any): void => {
+    event.stopPropagation();
+    setValues({
+      ...values,
+      teams: values.teams.filter((_val, index) => index !== teamIndex),
+    });
   };
-  return isDefault ? (
-    <StyledContainer $isDefault={isDefault}>
-      <Typography fontWeight="bold">Default</Typography>
-    </StyledContainer>
-  ) : (
-    <StyledContainer $isDefault={isDefault}>
+  return (
+    <StyledContainer
+      $isDefault={isDefault}
+      onClick={() => toggleEdit(teamIndex)}
+    >
       <Typography fontWeight="bold">{teamObject.teamName}</Typography>
       <Typography fontWeight="bold">{teamObject.teamLead}</Typography>
-      <IconButton onClick={handleDeleteCard}>
-        <SvgIcon
-          name="delete"
-          color="error"
-          $size={2}
-        />
+      <IconButton onClick={($event) => handleDeleteCard($event)}>
+        <SvgIcon name="delete" color="error" $size={2} />
       </IconButton>
     </StyledContainer>
   );

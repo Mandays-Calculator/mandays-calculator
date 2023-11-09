@@ -3,11 +3,16 @@
     "user": "User",
     "submit": "Submit",
     "confirm": "Confirm",
+    "complexity": "Complexity",
     "dashboard": "Dashboard",
     "settings": "Settings",
+    "history": "History",
+    "task": "Task",
     "button": {
-      "goBackHome": "GO BACK HOME"
+      "goBackHome": "GO BACK HOME",
+      "collapse": "Collapse"
     },
+    "noData": "No Data",
     "somethingWentWrong": {
       "title": "SOMETHING WENT WRONG",
       "description": "Relax, you didn't break the internet. You may try refreshing the page."
@@ -63,5 +68,9 @@
   },
   "footer": {
     "label": "All rights reserved."
+  },
+  "mandaysCalculator": {
+    "title": "Mandays Calculator",
+    "label": "Current Estimation"
   }
 }
