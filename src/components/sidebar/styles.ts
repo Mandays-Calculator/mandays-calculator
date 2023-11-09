@@ -35,6 +35,7 @@ const StyledDrawer = styled(Drawer, {
 })(({ theme, open }) => ({
   maxWidth: 390,
   width: drawerWidth,
+  paddingBottom: theme.spacing(6.8),
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
@@ -50,8 +51,10 @@ const StyledDrawer = styled(Drawer, {
 
 const StyledListItemIcon = styled(ListItemIcon)``;
 
-const StyledListItem = styled(ListItem)<{ open: boolean; activepath: boolean }>(
-  ({ open, theme, activepath }) =>
+const StyledListItem = styled(ListItem)<{
+  open: boolean;
+}>(
+  ({ open, theme }) =>
     `
 margin: ${theme.spacing(1.3, 0)};
 min-height: 48px;
@@ -75,21 +78,6 @@ div {
 
   border-radius: ${open ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};
-}
-
-${
-  activepath
-    ? `& span,
-    div {
-      color: ${theme.palette.background.default} !important;
-  
-      svg {
-        color: ${theme.palette.background.default};
-      }
-    }
-  border-radius: ${open ? "10px" : "0"};
-  background-color: ${theme.palette.primary.main};`
-    : ""
 }`
 );
 
@@ -122,6 +110,33 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   padding: theme.spacing(1, 1),
 }));
 
+const StyledCollapsibleItem = styled("div", {
+  shouldForwardProp: (prop) => prop !== "open",
+})<{ open: boolean }>(({ open, theme }) => ({
+  display: "flex",
+  position: "absolute",
+  left: open ? "16px" : "0",
+  bottom: "24px",
+  justifyContent: "center",
+  minHeight: "48px",
+  cursor: "pointer",
+  alignItems: "center",
+  "& svg": {
+    marginRight: theme.spacing(2.1),
+  },
+  "& p": {
+    fontSize: "1.15rem",
+  },
+  "& button": {
+    padding: theme.spacing(2, 0, 2, 2),
+  },
+  [theme.breakpoints.down("xl")]: {
+    "& svg": {
+      marginRight: theme.spacing(4.7),
+    },
+  },
+}));
+
 export {
   StyledItemText,
   StyledListItem,
@@ -129,4 +144,5 @@ export {
   StyledListItemIcon,
   StyledDrawer,
   StyledList,
+  StyledCollapsibleItem,
 };

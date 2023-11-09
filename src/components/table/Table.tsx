@@ -1,123 +1,146 @@
-import type { ReactElement } from 'react';
-import type { Column } from "react-table";
+import type { ReactElement } from "react";
+import type { TableProps, CustomHeaderGroup } from ".";
 
-import { Fragment } from 'react';
-import { useTable } from 'react-table'
-import { styled } from '@mui/material/styles';
-import MuiTable from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+import { useTable, useSortBy } from "react-table";
+import { useTranslation } from "react-i18next";
 
-interface TableProps<Type extends object> {
-  name: string;
-  title?: string;
-  columns: Column<Type>[];
-  data?: Type[];
-}
+import MuiTable from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 
-const StyledHeader = styled(TableRow)({
-  backgroundColor: '#D0DEEA',
-  borderRadius: '8px',
-})
+import { SvgIcon } from "~/components";
+import LocalizationKey from "~/i18n/key";
 
-const StyledCell = styled(TableCell)({
-  padding: '16px 12px'
-})
+import { StyledCell, StyledHeader, StyledStripeRow } from ".";
 
+/* *
+  Sample usage of the Table component:
+  Import the necessary dependencies at the beginning of your file:
 
-const StyledStripeRow = styled(TableRow)({
-  '&:nth-of-type(odd)': {
-    backgroundColor: '#FEFEFE'
-  },
-  '&:nth-of-type(even)': {
-    backgroundColor: '#EAF3F4'
-  }
-})
+  import { Table, Column } from "./Table";
 
-
-export const Table = <Type extends object>(props: TableProps<Type>): ReactElement => {
-  const {
-    name,
-    title,
-    columns,
-    data = [],
-  } = props;
-
-  const {
-    getTableProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable<Type>(
+  Define your data columns using the Column interface:
+  
+  const columns: Column<YourDataType>[] = [
     {
-      columns,
-      data,
-    }
-  );
+      Header: "Name",        // The column header label
+      accessor: "name",      // The key in your data that corresponds to this column
+    },
+    {
+      Header: "Team",
+      accessor: "team",
+      disableSortBy: true,   // To disable sorting for this specific column
+    },
+  ];
 
+  Define your data in an array of objects with the corresponding keys:
+  const data: YourDataType[] = [
+    {
+      name: "Joe",
+      team: "Enrollment",
+      startedDate: "30/01/2023",
+      status: "On going",
+    },
+  ];
+
+  Finally, render the Table component with the defined columns and data:
+
+  <Table
+    columns={columns}
+    data={data}
+  />
+
+  Customize the Table component by passing additional props as needed, such as a title or a label for when there's no data.
+  Example with a title and a custom "No Data" label:
+  <Table
+    columns={columns}
+    data={data}
+    title="Employee List"
+    noDataLabel="No employees found"
+  />
+  *
+*/
+
+export const Table = <Type extends object>(
+  props: TableProps<Type>
+): ReactElement => {
+  const { common } = LocalizationKey;
+  const { name, title, columns, data = [], noDataLabel } = props;
+  const { t } = useTranslation();
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable<Type>(
+      {
+        columns,
+        data,
+      },
+      useSortBy
+    );
 
   return (
     <Stack gap={2}>
       <TableContainer component={Paper}>
         {title && (
-          <Typography variant='h5'>
+          <Typography variant="h5" component="div" gutterBottom>
             {title}
           </Typography>
         )}
-        <MuiTable {...getTableProps()} size='small' aria-label={name}>
+        <MuiTable {...getTableProps()} size="small" aria-label={name}>
           <TableHead>
-            {headerGroups.map((headerGroup) => {
-              const { key: headerGroupKey, role: headerGroupRole, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
-              return (
-                <StyledHeader {...restHeaderGroupProps} key={headerGroupKey} role={headerGroupRole}>
-                  {headerGroup.headers.map((column) => {
-                    const { key: headerKey, role: headerRole, ...restHeaderProps } = column.getHeaderProps(); 
-                    return (
-                      <StyledCell
-                        {...restHeaderProps}
-                        key={headerKey}
-                        role={headerRole}
-                      >
-                        <Typography fontWeight='bold'>
-                          {column.render('Header')}
-                        </Typography>
-                      </StyledCell>
-
-                    )
-                  })}
-                </StyledHeader>
-              )
-            })}
+            {headerGroups.map((headerGroup) => (
+              <StyledHeader {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <StyledCell
+                    {...column.getHeaderProps(
+                      (column as CustomHeaderGroup<Type>).getSortByToggleProps()
+                    )}
+                  >
+                    <Typography fontWeight="bold">
+                      {column.render("Header")}
+                      <span>
+                        {(column as CustomHeaderGroup<Type>).isSorted ? (
+                          (column as CustomHeaderGroup<Type>).isSortedDesc ? (
+                            <SvgIcon
+                              name="arrow_down"
+                              $size={1}
+                              sx={{ ml: 1 }}
+                            />
+                          ) : (
+                            <SvgIcon name="arrow_up" $size={1} sx={{ ml: 1 }} />
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </span>
+                    </Typography>
+                  </StyledCell>
+                ))}
+              </StyledHeader>
+            ))}
           </TableHead>
-          <TableBody>
-            {rows?.map((row) => {
+          <TableBody {...getTableBodyProps()}>
+            {rows.map((row) => {
               prepareRow(row);
-              const { key: rowKey, ...restRowProps } = row.getRowProps(); 
               return (
-                <Fragment key={rowKey}>
-                <StyledStripeRow {...restRowProps} >
-                  {row.cells.map((cell) => {
-                    const { key: cellKey, ...restCellProps } = cell.getCellProps();
-                    return (
-                      <StyledCell {...restCellProps} key={cellKey}>
-                        {cell.render("Cell")}
-                      </StyledCell>
-                    )
-                  })}
+                <StyledStripeRow {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <StyledCell {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </StyledCell>
+                  ))}
                 </StyledStripeRow>
-                </Fragment>
-                )
+              );
             })}
             {rows.length === 0 && (
               <StyledStripeRow>
                 <StyledCell colSpan={columns.length}>
-                  <Typography textAlign='center'>No Data</Typography>
+                  <Typography textAlign="center">
+                    {noDataLabel || t(common.noDataLabel)}
+                  </Typography>
                 </StyledCell>
               </StyledStripeRow>
             )}
@@ -126,6 +149,6 @@ export const Table = <Type extends object>(props: TableProps<Type>): ReactElemen
       </TableContainer>
     </Stack>
   );
-}
+};
 
 export default Table;

@@ -6,12 +6,8 @@ import { routesConfig } from ".";
 const AppRoutes = () => {
   return (
     <Routes>
-      {routesConfig.map((routeItem: RouteType) => (
-        <Route
-          path={routeItem.path}
-          element={routeItem.element}
-          key={routeItem.path}
-        />
+      {routesConfig.map((routeItem: RouteType, index: number) => (
+        <Route path={routeItem.path} element={routeItem.element} key={index} />
       ))}
     </Routes>
   );
