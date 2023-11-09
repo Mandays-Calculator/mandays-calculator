@@ -10,7 +10,12 @@ import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
 export const routes: RouteType[] = [
   {
     path: "/",
-    element: <Navigate to="/project-management" replace />,
+    element: (
+      <Navigate
+        to="/project-management"
+        replace
+      />
+    ),
   },
   {
     path: "project-management",
@@ -42,7 +47,6 @@ export const routes: RouteType[] = [
   },
   {
     path: "change-password",
-    label: "account.info.label",
     element: <ChangePassword />,
   },
   {
