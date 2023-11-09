@@ -32,10 +32,12 @@ export interface AddUserParams {
   firstName: string;
   lastName: string;
   middleName: string;
-  suffix: string | number;
+  suffix: string;
   gender: string | number;
   email: string;
   careerStep: string;
+  employeeId: string;
+  odcId: string;
   joiningDate: string;
   projectId: string;
   teamId: string;

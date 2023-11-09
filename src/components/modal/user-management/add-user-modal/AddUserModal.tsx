@@ -63,24 +63,31 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     lastName: values.lastName,
     middleName: values.middleName,
     suffix: values.suffix,
-    gender: values.gender,
+    gender: 1,
     email: values.email,
+    employeeId: values.employeeId,
+    odcId: values.odcId,
     careerStep: values.careerStep,
     joiningDate: values.joiningDate,
     projectId: values.projectId,
     teamId: values.teamId,
-    roles: ["ROLE_SYS_ADMIN"],
+    roles: values.roles,
   };
   const rolesDummyData = [
     {
-      label: "User",
-      value: "User",
+      label: "System Admin",
+      value: "ROLE_SYS_ADMIN",
     },
     {
       label: "Sprint Manager",
-      value: "Sprint Manager",
+      value: "ROLE_SPRINT_MANAGER",
+    },
+    {
+      label: "User",
+      value: "ROLE_USER",
     },
   ];
+
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"53rem"} padding={"2rem"}>
@@ -164,20 +171,21 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 <ControlledDatePicker
                   name="joiningDate"
                   placeholderText="01/01/23"
+                  dateFormat="yyyy/MM/dd"
                 />
               </Stack>
             </FormControl>
           </Grid>
           <Grid item xs={3.5}>
             <ControlledTextField
-              name="EmployeeId"
+              name="employeeId"
               label="Employee Id"
               placeholder="82000000"
             />
           </Grid>
           <Grid item xs={3.5}>
             <ControlledTextField
-              name="Odc"
+              name="odcId"
               label="ODC"
               placeholder="philippines"
             />
@@ -187,7 +195,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <ControlledSelect
               multiple
               options={rolesDummyData}
-              name="roleName"
+              name="roles"
               placeholder="Sprint Manager"
             />
           </Grid>
@@ -219,11 +227,16 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              // console.log(AddUserForm);
+              console.log("test", AddUserForm);
 
               AddUser.mutate(AddUserForm, {
                 onSuccess: (data) => {
-                  console.log("test", data);
+                  console.log("success", data);
+                  alert("sucess");
+                },
+                onError: (error) => {
+                  alert(error.message);
+                  console.log(error);
                 },
               });
             }}
