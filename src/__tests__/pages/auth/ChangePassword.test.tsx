@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -6,6 +8,11 @@ import { Formik } from 'formik';
 import { ChangePassword } from '~/pages/auth';
 
 import { cleanAllCallback } from './utils/auth-utils';
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: jest.fn(),
+}));
 
 const handleSubmit = jest.fn();
 
@@ -119,6 +126,12 @@ describe('GIVEN user changes password,', () => {
         },
     ];
 
+    test('WHEN user access the ChangePassword page, THEN it should render the ChangePassword component correctly', () => {
+        renderChangePassword();
+
+        expect(screen.getByText('Create New Password')).toBeInTheDocument();
+    });
+
     test.each(testCases)(
         `%s`,
         async ({ password, confirmPassword, expectedResults }) => {
@@ -135,12 +148,27 @@ describe('GIVEN user changes password,', () => {
                     if (shouldExist) {
                         expect(element).toBeInTheDocument();
                     } else {
-                        expect(element).not.toBeInTheDocument();
+                        expect(element).toBeNull();
                     }
                 });
             });
         }
     );
+});
+
+describe('GIVEN user wants to go cancel changing password,', () => {
+    test('WHEN user clicks the cancel button, THEN it should navigate back', async () => {
+        const mockNavigate = jest.fn();
+        (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+
+        renderChangePassword();
+
+        await userEvent.click(screen.getByRole('button', { name: /Cancel/i }));
+
+        await waitFor(() => {
+            expect(mockNavigate).toHaveBeenCalledWith(-1);
+        });
+    });
 });
 
 const renderChangePassword = () => {
