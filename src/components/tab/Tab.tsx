@@ -44,10 +44,21 @@ const CustomTabs = ({
         value={value}
         onChange={handleChange}
         aria-label="custom tabs"
-        style={{ width: 228 }}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{
+          "& .MuiTabs-flexContainer": {
+            justifyContent: "space-between",
+          },
+        }}
       >
         {tabs.map((tab, index) => (
-          <Tab label={tab.label} key={index} value={index} />
+          <Tab
+            label={tab.label}
+            key={index}
+            value={index}
+            sx={{ justifyContent: "center", minWidth: 220 }}
+          />
         ))}
       </Tabs>
       <Divider sx={{ borderWidth: 2 }} />
