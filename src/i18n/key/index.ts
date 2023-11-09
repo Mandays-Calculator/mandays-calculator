@@ -20,6 +20,12 @@ const LocalizationKey = {
   },
   mandaysCalculator: {
     label: "mandaysCalculator.label",
+    sprintListTableColumns: {
+      sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
+      team: "mandaysCalculator.sprintList.table.team",
+      startedDate: "mandaysCalculator.sprintList.table.startedDate",
+      status: "mandaysCalculator.sprintList.table.status",
+    },
   },
 };
 
