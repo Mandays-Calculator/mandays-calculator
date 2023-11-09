@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import type { TableProps, CustomHeaderGroup } from ".";
 
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, RowPropGetter, Row } from "react-table";
 import { useTranslation } from "react-i18next";
 
 import MuiTable from "@mui/material/Table";
@@ -65,11 +65,15 @@ import { StyledCell, StyledHeader, StyledStripeRow } from ".";
   *
 */
 
+export type ExtendedRowPropGetter<Type extends object> = (
+  props?: Partial<Row<Type>>
+) => RowPropGetter<Type> & Record<string, any>;
+
 export const Table = <Type extends object>(
   props: TableProps<Type>
 ): ReactElement => {
   const { common } = LocalizationKey;
-  const { name, title, columns, data = [], noDataLabel } = props;
+  const { name, title, columns, data = [], noDataLabel, onRowClick } = props;
   const { t } = useTranslation();
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -126,7 +130,15 @@ export const Table = <Type extends object>(
             {rows.map((row) => {
               prepareRow(row);
               return (
-                <StyledStripeRow {...row.getRowProps()}>
+                <StyledStripeRow
+                  {...row.getRowProps({
+                    onClick: () =>
+                      onRowClick ? onRowClick(row.original) : null,
+                    style: {
+                      cursor: onRowClick ? "pointer" : "default",
+                    },
+                  })}
+                >
                   {row.cells.map((cell) => (
                     <StyledCell {...cell.getCellProps()}>
                       {cell.render("Cell")}
