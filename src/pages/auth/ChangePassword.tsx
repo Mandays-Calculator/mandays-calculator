@@ -1,22 +1,27 @@
 import type { ReactElement, ReactNode } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 
 import { Grid, ListItem, ListItemIcon } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+import LocalizationKey from "~/i18n/key";
 import Form from "~/components/form/Form";
 import { CustomButton as Button } from "~/components/form/button";
+
 import PasswordInput from "./components/password-input/PasswordInput";
 import { StyledTitle, StyledLabel, AuthContainer } from "./components/auth-container";
 import { changePasswordSchema } from "./schema";
 
 const ValidationResult = ({ values }: any): ReactNode => {
+  const { t } = useTranslation();
+  const { changePassword } = LocalizationKey;
   return (
     <>
-      <ListItem>
+      <ListItem disablePadding={true}>
         <ListItemIcon>
           {values.password.length >= 8 ? (
             <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-length" />
@@ -24,9 +29,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
             <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-length" />
           )}
         </ListItemIcon>
-        Password must be at least 8 characters long
+        {t(changePassword.validationInfo.charCount)}
       </ListItem>
-      <ListItem>
+      <ListItem disablePadding={true}>
         <ListItemIcon>
           {/[A-Z]/.test(values.password) ? (
             <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-uppecase" />
@@ -34,9 +39,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
             <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-uppecase" />
           )}
         </ListItemIcon>
-        Password must contain an uppercase letter
+        {t(changePassword.validationInfo.uppercase)}
       </ListItem>
-      <ListItem>
+      <ListItem disablePadding={true}>
         <ListItemIcon>
           {/[a-z]/.test(values.password) ? (
             <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-lowercase" />
@@ -44,9 +49,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
             <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-lowercase" />
           )}
         </ListItemIcon>
-        Password must contain a lowercase letter
+        {t(changePassword.validationInfo.lowercase)}
       </ListItem>
-      <ListItem>
+      <ListItem disablePadding={true}>
         <ListItemIcon>
           {/[0-9]/.test(values.password) ? (
             <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-number" />
@@ -54,9 +59,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
             <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-number" />
           )}
         </ListItemIcon>
-        Password must contain a number
+        {t(changePassword.validationInfo.number)}
       </ListItem>
-      <ListItem>
+      <ListItem disablePadding={true}>
         <ListItemIcon>
           {/(?=.*\W)/.test(values.password) ? (
             <CheckCircleIcon style={{ color: "green" }} data-testid="green-icon-password-symbol" />
@@ -64,9 +69,9 @@ const ValidationResult = ({ values }: any): ReactNode => {
             <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-symbol" />
           )}
         </ListItemIcon>
-        Password must contain one of the following symbols (#$-_!)
+        {t(changePassword.validationInfo.symbol)}
       </ListItem>
-      <ListItem>
+      <ListItem disablePadding={true}>
         <ListItemIcon>
           {values.password === values.confirmPassword &&
             values.password !== "" ? (
@@ -75,7 +80,7 @@ const ValidationResult = ({ values }: any): ReactNode => {
             <CancelIcon style={{ color: "red" }} data-testid="red-icon-password-match" />
           )}
         </ListItemIcon>
-        New password and confirm new password must match.
+        {t(changePassword.validationInfo.match)}
       </ListItem>
     </>
   );
@@ -83,6 +88,8 @@ const ValidationResult = ({ values }: any): ReactNode => {
 
 const ChangePassword = (): ReactElement => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { changePassword } = LocalizationKey;
   const changePasswordForm = useFormik({
     initialValues: {
       password: "",
@@ -90,7 +97,6 @@ const ChangePassword = (): ReactElement => {
     },
     validationSchema: changePasswordSchema,
     validateOnChange: true,
-    // onSubmit: (values) => console.log("values", values),
     onSubmit: () => { },
   });
 
@@ -102,14 +108,14 @@ const ChangePassword = (): ReactElement => {
   return (
     <AuthContainer>
       <Form instance={changePasswordForm}>
-        <StyledTitle>Create New Password</StyledTitle>
+        <StyledTitle>{t(changePassword.label.createNewPassword)}</StyledTitle>
         <Grid container>
           <Grid item xs={12} mb={2}>
-            <StyledLabel>Enter new password</StyledLabel>
+            <StyledLabel>{t(changePassword.label.enterNewPassword)}</StyledLabel>
             <PasswordInput name="password" placeholder="Input Password" />
           </Grid>
           <Grid item xs={12}>
-            <StyledLabel>Confirm new password</StyledLabel>
+            <StyledLabel>{t(changePassword.label.confirmNewPassword)}</StyledLabel>
             <PasswordInput
               name="confirmPassword"
               placeholder="Confirm Password"
@@ -120,12 +126,12 @@ const ChangePassword = (): ReactElement => {
           </Grid>
           <Grid item xs={6} mt={3} padding="10px">
             <Button fullWidth colorVariant="primaryLight" onClick={goBack}>
-              Cancel
+              {t(changePassword.btnlabel.cancel)}
             </Button>
           </Grid>
           <Grid item xs={6} mt={3} padding="10px">
             <Button type="submit" fullWidth>
-              Change Password
+              {t(changePassword.btnlabel.changePassword)}
             </Button>
           </Grid>
 
