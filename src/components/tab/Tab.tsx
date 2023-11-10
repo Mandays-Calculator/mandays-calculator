@@ -64,7 +64,7 @@ const CustomTabs = ({
       <Divider sx={{ borderWidth: 2 }} />
       {tabs.map((tab, index) =>
         value === index ? (
-          <Box key={index} p={3}>
+          <Box key={index} py={3}>
             {tab.content}
           </Box>
         ) : null

@@ -10,7 +10,10 @@
     "task": "Task",
     "button": {
       "goBackHome": "GO BACK HOME",
-      "collapse": "Collapse"
+      "collapse": "Collapse",
+      "back": "Back",
+      "share": "Share",
+      "export": "Export"
     },
     "noData": "No Data",
     "somethingWentWrong": {
@@ -31,6 +34,35 @@
       "userName": "Username",
       "password": "Password",
       "forgotPassword": "Forgot Password"
+    }
+  },
+  "changePassword": {
+    "label": {
+      "createNewPassword": "Create New Password",
+      "enterNewPassword": "Enter new password",
+      "confirmNewPassword": "Confirm new password"
+    },
+    "btnlabel": {
+      "changePassword": "Change Password",
+      "cancel": "Cancel"
+    },
+    "validationInfo": {
+      "charCount": "Password must be at least 8 characters long",
+      "uppercase": "Password must contain an uppercase letter",
+      "lowercase": "Password must contain a lowercase letter",
+      "number": "Password must contain a number",
+      "symbol": "Password must contain one of the following symbols (#$-_!)",
+      "match": "New password and confirm new password must match."
+    }
+  },
+  "forgotPassword": {
+    "labelInfo": {
+      "enterUsername": "Please enter your username or email.",
+      "link": "A link will be sent to your email in order for you to reset your password."
+    },
+    "btnlabel": {
+      "send": "Send",
+      "back": "<<< Back to Login"
     }
   },
   "odc": {
@@ -71,6 +103,52 @@
   },
   "mandaysCalculator": {
     "title": "Mandays Calculator",
-    "label": "Current Estimation"
+    "label": "Current Estimation",
+    "modalLabels": {
+      "confirmDeleteEstimation": "Are you sure you want to delete this estimation?"
+    },
+    "sprintList": {
+      "label": "List of Sprints",
+      "addEstimation": "Add Estimation",
+      "table": {
+        "columns": {
+          "sprintName": "Sprint Name",
+          "team": "Team",
+          "startedDate": "Started Date",
+          "status": "Status"
+        }
+      }
+    },
+    "summary": {
+      "table": {
+        "columns": {
+          "functionality": "Functionality",
+          "totalManHours": "Total Man Hours",
+          "totalManDays": "Total Man Days"
+        }
+      }
+    },
+    "resourceList": {
+      "table": {
+        "columns": {
+          "odc": "ODC",
+          "resourceCount": "RESOURCE COUNT",
+          "annualLeaves": "ANNUAL LEAVES"
+        }
+      }
+    },
+    "tasks": {
+      "table": {
+        "columns": {
+          "tasks": "Tasks",
+          "complexity": "Complexity",
+          "i03": "I03",
+          "i04": "I04",
+          "i05": "I05",
+          "i06": "I06",
+          "i07": "I07"
+        }
+      }
+    }
   }
 }

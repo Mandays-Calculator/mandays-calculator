@@ -1,12 +1,15 @@
 import { ReactElement, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import { Grid, ListItem, ListItemIcon } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+import LocalizationKey from "~/i18n/key";
 import Form from "~/components/form/Form";
 import { CustomButton as Button } from "~/components/form/button";
+
 import PasswordInput from "./components/password-input/PasswordInput";
 import { StyledTitle, StyledLabel, AuthContainer } from "./components/auth-container";
 import { changePasswordSchema } from "./schema";
@@ -16,19 +19,21 @@ interface ValidationResultProps {
 }
 
 const ValidationResult = ({ values }: ValidationResultProps): ReactNode => {
+  const { t } = useTranslation();
+  const { changePassword } = LocalizationKey;
   const validationItems = [
-    { test: values.password.length >= 8, testId: 'length', message: 'Password must be at least 8 characters long' },
-    { test: /[A-Z]/.test(values.password), testId: 'uppecase', message: 'Password must contain an uppercase letter' },
-    { test: /[a-z]/.test(values.password), testId: 'lowercase', message: 'Password must contain a lowercase letter' },
-    { test: /[0-9]/.test(values.password), testId: 'number', message: 'Password must contain a number' },
-    { test: /(?=.*\W)/.test(values.password), testId: 'symbol', message: 'Password must contain one of the following symbols (#$-_!)' },
-    { test: values.password === values.confirmPassword && values.password !== "", testId: 'match', message: 'New password and confirm new password must match.' },
+    { test: values.password.length >= 8, testId: 'length', message: t(changePassword.validationInfo.charCount) },
+    { test: /[A-Z]/.test(values.password), testId: 'uppecase', message: t(changePassword.validationInfo.uppercase) },
+    { test: /[a-z]/.test(values.password), testId: 'lowercase', message: t(changePassword.validationInfo.lowercase) },
+    { test: /[0-9]/.test(values.password), testId: 'number', message: t(changePassword.validationInfo.number) },
+    { test: /(?=.*\W)/.test(values.password), testId: 'symbol', message: t(changePassword.validationInfo.symbol) },
+    { test: values.password === values.confirmPassword && values.password !== "", testId: 'match', message: t(changePassword.validationInfo.match) },
   ];
 
   return (
     <>
       {validationItems.map(({ test, testId, message }) => (
-        <ListItem key={testId}>
+        <ListItem key={testId} disablePadding={true}>
           <ListItemIcon>
             {test ? (
               <CheckCircleIcon style={{ color: "green" }} data-testid={`green-icon-password-${testId}`} />
@@ -45,6 +50,8 @@ const ValidationResult = ({ values }: ValidationResultProps): ReactNode => {
 
 const ChangePassword = (): ReactElement => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { changePassword } = LocalizationKey;
   const changePasswordForm = useFormik({
     initialValues: {
       password: "",
@@ -64,27 +71,30 @@ const ChangePassword = (): ReactElement => {
   return (
     <AuthContainer>
       <Form instance={changePasswordForm}>
-        <StyledTitle>Create New Password</StyledTitle>
+        <StyledTitle>{t(changePassword.label.createNewPassword)}</StyledTitle>
         <Grid container>
           <Grid item xs={12} mb={2}>
-            <StyledLabel>Enter new password</StyledLabel>
+            <StyledLabel>{t(changePassword.label.enterNewPassword)}</StyledLabel>
             <PasswordInput name="password" placeholder="Input Password" />
           </Grid>
           <Grid item xs={12}>
-            <StyledLabel>Confirm new password</StyledLabel>
-            <PasswordInput name="confirmPassword" placeholder="Confirm Password" />
+            <StyledLabel>{t(changePassword.label.confirmNewPassword)}</StyledLabel>
+            <PasswordInput
+              name="confirmPassword"
+              placeholder="Confirm Password"
+            />
           </Grid>
           <Grid item xs={12} mt={2}>
             <ValidationResult values={values} />
           </Grid>
           <Grid item xs={6} mt={3} padding="10px">
             <Button fullWidth colorVariant="primaryLight" onClick={goBack}>
-              Cancel
+              {t(changePassword.btnlabel.cancel)}
             </Button>
           </Grid>
           <Grid item xs={6} mt={3} padding="10px">
             <Button type="submit" fullWidth>
-              Change Password
+              {t(changePassword.btnlabel.changePassword)}
             </Button>
           </Grid>
         </Grid>

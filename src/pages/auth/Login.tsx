@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import Form from "~/components/form/Form";
 import LocalizationKey from "~/i18n/key";
+import theme from "~/theme";
 import { CustomButton as Button } from "~/components/form/button";
 import { ControlledTextField } from "~/components/form/controlled";
 import { getFieldError } from "~/components/form/utils";
@@ -47,20 +48,20 @@ const Login = (): ReactElement => {
             helperText={getFieldError(loginForm.errors, "username")}
           />
         </Grid>
-        <Grid item xs={12} pt={1} mb={1}>
+        <Grid item xs={12} pt={1} mb={3}>
           <StyledLabel>{t(LocalizationKey.login.label.password)}</StyledLabel>
           <PasswordInput
             placeholder="Input password"
             name="password"
             helperText={getFieldError(loginForm.errors, "password")}
           />
-        </Grid>
-        <Grid item xs={12} mb={2}>
           <Link to={"/forgot-password"}>
             {t(LocalizationKey.login.label.forgotPassword)}
           </Link>
         </Grid>
-        {auth.error?.message}
+        <Typography color={theme.palette.error.main}>
+          {auth.error?.message}
+        </Typography>
         <Grid item xs={12}>
           <Button fullWidth type="submit">
             Sign In
