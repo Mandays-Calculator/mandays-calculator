@@ -57,7 +57,7 @@ const AppBarHeader = (): ReactElement => {
               <Tooltip title="Open settings">
                 <Grid container spacing={1} alignItems="center">
                   <Grid item xs={3}>
-                    <Avatar alt={name} src={AvatarImg} />
+                    <Avatar alt={name} src={String(AvatarImg)} />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography textAlign="left" fontSize={14}>
