@@ -33,6 +33,35 @@
       "forgotPassword": "Forgot Password"
     }
   },
+  "changePassword": {
+    "label": {
+      "createNewPassword": "Create New Password",
+      "enterNewPassword": "Enter new password",
+      "confirmNewPassword": "Confirm new password"
+    },
+    "btnlabel": {
+      "changePassword": "Change Password",
+      "cancel": "Cancel"
+    },
+    "validationInfo": {
+      "charCount": "Password must be at least 8 characters long",
+      "uppercase": "Password must contain an uppercase letter",
+      "lowercase": "Password must contain a lowercase letter",
+      "number": "Password must contain a number",
+      "symbol": "Password must contain one of the following symbols (#$-_!)",
+      "match": "New password and confirm new password must match."
+    }
+  },
+  "forgotPassword": {
+    "labelInfo": {
+      "enterUsername": "Please enter your username or email.",
+      "link": "A link will be sent to your email in order for you to reset your password."
+    },
+    "btnlabel": {
+      "send": "Send",
+      "back": "<<< Back to Login"
+    }
+  },
   "odc": {
     "management": {
       "label": "ODC Management"
