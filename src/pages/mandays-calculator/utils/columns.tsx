@@ -1,7 +1,10 @@
 import type {
-  DataType,
+  TasksColumnsProps,
+  TasksListColumnsType,
   SprintColumnsProps,
   SprintListColumnsType,
+  SprintListDataType,
+  SummaryListColumnsType,
 } from "./types";
 
 import { CellProps } from "react-table";
@@ -11,7 +14,11 @@ import { SvgIcon } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
 const {
-  mandaysCalculator: { sprintListTableColumns },
+  mandaysCalculator: {
+    sprintListTableColumns,
+    summaryTableColumns,
+    tasksTableColumns,
+  },
 } = LocalizationKey;
 
 export const SprintListColumns = ({
@@ -41,7 +48,7 @@ export const SprintListColumns = ({
     {
       Header: "",
       id: "actions",
-      Cell: ({ row }: CellProps<DataType>) => (
+      Cell: ({ row }: CellProps<SprintListDataType>) => (
         <>
           <IconButton onClick={() => onViewSprintDetails(row.original.id)}>
             <SvgIcon name="history" $size={2} color="primary" />
@@ -54,6 +61,64 @@ export const SprintListColumns = ({
           </IconButton>
         </>
       ),
+    },
+  ];
+};
+
+export const SummaryListColumns = ({
+  t,
+}: TasksColumnsProps): SummaryListColumnsType[] => {
+  return [
+    {
+      Header: t(summaryTableColumns.functionality),
+      accessor: "functionality",
+    },
+    {
+      Header: t(summaryTableColumns.totalManHours),
+      accessor: "totalManHours",
+    },
+    {
+      Header: t(summaryTableColumns.totalManDays),
+      accessor: "totalManDays",
+    },
+  ];
+};
+
+export const TasksListColumns = ({
+  t,
+}: TasksColumnsProps): TasksListColumnsType[] => {
+  return [
+    {
+      Header: t(tasksTableColumns.tasks),
+      accessor: "tasks",
+    },
+    {
+      Header: t(tasksTableColumns.complexity),
+      accessor: "complexity",
+    },
+    {
+      Header: t(tasksTableColumns.i03),
+      accessor: "i03",
+    },
+    {
+      Header: t(tasksTableColumns.i04),
+      accessor: "i04",
+    },
+    {
+      Header: t(tasksTableColumns.i05),
+      accessor: "i05",
+    },
+    {
+      Header: t(tasksTableColumns.i06),
+      accessor: "i06",
+    },
+    {
+      Header: t(tasksTableColumns.i07),
+      accessor: "i07",
+    },
+    {
+      Header: t(summaryTableColumns.totalManHours),
+      accessor: "totalManHours",
     },
   ];
 };

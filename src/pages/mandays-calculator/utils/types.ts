@@ -1,9 +1,42 @@
 import type { TFunction } from "i18next";
 import type { Column } from "react-table";
 
-export type SprintListColumnsType = Column<DataType> & {
+export interface SprintListDataType {
+  id: string;
+  sprintName: string;
+  team: string;
+  startedDate: string;
+  status: string;
+}
+
+export interface SummaryListDataType {
+  functionality: string;
+  totalManHours: string;
+  totalManDays: string;
+}
+
+export interface TasksListDataType {
+  tasks: string;
+  complexity: string;
+  i03: string;
+  i04: string;
+  i05: string;
+  i06: string;
+  i07: string;
+  totalManHours: string;
+}
+
+export type SprintListColumnsType = Column<SprintListDataType> & {
   id?: string;
   disableSortBy?: boolean;
+};
+
+export type TasksListColumnsType = Column<TasksListDataType> & {
+  id?: string;
+};
+
+export type SummaryListColumnsType = Column<SummaryListDataType> & {
+  id?: string;
 };
 
 export type SprintColumnsProps = {
@@ -13,6 +46,10 @@ export type SprintColumnsProps = {
   onDeleteSprintDetails: (sprintId: string) => void;
 };
 
+export type TasksColumnsProps = {
+  t: TFunction<"translation", undefined>;
+};
+
 export type LegendColumn = {
   complexity: string;
   step3: string;
@@ -20,12 +57,4 @@ export type LegendColumn = {
   step5: string;
   step6: string;
   step7: string;
-}
-
-export interface DataType {
-  id: string;
-  sprintName: string;
-  team: string;
-  startedDate: string;
-  status: string;
 }
