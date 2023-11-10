@@ -14,45 +14,35 @@ const Resources = (): ReactElement => {
       <Stack spacing={2}>
         <Accordion title="I03" defaultExpanded={false}>
           <Table
-            columns={ResourcesListColumns({
-              t,
-            })}
+            columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
         <Accordion title="I04" defaultExpanded={false}>
           <Table
-            columns={ResourcesListColumns({
-              t,
-            })}
+            columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
         <Accordion title="I05" defaultExpanded={false}>
           <Table
-            columns={ResourcesListColumns({
-              t,
-            })}
+            columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
         <Accordion title="I06" defaultExpanded={false}>
           <Table
-            columns={ResourcesListColumns({
-              t,
-            })}
+            columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
         <Accordion title="I07" defaultExpanded={false}>
           <Table
-            columns={ResourcesListColumns({
-              t,
-            })}
+            columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />

@@ -131,30 +131,16 @@ export const ResourcesListColumns = ({
 }: ResourcesColumnsProps): ResourcesListColumnsType[] => {
   return [
     {
-      Header: () => (
-        <div style={{ paddingRight: "40px" }}>
-          {t(resourceListTableColumns.odc)}
-        </div>
-      ),
+      Header: t(resourceListTableColumns.odc),
       accessor: "odc",
     },
     {
-      Header: () => (
-        <div style={{ textAlign: "center" }}>
-          {t(resourceListTableColumns.resourceCount)}
-        </div>
-      ),
+      Header: t(resourceListTableColumns.resourceCount),
       accessor: "resourceCount",
-      Cell: ({ value }) => <div style={{ textAlign: "center" }}>{value}</div>,
     },
     {
-      Header: () => (
-        <div style={{ textAlign: "right" }}>
-          {t(resourceListTableColumns.annualLeaves)}
-        </div>
-      ),
+      Header: t(resourceListTableColumns.annualLeaves),
       accessor: "annualLeaves",
-      Cell: ({ value }) => <div style={{ textAlign: "right" }}>{value}</div>,
     },
   ];
 };
