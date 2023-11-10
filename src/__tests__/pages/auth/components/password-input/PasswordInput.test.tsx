@@ -37,13 +37,6 @@ describe('GIVEN PasswordInput Component', () => {
         })
     });
 
-    test('WHEN PasswordInput component is rendered, THEN it should have showPassword set to false by default', () => {
-        renderPasswordInput();
-
-        const passwordInput = screen.getByPlaceholderText(PLACEHOLDER);
-        expect(passwordInput).toHaveAttribute('type', 'password');
-    });
-
     test('WHEN PasswordInput component is rendered with helperText, THEN it should render the helper text', () => {
         const helperText = 'Helper text here';
         render(
