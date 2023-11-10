@@ -119,6 +119,11 @@
           "annualLeaves": "ANNUAL LEAVES"
         }
       }
+    },
+    "legend": {
+      "table": {
+        "title": "Estimated man hours by career step"
+      }
     }
   }
 }

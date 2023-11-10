@@ -1,3 +1,5 @@
+import type { LegendColumn } from "./types";
+
 export const mandaysCalculatorData = [
   {
     id: "sprint1",
@@ -43,3 +45,30 @@ export const estimationDetailsData = {
     },
   ],
 };
+
+export const legendData: LegendColumn[] = [
+  {
+    complexity: "Simple",
+    step3: "5",
+    step4: "2",
+    step5: "1", 
+    step6: "1",
+    step7: "1",
+  },
+  {
+    complexity: "Medium",
+    step3: "2",
+    step4: "2",
+    step5: "1", 
+    step6: "1",
+    step7: "1",
+  },
+  {
+    complexity: "Complex",
+    step3: "3",
+    step4: "2",
+    step5: "1", 
+    step6: "1",
+    step7: "1",
+  },
+]

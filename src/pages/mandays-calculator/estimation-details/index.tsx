@@ -8,6 +8,7 @@ import { CustomButton } from "~/components/form/button";
 import { ResourcesTab } from "../ResourcesTab";
 
 import Summary from "./summary";
+import Legend from "./legend";
 import { useNavigate } from "react-router-dom";
 
 const EstimationDetails = (): ReactElement => {
@@ -62,7 +63,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Legend",
-              content: <h1>Legend here</h1>,
+              content: <Legend />,
             },
             {
               label: "Tasks",
