@@ -2,9 +2,11 @@ import type {
   TasksColumnsProps,
   TasksListColumnsType,
   SprintColumnsProps,
+  ResourcesColumnsProps,
   SprintListColumnsType,
   SprintListDataType,
   SummaryListColumnsType,
+  ResourcesListColumnsType,
 } from "./types";
 
 import { CellProps } from "react-table";
@@ -18,6 +20,7 @@ const {
     sprintListTableColumns,
     summaryTableColumns,
     tasksTableColumns,
+    resourceListTableColumns,
   },
 } = LocalizationKey;
 
@@ -119,6 +122,39 @@ export const TasksListColumns = ({
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
+    },
+  ];
+};
+
+export const ResourcesListColumns = ({
+  t,
+}: ResourcesColumnsProps): ResourcesListColumnsType[] => {
+  return [
+    {
+      Header: () => (
+        <div style={{ paddingRight: "40px" }}>
+          {t(resourceListTableColumns.odc)}
+        </div>
+      ),
+      accessor: "odc",
+    },
+    {
+      Header: () => (
+        <div style={{ textAlign: "center" }}>
+          {t(resourceListTableColumns.resourceCount)}
+        </div>
+      ),
+      accessor: "resourceCount",
+      Cell: ({ value }) => <div style={{ textAlign: "center" }}>{value}</div>,
+    },
+    {
+      Header: () => (
+        <div style={{ textAlign: "right" }}>
+          {t(resourceListTableColumns.annualLeaves)}
+        </div>
+      ),
+      accessor: "annualLeaves",
+      Cell: ({ value }) => <div style={{ textAlign: "right" }}>{value}</div>,
     },
   ];
 };
