@@ -9,6 +9,12 @@ export interface SprintListDataType {
   status: string;
 }
 
+export interface SummaryListDataType {
+  functionality: string;
+  totalManHours: string;
+  totalManDays: string;
+}
+
 export interface TasksListDataType {
   tasks: string;
   complexity: string;
@@ -26,6 +32,10 @@ export type SprintListColumnsType = Column<SprintListDataType> & {
 };
 
 export type TasksListColumnsType = Column<TasksListDataType> & {
+  id?: string;
+};
+
+export type SummaryListColumnsType = Column<SummaryListDataType> & {
   id?: string;
 };
 

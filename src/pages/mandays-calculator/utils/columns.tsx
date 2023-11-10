@@ -4,6 +4,7 @@ import type {
   SprintColumnsProps,
   SprintListColumnsType,
   SprintListDataType,
+  SummaryListColumnsType,
 } from "./types";
 
 import { CellProps } from "react-table";
@@ -13,7 +14,11 @@ import { SvgIcon } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
 const {
-  mandaysCalculator: { sprintListTableColumns, summaryTableColumns },
+  mandaysCalculator: {
+    sprintListTableColumns,
+    summaryTableColumns,
+    tasksTableColumns,
+  },
 } = LocalizationKey;
 
 export const SprintListColumns = ({
@@ -59,36 +64,56 @@ export const SprintListColumns = ({
     },
   ];
 };
+
+export const SummaryListColumns = ({
+  t,
+}: TasksColumnsProps): SummaryListColumnsType[] => {
+  return [
+    {
+      Header: t(summaryTableColumns.functionality),
+      accessor: "functionality",
+    },
+    {
+      Header: t(summaryTableColumns.totalManHours),
+      accessor: "totalManHours",
+    },
+    {
+      Header: t(summaryTableColumns.totalManDays),
+      accessor: "totalManDays",
+    },
+  ];
+};
+
 export const TasksListColumns = ({
   t,
 }: TasksColumnsProps): TasksListColumnsType[] => {
   return [
     {
-      Header: "Tasks",
+      Header: t(tasksTableColumns.tasks),
       accessor: "tasks",
     },
     {
-      Header: "Complexity",
+      Header: t(tasksTableColumns.complexity),
       accessor: "complexity",
     },
     {
-      Header: "I03",
+      Header: t(tasksTableColumns.i03),
       accessor: "i03",
     },
     {
-      Header: "I03",
+      Header: t(tasksTableColumns.i04),
       accessor: "i04",
     },
     {
-      Header: "I03",
+      Header: t(tasksTableColumns.i05),
       accessor: "i05",
     },
     {
-      Header: "I03",
+      Header: t(tasksTableColumns.i06),
       accessor: "i06",
     },
     {
-      Header: "I07",
+      Header: t(tasksTableColumns.i07),
       accessor: "i07",
     },
     {

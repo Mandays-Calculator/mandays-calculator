@@ -72,7 +72,7 @@ const MandaysCalculator = (): ReactElement => {
       <DeleteModal
         onDeleteConfirm={(): void => {}} // apply delete integration
         open={deleteModalOpen.open}
-        message={t("Are you sure you want to delete this estimation?")}
+        message={t(mandaysCalculator.modalConfirmDeleteEstimation)}
         onClose={() =>
           setDeleteModalOpen({
             open: false,

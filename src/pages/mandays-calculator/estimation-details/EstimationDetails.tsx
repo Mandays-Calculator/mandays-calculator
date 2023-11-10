@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import type { EstimationDetailsMode } from ".";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +11,8 @@ import { Select } from "~/components/form/select";
 
 import LocalizationKey from "~/i18n/key";
 
-import { Tasks } from "../tasks";
+import { Tasks } from "./tasks";
+import { ResourcesTab } from "../ResourcesTab";
 import Summary from "./summary";
 
 const EstimationDetails = (): ReactElement => {
@@ -22,7 +24,9 @@ const EstimationDetails = (): ReactElement => {
     navigate(-1);
   };
 
-  const { mandaysCalculator } = LocalizationKey;
+  const { mandaysCalculator, common } = LocalizationKey;
+  const sprintName = "Sprint 1"; // Note: will come from API
+  const mode: EstimationDetailsMode = "view";
   return (
     <>
       <Grid container justifyContent="space-between">
@@ -32,7 +36,7 @@ const EstimationDetails = (): ReactElement => {
         <Grid item>
           <Select
             name="team"
-            value={""}
+            value={"enrollment"}
             sx={{ background: "#fff" }}
             options={[{ label: "Enrollment", value: "enrollment" }]}
           />
@@ -43,16 +47,16 @@ const EstimationDetails = (): ReactElement => {
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-              Sprint 1
+              {sprintName}
             </Typography>
           </Grid>
           <Grid item xs={2}>
             <Grid container justifyContent={"right"}>
               <Grid item xs={5}>
-                <CustomButton>Export</CustomButton>
+                <CustomButton>{t(common.exportBtn)}</CustomButton>
               </Grid>
               <Grid item xs={5}>
-                <CustomButton>Share</CustomButton>
+                <CustomButton>{t(common.shareBtn)}</CustomButton>
               </Grid>
             </Grid>
           </Grid>
@@ -65,7 +69,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Resources",
-              content: <h1>Resources here</h1>,
+              content: <ResourcesTab />,
             },
             {
               label: "Legend",
@@ -73,7 +77,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Tasks",
-              content: <Tasks />,
+              content: <Tasks mode={mode} />,
             },
           ]}
         />
@@ -83,7 +87,7 @@ const EstimationDetails = (): ReactElement => {
           flexDirection={"row"}
           gap={2}
         >
-          <CustomButton onClick={goBack}>BACK</CustomButton>
+          <CustomButton onClick={goBack}>{t(common.backBtn)}</CustomButton>
         </Stack>
       </PageContainer>
     </>

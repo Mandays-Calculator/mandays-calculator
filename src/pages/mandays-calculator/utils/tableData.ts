@@ -30,26 +30,51 @@ export const estimationDetailsData = [
 
 export const taskDetailData = [
   {
-    label: "Function 1",
+    label: "Function 1 - Setup and Configuration",
     data: [
       {
-        tasks: "Task 1",
-        complexity: "Simple",
+        tasks: "Create repository for client and server",
+        complexity: "Hard",
         i03: "4",
-        i04: "1",
-        i05: "1",
+        i04: "3",
+        i05: "2",
         i06: "1",
-        i07: "1",
+        i07: "0",
         totalManHours: "24",
       },
       {
-        tasks: "Task 2",
-        complexity: "Simple",
+        tasks: "Keycloak configuration and auth integration",
+        complexity: "Complex",
         i03: "4",
-        i04: "1",
-        i05: "1",
+        i04: "3",
+        i05: "2",
         i06: "1",
-        i07: "1",
+        i07: "0",
+        totalManHours: "24",
+      },
+    ],
+  },
+  {
+    label: "Function 2 - Screen Creations",
+    data: [
+      {
+        tasks: "Login screens",
+        complexity: "simple",
+        i03: "2",
+        i04: "2",
+        i05: "1",
+        i06: "0",
+        i07: "0",
+        totalManHours: "24",
+      },
+      {
+        tasks: "Change password screens",
+        complexity: "Simple",
+        i03: "2",
+        i04: "2",
+        i05: "1",
+        i06: "0",
+        i07: "0",
         totalManHours: "24",
       },
       {
