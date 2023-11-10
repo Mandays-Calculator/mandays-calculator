@@ -8,42 +8,15 @@ import Typography from "@mui/material/Typography";
 import LocalizationKey from "~/i18n/key";
 import { Table } from "~/components";
 import { legendData } from "~/pages/mandays-calculator/utils/tableData";
-
+import { TasksListColumns } from "~/pages/mandays-calculator/utils/columns";
 
 const Legend = (): ReactElement => {
   const { t } = useTranslation();
   const {
-    common,
     mandaysCalculator
   } = LocalizationKey;
-  
-  const legendColumn: Column<LegendColumn>[] = [
-    {
-      Header: () => <>{t(common.complexity)}</>,
-      accessor: "complexity",
-    },
-    {
-      Header: "I03",
-      accessor: "step3",
-    },
-    {
-      Header: "I04",
-      accessor: "step4",
-    },
-    {
-      Header: "I05",
-      accessor: "step5",
-    },
-    {
-      Header: "I06",
-      accessor: "step6",
-    },
-    {
-      Header: "I07",
-      accessor: "step7",
-    },
-  ]
 
+  const legendColumn = TasksListColumns({t}).slice(1, -1) as Column<LegendColumn>[];
   return (
     <Stack spacing={2}> 
       <Typography variant="subtitle1" fontWeight="bold" color="primary">

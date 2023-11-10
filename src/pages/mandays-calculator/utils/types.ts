@@ -52,9 +52,9 @@ export type TasksColumnsProps = {
 
 export type LegendColumn = {
   complexity: string;
-  step3: string;
-  step4: string;
-  step5: string;
-  step6: string;
-  step7: string;
+  i03: string;
+  i04: string;
+  i05: string;
+  i06: string;
+  i07: string;
 }
