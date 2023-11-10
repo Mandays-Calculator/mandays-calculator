@@ -26,6 +26,12 @@ export interface TasksListDataType {
   totalManHours: string;
 }
 
+export interface ResourcesListDataType {
+  odc: string;
+  resourceCount: string;
+  annualLeaves: string;
+}
+
 export type SprintListColumnsType = Column<SprintListDataType> & {
   id?: string;
   disableSortBy?: boolean;
@@ -39,6 +45,10 @@ export type SummaryListColumnsType = Column<SummaryListDataType> & {
   id?: string;
 };
 
+export type ResourcesListColumnsType = Column<ResourcesListDataType> & {
+  id?: string;
+};
+
 export type SprintColumnsProps = {
   t: TFunction<"translation", undefined>;
   onViewSprintDetails: (sprintId: string) => void;
@@ -47,5 +57,9 @@ export type SprintColumnsProps = {
 };
 
 export type TasksColumnsProps = {
+  t: TFunction<"translation", undefined>;
+};
+
+export type ResourcesColumnsProps = {
   t: TFunction<"translation", undefined>;
 };

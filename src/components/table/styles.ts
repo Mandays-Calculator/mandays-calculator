@@ -3,6 +3,12 @@ import { styled } from "@mui/material/styles";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 
+export const StyledHeaderCell = styled(TableCell)({
+  minWidth: "150px", // Set a minimum width for each header cell
+  boxSizing: "border-box",
+  padding: "16px 12px",
+});
+
 export const StyledHeader = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.primary.light,
   "& th": {
