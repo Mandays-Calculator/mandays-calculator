@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import Accordion from "~/components/Accordion/Accordion";
 import LocalizationKey from "~/i18n/key";
 
-const ResourcesTab = (): ReactElement => {
+const Resources = (): ReactElement => {
   const { t } = useTranslation();
   const {
     mandaysCalculator: { resourceListTableColumns },
@@ -81,4 +81,4 @@ const ResourcesTab = (): ReactElement => {
   );
 };
 
-export default ResourcesTab;
+export default Resources;
