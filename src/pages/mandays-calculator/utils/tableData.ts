@@ -98,7 +98,7 @@ export const legendData: LegendColumn[] = [
     complexity: "Simple",
     i03: "5",
     i04: "2",
-    i05: "1", 
+    i05: "1",
     i06: "1",
     i07: "1",
   },
@@ -106,7 +106,7 @@ export const legendData: LegendColumn[] = [
     complexity: "Medium",
     i03: "2",
     i04: "2",
-    i05: "1", 
+    i05: "1",
     i06: "1",
     i07: "1",
   },
@@ -114,8 +114,21 @@ export const legendData: LegendColumn[] = [
     complexity: "Complex",
     i03: "3",
     i04: "2",
-    i05: "1", 
+    i05: "1",
     i06: "1",
     i07: "1",
   },
-]
+];
+
+export const resourcesDetailData = [
+  {
+    odc: "PH",
+    resourceCount: "5",
+    annualLeaves: "3",
+  },
+  {
+    odc: "HK",
+    resourceCount: "2",
+    annualLeaves: "6",
+  },
+];
