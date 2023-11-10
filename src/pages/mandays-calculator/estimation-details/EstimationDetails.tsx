@@ -12,8 +12,8 @@ import { Select } from "~/components/form/select";
 import LocalizationKey from "~/i18n/key";
 
 import { Tasks } from "./tasks";
-import { ResourcesTab } from "../ResourcesTab";
 import Summary from "./summary";
+import Resources from "./resources";
 
 const EstimationDetails = (): ReactElement => {
   const { t } = useTranslation();
@@ -69,7 +69,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Resources",
-              content: <ResourcesTab />,
+              content: <Resources />,
             },
             {
               label: "Legend",
