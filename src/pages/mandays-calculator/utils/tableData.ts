@@ -90,3 +90,16 @@ export const taskDetailData = [
     ],
   },
 ];
+
+export const resourcesDetailData = [
+  {
+    odc: "PH",
+    resourceCount: "5",
+    annualLeaves: "3",
+  },
+  {
+    odc: "HK",
+    resourceCount: "2",
+    annualLeaves: "6",
+  },
+];

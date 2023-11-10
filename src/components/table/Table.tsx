@@ -37,6 +37,7 @@ import {
   StyledStripeRow,
   StyledIconButton,
   StyledHeaderStripeRow,
+  StyledHeaderCell,
 } from ".";
 
 const renderStripedRow = <T extends object>({
@@ -147,7 +148,7 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
             {headerGroups.map((headerGroup) => (
               <StyledHeader {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <StyledCell
+                  <StyledHeaderCell
                     {...column.getHeaderProps(
                       (column as CustomHeaderGroup<T>).getSortByToggleProps()
                     )}
@@ -158,7 +159,7 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
                       </Typography>
                       {renderSortIcon(column)}
                     </Box>
-                  </StyledCell>
+                  </StyledHeaderCell>
                 ))}
               </StyledHeader>
             ))}

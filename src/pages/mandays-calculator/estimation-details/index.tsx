@@ -1,62 +1,39 @@
 import type { ReactElement } from "react";
-import type { EstimationDetailsMode } from ".";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import { Title } from "~/components";
+import { PageContainer } from "~/components";
 import { Typography, Grid, Stack } from "@mui/material";
-import { CustomTab, PageContainer, Title } from "~/components";
 
+import { CustomTab } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { Select } from "~/components/form/select";
 
-import LocalizationKey from "~/i18n/key";
-
-import { Tasks } from "./tasks";
 import Summary from "./summary";
 import Resources from "./resources";
 
 const EstimationDetails = (): ReactElement => {
-  const { t } = useTranslation();
-
   const navigate = useNavigate();
 
   const goBack = (): void => {
     navigate(-1);
   };
-
-  const { mandaysCalculator, common } = LocalizationKey;
-  const sprintName = "Sprint 1"; // Note: will come from API
-  const mode: EstimationDetailsMode = "view";
   return (
     <>
-      <Grid container justifyContent="space-between">
-        <Grid item>
-          <Title title={t(mandaysCalculator.label)} />
-        </Grid>
-        <Grid item>
-          <Select
-            name="team"
-            value={"enrollment"}
-            sx={{ background: "#fff" }}
-            options={[{ label: "Enrollment", value: "enrollment" }]}
-          />
-        </Grid>
-      </Grid>
-
+      <Title title={"Current Estimations"} />
       <PageContainer>
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-              {sprintName}
+              Sprint 1
             </Typography>
           </Grid>
           <Grid item xs={2}>
             <Grid container justifyContent={"right"}>
               <Grid item xs={5}>
-                <CustomButton>{t(common.exportBtn)}</CustomButton>
+                <CustomButton>Export</CustomButton>
               </Grid>
               <Grid item xs={5}>
-                <CustomButton>{t(common.shareBtn)}</CustomButton>
+                <CustomButton>Share</CustomButton>
               </Grid>
             </Grid>
           </Grid>
@@ -77,7 +54,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Tasks",
-              content: <Tasks mode={mode} />,
+              content: <h1>Tasks here</h1>,
             },
           ]}
         />
@@ -87,7 +64,7 @@ const EstimationDetails = (): ReactElement => {
           flexDirection={"row"}
           gap={2}
         >
-          <CustomButton onClick={goBack}>{t(common.backBtn)}</CustomButton>
+          <CustomButton onClick={goBack}>BACK</CustomButton>
         </Stack>
       </PageContainer>
     </>
