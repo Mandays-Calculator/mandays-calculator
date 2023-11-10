@@ -1,16 +1,26 @@
 import type { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
-import { Typography, Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
+import { Typography, Grid, Stack } from "@mui/material";
 import { CustomTab, PageContainer, Title } from "~/components";
+
 import { CustomButton } from "~/components/form/button";
 import { Select } from "~/components/form/select";
+
 import LocalizationKey from "~/i18n/key";
 
 import { Tasks } from "../tasks";
+import Summary from "./summary";
 
 const EstimationDetails = (): ReactElement => {
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
+
+  const goBack = (): void => {
+    navigate(-1);
+  };
 
   const { mandaysCalculator } = LocalizationKey;
   return (
@@ -51,7 +61,7 @@ const EstimationDetails = (): ReactElement => {
           tabs={[
             {
               label: "Summary",
-              content: <></>,
+              content: <Summary />,
             },
             {
               label: "Resources",
@@ -67,6 +77,14 @@ const EstimationDetails = (): ReactElement => {
             },
           ]}
         />
+        <Stack
+          display="flex"
+          justifyContent={"flex-end"}
+          flexDirection={"row"}
+          gap={2}
+        >
+          <CustomButton onClick={goBack}>BACK</CustomButton>
+        </Stack>
       </PageContainer>
     </>
   );

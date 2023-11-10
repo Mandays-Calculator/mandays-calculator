@@ -5,11 +5,17 @@ import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import ErrorPage from "~/pages/common/error-page";
 import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
+import { authRoutes } from "~/pages/auth/routes";
 
 export const routes: RouteType[] = [
   {
     path: "/",
-    element: <Navigate to="/project-management" replace />,
+    element: (
+      <Navigate
+        to="/project-management"
+        replace
+      />
+    ),
   },
   {
     path: "project-management",
@@ -47,4 +53,5 @@ export const routes: RouteType[] = [
     element: <ErrorPage type="not-found" />,
   },
   ...mandaysCalculatorRoutes,
+  ...authRoutes,
 ];

@@ -19,12 +19,12 @@ const AuthContainer = ({ children }: AuthContainerProps): ReactElement => {
     <StyledAuthContainer>
       <StyledContainer>
         <Grid container alignItems="center" justifyContent="center">
-          <AuthImageContainer item xs={4}>
+          <AuthImageContainer item xs={3.75}>
             <StyledImageContainer>
-              <img src={LoginIcon} alt="login" width={556} height={556} />
+              <img src={LoginIcon} alt="login" width={"100%"} height={"auto"} />
             </StyledImageContainer>
           </AuthImageContainer>
-          <StyledGrid item xs={7} sx={{ height: 600 }}>
+          <StyledGrid item xs={6}>
             {children}
           </StyledGrid>
         </Grid>
