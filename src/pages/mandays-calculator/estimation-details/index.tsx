@@ -1,29 +1,49 @@
 import type { ReactElement } from "react";
 import { Title } from "~/components";
 import { PageContainer } from "~/components";
-import { Typography, Grid } from "@mui/material";
-import { estimationDetailsData } from "../utils/tableData";
-import { Table, CustomTab } from "~/components";
+import { Typography, Grid, Stack } from "@mui/material";
+
+import { CustomTab } from "~/components";
 import { CustomButton } from "~/components/form/button";
 
+import Summary from "./summary";
+import { useNavigate } from "react-router-dom";
+
 const EstimationDetails = (): ReactElement => {
-  const { columns, data }: any = estimationDetailsData;
+  const navigate = useNavigate();
+
+  const goBack = (): void => {
+    navigate(-1);
+  };
   return (
     <>
       <Title title={"Current Estimations"} />
       <PageContainer>
-        <Grid container justifyContent="space-between">
+        <Grid
+          container
+          justifyContent="space-between"
+        >
           <Grid item>
-            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-              Sprint 1
-            </Typography>
+            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>Sprint 1</Typography>
           </Grid>
-          <Grid item xs={2}>
-            <Grid container justifyContent={"right"}>
-              <Grid item xs={5}>
+          <Grid
+            item
+            xs={2}
+          >
+            <Grid
+              container
+              justifyContent={"right"}
+            >
+              <Grid
+                item
+                xs={5}
+              >
                 <CustomButton>Export</CustomButton>
               </Grid>
-              <Grid item xs={5}>
+              <Grid
+                item
+                xs={5}
+              >
                 <CustomButton>Share</CustomButton>
               </Grid>
             </Grid>
@@ -33,7 +53,7 @@ const EstimationDetails = (): ReactElement => {
           tabs={[
             {
               label: "Summary",
-              content: <h1>Summary here</h1>,
+              content: <Summary />,
             },
             {
               label: "Resources",
@@ -49,7 +69,14 @@ const EstimationDetails = (): ReactElement => {
             },
           ]}
         />
-        <Table columns={columns} data={data} name="mandays-calculator" />
+        <Stack
+          display="flex"
+          justifyContent={"flex-end"}
+          flexDirection={"row"}
+          gap={2}
+        >
+          <CustomButton onClick={goBack}>BACK</CustomButton>
+        </Stack>
       </PageContainer>
     </>
   );

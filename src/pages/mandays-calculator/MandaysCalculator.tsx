@@ -1,55 +1,33 @@
 import type { ReactElement } from "react";
+
 import { useTranslation } from "react-i18next";
-import LocalizationKey from "~/i18n/key";
-import { SvgIcon, Title } from "~/components";
-import { PageContainer } from "~/components";
+import { useNavigate } from "react-router-dom";
 import { Typography, Grid } from "@mui/material";
-import { mandaysCalculatorData } from "./utils/tableData";
-import { Table } from "~/components";
+
+import { SvgIcon, Title, PageContainer, Table } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { IconButton } from "@mui/material";
+import LocalizationKey from "~/i18n/key";
+
+import { mandaysCalculatorData } from "./utils/tableData";
+import { SprintListColumns } from "./utils/columns";
 
 const MandaysCalculator = (): ReactElement => {
-  const { data }: any = mandaysCalculatorData;
   const { mandaysCalculator } = LocalizationKey;
-  const { t } = useTranslation();
 
-  const tableColumns = [
-    {
-      Header: "Sprint Name",
-      accessor: "sprintName",
-    },
-    {
-      Header: "Team",
-      accessor: "team",
-    },
-    {
-      Header: "Started Date",
-      accessor: "startedDate",
-    },
-    {
-      Header: "Status",
-      accessor: "status",
-      disableSortBy: true,
-    },
-    {
-      Header: "",
-      id: "actions",
-      Cell: ({ row }: any) => (
-        <>
-          <IconButton onClick={() => console.log(row)}>
-            <SvgIcon name="history" $size={2} color="primary" />
-          </IconButton>
-          <IconButton onClick={() => console.log(row)}>
-            <SvgIcon name="edit" $size={2} color="primary" />
-          </IconButton>
-          <IconButton onClick={() => console.log(row)}>
-            <SvgIcon name="delete" $size={2} color="error" />
-          </IconButton>
-        </>
-      ),
-    },
-  ];
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleRowClick = (sprintId: string): void => {
+    navigate(`${sprintId}`);
+  };
+
+  const handleDeleteSprint = (sprintId: string): void => {
+    console.log("Deleting sprintID", sprintId);
+  };
+
+  const handleEditSprint = (sprintId: string): void => {
+    console.log("Edit sprint", sprintId);
+  };
 
   return (
     <>
@@ -68,7 +46,16 @@ const MandaysCalculator = (): ReactElement => {
             </CustomButton>
           </Grid>
         </Grid>
-        <Table columns={tableColumns} data={data} name="mandays-calculator" />
+        <Table
+          name="mandays-calculator"
+          columns={SprintListColumns({
+            t,
+            onDeleteSprintDetails: handleDeleteSprint,
+            onViewSprintDetails: handleRowClick,
+            onEditSprintDetails: handleEditSprint,
+          })}
+          data={mandaysCalculatorData}
+        />
       </PageContainer>
     </>
   );

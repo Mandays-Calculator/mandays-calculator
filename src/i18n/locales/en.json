@@ -100,6 +100,16 @@
   },
   "mandaysCalculator": {
     "title": "Mandays Calculator",
-    "label": "Current Estimation"
+    "label": "Current Estimation",
+    "sprintList": {
+      "table": {
+        "columns": {
+          "sprintName": "Sprint Name",
+          "team": "Team",
+          "startedDate": "Started Date",
+          "status": "Status"
+        }
+      }
+    }
   }
 }

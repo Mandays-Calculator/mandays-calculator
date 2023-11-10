@@ -10,3 +10,4 @@ export * from "./modal";
 export * from "./layout";
 export * from "./tab";
 export * from "./card";
+export * from './pagination';

@@ -10,7 +10,12 @@ import { authRoutes } from "~/pages/auth/routes";
 export const routes: RouteType[] = [
   {
     path: "/",
-    element: <Navigate to="/project-management" replace />,
+    element: (
+      <Navigate
+        to="/project-management"
+        replace
+      />
+    ),
   },
   {
     path: "project-management",
