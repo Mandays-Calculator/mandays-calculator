@@ -162,7 +162,7 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is already authent
             </li>
           </ul>
           <div
-            class="css-3356tu"
+            class="css-11n5nzv"
           >
             <button
               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
@@ -353,65 +353,76 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is already authent
                     class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                   >
                     <tr
-                      class="MuiTableRow-root MuiTableRow-head css-p5r2wn-MuiTableRow-root"
+                      class="MuiTableRow-root MuiTableRow-head css-l7ewl1-MuiTableRow-root"
                       role="row"
                     >
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                         style="cursor: pointer;"
                         title="Toggle SortBy"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          Project
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            Project
+                          </span>
+                        </div>
                       </th>
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                         style="cursor: pointer;"
                         title="Toggle SortBy"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          No. of Teams
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Teams
+                          </span>
+                        </div>
                       </th>
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                         style="cursor: pointer;"
                         title="Toggle SortBy"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          No. of Users
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Users
+                          </span>
+                        </div>
                       </th>
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          />
+                        </div>
                       </th>
                     </tr>
                   </thead>
@@ -420,17 +431,13 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is already authent
                     role="rowgroup"
                   >
                     <tr
-                      class="MuiTableRow-root css-15h0stw-MuiTableRow-root"
+                      class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
                     >
                       <td
-                        class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-11f7u87-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
                         colspan="4"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-1uwgr7b-MuiTypography-root"
-                        >
-                          common.noData
-                        </p>
+                        common.noData
                       </td>
                     </tr>
                   </tbody>
@@ -590,7 +597,7 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is authenticated, 
             </li>
           </ul>
           <div
-            class="css-3356tu"
+            class="css-11n5nzv"
           >
             <button
               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
@@ -781,65 +788,76 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is authenticated, 
                     class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
                   >
                     <tr
-                      class="MuiTableRow-root MuiTableRow-head css-p5r2wn-MuiTableRow-root"
+                      class="MuiTableRow-root MuiTableRow-head css-l7ewl1-MuiTableRow-root"
                       role="row"
                     >
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                         style="cursor: pointer;"
                         title="Toggle SortBy"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          Project
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            Project
+                          </span>
+                        </div>
                       </th>
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                         style="cursor: pointer;"
                         title="Toggle SortBy"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          No. of Teams
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Teams
+                          </span>
+                        </div>
                       </th>
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                         style="cursor: pointer;"
                         title="Toggle SortBy"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          No. of Users
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Users
+                          </span>
+                        </div>
                       </th>
                       <th
-                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-17k3yz-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
                         colspan="1"
                         role="columnheader"
                         scope="col"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                        <div
+                          class="MuiBox-root css-18biwo"
                         >
-                          <span />
-                        </p>
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          />
+                        </div>
                       </th>
                     </tr>
                   </thead>
@@ -848,17 +866,13 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is authenticated, 
                     role="rowgroup"
                   >
                     <tr
-                      class="MuiTableRow-root css-15h0stw-MuiTableRow-root"
+                      class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
                     >
                       <td
-                        class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-11f7u87-MuiTableCell-root"
+                        class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
                         colspan="4"
                       >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-1uwgr7b-MuiTypography-root"
-                        >
-                          common.noData
-                        </p>
+                        common.noData
                       </td>
                     </tr>
                   </tbody>
@@ -891,27 +905,27 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is not authenticat
     class="css-16a6vc1"
   >
     <div
-      class="MuiContainer-root MuiContainer-maxWidthLg css-tzhofu-MuiContainer-root"
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
     >
       <div
         class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4 css-17vtbed-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
         >
           <div
-            class="css-yslc9"
+            class="css-p72wz0"
           >
             <img
               alt="login"
-              height="556"
+              height="auto"
               src="[object Object]"
-              width="556"
+              width="100%"
             />
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-7 css-1v5dxm6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
         >
           <form
             data-testid="form-component"
@@ -971,7 +985,7 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is not authenticat
                 </div>
               </div>
               <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1qdlvon-MuiGrid-root"
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-16ehins-MuiGrid-root"
               >
                 <p
                   class="MuiTypography-root MuiTypography-body1 css-1exsy04-MuiTypography-root"
@@ -1039,16 +1053,15 @@ exports[`GIVEN AuthenticatedApp Component is called WHEN user is not authenticat
                     </div>
                   </div>
                 </div>
-              </div>
-              <div
-                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-yp0tso-MuiGrid-root"
-              >
                 <a
                   href="/forgot-password"
                 >
                   login.label.forgotPassword
                 </a>
               </div>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-17byxqv-MuiTypography-root"
+              />
               <div
                 class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
               >
