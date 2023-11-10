@@ -8,7 +8,7 @@ import type {
   DataRowType,
 } from ".";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useTable, useSortBy } from "react-table";
 import { useTranslation } from "react-i18next";
 
@@ -56,8 +56,8 @@ const renderStripedRow = <T extends object>({
   switch (type) {
     case "collapse":
       return (
-        <>
-          <StyledHeaderStripeRow key={rowId}>
+        <React.Fragment key={rowId}>
+          <StyledHeaderStripeRow>
             <StyledCell
               colSpan={row.cells.length}
               sx={{ position: "relative" }}
@@ -81,11 +81,12 @@ const renderStripedRow = <T extends object>({
                 {renderCells(dataRow)}
               </StyledStripeRow>
             ))}
-        </>
+        </React.Fragment>
       );
     default:
       return (
         <StyledStripeRow
+          key={rowId}
           {...row.getRowProps({
             onClick: onRowClick ? () => onRowClick(row.original) : undefined,
             style: { cursor: onRowClick ? "pointer" : "default" },
