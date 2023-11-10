@@ -1,16 +1,34 @@
 import type { ReactElement } from "react";
-import { Title } from "~/components";
-import { PageContainer } from "~/components";
+import { useTranslation } from "react-i18next";
 import { Typography, Grid } from "@mui/material";
-import { estimationDetailsData } from "../utils/tableData";
-import { Table, CustomTab } from "~/components";
+
+import { CustomTab, PageContainer, Title } from "~/components";
 import { CustomButton } from "~/components/form/button";
+import { Select } from "~/components/form/select";
+import LocalizationKey from "~/i18n/key";
+
+import { Tasks } from "../tasks";
 
 const EstimationDetails = (): ReactElement => {
-  const { columns, data }: any = estimationDetailsData;
+  const { t } = useTranslation();
+
+  const { mandaysCalculator } = LocalizationKey;
   return (
     <>
-      <Title title={"Current Estimations"} />
+      <Grid container justifyContent="space-between">
+        <Grid item>
+          <Title title={t(mandaysCalculator.label)} />
+        </Grid>
+        <Grid item>
+          <Select
+            name="team"
+            value={""}
+            sx={{ background: "#fff" }}
+            options={[{ label: "Enrollment", value: "enrollment" }]}
+          />
+        </Grid>
+      </Grid>
+
       <PageContainer>
         <Grid container justifyContent="space-between">
           <Grid item>
@@ -33,7 +51,7 @@ const EstimationDetails = (): ReactElement => {
           tabs={[
             {
               label: "Summary",
-              content: <h1>Summary here</h1>,
+              content: <></>,
             },
             {
               label: "Resources",
@@ -45,11 +63,10 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Tasks",
-              content: <h1>Tasks here</h1>,
+              content: <Tasks />,
             },
           ]}
         />
-        <Table columns={columns} data={data} name="mandays-calculator" />
       </PageContainer>
     </>
   );

@@ -9,6 +9,7 @@ export const mandaysCalculatorRoutes: RouteType[] = [
   },
   {
     path: "mandays-calculator",
+    pageTitle: "mandaysCalculator.label",
     element: <MandaysCalculator />,
   },
 ];

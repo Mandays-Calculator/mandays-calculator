@@ -20,11 +20,18 @@ const LocalizationKey = {
   },
   mandaysCalculator: {
     label: "mandaysCalculator.label",
+    sprintListLabel: "mandaysCalculator.sprintList.label",
+    addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
-      team: "mandaysCalculator.sprintList.table.team",
-      startedDate: "mandaysCalculator.sprintList.table.startedDate",
-      status: "mandaysCalculator.sprintList.table.status",
+      team: "mandaysCalculator.sprintList.table.columns.team",
+      startedDate: "mandaysCalculator.sprintList.table.columns.startedDate",
+      status: "mandaysCalculator.sprintList.table.columns.status",
+    },
+    summaryTableColumns: {
+      functionality: "mandaysCalculator.summary.table.columns.functionality",
+      totalManHours: "mandaysCalculator.summary.table.columns.totalManHours",
+      totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
   },
 };

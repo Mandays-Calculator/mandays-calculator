@@ -73,12 +73,23 @@
     "title": "Mandays Calculator",
     "label": "Current Estimation",
     "sprintList": {
+      "label": "List of Sprints",
+      "addEstimation": "Add Estimation",
       "table": {
         "columns": {
           "sprintName": "Sprint Name",
           "team": "Team",
           "startedDate": "Started Date",
           "status": "Status"
+        }
+      }
+    },
+    "summary": {
+      "table": {
+        "columns": {
+          "functionality": "Functionality",
+          "totalManHours": "Total Man Hours",
+          "totalManDays": "Total Man Days"
         }
       }
     }
