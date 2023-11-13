@@ -50,6 +50,11 @@ const LocalizationKey = {
     backBtn: "common.button.back",
     shareBtn: "common.button.share",
     exportBtn: "common.button.export",
+    userManagement: {
+      authSignInLoading: "common.userManagement.auth.signInLoading",
+      authSignOutLoading: "common.userManagement.auth.signOutLoading",
+      authPermissionLoading: "common.userManagement.auth.permissionLoading",
+    },
   },
   mandaysCalculator: {
     label: "mandaysCalculator.label",
@@ -85,7 +90,7 @@ const LocalizationKey = {
     },
     legend: {
       tableTitle: "mandaysCalculator.legend.table.title",
-    }
+    },
   },
 };
 
