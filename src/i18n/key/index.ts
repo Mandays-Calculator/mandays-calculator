@@ -40,6 +40,7 @@ const LocalizationKey = {
   footerLabel: "footer.label",
   common: {
     noDataLabel: "common.noData",
+    complexity: "common.complexity",
     somethingWentWrongTitle: "common.somethingWentWrong.title",
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
@@ -82,6 +83,9 @@ const LocalizationKey = {
       i06: "mandaysCalculator.tasks.table.columns.i06",
       i07: "mandaysCalculator.tasks.table.columns.i07",
     },
+    legend: {
+      tableTitle: "mandaysCalculator.legend.table.title",
+    }
   },
 };
 

@@ -13,6 +13,7 @@ import LocalizationKey from "~/i18n/key";
 
 import { Tasks } from "./tasks";
 import Summary from "./summary";
+import Legend from "./legend";
 import Resources from "./resources";
 
 const EstimationDetails = (): ReactElement => {
@@ -73,7 +74,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Legend",
-              content: <h1>Legend here</h1>,
+              content: <Legend />,
             },
             {
               label: "Tasks",

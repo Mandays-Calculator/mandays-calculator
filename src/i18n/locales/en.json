@@ -149,6 +149,11 @@
           "i07": "I07"
         }
       }
+    },
+    "legend": {
+      "table": {
+        "title": "Estimated man hours by career step"
+      }
     }
   }
 }
