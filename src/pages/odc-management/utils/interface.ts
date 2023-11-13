@@ -1,5 +1,5 @@
-import type { DataType } from "./type";
+import type { ODCListResponse } from "~/api/odc";
 
 export interface IntValues {
-  odcList: DataType[];
+  odcList: ODCListResponse[];
 };

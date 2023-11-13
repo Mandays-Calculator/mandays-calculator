@@ -1,4 +1,5 @@
 import type { ReactElement, Dispatch, SetStateAction } from "react";
+import type { HolidayType } from "~/api/odc";
 import type { IntValues } from "../utils/interface";
 
 import { useTranslation } from "react-i18next";
@@ -12,7 +13,6 @@ import { Table } from "~/components";
 import { ControlledTextField } from "~/components/form/controlled";
 
 import { HolidayColumn } from "../utils/columns";
-import { InitialODCValues, HolidayData } from "../utils/data";
 
 type AddProps = {
   setIsAdd: Dispatch<SetStateAction<boolean>>;
@@ -25,15 +25,10 @@ const AddODC = (props: AddProps): ReactElement => {
   const { idx, isEdit, setIsAdd } = props;
 
   const { values, resetForm } = useFormikContext<IntValues>();
+  const holidays: HolidayType[] = values?.odcList[idx]?.holidays || [];
 
   const handleClose = () => {
-    if (isEdit) {
-      const obj: IntValues = values;
-      obj.odcList[idx] = InitialODCValues.odcList[idx];
-      resetForm({ values: obj });
-    } else {
-      resetForm();
-    }
+    resetForm();
     setIsAdd(false);
   };
 
@@ -43,9 +38,9 @@ const AddODC = (props: AddProps): ReactElement => {
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={6}>
             <ControlledTextField
-              name={`odcList.${idx}.odcName`}
+              name={`odcList.${idx}.name`}
               label={t("odc.form.odcName")}
-              id="odcName"
+              id="name"
             />
           </Grid>
           <Grid item xs={6}>
@@ -55,7 +50,7 @@ const AddODC = (props: AddProps): ReactElement => {
               id="abbreviation"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <ControlledTextField
               name={`odcList.${idx}.location`}
               label={t("odc.form.loc")}
@@ -65,7 +60,7 @@ const AddODC = (props: AddProps): ReactElement => {
         </Grid>
 
         <Box margin="14px 0px">
-          <Table name="HolidayTable" columns={HolidayColumn} data={isEdit ? HolidayData : []} />
+          <Table name="HolidayTable" columns={HolidayColumn} data={isEdit ? holidays : []} />
           <Grid container spacing={2} alignItems="center"mt={1}>
             <Grid item xs={12} container justifyContent="flex-end">
               {isEdit ? (

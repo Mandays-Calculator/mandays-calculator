@@ -58,7 +58,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
               setDelIdx,
               setDeleteModalOpen,
             )}
-            data={values.odcList}
+            data={values?.odcList}
           />
         </Box>
       </PageContainer>

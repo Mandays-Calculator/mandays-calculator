@@ -1,12 +1,19 @@
-import type { DataType } from "./type";
+import type { ODCListResponse, HolidayType } from "~/api/odc";
 
-import { Schema, array, object, string, number } from "yup";
+import { Schema, array, boolean, object, string } from "yup";
 
-const DataTypeSchema: Schema<DataType> = object().shape({
-  odcName: string().required('ODC Name is required').defined(),
-  location: string().default(""),
-  abbreviation: string().default(""),
-  noHolidays: number().default(0),
+const HolidayTypeSchema: Schema<HolidayType> = object().shape({
+  date: string().defined(),
+  holiday: string().defined(),
+});
+
+const DataTypeSchema: Schema<ODCListResponse> = object().shape({
+  id: string().defined(),
+  name: string().required('Required'),
+  location: string().defined(),
+  abbreviation: string().required('Required').defined(),
+  holidays: array().of(HolidayTypeSchema).defined(),
+  active: boolean().defined(),
 });
 
 export const IntValuesSchema = object().shape({
