@@ -19,7 +19,7 @@ import {
   ControlledTextField,
 } from "~/components/form/controlled";
 import { useFormikContext } from "formik";
-import { AddUserManagement } from "~/pages/user-management/types";
+import { UserManagementForms } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
 
@@ -58,13 +58,24 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
-  const { values } = useFormikContext<AddUserManagement>();
-  const AddUserForm: AddUserManagement = {
+  const { values } = useFormikContext<UserManagementForms>();
+  const gender = () => {
+    if (values.gender == "FEMALE") {
+      return 1;
+    } else if (values.gender == "MALE") {
+      return 2;
+    } else if (values.gender == "NON_BINARY") {
+      return 3;
+    } else if (values.gender == "PREFER_NOT_TO_SAY") {
+      return 4;
+    }
+  };
+  const AddUserForm: UserManagementForms = {
     firstName: values.firstName,
     lastName: values.lastName,
     middleName: values.middleName,
     suffix: values.suffix,
-    gender: 1,
+    gender: gender() ?? 0,
     email: values.email,
     employeeId: values.employeeId,
     odcId: values.odcId,
@@ -158,7 +169,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <Stack ml={4.3}>
                 <ControlledDatePicker
                   name="joiningDate"
-                  placeholderText="01/01/23"
+                  placeholderText="2023/12/31"
                   dateFormat="yyyy/MM/dd"
                 />
               </Stack>
@@ -215,18 +226,20 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              console.log("test", AddUserForm);
-
-              AddUser.mutate(AddUserForm, {
-                onSuccess: (data) => {
-                  console.log("success", data);
-                  alert("sucess");
-                },
-                onError: (error) => {
-                  alert(error.message);
-                  console.log(error);
-                },
-              });
+              if (values.firstName === "") {
+                alert("Input First");
+              } else {
+                AddUser.mutate(AddUserForm, {
+                  onSuccess: (data) => {
+                    console.log("success", data);
+                    alert("sucess");
+                  },
+                  onError: (error) => {
+                    alert(error.message);
+                    console.log(error);
+                  },
+                });
+              }
             }}
           >
             Add User

@@ -4,6 +4,8 @@ import { SvgIcon } from "~/components";
 import { useState } from "react";
 import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
 import { UserListData } from "~/api/user-management/types";
+import { useFormikContext } from "formik";
+import { UpdateUserManagementParams } from "../types";
 
 export const userListColum: Column<UserListData>[] = [
   {
@@ -37,12 +39,30 @@ export const userListColum: Column<UserListData>[] = [
     Cell: ({ row }: CellProps<UserListData>) => {
       const [editModal, setEditModal] = useState(false);
       const [currentUser, setCurrentUser] = useState<UserListData>();
+      const form = useFormikContext<UpdateUserManagementParams>();
+      const setCurrentValues = {
+        UpdateFirstName: row.original?.firstName ?? "",
+        UpdateLastName: row.original?.lastName ?? "",
+        UpdateMiddleName: row.original?.middleName ?? "",
+        UpdateSuffix: row.original?.suffix ?? "",
+        UpdateGender: row.original?.gender ?? "",
+        UpdateEmail: row.original?.email ?? "",
+        UpdateEmployeeId: row.original?.employeeId ?? "",
+        UpdateOdcId: "",
+        UpdateCareerStep: row.original?.careerStep ?? "",
+        UpdateJoiningDate: row.original?.joiningDate ?? "",
+        UpdateProjectId: "",
+        UpdateTeamId: "",
+        UpdateRoles: row.original?.roles ?? [],
+      };
       return (
         <Stack direction="row" spacing={2}>
           <SvgIcon
             onClick={() => {
               setEditModal(true);
               setCurrentUser(row.original);
+              form.setValues(setCurrentValues);
+              console.log("ffff", row.original);
             }}
             name="edit"
             color="primary"
@@ -53,9 +73,7 @@ export const userListColum: Column<UserListData>[] = [
           <EditUserModal
             open={editModal}
             currentUser={currentUser}
-            onEditUser={() => {
-              alert("success");
-            }}
+            onEditUser={() => setEditModal(false)}
             onClose={() => setEditModal(false)}
           />
         </Stack>

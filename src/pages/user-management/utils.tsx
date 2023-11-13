@@ -1,6 +1,6 @@
-import { AddUserManagement } from "./types";
+import { UserManagementForms } from "./types";
 import * as yup from "yup";
-export const AddUserManagementFormValues: AddUserManagement = {
+export const UserManagementFormValues: UserManagementForms = {
   lastName: "",
   firstName: "",
   middleName: "",
@@ -16,7 +16,7 @@ export const AddUserManagementFormValues: AddUserManagement = {
   roles: [],
 };
 
-export const AddUserManagementSchema = yup.object({
+export const UserManagementSchema = yup.object({
   lastName: yup
     .string()
     .min(2, "too short")
