@@ -34,7 +34,7 @@ const PasswordInput = ({
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton onClick={handleTogglePassword}>
+            <IconButton onClick={handleTogglePassword} data-testid={`icon-button`}>
               {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
             </IconButton>
           </InputAdornment>

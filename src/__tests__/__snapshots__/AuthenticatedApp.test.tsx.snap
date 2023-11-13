@@ -1,0 +1,1114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN page loads, THEN it should display the PageLoader: page-loading 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-1hqaa5r"
+  >
+    <span
+      aria-label="loading..."
+      class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
+      role="progressbar"
+      style="width: 40px; height: 40px;"
+    >
+      <svg
+        class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+        viewBox="22 22 44 44"
+      >
+        <circle
+          class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+          cx="44"
+          cy="44"
+          fill="none"
+          r="20.2"
+          stroke-width="3.6"
+        />
+      </svg>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN user is already authenticated, THEN it should automatically be signedin: user-already-authenticated 1`] = `
+<div>
+  <div
+    class="css-1p16i2a"
+  >
+    <div
+      class="MuiBox-root css-k008qs"
+    >
+      <div
+        class="MuiDrawer-root MuiDrawer-docked css-j1fxea-MuiDrawer-docked"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiDrawer-paper MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft css-12i7wg6-MuiPaper-root-MuiDrawer-paper"
+        >
+          <ul
+            class="MuiList-root MuiList-padding css-gygkfk-MuiList-root"
+          >
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-dashboard"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-complexity"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-history"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-settings"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-history"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-settings"
+                  />
+                </svg>
+              </div>
+            </li>
+          </ul>
+          <div
+            class="css-11n5nzv"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+                data-testid="svg-component"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <use
+                  href="#icon-collapse_right"
+                />
+              </svg>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-ha59ia"
+    >
+      <header
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionSticky css-lr6u4k-MuiPaper-root-MuiAppBar-root"
+      >
+        <div
+          class="MuiContainer-root MuiContainer-disableGutters css-idqxm-MuiContainer-root"
+        >
+          <div
+            class="css-vgodjd"
+          >
+            <div
+              class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1hq4vw-MuiToolbar-root"
+            >
+              <div
+                class="MuiBox-root css-lr0ish"
+              >
+                <div
+                  aria-label="Open settings"
+                  class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-7ldjcq-MuiGrid-root"
+                  data-mui-internal-clone-element="true"
+                >
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3 css-1equabv-MuiGrid-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="Juan Dela Cruz"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="[object Object]"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8 css-vok43g-MuiGrid-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-p8vqrd-MuiTypography-root"
+                    >
+                      Juan Dela Cruz
+                    </p>
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-11ine16-MuiTypography-root"
+                    >
+                      Sprint Manager
+                    </p>
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1 css-u78q51-MuiGrid-root"
+                  >
+                    <button
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      aria-label="account of current user"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-nff64r-MuiButtonBase-root-MuiIconButton-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-tzssek-MuiSvgIcon-root"
+                        data-testid="ArrowDropDownIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="m7 10 5 5 5-5z"
+                        />
+                      </svg>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div
+        class="css-12128pa"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-p7npm1-MuiTypography-root"
+          data-testid="title-component"
+        >
+          Project Management
+        </p>
+        <div
+          class="MuiContainer-root css-1wl6626-MuiContainer-root"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-5 css-k3f0g4-MuiGrid-root"
+            >
+              <div
+                class="MuiFormControl-root MuiTextField-root css-hzmf2y-MuiFormControl-root-MuiTextField-root"
+              >
+                <div
+                  class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+                    id=":r5:"
+                    placeholder="Enter keyword here..."
+                    type="text"
+                    value=""
+                  />
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-ihdtdm"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-7 css-17rcz26-MuiGrid-root"
+            >
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+                tabindex="0"
+                type="button"
+              >
+                Add Project
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            class="MuiBox-root css-wmz062"
+          >
+            <div
+              class="MuiStack-root css-1ucnu3w-MuiStack-root"
+            >
+              <div
+                class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiTableContainer-root css-11xur9t-MuiPaper-root-MuiTableContainer-root"
+              >
+                <table
+                  aria-label="ODCTable"
+                  class="MuiTable-root css-rqglhn-MuiTable-root"
+                  role="table"
+                >
+                  <thead
+                    class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
+                  >
+                    <tr
+                      class="MuiTableRow-root MuiTableRow-head css-l7ewl1-MuiTableRow-root"
+                      role="row"
+                    >
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                        style="cursor: pointer;"
+                        title="Toggle SortBy"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            Project
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                        style="cursor: pointer;"
+                        title="Toggle SortBy"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Teams
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                        style="cursor: pointer;"
+                        title="Toggle SortBy"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Users
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          />
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
+                    role="rowgroup"
+                  >
+                    <tr
+                      class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    >
+                      <td
+                        class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                        colspan="4"
+                      >
+                        common.noData
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-19bwc11-MuiPaper-root-MuiAppBar-root"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-184l77m-MuiTypography-root"
+      >
+        © 
+        2023
+         
+        footer.label
+      </p>
+    </header>
+  </div>
+</div>
+`;
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN user is authenticated, THEN it should render the landing page: user-authenticated 1`] = `
+<div>
+  <div
+    class="css-1p16i2a"
+  >
+    <div
+      class="MuiBox-root css-k008qs"
+    >
+      <div
+        class="MuiDrawer-root MuiDrawer-docked css-j1fxea-MuiDrawer-docked"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiDrawer-paper MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft css-12i7wg6-MuiPaper-root-MuiDrawer-paper"
+        >
+          <ul
+            class="MuiList-root MuiList-padding css-gygkfk-MuiList-root"
+          >
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-dashboard"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-complexity"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-history"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-settings"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-history"
+                  />
+                </svg>
+              </div>
+            </li>
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-settings"
+                  />
+                </svg>
+              </div>
+            </li>
+          </ul>
+          <div
+            class="css-11n5nzv"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+                data-testid="svg-component"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <use
+                  href="#icon-collapse_right"
+                />
+              </svg>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-ha59ia"
+    >
+      <header
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionSticky css-lr6u4k-MuiPaper-root-MuiAppBar-root"
+      >
+        <div
+          class="MuiContainer-root MuiContainer-disableGutters css-idqxm-MuiContainer-root"
+        >
+          <div
+            class="css-vgodjd"
+          >
+            <div
+              class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1hq4vw-MuiToolbar-root"
+            >
+              <div
+                class="MuiBox-root css-lr0ish"
+              >
+                <div
+                  aria-label="Open settings"
+                  class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-7ldjcq-MuiGrid-root"
+                  data-mui-internal-clone-element="true"
+                >
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3 css-1equabv-MuiGrid-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="Juan Dela Cruz"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="[object Object]"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8 css-vok43g-MuiGrid-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-p8vqrd-MuiTypography-root"
+                    >
+                      Juan Dela Cruz
+                    </p>
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-11ine16-MuiTypography-root"
+                    >
+                      Sprint Manager
+                    </p>
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1 css-u78q51-MuiGrid-root"
+                  >
+                    <button
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      aria-label="account of current user"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-nff64r-MuiButtonBase-root-MuiIconButton-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-tzssek-MuiSvgIcon-root"
+                        data-testid="ArrowDropDownIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="m7 10 5 5 5-5z"
+                        />
+                      </svg>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div
+        class="css-12128pa"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-p7npm1-MuiTypography-root"
+          data-testid="title-component"
+        >
+          Project Management
+        </p>
+        <div
+          class="MuiContainer-root css-1wl6626-MuiContainer-root"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-5 css-k3f0g4-MuiGrid-root"
+            >
+              <div
+                class="MuiFormControl-root MuiTextField-root css-hzmf2y-MuiFormControl-root-MuiTextField-root"
+              >
+                <div
+                  class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input"
+                    id=":r1:"
+                    placeholder="Enter keyword here..."
+                    type="text"
+                    value=""
+                  />
+                  <fieldset
+                    aria-hidden="true"
+                    class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                  >
+                    <legend
+                      class="css-ihdtdm"
+                    >
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-7 css-17rcz26-MuiGrid-root"
+            >
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+                tabindex="0"
+                type="button"
+              >
+                Add Project
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            class="MuiBox-root css-wmz062"
+          >
+            <div
+              class="MuiStack-root css-1ucnu3w-MuiStack-root"
+            >
+              <div
+                class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiTableContainer-root css-11xur9t-MuiPaper-root-MuiTableContainer-root"
+              >
+                <table
+                  aria-label="ODCTable"
+                  class="MuiTable-root css-rqglhn-MuiTable-root"
+                  role="table"
+                >
+                  <thead
+                    class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
+                  >
+                    <tr
+                      class="MuiTableRow-root MuiTableRow-head css-l7ewl1-MuiTableRow-root"
+                      role="row"
+                    >
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                        style="cursor: pointer;"
+                        title="Toggle SortBy"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            Project
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                        style="cursor: pointer;"
+                        title="Toggle SortBy"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Teams
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                        style="cursor: pointer;"
+                        title="Toggle SortBy"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          >
+                            No. of Users
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+                        colspan="1"
+                        role="columnheader"
+                        scope="col"
+                      >
+                        <div
+                          class="MuiBox-root css-18biwo"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                          />
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
+                    role="rowgroup"
+                  >
+                    <tr
+                      class="MuiTableRow-root css-1q1u3t4-MuiTableRow-root"
+                    >
+                      <td
+                        class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeSmall css-vtdehq-MuiTableCell-root"
+                        colspan="4"
+                      >
+                        common.noData
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-19bwc11-MuiPaper-root-MuiAppBar-root"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-184l77m-MuiTypography-root"
+      >
+        © 
+        2023
+         
+        footer.label
+      </p>
+    </header>
+  </div>
+</div>
+`;
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN user is not authenticated, THEN it should render Auth component: user-not-authenticated 1`] = `
+<div>
+  <div
+    class="css-16a6vc1"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+        >
+          <div
+            class="css-p72wz0"
+          >
+            <img
+              alt="login"
+              height="auto"
+              src="[object Object]"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+        >
+          <form
+            data-testid="form-component"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-1gw5rvg-MuiTypography-root"
+              >
+                login.label.signIn
+              </p>
+              <div
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-1exsy04-MuiTypography-root"
+                >
+                  login.label.userName
+                </p>
+                <div
+                  class="MuiStack-root css-hwnj0i-MuiStack-root"
+                >
+                  <div
+                    class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+                    data-testid="text-field-component"
+                    field="[object Object]"
+                    form="[object Object]"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+                    >
+                      <input
+                        aria-invalid="false"
+                        class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                        id=":r2:"
+                        placeholder="Input username"
+                        type="text"
+                        value=""
+                      />
+                      <fieldset
+                        aria-hidden="true"
+                        class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                      >
+                        <legend
+                          class="css-ihdtdm"
+                        >
+                          <span
+                            class="notranslate"
+                          >
+                            ​
+                          </span>
+                        </legend>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-16ehins-MuiGrid-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-1exsy04-MuiTypography-root"
+                >
+                  login.label.password
+                </p>
+                <div
+                  class="MuiStack-root css-hwnj0i-MuiStack-root"
+                >
+                  <div
+                    class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+                    data-testid="text-field-component"
+                    field="[object Object]"
+                    form="[object Object]"
+                  >
+                    <div
+                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root"
+                    >
+                      <input
+                        aria-invalid="false"
+                        class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
+                        id=":r3:"
+                        placeholder="Input password"
+                        type="password"
+                        value=""
+                      />
+                      <div
+                        class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-1laqsz7-MuiInputAdornment-root"
+                      >
+                        <button
+                          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                            data-testid="VisibilityOffIcon"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78 3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"
+                            />
+                          </svg>
+                          <span
+                            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                          />
+                        </button>
+                      </div>
+                      <fieldset
+                        aria-hidden="true"
+                        class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                      >
+                        <legend
+                          class="css-ihdtdm"
+                        >
+                          <span
+                            class="notranslate"
+                          >
+                            ​
+                          </span>
+                        </legend>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+                <a
+                  href="/forgot-password"
+                >
+                  login.label.forgotPassword
+                </a>
+              </div>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-17byxqv-MuiTypography-root"
+              />
+              <div
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+              >
+                <button
+                  class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-fullWidth css-qnoc98-MuiButtonBase-root-MuiButton-root"
+                  tabindex="0"
+                  type="submit"
+                >
+                  Sign In
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <header
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-19bwc11-MuiPaper-root-MuiAppBar-root"
+  >
+    <p
+      class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-184l77m-MuiTypography-root"
+    >
+      © 
+      2023
+       
+      footer.label
+    </p>
+  </header>
+</div>
+`;
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN user is signing in, THEN it should display the \`Signing you in...\` text: user-signin 1`] = `
+<div>
+  <div>
+    Signing you in...
+  </div>
+</div>
+`;
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN user is signing out, THEN it should display the \`Signing you out...\` text: user-signout 1`] = `
+<div>
+  <div>
+    Signing you out...
+  </div>
+</div>
+`;
