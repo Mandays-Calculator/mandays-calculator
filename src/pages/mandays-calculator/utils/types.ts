@@ -60,6 +60,11 @@ export type TasksColumnsProps = {
   t: TFunction<"translation", undefined>;
 };
 
+export type LegendColumnProps = {
+  t: TFunction<"translation", undefined>;
+  isInput?: boolean;
+};
+
 export type LegendColumn = {
   complexity: string;
   i03: string;

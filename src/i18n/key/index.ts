@@ -41,6 +41,7 @@ const LocalizationKey = {
   common: {
     noDataLabel: "common.noData",
     complexity: "common.complexity",
+    submit: "common.submit",
     somethingWentWrongTitle: "common.somethingWentWrong.title",
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",

@@ -74,7 +74,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Legend",
-              content: <Legend />,
+              content: <Legend mode={mode} />,
             },
             {
               label: "Tasks",
