@@ -70,7 +70,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Resources",
-              content: <Resources />,
+              content: <Resources mode={mode} />,
             },
             {
               label: "Legend",
