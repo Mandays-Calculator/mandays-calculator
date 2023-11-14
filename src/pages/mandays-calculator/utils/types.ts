@@ -80,4 +80,5 @@ export type LegendColumn = {
 
 export type ResourcesColumnsProps = {
   t: TFunction<"translation", undefined>;
+  isInput?: boolean;
 };

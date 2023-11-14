@@ -88,6 +88,13 @@ const LocalizationKey = {
         "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
+    summaryForm: {
+      name: "mandaysCalculator.summary.form.name",
+      team: "mandaysCalculator.summary.form.team",
+      utilization: "mandaysCalculator.summary.form.utilization",
+      startDate: "mandaysCalculator.summary.form.startDate",
+      endDate: "mandaysCalculator.summary.form.endDate",
+    },
     tasksTitle: "mandaysCalculator.tasks.title",
     tasksTableColumns: {
       tasks: "mandaysCalculator.tasks.table.columns.tasks",

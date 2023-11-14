@@ -141,6 +141,13 @@
           "totalManHours": "Total Man Hours",
           "totalManDays": "Total Man Days"
         }
+      },
+      "form": {
+        "name": "Name",
+        "team": "Team",
+        "utilization": "Utilization Rate",
+        "startDate": "Start Date",
+        "endDate": "End Date"
       }
     },
     "resourceList": {

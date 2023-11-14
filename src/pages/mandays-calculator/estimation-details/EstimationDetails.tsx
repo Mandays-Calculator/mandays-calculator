@@ -91,7 +91,7 @@ const renderExportModal = ({
 const EstimationDetails = (): ReactElement => {
   const { mandaysCalculator, common } = LocalizationKey;
   const sprintName = "Sprint 1"; // Note: will come from API
-  const mode: EstimationDetailsMode = "view";
+  const mode: EstimationDetailsMode = "add";
 
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -190,11 +190,13 @@ const EstimationDetails = (): ReactElement => {
             tabs={[
               {
                 label: t(mandaysCalculator.summaryTitle),
-                content: <Summary />,
+                content: <Summary mode={mode} />,
               },
               {
                 label: t(mandaysCalculator.resourcesTitle),
-                content: <Resources isGeneratingPDF={isGeneratingPDF} />,
+                content: (
+                  <Resources isGeneratingPDF={isGeneratingPDF} mode={mode} />
+                ),
               },
               {
                 label: t(mandaysCalculator.legend.title),
