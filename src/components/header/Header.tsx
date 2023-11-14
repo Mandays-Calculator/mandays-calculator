@@ -2,6 +2,7 @@ import type { ReactElement, MouseEvent } from "react";
 
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Toolbar,
@@ -24,6 +25,7 @@ import { StyledAppBar, StyledToolBarContainer } from ".";
 const AppBarHeader = (): ReactElement => {
   const auth = useAuth();
   const user = getUser();
+  const navigate = useNavigate();
   // const userSettings = ["Profile", "Change Password ", "Logout"];
   const name = user?.profile.name;
   const position = "Sprint Manager";
@@ -38,10 +40,14 @@ const AppBarHeader = (): ReactElement => {
     setAnchorElUser(null);
   };
 
+  const handleChangePasswordUserMenu = (): void => {
+    setAnchorElUser(null);
+    navigate('../change-password');
+  };
+
   const handleLogoutUserMenu = (): void => {
     auth.removeUser()
   };
-
   return (
     <StyledAppBar position="sticky">
       <Container maxWidth={false} disableGutters={true}>
@@ -51,7 +57,7 @@ const AppBarHeader = (): ReactElement => {
               <Tooltip title="Open settings">
                 <Grid container spacing={1} alignItems="center">
                   <Grid item xs={3}>
-                    <Avatar alt={name} src={AvatarImg} />
+                    <Avatar alt={name} src={String(AvatarImg)} />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography textAlign="left" fontSize={14}>
@@ -98,7 +104,7 @@ const AppBarHeader = (): ReactElement => {
                 <MenuItem key="Profile" onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-                <MenuItem key="Change Password" onClick={handleCloseUserMenu}>
+                <MenuItem key="Change Password" onClick={handleChangePasswordUserMenu}>
                   <Typography textAlign="center">Change Password</Typography>
                 </MenuItem>
                 <MenuItem key="Logout" onClick={handleLogoutUserMenu}>

@@ -4,6 +4,7 @@ import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
+import ErrorMessage from "~/components/form/error-message/ErrorMessage";
 
 import Form from "~/components/form/Form";
 import LocalizationKey from "~/i18n/key";
@@ -58,7 +59,7 @@ const Login = (): ReactElement => {
             {t(LocalizationKey.login.label.forgotPassword)}
           </Link>
         </Grid>
-        {auth.error?.message}
+        <ErrorMessage error={auth.error?.message} />
         <Grid item xs={12}>
           <Button fullWidth type="submit">
             Sign In

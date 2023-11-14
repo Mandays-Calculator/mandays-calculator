@@ -16,7 +16,7 @@ const StyledSvgIcon = styled(MuiSvgIcon, {
 }));
 
 export const SvgIcon = (props: SvgIconsProps): ReactElement => {
-  const { name, sx, $size = 4, onClick, color } = props;
+  const { name, sx, $size = 4, onClick, color, ...rest } = props;
 
   return (
     <StyledSvgIcon
@@ -25,6 +25,7 @@ export const SvgIcon = (props: SvgIconsProps): ReactElement => {
       onClick={onClick}
       color={color}
       data-testid="svg-component"
+      {...rest}
     >
       <svg aria-hidden="true">
         <use href={`#icon-${name}`} />

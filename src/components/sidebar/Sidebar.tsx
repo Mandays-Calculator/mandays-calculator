@@ -1,78 +1,75 @@
 import type { ReactElement } from "react";
-import type { RouteType } from "~/routes";
 
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Divider, Box, IconButton } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Box, Typography, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { SvgIcon } from "~/components";
-import { routesConfig } from "~/routes";
+import LocalizationKey from "~/i18n/key";
+
 import {
   StyledDrawer,
-  DrawerHeader,
+  StyledCollapsibleItem,
   StyledItemText,
   StyledListItemIcon,
   StyledListItem,
   StyledList,
 } from ".";
 
+import { getSidebarConfig, SideBarItemType } from "./config";
+
 const Drawer = (): ReactElement => {
   const [open, setOpen] = useState<boolean>(false);
-  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const handleNavigate = (routeItem: RouteType): void => {
+  const { common } = LocalizationKey;
+  const handleNavigate = (routeItem: SideBarItemType): void => {
     navigate(`${routeItem.path}`);
-  };
-
-  const isActivePath = (path: string): boolean => {
-    return location.pathname.includes(path);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <StyledDrawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={() => setOpen(!open)}>
-            {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider sx={{ mb: 7 }} />
-        <StyledList open={open}>
-          {routesConfig.map((routeItem: RouteType, index: number) => {
-            if (routeItem.icon) {
-              return (
-                <StyledListItem
-                  key={index}
-                  activepath={isActivePath(routeItem.path || "")}
-                  onClick={() => handleNavigate(routeItem)}
-                  open={open}
-                >
-                  <StyledListItemIcon>
-                    {routeItem.icon ? (
-                      <SvgIcon
-                        name={routeItem.icon}
-                        $size={4}
-                        color="primary"
-                      />
-                    ) : (
-                      <AccountCircleIcon fontSize="large" />
+        <StyledList open={open} sx={{ mt: 7 }}>
+          {getSidebarConfig("sprint_manager").map(
+            (routeItem: SideBarItemType, index: number) => {
+              if (routeItem.icon) {
+                return (
+                  <StyledListItem
+                    key={index}
+                    onClick={() => handleNavigate(routeItem)}
+                    open={open}
+                  >
+                    <StyledListItemIcon>
+                      {routeItem.icon ? (
+                        <SvgIcon
+                          name={routeItem.icon}
+                          $size={3}
+                          color="primary"
+                        />
+                      ) : (
+                        <AccountCircleIcon fontSize="large" />
+                      )}
+                    </StyledListItemIcon>
+                    {open && (
+                      <StyledItemText primary={t(routeItem.label || "")} />
                     )}
-                  </StyledListItemIcon>
-                  {open && (
-                    <StyledItemText primary={t(routeItem.label || "")} />
-                  )}
-                </StyledListItem>
-              );
+                  </StyledListItem>
+                );
+              }
             }
-          })}
+          )}
         </StyledList>
+        <StyledCollapsibleItem open={open}>
+          <IconButton onClick={() => setOpen(!open)}>
+            <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
+          </IconButton>
+          {open && <Typography>{t(common.collapse)}</Typography>}
+        </StyledCollapsibleItem>
       </StyledDrawer>
     </Box>
   );

@@ -2,7 +2,7 @@ import type { PropsWithChildren, ReactElement } from "react";
 import { Card as MuiCard, Typography, CardContent } from "@mui/material";
 
 interface CardProps extends PropsWithChildren {
-  title: string;
+  title?: string;
 }
 export const Card = (props: CardProps): ReactElement => {
   const { title, children } = props;
