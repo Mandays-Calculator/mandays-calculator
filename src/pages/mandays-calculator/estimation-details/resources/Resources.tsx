@@ -6,41 +6,44 @@ import { resourcesDetailData } from "../../utils/tableData";
 import { ResourcesListColumns } from "../../utils/columns";
 import Accordion from "~/components/Accordion/Accordion";
 
-const Resources = (): ReactElement => {
+type ResourcesProps = {
+  isGeneratingPDF?: boolean;
+};
+const Resources = (props: ResourcesProps): ReactElement => {
   const { t } = useTranslation();
-
+  const { isGeneratingPDF } = props;
   return (
     <Box>
       <Stack spacing={2}>
-        <Accordion title="I03" defaultExpanded={false}>
+        <Accordion title="I03" defaultExpanded={isGeneratingPDF}>
           <Table
             columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
-        <Accordion title="I04" defaultExpanded={false}>
+        <Accordion title="I04" defaultExpanded={isGeneratingPDF}>
           <Table
             columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
-        <Accordion title="I05" defaultExpanded={false}>
+        <Accordion title="I05" defaultExpanded={isGeneratingPDF}>
           <Table
             columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
-        <Accordion title="I06" defaultExpanded={false}>
+        <Accordion title="I06" defaultExpanded={isGeneratingPDF}>
           <Table
             columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
             name="mandays-calculator"
           />
         </Accordion>
-        <Accordion title="I07" defaultExpanded={false}>
+        <Accordion title="I07" defaultExpanded={isGeneratingPDF}>
           <Table
             columns={ResourcesListColumns({ t })}
             data={resourcesDetailData}
