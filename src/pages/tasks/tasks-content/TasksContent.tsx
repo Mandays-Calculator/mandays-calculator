@@ -2,11 +2,10 @@ import { ReactElement, useState } from "react";
 
 import { Divider, Grid, Stack, Typography } from "@mui/material";
 
-import { Select, TextField } from "~/components";
-import { PageContainer } from "~/components/page-container";
-import TaskDetailsCard from "./task-details/TaskDetailsCard";
-import { Modal } from "~/components/modal";
+import { Select, TextField, PageContainer, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
+
+import TaskDetailsCard from "./task-details/TaskDetailsCard";
 
 const TasksContent = (): ReactElement => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
