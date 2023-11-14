@@ -56,8 +56,7 @@ const LocalizationKey = {
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
-    modalConfirmDeleteEstimation:
-      "mandaysCalculator.modalLabels.confirmDeleteEstimation",
+    modalConfirmDeleteEstimation: "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
       team: "mandaysCalculator.sprintList.table.columns.team",
@@ -69,10 +68,16 @@ const LocalizationKey = {
       totalManHours: "mandaysCalculator.summary.table.columns.totalManHours",
       totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
+    summaryForm: {
+      name: "mandaysCalculator.summary.form.name",
+      team: "mandaysCalculator.summary.form.team",
+      utilization: "mandaysCalculator.summary.form.utilization",
+      startDate: "mandaysCalculator.summary.form.startDate",
+      endDate: "mandaysCalculator.summary.form.endDate",
+    },
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
-      resourceCount:
-        "mandaysCalculator.resourceList.table.columns.resourceCount",
+      resourceCount: "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
     tasksTableColumns: {
@@ -86,7 +91,7 @@ const LocalizationKey = {
     },
     legend: {
       tableTitle: "mandaysCalculator.legend.table.title",
-    }
+    },
   },
 };
 
