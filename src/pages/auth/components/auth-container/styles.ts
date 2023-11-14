@@ -7,64 +7,69 @@ const StyledAuthContainer = styled("div")`
 `;
 
 const StyledContainer = styled(Container)`
+  min-width: ${({ theme }) => theme.spacing(125)};
   display: flex;
-  padding: 10px;
+  padding: ${({ theme }) => theme.spacing(1.25)};
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: ${({ theme }) => theme.spacing(1.25)};
   flex: 1 0 0;
   height: 100vh;
   align-self: stretch;
 `;
 
 const StyledGrid = styled(Grid)`
+  height: ${({ theme }) => theme.spacing(75)};
   background: #fefefe;
   display: flex;
-  width: 500px;
-  padding: 68px;
+  width: ${({ theme }) => theme.spacing(62.5)};
+  padding: ${({ theme }) => theme.spacing(8.5)};
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 20px;
+  gap: ${({ theme }) => theme.spacing(2.5)};
   flex-shrink: 0;
   align-self: stretch;
-  border-radius: 0px 30px 30px 0px;
+  border-radius: ${({ theme }) => theme.spacing(0, 3.75, 3.75, 0)};
 `;
 
 const StyledImageContainer = styled("div")`
+  height: ${({ theme }) => theme.spacing(75)};
   position: absolute;
-  left: -124px;
-  right: -32px;
-  bottom: 47px;
+  left: ${({ theme }) => theme.spacing(-15.5)};
+  right: ${({ theme }) => theme.spacing(-4)};
+  @media (min-width: 1441px) {
+    top: ${({ theme }) => theme.spacing(5.875)};
+  }
 `;
 
 const StyledLogoContainer = styled("div")`
   position: absolute;
-  bottom: 10px;
-  left: 15px;
+  bottom: ${({ theme }) => theme.spacing(1.25)};
+  left: ${({ theme }) => theme.spacing(1.875)};
 `;
 
 const AuthImageContainer = styled(Grid)`
-  height: 600px;
+  height: ${({ theme }) => theme.spacing(75)};
   position: relative;
-  border-radius: 30px 0px 0px 30px;
+  border-radius: ${({ theme }) => theme.spacing(3.75, 0, 0, 3.75)};
   background: #1aa9e8;
 `;
 
 const StyledTitle = styled(Typography)`
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: ${({ theme }) => theme.spacing(2.5)};
+  font-size: ${({ theme }) => theme.spacing(3)};
   font-weight: 400;
   line-height: normal;
-  letter-spacing: -2.4px;
+  letter-spacing: ${({ theme }) => theme.spacing(-0.3)};
 `;
 
 const StyledLabel = styled(Typography)`
-  margin-bottom: 5px;
+  margin-bottom: ${({ theme }) => theme.spacing(0.625)};
   font-size: inherit;
   font-weight: 400;
   line-height: normal;
-  letter-spacing: -1.4px;
+  letter-spacing: ${({ theme }) => theme.spacing(-0.175)};
 `;
 
 export {

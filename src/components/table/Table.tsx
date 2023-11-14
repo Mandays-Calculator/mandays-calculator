@@ -1,131 +1,196 @@
-import type { ReactElement } from 'react';
-import type { Column } from "react-table";
+import type { ReactElement, ReactNode } from "react";
+import type {
+  CustomHeaderGroup,
+  TableProps,
+  RenderStripedRowProps,
+  TableData,
+  CellParamType,
+  DataRowType,
+} from ".";
 
-import { Fragment } from 'react';
-import { useTable } from 'react-table'
-import { styled } from '@mui/material/styles';
-import MuiTable from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+import React, { useState } from "react";
+import { useTable, useSortBy } from "react-table";
+import { useTranslation } from "react-i18next";
 
-interface TableProps<Type extends object> {
-  name: string;
-  title?: string;
-  columns: Column<Type>[];
-  data?: Type[];
-}
+import {
+  Table as MuiTable,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Typography,
+  Paper,
+  Stack,
+  Box,
+} from "@mui/material";
 
-const StyledHeader = styled(TableRow)({
-  backgroundColor: '#D0DEEA',
-  borderRadius: '8px',
-})
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import LocalizationKey from "~/i18n/key";
 
-const StyledCell = styled(TableCell)({
-  padding: '16px 12px'
-})
+import {
+  StyledCell,
+  StyledHeader,
+  StyledStripeRow,
+  StyledIconButton,
+  StyledHeaderStripeRow,
+  StyledHeaderCell,
+} from ".";
 
+const renderStripedRow = <T extends object>({
+  row,
+  onRowClick,
+  type,
+  toggleCollapse,
+  rowId,
+  isCollapsed,
+}: RenderStripedRowProps<T>): ReactNode => {
+  const renderCells = (dataRow: DataRowType) => {
+    return Object.keys(dataRow).map((key) => (
+      <StyledCell key={`${rowId}-${key}`}>{dataRow[key]}</StyledCell>
+    ));
+  };
 
-const StyledStripeRow = styled(TableRow)({
-  '&:nth-of-type(odd)': {
-    backgroundColor: '#FEFEFE'
-  },
-  '&:nth-of-type(even)': {
-    backgroundColor: '#EAF3F4'
+  switch (type) {
+    case "collapse":
+      return (
+        <React.Fragment key={rowId}>
+          <StyledHeaderStripeRow>
+            <StyledCell
+              colSpan={row.cells.length}
+              sx={{ position: "relative" }}
+            >
+              {row.original.label}
+              <StyledIconButton
+                size="small"
+                onClick={() => toggleCollapse(rowId)}
+              >
+                {isCollapsed ? (
+                  <KeyboardArrowUpIcon />
+                ) : (
+                  <KeyboardArrowDownIcon />
+                )}
+              </StyledIconButton>
+            </StyledCell>
+          </StyledHeaderStripeRow>
+          {!isCollapsed &&
+            row.original.data.map((dataRow: any, index: any) => (
+              <StyledStripeRow key={`${rowId}-${index}`}>
+                {renderCells(dataRow)}
+              </StyledStripeRow>
+            ))}
+        </React.Fragment>
+      );
+    default:
+      return (
+        <StyledStripeRow
+          key={rowId}
+          {...row.getRowProps({
+            onClick: onRowClick ? () => onRowClick(row.original) : undefined,
+            style: { cursor: onRowClick ? "pointer" : "default" },
+          })}
+        >
+          {row.cells.map((cell: CellParamType) => (
+            <StyledCell {...cell.getCellProps()}>
+              {cell.render("Cell")}
+            </StyledCell>
+          ))}
+        </StyledStripeRow>
+      );
   }
-})
+};
 
-
-export const Table = <Type extends object>(props: TableProps<Type>): ReactElement => {
+export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
   const {
-    name,
     title,
     columns,
     data = [],
+    noDataLabel,
+    onRowClick,
+    type = "default",
   } = props;
-
-  const {
-    getTableProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable<Type>(
-    {
-      columns,
-      data,
-    }
+  const { t } = useTranslation();
+  const [collapsedRows, setCollapsedRows] = useState<Record<string, boolean>>(
+    {}
   );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable<TableData<any>>({ columns, data }, useSortBy);
 
+  // will toggle parent row if type === collapse
+  const toggleCollapse = (rowId: string) => {
+    setCollapsedRows((prevState) => ({
+      ...prevState,
+      [rowId]: !prevState[rowId],
+    }));
+  };
+  const renderSortIcon = (column: any) =>
+    column.isSorted ? (
+      column.isSortedDesc ? (
+        <ArrowDropDownIcon sx={{ ml: 1 }} fontSize="small" />
+      ) : (
+        <ArrowDropUpIcon sx={{ ml: 1 }} fontSize="small" />
+      )
+    ) : null;
 
+  const { common } = LocalizationKey;
   return (
     <Stack gap={2}>
       <TableContainer component={Paper}>
         {title && (
-          <Typography variant='h5'>
+          <Typography variant="h5" gutterBottom>
             {title}
           </Typography>
         )}
-        <MuiTable {...getTableProps()} size='small' aria-label={name}>
+        <MuiTable {...getTableProps()} size="small" aria-label={props.name}>
           <TableHead>
-            {headerGroups.map((headerGroup) => {
-              const { key: headerGroupKey, role: headerGroupRole, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
-              return (
-                <StyledHeader {...restHeaderGroupProps} key={headerGroupKey} role={headerGroupRole}>
-                  {headerGroup.headers.map((column) => {
-                    const { key: headerKey, role: headerRole, ...restHeaderProps } = column.getHeaderProps(); 
-                    return (
-                      <StyledCell
-                        {...restHeaderProps}
-                        key={headerKey}
-                        role={headerRole}
-                      >
-                        <Typography fontWeight='bold'>
-                          {column.render('Header')}
-                        </Typography>
-                      </StyledCell>
-
-                    )
-                  })}
-                </StyledHeader>
-              )
-            })}
+            {headerGroups.map((headerGroup) => (
+              <StyledHeader {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <StyledHeaderCell
+                    {...column.getHeaderProps(
+                      (column as CustomHeaderGroup<T>).getSortByToggleProps()
+                    )}
+                  >
+                    <Box sx={{ display: "inline-flex", alignItems: "center" }}>
+                      <Typography variant="body1" component="span">
+                        {column.render("Header")}
+                      </Typography>
+                      {renderSortIcon(column)}
+                    </Box>
+                  </StyledHeaderCell>
+                ))}
+              </StyledHeader>
+            ))}
           </TableHead>
-          <TableBody>
-            {rows?.map((row) => {
+          <TableBody {...getTableBodyProps()}>
+            {rows.map((row, index) => {
               prepareRow(row);
-              const { key: rowKey, ...restRowProps } = row.getRowProps(); 
-              return (
-                <Fragment key={rowKey}>
-                <StyledStripeRow {...restRowProps} >
-                  {row.cells.map((cell) => {
-                    const { key: cellKey, ...restCellProps } = cell.getCellProps();
-                    return (
-                      <StyledCell {...restCellProps} key={cellKey}>
-                        {cell.render("Cell")}
-                      </StyledCell>
-                    )
-                  })}
-                </StyledStripeRow>
-                </Fragment>
-                )
+              const rowId = `row-${index}`; // or some other unique identifier from your row data
+              const isCollapsed = collapsedRows[rowId];
+              return renderStripedRow({
+                row,
+                isCollapsed,
+                rowId,
+                onRowClick,
+                toggleCollapse,
+                type,
+              });
             })}
             {rows.length === 0 && (
-              <StyledStripeRow>
-                <StyledCell colSpan={columns.length}>
-                  <Typography textAlign='center'>No Data</Typography>
-                </StyledCell>
-              </StyledStripeRow>
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center">
+                  {noDataLabel || t(common.noDataLabel)}
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </MuiTable>
       </TableContainer>
     </Stack>
   );
-}
+};
 
 export default Table;

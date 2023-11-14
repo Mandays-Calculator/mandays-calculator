@@ -1,81 +1,87 @@
 import type { ReactElement } from "react";
-import type { RouteType } from "~/routes";
+import type { Permission } from "~/api/user";
+import type { UserPermissionState } from "~/redux/reducers/user/types";
 
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
-import { Divider, Box, IconButton } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Box, Typography, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+import { selectUser } from "~/redux/reducers/user";
+
 import { SvgIcon } from "~/components";
-import { routesConfig } from "~/routes";
+import LocalizationKey from "~/i18n/key";
+
 import {
   StyledDrawer,
-  DrawerHeader,
+  StyledCollapsibleItem,
   StyledItemText,
   StyledListItemIcon,
   StyledListItem,
   StyledList,
 } from ".";
+import { SvgIconsType } from "../svc-icons/types";
 
 const Drawer = (): ReactElement => {
   const [open, setOpen] = useState<boolean>(false);
-  const location = useLocation();
+  const userState: UserPermissionState = useSelector(selectUser);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const handleNavigate = (routeItem: RouteType): void => {
+  const { common } = LocalizationKey;
+
+  const handleNavigate = (routeItem: Permission): void => {
     navigate(`${routeItem.path}`);
   };
 
-  const isActivePath = (path: string): boolean => {
-    return location.pathname.includes(path);
-  };
+  if (!userState.loading)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <StyledDrawer variant="permanent" open={open}>
+          <StyledList open={open} sx={{ mt: 7 }}>
+            {userState.permissions.map(
+              (routeItem: Permission, index: number) => {
+                if (routeItem.icon) {
+                  return (
+                    <StyledListItem
+                      key={index}
+                      onClick={() => handleNavigate(routeItem)}
+                      open={open}
+                    >
+                      <StyledListItemIcon>
+                        {routeItem.icon ? (
+                          <SvgIcon
+                            name={routeItem.icon as SvgIconsType}
+                            $size={3}
+                            color="primary"
+                          />
+                        ) : (
+                          <AccountCircleIcon fontSize="large" />
+                        )}
+                      </StyledListItemIcon>
+                      {open && (
+                        <StyledItemText primary={routeItem.displayName} />
+                      )}
+                    </StyledListItem>
+                  );
+                }
+              }
+            )}
+          </StyledList>
+          <StyledCollapsibleItem open={open}>
+            <IconButton onClick={() => setOpen(!open)}>
+              <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
+            </IconButton>
+            {open && <Typography>{t(common.collapse)}</Typography>}
+          </StyledCollapsibleItem>
+        </StyledDrawer>
+      </Box>
+    );
 
-  return (
-    <Box sx={{ display: "flex" }}>
-      <StyledDrawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={() => setOpen(!open)}>
-            {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider sx={{ mb: 7 }} />
-        <StyledList open={open}>
-          {routesConfig.map((routeItem: RouteType, index: number) => {
-            if (routeItem.icon) {
-              return (
-                <StyledListItem
-                  key={index}
-                  activepath={isActivePath(routeItem.path || "")}
-                  onClick={() => handleNavigate(routeItem)}
-                  open={open}
-                >
-                  <StyledListItemIcon>
-                    {routeItem.icon ? (
-                      <SvgIcon
-                        name={routeItem.icon}
-                        $size={4}
-                        color="primary"
-                      />
-                    ) : (
-                      <AccountCircleIcon fontSize="large" />
-                    )}
-                  </StyledListItemIcon>
-                  {open && (
-                    <StyledItemText primary={t(routeItem.label || "")} />
-                  )}
-                </StyledListItem>
-              );
-            }
-          })}
-        </StyledList>
-      </StyledDrawer>
-    </Box>
-  );
+  return <></>;
 };
 
 export default Drawer;

@@ -5,6 +5,7 @@ export {
   StyledListItemIcon,
   StyledDrawer,
   StyledList,
+  StyledCollapsibleItem,
 } from "./styles";
 
 export { default as Sidebar } from "./Sidebar";
