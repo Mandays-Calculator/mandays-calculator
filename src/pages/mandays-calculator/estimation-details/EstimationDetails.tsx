@@ -45,7 +45,9 @@ const EstimationDetails = (): ReactElement => {
   const mode: EstimationDetailsMode = "view";
   return (
     <>
-      {isGeneratingPDF && <PageLoader />}
+      {isGeneratingPDF && (
+        <PageLoader labelOnLoad="Generating your PDF. Please wait ..." />
+      )}
       <div id="divToPrint">
         <Grid container justifyContent="space-between">
           <Grid item>
@@ -60,7 +62,6 @@ const EstimationDetails = (): ReactElement => {
             />
           </Grid>
         </Grid>
-
         <PageContainer>
           <Grid container justifyContent="space-between">
             <Grid item>
@@ -94,7 +95,7 @@ const EstimationDetails = (): ReactElement => {
               },
               {
                 label: "Legend",
-                content: <Legend />,
+                content: <Legend mode={mode} />,
               },
               {
                 label: "Tasks",
