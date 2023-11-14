@@ -17,4 +17,6 @@ declare global {
     label: string;
     value: string;
   }
+
+  type EstimationDetailsMode = "edit" | "add" | "view";
 }
