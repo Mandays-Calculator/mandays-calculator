@@ -8,6 +8,13 @@
     "settings": "Settings",
     "history": "History",
     "task": "Task",
+    "userManagement": {
+      "auth": {
+        "signInLoading": "Signing you in ...",
+        "signOutLoading": "Signing you out ...",
+        "permissionLoading": "Loading user permission ..."
+      }
+    },
     "button": {
       "goBackHome": "GO BACK HOME",
       "collapse": "Collapse",

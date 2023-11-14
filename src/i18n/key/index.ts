@@ -41,6 +41,7 @@ const LocalizationKey = {
   common: {
     noDataLabel: "common.noData",
     complexity: "common.complexity",
+    submit: "common.submit",
     somethingWentWrongTitle: "common.somethingWentWrong.title",
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
@@ -50,6 +51,11 @@ const LocalizationKey = {
     backBtn: "common.button.back",
     shareBtn: "common.button.share",
     exportBtn: "common.button.export",
+    userManagement: {
+      authSignInLoading: "common.userManagement.auth.signInLoading",
+      authSignOutLoading: "common.userManagement.auth.signOutLoading",
+      authPermissionLoading: "common.userManagement.auth.permissionLoading",
+    },
   },
   mandaysCalculator: {
     label: "mandaysCalculator.label",
@@ -85,7 +91,7 @@ const LocalizationKey = {
     },
     legend: {
       tableTitle: "mandaysCalculator.legend.table.title",
-    }
+    },
   },
 };
 
