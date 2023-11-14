@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { CSSObject, Theme, styled } from "@mui/material/styles";
 
-const drawerWidth = 320;
+const drawerWidth = 350;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -35,6 +35,7 @@ const StyledDrawer = styled(Drawer, {
 })(({ theme, open }) => ({
   maxWidth: 390,
   width: drawerWidth,
+  paddingBottom: theme.spacing(6.8),
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
@@ -111,27 +112,28 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const StyledCollapsibleItem = styled("div", {
   shouldForwardProp: (prop) => prop !== "open",
-})<{ open: boolean }>`
-  display: flex;
-  position: absolute;
-  left:  ${({ open }) => (open ? `16px;` : `0;`)}
-  bottom: 24px; 
-  justify-content: center;
-  min-height: 48px;
-  cursor: pointer;
-  align-items: center;
-  & svg {
-    margin-right: ${({ theme }) => theme.spacing(2.1)};
-  }
-
-  & p {
-    font-size: 1.15rem;
-  }
-  
-  & button {
-    padding: ${({ theme }) => theme.spacing(2, 0, 2, 2)};
-  }
-`;
+})<{ open: boolean }>(({ open, theme }) => ({
+  display: "flex",
+  position: "absolute",
+  left: open ? "16px" : "0",
+  bottom: "24px",
+  justifyContent: "center",
+  minHeight: "48px",
+  cursor: "pointer",
+  alignItems: "center",
+  "& p": {
+    fontSize: "1.15rem",
+    marginLeft: `${theme.spacing(2.1)} !important`,
+  },
+  "& button": {
+    padding: theme.spacing(2),
+  },
+  [theme.breakpoints.down("xl")]: {
+    "& svg": {
+      marginRight: theme.spacing(2.1),
+    },
+  },
+}));
 
 export {
   StyledItemText,

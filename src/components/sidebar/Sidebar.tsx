@@ -1,79 +1,87 @@
 import type { ReactElement } from "react";
-import type { RouteType } from "~/routes";
+import type { Permission } from "~/api/user";
+import type { UserPermissionState } from "~/redux/reducers/user/types";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
-import { Divider, Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+import { selectUser } from "~/redux/reducers/user";
+
 import { SvgIcon } from "~/components";
-import { routesConfig } from "~/routes";
 import LocalizationKey from "~/i18n/key";
 
 import {
   StyledDrawer,
-  DrawerHeader,
   StyledCollapsibleItem,
   StyledItemText,
   StyledListItemIcon,
   StyledListItem,
   StyledList,
 } from ".";
+import { SvgIconsType } from "../svc-icons/types";
 
 const Drawer = (): ReactElement => {
   const [open, setOpen] = useState<boolean>(false);
+  const userState: UserPermissionState = useSelector(selectUser);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const { common } = LocalizationKey;
-  const handleNavigate = (routeItem: RouteType): void => {
+
+  const handleNavigate = (routeItem: Permission): void => {
     navigate(`${routeItem.path}`);
   };
 
-  return (
-    <Box sx={{ display: "flex" }}>
-      <StyledDrawer variant="permanent" open={open}>
-        <DrawerHeader></DrawerHeader>
-        <Divider sx={{ mb: 7 }} />
-        <StyledList open={open}>
-          {routesConfig.map((routeItem: RouteType, index: number) => {
-            if (routeItem.icon) {
-              return (
-                <StyledListItem
-                  key={index}
-                  onClick={() => handleNavigate(routeItem)}
-                  open={open}
-                >
-                  <StyledListItemIcon>
-                    {routeItem.icon ? (
-                      <SvgIcon
-                        name={routeItem.icon}
-                        $size={4}
-                        color="primary"
-                      />
-                    ) : (
-                      <AccountCircleIcon fontSize="large" />
-                    )}
-                  </StyledListItemIcon>
-                  {open && (
-                    <StyledItemText primary={t(routeItem.label || "")} />
-                  )}
-                </StyledListItem>
-              );
-            }
-          })}
-        </StyledList>
-        <StyledCollapsibleItem open={open}>
-          <IconButton onClick={() => setOpen(!open)}>
-            <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
-          </IconButton>
-          {open && <Typography>{t(common.collapse)}</Typography>}
-        </StyledCollapsibleItem>
-      </StyledDrawer>
-    </Box>
-  );
+  if (!userState.loading)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <StyledDrawer variant="permanent" open={open}>
+          <StyledList open={open} sx={{ mt: 7 }}>
+            {userState.permissions.map(
+              (routeItem: Permission, index: number) => {
+                if (routeItem.icon) {
+                  return (
+                    <StyledListItem
+                      key={index}
+                      onClick={() => handleNavigate(routeItem)}
+                      open={open}
+                    >
+                      <StyledListItemIcon>
+                        {routeItem.icon ? (
+                          <SvgIcon
+                            name={routeItem.icon as SvgIconsType}
+                            $size={3}
+                            color="primary"
+                          />
+                        ) : (
+                          <AccountCircleIcon fontSize="large" />
+                        )}
+                      </StyledListItemIcon>
+                      {open && (
+                        <StyledItemText primary={routeItem.displayName} />
+                      )}
+                    </StyledListItem>
+                  );
+                }
+              }
+            )}
+          </StyledList>
+          <StyledCollapsibleItem open={open}>
+            <IconButton onClick={() => setOpen(!open)}>
+              <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
+            </IconButton>
+            {open && <Typography>{t(common.collapse)}</Typography>}
+          </StyledCollapsibleItem>
+        </StyledDrawer>
+      </Box>
+    );
+
+  return <></>;
 };
 
 export default Drawer;
