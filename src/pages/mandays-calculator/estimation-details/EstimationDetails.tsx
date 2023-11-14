@@ -82,7 +82,7 @@ const EstimationDetails = (): ReactElement => {
           tabs={[
             {
               label: "Summary",
-              content: <Summary mode={"add"} />,
+              content: <Summary mode={mode} />,
             },
             {
               label: "Resources",
