@@ -78,7 +78,7 @@ export const compilePDF = async ({
   const now = new Date();
   const date = (now.toLocaleDateString("en-CA") as any).replaceAll("/", "-");
   const time = (now.toLocaleTimeString("en-GB") as any).replaceAll(":", "-");
-  const filename = `sprint_${sprintName}_details_${date}_${time}.pdf`;
+  const filename = `SPRINT_${sprintName}_details_${date}_${time}.pdf`;
   pdf.save(filename);
   callback1(false);
 };

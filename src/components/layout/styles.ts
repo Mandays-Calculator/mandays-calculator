@@ -1,14 +1,14 @@
 import { styled } from "@mui/material/styles";
 
-const StyledLayoutContainer = styled("div")({
+const StyledLayoutContainer = styled("div")(({ theme }) => ({
   display: "flex",
   height: "100vh",
   overflow: "scroll",
-});
+  backgroundColor: theme.palette.secondary.light,
+}));
 
 const StyledLayoutContent = styled("div")`
   flex-grow: 2;
-  background-color: ${({ theme }) => theme.palette.secondary.light};
 `;
 
 const ContentContainer = styled("div")`
