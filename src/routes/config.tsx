@@ -5,6 +5,7 @@ import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import { MandaysCalculator } from "~/pages/mandays-calculator";
 import ErrorPage from "~/pages/common/error-page";
+import { Complexity } from "~/pages/complexity";
 
 export const routes: RouteType[] = [
   {
@@ -38,7 +39,7 @@ export const routes: RouteType[] = [
   {
     path: "complexity",
     label: "common.complexity",
-    element: <Outlet />,
+    element: <Complexity />,
     icon: "complexity",
   },
   {
