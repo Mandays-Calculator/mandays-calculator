@@ -8,6 +8,13 @@
     "settings": "Settings",
     "history": "History",
     "task": "Task",
+    "userManagement": {
+      "auth": {
+        "signInLoading": "Signing you in ...",
+        "signOutLoading": "Signing you out ...",
+        "permissionLoading": "Loading user permission ..."
+      }
+    },
     "button": {
       "goBackHome": "GO BACK HOME",
       "collapse": "Collapse",
@@ -126,6 +133,13 @@
           "totalManHours": "Total Man Hours",
           "totalManDays": "Total Man Days"
         }
+      },
+      "form": {
+        "name": "Name",
+        "team": "Team",
+        "utilization": "Utilization Rate",
+        "startDate": "Start Date",
+        "endDate": "End Date"
       }
     },
     "resourceList": {
@@ -148,6 +162,11 @@
           "i06": "I06",
           "i07": "I07"
         }
+      }
+    },
+    "legend": {
+      "table": {
+        "title": "Estimated man hours by career step"
       }
     }
   }

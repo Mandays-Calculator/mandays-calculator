@@ -1,0 +1,238 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called with custom children, THEN it should render correctly: component-custom-children 1`] = `
+<DocumentFragment>
+  <div
+    class="css-16a6vc1"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+        >
+          <div
+            class="css-p72wz0"
+          >
+            <img
+              alt="login"
+              height="auto"
+              src="[object Object]"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+        >
+          <div>
+            Custom Content
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called with default props, THEN it should render correctly: component-default-props 1`] = `
+<DocumentFragment>
+  <div
+    class="css-16a6vc1"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+        >
+          <div
+            class="css-p72wz0"
+          >
+            <img
+              alt="login"
+              height="auto"
+              src="[object Object]"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called with different children (image), THEN it should render correctly: component-image-children 1`] = `
+<DocumentFragment>
+  <div
+    class="css-16a6vc1"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+        >
+          <div
+            class="css-p72wz0"
+          >
+            <img
+              alt="login"
+              height="auto"
+              src="[object Object]"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+        >
+          <img
+            alt="example"
+            height="auto"
+            src="[object Object]"
+            width="100%"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called with different children (nested components), THEN it should render correctly: component-nested-components 1`] = `
+<DocumentFragment>
+  <div
+    class="css-16a6vc1"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+        >
+          <div
+            class="css-p72wz0"
+          >
+            <img
+              alt="login"
+              height="auto"
+              src="[object Object]"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+        >
+          <div>
+            <h1>
+              Nested Content
+            </h1>
+            <p>
+              Some text inside nested content.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called with empty children, THEN it should render correctly: component-empty-children 1`] = `
+<DocumentFragment>
+  <div
+    class="css-16a6vc1"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+        >
+          <div
+            class="css-p72wz0"
+          >
+            <img
+              alt="login"
+              height="auto"
+              src="[object Object]"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called with multiple types of children, THEN it should render correctly: component-multiple-types 1`] = `
+<DocumentFragment>
+  <div
+    class="css-16a6vc1"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1fu5yrq-MuiContainer-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+        >
+          <div
+            class="css-p72wz0"
+          >
+            <img
+              alt="login"
+              height="auto"
+              src="[object Object]"
+              width="100%"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+        >
+          <div>
+            First Child
+          </div>
+          <img
+            alt="example"
+            height="auto"
+            src="[object Object]"
+            width="100%"
+          />
+          <p>
+            Text Child
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

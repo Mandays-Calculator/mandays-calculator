@@ -1,13 +1,46 @@
+import { I18nextProvider } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Formik } from 'formik';
+import i18n from '~/i18n';
 
 import { ChangePassword } from '~/pages/auth';
 
 import { cleanAllCallback } from './utils/auth-utils';
+
+// Mock the i18next translation function
+i18n.init({
+    resources: {
+        en: {
+            translation: {
+                "changePassword": {
+                    "label": {
+                        "createNewPassword": "Create New Password",
+                        "enterNewPassword": "Enter new password",
+                        "confirmNewPassword": "Confirm new password"
+                    },
+                    "btnlabel": {
+                        "changePassword": "Change Password",
+                        "cancel": "Cancel"
+                    },
+                    "validationInfo": {
+                        "charCount": "Password must be at least 8 characters long",
+                        "uppercase": "Password must contain an uppercase letter",
+                        "lowercase": "Password must contain a lowercase letter",
+                        "number": "Password must contain a number",
+                        "symbol": "Password must contain one of the following symbols (#$-_!)",
+                        "match": "New password and confirm new password must match."
+                    }
+                },
+            },
+        },
+    },
+    lng: 'en',
+    interpolation: { escapeValue: false }, // react already safes from xss
+});
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -129,7 +162,7 @@ describe('GIVEN user changes password,', () => {
     test('WHEN user access the ChangePassword page, THEN it should render the ChangePassword component correctly', () => {
         renderChangePassword();
 
-        expect(screen.getByText('Create New Password')).toBeInTheDocument();
+        expect(screen.getByText('changePassword.label.createNewPassword')).toBeInTheDocument();
     });
 
     test.each(testCases)(
@@ -140,7 +173,7 @@ describe('GIVEN user changes password,', () => {
 
             await user.type(screen.getByPlaceholderText('Input Password'), password);
             await user.type(screen.getByPlaceholderText('Confirm Password'), confirmPassword);
-            await user.click(screen.getByRole('button', { name: /Change Password/i }));
+            await user.click(screen.getByRole('button', { name: 'changePassword.btnlabel.changePassword' }));
 
             await waitFor(() => {
                 Object.entries(expectedResults).forEach(([testId, shouldExist]) => {
@@ -173,8 +206,10 @@ describe('GIVEN user wants to go cancel changing password,', () => {
 
 const renderChangePassword = () => {
     render(
-        <Formik initialValues={{}} onSubmit={handleSubmit}>
-            <ChangePassword />
-        </Formik>
+        <I18nextProvider i18n={i18n}>
+            <Formik initialValues={{}} onSubmit={handleSubmit}>
+                <ChangePassword />
+            </Formik>
+        </I18nextProvider>
     );
 };
