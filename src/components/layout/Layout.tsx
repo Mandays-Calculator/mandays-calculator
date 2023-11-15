@@ -11,7 +11,7 @@ import {
 const Layout = ({ children }: PropsWithChildren): ReactElement => {
   return (
     <>
-      <StyledLayoutContainer>
+      <StyledLayoutContainer id="layout-container">
         <Sidebar />
         <StyledLayoutContent>
           <Header />
