@@ -7,6 +7,13 @@ const LocalizationKey = {
       password: "login.label.password",
       forgotPassword: "login.label.forgotPassword",
     },
+    btnlabel: {
+      signIn: "login.btnlabel.signIn",
+    },
+    placeholder: {
+      userName: "login.placeholder.userName",
+      password: "login.placeholder.password"
+    },
   },
   changePassword: {
     label: {
