@@ -6,6 +6,7 @@ export type SvgIconsType =
   | "check"
   | "add"
   | "cross"
+  | "upload"
   | "eyball_1"
   | "odc_management"
   | "people"

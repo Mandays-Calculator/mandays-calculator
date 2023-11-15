@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -16,6 +16,18 @@ const StyledContainer = styled(Box)({
 
 export const PageLoader = (props: { labelOnLoad?: string }): ReactElement => {
   const { labelOnLoad } = props;
+
+  useEffect(() => {
+    const layoutContainer = document.getElementById("layout-container");
+    if (layoutContainer) {
+      const originalOverflow = layoutContainer.style.overflow;
+      layoutContainer.style.overflow = "hidden";
+      return () => {
+        layoutContainer.style.overflow = originalOverflow;
+      };
+    }
+  }, []);
+
   return (
     <StyledContainer>
       <CircularProgress aria-label="loading..." />

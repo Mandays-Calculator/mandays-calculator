@@ -11,10 +11,11 @@ import Accordion from "~/components/Accordion/Accordion";
 
 interface ResourcesProps {
   mode: EstimationDetailsMode;
+  isGeneratingPDF: boolean;
 }
 
 const Resources = (props: ResourcesProps): ReactElement => {
-  const { mode } = props;
+  const { mode, isGeneratingPDF } = props;
   const { t } = useTranslation();
 
   const resourcesForm = useFormik({
@@ -31,7 +32,7 @@ const Resources = (props: ResourcesProps): ReactElement => {
   const isInput: boolean = inputView.includes(mode);
 
   const renderTable = (title: string) => (
-    <Accordion key={title} title={title} defaultExpanded={false}>
+    <Accordion key={title} title={title} defaultExpanded={isGeneratingPDF}>
       <Table
         columns={ResourcesListColumns({ t, isInput })}
         data={resourcesDetailData}

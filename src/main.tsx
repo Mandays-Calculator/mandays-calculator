@@ -12,13 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "virtual:svg-icons-register";
 import "./app.css";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      enabled: false,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>

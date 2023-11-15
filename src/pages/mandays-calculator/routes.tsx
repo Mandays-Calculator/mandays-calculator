@@ -4,11 +4,11 @@ import { EstimationDetails } from "~/pages/mandays-calculator/estimation-details
 
 export const mandaysCalculatorRoutes: RouteType[] = [
   {
-    path: "mandays-calculator/:estimationId",
+    path: "mandays-estimation-tool/:estimationId",
     element: <EstimationDetails />,
   },
   {
-    path: "mandays-calculator",
+    path: "mandays-estimation-tool",
     pageTitle: "mandaysCalculator.label",
     element: <MandaysCalculator />,
   },
