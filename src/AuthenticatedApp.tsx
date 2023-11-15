@@ -7,19 +7,24 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "react-oidc-context";
 
+import { PageLoader, Layout, NotificationModal } from "~/components";
 import LocalizationKey from "~/i18n/key";
 import { Auth } from "~/pages/auth";
-import { PageLoader, Layout } from "~/components";
 
 import { getUser } from "~/utils/oidc-utils";
 import { getEnvConfig } from "~/utils/env-config";
+import { ERROR_MESSAGES, LOCAL_STORAGE_ITEMS } from "~/utils/constants";
+import {
+  removeStateStorage,
+  getItemStorage,
+  removeStorageListener,
+  addStorageListener,
+} from "~/utils/storageHelper";
+
 import AppRoutes from "~/routes/AppRoutes";
 import axiosInit from "~/api/axios.config";
 
 import { fetchUserPermission, selectUser } from "~/redux/reducers/user";
-import NotificationModal from "./components/modal/notification-modal/NotificationModal";
-import { ERROR_MESSAGES } from "./utils/constants/constants";
-import { removeStateStorage } from "./utils/storageHelper";
 
 const AuthenticatedApp = (): ReactElement => {
   const auth = useAuth();
@@ -35,24 +40,29 @@ const AuthenticatedApp = (): ReactElement => {
   const { common } = LocalizationKey;
 
   useEffect(() => {
+    /**
+     * Initiate axios token once user is logged in
+     */
     if (user) {
       axiosInit(user.access_token);
       dispatch(fetchUserPermission());
     }
-  }, [auth]);
 
-  useEffect(() => {
+    /**
+     * Track changes in local storage items
+     */
     const handleStorageChange = () => {
-      const sessionState = JSON.parse(
-        localStorage.getItem("sessionState") || "false"
-      );
+      const sessionState = getItemStorage(LOCAL_STORAGE_ITEMS.sessionState);
       setShowUnauthorizedModal(sessionState.unauthorized);
     };
 
     handleStorageChange();
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+    addStorageListener(handleStorageChange);
+    return () => {
+      setShowUnauthorizedModal(false);
+      removeStorageListener(handleStorageChange);
+    };
+  }, [auth]);
 
   const renderAuth = (): ReactElement => {
     switch (auth.activeNavigator) {
@@ -101,13 +111,14 @@ const AuthenticatedApp = (): ReactElement => {
       {renderAuth()}
       {showUnauthorizedModal && (
         <NotificationModal
-          type="error"
-          message={ERROR_MESSAGES.permission}
+          type="unauthorized"
+          message={
+            "Unauthorized. Your session has expired. Please login again."
+          }
           open={showUnauthorizedModal}
           onConfirm={() => {
             removeStateStorage();
             auth.removeUser();
-            auth.signoutPopup();
           }}
         />
       )}

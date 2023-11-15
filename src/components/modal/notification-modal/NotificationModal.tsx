@@ -16,17 +16,19 @@ interface NotificationModalProps {
   onCloseLabel?: string;
   onConfirmLabel?: string;
   type?: ModalType;
+  title?: string;
 }
 
 const renderIcon = (type: ModalType): ReactElement => {
-  // need to change depends on type
   switch (type) {
     case "error":
+      return <WarningIcon color="error" sx={{ fontSize: 40 }} />;
+    case "unauthorized":
+      return <WarningIcon color="warning" sx={{ fontSize: 70 }} />;
     case "warning":
     case "success":
-      return <WarningIcon color="error" style={{ fontSize: 40 }} />;
     default:
-      return <WarningIcon color="error" style={{ fontSize: 40 }} />;
+      return <WarningIcon color="success" />;
   }
 };
 
@@ -38,6 +40,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
   message,
   onCloseLabel,
   onConfirmLabel,
+  title,
 }): ReactElement => {
   const [isOpen, setIsOpen] = useState<boolean>(open);
 
@@ -47,12 +50,11 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
 
   switch (type) {
     case "unauthorized":
-      return <></>;
     default:
       return (
         <Modal
           open={isOpen}
-          title=""
+          title={title as string}
           maxWidth="xs"
           onClose={() => {
             setIsOpen(false);
