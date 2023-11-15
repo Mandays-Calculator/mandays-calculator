@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import type { AppDispatch } from "~/redux/store";
 import type { UserPermissionState } from "~/redux/reducers/user/types";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "react-oidc-context";
@@ -19,6 +19,7 @@ import axiosInit from "~/api/axios.config";
 import { fetchUserPermission, selectUser } from "~/redux/reducers/user";
 import NotificationModal from "./components/modal/notification-modal/NotificationModal";
 import { ERROR_MESSAGES } from "./utils/constants/constants";
+import { removeStateStorage } from "./utils/storageHelper";
 
 const AuthenticatedApp = (): ReactElement => {
   const auth = useAuth();
@@ -28,6 +29,8 @@ const AuthenticatedApp = (): ReactElement => {
   const { t } = useTranslation();
 
   const userState: UserPermissionState = useSelector(selectUser);
+  const [showUnauthorizedModal, setShowUnauthorizedModal] =
+    useState<boolean>(false);
 
   const { common } = LocalizationKey;
 
@@ -37,6 +40,19 @@ const AuthenticatedApp = (): ReactElement => {
       dispatch(fetchUserPermission());
     }
   }, [auth]);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const sessionState = JSON.parse(
+        localStorage.getItem("sessionState") || "false"
+      );
+      setShowUnauthorizedModal(sessionState.unauthorized);
+    };
+
+    handleStorageChange();
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   const renderAuth = (): ReactElement => {
     switch (auth.activeNavigator) {
@@ -83,11 +99,25 @@ const AuthenticatedApp = (): ReactElement => {
   return (
     <>
       {renderAuth()}
-      <NotificationModal
-        type="error"
-        message={ERROR_MESSAGES.permission}
-        open={userState.error !== null}
-      />
+      {showUnauthorizedModal && (
+        <NotificationModal
+          type="error"
+          message={ERROR_MESSAGES.permission}
+          open={showUnauthorizedModal}
+          onConfirm={() => {
+            removeStateStorage();
+            auth.removeUser();
+            auth.signoutPopup();
+          }}
+        />
+      )}
+      {userState.error !== null && (
+        <NotificationModal
+          type="error"
+          message={ERROR_MESSAGES.permission}
+          open={userState.error !== null}
+        />
+      )}
     </>
   );
 };

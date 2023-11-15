@@ -6,7 +6,7 @@ import Modal from "~/components/modal/Modal";
 import WarningIcon from "@mui/icons-material/Warning";
 import { Box, Stack } from "@mui/material";
 
-type ModalType = "error" | "warning" | "success";
+type ModalType = "error" | "warning" | "success" | "unauthorized";
 
 interface NotificationModalProps {
   onConfirm?: () => void;
@@ -45,56 +45,61 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
     setIsOpen(open);
   }, [open]);
 
-  return (
-    <Modal
-      open={isOpen}
-      title=""
-      maxWidth="xs"
-      onClose={() => {
-        setIsOpen(false);
-        if (onClose) {
-          onClose();
-        }
-      }}
-    >
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        spacing={2}
-      >
-        {renderIcon(type)}
-        <Box maxWidth={250} textAlign="center">
-          {message}
-        </Box>
-      </Stack>
-
-      <Box display="flex" justifyContent="center" my={2}>
-        {onCloseLabel && (
-          <CustomButton
-            variant="contained"
-            colorVariant="neutral"
-            onClick={onClose}
-            style={{ marginRight: 16 }}
-          >
-            {onCloseLabel}
-          </CustomButton>
-        )}
-        <CustomButton
-          variant="contained"
-          color="primary"
-          onClick={() => {
+  switch (type) {
+    case "unauthorized":
+      return <></>;
+    default:
+      return (
+        <Modal
+          open={isOpen}
+          title=""
+          maxWidth="xs"
+          onClose={() => {
             setIsOpen(false);
-            if (onConfirm) {
-              onConfirm();
+            if (onClose) {
+              onClose();
             }
           }}
         >
-          {onConfirmLabel || "Okay"}
-        </CustomButton>
-      </Box>
-    </Modal>
-  );
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            spacing={2}
+          >
+            {renderIcon(type)}
+            <Box maxWidth={250} textAlign="center">
+              {message}
+            </Box>
+          </Stack>
+
+          <Box display="flex" justifyContent="center" my={2}>
+            {onCloseLabel && (
+              <CustomButton
+                variant="contained"
+                colorVariant="neutral"
+                onClick={onClose}
+                style={{ marginRight: 16 }}
+              >
+                {onCloseLabel}
+              </CustomButton>
+            )}
+            <CustomButton
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setIsOpen(false);
+                if (onConfirm) {
+                  onConfirm();
+                }
+              }}
+            >
+              {onConfirmLabel || "Okay"}
+            </CustomButton>
+          </Box>
+        </Modal>
+      );
+  }
 };
 
 export default NotificationModal;
