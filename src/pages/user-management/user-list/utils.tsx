@@ -1,82 +1,53 @@
-import type { CellProps, Column } from "react-table";
-import { Stack } from "@mui/material";
+import type { CellProps } from "react-table";
+import { IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
-import { useState } from "react";
-import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
-import { DeleteUserModal } from "~/components/modal/user-management/delete-user-modal";
 import { UserListData } from "~/api/user-management/types";
+import { UserColumnsProps, UserListColumnsType } from "./types";
 
-export const userListColum: Column<UserListData>[] = [
-  {
-    Header: "Name",
-    Cell: ({ row }: CellProps<UserListData>) => {
-      return (
-        row.original.firstName +
-        " " +
-        (row.original.middleName ? row.original.middleName + " " : "") +
-        row.original.lastName
-      );
+export const userListColumns = ({
+  t,
+  onDeleteUser,
+  onEditUser,
+}: UserColumnsProps): UserListColumnsType[] => {
+  return [
+    {
+      Header: t("Name"),
+      Cell: ({ row }: CellProps<UserListData>) => {
+        return (
+          row.original.firstName +
+          " " +
+          (row.original.middleName ? row.original.middleName + " " : "") +
+          row.original.lastName
+        );
+      },
     },
-  },
-  {
-    accessor: "email",
-    Header: "Email",
-  },
-  {
-    accessor: "joiningDate",
-    Header: "Joining Date",
-  },
-  {
-    accessor: "roles",
-    Header: "Roles",
-    Cell: ({ row }: CellProps<UserListData>) => {
-      return row.original.roles.join(", ");
+    {
+      accessor: "email",
+      Header: t("Email"),
     },
-  },
-  {
-    Header: "Action",
-    Cell: ({ row }: CellProps<UserListData>) => {
-      const [editModal, setEditModal] = useState(false);
-      const [deleteModal, setDeleteModal] = useState(false);
-      const [currentUser, setCurrentUser] = useState<UserListData>();
-
-      return (
-        <Stack direction="row" spacing={2}>
-          <SvgIcon
-            onClick={() => {
-              setEditModal(true);
-              setCurrentUser(row.original);
-            }}
-            name="edit"
-            color="primary"
-            $size={2}
-          />
-
-          <SvgIcon
-            onClick={() => {
-              setDeleteModal(true);
-              setCurrentUser(row.original);
-            }}
-            name="delete"
-            color="error"
-            $size={2}
-          />
-          <EditUserModal
-            open={editModal}
-            currentUser={currentUser}
-            onEditUser={() => {
-              alert("success");
-            }}
-            onClose={() => setEditModal(false)}
-          />
-
-          <DeleteUserModal
-            open={deleteModal}
-            id={currentUser?.id ? currentUser?.id : "0"}
-            onClose={() => setDeleteModal(false)}
-          />
-        </Stack>
-      );
+    {
+      accessor: "joiningDate",
+      Header: "Joining Date",
     },
-  },
-];
+    {
+      accessor: "roles",
+      Header: t("Roles"),
+      Cell: ({ row }: CellProps<UserListData>) => {
+        return row.original.roles.join(", ");
+      },
+    },
+    {
+      Header: t("Action"),
+      Cell: ({ row }: CellProps<UserListData>) => (
+        <>
+          <IconButton onClick={() => onEditUser(row.original.id)}>
+            <SvgIcon name="edit" $size={2} color="primary" />
+          </IconButton>
+          <IconButton onClick={() => onDeleteUser(row.original.id, row.index)}>
+            <SvgIcon name="delete" $size={2} color="error" />
+          </IconButton>
+        </>
+      ),
+    },
+  ];
+};
