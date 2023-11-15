@@ -1,4 +1,4 @@
-import type { Column } from 'react-table'
+import type { Column } from "react-table";
 import type {
   TasksColumnsProps,
   TasksListColumnsType,
@@ -10,12 +10,13 @@ import type {
   ResourcesListColumnsType,
   LegendColumn,
   LegendColumnProps,
+  ResourcesListDataType,
 } from "./types";
 
 import { CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
-import { ControlledTextField } from '~/components/form/controlled';
+import { ControlledTextField } from "~/components/form/controlled";
 
 import LocalizationKey from "~/i18n/key";
 
@@ -130,7 +131,7 @@ export const TasksListColumns = ({
   ];
 };
 
-export const LegendListColumns =  ({
+export const LegendListColumns = ({
   t,
   isInput,
 }: LegendColumnProps): Column<LegendColumn>[] => {
@@ -141,57 +142,62 @@ export const LegendListColumns =  ({
     },
     {
       Header: t(tasksTableColumns.i03),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) => (
+      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i03`} /> 
+            <ControlledTextField name={`legendValues.${index}.i03`} />
           </>
-        ) : <> {row.original.i03} </>
-      ),
+        ) : (
+          <> {row.original.i03} </>
+        ),
       accessor: "i03",
     },
     {
       Header: t(tasksTableColumns.i04),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) => (
+      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i04`} /> 
+            <ControlledTextField name={`legendValues.${index}.i04`} />
           </>
-        ) : <> {row.original.i04} </>
-      ),
+        ) : (
+          <> {row.original.i04} </>
+        ),
       accessor: "i04",
     },
     {
       Header: t(tasksTableColumns.i05),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) => (
+      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i05`} /> 
+            <ControlledTextField name={`legendValues.${index}.i05`} />
           </>
-        ) : <> {row.original.i05} </>
-      ),
+        ) : (
+          <> {row.original.i05} </>
+        ),
       accessor: "i05",
     },
     {
       Header: t(tasksTableColumns.i06),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) => (
+      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i06`} /> 
+            <ControlledTextField name={`legendValues.${index}.i06`} />
           </>
-        ) : <> {row.original.i06} </>
-      ),
+        ) : (
+          <> {row.original.i06} </>
+        ),
       accessor: "i06",
     },
     {
       Header: t(tasksTableColumns.i07),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) => (
+      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i07`} /> 
+            <ControlledTextField name={`legendValues.${index}.i07`} />
           </>
-        ) : <> {row.original.i07} </>
-      ),
+        ) : (
+          <> {row.original.i07} </>
+        ),
       accessor: "i07",
     },
   ];
@@ -199,6 +205,7 @@ export const LegendListColumns =  ({
 
 export const ResourcesListColumns = ({
   t,
+  isInput,
 }: ResourcesColumnsProps): ResourcesListColumnsType[] => {
   return [
     {
@@ -208,10 +215,26 @@ export const ResourcesListColumns = ({
     {
       Header: t(resourceListTableColumns.resourceCount),
       accessor: "resourceCount",
+      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
+        isInput ? (
+          <>
+            <ControlledTextField name={`resValues.${index}.resourceCount`} />
+          </>
+        ) : (
+          <> {row.original.resourceCount} </>
+        ),
     },
     {
       Header: t(resourceListTableColumns.annualLeaves),
       accessor: "annualLeaves",
+      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
+        isInput ? (
+          <>
+            <ControlledTextField name={`resValues.${index}.annualLeaves`} />
+          </>
+        ) : (
+          <> {row.original.annualLeaves} </>
+        ),
     },
   ];
 };

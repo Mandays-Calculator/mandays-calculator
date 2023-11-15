@@ -1,20 +1,13 @@
 import type { ReactElement } from "react";
 
-import { useMemo } from "react";
-
+import { useUserList } from "~/queries/user-management/UserManagement";
 import { Table } from "~/components";
 
-import { userListColum, userListData } from "./utils";
+import { userListColum } from "./utils";
 
 const UserList = (): ReactElement => {
-  const listData = useMemo(() => userListData(), []);
-  return (
-    <Table
-      name="user-list"
-      columns={userListColum}
-      data={listData}
-    />
-  );
+  const { data } = useUserList();
+  return <Table name="user-list" columns={userListColum} data={data?.data} />;
 };
 
 export default UserList;
