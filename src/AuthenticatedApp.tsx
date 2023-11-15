@@ -112,9 +112,7 @@ const AuthenticatedApp = (): ReactElement => {
       {showUnauthorizedModal && (
         <NotificationModal
           type="unauthorized"
-          message={
-            "Unauthorized. Your session has expired. Please login again."
-          }
+          message={t(common.errorMessage.unauthorized)}
           open={showUnauthorizedModal}
           onConfirm={() => {
             removeStateStorage();

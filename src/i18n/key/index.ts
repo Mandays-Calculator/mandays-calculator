@@ -59,6 +59,7 @@ const LocalizationKey = {
     errorMessage: {
       required: "common.errorMessage.required",
       fieldRequired: "common.errorMessage.fieldRequired",
+      unauthorized: "common.errorMessage.unauthorized",
     },
   },
   mandaysCalculator: {
