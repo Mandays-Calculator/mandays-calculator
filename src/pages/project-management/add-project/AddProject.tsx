@@ -14,8 +14,8 @@ import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
 import { addFormInitValue } from "./utils";
 
 import AddTeamForm from "./add-team-form";
+import EditTeamForm from "./edit-team-form/EditTeamForm";
 import TeamList from "./team-list";
-import EditTeamForm from "./edit-team-form";
 
 const StyledTextField = styled(ControlledTextField)(() => ({
   width: "50%",

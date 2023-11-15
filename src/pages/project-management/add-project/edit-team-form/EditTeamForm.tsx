@@ -7,14 +7,12 @@ import {
   Stack,
   Box,
   IconButton,
-  Divider,
-  Avatar,
 } from "@mui/material";
 
 import { CustomButton } from "~/components/form/button";
 import { AddTeamForm as AddTeamFormType } from "../types";
-import { Table, TextField, SvgIcon, Select } from "~/components";
-import { Modal } from "~/components/modal";
+import { Table, TextField, SvgIcon } from "~/components";
+import DialogSearchUser from "./DialogSearchUser";
 
 type DataType = {
   name: string;
@@ -43,7 +41,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
   const [showMemberDialog, setMemberDialog] = useState<boolean>(false);
 
-  const toggleDialog = () => {
+  const onToggleDialog = () => {
     setMemberDialog(!showMemberDialog);
   };
 
@@ -148,6 +146,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               fullWidth
               error={projectNameError}
               helperText={projectNameError && "Please Input Project Name."}
+              inputProps={{ 'data-testid': 'test-project-name' }}
             />
           </Grid>
           <Grid item xs={4}>
@@ -159,6 +158,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               fullWidth
               error={teamNameError}
               helperText={teamNameError && "Please Input Team Name."}
+              inputProps={{ 'data-testid': 'test-team-name' }}
             />
           </Grid>
           <Grid item xs={4}>
@@ -170,6 +170,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               fullWidth
               error={teamLeadError}
               helperText={teamLeadError && "Please Input Team Lead."}
+              inputProps={{ 'data-testid': 'test-team-lead' }}
             />
           </Grid>
         </Grid>
@@ -188,7 +189,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
             />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
-            <CustomButton type="button" onClick={toggleDialog}>
+            <CustomButton type="button" onClick={onToggleDialog} data-testid="test-add-members-btn">
               Add Members
             </CustomButton>
           </Grid>
@@ -210,111 +211,14 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
             colorVariant="secondary"
             type="button"
             onClick={() => onCancel(teamIndex)}
+            data-testid="test-cancel-edit-btn"
           >
             Cancel
           </CustomButton>
-          <CustomButton onClick={editTeam}>Done</CustomButton>
+          <CustomButton onClick={editTeam} data-testid="test-done-edit-btn">Done</CustomButton>
         </Stack>
       </Stack>
-      <Modal
-        open={showMemberDialog}
-        title="Search User"
-        maxWidth="sm"
-        onClose={toggleDialog}
-      >
-        <Stack direction="column">
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField name="teamName" label="Name" fullWidth />
-            </Grid>
-            <Grid item xs={6}>
-              <Stack direction="column" gap={1}>
-                <Typography>ODC</Typography>
-                <Select
-                  name="teamLead"
-                  placeholder="ODC"
-                  fullWidth
-                  options={[
-                    {
-                      value: "1",
-                      label: "Filter 1",
-                    },
-                    {
-                      value: "2",
-                      label: "Filter 2",
-                    },
-                  ]}
-                />
-              </Stack>
-            </Grid>
-          </Grid>
-        </Stack>
-        <Divider style={{ marginTop: "10px" }} />
-        <br />
-        <Stack
-          direction={"row"}
-          gap={4}
-          spacing={2}
-          padding={{ padding: "0 1rem 1rem 1rem" }}
-        >
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar alt="Remy Sharp" />
-            <div style={{ marginLeft: "10px" }}>
-              <Typography>Dela Cruz, Juan</Typography>
-              <Typography>PH ODC</Typography>
-              <Typography>I03</Typography>
-            </div>
-          </Grid>
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar alt="Remy Sharp" />
-            <div style={{ marginLeft: "10px" }}>
-              <Typography>Dela Cruz, Juan</Typography>
-              <Typography>PH ODC</Typography>
-              <Typography>I03</Typography>
-            </div>
-          </Grid>
-        </Stack>
-        <Stack
-          direction={"row"}
-          gap={4}
-          spacing={2}
-          padding={{ padding: "0 1rem 1rem 1rem" }}
-        >
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar alt="Remy Sharp" />
-            <div style={{ marginLeft: "10px" }}>
-              <Typography>Dela Cruz, Juan</Typography>
-              <Typography>PH ODC</Typography>
-              <Typography>I03</Typography>
-            </div>
-          </Grid>
-          <Grid item xs={6} sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar alt="Remy Sharp" />
-            <div style={{ marginLeft: "10px" }}>
-              <Typography>Dela Cruz, Juan</Typography>
-              <Typography>PH ODC</Typography>
-              <Typography>I03</Typography>
-            </div>
-          </Grid>
-        </Stack>
-
-        <Stack direction="row" display="flex" justifyContent="flex-end" gap={1}>
-          <CustomButton
-            type="button"
-            colorVariant="secondary"
-            onClick={toggleDialog}
-          >
-            Cancel
-          </CustomButton>
-          <CustomButton
-            type="button"
-            colorVariant="primary"
-            onClick={toggleDialog}
-          >
-            Select
-          </CustomButton>
-        </Stack>
-      </Modal>
+      <DialogSearchUser showMemberDialog={showMemberDialog} toggleDialog={onToggleDialog}/>
     </>
   );
 };

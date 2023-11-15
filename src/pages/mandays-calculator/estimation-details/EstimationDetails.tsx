@@ -30,7 +30,10 @@ const EstimationDetails = (): ReactElement => {
   const mode: EstimationDetailsMode = "view";
   return (
     <>
-      <Grid container justifyContent="space-between">
+      <Grid
+        container
+        justifyContent="space-between"
+      >
         <Grid item>
           <Title title={t(mandaysCalculator.label)} />
         </Grid>
@@ -45,18 +48,31 @@ const EstimationDetails = (): ReactElement => {
       </Grid>
 
       <PageContainer>
-        <Grid container justifyContent="space-between">
+        <Grid
+          container
+          justifyContent="space-between"
+        >
           <Grid item>
-            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-              {sprintName}
-            </Typography>
+            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>{sprintName}</Typography>
           </Grid>
-          <Grid item xs={2}>
-            <Grid container justifyContent={"right"}>
-              <Grid item xs={5}>
+          <Grid
+            item
+            xs={2}
+          >
+            <Grid
+              container
+              justifyContent={"right"}
+            >
+              <Grid
+                item
+                xs={5}
+              >
                 <CustomButton>{t(common.exportBtn)}</CustomButton>
               </Grid>
-              <Grid item xs={5}>
+              <Grid
+                item
+                xs={5}
+              >
                 <CustomButton>{t(common.shareBtn)}</CustomButton>
               </Grid>
             </Grid>
@@ -66,11 +82,11 @@ const EstimationDetails = (): ReactElement => {
           tabs={[
             {
               label: "Summary",
-              content: <Summary />,
+              content: <Summary mode={mode} />,
             },
             {
               label: "Resources",
-              content: <Resources />,
+              content: <Resources mode={mode} />,
             },
             {
               label: "Legend",

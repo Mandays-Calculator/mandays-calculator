@@ -39,7 +39,7 @@ const TeamList = (props: TeamListProps): ReactElement => {
           );
         } else if (values.teams.length === 1) {
           return (
-            <StyledContainer $isDefault={true}>
+            <StyledContainer $isDefault={true} key={index}>
               <Typography fontWeight='bold'>Default</Typography>
             </StyledContainer>
           );
