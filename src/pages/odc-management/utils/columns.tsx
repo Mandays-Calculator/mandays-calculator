@@ -47,6 +47,7 @@ export const ODCColumns = (
               setIsEdit(true);
               setIdx(row.index);
             }}
+            aria-label={`edit-${row.index}`}
           >
             <SvgIcon name="edit" $size={2} />
           </IconButton>
@@ -55,6 +56,7 @@ export const ODCColumns = (
               setDeleteModalOpen(true);
               setDelIdx(row.index);
             }}
+            aria-label={`delete-${row.index}`}
           >
             <SvgIcon name="delete" $size={2} />
           </IconButton>
