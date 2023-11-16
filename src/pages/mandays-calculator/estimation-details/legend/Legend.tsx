@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import type { LegendColumn } from "~/pages/mandays-calculator/utils/types";
 import type { EstimationDetailsMode } from "..";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import Stack from "@mui/material/Stack";
@@ -38,14 +39,18 @@ const Legend = (props: LegendProps): ReactElement => {
   })
 
   const { values } = legendForm;
+  const dataMemoized = useMemo(() => values.legendValues, [values.legendValues])
   const inputView = ['add', 'edit'];
   const isInput: boolean = inputView.includes(mode);
 
   return (
-    isInput
-    ? <Form instance={legendForm}>
-        <Stack gap={3}>
-          <Table name="legend-table" columns={LegendListColumns({t, isInput})} data={values.legendValues} />
+    <Form instance={legendForm}>
+      <Stack gap={3}>
+        <Typography variant="subtitle1" fontWeight="bold" color="primary">
+          {t(mandaysCalculator.legend.tableTitle)}
+        </Typography>
+        <Table name="legend-table" columns={LegendListColumns({ t, isInput })} data={dataMemoized} />
+        { isInput && (
           <Stack
             display="flex"
             justifyContent="flex-end"
@@ -53,14 +58,9 @@ const Legend = (props: LegendProps): ReactElement => {
           >
             <CustomButton type="submit">{t(common.submit)}</CustomButton>
           </Stack>
-        </Stack>
-      </Form>
-    : <Stack spacing={2}> 
-        <Typography variant="subtitle1" fontWeight="bold" color="primary">
-          {t(mandaysCalculator.legend.tableTitle)}
-        </Typography>
-        <Table name="legend-table" columns={LegendListColumns({t, isInput})} data={legendData} />
+        )}
       </Stack>
+    </Form>
   )
 }
 
