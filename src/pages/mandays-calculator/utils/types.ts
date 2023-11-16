@@ -56,6 +56,10 @@ export type SprintColumnsProps = {
   onDeleteSprintDetails: (sprintId: string) => void;
 };
 
+export type withTFunctionProps = {
+  t: TFunction<"translation", undefined>;
+};
+
 export type TasksColumnsProps = {
   t: TFunction<"translation", undefined>;
 };

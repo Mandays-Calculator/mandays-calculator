@@ -1,8 +1,10 @@
 import type { ReactElement } from "react";
 import type { EstimationDetailsMode } from "../";
-import { Stack } from "@mui/material";
-import { useFormik } from "formik";
+
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useFormik } from "formik";
+import { Stack } from "@mui/material";
 import { resourcesDetailData } from "../../utils/tableData";
 import { ResourcesListColumns } from "../../utils/columns";
 import { Form, Table } from "~/components";
@@ -11,10 +13,11 @@ import Accordion from "~/components/Accordion/Accordion";
 
 interface ResourcesProps {
   mode: EstimationDetailsMode;
+  isGeneratingPDF: boolean;
 }
 
 const Resources = (props: ResourcesProps): ReactElement => {
-  const { mode } = props;
+  const { mode, isGeneratingPDF } = props;
   const { t } = useTranslation();
 
   const resourcesForm = useFormik({
@@ -29,11 +32,12 @@ const Resources = (props: ResourcesProps): ReactElement => {
   const titles = ["I03", "I04", "I05", "I06", "I07"];
   const inputView = ["add", "edit"];
   const isInput: boolean = inputView.includes(mode);
+  const columnsMemo = useMemo(() => ResourcesListColumns({ t, isInput }), []);
 
   const renderTable = (title: string) => (
-    <Accordion key={title} title={title} defaultExpanded={false}>
+    <Accordion key={title} title={title} defaultExpanded={isGeneratingPDF}>
       <Table
-        columns={ResourcesListColumns({ t, isInput })}
+        columns={columnsMemo}
         data={resourcesDetailData}
         name="mandays-calculator"
       />
