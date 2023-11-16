@@ -19,13 +19,20 @@
   },
   "login": {
     "management": {
-      "label": "Login management"
+      "label": "Login Management"
     },
     "label": {
       "signIn": "Sign In",
       "userName": "Username",
       "password": "Password",
       "forgotPassword": "Forgot Password"
+    },
+    "btnlabel": {
+      "signIn": "Sign In"
+    },
+    "placeholder": {
+      "userName": "Enter Username",
+      "password": "Enter Password"
     }
   },
   "changePassword": {
