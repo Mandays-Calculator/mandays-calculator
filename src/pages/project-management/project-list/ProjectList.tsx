@@ -1,4 +1,4 @@
-import { useState, ReactElement } from "react";
+import { ReactElement, useEffect, useReducer } from "react";
 import { Column } from "react-table";
 
 import { Grid, TextField, styled, Box, IconButton } from "@mui/material";
@@ -6,6 +6,7 @@ import { Grid, TextField, styled, Box, IconButton } from "@mui/material";
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
 import { SvgIcon, Table } from "~/components";
+import { ProjectResponse, getProjects } from "~/api/projects";
 
 type DataType = {
   prjName: string;
@@ -24,12 +25,40 @@ const StyledTextField = styled(TextField)(() => ({
   width: "100%",
 }));
 
+const initialProjectListState = { results: [] as DataType[], filteredText: '', filteredResult: [] as DataType[] };
+
+const projectListReducer = (
+    state: typeof initialProjectListState, 
+    action: { type: 'SET_VALUE' | 'SEARCH', payload: any }
+  ) => {
+    if (action.type === 'SET_VALUE') {
+      const mapProjectResult: (T: ProjectResponse[]) => DataType[] = (data: ProjectResponse[]) => {
+        return data.map(response => ({
+          prjName: response.name,
+          noOfTeams: response.project_team.length,
+          noOfUsers: 1 //WIP
+        }));
+      } 
+      const newResult = mapProjectResult(action.payload);
+      
+      return { ...state, results: newResult, filteredResult: newResult };
+    } 
+    else if (action.type === 'SEARCH') {
+      const filteredData = state.results.filter((row) =>
+        row.prjName.toLowerCase().includes(action.payload),
+      );
+
+      return { ...state, filteredResult: filteredData, filteredText: action.payload };
+    } 
+    else {
+      return state
+    }
+}
+
 const ProjectList = (props: ProjectListProps): ReactElement => {
   const { handleAddProject } = props;
 
-  const [filterText, setFilterText] = useState<string>("");
-
-  const rows: DataType[] = [];
+  const [projectListState, dispatchProjectList] = useReducer(projectListReducer, initialProjectListState);
 
   const columns: ColumnType[] = [
     {
@@ -59,10 +88,26 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
       ),
     },
   ];
+  
+  const onChangeFilterText = (e: any) => {
+    dispatchProjectList({ type: 'SEARCH', payload: e.target.value });
+  }
+ 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getProjects();
+        dispatchProjectList({type: 'SET_VALUE', payload: response.data ?? [] });
+      } 
+      catch (error) {
+        dispatchProjectList({type: 'SET_VALUE', payload: [] });
+        // show error if necessary
+      }
+        
+    };
 
-  const filteredRows = rows.filter((row) =>
-    row.prjName.toLowerCase().includes(filterText.toLowerCase())
-  );
+    fetchData();
+  }, []);
 
   return (
     <PageContainer>
@@ -71,7 +116,8 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
           <StyledTextField
             size="small"
             placeholder="Enter keyword here..."
-            onChange={(e) => setFilterText(e.target.value)}
+            value={projectListState.filteredText}
+            onChange={onChangeFilterText}
           />
         </Grid>
         <Grid item xs={7} container justifyContent="flex-end">
@@ -81,7 +127,7 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
         </Grid>
       </Grid>
       <Box marginTop="14px">
-        <Table name="ODCTable" columns={columns} data={filteredRows} />
+        <Table name="ODCTable" columns={columns} data={projectListState.filteredResult} />
       </Box>
     </PageContainer>
   );
