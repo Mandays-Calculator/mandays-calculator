@@ -1,20 +1,21 @@
-import { ReactElement } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
-import { useFormik } from "formik";
-import { Grid } from "@mui/material";
-import ErrorMessage from "~/components/form/error-message/ErrorMessage";
+import { useAuth } from "react-oidc-context";
+import { Link } from "react-router-dom";
+import { ReactElement } from "react";
 
-import Form from "~/components/form/Form";
 import LocalizationKey from "~/i18n/key";
-import { CustomButton as Button } from "~/components/form/button";
-import { ControlledTextField } from "~/components/form/controlled";
-import { getFieldError } from "~/components/form/utils";
+import { Grid } from "@mui/material";
+import { useFormik } from "formik";
 
+import ErrorMessage from "~/components/form/error-message/ErrorMessage";
+import { ControlledTextField } from "~/components/form/controlled";
+import { CustomButton as Button } from "~/components/form/button";
+import { getFieldError } from "~/components/form/utils";
+import Form from "~/components/form/Form";
+
+import { StyledLabel, StyledTitle } from "./components/auth-container";
 import PasswordInput from "./components/password-input/PasswordInput";
 import { loginSchema } from "./schema";
-import { StyledLabel, StyledTitle } from "./components/auth-container";
 
 const Login = (): ReactElement => {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ const Login = (): ReactElement => {
           <StyledLabel>{t(LocalizationKey.login.label.userName)}</StyledLabel>
           <ControlledTextField
             fullWidth
-            placeholder="Input username"
+            placeholder={t(LocalizationKey.login.placeholder.userName)}
             name="username"
             helperText={getFieldError(loginForm.errors, "username")}
           />
@@ -51,7 +52,7 @@ const Login = (): ReactElement => {
         <Grid item xs={12} pt={1} mb={3}>
           <StyledLabel>{t(LocalizationKey.login.label.password)}</StyledLabel>
           <PasswordInput
-            placeholder="Input password"
+            placeholder={t(LocalizationKey.login.placeholder.password)}
             name="password"
             helperText={getFieldError(loginForm.errors, "password")}
           />
@@ -62,7 +63,7 @@ const Login = (): ReactElement => {
         <ErrorMessage error={auth.error?.message} />
         <Grid item xs={12}>
           <Button fullWidth type="submit">
-            Sign In
+            {t(LocalizationKey.login.btnlabel.signIn)}
           </Button>
         </Grid>
       </Grid>

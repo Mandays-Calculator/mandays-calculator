@@ -7,6 +7,13 @@ const LocalizationKey = {
       password: "login.label.password",
       forgotPassword: "login.label.forgotPassword",
     },
+    btnlabel: {
+      signIn: "login.btnlabel.signIn",
+    },
+    placeholder: {
+      userName: "login.placeholder.userName",
+      password: "login.placeholder.password"
+    },
   },
   changePassword: {
     label: {
@@ -25,6 +32,10 @@ const LocalizationKey = {
       number: "changePassword.validationInfo.number",
       symbol: "changePassword.validationInfo.symbol",
       match: "changePassword.validationInfo.match",
+    },
+    placeholder: {
+      password: "changePassword.placeholder.userName",
+      confirmPassword: "changePassword.placeholder.password"
     },
   },
   forgotPassword: {

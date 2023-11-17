@@ -22,12 +22,45 @@ interface SummaryForm {
   endDate: string;
 }
 
+interface WrapperProps {
+  title: ReactElement;
+  field: ReactElement;
+}
+
 const initValue: SummaryForm = {
   name: "",
   team: "",
   utilRate: "",
   startDate: "",
   endDate: "",
+};
+
+const Wrapper = (props: WrapperProps): ReactElement => {
+  const { title, field } = props;
+  return (
+    <Grid
+      container
+      direction={"row"}
+      alignItems={"center"}
+    >
+      <Grid
+        xs={4}
+        item
+      ></Grid>
+      <Grid
+        item
+        xs={2}
+      >
+        {title}
+      </Grid>
+      <Grid
+        item
+        xs={4}
+      >
+        {field}
+      </Grid>
+    </Grid>
+  );
 };
 
 const AddEstimation = (): ReactElement => {
@@ -46,58 +79,28 @@ const AddEstimation = (): ReactElement => {
         direction="column"
         spacing={2}
       >
-        <Grid
-          container
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Grid
-            xs={2}
-            item
-          ></Grid>
-          <Grid
-            item
-            xs={2}
-          >
+        <Wrapper
+          title={
             <Typography
               fontWeight={"bold"}
               variant="subtitle1"
             >
               {t(summaryForm.name)}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={4}
-          >
-            <ControlledTextField name="name" />
-          </Grid>
-        </Grid>
+          }
+          field={<ControlledTextField name="name" />}
+        />
 
-        <Grid
-          container
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Grid
-            xs={2}
-            item
-          ></Grid>
-          <Grid
-            item
-            xs={2}
-          >
+        <Wrapper
+          title={
             <Typography
               fontWeight={"bold"}
               variant="subtitle1"
             >
               {t(summaryForm.team)}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={4}
-          >
+          }
+          field={
             <ControlledSelect
               options={[
                 {
@@ -107,95 +110,48 @@ const AddEstimation = (): ReactElement => {
               ]}
               name="team"
             />
-          </Grid>
-        </Grid>
-
-        <Grid
-          container
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Grid
-            xs={2}
-            item
-          ></Grid>
-          <Grid
-            item
-            xs={2}
-          >
+          }
+        />
+        <Wrapper
+          title={
             <Typography
               fontWeight={"bold"}
               variant="subtitle1"
             >
               {t(summaryForm.utilization)}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={1}
-          >
+          }
+          field={
             <ControlledTextField
               placeholder="50"
               name="utilRate"
             />
-          </Grid>
-        </Grid>
+          }
+        />
 
-        <Grid
-          container
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Grid
-            xs={2}
-            item
-          ></Grid>
-          <Grid
-            item
-            xs={2}
-          >
+        <Wrapper
+          title={
             <Typography
               fontWeight={"bold"}
               variant="subtitle1"
             >
               {t(summaryForm.startDate)}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={2}
-          >
-            <ControlledDatePicker name="startDate" />
-          </Grid>
-        </Grid>
+          }
+          field={<ControlledDatePicker name="startDate" />}
+        />
 
-        <Grid
-          container
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Grid
-            xs={2}
-            item
-          ></Grid>
-          <Grid
-            item
-            xs={2}
-          >
+        <Wrapper
+          title={
             <Typography
               fontWeight={"bold"}
               variant="subtitle1"
             >
               {t(summaryForm.endDate)}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={2}
-          >
-            <ControlledDatePicker name="endDate" />
-          </Grid>
-        </Grid>
+          }
+          field={<ControlledDatePicker name="endDate" />}
+        />
       </Stack>
     </Form>
   );
