@@ -33,6 +33,10 @@ const LocalizationKey = {
       symbol: "changePassword.validationInfo.symbol",
       match: "changePassword.validationInfo.match",
     },
+    placeholder: {
+      password: "changePassword.placeholder.userName",
+      confirmPassword: "changePassword.placeholder.password"
+    },
   },
   forgotPassword: {
     labelInfo: {
