@@ -1,16 +1,15 @@
 import type { ReactElement, Dispatch, SetStateAction } from "react";
-import type { IntValues } from "../utils/interface";
 
 import { useTranslation } from "react-i18next";
 
 import { Grid, TextField, styled, Box } from "@mui/material";
-import { useFormikContext } from "formik";
 
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
 
 import { ODCColumns } from "../utils/columns";
+import { ODCListResponse } from "~/api/odc/types";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
@@ -21,13 +20,13 @@ type ViewProps = {
   setDeleteModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
   setIdx: Dispatch<SetStateAction<number>>;
+  data: ODCListResponse[];
   setDelIdx: Dispatch<SetStateAction<number | null>>;
 };
 
 const ViewODC = (props: ViewProps): ReactElement => {
   const { t } = useTranslation();
   const { setIsAdd, setDeleteModalOpen, setIsEdit, setIdx, setDelIdx } = props;
-  const { values } = useFormikContext<IntValues>();
 
   const handleAdd = (): void => {
     setIsAdd(true);
@@ -43,7 +42,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
             <CustomButton type="button" onClick={handleAdd}>
-              {t('odc.button.add')}
+              {t("odc.button.add")}
             </CustomButton>
           </Grid>
         </Grid>
@@ -56,9 +55,9 @@ const ViewODC = (props: ViewProps): ReactElement => {
               setIsEdit,
               setIdx,
               setDelIdx,
-              setDeleteModalOpen,
+              setDeleteModalOpen
             )}
-            data={values?.odcList}
+            data={props.data}
           />
         </Box>
       </PageContainer>

@@ -11,7 +11,6 @@ import { Form } from "~/components/form";
 
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
-import { NewODCData } from "./utils/data";
 import { IntValuesSchema } from "./utils/schema";
 import { useODCList } from "~/queries/odc/ODC";
 import { PageLoader } from "~/components";
@@ -32,15 +31,11 @@ const ODCManagement = (): ReactElement => {
     enableReinitialize: true,
     onSubmit: (): void => {},
   });
+  const [odc, setODC] = useState(ODCForm.initialValues.odcList);
 
   useEffect(() => {
-    if (isAdd === true && isEdit === false) {
-      const arr = ODCForm.values.odcList;
-      arr.push(NewODCData);
-      setIdx(arr.length - 1);
-      ODCForm.setFieldValue(`ocdList`, arr);
-    }
-  }, [isAdd]);
+    setODC(ODCForm.values.odcList);
+  }, [ODCForm.values.odcList]);
 
   if (isLoading) {
     return <PageLoader />;
@@ -57,10 +52,12 @@ const ODCManagement = (): ReactElement => {
               setDeleteModalOpen={setDeleteModalOpen}
               setIsEdit={setIsEdit}
               setIdx={setIdx}
+              data={odc}
               setDelIdx={setDelIdx}
             />
           )}
         </Form>
+        {JSON.stringify(data)}
         <DeleteModal
           onDeleteConfirm={(): void => {
             const dIdx = delIdx || 0;
