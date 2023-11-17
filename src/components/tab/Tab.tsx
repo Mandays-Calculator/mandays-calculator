@@ -1,5 +1,5 @@
 import type { CustomTabsProps } from ".";
-import { useState, ReactElement, SyntheticEvent } from "react";
+import { useState, ReactElement, SyntheticEvent, useEffect } from "react";
 
 import { Divider } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
@@ -38,6 +38,10 @@ const CustomTabs = ({
     }
   };
 
+  useEffect(() => {
+    setValue(defaultActiveTab);
+  }, [defaultActiveTab]);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Tabs
@@ -64,7 +68,7 @@ const CustomTabs = ({
       <Divider sx={{ borderWidth: 2 }} />
       {tabs.map((tab, index) =>
         value === index ? (
-          <Box key={index} py={3}>
+          <Box key={index} py={3} id={`tab-${index}`}>
             {tab.content}
           </Box>
         ) : null

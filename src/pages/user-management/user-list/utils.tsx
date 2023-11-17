@@ -3,6 +3,7 @@ import { Stack } from "@mui/material";
 import { SvgIcon } from "~/components";
 import { useState } from "react";
 import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
+import { DeleteUserModal } from "~/components/modal/user-management/delete-user-modal";
 import { UserListData } from "~/api/user-management/types";
 import { useFormikContext } from "formik";
 import { UpdateUserManagementParams } from "../types";
@@ -38,6 +39,7 @@ export const userListColum: Column<UserListData>[] = [
     Header: "Action",
     Cell: ({ row }: CellProps<UserListData>) => {
       const [editModal, setEditModal] = useState(false);
+      const [deleteModal, setDeleteModal] = useState(false);
       const [currentUser, setCurrentUser] = useState<UserListData>();
       const form = useFormikContext<UpdateUserManagementParams>();
       const setCurrentValues = {
@@ -55,6 +57,7 @@ export const userListColum: Column<UserListData>[] = [
         UpdateTeamId: "",
         UpdateRoles: row.original?.roles ?? [],
       };
+
       return (
         <Stack direction="row" spacing={2}>
           <SvgIcon
@@ -69,12 +72,26 @@ export const userListColum: Column<UserListData>[] = [
             $size={2}
           />
 
-          <SvgIcon name="delete" color="error" $size={2} />
+          <SvgIcon
+            onClick={() => {
+              setDeleteModal(true);
+              setCurrentUser(row.original);
+            }}
+            name="delete"
+            color="error"
+            $size={2}
+          />
           <EditUserModal
             open={editModal}
             currentUser={currentUser}
             onEditUser={() => setEditModal(false)}
             onClose={() => setEditModal(false)}
+          />
+
+          <DeleteUserModal
+            open={deleteModal}
+            id={currentUser?.id ? currentUser?.id : "0"}
+            onClose={() => setDeleteModal(false)}
           />
         </Stack>
       );
