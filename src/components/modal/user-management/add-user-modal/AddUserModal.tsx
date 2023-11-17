@@ -22,6 +22,7 @@ import { useFormikContext } from "formik";
 import { AddUserManagement } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
+import { NotificationModal } from "../../notification-modal";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -54,6 +55,27 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
 }): ReactElement => {
   const [value, setValue] = useState("");
 
+  const [errors, setErrors] = useState<any>({
+    lastName: false,
+    firstName: false,
+    gender: false,
+    careerStep: false,
+    employeeId: false,
+  });
+  const [addUserStatus, setAddUserStatus] = useState<any>({
+    status: "",
+    message: "",
+    show: false,
+  });
+
+  const errorMessage = {
+    lastName: "Last Name is required",
+    firstName: "First Name is required",
+    gender: "Gender is required",
+    careerStep: "Career Step is required",
+    employeeId: "Employee ID is required",
+  };
+
   const AddUser = useAddUser();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -69,10 +91,28 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     employeeId: values.employeeId,
     odcId: values.odcId,
     careerStep: values.careerStep,
-    joiningDate: values.joiningDate,
+    joiningDate:
+      value !== "recentlyJoinedlaterDate"
+        ? new Date().toJSON().slice(0, 10)
+        : values.joiningDate,
     projectId: values.projectId,
     teamId: values.teamId,
     roles: values.roles,
+  };
+
+  const validateForm = (): boolean => {
+    let requiredError = false;
+    let requiredErrors = { ...errors };
+    for (const field in errors) {
+      if (AddUserForm[field as keyof AddUserManagement] === "") {
+        requiredErrors = { ...requiredErrors, ...{ [field]: true } };
+        requiredError = true;
+      } else {
+        requiredErrors = { ...requiredErrors, ...{ [field]: false } };
+      }
+    }
+    setErrors(requiredErrors);
+    return requiredError;
   };
 
   return (
@@ -91,6 +131,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="lastName"
                 label="Last Name"
                 placeholder="Dela Cruz"
+                error={errors.lastName}
+                helperText={errors.lastName && errorMessage.lastName}
               />
             </Grid>
             <Grid item xs={6}>
@@ -98,6 +140,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="firstName"
                 label="First Name"
                 placeholder="Juan"
+                error={errors.firstName}
+                helperText={errors.firstName && errorMessage.firstName}
               />
             </Grid>
             <Grid item xs={6}>
@@ -120,6 +164,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="gender"
                 options={genders}
                 placeholder="Male"
+                error={errors.gender}
+                helperText={errors.gender && errorMessage.gender}
               />
             </Grid>
           </Grid>
@@ -135,6 +181,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="careerStep"
               label="Carrer Step"
               placeholder="I03"
+              error={errors.careerStep}
+              helperText={errors.careerStep && errorMessage.careerStep}
             />
           </Grid>
           <Grid item xs={12} mb={1}>
@@ -169,6 +217,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="employeeId"
               label="Employee Id"
               placeholder="82000000"
+              error={errors.employeeId}
+              helperText={errors.employeeId && errorMessage.employeeId}
             />
           </Grid>
           <Grid item xs={3.5}>
@@ -216,21 +266,44 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             color="primary"
             onClick={() => {
               console.log("test", AddUserForm);
-
-              AddUser.mutate(AddUserForm, {
-                onSuccess: (data) => {
-                  console.log("success", data);
-                  alert("sucess");
-                },
-                onError: (error) => {
-                  alert(error.message);
-                  console.log(error);
-                },
-              });
+              if (!validateForm()) {
+                console.log(AddUserForm);
+                AddUser.mutate(AddUserForm, {
+                  onSuccess: () => {
+                    setAddUserStatus({
+                      status: "success",
+                      message: "User successfully added.",
+                      show: true,
+                    });
+                  },
+                  onError: (error) => {
+                    setAddUserStatus({
+                      status: "error",
+                      message: "Please try again later.",
+                      show: true,
+                    });
+                    console.log(error);
+                  },
+                });
+              }
             }}
           >
             Add User
           </CustomButton>
+
+          <NotificationModal
+            type={addUserStatus.status}
+            message={addUserStatus.message}
+            open={addUserStatus.show}
+            onConfirm={() => {
+              setAddUserStatus({
+                status: "",
+                message: "",
+                show: false,
+              });
+              onClose();
+            }}
+          />
         </Box>
       </Stack>
     </Dialog>
