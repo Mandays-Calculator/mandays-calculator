@@ -22,6 +22,8 @@ import { useFormikContext } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
+import { NotificationModal } from "../../notification-modal";
+import moment from "moment";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -54,10 +56,32 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
 }): ReactElement => {
   const [value, setValue] = useState("");
 
+  const [errors, setErrors] = useState<any>({
+    lastName: false,
+    firstName: false,
+    gender: false,
+    careerStep: false,
+    employeeId: false,
+  });
+  const [addUserStatus, setAddUserStatus] = useState<any>({
+    status: "",
+    message: "",
+    show: false,
+  });
+
+  const errorMessage = {
+    lastName: "Last Name is required",
+    firstName: "First Name is required",
+    gender: "Gender is required",
+    careerStep: "Career Step is required",
+    employeeId: "Employee ID is required",
+  };
+
   const AddUser = useAddUser();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
+  console.log(value);
   const { values } = useFormikContext<UserManagementForms>();
   const gender = () => {
     if (values.gender == "FEMALE") {
@@ -86,6 +110,21 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     roles: values.roles,
   };
 
+  const validateForm = (): boolean => {
+    let requiredError = false;
+    let requiredErrors = { ...errors };
+    for (const field in errors) {
+      if (AddUserForm[field as keyof UserManagementForms] === "") {
+        requiredErrors = { ...requiredErrors, ...{ [field]: true } };
+        requiredError = true;
+      } else {
+        requiredErrors = { ...requiredErrors, ...{ [field]: false } };
+      }
+    }
+    setErrors(requiredErrors);
+    return requiredError;
+  };
+
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -102,6 +141,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="lastName"
                 label="Last Name"
                 placeholder="Dela Cruz"
+                error={errors.lastName}
+                helperText={errors.lastName && errorMessage.lastName}
               />
             </Grid>
             <Grid item xs={6}>
@@ -109,6 +150,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="firstName"
                 label="First Name"
                 placeholder="Juan"
+                error={errors.firstName}
+                helperText={errors.firstName && errorMessage.firstName}
               />
             </Grid>
             <Grid item xs={6}>
@@ -131,6 +174,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="gender"
                 options={genders}
                 placeholder="Male"
+                error={errors.gender}
+                helperText={errors.gender && errorMessage.gender}
               />
             </Grid>
           </Grid>
@@ -146,6 +191,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="careerStep"
               label="Carrer Step"
               placeholder="I03"
+              error={errors.careerStep}
+              helperText={errors.careerStep && errorMessage.careerStep}
             />
           </Grid>
           <Grid item xs={12} mb={1}>
@@ -167,11 +214,21 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 />
               </RadioGroup>
               <Stack ml={4.3}>
-                <ControlledDatePicker
-                  name="joiningDate"
-                  placeholderText="2023/12/31"
-                  dateFormat="yyyy/MM/dd"
-                />
+                {value == "recentlyJoined" ? (
+                  <ControlledDatePicker
+                    name="joiningDate"
+                    value={moment().format("yyyy/MM/D")}
+                    placeholderText="2023/12/31"
+                    dateFormat="yyyy/MM/dd"
+                    disabled
+                  />
+                ) : (
+                  <ControlledDatePicker
+                    name="joiningDate"
+                    placeholderText="2023/12/31"
+                    dateFormat="yyyy/MM/dd"
+                  />
+                )}
               </Stack>
             </FormControl>
           </Grid>
@@ -180,6 +237,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="employeeId"
               label="Employee Id"
               placeholder="82000000"
+              error={errors.employeeId}
+              helperText={errors.employeeId && errorMessage.employeeId}
             />
           </Grid>
           <Grid item xs={3.5}>
@@ -226,16 +285,23 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              if (values.firstName === "") {
-                alert("Input First");
-              } else {
+              console.log("test", AddUserForm);
+              if (!validateForm()) {
+                console.log(AddUserForm);
                 AddUser.mutate(AddUserForm, {
-                  onSuccess: (data) => {
-                    console.log("success", data);
-                    alert("sucess");
+                  onSuccess: () => {
+                    setAddUserStatus({
+                      status: "success",
+                      message: "User successfully added.",
+                      show: true,
+                    });
                   },
                   onError: (error) => {
-                    alert(error.message);
+                    setAddUserStatus({
+                      status: "error",
+                      message: "Please try again later.",
+                      show: true,
+                    });
                     console.log(error);
                   },
                 });
@@ -244,6 +310,20 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           >
             Add User
           </CustomButton>
+
+          <NotificationModal
+            type={addUserStatus.status}
+            message={addUserStatus.message}
+            open={addUserStatus.show}
+            onConfirm={() => {
+              setAddUserStatus({
+                status: "",
+                message: "",
+                show: false,
+              });
+              onClose();
+            }}
+          />
         </Box>
       </Stack>
     </Dialog>

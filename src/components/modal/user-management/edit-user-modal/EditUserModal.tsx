@@ -1,4 +1,4 @@
-import { type ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 import { CustomButton } from "~/components/form/button";
 import AvatarImg from "~/assets/img/add-edit-avatar.png";
 import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
@@ -7,11 +7,14 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { UserListData } from "~/api/user-management/types";
 import { genders, rolesData } from "../utils";
 import { useFormikContext } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
-import { useEditUser } from "~/queries/user-management/UserManagement";
+import {
+  useEditUser,
+  useUserList,
+} from "~/queries/user-management/UserManagement";
+import { NotificationModal } from "../../notification-modal";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -33,7 +36,7 @@ interface EditUserModalProps {
   onEditUser: () => void;
   open: boolean;
   onClose: () => void;
-  currentUser?: UserListData;
+  currentUser?: string;
 }
 
 export const EditUserModal: React.FC<EditUserModalProps> = ({
@@ -42,14 +45,29 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   currentUser,
 }): ReactElement => {
   const { values } = useFormikContext<UserManagementForms>();
-  const EditUser = useEditUser(currentUser?.id ?? "");
-
+  const EditUser = useEditUser(currentUser ?? "");
+  const [editUserStatus, setEditUserStatus] = useState<any>({
+    message: "",
+    show: false,
+  });
+  const { refetch } = useUserList();
+  const gender = () => {
+    if (values.UpdateGender == "FEMALE") {
+      return 1;
+    } else if (values.UpdateGender == "MALE") {
+      return 2;
+    } else if (values.UpdateGender == "NON_BINARY") {
+      return 3;
+    } else if (values.UpdateGender == "PREFER_NOT_TO_SAY") {
+      return 4;
+    }
+  };
   const EditUserForm: UserManagementForms = {
     firstName: values?.UpdateFirstName ?? "",
     lastName: values?.UpdateLastName ?? "",
     middleName: values?.UpdateMiddleName ?? "",
     suffix: values?.UpdateSuffix ?? "",
-    gender: 1,
+    gender: gender() ?? 0,
     email: values?.UpdateEmail ?? "",
     employeeId: values?.UpdateEmployeeId ?? "",
     odcId: values?.UpdateOdcId ?? "",
@@ -187,8 +205,12 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
 
               EditUser.mutate(EditUserForm, {
                 onSuccess: (data) => {
+                  setEditUserStatus({
+                    message: "User successfully updated",
+                    show: true,
+                  });
+                  refetch();
                   console.log("success", data);
-                  alert("sucess");
                 },
                 onError: (error) => {
                   alert(error.message);
@@ -199,6 +221,18 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           >
             Save
           </CustomButton>
+          <NotificationModal
+            type={"success"}
+            message={editUserStatus.message}
+            open={editUserStatus.show}
+            onConfirm={() => {
+              setEditUserStatus({
+                message: "",
+                show: false,
+              });
+              onClose();
+            }}
+          />
         </Box>
       </Stack>
     </Dialog>
