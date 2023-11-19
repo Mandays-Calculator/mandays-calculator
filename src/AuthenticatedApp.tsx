@@ -33,7 +33,7 @@ const AuthenticatedApp = (): ReactElement => {
 
   useEffect(() => {
     if (user) {
-      axiosInit(user.access_token);
+      axiosInit();
       dispatch(fetchUserPermission());
     }
   }, [auth]);
