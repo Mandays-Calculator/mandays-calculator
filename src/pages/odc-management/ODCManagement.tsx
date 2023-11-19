@@ -1,19 +1,18 @@
 import type { ReactElement } from "react";
 import type { IntValues } from "./utils/interface";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useFormik } from "formik";
 
-import Title from "~/components/title/Title";
+import { useODCList } from "~/queries/odc/ODC";
+import { PageLoader, Title, Form } from "~/components";
 import { DeleteModal } from "~/components/modal/delete-modal";
-import { Form } from "~/components/form";
 
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
 import { IntValuesSchema } from "./utils/schema";
-import { useODCList } from "~/queries/odc/ODC";
-import { PageLoader } from "~/components";
+import { NewODCData } from "./utils/data";
 
 const ODCManagement = (): ReactElement => {
   const [isAdd, setIsAdd] = useState<boolean>(false);
@@ -31,11 +30,15 @@ const ODCManagement = (): ReactElement => {
     enableReinitialize: true,
     onSubmit: (): void => {},
   });
-  const [odc, setODC] = useState(ODCForm.initialValues.odcList);
-
+  
   useEffect(() => {
-    setODC(ODCForm.values.odcList);
-  }, [ODCForm.values.odcList]);
+    if (isAdd === true && isEdit === false) {
+      const arr = ODCForm.values.odcList;
+      arr.push(NewODCData);
+      setIdx(arr.length - 1);
+      ODCForm.setFieldValue(`ocdList`, arr);
+    }
+  }, [isAdd]);
 
   if (isLoading) {
     return <PageLoader />;
@@ -52,7 +55,6 @@ const ODCManagement = (): ReactElement => {
               setDeleteModalOpen={setDeleteModalOpen}
               setIsEdit={setIsEdit}
               setIdx={setIdx}
-              data={odc}
               setDelIdx={setDelIdx}
             />
           )}
@@ -62,9 +64,12 @@ const ODCManagement = (): ReactElement => {
           onDeleteConfirm={(): void => {
             const dIdx = delIdx || 0;
             const arr = ODCForm.values.odcList;
-            arr.splice(dIdx, 1);
-            ODCForm.setFieldValue(`odcList`, arr);
+            // arr.splice(dIdx, 1);
             setDeleteModalOpen(false);
+            // postUpdateAPI
+            arr[dIdx].active = false;
+            ODCForm.setFieldValue(`odcList`, arr);
+            console.log('Delete API', arr, dIdx);
           }}
           open={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}

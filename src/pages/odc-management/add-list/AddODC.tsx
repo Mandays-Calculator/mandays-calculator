@@ -1,12 +1,9 @@
-import {
-  type ReactElement,
-  type Dispatch,
-  type SetStateAction,
-  useState,
-} from "react";
+import type { ReactElement, Dispatch, SetStateAction } from "react";
 import type { IntValues } from "../utils/interface";
 
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+
 import * as yup from "yup";
 import { ValidationError, array, object } from "yup";
 
@@ -21,6 +18,7 @@ import { ControlledTextField } from "~/components/form/controlled";
 import { HolidayColumn } from "../utils/columns";
 import { DataTypeSchema, IntValuesSchema } from "../utils/schema";
 import { HolidayType } from "~/api/odc/types";
+import { SubmitFormat } from "../utils/data";
 
 type AddProps = {
   setIsAdd: Dispatch<SetStateAction<boolean>>;
@@ -32,20 +30,17 @@ const AddODC = (props: AddProps): ReactElement => {
   const { t } = useTranslation();
   const { idx, isEdit, setIsAdd } = props;
 
-  const { values, resetForm } = useFormikContext<IntValues>();
-  const formikContext = useFormikContext<IntValues>();
+  const { values, resetForm, setValues } = useFormikContext<IntValues>();
   const holidays: HolidayType[] = values?.odcList[idx]?.holidays || [];
 
   const handleClose = () => {
-    if (isEdit) {
-      const obj: IntValues = values;
-      obj.odcList[idx] = formikContext.initialValues.odcList[idx];
-      resetForm({ values: obj });
-    } else {
-      resetForm();
-    }
+    resetForm();
     setIsAdd(false);
   };
+
+  const [isNameError, setIsNameError] = useState<boolean>(false);
+  const [isAbbrError, setIsAbbrError] = useState<boolean>(false);
+  const [isLocError, setIsLocError] = useState<boolean>(false);
 
   const [fieldValues, setFieldValues] = useState({
     name: isEdit ? values.odcList[idx].name : "",
@@ -63,7 +58,14 @@ const AddODC = (props: AddProps): ReactElement => {
   >("");
   const [locationError, setLocationError] = useState<string | undefined>("");
 
-  const handleAddODC = () => {
+  const handleError = (error: string | undefined): boolean => {
+    let retError = false;
+    if (error === undefined || error === null || error === "")
+      retError = true;
+    return retError;
+  };
+
+  const handleAddODC = (): void => {
     if (isEdit) {
       //Edit ODC
       const updatedValues = { ...values };
@@ -77,7 +79,7 @@ const AddODC = (props: AddProps): ReactElement => {
       };
 
       updatedValues.odcList[idx] = editedODC;
-      formikContext.setValues(updatedValues);
+      setValues(updatedValues);
       setIsAdd(false);
     } else {
       //Add ODC
@@ -107,18 +109,23 @@ const AddODC = (props: AddProps): ReactElement => {
           { abortEarly: false }
         );
         updatedValues.odcList = [newODC, ...updatedValues.odcList];
-        formikContext.setValues(updatedValues);
+        setValues(updatedValues);
+        const data = SubmitFormat(values?.odcList[idx]);
+        console.log("Submit JSON API", data);
         setIsAdd(false);
       } catch (error: ValidationError | unknown) {
         if (error instanceof yup.ValidationError) {
           const errorMappings: Record<
             string,
-            React.Dispatch<React.SetStateAction<string | undefined>>
+            Dispatch<SetStateAction<string | undefined>>
           > = {
             "odcList[0].name": setOdcNameError,
             "odcList[0].abbreviation": setAbbreviationError,
             "odcList[0].location": setLocationError,
           };
+          setIsNameError(handleError(odcNameError));
+          setIsAbbrError(handleError(abbreviationError));
+          setIsLocError(handleError(locationError));
 
           error.inner.forEach((e) => {
             if (e.path) {
@@ -134,6 +141,26 @@ const AddODC = (props: AddProps): ReactElement => {
       }
     }
   };
+
+  // const handleAdd = () => {
+  //   // postAddAPI
+  //   if (values?.odcList[idx]?.name === "")
+  //     setIsNameError(true);
+  //   else {
+  //     setIsNameError(false);
+  //     setIsAdd(false);
+  //   } 
+  
+  //   const data = SubmitFormat(values?.odcList[idx]);
+  //   console.log("Submit JSON API", data);
+  // };
+
+  // const handleUpdate = () => {
+  //   setIsAdd(false);
+  //   // postUpdateAPI
+  //   console.log("Update JSON API", values?.odcList[idx]);
+  // };
+
   return (
     <>
       <PageContainer sx={{ background: "#FFFFFF" }}>
@@ -143,6 +170,7 @@ const AddODC = (props: AddProps): ReactElement => {
               name={`odcList.${idx}.name`}
               label={t("odc.form.name")}
               id="name"
+              error={isNameError}
               value={fieldValues.name}
               onChange={(event: any) =>
                 handleFieldChange("name", event.target.value)
@@ -155,6 +183,7 @@ const AddODC = (props: AddProps): ReactElement => {
               name={`odcList.${idx}.abbreviation`}
               label={t("odc.form.abbr")}
               id="abbreviation"
+              error={isAbbrError}
               value={fieldValues.abbreviation}
               onChange={(event) =>
                 handleFieldChange("abbreviation", event.target.value)
@@ -167,6 +196,7 @@ const AddODC = (props: AddProps): ReactElement => {
               name={`odcList.${idx}.location`}
               label={t("odc.form.loc")}
               id="location"
+              error={isLocError}
               value={fieldValues.location}
               onChange={(event) =>
                 handleFieldChange("location", event.target.value)
@@ -190,17 +220,11 @@ const AddODC = (props: AddProps): ReactElement => {
                     type="button"
                     sx={{ mr: 2 }}
                     onClick={handleAddODC}
-                  >
-                    {t("odc.button.save")}
-                  </CustomButton>
-                  <CustomButton type="button" onClick={handleClose}>
-                    {t("odc.button.cancel")}
-                  </CustomButton>
+                  >{t('odc.button.save')}</CustomButton>
+                  <CustomButton type="button" onClick={handleClose}>{t('odc.button.cancel')}</CustomButton>
                 </>
               ) : (
-                <CustomButton type="button" onClick={handleAddODC}>
-                  {t("odc.button.add")}
-                </CustomButton>
+                <CustomButton type="button" onClick={handleAddODC}>{t('odc.button.add')}</CustomButton>
               )}
             </Grid>
           </Grid>
