@@ -40,11 +40,10 @@ const AddTasks = (): ReactElement => {
     const [, drop] = useDrop(() => ({
       accept: "TASK",
       drop: (item: TaskType) => {
-        //@ts-ignore
-        const droppedTask = tasksData[item.id];
+        const idx: any = item.id ? item.id : 0;
+        const droppedTask = tasksData[idx];
         const updatedTask = tasksData.filter((task) => task.id !== item.id);
         console.log(updatedTask, "updated task");
-        //@ts-ignore
         setSelectedTasks((prev: any) => [...prev, droppedTask]);
         setTask(updatedTask);
       },
