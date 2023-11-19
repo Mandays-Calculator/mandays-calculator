@@ -36,12 +36,13 @@ const Legend = (props: LegendProps): ReactElement => {
     },
     onSubmit: (values) => console.log('Submit API will be called here', values.legendValues),
     enableReinitialize: true
-  })
+  });
 
   const { values } = legendForm;
-  const dataMemoized = useMemo(() => values.legendValues, [values.legendValues])
   const inputView = ['add', 'edit'];
   const isInput: boolean = inputView.includes(mode);
+  const columnsMemo = useMemo(() => LegendListColumns({ t, isInput }), []);
+  const dataMemo = useMemo(() => values.legendValues, [values.legendValues]);
 
   return (
     <Form instance={legendForm}>
@@ -49,7 +50,11 @@ const Legend = (props: LegendProps): ReactElement => {
         <Typography variant="subtitle1" fontWeight="bold" color="primary">
           {t(mandaysCalculator.legend.tableTitle)}
         </Typography>
-        <Table name="legend-table" columns={LegendListColumns({ t, isInput })} data={dataMemoized} />
+        <Table 
+          name="legend-table" 
+          columns={columnsMemo} 
+          data={dataMemo} 
+        />
         { isInput && (
           <Stack
             display="flex"
@@ -61,7 +66,7 @@ const Legend = (props: LegendProps): ReactElement => {
         )}
       </Stack>
     </Form>
-  )
-}
+  );
+};
 
 export default Legend; 
