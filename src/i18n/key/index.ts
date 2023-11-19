@@ -12,7 +12,7 @@ const LocalizationKey = {
     },
     placeholder: {
       userName: "login.placeholder.userName",
-      password: "login.placeholder.password"
+      password: "login.placeholder.password",
     },
   },
   changePassword: {
@@ -35,7 +35,7 @@ const LocalizationKey = {
     },
     placeholder: {
       password: "changePassword.placeholder.userName",
-      confirmPassword: "changePassword.placeholder.password"
+      confirmPassword: "changePassword.placeholder.password",
     },
   },
   forgotPassword: {
@@ -61,7 +61,9 @@ const LocalizationKey = {
     collapse: "common.button.collapse",
     backBtn: "common.button.back",
     shareBtn: "common.button.share",
+    nextBtn: "common.button.next",
     exportBtn: "common.button.export",
+    saveBtn: "common.button.save",
     userManagement: {
       authSignInLoading: "common.userManagement.auth.signInLoading",
       authSignOutLoading: "common.userManagement.auth.signOutLoading",

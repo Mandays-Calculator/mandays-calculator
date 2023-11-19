@@ -21,7 +21,9 @@
       "back": "Back",
       "share": "Share",
       "export": "Export",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "save": "Save",
+      "next": "Next"
     },
     "noData": "No Data",
     "somethingWentWrong": {

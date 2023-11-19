@@ -8,6 +8,10 @@ export const mandaysCalculatorRoutes: RouteType[] = [
     element: <EstimationDetails />,
   },
   {
+    path: "mandays-estimation-tool/add-sprint",
+    element: <EstimationDetails />,
+  },
+  {
     path: "mandays-estimation-tool",
     pageTitle: "mandaysCalculator.label",
     element: <MandaysCalculator />,
