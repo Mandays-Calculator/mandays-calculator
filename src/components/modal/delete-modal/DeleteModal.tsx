@@ -5,7 +5,8 @@ import WarningIcon from "@mui/icons-material/Warning";
 import { Box, Stack } from "@mui/material";
 
 interface DeleteModalProps {
-  onDeleteConfirm: (rowIndex: number) => void;
+  onDeleteConfirm?: (rowIndex: number) => void;
+  onConfirm?: () => void;
   open: boolean;
   onClose: () => void;
   message?: string;
@@ -18,6 +19,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   onClose,
   message = "Are you sure you want to delete this ODC?",
   selectedRow,
+  onConfirm,
 }): ReactElement => {
   return (
     <Modal open={open} title="" maxWidth="xs" onClose={onClose}>
@@ -46,8 +48,11 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
           variant="contained"
           color="primary"
           onClick={() => {
-            if (selectedRow !== null) {
+            if (selectedRow !== null && onDeleteConfirm) {
               onDeleteConfirm(selectedRow);
+            }
+            if (onConfirm) {
+              onConfirm();
             }
           }}
         >
