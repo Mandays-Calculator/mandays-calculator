@@ -25,6 +25,10 @@
       "save": "Save",
       "next": "Next"
     },
+    "label": {
+      "createdDate": "Created date",
+      "selected": "Selected"
+    },
     "noData": "No Data",
     "somethingWentWrong": {
       "title": "SOMETHING WENT WRONG",
@@ -185,7 +189,11 @@
           "i06": "I06",
           "i07": "I07"
         }
-      }
+      },
+      "noTaskLabel": "No task.",
+      "noSelectedTaskLabel": "No selected task.",
+      "descriptionLabel": "Description",
+      "tasksListLabel": "Tasks list"
     },
     "legend": {
       "title": "Legend",

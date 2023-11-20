@@ -9,7 +9,9 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { Grid, Typography } from "@mui/material";
 import { SvgIcon, Pagination } from "~/components";
 import { TextField } from "~/components/form";
+import { useTranslation } from "react-i18next";
 
+import LocalizationKey from "~/i18n/key";
 import { usePagination } from "~/hooks/pagination";
 
 import { tasksData } from "~/pages/mandays-calculator/utils/tableData";
@@ -37,13 +39,14 @@ const AddTasks = (): ReactElement => {
   } = usePagination({ items: tasks, itemsPerPage: 2 });
 
   const DropZone = (): ReactElement => {
+    const { mandaysCalculator } = LocalizationKey;
+    const { t } = useTranslation();
     const [, drop] = useDrop(() => ({
       accept: "TASK",
       drop: (item: TaskType) => {
         const idx: any = item.id ? item.id : 0;
         const droppedTask = tasksData[idx];
         const updatedTask = tasksData.filter((task) => task.id !== item.id);
-        console.log(updatedTask, "updated task");
         setSelectedTasks((prev: any) => [...prev, droppedTask]);
         setTask(updatedTask);
       },
@@ -67,14 +70,16 @@ const AddTasks = (): ReactElement => {
                 "MM-DD-YYYY"
               )}`}
             >
-              <Typography>Description:</Typography>
+              <Typography>
+                {t(mandaysCalculator.taskDescriptionLabel)}:
+              </Typography>
               <Typography>{task.description}</Typography>
             </StyledCardContainer>
           ))
         ) : (
           <StyledNoDataContainer item xs={12}>
             <Typography variant="h2" color="primary">
-              No selected task.
+              {t(mandaysCalculator.noSelectedTaskLabel)}
             </Typography>
           </StyledNoDataContainer>
         )}
@@ -83,6 +88,8 @@ const AddTasks = (): ReactElement => {
   };
 
   const renderDraggableTasks = (): ReactElement => {
+    const { mandaysCalculator, common } = LocalizationKey;
+    const { t } = useTranslation();
     const DraggableTask = ({
       task,
       index,
@@ -109,11 +116,13 @@ const AddTasks = (): ReactElement => {
                 sx={{ color: "#7AC0EF", cursor: "pointer" }}
               />
             }
-            subHeader={`Created date: ${moment(new Date().toString()).format(
-              "MM-DD-YYYY"
-            )}`}
+            subHeader={`${t(common.createdDateLabel)}: ${moment(
+              new Date().toString()
+            ).format("MM-DD-YYYY")}`}
           >
-            <Typography>Description:</Typography>
+            <Typography>
+              {t(mandaysCalculator.taskDescriptionLabel)}:
+            </Typography>
             <Typography>{task.description}</Typography>
           </StyledCardContainer>
         </div>
@@ -121,11 +130,11 @@ const AddTasks = (): ReactElement => {
     };
 
     return (
-      <StyledGridItem item xs={6}>
+      <StyledGridItem item xs={6} key={index}>
         <Grid container sx={{ mb: 5 }} justifyContent="space-between">
           <Grid item xs={4}>
             <Typography color={"primary"} variant="h5" fontWeight="bold">
-              Tasks list
+              {t(mandaysCalculator.tasksListLabel)}
             </Typography>
           </Grid>
           <Grid item xs={5}>
@@ -143,7 +152,7 @@ const AddTasks = (): ReactElement => {
         ) : (
           <StyledNoDataContainer item xs={12}>
             <Typography variant="h2" color="primary">
-              No task.
+              {t(mandaysCalculator.noTaskLabel)}
             </Typography>
           </StyledNoDataContainer>
         )}
@@ -159,12 +168,14 @@ const AddTasks = (): ReactElement => {
   };
 
   const renderDropZoneTasks = (): ReactElement => {
+    const { t } = useTranslation();
+    const { common } = LocalizationKey;
     return (
       <StyledGridItem item xs={6}>
         <Grid container sx={{ mb: 5 }} justifyContent="space-between">
           <Grid item xs={4}>
             <Typography color={"primary"} variant="h5" fontWeight="bold">
-              Selected
+              {t(common.selectedLabel)}
             </Typography>
           </Grid>
           <Grid item xs={5}>
