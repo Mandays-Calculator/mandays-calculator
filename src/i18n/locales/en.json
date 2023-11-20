@@ -34,7 +34,8 @@
     },
     "errorMessage": {
       "required": "This field is required.",
-      "fieldRequired": "{{field}} is required."
+      "fieldRequired": "{{field}} is required.",
+      "unauthorized": "Unauthorized. Your session has expired. Please login again."
     }
   },
   "login": {
