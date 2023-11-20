@@ -2,7 +2,6 @@ import type { ReactElement, MouseEvent } from "react";
 
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Toolbar,
@@ -18,6 +17,7 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import AvatarImg from "~/assets/img/avatar.png";
+import ChangePasswordModal from "~/pages/auth/ChangePasswordModal";
 import { getUser } from "~/utils/oidc-utils";
 
 import { StyledAppBar, StyledToolBarContainer } from ".";
@@ -25,12 +25,11 @@ import { StyledAppBar, StyledToolBarContainer } from ".";
 const AppBarHeader = (): ReactElement => {
   const auth = useAuth();
   const user = getUser();
-  const navigate = useNavigate();
-  // const userSettings = ["Profile", "Change Password ", "Logout"];
   const name = user?.profile.name;
   const position = "Sprint Manager";
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState<boolean>(false);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget);
@@ -42,7 +41,7 @@ const AppBarHeader = (): ReactElement => {
 
   const handleChangePasswordUserMenu = (): void => {
     setAnchorElUser(null);
-    navigate('../change-password');
+    setChangePasswordModalOpen(true)
   };
 
   const handleLogoutUserMenu = (): void => {
@@ -57,7 +56,7 @@ const AppBarHeader = (): ReactElement => {
               <Tooltip title="Open settings">
                 <Grid container spacing={1} alignItems="center">
                   <Grid item xs={3}>
-                    <Avatar alt={name} src={AvatarImg} />
+                    <Avatar alt={name} src={String(AvatarImg)} />
                   </Grid>
                   <Grid item xs={8}>
                     <Typography textAlign="left" fontSize={14}>
@@ -115,6 +114,11 @@ const AppBarHeader = (): ReactElement => {
           </Toolbar>
         </StyledToolBarContainer>
       </Container>
+      
+      <ChangePasswordModal
+          open={changePasswordModalOpen}
+          onClose={() => setChangePasswordModalOpen(false)}
+        />
     </StyledAppBar>
   );
 };

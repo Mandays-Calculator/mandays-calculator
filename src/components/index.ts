@@ -10,4 +10,7 @@ export * from "./modal";
 export * from "./layout";
 export * from "./tab";
 export * from "./card";
-export * from './pagination';
+export * from "./pagination";
+export * from "./image-upload";
+export * from "./form/error-message";
+export * from "./modal/notification-modal";

@@ -1,4 +1,6 @@
 import type { ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Title } from "~/components";
 import { PageContainer } from "~/components";
 import { Typography, Grid, Stack } from "@mui/material";
@@ -7,7 +9,7 @@ import { CustomTab } from "~/components";
 import { CustomButton } from "~/components/form/button";
 
 import Summary from "./summary";
-import { useNavigate } from "react-router-dom";
+import Resources from "./resources";
 
 const EstimationDetails = (): ReactElement => {
   const navigate = useNavigate();
@@ -19,31 +21,18 @@ const EstimationDetails = (): ReactElement => {
     <>
       <Title title={"Current Estimations"} />
       <PageContainer>
-        <Grid
-          container
-          justifyContent="space-between"
-        >
+        <Grid container justifyContent="space-between">
           <Grid item>
-            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>Sprint 1</Typography>
+            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
+              Sprint 1
+            </Typography>
           </Grid>
-          <Grid
-            item
-            xs={2}
-          >
-            <Grid
-              container
-              justifyContent={"right"}
-            >
-              <Grid
-                item
-                xs={5}
-              >
+          <Grid item xs={2}>
+            <Grid container justifyContent={"right"}>
+              <Grid item xs={5}>
                 <CustomButton>Export</CustomButton>
               </Grid>
-              <Grid
-                item
-                xs={5}
-              >
+              <Grid item xs={5}>
                 <CustomButton>Share</CustomButton>
               </Grid>
             </Grid>
@@ -57,7 +46,7 @@ const EstimationDetails = (): ReactElement => {
             },
             {
               label: "Resources",
-              content: <h1>Resources here</h1>,
+              content: <Resources />,
             },
             {
               label: "Legend",

@@ -1,8 +1,10 @@
 import { ReactElement } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import { Grid } from "@mui/material";
 
+import LocalizationKey from "~/i18n/key";
 import Form from "~/components/form/Form";
 import { CustomButton as Button } from "~/components/form/button";
 import { ControlledTextField } from "~/components/form/controlled";
@@ -13,6 +15,8 @@ import { forgotPasswordSchema } from "./schema";
 
 const ForgotPassword = (): ReactElement => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { forgotPassword } = LocalizationKey;
 
   const forgotPasswordForm = useFormik({
     initialValues: {
@@ -34,8 +38,7 @@ const ForgotPassword = (): ReactElement => {
       <Grid container>
         <Grid item xs={12}>
           <StyledLabel textAlign="center">
-            Please enter your username or email. <br />A link will be sent to your
-            email in order for you to reset your password.
+            {t(forgotPassword.labelInfo.enterUsername)} <br />{t(forgotPassword.labelInfo.link)}
           </StyledLabel>
         </Grid>
         <Grid item xs={12} mt={2} mb={1}>
@@ -51,12 +54,12 @@ const ForgotPassword = (): ReactElement => {
         </Grid>
         <Grid item xs={12} mb={2}>
           <Link to={"/"}>
-            &lt;&lt;&lt; Back to Login
+            {t(forgotPassword.btnlabel.back)}
           </Link>
         </Grid>
         <Grid item xs={12}>
           <Button fullWidth type="submit">
-            Send
+            {t(forgotPassword.btnlabel.send)}
           </Button>
         </Grid>
       </Grid>

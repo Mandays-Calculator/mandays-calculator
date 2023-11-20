@@ -1,25 +1,39 @@
 import type { ReactElement } from "react";
 
+import { useTranslation } from "react-i18next";
+
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
-import Details from "./details";
-import { estimationDetailsData } from "~/pages/mandays-calculator/utils/tableData";
-
 import { Table } from "~/components";
 
-const Summary = (): ReactElement => {
-  const { columns, data }: any = estimationDetailsData;
-  return (
+import { estimationDetailsData } from "../../utils/tableData";
+import { SummaryListColumns } from "../../utils/columns";
+import Details from "./details";
+import AddEstimation from "./add-estimation";
+
+interface SummaryProps {
+  mode: EstimationDetailsMode;
+}
+
+const Summary = (props: SummaryProps): ReactElement => {
+  const { mode } = props;
+
+  const { t } = useTranslation();
+  const inputView = ["add", "edit"];
+  const isInput = inputView.includes(mode);
+  return isInput ? (
+    <AddEstimation />
+  ) : (
     <Stack
       direction="column"
       gap={2}
     >
       <Details />
       <Table
-        columns={columns}
-        data={data}
+        columns={SummaryListColumns({ t })}
+        data={estimationDetailsData}
         name="mandays-calculator"
       />
       <Grid container>

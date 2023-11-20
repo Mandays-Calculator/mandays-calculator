@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { CSSObject, Theme, styled } from "@mui/material/styles";
 
-const drawerWidth = 320;
+const drawerWidth = 350;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -121,18 +121,16 @@ const StyledCollapsibleItem = styled("div", {
   minHeight: "48px",
   cursor: "pointer",
   alignItems: "center",
-  "& svg": {
-    marginRight: theme.spacing(2.1),
-  },
   "& p": {
     fontSize: "1.15rem",
+    marginLeft: `${theme.spacing(2.1)} !important`,
   },
   "& button": {
-    padding: theme.spacing(2, 0, 2, 2),
+    padding: theme.spacing(2),
   },
   [theme.breakpoints.down("xl")]: {
     "& svg": {
-      marginRight: theme.spacing(4.7),
+      marginRight: theme.spacing(2.1),
     },
   },
 }));

@@ -1,3 +1,5 @@
+import type { LegendColumn } from "./types";
+
 export const mandaysCalculatorData = [
   {
     id: "sprint1",
@@ -15,31 +17,118 @@ export const mandaysCalculatorData = [
   },
 ];
 
-export const estimationDetailsData = {
-  columns: [
-    {
-      Header: "Functionality",
-      accessor: "functionality",
-    },
-    {
-      Header: "Total Man Hours",
-      accessor: "totalManHours",
-    },
-    {
-      Header: "Total Man Days",
-      accessor: "totalManDays",
-    },
-  ],
-  data: [
-    {
-      functionality: "(PMO)",
-      totalManHours: "40",
-      totalManDays: "40",
-    },
-    {
-      functionality: "(PMO)",
-      totalManHours: "39",
-      totalManDays: "41",
-    },
-  ],
-};
+export const estimationDetailsData = [
+  {
+    functionality: "(PMO)",
+    totalManHours: "40",
+    totalManDays: "40",
+  },
+  {
+    functionality: "(PMO)",
+    totalManHours: "39",
+    totalManDays: "41",
+  },
+];
+
+export const taskDetailData = [
+  {
+    label: "Function 1 - Setup and Configuration",
+    data: [
+      {
+        tasks: "Create repository for client and server",
+        complexity: "Hard",
+        i03: "4",
+        i04: "3",
+        i05: "2",
+        i06: "1",
+        i07: "0",
+        totalManHours: "24",
+      },
+      {
+        tasks: "Keycloak configuration and auth integration",
+        complexity: "Complex",
+        i03: "4",
+        i04: "3",
+        i05: "2",
+        i06: "1",
+        i07: "0",
+        totalManHours: "24",
+      },
+    ],
+  },
+  {
+    label: "Function 2 - Screen Creations",
+    data: [
+      {
+        tasks: "Login screens",
+        complexity: "simple",
+        i03: "2",
+        i04: "2",
+        i05: "1",
+        i06: "0",
+        i07: "0",
+        totalManHours: "24",
+      },
+      {
+        tasks: "Change password screens",
+        complexity: "Simple",
+        i03: "2",
+        i04: "2",
+        i05: "1",
+        i06: "0",
+        i07: "0",
+        totalManHours: "24",
+      },
+      {
+        tasks: "Task 3",
+        complexity: "Simple",
+        i03: "4",
+        i04: "1",
+        i05: "1",
+        i06: "1",
+        i07: "1",
+        totalManHours: "24",
+      },
+    ],
+  },
+];
+
+export const legendData: LegendColumn[] = [
+  {
+    complexity: "Simple",
+    i03: "5",
+    i04: "2",
+    i05: "1",
+    i06: "1",
+    i07: "1",
+  },
+  {
+    complexity: "Medium",
+    i03: "2",
+    i04: "2",
+    i05: "1",
+    i06: "1",
+    i07: "1",
+  },
+  {
+    complexity: "Complex",
+    i03: "3",
+    i04: "2",
+    i05: "1",
+    i06: "1",
+    i07: "1",
+  },
+];
+
+export const resourcesDetailData = [
+  {
+    odc: "PH",
+    resourceCount: "5",
+    annualLeaves: "3",
+  },
+  {
+    odc: "HK",
+    resourceCount: "2",
+    annualLeaves: "6",
+  },
+];
