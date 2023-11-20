@@ -130,7 +130,7 @@ const AddTasks = (): ReactElement => {
     };
 
     return (
-      <StyledGridItem item xs={6} key={index}>
+      <StyledGridItem item xs={6} key={"draggable-tasks"}>
         <Grid container sx={{ mb: 5 }} justifyContent="space-between">
           <Grid item xs={4}>
             <Typography color={"primary"} variant="h5" fontWeight="bold">
@@ -171,7 +171,7 @@ const AddTasks = (): ReactElement => {
     const { t } = useTranslation();
     const { common } = LocalizationKey;
     return (
-      <StyledGridItem item xs={6}>
+      <StyledGridItem item xs={6} key={"dropzone-tasks"}>
         <Grid container sx={{ mb: 5 }} justifyContent="space-between">
           <Grid item xs={4}>
             <Typography color={"primary"} variant="h5" fontWeight="bold">

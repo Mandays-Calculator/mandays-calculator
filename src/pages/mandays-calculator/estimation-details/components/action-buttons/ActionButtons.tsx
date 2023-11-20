@@ -28,7 +28,7 @@ const ActionButtons = (props: ActionButtonsProps): ReactElement => {
         <CustomButton onClick={handleNext}>{t(common.nextBtn)}</CustomButton>
       )}
       {activeTab === 3 && (
-        <CustomButton onClick={handleSave}>{common.saveBtn}</CustomButton>
+        <CustomButton onClick={handleSave}>{t(common.saveBtn)}</CustomButton>
       )}
     </Stack>
   );

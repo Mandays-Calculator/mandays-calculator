@@ -6,6 +6,7 @@ import { AuthProvider } from "react-oidc-context";
 import _ from "lodash";
 
 import { loadConfig } from "~/utils/env-config";
+import { initStorage } from "~/utils/storageHelper";
 import { PageLoader } from "./components";
 import AuthenticatedApp from "./AuthenticatedApp";
 
@@ -18,6 +19,7 @@ const App = (): ReactElement => {
       loadConfig(environment).then((res: ConfigType | null) => {
         if (res) {
           setConfig(res);
+          initStorage();
         }
       });
     }
