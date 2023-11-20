@@ -3,6 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
+import { Tasks } from "~/pages/tasks";
 import ErrorPage from "~/pages/common/error-page";
 import { ChangePassword } from "~/pages/auth";
 import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
@@ -32,6 +33,10 @@ export const routes: RouteType[] = [
   {
     path: "user-management",
     element: <UserManagement />,
+  },
+  {
+    path: "tasks",
+    element: <Tasks />,
   },
   {
     path: "complexity",

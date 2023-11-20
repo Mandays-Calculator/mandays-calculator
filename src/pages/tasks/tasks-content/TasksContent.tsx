@@ -1,15 +1,35 @@
 import { ReactElement, useState } from "react";
-
+ 
 import { Divider, Grid, Stack, Typography } from "@mui/material";
-
+ 
 import { Select, TextField, PageContainer, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
-
+ 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
-
+ 
+interface Task {
+  taskTitle: string;
+  desc: string;
+  date: string;
+  sprint: string;
+  complexity: string;
+  status: string;
+  type: string;
+}
+ 
 const TasksContent = (): ReactElement => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [newTask, setNewTask] = useState<Task>({
+    taskTitle: "",
+    desc: "",
+    date: "",
+    sprint: "",
+    complexity: "",
+    status: "Backlog",
+    type: "",
+  });
+ 
   const status = [
     "Backlog",
     "Not Yet Started",
@@ -17,7 +37,7 @@ const TasksContent = (): ReactElement => {
     "On Hold",
     "Completed",
   ];
-  const mockData = [
+  const [mockData, setMockData] = useState<Task[]>([
     {
       taskTitle: "BE - Database Structure",
       desc: "lorem kineme",
@@ -54,22 +74,71 @@ const TasksContent = (): ReactElement => {
       status: "Completed",
       type: "Bug",
     },
-  ];
-
+  ]);
+ 
   const handleModalState: () => void = () => {
     setModalOpen(!modalOpen);
   };
+ 
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setNewTask((prevTask) => ({
+  //     ...prevTask,
+  //     [name]: value,
+  //   }));
+  // };
+ 
+  const handleSelectChange = (name: string, value: string) => {
+    setNewTask((prevTask) => ({
+      ...prevTask,
+      [name]: value,
+    }));
+  };
+ 
+  const handleCreateTask = () => {
+    {
+      const updatedMockData = [...mockData, newTask];
+      setMockData(updatedMockData);
+ 
+      setModalOpen(false);
+      setNewTask({
+        taskTitle: "",
+        desc: "",
+        date: "",
+        sprint: "",
+        complexity: "",
+        status: "Backlog",
+        type: "",
+      });
+    }
+  };
+ 
+  const close = () => {
+    setModalOpen(false);
+    setNewTask({
+      taskTitle: "",
+      desc: "",
+      date: "",
+      sprint: "",
+      complexity: "",
+      status: "",
+      type: "",
+    });
+  };
+ 
   return (
     <PageContainer>
       <Modal open={modalOpen} title="Task Name" maxWidth="md" onClose={close}>
         <Stack direction="column" gap={2}>
           <TextField
-            name="description"
+            name="desc"
             label="Description"
             fullWidth
             multiline
             rows={4}
             maxRows={4}
+            onChange={(e) => setNewTask({ ...newTask, desc: e.target.value })}
+            value={newTask.desc}
           />
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -83,6 +152,10 @@ const TasksContent = (): ReactElement => {
                   placeholder="Complexity"
                   defaultValue="simple"
                   fullWidth
+                  onChange={(e) =>
+                    handleSelectChange("complexity", e.target.value as string)
+                  }
+                  value={newTask.complexity}
                   options={[
                     {
                       value: "simple",
@@ -97,7 +170,7 @@ const TasksContent = (): ReactElement => {
               </Stack>
             </Grid>
           </Grid>
-
+ 
           <Stack direction="column" gap={1}>
             <Typography>Tags</Typography>
             <Select
@@ -105,17 +178,14 @@ const TasksContent = (): ReactElement => {
               placeholder="Tags"
               multiple={true}
               fullWidth
+              onChange={(e) => setSelectedTags(e.target.value as string[])}
+              value={selectedTags}
               options={[
-                {
-                  value: "sample",
-                  label: "Sample",
-                },
-                {
-                  value: "sample",
-                  label: "Sample",
-                },
+                { value: "sample1", label: "Sample 1" },
+                { value: "sample2", label: "Sample 2" },
               ]}
             />
+            ;
           </Stack>
           <Stack
             direction="row"
@@ -126,7 +196,7 @@ const TasksContent = (): ReactElement => {
             <CustomButton
               type="button"
               colorVariant="primary"
-              onClick={handleModalState}
+              onClick={handleCreateTask}
             >
               Create
             </CustomButton>
@@ -152,7 +222,7 @@ const TasksContent = (): ReactElement => {
       <Grid container spacing={0} justifyContent="space-between">
         {status.map((i) => {
           const filteredData = mockData.filter((task) => task.status === i);
-
+ 
           return (
             <Grid item xs={2}>
               <div
@@ -201,7 +271,7 @@ const TasksContent = (): ReactElement => {
                     </div>
                   </Grid>
                 </Grid>
-
+ 
                 <Divider />
                 {filteredData.map((i) => {
                   return <TaskDetailsCard data={i} />;
@@ -214,5 +284,5 @@ const TasksContent = (): ReactElement => {
     </PageContainer>
   );
 };
-
+ 
 export default TasksContent;
