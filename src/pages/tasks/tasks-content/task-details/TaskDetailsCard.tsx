@@ -70,8 +70,24 @@ const TaskDetailsCard = ({ data }: TaskDetailsCardProps): ReactElement => {
             </Box>
           </Stack>
           <Stack display={"flex"} direction={"row"} spacing={1}>
-            <EditOutlinedIcon color="primary" />
-            <DeleteOutlinedIcon color="error" />
+            <EditOutlinedIcon
+              color="primary"
+              style={{
+                display:
+                  data.status !== "On Hold" && data.status !== "Backlog"
+                    ? "none"
+                    : "",
+              }}
+            />
+            <DeleteOutlinedIcon
+              color="error"
+              style={{
+                display:
+                  data.status !== "On Hold" && data.status !== "Backlog"
+                    ? "none"
+                    : "",
+              }}
+            />
           </Stack>
         </Stack>
       </div>

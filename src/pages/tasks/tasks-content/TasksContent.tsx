@@ -1,12 +1,12 @@
 import { ReactElement, useState } from "react";
- 
+
 import { Divider, Grid, Stack, Typography } from "@mui/material";
- 
+
 import { Select, TextField, PageContainer, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
- 
+
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
- 
+
 interface Task {
   taskTitle: string;
   desc: string;
@@ -16,7 +16,7 @@ interface Task {
   status: string;
   type: string;
 }
- 
+
 const TasksContent = (): ReactElement => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -29,7 +29,7 @@ const TasksContent = (): ReactElement => {
     status: "Backlog",
     type: "",
   });
- 
+
   const status = [
     "Backlog",
     "Not Yet Started",
@@ -75,11 +75,11 @@ const TasksContent = (): ReactElement => {
       type: "Bug",
     },
   ]);
- 
+
   const handleModalState: () => void = () => {
     setModalOpen(!modalOpen);
   };
- 
+
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const { name, value } = e.target;
   //   setNewTask((prevTask) => ({
@@ -87,19 +87,19 @@ const TasksContent = (): ReactElement => {
   //     [name]: value,
   //   }));
   // };
- 
+
   const handleSelectChange = (name: string, value: string) => {
     setNewTask((prevTask) => ({
       ...prevTask,
       [name]: value,
     }));
   };
- 
+
   const handleCreateTask = () => {
     {
       const updatedMockData = [...mockData, newTask];
       setMockData(updatedMockData);
- 
+
       setModalOpen(false);
       setNewTask({
         taskTitle: "",
@@ -112,7 +112,7 @@ const TasksContent = (): ReactElement => {
       });
     }
   };
- 
+
   const close = () => {
     setModalOpen(false);
     setNewTask({
@@ -125,7 +125,7 @@ const TasksContent = (): ReactElement => {
       type: "",
     });
   };
- 
+
   return (
     <PageContainer>
       <Modal open={modalOpen} title="Task Name" maxWidth="md" onClose={close}>
@@ -142,7 +142,14 @@ const TasksContent = (): ReactElement => {
           />
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField name="function" label="Function" fullWidth />
+              <TextField
+                name="function"
+                label="Function"
+                fullWidth
+                onChange={(e) =>
+                  setNewTask({ ...newTask, taskTitle: e.target.value })
+                }
+              />
             </Grid>
             <Grid item xs={6}>
               <Stack direction="column" gap={1}>
@@ -170,7 +177,7 @@ const TasksContent = (): ReactElement => {
               </Stack>
             </Grid>
           </Grid>
- 
+
           <Stack direction="column" gap={1}>
             <Typography>Tags</Typography>
             <Select
@@ -222,7 +229,7 @@ const TasksContent = (): ReactElement => {
       <Grid container spacing={0} justifyContent="space-between">
         {status.map((i) => {
           const filteredData = mockData.filter((task) => task.status === i);
- 
+
           return (
             <Grid item xs={2}>
               <div
@@ -264,14 +271,20 @@ const TasksContent = (): ReactElement => {
                   </Grid>
                   <Grid item xs={4}>
                     <div
-                      style={{ float: "right", cursor: "pointer" }}
+                      style={{
+                        fontSize: 25,
+                        fontWeight: "bolder",
+                        float: "right",
+                        cursor: "pointer",
+                        display: i !== "Backlog" ? "none" : "",
+                      }}
                       onClick={handleModalState}
                     >
                       +
                     </div>
                   </Grid>
                 </Grid>
- 
+
                 <Divider />
                 {filteredData.map((i) => {
                   return <TaskDetailsCard data={i} />;
@@ -284,5 +297,5 @@ const TasksContent = (): ReactElement => {
     </PageContainer>
   );
 };
- 
+
 export default TasksContent;
