@@ -14,6 +14,9 @@ import { Auth } from "~/pages/auth";
 import { getUser } from "~/utils/oidc-utils";
 import { getEnvConfig } from "~/utils/env-config";
 import { ERROR_MESSAGES, LOCAL_STORAGE_ITEMS } from "~/utils/constants";
+
+import { withIdleTimer } from "./pages/common/idle-timer-wrapper";
+
 import {
   removeStateStorage,
   getItemStorage,
@@ -24,7 +27,11 @@ import {
 import AppRoutes from "~/routes/AppRoutes";
 import axiosInit from "~/api/axios.config";
 
-import { fetchUserPermission, selectUser } from "~/redux/reducers/user";
+import {
+  fetchUserPermission,
+  selectUser,
+  resetUserState,
+} from "~/redux/reducers/user";
 
 const AuthenticatedApp = (): ReactElement => {
   const auth = useAuth();
@@ -64,6 +71,30 @@ const AuthenticatedApp = (): ReactElement => {
     };
   }, [auth]);
 
+  const AuthApp = (): ReactElement => {
+    return (
+      <Layout>
+        <AppRoutes />
+      </Layout>
+    );
+  };
+
+  const onIdle = () => {
+    console.log("User is idle");
+    // Additional idle actions
+  };
+
+  const onActive = () => {
+    console.log("User is active");
+    // Additional active actions
+  };
+
+  const IdleWrappedApp = withIdleTimer(AuthApp, {
+    onIdle,
+    onActive,
+    timeout: 30000,
+  });
+
   const renderAuth = (): ReactElement => {
     switch (auth.activeNavigator) {
       case "signinSilent":
@@ -89,44 +120,48 @@ const AuthenticatedApp = (): ReactElement => {
     }
 
     if (!config.enableAuth) {
-      return (
-        <Layout>
-          <AppRoutes />
-        </Layout>
-      );
+      return <IdleWrappedApp />;
     } else {
       if (auth.isAuthenticated) {
-        return (
-          <Layout>
-            <AppRoutes />
-          </Layout>
-        );
+        return <IdleWrappedApp />;
       }
       return <Auth />;
     }
   };
 
+  const handleLogout = (): void => {
+    removeStateStorage();
+    resetUserState();
+    auth.removeUser();
+  };
+
+  const RenderModal = (): ReactElement => {
+    return (
+      <>
+        {showUnauthorizedModal && (
+          <NotificationModal
+            type="unauthorized"
+            message={t(common.errorMessage.unauthorized)}
+            open={showUnauthorizedModal}
+            onConfirm={handleLogout}
+          />
+        )}
+        {userState.error !== null && (
+          <NotificationModal
+            type="error"
+            message={ERROR_MESSAGES.permission}
+            open={userState.error !== null}
+            onConfirm={handleLogout}
+          />
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       {renderAuth()}
-      {showUnauthorizedModal && (
-        <NotificationModal
-          type="unauthorized"
-          message={t(common.errorMessage.unauthorized)}
-          open={showUnauthorizedModal}
-          onConfirm={() => {
-            removeStateStorage();
-            auth.removeUser();
-          }}
-        />
-      )}
-      {userState.error !== null && (
-        <NotificationModal
-          type="error"
-          message={ERROR_MESSAGES.permission}
-          open={userState.error !== null}
-        />
-      )}
+      <RenderModal />
     </>
   );
 };

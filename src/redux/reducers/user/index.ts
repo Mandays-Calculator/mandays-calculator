@@ -43,8 +43,16 @@ export const userSlice = createSlice({
       state.error = ERROR_MESSAGES.permission;
     });
   },
-  reducers: {},
+  reducers: {
+    resetUserState: () => {
+      return initialState;
+    },
+  },
 });
 
+// actions
+export const { resetUserState } = userSlice.actions;
+//slices
 export const selectUser = (state: RootState) => state.user;
+//reducer
 export default userSlice.reducer;
