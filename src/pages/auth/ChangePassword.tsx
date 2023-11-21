@@ -75,13 +75,16 @@ const ChangePassword = (): ReactElement => {
         <Grid container>
           <Grid item xs={12} mb={2}>
             <StyledLabel>{t(changePassword.label.enterNewPassword)}</StyledLabel>
-            <PasswordInput name="password" placeholder="Input Password" />
+            <PasswordInput
+              name="password"
+              placeholder={t(changePassword.placeholder.password)}
+            />
           </Grid>
           <Grid item xs={12}>
             <StyledLabel>{t(changePassword.label.confirmNewPassword)}</StyledLabel>
             <PasswordInput
               name="confirmPassword"
-              placeholder="Confirm Password"
+              placeholder={t(changePassword.placeholder.confirmPassword)}
             />
           </Grid>
           <Grid item xs={12} mt={2}>
