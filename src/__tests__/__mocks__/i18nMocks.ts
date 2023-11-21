@@ -14,6 +14,8 @@ export const i18nMock = {
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
     pageNotFoundDesc: "common.notFound.description",
+    permissionDeniedTitle: "common.permissionDenied.title",
+    permissionDeniedDesc: "common.permissionDenied.description",
     goBackHomeBtnLabel: "common.button.goBackHome",
   },
 };
