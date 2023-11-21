@@ -28,6 +28,14 @@ describe("Error Page Component", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
+  it("renders permission denied", () => {
+    const { common } = i18nMock;
+    const { asFragment, getByText } = render(<ErrorPage type="permission-error" />);
+    expect(getByText(common.permissionDeniedTitle)).toBeInTheDocument();
+    expect(getByText(common.somethingWentWrongDesc)).toBeInTheDocument();
+    expect(asFragment()).toMatchSnapshot();
+  });
+
   it("clicked go back button", () => {
     const { common } = i18nMock;
     const navigate = jest.fn();
