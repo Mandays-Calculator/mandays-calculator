@@ -28,7 +28,11 @@ const MandaysCalculator = (): ReactElement => {
   const navigate = useNavigate();
 
   const handleRowClick = (sprintId: string): void => {
-    navigate(`${sprintId}`);
+    navigate(`${sprintId}`, {
+      state: {
+        mode: "view",
+      },
+    });
   };
 
   const handleDeleteSprint = (sprintId: string): void => {
@@ -39,7 +43,27 @@ const MandaysCalculator = (): ReactElement => {
   };
 
   const handleEditSprint = (sprintId: string): void => {
-    console.log("Edit sprint", sprintId);
+    navigate(`./${sprintId}`, {
+      state: {
+        mode: "edit",
+      },
+    });
+  };
+
+  const deleteSelectedSprint = (): void => {
+    console.log("deleting sprint");
+    setDeleteModalOpen({
+      open: false,
+      sprintId: null,
+    });
+  };
+
+  const handleAddSprint = (): void => {
+    navigate("./add-sprint", {
+      state: {
+        mode: "add",
+      },
+    });
   };
 
   return (
@@ -52,7 +76,7 @@ const MandaysCalculator = (): ReactElement => {
             </Typography>
           </Grid>
           <Grid>
-            <CustomButton>
+            <CustomButton onClick={handleAddSprint}>
               <SvgIcon name="add_v2" $size={2} sx={{ mr: 1 }} />
               {t(mandaysCalculator.addEstimationBtn)}
             </CustomButton>
@@ -70,7 +94,7 @@ const MandaysCalculator = (): ReactElement => {
         />
       </PageContainer>
       <DeleteModal
-        onDeleteConfirm={(): void => {}} // apply delete integration
+        onConfirm={deleteSelectedSprint} // apply delete integration
         open={deleteModalOpen.open}
         message={t(mandaysCalculator.modalConfirmDeleteEstimation)}
         onClose={() =>

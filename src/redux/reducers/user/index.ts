@@ -13,6 +13,7 @@ const initialState: UserPermissionState = {
   loading: false,
   error: null,
   permissions: [],
+  initialized: false,
 };
 
 export const fetchUserPermission = createAsyncThunk(
@@ -34,12 +35,14 @@ export const userSlice = createSlice({
         const { user, permissions } = action.payload.data;
         state.user = user;
         state.permissions = permissions;
+        state.initialized = true;
       }
     );
     builder.addCase(fetchUserPermission.rejected, (state) => {
       state.loading = false;
       state.user = null;
       state.permissions = [];
+      state.initialized = true;
       state.error = ERROR_MESSAGES.permission;
     });
   },

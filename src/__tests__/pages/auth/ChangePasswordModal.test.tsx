@@ -1,5 +1,4 @@
 import { I18nextProvider } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -7,9 +6,8 @@ import userEvent from '@testing-library/user-event';
 import { Formik } from 'formik';
 import i18n from '~/i18n';
 
-import { ChangePassword } from '~/pages/auth';
-
 import { cleanAllCallback } from './utils/auth-utils';
+import ChangePasswordModal from '~/pages/auth/ChangePasswordModal';
 
 // Mock the i18next translation function
 i18n.init({
@@ -57,6 +55,7 @@ const CHANGE_PASSWORD_TEXT = {
 };
 
 const handleSubmit = jest.fn();
+const handleClose = jest.fn();
 
 afterEach((done) => {
     cleanAllCallback(done);
@@ -66,7 +65,7 @@ afterAll((done) => {
     cleanAllCallback(done);
 });
 
-describe('GIVEN user changes password,', () => {
+describe('GIVEN user changes password via modal,', () => {
     interface TestConfig {
         title: string;
         password: string;
@@ -168,8 +167,14 @@ describe('GIVEN user changes password,', () => {
         },
     ];
 
-    test('WHEN user access the ChangePassword page, THEN it should render the ChangePassword component correctly', () => {
-        renderChangePassword();
+    test('WHEN ChangePasswordModal is closed, THEN it should not render the ChangePassword Modal', () => {
+        renderChangePasswordModal(false);
+
+        expect(screen.queryByText(CHANGE_PASSWORD_TEXT.label)).toBeNull();
+    });
+
+    test('WHEN user access the ChangePasswordModal, THEN it should render the ChangePassword Modal correctly', () => {
+        renderChangePasswordModal(true);
 
         expect(screen.getByText(CHANGE_PASSWORD_TEXT.label)).toBeInTheDocument();
         expect(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password)).toBeInTheDocument();
@@ -180,7 +185,7 @@ describe('GIVEN user changes password,', () => {
     test.each(testCases)(
         `%s`,
         async ({ password, confirmPassword, expectedResults }) => {
-            renderChangePassword();
+            renderChangePasswordModal(true);
             const user = userEvent.setup();
 
             await user.type(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password), password);
@@ -201,26 +206,11 @@ describe('GIVEN user changes password,', () => {
     );
 });
 
-describe('GIVEN user wants to go cancel changing password,', () => {
-    test('WHEN user clicks the cancel button, THEN it should navigate back', async () => {
-        const mockNavigate = jest.fn();
-        (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-
-        renderChangePassword();
-
-        await userEvent.click(screen.getByRole('button', { name: /Cancel/i }));
-
-        await waitFor(() => {
-            expect(mockNavigate).toHaveBeenCalledWith(-1);
-        });
-    });
-});
-
-const renderChangePassword = () => {
+const renderChangePasswordModal = (open: boolean) => {
     render(
         <I18nextProvider i18n={i18n}>
             <Formik initialValues={{}} onSubmit={handleSubmit}>
-                <ChangePassword />
+                <ChangePasswordModal open={open} onClose={handleClose} />
             </Formik>
         </I18nextProvider>
     );
