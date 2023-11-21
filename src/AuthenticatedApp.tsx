@@ -11,14 +11,13 @@ import { PageLoader, Layout, NotificationModal } from "~/components";
 import LocalizationKey from "~/i18n/key";
 import { Auth } from "~/pages/auth";
 
-import { getUser } from "~/utils/oidc-utils";
+import { getUser, logout } from "~/utils/oidc-utils";
 import { getEnvConfig } from "~/utils/env-config";
 import { ERROR_MESSAGES, LOCAL_STORAGE_ITEMS } from "~/utils/constants";
 
-import { withIdleTimer } from "./pages/common/idle-timer-wrapper";
+import { useIdleTimer } from "~/hooks/idle-timer";
 
 import {
-  removeStateStorage,
   getItemStorage,
   removeStorageListener,
   addStorageListener,
@@ -29,8 +28,8 @@ import axiosInit from "~/api/axios.config";
 
 import {
   fetchUserPermission,
-  selectUser,
   resetUserState,
+  selectUser,
 } from "~/redux/reducers/user";
 
 const AuthenticatedApp = (): ReactElement => {
@@ -79,20 +78,8 @@ const AuthenticatedApp = (): ReactElement => {
     );
   };
 
-  const onIdle = () => {
-    console.log("User is idle");
-    // Additional idle actions
-  };
-
-  const onActive = () => {
-    console.log("User is active");
-    // Additional active actions
-  };
-
-  const IdleWrappedApp = withIdleTimer(AuthApp, {
-    onIdle,
-    onActive,
-    timeout: 30000,
+  const IdleWrappedApp = useIdleTimer(AuthApp, {
+    timeout: config.idleTimeoutConfig.durationUntilPromptSeconds,
   });
 
   const renderAuth = (): ReactElement => {
@@ -130,9 +117,9 @@ const AuthenticatedApp = (): ReactElement => {
   };
 
   const handleLogout = (): void => {
-    removeStateStorage();
-    resetUserState();
-    auth.removeUser();
+    logout(auth, () => {
+      dispatch(resetUserState());
+    });
   };
 
   const RenderModal = (): ReactElement => {

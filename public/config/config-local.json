@@ -1,8 +1,8 @@
 {
   "environment": "local",
   "idleTimeoutConfig": {
-    "durationUntilPromptSeconds": "600",
-    "confirmationWindowSeconds": "300"
+    "durationUntilPromptSeconds": "600000",
+    "confirmationWindowSeconds": "300000"
   },
   "apiBasePath": "http://localhost:18000",
   "enableAuth": true,
@@ -12,6 +12,5 @@
     "client_id": "mc-client",
     "response_type": "code",
     "scope": "openid profile"
-  },
-  "sessionStorageOidcKey": "oidc.user:http://localhost:8080/realms/mandays-calculator:mc-client"
+  }
 }

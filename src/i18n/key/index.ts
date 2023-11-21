@@ -76,6 +76,9 @@ const LocalizationKey = {
       fieldRequired: "common.errorMessage.fieldRequired",
       unauthorized: "common.errorMessage.unauthorized",
     },
+    idleTimeOutLabel: "common.idleTimeOut.label",
+    idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
+    logout: "common.idleTimeOut.logout",
   },
   mandaysCalculator: {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",

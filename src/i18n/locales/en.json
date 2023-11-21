@@ -29,6 +29,11 @@
       "createdDate": "Created date",
       "selected": "Selected"
     },
+    "idleTimeOut": {
+      "label": "You will be automatically logged off in",
+      "stayLogged": "Stay Logged on",
+      "logout": "Logout"
+    },
     "noData": "No Data",
     "somethingWentWrong": {
       "title": "SOMETHING WENT WRONG",
