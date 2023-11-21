@@ -60,8 +60,7 @@ const AddODC = (props: AddProps): ReactElement => {
 
   const handleError = (error: string | undefined): boolean => {
     let retError = false;
-    if (error === undefined || error === null || error === "")
-      retError = true;
+    if (error === undefined || error === null || error === "") retError = true;
     return retError;
   };
 
@@ -149,8 +148,8 @@ const AddODC = (props: AddProps): ReactElement => {
   //   else {
   //     setIsNameError(false);
   //     setIsAdd(false);
-  //   } 
-  
+  //   }
+
   //   const data = SubmitFormat(values?.odcList[idx]);
   //   console.log("Submit JSON API", data);
   // };
@@ -220,11 +219,17 @@ const AddODC = (props: AddProps): ReactElement => {
                     type="button"
                     sx={{ mr: 2 }}
                     onClick={handleAddODC}
-                  >{t('odc.button.save')}</CustomButton>
-                  <CustomButton type="button" onClick={handleClose}>{t('odc.button.cancel')}</CustomButton>
+                  >
+                    {t("odc.button.save")}
+                  </CustomButton>
+                  <CustomButton type="button" onClick={handleClose}>
+                    {t("odc.button.cancel")}
+                  </CustomButton>
                 </>
               ) : (
-                <CustomButton type="button" onClick={handleAddODC}>{t('odc.button.add')}</CustomButton>
+                <CustomButton type="button" onClick={handleAddODC}>
+                  {t("odc.button.add")}
+                </CustomButton>
               )}
             </Grid>
           </Grid>

@@ -12,7 +12,6 @@ import { DeleteModal } from "~/components/modal/delete-modal";
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
 import { IntValuesSchema } from "./utils/schema";
-import { NewODCData } from "./utils/data";
 
 const ODCManagement = (): ReactElement => {
   const [isAdd, setIsAdd] = useState<boolean>(false);
@@ -30,15 +29,11 @@ const ODCManagement = (): ReactElement => {
     enableReinitialize: true,
     onSubmit: (): void => {},
   });
-  
+
   useEffect(() => {
-    if (isAdd === true && isEdit === false) {
-      const arr = ODCForm.values.odcList;
-      arr.push(NewODCData);
-      setIdx(arr.length - 1);
-      ODCForm.setFieldValue(`ocdList`, arr);
-    }
-  }, [isAdd]);
+    const arr = ODCForm.values.odcList;
+    setIdx(arr.length - 1);
+  }, [ODCForm.values.odcList]);
 
   if (isLoading) {
     return <PageLoader />;
@@ -69,7 +64,7 @@ const ODCManagement = (): ReactElement => {
             // postUpdateAPI
             arr[dIdx].active = false;
             ODCForm.setFieldValue(`odcList`, arr);
-            console.log('Delete API', arr, dIdx);
+            console.log("Delete API", arr, dIdx);
           }}
           open={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
