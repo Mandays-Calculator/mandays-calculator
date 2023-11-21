@@ -57,6 +57,8 @@ const LocalizationKey = {
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
     pageNotFoundDesc: "common.notFound.description",
+    permissionDeniedTitle: "common.permissionDenied.title",
+    permissionDeniedDesc: "common.permissionDenied.description",
     goBackHomeBtnLabel: "common.button.goBackHome",
     collapse: "common.button.collapse",
     backBtn: "common.button.back",
@@ -85,8 +87,7 @@ const LocalizationKey = {
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
-    modalConfirmDeleteEstimation:
-      "mandaysCalculator.modalLabels.confirmDeleteEstimation",
+    modalConfirmDeleteEstimation: "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
@@ -103,8 +104,7 @@ const LocalizationKey = {
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
-      resourceCount:
-        "mandaysCalculator.resourceList.table.columns.resourceCount",
+      resourceCount: "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
     summaryForm: {
