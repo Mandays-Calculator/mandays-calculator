@@ -81,7 +81,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
-  console.log(value);
+
   const { values } = useFormikContext<UserManagementForms>();
   const gender = () => {
     if (values.gender == "FEMALE") {

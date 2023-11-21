@@ -65,11 +65,13 @@ export const userListColumns = ({
                 onEditUser(row.original.id);
                 form.setValues(setCurrentValues);
               }}
+              data-testid="test-edit-user-btn"
             >
               <SvgIcon name="edit" $size={2} color="primary" />
             </IconButton>
             <IconButton
               onClick={() => onDeleteUser(row.original.id, row.index)}
+              data-testid="test-delete-user-btn"
             >
               <SvgIcon name="delete" $size={2} color="error" />
             </IconButton>
