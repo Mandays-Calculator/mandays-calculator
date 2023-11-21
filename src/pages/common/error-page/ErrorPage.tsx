@@ -13,7 +13,7 @@ import { CustomButton } from "~/components/form/button";
 import { StyledChildContainer, StyledContainer } from ".";
 
 interface ErrorPageProps {
-  type: "something-went-wrong" | "not-found";
+  type: "something-went-wrong" | "not-found" | "permission-error";
 }
 
 const ErrorPage = (props: ErrorPageProps): ReactElement => {
@@ -66,6 +66,31 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
             fontWeight="bold"
           >
             {t(common.somethingWentWrongDesc)}
+          </Typography>
+          <CustomButton
+            type="button"
+            onClick={goBack}
+          >
+            {t(common.goBackHomeBtnLabel)}
+          </CustomButton>
+        </>
+      );
+    }
+
+    if (type === "permission-error") {
+      return (
+        <>
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+          >
+            {t(common.permissionDeniedTitle)}
+          </Typography>
+          <Typography
+            variant="body2"
+            fontWeight="bold"
+          >
+            {t(common.permissionDeniedDesc)}
           </Typography>
           <CustomButton
             type="button"
