@@ -90,14 +90,15 @@
     }
   },
   "forgotPassword": {
-    "labelInfo": {
+    "label": {
       "enterUsername": "Please enter your username or email.",
       "link": "A link will be sent to your email in order for you to reset your password."
     },
     "btnlabel": {
       "send": "Send",
       "back": "<<< Back to Login"
-    }
+    },
+    "placeholder": "Username or Email"
   },
   "odc": {
     "management": {
