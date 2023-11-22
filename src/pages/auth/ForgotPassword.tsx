@@ -79,7 +79,7 @@ const ForgotPassword = (): ReactElement => {
         </Grid>
         <Grid item xs={12}>
           <Button fullWidth type="submit" disabled={isLoading}>
-            {isLoading ? t("Sending...") : t(forgotPassword.btnlabel.send)}
+            {isLoading ? t(forgotPassword.btnlabel.process) : t(forgotPassword.btnlabel.send)}
           </Button>
         </Grid>
       </Grid>
