@@ -37,7 +37,7 @@ const EstimationDetails = (): ReactElement => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [isExport, setIsExport] = useState<boolean>(false);
 
-  const mode = state.mode || "view";
+  const mode = state?.mode || "view";
   const sprintName = "Sprint 1"; // Note: will come from API
 
   const switchTab = (tabId: number): void => {

@@ -12,6 +12,11 @@ export const mandaysCalculatorRoutes: RouteType[] = [
     element: <EstimationDetails />,
   },
   {
+    path: "mandays-estimation-detail",
+    element: <EstimationDetails />,
+    protected: false,
+  },
+  {
     path: "mandays-estimation-tool",
     pageTitle: "mandaysCalculator.label",
     element: <MandaysCalculator />,

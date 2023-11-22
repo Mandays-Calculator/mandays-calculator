@@ -9,7 +9,6 @@ import { useAuth } from "react-oidc-context";
 
 import { PageLoader, Layout, NotificationModal } from "~/components";
 import LocalizationKey from "~/i18n/key";
-import { Auth } from "~/pages/auth";
 
 import { getUser, logout } from "~/utils/oidc-utils";
 import { getEnvConfig } from "~/utils/env-config";
@@ -73,7 +72,9 @@ const AuthenticatedApp = (): ReactElement => {
   const AuthApp = (): ReactElement => {
     return (
       <Layout>
-        <AppRoutes />
+        <AppRoutes
+          isAuthenticated={!config.enableAuth || auth.isAuthenticated}
+        />
       </Layout>
     );
   };
@@ -97,7 +98,6 @@ const AuthenticatedApp = (): ReactElement => {
           />
         );
     }
-
     if (auth.isLoading || userState.loading) {
       return (
         <PageLoader
@@ -112,7 +112,7 @@ const AuthenticatedApp = (): ReactElement => {
       if (auth.isAuthenticated) {
         return <IdleWrappedApp />;
       }
-      return <Auth />;
+      return <AppRoutes isAuthenticated={false} />;
     }
   };
 
