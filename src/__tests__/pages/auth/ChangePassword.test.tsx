@@ -47,6 +47,15 @@ jest.mock('react-router-dom', () => ({
     useNavigate: jest.fn(),
 }));
 
+const CHANGE_PASSWORD_TEXT = {
+    label: 'changePassword.label.createNewPassword',
+    placeholder: {
+        password: "changePassword.placeholder.userName",
+        confirmPassword: "changePassword.placeholder.password"
+    },
+    button: 'changePassword.btnlabel.changePassword'
+};
+
 const handleSubmit = jest.fn();
 
 afterEach((done) => {
@@ -162,7 +171,10 @@ describe('GIVEN user changes password,', () => {
     test('WHEN user access the ChangePassword page, THEN it should render the ChangePassword component correctly', () => {
         renderChangePassword();
 
-        expect(screen.getByText('changePassword.label.createNewPassword')).toBeInTheDocument();
+        expect(screen.getByText(CHANGE_PASSWORD_TEXT.label)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.button })).toBeInTheDocument();
     });
 
     test.each(testCases)(
@@ -171,9 +183,9 @@ describe('GIVEN user changes password,', () => {
             renderChangePassword();
             const user = userEvent.setup();
 
-            await user.type(screen.getByPlaceholderText('Input Password'), password);
-            await user.type(screen.getByPlaceholderText('Confirm Password'), confirmPassword);
-            await user.click(screen.getByRole('button', { name: 'changePassword.btnlabel.changePassword' }));
+            await user.type(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password), password);
+            await user.type(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword), confirmPassword);
+            await user.click(screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.button }));
 
             await waitFor(() => {
                 Object.entries(expectedResults).forEach(([testId, shouldExist]) => {

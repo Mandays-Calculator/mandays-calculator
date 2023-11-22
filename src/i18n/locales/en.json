@@ -21,7 +21,18 @@
       "back": "Back",
       "share": "Share",
       "export": "Export",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "save": "Save",
+      "next": "Next"
+    },
+    "label": {
+      "createdDate": "Created date",
+      "selected": "Selected"
+    },
+    "idleTimeOut": {
+      "label": "You will be automatically logged off in",
+      "stayLogged": "Stay Logged on",
+      "logout": "Logout"
     },
     "noData": "No Data",
     "somethingWentWrong": {
@@ -32,9 +43,14 @@
       "title": "PAGE NOT FOUND",
       "description": "Couldn't find that. Try something else or go back home."
     },
+    "permissionDenied": {
+      "title": "PERMISSION DENIED",
+      "description": "You do not have permission to access this."
+    },
     "errorMessage": {
       "required": "This field is required.",
-      "fieldRequired": "{{field}} is required."
+      "fieldRequired": "{{field}} is required.",
+      "unauthorized": "Unauthorized. Your session has expired. Please login again."
     }
   },
   "login": {
@@ -58,8 +74,8 @@
   "changePassword": {
     "label": {
       "createNewPassword": "Create New Password",
-      "enterNewPassword": "Enter new password",
-      "confirmNewPassword": "Confirm new password"
+      "enterNewPassword": "Enter New Password",
+      "confirmNewPassword": "Confirm New Password"
     },
     "btnlabel": {
       "changePassword": "Change Password",
@@ -72,17 +88,22 @@
       "number": "Password must contain a number",
       "symbol": "Password must contain one of the following symbols (#$-_!)",
       "match": "New password and confirm new password must match."
+    },
+    "placeholder": {
+      "password": "New Password",
+      "confirmPassword": "Confirm Password"
     }
   },
   "forgotPassword": {
-    "labelInfo": {
+    "label": {
       "enterUsername": "Please enter your username or email.",
       "link": "A link will be sent to your email in order for you to reset your password."
     },
     "btnlabel": {
       "send": "Send",
       "back": "<<< Back to Login"
-    }
+    },
+    "placeholder": "Username or Email"
   },
   "odc": {
     "management": {
@@ -179,7 +200,11 @@
           "i06": "I06",
           "i07": "I07"
         }
-      }
+      },
+      "noTaskLabel": "No task.",
+      "noSelectedTaskLabel": "No selected task.",
+      "descriptionLabel": "Description",
+      "tasksListLabel": "Tasks list"
     },
     "legend": {
       "title": "Legend",

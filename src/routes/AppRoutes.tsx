@@ -1,30 +1,40 @@
 import { RouteType } from ".";
 import { ReactElement } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import { Routes, Route } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Title } from "~/components";
+import { authRoutes, Auth } from "~/pages/auth";
 
-import { routesConfig } from ".";
+import RouteWithTitle from "./RouteWithTitle";
+import { seperateRoutesByType } from "./utils";
 
-const RouteWithTitle = ({ routeItem }: { routeItem: RouteType }) => {
-  const { t } = useTranslation();
-  return (
-    <>
-      {routeItem.pageTitle && typeof routeItem.pageTitle === "string" ? (
-        <Title title={t(routeItem.pageTitle)} />
-      ) : (
-        routeItem.pageTitle
-      )}
-      {routeItem.element}
-    </>
-  );
-};
+const AppRoutes = ({
+  isAuthenticated,
+}: {
+  isAuthenticated: boolean;
+}): ReactElement => {
+  const publicRoutes = seperateRoutesByType("public");
+  const privateRoutes = seperateRoutesByType("private");
 
-const AppRoutes = (): ReactElement => {
+  const routes = isAuthenticated
+    ? [
+        ...privateRoutes,
+        ...publicRoutes,
+        ...authRoutes.map((routeItem: RouteType) => ({
+          ...routeItem,
+          element: <Navigate to="/" />,
+        })),
+      ]
+    : [
+        ...publicRoutes,
+        ...authRoutes.map((routeItem: RouteType) => ({
+          ...routeItem,
+          element: <Auth>{routeItem.element}</Auth>,
+        })),
+      ];
+
   return (
     <Routes>
-      {routesConfig.map((routeItem: RouteType, index: number) => (
+      {routes.map((routeItem: RouteType, index: number) => (
         <Route
           path={routeItem.path}
           element={<RouteWithTitle routeItem={routeItem} />}
