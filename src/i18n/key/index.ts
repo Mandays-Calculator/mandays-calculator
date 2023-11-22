@@ -39,14 +39,15 @@ const LocalizationKey = {
     },
   },
   forgotPassword: {
-    labelInfo: {
-      enterUsername: "forgotPassword.labelInfo.enterUsername",
-      link: "forgotPassword.labelInfo.link",
+    label: {
+      enterUsername: "forgotPassword.label.enterUsername",
+      link: "forgotPassword.label.link",
     },
     btnlabel: {
       send: "forgotPassword.btnlabel.send",
       back: "forgotPassword.btnlabel.back",
     },
+    placeholder: "forgotPassword.placeholder"
   },
   footerLabel: "footer.label",
   common: {
@@ -78,6 +79,9 @@ const LocalizationKey = {
       fieldRequired: "common.errorMessage.fieldRequired",
       unauthorized: "common.errorMessage.unauthorized",
     },
+    idleTimeOutLabel: "common.idleTimeOut.label",
+    idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
+    logout: "common.idleTimeOut.logout",
   },
   mandaysCalculator: {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",

@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 import { useEffect, useState } from "react";
 import { CustomButton } from "~/components/form/button";
@@ -6,13 +6,18 @@ import Modal from "~/components/modal/Modal";
 import WarningIcon from "@mui/icons-material/Warning";
 import { Box, Stack } from "@mui/material";
 
-type ModalType = "error" | "warning" | "success" | "unauthorized";
+type ModalType =
+  | "error"
+  | "warning"
+  | "success"
+  | "unauthorized"
+  | "idleTimeOut";
 
 interface NotificationModalProps {
   onConfirm?: () => void;
   open: boolean;
   onClose?: () => void;
-  message?: string;
+  message?: string | ReactNode;
   onCloseLabel?: string;
   onConfirmLabel?: string;
   type?: ModalType;
@@ -26,6 +31,8 @@ const renderIcon = (type: ModalType): ReactElement => {
     case "unauthorized":
       return <WarningIcon color="warning" sx={{ fontSize: 70 }} />;
     case "warning":
+    case "idleTimeOut":
+      return <WarningIcon color="error" sx={{ fontSize: 40 }} />;
     case "success":
     default:
       return <WarningIcon color="success" />;

@@ -38,13 +38,13 @@ const ForgotPassword = (): ReactElement => {
       <Grid container>
         <Grid item xs={12}>
           <StyledLabel textAlign="center">
-            {t(forgotPassword.labelInfo.enterUsername)} <br />{t(forgotPassword.labelInfo.link)}
+            {t(forgotPassword.label.enterUsername)} <br />{t(forgotPassword.label.link)}
           </StyledLabel>
         </Grid>
         <Grid item xs={12} mt={2} mb={1}>
           <ControlledTextField
             fullWidth
-            placeholder="Input Username or Email"
+            placeholder={t(forgotPassword.placeholder)}
             name="usernameOrEmail"
             helperText={getFieldError(
               forgotPasswordForm.errors,
