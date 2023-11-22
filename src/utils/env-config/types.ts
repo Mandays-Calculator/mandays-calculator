@@ -14,7 +14,7 @@ export type IdleTimeoutConfig = {
 
 export type ConfigType = {
   environment: string;
-  apiBasePath: string;
+  apiBasePath: string | ApiBasePath;
   enableAuth: boolean;
   oidcConfig: OIDCConfigType;
   idleTimeoutConfig: IdleTimeoutConfig;

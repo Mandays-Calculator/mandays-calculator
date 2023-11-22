@@ -18,146 +18,81 @@ const sampleData1 = {
 };
 const Details = (): ReactElement => {
   return (
-    <Grid
-      container
-      spacing={2}
-    >
-      <Grid
-        xs={6}
-        item
-      >
+    <Grid container spacing={2}>
+      <Grid xs={6} item>
         <Card>
-          <Stack
-            direction="column"
-            gap={2}
-          >
-            {Object.keys(sampleData1).map((item) => (
-              <Grid container>
-                <Grid
-                  item
-                  xs={3}
-                >
-                  <Typography fontWeight={"bold"}>{item.toUpperCase()}:</Typography>
+          <Stack direction="column" gap={2}>
+            {Object.keys(sampleData1).map((item, index) => (
+              <Grid container key={index}>
+                <Grid item xs={3}>
+                  <Typography fontWeight={"bold"}>
+                    {item.toUpperCase()}:
+                  </Typography>
                 </Grid>
-                <Grid
-                  xs={6}
-                  item
-                >
-                  <Typography>{sampleData1[item as keyof SampleDataType]}</Typography>
+                <Grid xs={6} item>
+                  <Typography>
+                    {sampleData1[item as keyof SampleDataType]}
+                  </Typography>
                 </Grid>
               </Grid>
             ))}
           </Stack>
         </Card>
       </Grid>
-      <Grid
-        xs={6}
-        item
-      >
+      <Grid xs={6} item>
         <Card>
-          <Stack
-            direction="column"
-            gap={0.4}
-          >
+          <Stack direction="column" gap={0.4}>
             <Grid container>
-              <Grid
-                item
-                xs={6}
-              ></Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={6}></Grid>
+              <Grid item xs={2}>
                 <Typography>PH</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>HK</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>MY</Typography>
               </Grid>
             </Grid>
             <Grid container>
-              <Grid
-                item
-                xs={6}
-              >
+              <Grid item xs={6}>
                 <Typography fontWeight={"bold"}>No. of Resources:</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
             </Grid>
             <Grid container>
-              <Grid
-                item
-                xs={6}
-              >
+              <Grid item xs={6}>
                 <Typography fontWeight={"bold"}>Leaves:</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
             </Grid>
             <Grid container>
-              <Grid
-                item
-                xs={6}
-              >
+              <Grid item xs={6}>
                 <Typography fontWeight={"bold"}>Total man-days:</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
-              <Grid
-                item
-                xs={2}
-              >
+              <Grid item xs={2}>
                 <Typography>0</Typography>
               </Grid>
             </Grid>
