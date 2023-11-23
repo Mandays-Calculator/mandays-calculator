@@ -1,14 +1,32 @@
-import axios, { AxiosResponse } from 'axios';
-import { getEnvConfig } from '~/utils/env-config';
+import type { ForgotPasswordResponse } from "./types";
 
-type BaseResponse<T> = Promise<AxiosResponse<T, any>>;
+import axios from "axios";
+import { getEnvConfig } from "~/utils/env-config";
 
 const getApiBasePath = () => {
-    const { apiBasePath } = getEnvConfig();
-    return apiBasePath;
+  const { apiBasePath } = getEnvConfig();
+  return apiBasePath;
 };
 
-export const forgotPasswordAPI = async (usernameOrEmail: string): BaseResponse<any> => {
-    const url = `${getApiBasePath()}/forgot-password?username=${usernameOrEmail}`;
-    return await axios.post<any>(url);
+export const forgotPasswordApi = async (
+  usernameOrEmail: string
+): Promise<ForgotPasswordResponse> => {
+  const url = `${getApiBasePath()}/forgot-password?username=${usernameOrEmail}`;
+  try {
+    const response = await axios.post<ForgotPasswordResponse>(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: "No Auth",
+        },
+      }
+    );
+    if (response.data && response.data.status >= 201) {
+      throw Error(response.data.message);
+    }
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
