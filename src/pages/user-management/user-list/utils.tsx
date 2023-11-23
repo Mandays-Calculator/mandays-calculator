@@ -2,8 +2,6 @@ import type { CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
 import { UserListData } from "~/api/user-management/types";
-import { useFormikContext } from "formik";
-import { UpdateUserManagementParams } from "../types";
 import { UserColumnsProps, UserListColumnsType } from "./types";
 
 export const userListColumns = ({
@@ -41,30 +39,11 @@ export const userListColumns = ({
     {
       Header: t("Action"),
       Cell: ({ row }: CellProps<UserListData>) => {
-        const form = useFormikContext<UpdateUserManagementParams>();
-        const setCurrentValues = {
-          UpdateFirstName: row.original?.firstName ?? "",
-          UpdateLastName: row.original?.lastName ?? "",
-          UpdateMiddleName: row.original?.middleName ?? "",
-          UpdateSuffix: row.original?.suffix ?? "",
-          UpdateGender: row.original?.gender ?? "",
-          UpdateEmail: row.original?.email ?? "",
-          // UpdateImage: row.original?.image ?? "",
-          UpdateEmployeeId: row.original?.employeeId ?? "",
-          UpdateOdcId: "",
-          UpdateCareerStep: row.original?.careerStep ?? "",
-          UpdateJoiningDate: row.original?.joiningDate ?? "",
-          UpdateProjectId: "",
-          UpdateTeamId: "",
-          UpdateRoles: row.original?.roles ?? [],
-        };
-
         return (
           <>
             <IconButton
               onClick={() => {
-                onEditUser(row.original.id);
-                form.setValues(setCurrentValues);
+                onEditUser(row.original);
               }}
               data-testid="test-edit-user-btn"
             >

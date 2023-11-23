@@ -20,6 +20,14 @@ jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key: any) => key }),
 }));
 
+jest.mock("formik", () => ({
+  useFormikContext: () => {
+    return {
+      values: UserList,
+    };
+  },
+}));
+
 describe("View User Management", () => {
   const component = (
     <ProviderWrapper>
@@ -58,30 +66,6 @@ describe("View User Management", () => {
   //     expect(editButton).toBeInTheDocument();
   //   });
   // });
-  jest.mock("formik", () => ({
-    useFormikContext: () => {
-      return {
-        values: UserList,
-        setValues: jest.fn().mockImplementation(() => {
-          return {
-            UpdateFirstName: "",
-            UpdateLastName: "",
-            UpdateMiddleName: "",
-            UpdateSuffix: "",
-            UpdateGender: "",
-            UpdateEmail: "",
-            UpdateEmployeeId: "",
-            UpdateOdcId: "",
-            UpdateCareerStep: "",
-            UpdateJoiningDate: "",
-            UpdateProjectId: "",
-            UpdateTeamId: "",
-            UpdateRoles: [],
-          };
-        }),
-      };
-    },
-  }));
 
   test("user management table and edit button test", async () => {
     const { t } = useTranslation();
@@ -99,8 +83,6 @@ describe("View User Management", () => {
     expect(container.textContent).toMatch("ditalomartin@gmail.com");
     await waitFor(() => {
       const editBtn = getByTestId("test-edit-user-btn");
-      // editBtn.onclick = () => mockOnEditUser();
-
       expect(editBtn).toBeInTheDocument();
       fireEvent.click(editBtn);
     });

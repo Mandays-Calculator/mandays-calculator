@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 
 import { useDeleteUser } from "~/queries/user-management/UserManagement";
 import { DeleteModal } from "~/components/modal/delete-modal";
+import { UserListData } from "~/api/user-management/types";
 
 const UserList = (): ReactElement => {
   const { data, isLoading, refetch } = useUserList();
@@ -17,12 +18,13 @@ const UserList = (): ReactElement => {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [currentUserData, setCurrentUserData] = useState<UserListData>();
   const [currentUser, setCurrentUser] = useState<string>("");
   const [rowId, setRowId] = useState<number>(0);
 
-  const handleEditUser = (userId: string): void => {
+  const handleEditUser = (currentSelectedUser: UserListData): void => {
     setEditModalOpen(true);
-    setCurrentUser(userId);
+    setCurrentUserData(currentSelectedUser);
   };
 
   const handleDeleteUser = (userId: string, rowId: number): void => {
@@ -48,7 +50,7 @@ const UserList = (): ReactElement => {
 
         <EditUserModal
           onEditUser={(): void => {}}
-          currentUser={currentUser}
+          currentUser={currentUserData}
           open={editModalOpen}
           onClose={() => setEditModalOpen(false)}
         />

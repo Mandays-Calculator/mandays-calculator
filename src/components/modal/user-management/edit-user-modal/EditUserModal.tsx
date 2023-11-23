@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from "react";
+import { useState, type ReactElement, useEffect } from "react";
 import { CustomButton } from "~/components/form/button";
 import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
 import {
@@ -8,13 +8,17 @@ import {
 } from "~/components/form/controlled";
 import { genders, rolesData } from "../utils";
 import { useFormikContext } from "formik";
-import { UserManagementForms } from "~/pages/user-management/types";
+import {
+  UpdateUserManagementParams,
+  UserManagementForms,
+} from "~/pages/user-management/types";
 import {
   useEditUser,
   useUserList,
 } from "~/queries/user-management/UserManagement";
 import { NotificationModal } from "../../notification-modal";
 import { ImageUpload } from "~/components";
+import { UserListData } from "~/api/user-management/types";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -36,7 +40,7 @@ interface EditUserModalProps {
   onEditUser: () => void;
   open: boolean;
   onClose: () => void;
-  currentUser?: string;
+  currentUser?: UserListData;
 }
 
 export const EditUserModal: React.FC<EditUserModalProps> = ({
@@ -45,7 +49,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   currentUser,
 }): ReactElement => {
   const { values, setFieldValue } = useFormikContext<UserManagementForms>();
-  const EditUser = useEditUser(currentUser ?? "");
+
+  const EditUser = useEditUser(currentUser?.id ?? "");
   const [editUserStatus, setEditUserStatus] = useState<any>({
     message: "",
     show: false,
@@ -78,6 +83,26 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     teamId: values?.UpdateTeamId ?? "",
     roles: values?.UpdateRoles ?? [],
   };
+
+  const form = useFormikContext<UpdateUserManagementParams>();
+  useEffect(() => {
+    form.setValues({
+      UpdateFirstName: currentUser?.firstName ?? "",
+      UpdateLastName: currentUser?.lastName ?? "",
+      UpdateMiddleName: currentUser?.middleName ?? "",
+      UpdateSuffix: currentUser?.suffix ?? "",
+      UpdateGender: currentUser?.gender ?? "",
+      UpdateEmail: currentUser?.email ?? "",
+      // UpdateImage: currentUser?.image ?? "",
+      UpdateEmployeeId: currentUser?.employeeId ?? "",
+      UpdateOdcId: "",
+      UpdateCareerStep: currentUser?.careerStep ?? "",
+      UpdateJoiningDate: currentUser?.joiningDate ?? "",
+      UpdateProjectId: "",
+      UpdateTeamId: "",
+      UpdateRoles: currentUser?.roles ?? [],
+    });
+  }, [currentUser]);
 
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
