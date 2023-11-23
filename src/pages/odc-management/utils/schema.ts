@@ -25,7 +25,7 @@ export const DataTypeSchema: Schema<DataType> = object().shape({
           if (this.path === "odcList[0].name") {
             const otherODCNames = odcList
               .filter((_odc, index: number) => index !== 0)
-              .map((odc) => odc.name.toLowerCase());
+              .map((odc) => odc?.name?.toLowerCase());
             return otherODCNames.includes(value.toLowerCase()) ? false : true;
           }
         }
@@ -45,7 +45,7 @@ export const DataTypeSchema: Schema<DataType> = object().shape({
           if (this.path === "odcList[0].abbreviation") {
             const otherAbbreviations = odcList
               .filter((_odc, index: number) => index !== 0)
-              .map((odc) => odc.abbreviation.toLowerCase());
+              .map((odc) => odc?.abbreviation?.toLowerCase());
             return otherAbbreviations.includes(value.toLowerCase())
               ? false
               : true;

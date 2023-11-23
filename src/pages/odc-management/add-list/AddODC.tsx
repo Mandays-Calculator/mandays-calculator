@@ -1,24 +1,26 @@
 import type { ReactElement, Dispatch, SetStateAction } from "react";
+import type { HolidayType } from "~/api/odc/types";
 import type { IntValues } from "../utils/interface";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-
-import * as yup from "yup";
-import { ValidationError, array, object } from "yup";
 
 import { Grid, Box } from "@mui/material";
 import { useFormikContext } from "formik";
+import * as yup from "yup";
+import { ValidationError, array, object } from "yup";
 
-import { PageContainer } from "~/components/page-container";
+import { Table, PageContainer } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { Table } from "~/components";
 import { ControlledTextField } from "~/components/form/controlled";
 
-import { HolidayColumn } from "../utils/columns";
-import { DataTypeSchema, IntValuesSchema } from "../utils/schema";
-import { HolidayType } from "~/api/odc/types";
-import { SubmitFormat } from "../utils/data";
+import {
+  HolidayColumn,
+  DataTypeSchema,
+  IntValuesSchema,
+  //SubmitFormat
+} from "../utils";
+import { AddEditFormat } from ".";
 
 type AddProps = {
   setIsAdd: Dispatch<SetStateAction<boolean>>;
@@ -59,106 +61,63 @@ const AddODC = (props: AddProps): ReactElement => {
   const [locationError, setLocationError] = useState<string | undefined>("");
 
   const handleError = (error: string | undefined): boolean => {
-    let retError = false;
-    if (error === undefined || error === null || error === "") retError = true;
+    let retError = true;
+    if (error === undefined || error === null || error === "") retError = false;
     return retError;
   };
 
+  useEffect(() => {
+    setIsNameError(handleError(odcNameError));
+    setIsLocError(handleError(locationError))
+    setIsAbbrError(handleError(abbreviationError));
+  }, [odcNameError, locationError, abbreviationError])
+
   const handleAddODC = (): void => {
-    if (isEdit) {
-      //Edit ODC
-      const updatedValues = { ...values };
-      const editedODC = {
-        id: "0",
-        name: fieldValues.name,
-        abbreviation: fieldValues.abbreviation,
-        location: fieldValues.location,
-        holidays: null,
-        active: true,
-      };
+    setOdcNameError("");
+    setAbbreviationError("");
+    setLocationError("");
 
-      updatedValues.odcList[idx] = editedODC;
-      setValues(updatedValues);
-      setIsAdd(false);
-    } else {
-      //Add ODC
-      setOdcNameError("");
-      setAbbreviationError("");
-      setLocationError("");
-      const updatedValues = { ...values };
-      const newODC = {
-        id: "0",
-        name: fieldValues.name,
-        abbreviation: fieldValues.abbreviation,
-        location: fieldValues.location,
-        noHolidays: 0,
-        holidays: null,
-        active: true,
-      };
+    const list = AddEditFormat(values, fieldValues, idx, isEdit)
 
-      const validationSchema = IntValuesSchema.concat(
-        object({
-          odcList: array().of(DataTypeSchema),
-        })
+    const validationSchema = IntValuesSchema.concat(
+      object({
+        odcList: array().of(DataTypeSchema),
+      })
+    );
+
+    try {
+      validationSchema.validateSync(
+        { odcList: list },
+        { abortEarly: false }
       );
+      setValues({ odcList: list });
+      // const data = SubmitFormat(values?.odcList[idx]);
+      // console.log("Submit JSON API", data);
+      setIsAdd(false);
+    } catch (error: ValidationError | unknown) {
+      if (error instanceof yup.ValidationError) {
+        const errorMappings: Record<
+          string,
+          Dispatch<SetStateAction<string | undefined>>
+        > = {
+          "odcList[0].name": setOdcNameError,
+          "odcList[0].abbreviation": setAbbreviationError,
+          "odcList[0].location": setLocationError,
+        };
 
-      try {
-        validationSchema.validateSync(
-          { odcList: [newODC, ...updatedValues.odcList] },
-          { abortEarly: false }
-        );
-        updatedValues.odcList = [newODC, ...updatedValues.odcList];
-        setValues(updatedValues);
-        const data = SubmitFormat(values?.odcList[idx]);
-        console.log("Submit JSON API", data);
-        setIsAdd(false);
-      } catch (error: ValidationError | unknown) {
-        if (error instanceof yup.ValidationError) {
-          const errorMappings: Record<
-            string,
-            Dispatch<SetStateAction<string | undefined>>
-          > = {
-            "odcList[0].name": setOdcNameError,
-            "odcList[0].abbreviation": setAbbreviationError,
-            "odcList[0].location": setLocationError,
-          };
-          setIsNameError(handleError(odcNameError));
-          setIsAbbrError(handleError(abbreviationError));
-          setIsLocError(handleError(locationError));
-
-          error.inner.forEach((e) => {
-            if (e.path) {
-              const setError = errorMappings[e.path];
-              if (setError) {
-                setError(e.message);
-              }
+        error.inner.forEach((e) => {
+          if (e.path) {
+            const setError = errorMappings[e.path];
+            if (setError) {
+              setError(e.message);
             }
-          });
-        } else {
-          console.error(error);
-        }
+          }
+        });
+      } else {
+        console.error(error);
       }
     }
   };
-
-  // const handleAdd = () => {
-  //   // postAddAPI
-  //   if (values?.odcList[idx]?.name === "")
-  //     setIsNameError(true);
-  //   else {
-  //     setIsNameError(false);
-  //     setIsAdd(false);
-  //   }
-
-  //   const data = SubmitFormat(values?.odcList[idx]);
-  //   console.log("Submit JSON API", data);
-  // };
-
-  // const handleUpdate = () => {
-  //   setIsAdd(false);
-  //   // postUpdateAPI
-  //   console.log("Update JSON API", values?.odcList[idx]);
-  // };
 
   return (
     <>
@@ -167,7 +126,7 @@ const AddODC = (props: AddProps): ReactElement => {
           <Grid item xs={6}>
             <ControlledTextField
               name={`odcList.${idx}.name`}
-              label={t("odc.form.name")}
+              label={t("odc.form.odcName")}
               id="name"
               error={isNameError}
               value={fieldValues.name}
