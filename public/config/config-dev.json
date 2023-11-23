@@ -4,8 +4,11 @@
     "durationUntilPromptSeconds": "600000",
     "confirmationWindowSeconds": "300000"
   },
-  "apiBasePath": "http://localhost:18000",
-  "enableAuth": false,
+  "apiBasePath": {
+    "accountsService": "http://localhost:18000",
+    "mandaysEstimateService": "http://localhost:18001"
+  },
+  "enableAuth": true,
   "oidcConfig": {
     "authority": "http://localhost:8080/realms/mandays-calculator",
     "realm": "mandays-calculator",
