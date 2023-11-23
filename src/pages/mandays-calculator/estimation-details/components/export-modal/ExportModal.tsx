@@ -1,8 +1,12 @@
-import type { FormikInstance } from "formik";
 import type { ReactElement } from "react";
-import LocalizationKey from "~/i18n/key";
+import type { TFunction } from "i18next";
+import type { ExportFormValues } from "../../types";
 
+import * as yup from "yup";
+import { useFormik } from "formik";
 import { Grid } from "@mui/material";
+
+import LocalizationKey from "~/i18n/key";
 
 import { Form, Modal, ErrorMessage } from "~/components";
 import { ControlledSelect } from "~/components/form/controlled";
@@ -12,17 +16,31 @@ import { getFieldError } from "~/components/form/utils";
 type ExportModalProps = {
   isExport: boolean;
   setIsExport: (value: boolean) => void;
-  exportForm: FormikInstance<{ exportBy: string }>;
-  t: any;
+  t: TFunction<"translation", undefined>;
+  handleSubmit: (values: ExportFormValues) => void;
 };
 
 const ExportModal = ({
   isExport,
   setIsExport,
-  exportForm,
   t,
+  handleSubmit,
 }: ExportModalProps): ReactElement => {
   const { mandaysCalculator, common } = LocalizationKey;
+
+  const exportForm = useFormik<ExportFormValues>({
+    initialValues: {
+      exportBy: "",
+    },
+    validationSchema: yup.object({
+      exportBy: yup.string().required(t(common.errorMessage.required)),
+    }),
+    validateOnChange: true,
+    onSubmit: (values: ExportFormValues) => {
+      handleSubmit(values);
+    },
+  });
+
   return (
     <Modal
       open={isExport}

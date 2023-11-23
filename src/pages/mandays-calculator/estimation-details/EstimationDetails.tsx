@@ -1,5 +1,5 @@
 import { type ReactElement } from "react";
-import type { EstimationDetailsMode } from ".";
+import type { EstimationDetailsMode, ExportFormValues } from ".";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,8 +9,6 @@ import { Typography, Grid } from "@mui/material";
 import { CustomTab, PageContainer, PageLoader, Title } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { Select } from "~/components/form/select";
-import * as yup from "yup";
-import { useFormik } from "formik";
 
 import LocalizationKey from "~/i18n/key";
 
@@ -25,6 +23,7 @@ import Resources from "./resources";
 
 import { ExportModal } from "./components/export-modal";
 import { ActionButtons } from "./components/action-buttons";
+import { ShareModal } from "./components/share-modal";
 
 const EstimationDetails = (): ReactElement => {
   const { mandaysCalculator, common } = LocalizationKey;
@@ -64,23 +63,14 @@ const EstimationDetails = (): ReactElement => {
     );
   };
 
-  const exportForm = useFormik<{ exportBy: string }>({
-    initialValues: {
-      exportBy: "",
-    },
-    validationSchema: yup.object({
-      exportBy: yup.string().required(t(common.errorMessage.required)),
-    }),
-    validateOnChange: true,
-    onSubmit: (values) => {
-      const { exportBy } = values;
-      if (exportBy === "pdf") {
-        handlePDFExport();
-      } else {
-        handleExcelExport();
-      }
-    },
-  });
+  const handleExportSubmit = (formValues: ExportFormValues): void => {
+    const { exportBy } = formValues;
+    if (exportBy === "pdf") {
+      handlePDFExport();
+    } else {
+      handleExcelExport();
+    }
+  };
 
   const goBack = (): void => {
     navigate(-1);
@@ -178,8 +168,16 @@ const EstimationDetails = (): ReactElement => {
         <ExportModal
           isExport={isExport}
           setIsExport={setIsExport}
-          exportForm={exportForm}
+          handleSubmit={handleExportSubmit}
           t={t}
+        />
+      )}
+      {true && (
+        <ShareModal
+          isShare={true}
+          setIsShare={() => console.log("running")}
+          t={t}
+          handleSubmit={() => console.log("submit")}
         />
       )}
     </>
