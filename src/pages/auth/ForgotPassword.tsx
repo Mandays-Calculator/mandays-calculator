@@ -21,7 +21,7 @@ const ForgotPassword = (): ReactElement => {
   const { t } = useTranslation();
   const { forgotPassword } = LocalizationKey;
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onSubmit = async (values: { usernameOrEmail: string; }) => {
     try {
