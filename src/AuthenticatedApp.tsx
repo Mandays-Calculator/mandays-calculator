@@ -9,13 +9,14 @@ import { useAuth } from "react-oidc-context";
 
 import { PageLoader, Layout, NotificationModal } from "~/components";
 import LocalizationKey from "~/i18n/key";
-import { Auth } from "~/pages/auth";
 
-import { getUser } from "~/utils/oidc-utils";
+import { getUser, logout } from "~/utils/oidc-utils";
 import { getEnvConfig } from "~/utils/env-config";
 import { ERROR_MESSAGES, LOCAL_STORAGE_ITEMS } from "~/utils/constants";
+
+import { useIdleTimer } from "~/hooks/idle-timer";
+
 import {
-  removeStateStorage,
   getItemStorage,
   removeStorageListener,
   addStorageListener,
@@ -24,7 +25,11 @@ import {
 import AppRoutes from "~/routes/AppRoutes";
 import axiosInit from "~/api/axios.config";
 
-import { fetchUserPermission, selectUser } from "~/redux/reducers/user";
+import {
+  fetchUserPermission,
+  resetUserState,
+  selectUser,
+} from "~/redux/reducers/user";
 
 const AuthenticatedApp = (): ReactElement => {
   const auth = useAuth();
@@ -44,7 +49,7 @@ const AuthenticatedApp = (): ReactElement => {
      * Initiate axios token once user is logged in
      */
     if (user) {
-      axiosInit(user.access_token);
+      axiosInit();
       dispatch(fetchUserPermission());
     }
 
@@ -64,6 +69,20 @@ const AuthenticatedApp = (): ReactElement => {
     };
   }, [auth]);
 
+  const AuthApp = (): ReactElement => {
+    return (
+      <Layout>
+        <AppRoutes
+          isAuthenticated={!config.enableAuth || auth.isAuthenticated}
+        />
+      </Layout>
+    );
+  };
+
+  const IdleWrappedApp = useIdleTimer(AuthApp, {
+    timeout: config.idleTimeoutConfig.durationUntilPromptSeconds,
+  });
+
   const renderAuth = (): ReactElement => {
     switch (auth.activeNavigator) {
       case "signinSilent":
@@ -79,7 +98,6 @@ const AuthenticatedApp = (): ReactElement => {
           />
         );
     }
-
     if (auth.isLoading || userState.loading) {
       return (
         <PageLoader
@@ -89,44 +107,48 @@ const AuthenticatedApp = (): ReactElement => {
     }
 
     if (!config.enableAuth) {
-      return (
-        <Layout>
-          <AppRoutes />
-        </Layout>
-      );
+      return <IdleWrappedApp />;
     } else {
       if (auth.isAuthenticated) {
-        return (
-          <Layout>
-            <AppRoutes />
-          </Layout>
-        );
+        return <IdleWrappedApp />;
       }
-      return <Auth />;
+      return <AppRoutes isAuthenticated={false} />;
     }
+  };
+
+  const handleLogout = (): void => {
+    logout(auth, () => {
+      dispatch(resetUserState());
+    });
+  };
+
+  const RenderModal = (): ReactElement => {
+    return (
+      <>
+        {showUnauthorizedModal && (
+          <NotificationModal
+            type="unauthorized"
+            message={t(common.errorMessage.unauthorized)}
+            open={showUnauthorizedModal}
+            onConfirm={handleLogout}
+          />
+        )}
+        {userState.error !== null && (
+          <NotificationModal
+            type="error"
+            message={ERROR_MESSAGES.permission}
+            open={userState.error !== null}
+            onConfirm={handleLogout}
+          />
+        )}
+      </>
+    );
   };
 
   return (
     <>
       {renderAuth()}
-      {showUnauthorizedModal && (
-        <NotificationModal
-          type="unauthorized"
-          message={t(common.errorMessage.unauthorized)}
-          open={showUnauthorizedModal}
-          onConfirm={() => {
-            removeStateStorage();
-            auth.removeUser();
-          }}
-        />
-      )}
-      {userState.error !== null && (
-        <NotificationModal
-          type="error"
-          message={ERROR_MESSAGES.permission}
-          open={userState.error !== null}
-        />
-      )}
+      <RenderModal />
     </>
   );
 };

@@ -9,6 +9,18 @@ export const getYears = (): number[] => {
   return range(1900, getCurrentYear(), 1);
 };
 
+export const formatTime = (milliseconds: number): string => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  if (minutes > 0) {
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  } else {
+    return `${seconds} second${seconds !== 1 ? "s" : ""}`;
+  }
+};
+
 export const getMonths = (): string[] => {
   return [
     "January",

@@ -7,10 +7,15 @@ export type OIDCConfigType = {
   scope: string;
 };
 
+export type IdleTimeoutConfig = {
+  durationUntilPromptSeconds: number; // milliseconds
+  confirmationWindowSeconds: number; // milliseconds
+};
+
 export type ConfigType = {
   environment: string;
-  apiBasePath: string;
+  apiBasePath: string | ApiBasePath;
   enableAuth: boolean;
   oidcConfig: OIDCConfigType;
-  sessionStorageOidcKey: string;
+  idleTimeoutConfig: IdleTimeoutConfig;
 };

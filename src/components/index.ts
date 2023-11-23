@@ -14,3 +14,4 @@ export * from "./pagination";
 export * from "./image-upload";
 export * from "./form/error-message";
 export * from "./modal/notification-modal";
+export * from "./timer";

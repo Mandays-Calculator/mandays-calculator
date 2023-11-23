@@ -12,7 +12,7 @@ const LocalizationKey = {
     },
     placeholder: {
       userName: "login.placeholder.userName",
-      password: "login.placeholder.password"
+      password: "login.placeholder.password",
     },
   },
   changePassword: {
@@ -35,18 +35,19 @@ const LocalizationKey = {
     },
     placeholder: {
       password: "changePassword.placeholder.userName",
-      confirmPassword: "changePassword.placeholder.password"
+      confirmPassword: "changePassword.placeholder.password",
     },
   },
   forgotPassword: {
-    labelInfo: {
-      enterUsername: "forgotPassword.labelInfo.enterUsername",
-      link: "forgotPassword.labelInfo.link",
+    label: {
+      enterUsername: "forgotPassword.label.enterUsername",
+      link: "forgotPassword.label.link",
     },
     btnlabel: {
       send: "forgotPassword.btnlabel.send",
       back: "forgotPassword.btnlabel.back",
     },
+    placeholder: "forgotPassword.placeholder"
   },
   footerLabel: "footer.label",
   common: {
@@ -57,11 +58,17 @@ const LocalizationKey = {
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
     pageNotFoundDesc: "common.notFound.description",
+    permissionDeniedTitle: "common.permissionDenied.title",
+    permissionDeniedDesc: "common.permissionDenied.description",
     goBackHomeBtnLabel: "common.button.goBackHome",
     collapse: "common.button.collapse",
     backBtn: "common.button.back",
     shareBtn: "common.button.share",
+    nextBtn: "common.button.next",
     exportBtn: "common.button.export",
+    saveBtn: "common.button.save",
+    createdDateLabel: "common.label.createdDate",
+    selectedLabel: "common.label.selected",
     userManagement: {
       authSignInLoading: "common.userManagement.auth.signInLoading",
       authSignOutLoading: "common.userManagement.auth.signOutLoading",
@@ -72,14 +79,16 @@ const LocalizationKey = {
       fieldRequired: "common.errorMessage.fieldRequired",
       unauthorized: "common.errorMessage.unauthorized",
     },
+    idleTimeOutLabel: "common.idleTimeOut.label",
+    idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
+    logout: "common.idleTimeOut.logout",
   },
   mandaysCalculator: {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
-    modalConfirmDeleteEstimation:
-      "mandaysCalculator.modalLabels.confirmDeleteEstimation",
+    modalConfirmDeleteEstimation: "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
@@ -96,8 +105,7 @@ const LocalizationKey = {
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
-      resourceCount:
-        "mandaysCalculator.resourceList.table.columns.resourceCount",
+      resourceCount: "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
     summaryForm: {
@@ -108,6 +116,10 @@ const LocalizationKey = {
       endDate: "mandaysCalculator.summary.form.endDate",
     },
     tasksTitle: "mandaysCalculator.tasks.title",
+    noTaskLabel: "mandaysCalculator.tasks.toTaskLabel",
+    noSelectedTaskLabel: "mandaysCalculator.tasks.noSelectedTaskLabel",
+    taskDescriptionLabel: "mandaysCalculator.tasks.taskDescriptionLabel",
+    tasksListLabel: "mandaysCalculator.tasks.tasksListLabel",
     tasksTableColumns: {
       tasks: "mandaysCalculator.tasks.table.columns.tasks",
       complexity: "mandaysCalculator.tasks.table.columns.complexity",

@@ -132,3 +132,36 @@ export const resourcesDetailData = [
     annualLeaves: "6",
   },
 ];
+
+export const tasksData = [
+  {
+    id: "1",
+    title: "Task title 1",
+    description:
+      " Lorem ipsum dolor sit amet, consectuer adiciping elit. Aenan commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+  },
+  {
+    id: "2",
+    title: "Task title 2",
+    description:
+      " Lorem ipsum dolor sit amet, consectuer adiciping elit. Aenan commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+  },
+  {
+    id: "3",
+    title: "Task title 3 ",
+    description:
+      " Lorem ipsum dolor sit amet, consectuer adiciping elit. Aenan commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+  },
+  {
+    id: "3",
+    title: "Task title 4",
+    description:
+      " Lorem ipsum dolor sit amet, consectuer adiciping elit. Aenan commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+  },
+  {
+    id: "4",
+    title: "Task title 5",
+    description:
+      " Lorem ipsum dolor sit amet, consectuer adiciping elit. Aenan commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+  },
+];

@@ -1,42 +1,44 @@
-import type { ChangeEvent, ReactElement } from "react"
+import type { ChangeEvent, ReactElement } from "react";
 import type { PaginationProps } from "@mui/material/Pagination";
 
-import MuiPagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import MuiPagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 import { StyledPreviousIcon, StyledNextIcon, StyledPaginationItem } from ".";
 
 interface PaginationPropType extends PaginationProps {
-  totalPages?: number;
+  totalItems?: number;
+  itemsPerPage?: number;
   handleChange?: (page: number) => void;
-};
+}
 
-export const Pagination = (props: PaginationPropType ): ReactElement => {
-  const { 
-    totalPages = 1, 
-    handleChange,
-     ...rest 
-  } = props;
+export const Pagination = (props: PaginationPropType): ReactElement => {
+  const { totalItems = 0, itemsPerPage = 5, handleChange, ...rest } = props;
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handleChangeEvent = (_e: ChangeEvent<unknown>, value: number) => {
-    if (handleChange) handleChange(value)
-  } 
+    if (handleChange) handleChange(value);
+  };
 
-  return (
-    <Stack spacing={2}>
-    <MuiPagination
-      count={totalPages}
-      onChange={handleChangeEvent}
-      renderItem={(item) => (
-        <StyledPaginationItem
-          slots={{ previous: StyledPreviousIcon, next: StyledNextIcon }}
-          {...item}
+  if (totalPages) {
+    return (
+      <Stack spacing={2} sx={{ alignItems: "center" }}>
+        <MuiPagination
+          count={totalPages}
+          onChange={handleChangeEvent}
+          renderItem={(item) => (
+            <StyledPaginationItem
+              slots={{ previous: StyledPreviousIcon, next: StyledNextIcon }}
+              {...item}
+            />
+          )}
+          {...rest}
         />
-      )}
-      {...rest}
-    />
-  </Stack>
-  )
-} 
+      </Stack>
+    );
+  }
+  return <></>;
+};
 
 export default Pagination;
