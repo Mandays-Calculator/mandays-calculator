@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View User Management user management table and edit button test: user-management-table-edit 1`] = `
+<div>
+  <div
+    class="MuiStack-root css-1ucnu3w-MuiStack-root"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiTableContainer-root css-11xur9t-MuiPaper-root-MuiTableContainer-root"
+    >
+      <table
+        aria-label="user-list"
+        class="MuiTable-root css-rqglhn-MuiTable-root"
+        role="table"
+      >
+        <thead
+          class="MuiTableHead-root css-15wwp11-MuiTableHead-root"
+        >
+          <tr
+            class="MuiTableRow-root MuiTableRow-head css-l7ewl1-MuiTableRow-root"
+            role="row"
+          >
+            <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+              colspan="1"
+              role="columnheader"
+              scope="col"
+            >
+              <div
+                class="MuiBox-root css-18biwo"
+              >
+                <span
+                  class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                >
+                  Name
+                </span>
+              </div>
+            </th>
+            <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+              colspan="1"
+              role="columnheader"
+              scope="col"
+              style="cursor: pointer;"
+              title="Toggle SortBy"
+            >
+              <div
+                class="MuiBox-root css-18biwo"
+              >
+                <span
+                  class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                >
+                  Email
+                </span>
+              </div>
+            </th>
+            <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+              colspan="1"
+              role="columnheader"
+              scope="col"
+              style="cursor: pointer;"
+              title="Toggle SortBy"
+            >
+              <div
+                class="MuiBox-root css-18biwo"
+              >
+                <span
+                  class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                >
+                  Joining Date
+                </span>
+              </div>
+            </th>
+            <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+              colspan="1"
+              role="columnheader"
+              scope="col"
+              style="cursor: pointer;"
+              title="Toggle SortBy"
+            >
+              <div
+                class="MuiBox-root css-18biwo"
+              >
+                <span
+                  class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                >
+                  Roles
+                </span>
+              </div>
+            </th>
+            <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeSmall css-145yh06-MuiTableCell-root"
+              colspan="1"
+              role="columnheader"
+              scope="col"
+            >
+              <div
+                class="MuiBox-root css-18biwo"
+              >
+                <span
+                  class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                >
+                  Action
+                </span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          class="MuiTableBody-root css-apqrd9-MuiTableBody-root"
+          role="rowgroup"
+        >
+          <tr
+            class="MuiTableRow-root css-boip6d-MuiTableRow-root"
+            role="row"
+            style="cursor: default;"
+          >
+            <td
+              class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-cd7196-MuiTableCell-root"
+              role="cell"
+            >
+              Martin Berula Ditalo
+            </td>
+            <td
+              class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-cd7196-MuiTableCell-root"
+              role="cell"
+            >
+              ditalomartin@gmail.com
+            </td>
+            <td
+              class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-cd7196-MuiTableCell-root"
+              role="cell"
+            >
+              2023-11-14
+            </td>
+            <td
+              class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-cd7196-MuiTableCell-root"
+              role="cell"
+            >
+              ROLE_SYS_ADMIN
+            </td>
+            <td
+              class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeSmall css-cd7196-MuiTableCell-root"
+              role="cell"
+            >
+              <button
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                data-testid="test-edit-user-btn"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-254bcz-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-edit"
+                  />
+                </svg>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+              <button
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                data-testid="test-delete-user-btn"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorError MuiSvgIcon-fontSizeMedium css-sba5k-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-delete"
+                  />
+                </svg>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+`;

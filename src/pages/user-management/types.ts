@@ -9,6 +9,7 @@ export interface UpdateUserManagementParams {
   UpdateGender?: string | number;
   UpdateEmail?: string;
   UpdateOdcId?: string;
+  UpdateImage?: string;
   UpdateEmployeeId?: string;
   UpdateJoiningDate?: string;
   UpdateCareerStep?: string;
@@ -21,6 +22,7 @@ export interface AddUserManagementParams {
   lastName: string;
   middleName: string;
   suffix: string;
+  image?: string;
   gender: string | number;
   email: string;
   odcId: string;

@@ -1,6 +1,5 @@
 import { useState, type ReactElement } from "react";
 import { CustomButton } from "~/components/form/button";
-import AvatarImg from "~/assets/img/add-edit-avatar.png";
 import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
 import {
   ControlledDatePicker,
@@ -15,6 +14,7 @@ import {
   useUserList,
 } from "~/queries/user-management/UserManagement";
 import { NotificationModal } from "../../notification-modal";
+import { ImageUpload } from "~/components";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -44,7 +44,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   onClose,
   currentUser,
 }): ReactElement => {
-  const { values } = useFormikContext<UserManagementForms>();
+  const { values, setFieldValue } = useFormikContext<UserManagementForms>();
   const EditUser = useEditUser(currentUser ?? "");
   const [editUserStatus, setEditUserStatus] = useState<any>({
     message: "",
@@ -68,6 +68,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     middleName: values?.UpdateMiddleName ?? "",
     suffix: values?.UpdateSuffix ?? "",
     gender: gender() ?? 0,
+    // image: values.UpdateImage ?? "",
     email: values?.UpdateEmail ?? "",
     employeeId: values?.UpdateEmployeeId ?? "",
     odcId: values?.UpdateOdcId ?? "",
@@ -85,7 +86,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <img height="175px" width="175px" alt={"name"} src={AvatarImg} />
+              <ImageUpload name="UpdateImage" setFieldValue={setFieldValue} />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>

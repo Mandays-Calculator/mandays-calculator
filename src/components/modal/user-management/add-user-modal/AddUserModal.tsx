@@ -1,6 +1,5 @@
 import { useState, type ReactElement } from "react";
 import { CustomButton } from "~/components/form/button";
-import AvatarImg from "~/assets/img/add-edit-avatar.png";
 import {
   Box,
   Dialog,
@@ -24,6 +23,7 @@ import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
 import { NotificationModal } from "../../notification-modal";
 import moment from "moment";
+import { ImageUpload } from "~/components";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -55,7 +55,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   onClose,
 }): ReactElement => {
   const [value, setValue] = useState("");
-
   const [errors, setErrors] = useState<any>({
     lastName: false,
     firstName: false,
@@ -81,8 +80,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
-
-  const { values } = useFormikContext<UserManagementForms>();
+  const { values, setFieldValue } = useFormikContext<UserManagementForms>();
   const gender = () => {
     if (values.gender == "FEMALE") {
       return 1;
@@ -100,6 +98,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     middleName: values.middleName,
     suffix: values.suffix,
     gender: gender() ?? 0,
+    // image: values.image,
     email: values.email,
     employeeId: values.employeeId,
     odcId: values.odcId,
@@ -132,7 +131,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <img height="175px" width="175px" alt={"name"} src={AvatarImg} />
+              <ImageUpload name="image" setFieldValue={setFieldValue} />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>

@@ -49,6 +49,7 @@ export const userListColumns = ({
           UpdateSuffix: row.original?.suffix ?? "",
           UpdateGender: row.original?.gender ?? "",
           UpdateEmail: row.original?.email ?? "",
+          // UpdateImage: row.original?.image ?? "",
           UpdateEmployeeId: row.original?.employeeId ?? "",
           UpdateOdcId: "",
           UpdateCareerStep: row.original?.careerStep ?? "",

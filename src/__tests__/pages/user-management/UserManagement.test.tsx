@@ -1,8 +1,18 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import UserEvent from "@testing-library/user-event";
 import ProviderWrapper from "~/__tests__/utils/ProviderWrapper";
+import { Table } from "~/components/table";
 
 import { UserManagement } from "~/pages/user-management/";
+import { UserList } from "./utils/editUserValues";
+import { userListColumns } from "~/pages/user-management/user-list/utils";
+import { useTranslation } from "react-i18next";
 // import { mockUseUserList } from "./utils/mockUserManagementApis";
 
 jest.mock("react-i18next", () => ({
@@ -11,15 +21,15 @@ jest.mock("react-i18next", () => ({
 }));
 
 describe("View User Management", () => {
+  const component = (
+    <ProviderWrapper>
+      <UserManagement />
+    </ProviderWrapper>
+  );
+  afterEach(cleanup);
   test("Render User Management", async () => {
     const user = UserEvent.setup();
-
-    render(
-      <ProviderWrapper>
-        <UserManagement />
-      </ProviderWrapper>
-    );
-
+    render(component);
     await waitFor(() => {
       const title = screen.getByText(/User Management/i);
       expect(title).toBeInTheDocument();
@@ -48,4 +58,53 @@ describe("View User Management", () => {
   //     expect(editButton).toBeInTheDocument();
   //   });
   // });
+  jest.mock("formik", () => ({
+    useFormikContext: () => {
+      return {
+        values: UserList,
+        setValues: jest.fn().mockImplementation(() => {
+          return {
+            UpdateFirstName: "",
+            UpdateLastName: "",
+            UpdateMiddleName: "",
+            UpdateSuffix: "",
+            UpdateGender: "",
+            UpdateEmail: "",
+            UpdateEmployeeId: "",
+            UpdateOdcId: "",
+            UpdateCareerStep: "",
+            UpdateJoiningDate: "",
+            UpdateProjectId: "",
+            UpdateTeamId: "",
+            UpdateRoles: [],
+          };
+        }),
+      };
+    },
+  }));
+
+  test("user management table and edit button test", async () => {
+    const { t } = useTranslation();
+    const { getByTestId, container } = render(
+      <Table
+        name={"user-list"}
+        data={UserList}
+        columns={userListColumns({
+          t,
+          onDeleteUser: jest.fn(),
+          onEditUser: jest.fn(),
+        })}
+      />
+    );
+    expect(container.textContent).toMatch("ditalomartin@gmail.com");
+    await waitFor(() => {
+      const editBtn = getByTestId("test-edit-user-btn");
+      // editBtn.onclick = () => mockOnEditUser();
+
+      expect(editBtn).toBeInTheDocument();
+      fireEvent.click(editBtn);
+    });
+
+    expect(container).toMatchSnapshot("user-management-table-edit");
+  }, 12000);
 });

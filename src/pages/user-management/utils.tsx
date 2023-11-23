@@ -1,6 +1,7 @@
 import { UserManagementForms } from "./types";
 import * as yup from "yup";
 export const UserManagementFormValues: UserManagementForms = {
+  image: "",
   lastName: "",
   firstName: "",
   middleName: "",
