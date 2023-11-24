@@ -6,11 +6,12 @@ export interface AddTeamForm {
 export interface TeamObject {
   teamName: string;
   teamLead: string;
-  // members: MemberObject[];
+  teamMembers: MemberObject[];
 }
 
 export interface MemberObject {
   name: string;
-  odc: string;
-  careerStep: string;
+  // odc: string;
+  // careerStep: string;
+  // commented as it is not required based on getProjectList endpoint
 }

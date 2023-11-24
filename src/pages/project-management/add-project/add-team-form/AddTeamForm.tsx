@@ -37,10 +37,11 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
     if (teamName !== "" && teamLead !== "") {
       setValues({
         ...values,
-        teams: [...values.teams, { teamName: teamName, teamLead: teamLead }],
+        teams: [...values.teams, { teamName: teamName, teamLead: teamLead, teamMembers: [] }],
       });
       setTeamName("");
       setTeamLead("");
+      onCancel(); //execute to auto close form
     }
   };
 

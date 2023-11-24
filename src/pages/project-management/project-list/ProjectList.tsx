@@ -33,12 +33,21 @@ const projectListReducer = (
   ) => {
     if (action.type === 'SET_VALUE') {
       const mapProjectResult: (T: ProjectResponse[]) => DataType[] = (data: ProjectResponse[]) => {
-        return data.map(response => ({
-          prjName: response.name,
-          noOfTeams: response.project_team.length,
-          noOfUsers: 1 //WIP
-        }));
-      } 
+        return data.map((response) => {
+          let userCount = 0;
+          
+          response.project_team.forEach(team => {
+            userCount += team.team_members.length;
+          });
+
+          return {
+            prjName: response.name,
+            noOfTeams: response.project_team.length,
+            noOfUsers: userCount,
+          };
+        });
+      };
+
       const newResult = mapProjectResult(action.payload);
       
       return { ...state, results: newResult, filteredResult: newResult };
@@ -97,7 +106,9 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
     const fetchData = async () => {
       try {
         const response = await getProjects();
-        dispatchProjectList({type: 'SET_VALUE', payload: response.data ?? [] });
+        const result =  Array.isArray(response.data) ? response.data : [];
+
+        dispatchProjectList({type: 'SET_VALUE', payload: result });
       } 
       catch (error) {
         dispatchProjectList({type: 'SET_VALUE', payload: [] });

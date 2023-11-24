@@ -3,15 +3,17 @@ import type { AddTeamForm as AddTeamFormType } from "./types";
 
 import { useFormik } from "formik";
 
+import { createProject } from "~/api/projects";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
-import { Form, SvgIcon } from "~/components";
+import { ErrorMessage, Form, SvgIcon } from "~/components";
 import { StyledContainer } from "./components/TeamListCard/TeamListCard";
 import { CustomButton } from "~/components/form/button";
 
 import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
 
 import { addFormInitValue } from "./utils";
+import { appProjectSchema } from "./project-schema";
 
 import AddTeamForm from "./add-team-form";
 import EditTeamForm from "./edit-team-form/EditTeamForm";
@@ -30,16 +32,77 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const { handleAddProject } = props;
   const projectForm = useFormik<AddTeamFormType>({
     initialValues: addFormInitValue,
-    onSubmit: (val) => console.log(val),
+    validationSchema: appProjectSchema,
+    onSubmit: () => onSubmit(),
   });
   const [showTeamForm, setShowTeamForm] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [teamIndex, setTeamIndex] = useState<number>(0);
+  const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleToggleEdit = (teamId: number): void => {
     setTeamIndex(teamId);
     setIsEditMode(!isEditMode);
   };
+
+  const onSubmit = async () => {
+    if (isLoading) return;
+
+    const { projectName, teams } = projectForm.values;
+
+    const createProjectParams = {
+      name: projectName,
+      isActive: 1,
+      dateCreated: Date.now(),
+      lastUpdatedDate: Date.now(),
+      projectTeam: teams.map((team) => ({
+        teamName: team.teamName,
+        leadName: team.teamLead,
+        isActive: 0,
+        teamMembers: team.teamMembers.map(({ name }) => ({ name, isActive: 0 })),
+      })),
+    };
+
+    try {
+      setIsLoading(true);
+
+      const result = await createProject(createProjectParams);
+      if (result.data.status == 200) {
+        handleAddProject(); //close Add Project
+      } else {
+        showError(result.data.message);
+      }
+    } catch (error: any) {
+      showError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const onValidateForm = async () => {
+    const errors = await projectForm.validateForm();
+    if (Object.entries(errors).length) {
+      let errorMessage = typeof errors.teams === 'string' ? 'Must have at least 1 team in the project' : '';
+
+      if (typeof errors.teams === 'object') {
+        errorMessage = 'Edit team to add members';
+      }
+
+      showError(errorMessage);
+    }
+  }
+
+  const showError = (error: any) => {
+    setAddProjectErrorMsg(error);
+    setTimeout(() => {
+      setAddProjectErrorMsg('');
+    }, 2000);
+  }
+
+  const isErrorField = (field: string) => {
+    return projectForm.errors[field as keyof {}] ? true : false;
+  }
 
   return (
     <PageContainer>
@@ -49,6 +112,8 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             name="projectName"
             placeholder="Enter keyword here..."
             label="Project Name"
+            error={isErrorField('projectName')}
+            helperText={isErrorField('projectName') ? 'Please Input Project Name' : ''}
           />
           <TeamList toggleEdit={(teamIndex) => handleToggleEdit(teamIndex)} />
           <Grid paddingY={2}></Grid>
@@ -78,10 +143,11 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             >
               Cancel
             </CustomButton>
-            <CustomButton type="submit" onClick={handleAddProject}>
-              Add Project
+            <CustomButton type="submit" onClick={onValidateForm} disabled={isLoading}>
+              {isLoading ? 'Loading...' : 'Add Project'}
             </CustomButton>
           </Stack>
+          <ErrorMessage error={addProjectErrorMsg} type={'alert'} duration={2000}/>
         </Form>
       ) : (
         <Form instance={projectForm}>

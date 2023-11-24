@@ -4,18 +4,18 @@ import { Alert, Snackbar, Stack } from "@mui/material";
 type ErrorMessageProps = {
   error?: string;
   type?: "alert" | "default";
+  duration?: number;
 };
 
 const ErrorMessage = (props: ErrorMessageProps): ReactElement | null => {
-  const { error, type = "default" } = props;
-
+  const { error, type = "default", duration = 300 } = props;
   if (error) {
     switch (type) {
       case "alert":
         return (
           <Snackbar
             open={error !== ""}
-            autoHideDuration={300}
+            autoHideDuration={duration}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
           >
             <Alert severity="error" sx={{ width: "100%" }}>
