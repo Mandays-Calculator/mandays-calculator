@@ -74,7 +74,6 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Make the axios API call here
       try {
         const response = await getUsers();
         const result = Array.isArray(response?.data) ? response.data : [];

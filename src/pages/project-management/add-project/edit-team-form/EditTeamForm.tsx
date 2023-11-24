@@ -46,19 +46,16 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
 
   const editTeam = (): void => {
     if (projectName === "") {
-      //Validation for project name field required rule
       setProjectNameError(true);
     } else {
       setProjectNameError(false);
     }
     if (teamName === "") {
-      //Validation for team name field required rule
       setTeamNameError(true);
     } else {
       setTeamNameError(false);
     }
     if (teamLead === "") {
-      //Valudation for team lead field required rule
       setTeamLeadError(true);
     } else {
       setTeamLeadError(false);

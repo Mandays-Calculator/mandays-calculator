@@ -23,13 +23,11 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
 
   const addTeam = (): void => {
     if (teamName === "") {
-      //Validation for team name field required rule
       setTeamNameError(true);
     } else {
       setTeamNameError(false);
     }
     if (teamLead === "") {
-      //Valudation for team lead field required rule
       setTeamLeadError(true);
     } else {
       setTeamLeadError(false);
@@ -41,7 +39,7 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
       });
       setTeamName("");
       setTeamLead("");
-      onCancel(); //execute to auto close form
+      onCancel();
     }
   };
 

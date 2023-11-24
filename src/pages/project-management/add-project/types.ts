@@ -11,7 +11,4 @@ export interface TeamObject {
 
 export interface MemberObject {
   name: string;
-  // odc: string;
-  // careerStep: string;
-  // commented as it is not required based on getProjectList endpoint
 }

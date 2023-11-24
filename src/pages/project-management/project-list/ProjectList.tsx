@@ -18,7 +18,6 @@ type ColumnType = Column<DataType> & { id?: string };
 
 interface ProjectListProps {
   handleAddProject: () => void;
-  // Other props
 }
 
 const StyledTextField = styled(TextField)(() => ({
@@ -112,7 +111,6 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
       } 
       catch (error) {
         dispatchProjectList({type: 'SET_VALUE', payload: [] });
-        // show error if necessary
       }
         
     };

@@ -25,7 +25,6 @@ const StyledTextField = styled(ControlledTextField)(() => ({
 
 interface ProjectListProps {
   handleAddProject: () => void;
-  // Other props
 }
 
 const AddProject = (props: ProjectListProps): ReactElement => {
@@ -69,7 +68,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 
       const result = await createProject(createProjectParams);
       if (result.data.status == 200) {
-        handleAddProject(); //close Add Project
+        handleAddProject();
       } else {
         showError(result.data.message);
       }
