@@ -34,6 +34,7 @@ const AddODC = (props: AddProps): ReactElement => {
 
   const { values, resetForm, setValues } = useFormikContext<IntValues>();
   const holidays: HolidayType[] = values?.odcList[idx]?.holidays || [];
+  console.log(idx)
 
   const handleClose = () => {
     resetForm();
@@ -77,7 +78,7 @@ const AddODC = (props: AddProps): ReactElement => {
     setAbbreviationError("");
     setLocationError("");
 
-    const list = AddEditFormat(values, fieldValues, idx, isEdit)
+    const list = AddEditFormat(values, fieldValues, idx);
 
     const validationSchema = IntValuesSchema.concat(
       object({
@@ -100,9 +101,9 @@ const AddODC = (props: AddProps): ReactElement => {
           string,
           Dispatch<SetStateAction<string | undefined>>
         > = {
-          "odcList[0].name": setOdcNameError,
-          "odcList[0].abbreviation": setAbbreviationError,
-          "odcList[0].location": setLocationError,
+          [`odcList[${idx}].name`]: setOdcNameError,
+          [`odcList[${idx}].abbreviation`]: setAbbreviationError,
+          [`odcList[${idx}].location`]: setLocationError,
         };
 
         error.inner.forEach((e) => {

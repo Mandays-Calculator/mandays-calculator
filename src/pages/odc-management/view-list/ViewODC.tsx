@@ -1,6 +1,7 @@
-import type { ReactElement, Dispatch, SetStateAction } from "react";
+import type { ReactElement, Dispatch, SetStateAction, ChangeEvent } from "react";
 import type { IntValues } from "../utils/interface";
 
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Grid, TextField, styled, Box } from "@mui/material";
@@ -11,6 +12,7 @@ import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
 
 import { ODCColumns } from "../utils/columns";
+import { ODCListResponse } from "~/api/odc";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
@@ -28,22 +30,35 @@ const ViewODC = (props: ViewProps): ReactElement => {
   const { t } = useTranslation();
   const { setIsAdd, setDeleteModalOpen, setIsEdit, setIdx, setDelIdx } = props;
   const { values } = useFormikContext<IntValues>();
+  const [filterData, setFilterData] = useState<ODCListResponse[]>([]);
+
+  useEffect(() => {
+    setFilterData(values?.odcList?.filter((obj: ODCListResponse) => obj.active === true));
+  }, [values]);
 
   const handleAdd = (): void => {
     setIsAdd(true);
     setIsEdit(false);
   };
 
-  const filterData = values?.odcList?.filter((obj) => {
-    return obj.active === true;
-  });
+  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setFilterData(
+      values?.odcList?.filter(
+        (obj: ODCListResponse) => obj.active === true && obj.name.includes(event.target.value)
+      )
+    );
+  };
 
   return (
     <>
       <PageContainer sx={{ background: "#FFFFFF" }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={5}>
-            <StyledTextField size="small" placeholder="Enter keyword here..." />
+            <StyledTextField
+              size="small"
+              placeholder="Enter keyword here..."
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
             <CustomButton type="button" onClick={handleAdd}>
