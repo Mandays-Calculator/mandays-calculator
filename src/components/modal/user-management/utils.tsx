@@ -9,7 +9,7 @@ export const genders = [
   },
   {
     label: "NON-BINARY",
-    value: "BINARY",
+    value: "NON_BINARY",
   },
   {
     label: "PREFER NOT TO SAY",

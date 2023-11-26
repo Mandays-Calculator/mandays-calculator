@@ -24,6 +24,16 @@ export const AddUser = async (
   return res;
 };
 
+export const EditUser = async (
+  params: AddUserParams,
+  id: string
+): Promise<AddUserResponse> => {
+  const { apiBasePath } = getEnvConfig();
+  const res = await axios.put<AddUserResponse>(`${apiBasePath}/user/${id}`, {
+    ...params,
+  });
+  return res;
+};
 export const DeleteUser = async (
   param: DeleteUserParam
 ): Promise<DeleteUserResponse> => {

@@ -9,13 +9,13 @@ import UserList from "./user-list";
 import Header from "./header";
 import Form from "~/components/form/Form";
 import { useFormik } from "formik";
-import { AddUserManagementFormValues, AddUserManagementSchema } from "./utils";
-import { AddUserManagement } from "./types";
+import { UserManagementFormValues, UserManagementSchema } from "./utils";
+import { UserManagementForms } from "./types";
 
 const UserManagement = (): ReactElement => {
-  const AddUserManagementForm = useFormik<AddUserManagement>({
-    initialValues: AddUserManagementFormValues,
-    validationSchema: AddUserManagementSchema,
+  const UserManagementForm = useFormik<UserManagementForms>({
+    initialValues: UserManagementFormValues,
+    validationSchema: UserManagementSchema,
 
     onSubmit: (values) => console.log("values", values),
   });
@@ -23,7 +23,7 @@ const UserManagement = (): ReactElement => {
     <>
       <Title title="User Management" />
       <PageContainer>
-        <Form instance={AddUserManagementForm}>
+        <Form instance={UserManagementForm}>
           <Stack direction={"column"} spacing={2}>
             <Header />
             <UserList />
