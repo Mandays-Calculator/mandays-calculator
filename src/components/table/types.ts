@@ -21,6 +21,7 @@ export type CollapseData<Type extends object> = {
 };
 
 export type TableData<Type extends object> = Type | CollapseData<Type>;
+
 export interface TableProps<Type extends object> {
   name: string;
   title?: string;
