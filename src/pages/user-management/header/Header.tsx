@@ -63,6 +63,8 @@ const Header = (): ReactElement => {
             fullWidth
             noBorder
             onClick={() => setAddModal(true)}
+            name="add"
+            data-testid="test-add-user-btn"
           >
             Add User
           </StyledButton>

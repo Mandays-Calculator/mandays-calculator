@@ -1,6 +1,5 @@
 import { useState, type ReactElement } from "react";
 import { CustomButton } from "~/components/form/button";
-import AvatarImg from "~/assets/img/add-edit-avatar.png";
 import {
   Box,
   Dialog,
@@ -19,9 +18,12 @@ import {
   ControlledTextField,
 } from "~/components/form/controlled";
 import { useFormikContext } from "formik";
-import { AddUserManagement } from "~/pages/user-management/types";
+import { UserManagementForms } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
+import { NotificationModal } from "../../notification-modal";
+import moment from "moment";
+import { ImageUpload } from "~/components";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -53,18 +55,50 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   onClose,
 }): ReactElement => {
   const [value, setValue] = useState("");
+  const [errors, setErrors] = useState<any>({
+    lastName: false,
+    firstName: false,
+    gender: false,
+    careerStep: false,
+    employeeId: false,
+  });
+  const [addUserStatus, setAddUserStatus] = useState<any>({
+    status: "",
+    message: "",
+    show: false,
+  });
+
+  const errorMessage = {
+    lastName: "Last Name is required",
+    firstName: "First Name is required",
+    gender: "Gender is required",
+    careerStep: "Career Step is required",
+    employeeId: "Employee ID is required",
+  };
 
   const AddUser = useAddUser();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
-  const { values } = useFormikContext<AddUserManagement>();
-  const AddUserForm: AddUserManagement = {
+  const { values, setFieldValue } = useFormikContext<UserManagementForms>();
+  const gender = () => {
+    if (values.gender == "FEMALE") {
+      return 1;
+    } else if (values.gender == "MALE") {
+      return 2;
+    } else if (values.gender == "NON_BINARY") {
+      return 3;
+    } else if (values.gender == "PREFER_NOT_TO_SAY") {
+      return 4;
+    }
+  };
+  const AddUserForm: UserManagementForms = {
     firstName: values.firstName,
     lastName: values.lastName,
     middleName: values.middleName,
     suffix: values.suffix,
-    gender: 1,
+    gender: gender() ?? 0,
+    // image: values.image,
     email: values.email,
     employeeId: values.employeeId,
     odcId: values.odcId,
@@ -75,6 +109,21 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     roles: values.roles,
   };
 
+  const validateForm = (): boolean => {
+    let requiredError = false;
+    let requiredErrors = { ...errors };
+    for (const field in errors) {
+      if (AddUserForm[field as keyof UserManagementForms] === "") {
+        requiredErrors = { ...requiredErrors, ...{ [field]: true } };
+        requiredError = true;
+      } else {
+        requiredErrors = { ...requiredErrors, ...{ [field]: false } };
+      }
+    }
+    setErrors(requiredErrors);
+    return requiredError;
+  };
+
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -82,7 +131,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <img height="175px" width="175px" alt={"name"} src={AvatarImg} />
+              <ImageUpload name="image" setFieldValue={setFieldValue} />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>
@@ -91,6 +140,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="lastName"
                 label="Last Name"
                 placeholder="Dela Cruz"
+                error={errors.lastName}
+                helperText={errors.lastName && errorMessage.lastName}
               />
             </Grid>
             <Grid item xs={6}>
@@ -98,6 +149,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="firstName"
                 label="First Name"
                 placeholder="Juan"
+                error={errors.firstName}
+                helperText={errors.firstName && errorMessage.firstName}
               />
             </Grid>
             <Grid item xs={6}>
@@ -120,6 +173,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="gender"
                 options={genders}
                 placeholder="Male"
+                error={errors.gender}
+                helperText={errors.gender && errorMessage.gender}
               />
             </Grid>
           </Grid>
@@ -135,6 +190,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="careerStep"
               label="Carrer Step"
               placeholder="I03"
+              error={errors.careerStep}
+              helperText={errors.careerStep && errorMessage.careerStep}
             />
           </Grid>
           <Grid item xs={12} mb={1}>
@@ -156,11 +213,21 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 />
               </RadioGroup>
               <Stack ml={4.3}>
-                <ControlledDatePicker
-                  name="joiningDate"
-                  placeholderText="01/01/23"
-                  dateFormat="yyyy/MM/dd"
-                />
+                {value == "recentlyJoined" ? (
+                  <ControlledDatePicker
+                    name="joiningDate"
+                    value={moment().format("yyyy/MM/D")}
+                    placeholderText="2023/12/31"
+                    dateFormat="yyyy/MM/dd"
+                    disabled
+                  />
+                ) : (
+                  <ControlledDatePicker
+                    name="joiningDate"
+                    placeholderText="2023/12/31"
+                    dateFormat="yyyy/MM/dd"
+                  />
+                )}
               </Stack>
             </FormControl>
           </Grid>
@@ -169,6 +236,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="employeeId"
               label="Employee Id"
               placeholder="82000000"
+              error={errors.employeeId}
+              helperText={errors.employeeId && errorMessage.employeeId}
             />
           </Grid>
           <Grid item xs={3.5}>
@@ -216,21 +285,44 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             color="primary"
             onClick={() => {
               console.log("test", AddUserForm);
-
-              AddUser.mutate(AddUserForm, {
-                onSuccess: (data) => {
-                  console.log("success", data);
-                  alert("sucess");
-                },
-                onError: (error) => {
-                  alert(error.message);
-                  console.log(error);
-                },
-              });
+              if (!validateForm()) {
+                console.log(AddUserForm);
+                AddUser.mutate(AddUserForm, {
+                  onSuccess: () => {
+                    setAddUserStatus({
+                      status: "success",
+                      message: "User successfully added.",
+                      show: true,
+                    });
+                  },
+                  onError: (error) => {
+                    setAddUserStatus({
+                      status: "error",
+                      message: "Please try again later.",
+                      show: true,
+                    });
+                    console.log(error);
+                  },
+                });
+              }
             }}
           >
             Add User
           </CustomButton>
+
+          <NotificationModal
+            type={addUserStatus.status}
+            message={addUserStatus.message}
+            open={addUserStatus.show}
+            onConfirm={() => {
+              setAddUserStatus({
+                status: "",
+                message: "",
+                show: false,
+              });
+              onClose();
+            }}
+          />
         </Box>
       </Stack>
     </Dialog>

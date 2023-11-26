@@ -1,5 +1,5 @@
 import { ReactElement, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import { Grid, ListItem, ListItemIcon } from "@mui/material";
@@ -82,6 +82,10 @@ const ValidationResult = ({ values }: ValidationResultProps): ReactNode => {
 const ChangePassword = (): ReactElement => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const codeParam = searchParams.get("code");
+  const decodedCode = codeParam ? decodeURIComponent(codeParam) : "";
+  console.log(decodedCode, "decoded code");
   const { changePassword } = LocalizationKey;
   const changePasswordForm = useFormik({
     initialValues: {
