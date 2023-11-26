@@ -22,3 +22,9 @@ export interface TeamMembers {
   team_id: string;
   project_id: string;
 }
+
+export interface ProjectErrorResponse {
+  status: number;
+  errorCode: string;
+  message: string;
+}

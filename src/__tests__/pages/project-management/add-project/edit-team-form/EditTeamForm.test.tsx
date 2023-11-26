@@ -14,7 +14,7 @@ describe('Edit Team Form', () => {
   const useFormikContextMock = jest.spyOn(Formik, 'useFormikContext');
   const mockOnCancelEdit = jest.fn();
   const testTeamValue = addFormInitValue;
-  testTeamValue.teams.push({ teamName: 'test-team-name', teamLead: 'test-team-lead' });
+  testTeamValue.teams.push({ teamName: 'test-team-name', teamLead: 'test-team-lead', teamMembers: [] });
 
   beforeAll(() => {
     mockOnCancelEdit.mockImplementation((teamIndex: number) => {

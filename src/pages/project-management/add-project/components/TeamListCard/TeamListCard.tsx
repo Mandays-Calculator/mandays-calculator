@@ -40,6 +40,7 @@ const TeamListCard = (props: TeamListCardProps): ReactElement => {
   return (
     <StyledContainer
       $isDefault={isDefault}
+      sx={{cursor: 'pointer'}}
       onClick={() => toggleEdit(teamIndex)}
     >
       <Typography fontWeight="bold">{teamObject.teamName}</Typography>

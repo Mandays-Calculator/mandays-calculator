@@ -23,13 +23,11 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
 
   const addTeam = (): void => {
     if (teamName === "") {
-      //Validation for team name field required rule
       setTeamNameError(true);
     } else {
       setTeamNameError(false);
     }
     if (teamLead === "") {
-      //Valudation for team lead field required rule
       setTeamLeadError(true);
     } else {
       setTeamLeadError(false);
@@ -37,10 +35,11 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
     if (teamName !== "" && teamLead !== "") {
       setValues({
         ...values,
-        teams: [...values.teams, { teamName: teamName, teamLead: teamLead }],
+        teams: [...values.teams, { teamName: teamName, teamLead: teamLead, teamMembers: [] }],
       });
       setTeamName("");
       setTeamLead("");
+      onCancel();
     }
   };
 

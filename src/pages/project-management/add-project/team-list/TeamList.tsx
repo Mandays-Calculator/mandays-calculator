@@ -26,25 +26,23 @@ const TeamList = (props: TeamListProps): ReactElement => {
         },
       }}
     >
-      {values?.teams?.map((_team, index) => {
-        if (index > 0) {
+      {values?.teams.length ? (
+        values?.teams?.map((_team, index) => {
           return (
-            <TeamListCard
-              isDefault={false}
-              key={index}
-              teamIndex={index}
-              teamObject={_team}
-              toggleEdit={(teamIndex) => toggleEdit(teamIndex)}
-            />
+              <TeamListCard
+                isDefault={false}
+                key={index}
+                teamIndex={index}
+                teamObject={_team}
+                toggleEdit={(teamIndex) => toggleEdit(teamIndex)}
+              />
           );
-        } else if (values.teams.length === 1) {
-          return (
-            <StyledContainer $isDefault={true} key={index}>
-              <Typography fontWeight='bold'>Default</Typography>
-            </StyledContainer>
-          );
-        }
-      })}
+        })
+      ) : (
+        <StyledContainer $isDefault={true} key={0}>
+          <Typography fontWeight='bold'>Default</Typography>
+        </StyledContainer>
+      )}
     </Stack>
   );
 };

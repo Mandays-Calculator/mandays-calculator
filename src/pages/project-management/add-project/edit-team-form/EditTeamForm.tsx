@@ -1,4 +1,4 @@
-import { type ReactElement, useState, ChangeEvent } from "react";
+import { type ReactElement, useState, ChangeEvent, useEffect } from "react";
 import { Column } from "react-table";
 import { useFormikContext } from "formik";
 import {
@@ -10,17 +10,18 @@ import {
 } from "@mui/material";
 
 import { CustomButton } from "~/components/form/button";
-import { AddTeamForm as AddTeamFormType } from "../types";
-import { Table, TextField, SvgIcon } from "~/components";
+import { AddTeamForm as AddTeamFormType, TeamObject } from "../types";
+import { Table, TextField, SvgIcon, ErrorMessage } from "~/components";
 import DialogSearchUser from "./DialogSearchUser";
+import { User } from "~/api/user";
 
-type DataType = {
+type Members = {
   name: string;
-  odc: string;
+  abbreviation: string;
   careerStep: string;
 };
 
-type ColumnType = Column<DataType> & { id?: string };
+type ColumnType = Column<Members> & { id?: string };
 
 interface EditTeamFormProps {
   teamIndex: number;
@@ -31,7 +32,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const { teamIndex, onCancel } = props;
   const { values, setValues } = useFormikContext<AddTeamFormType>();
 
-  let team: any = values.teams.find((_val, index) => index === teamIndex);
+  let team: TeamObject = values.teams.find((_val, index) => index === teamIndex) as TeamObject;
 
   const [projectName, setProjectName] = useState<string>(values.projectName);
   const [teamName, setTeamName] = useState<string>(team.teamName);
@@ -39,35 +40,30 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const [projectNameError, setProjectNameError] = useState<boolean>(false);
   const [teamNameError, setTeamNameError] = useState<boolean>(false);
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
+  const [tableData, setTableData] = useState<Members[]>([]);
   const [showMemberDialog, setMemberDialog] = useState<boolean>(false);
-
-  const onToggleDialog = () => {
-    setMemberDialog(!showMemberDialog);
-  };
+  const [errorEditTeamMsg, setErrorEditTeamMsg] = useState<string>('');
 
   const editTeam = (): void => {
     if (projectName === "") {
-      //Validation for project name field required rule
       setProjectNameError(true);
     } else {
       setProjectNameError(false);
     }
     if (teamName === "") {
-      //Validation for team name field required rule
       setTeamNameError(true);
     } else {
       setTeamNameError(false);
     }
     if (teamLead === "") {
-      //Valudation for team lead field required rule
       setTeamLeadError(true);
     } else {
       setTeamLeadError(false);
     }
-    if (teamName !== "" && teamLead !== "") {
+    if (projectName !== "" && teamName !== "" && teamLead !== "") {
       let teams = values.teams.map((_val, index) => {
         if (index === teamIndex) {
-          return { teamName: teamName, teamLead: teamLead };
+          return { teamName, teamLead, teamMembers: tableData };
         }
         return _val;
       });
@@ -76,8 +72,38 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
         projectName: projectName,
         teams: teams,
       });
+
+      const selectedTeam = teams.find(x => x.teamMembers.length);
+      if (!selectedTeam) {
+        setErrorEditTeamMsg('Team members are required. Select at least 1(one) of the members');
+
+        setTimeout(() => setErrorEditTeamMsg(''), 3100);
+      } else {
+        onCancel(teamIndex);
+      }
     }
   };
+
+  const onToggleDialog = (selectedUsers?: User[]) => {
+    if (selectedUsers) {
+      initializeSelectedMembers(selectedUsers);
+    }
+    setMemberDialog(!showMemberDialog);
+  };
+
+  const initializeSelectedMembers = (selectedUsers: User[]) => {
+    setTableData(
+      selectedUsers.map((user) => ({
+        ...user,
+        name: `${user.firstName}, ${user.lastName} ${user.middleName ?? ''}`.trim(),
+        abbreviation: user.odc.abbreviation,
+      }))
+    );
+  }
+
+  const onTableRowClick = ($event: any) => {
+    console.log($event);
+  }
 
   const getProjectName = (e: ChangeEvent<HTMLInputElement>): void => {
     setProjectName(e.target.value);
@@ -91,19 +117,6 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setTeamLead(e.target.value);
   };
 
-  const rows = [
-    {
-      name: "Delos Santos, Michelle",
-      odc: "PH",
-      careerStep: "I03",
-    },
-    {
-      name: "Dela Cruz, Juan",
-      odc: "PH",
-      careerStep: "I03",
-    },
-  ];
-
   const columns: ColumnType[] = [
     {
       Header: "Name",
@@ -111,7 +124,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     },
     {
       Header: "ODC",
-      accessor: "odc",
+      accessor: "abbreviation",
     },
     {
       Header: "Career Step",
@@ -129,6 +142,11 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
       ),
     },
   ];
+
+  useEffect(() => {
+    const teamMembers = values.teams[teamIndex].teamMembers;
+    initializeSelectedMembers(teamMembers as unknown as User[]);
+  }, []);
 
   return (
     <>
@@ -189,14 +207,14 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
             />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
-            <CustomButton type="button" onClick={onToggleDialog} data-testid="test-add-members-btn">
+            <CustomButton type="button" onClick={() => onToggleDialog()} data-testid="test-add-members-btn">
               Add Members
             </CustomButton>
           </Grid>
         </Grid>
 
         <Box sx={{ padding: "0 1rem 0 1rem" }}>
-          <Table name="ODCTable" columns={columns} data={rows} />
+          <Table name="ODCTable" columns={columns} data={tableData} onRowClick={onTableRowClick} />
         </Box>
 
         <Stack
@@ -218,7 +236,8 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
           <CustomButton onClick={editTeam} data-testid="test-done-edit-btn">Done</CustomButton>
         </Stack>
       </Stack>
-      <DialogSearchUser showMemberDialog={showMemberDialog} toggleDialog={onToggleDialog}/>
+      <DialogSearchUser showMemberDialog={showMemberDialog} toggleDialog={($event) => onToggleDialog($event)}/>
+      <ErrorMessage error={errorEditTeamMsg} type={'alert'} duration={3000}/>
     </>
   );
 };
