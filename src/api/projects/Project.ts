@@ -1,16 +1,19 @@
 import axios, { AxiosResponse } from 'axios';
 import { getEnvConfig } from '~/utils/env-config';
-import { ProjectResponse } from '.';
+import { ProjectErrorResponse, ProjectResponse } from '.';
 
 type BaseResponse<T> = Promise<AxiosResponse<T, any>>;
 
-let apiBasePath: string | undefined;
+let apiBasePath: string | ApiBasePath;
 
 const getApiBasePath = () => {
-  return apiBasePath ?? (getEnvConfig()?.apiBasePath || '');
+  if (!apiBasePath) {
+    apiBasePath = getEnvConfig()?.apiBasePath || '';
+  }
+  return apiBasePath;
 };
 
-export const createProject = async (params: ProjectResponse): BaseResponse<any> => {
+export const createProject = async (params: any): BaseResponse<any> => {
   const url = `${getApiBasePath()}/projects`;
   return await axios.post<any>(url, params);
 };
@@ -25,7 +28,7 @@ export const deleteProject = async (projectId: number | string): BaseResponse<an
   return await axios.delete<any>(url);
 };
 
-export const getProjects = async (): BaseResponse<ProjectResponse[]> => {
+export const getProjects = async (): BaseResponse<ProjectResponse[] | ProjectErrorResponse> => {
   const url = `${getApiBasePath()}/projects`;
   return await axios.get<ProjectResponse[]>(url);
 };

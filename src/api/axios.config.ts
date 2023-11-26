@@ -9,10 +9,13 @@ import { LOCAL_STORAGE_ITEMS } from "~/utils/constants";
 import { getItemStorage, setItemStorage } from "~/utils/storageHelper";
 
 const init = async (): Promise<void> => {
+  const user = getUser();
   axios.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      const user = getUser();
-      config.headers.Authorization = `Bearer ${user?.access_token}`;
+      console.log(user, "ser");
+      if (user) {
+        config.headers.Authorization = `Bearer ${user?.access_token}`;
+      }
       return config;
     },
     (error: AxiosError) => {
@@ -26,7 +29,7 @@ const init = async (): Promise<void> => {
       return response;
     },
     (error: AxiosError) => {
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.status === 401 && user) {
         const sessionStorage = getItemStorage(LOCAL_STORAGE_ITEMS.sessionState);
         sessionStorage.unauthorized = true;
         setItemStorage(LOCAL_STORAGE_ITEMS.sessionState, sessionStorage);

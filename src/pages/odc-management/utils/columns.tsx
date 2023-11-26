@@ -1,12 +1,12 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { DataType, HolidayType } from "./type";
+import type { ODCListResponse, HolidayType } from "~/api/odc";
 
 import { Column, CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 
 import { SvgIcon } from "~/components";
 
-type ODCColumnType = Column<DataType> & { id?: string };
+type ODCColumnType = Column<ODCListResponse> & { id?: string };
 type HolidayColumnType = Column<HolidayType>;
 
 export const ODCColumns = (
@@ -19,7 +19,7 @@ export const ODCColumns = (
   return [
     {
       Header: "ODC Name",
-      accessor: "odcName",
+      accessor: "name",
     },
     {
       Header: "Location",
@@ -31,12 +31,15 @@ export const ODCColumns = (
     },
     {
       Header: "No. Holidays",
-      accessor: "noHolidays",
+      id: "holidays",
+      Cell: ({ row }: CellProps<ODCListResponse>) => (
+        <>{row.original.holidays === null ? 0 : row.original.holidays?.length}</>
+      ),
     },
     {
       Header: "",
       id: "actions",
-      Cell: ({ row }: CellProps<DataType>) => (
+      Cell: ({ row }: CellProps<ODCListResponse>) => (
         <>
           <IconButton
             onClick={() => {
@@ -44,6 +47,7 @@ export const ODCColumns = (
               setIsEdit(true);
               setIdx(row.index);
             }}
+            aria-label={`edit-${row.index}`}
           >
             <SvgIcon name="edit" $size={2} />
           </IconButton>
@@ -52,6 +56,7 @@ export const ODCColumns = (
               setDeleteModalOpen(true);
               setDelIdx(row.index);
             }}
+            aria-label={`delete-${row.index}`}
           >
             <SvgIcon name="delete" $size={2} />
           </IconButton>
@@ -64,10 +69,10 @@ export const ODCColumns = (
 export const HolidayColumn: HolidayColumnType[] = [
   {
     Header: "Date",
-    accessor: "holidayDate",
+    accessor: "date",
   },
   {
     Header: "Holiday",
-    accessor: "holidayName",
+    accessor: "holiday",
   },
 ];

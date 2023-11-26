@@ -65,7 +65,8 @@
     },
     "btnlabel": {
       "send": "Send",
-      "back": "<<< Back to Login"
+      "back": "Back to Login",
+      "process": "Processing..."
     }
   },
   "odc": {

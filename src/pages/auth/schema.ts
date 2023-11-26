@@ -6,7 +6,9 @@ export const loginSchema = yup.object({
 });
 
 export const forgotPasswordSchema = yup.object({
-  usernameOrEmail: yup.string().required(),
+  usernameOrEmail: yup
+    .string()
+    .required("Please enter your username or email."),
 });
 
 export const changePasswordSchema = yup.object().shape({
