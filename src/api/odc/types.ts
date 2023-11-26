@@ -1,8 +1,21 @@
 export interface ODCListResponse {
-  id: string;
+  id?: string;
   name: string;
   abbreviation: string;
   location: string;
-  holidays: string[] | null;
+  holidays: HolidayType[] | null;
+  active: boolean;
+}
+
+export type HolidayType = {
+  date: string;
+  holiday: string;
+};
+
+export interface ODCSubmit {
+  name: string;
+  abbreviation: string;
+  location: string;
+  holidays: HolidayType[] | null;
   active: boolean;
 }

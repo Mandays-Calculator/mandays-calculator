@@ -46,6 +46,7 @@ const LocalizationKey = {
     btnlabel: {
       send: "forgotPassword.btnlabel.send",
       back: "forgotPassword.btnlabel.back",
+      process: "forgotPassword.btnlabel.process",
     },
     placeholder: "forgotPassword.placeholder"
   },
