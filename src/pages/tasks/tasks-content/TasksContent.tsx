@@ -1,17 +1,17 @@
 import { ReactElement, useState } from "react";
 
-import { Divider, Grid, Stack, Typography } from "@mui/material";
+import { Divider, Grid } from "@mui/material";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
-} from "react-beautiful-dnd"; // Import these components
+} from "react-beautiful-dnd";
 
-import { Select, TextField, PageContainer, Modal } from "~/components";
-import CustomButton from "~/components/form/button/CustomButton";
+import { Select, PageContainer } from "~/components";
 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
+import CreateTask from "./CreateTask";
 
 interface Task {
   taskTitle: string;
@@ -25,17 +25,6 @@ interface Task {
 
 const TasksContent = (): ReactElement => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [newTask, setNewTask] = useState<Task>({
-    taskTitle: "",
-    desc: "",
-    date: "",
-    sprint: "",
-    complexity: "",
-    status: "Backlog",
-    type: "",
-  });
-
   const status = [
     "Backlog",
     "Not Yet Started",
@@ -113,42 +102,13 @@ const TasksContent = (): ReactElement => {
     setModalOpen(!modalOpen);
   };
 
-  const close = () => {
+  const handleCloseModal = () => {
     setModalOpen(false);
-    setNewTask({
-      taskTitle: "",
-      desc: "",
-      date: "",
-      sprint: "",
-      complexity: "",
-      status: "",
-      type: "",
-    });
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setNewTask((prevTask) => ({
-      ...prevTask,
-      [name]: value,
-    }));
-  };
-
-  const handleCreateTask = () => {
-    {
-      const updatedMockData = [...mockData, newTask];
-      setMockData(updatedMockData);
-
-      setModalOpen(false);
-      setNewTask({
-        taskTitle: "",
-        desc: "",
-        date: "",
-        sprint: "",
-        complexity: "",
-        status: "Backlog",
-        type: "",
-      });
-    }
+  const handleCreateTask = (task: Task) => {
+    const updatedMockData = [...mockData, task];
+    setMockData(updatedMockData);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -186,88 +146,11 @@ const TasksContent = (): ReactElement => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <PageContainer>
-        <Modal open={modalOpen} title="Task Name" maxWidth="md" onClose={close}>
-          <Stack direction="column" gap={2}>
-            <TextField
-              name="desc"
-              label="Description"
-              fullWidth
-              multiline
-              rows={4}
-              maxRows={4}
-              onChange={(e) => setNewTask({ ...newTask, desc: e.target.value })}
-              value={newTask.desc}
-            />
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  name="function"
-                  label="Function"
-                  fullWidth
-                  onChange={(e) =>
-                    setNewTask({ ...newTask, taskTitle: e.target.value })
-                  }
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Stack direction="column" gap={1}>
-                  <Typography>Complexity</Typography>
-                  <Select
-                    name="complexity"
-                    placeholder="Complexity"
-                    defaultValue="simple"
-                    fullWidth
-                    onChange={(e) =>
-                      handleSelectChange("complexity", e.target.value as string)
-                    }
-                    value={newTask.complexity}
-                    options={[
-                      {
-                        value: "simple",
-                        label: "Simple",
-                      },
-                      {
-                        value: "normal",
-                        label: "Normal",
-                      },
-                    ]}
-                  />
-                </Stack>
-              </Grid>
-            </Grid>
-
-            <Stack direction="column" gap={1}>
-              <Typography>Tags</Typography>
-              <Select
-                name="tags"
-                placeholder="Tags"
-                multiple={true}
-                fullWidth
-                onChange={(e) => setSelectedTags(e.target.value as string[])}
-                value={selectedTags}
-                options={[
-                  { value: "sample1", label: "Sample 1" },
-                  { value: "sample2", label: "Sample 2" },
-                ]}
-              />
-              ;
-            </Stack>
-            <Stack
-              direction="row"
-              display="flex"
-              justifyContent="flex-end"
-              gap={1}
-            >
-              <CustomButton
-                type="button"
-                colorVariant="primary"
-                onClick={handleCreateTask}
-              >
-                Create
-              </CustomButton>
-            </Stack>
-          </Stack>
-        </Modal>
+        <CreateTask
+          open={modalOpen}
+          onClose={handleCloseModal}
+          onCreateTask={handleCreateTask}
+        />
         <Select
           name="filter"
           placeholder="Team Name"
