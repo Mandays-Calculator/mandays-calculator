@@ -49,7 +49,9 @@ const AuthenticatedApp = (): ReactElement => {
      * Initiate axios token once user is logged in
      */
     if (user) {
-      axiosInit();
+      if (auth.isAuthenticated) {
+        axiosInit();
+      }
       dispatch(fetchUserPermission());
     }
 
