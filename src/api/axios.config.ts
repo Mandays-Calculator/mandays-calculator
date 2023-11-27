@@ -12,7 +12,6 @@ const init = async (): Promise<void> => {
   const user = getUser();
   axios.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      console.log(user, "ser");
       if (user) {
         config.headers.Authorization = `Bearer ${user?.access_token}`;
       }
@@ -26,6 +25,9 @@ const init = async (): Promise<void> => {
   // Response interceptor
   axios.interceptors.response.use(
     (response: AxiosResponse) => {
+      if (response.data?.status >= 201) {
+        return Promise.reject(response.data.message);
+      }
       return response;
     },
     (error: AxiosError) => {

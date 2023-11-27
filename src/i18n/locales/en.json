@@ -45,7 +45,11 @@
     },
     "permissionDenied": {
       "title": "PERMISSION DENIED",
-      "description": "You do not have permission to access this."
+      "description": "You do not have permission to access this. Please contact your system administrator."
+    },
+    "permissionError": {
+      "title": "PERMISSION ERROR",
+      "description": "There was an error retrieving your permissions. Please contact your system administrator."
     },
     "errorMessage": {
       "required": "This field is required.",

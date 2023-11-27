@@ -1,11 +1,5 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  ComponentType,
-  ReactElement,
-} from "react";
-import { IIdleTimer, IdleTimerProvider } from "react-idle-timer";
+import React, { useState, useEffect, ComponentType, ReactElement } from "react";
+import { IdleTimerProvider } from "react-idle-timer";
 import { BroadcastChannel } from "broadcast-channel";
 import { useAuth } from "react-oidc-context";
 
@@ -29,7 +23,6 @@ export const useIdleTimer = <P extends object>(
     const config = getEnvConfig();
     const { t } = useTranslation();
     const auth = useAuth();
-    const idleTimerRef = useRef<IIdleTimer>(null);
     const channel = new BroadcastChannel("idle_timer_channel");
 
     const { common } = LocalizationKey;
@@ -65,7 +58,6 @@ export const useIdleTimer = <P extends object>(
     return (
       <React.Fragment>
         <IdleTimerProvider
-          ref={idleTimerRef}
           timeout={timeout}
           onIdle={handleOnIdle}
           debounce={250}

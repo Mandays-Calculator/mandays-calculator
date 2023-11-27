@@ -48,12 +48,16 @@ export const routes: RouteType[] = [
     element: <Outlet />,
   },
   {
-    path: "/",
-    element: <ProjectManagement />,
+    path: "/permission-error",
+    element: <ErrorPage type="permission-error" />,
   },
   {
     path: "/*",
     element: <ErrorPage type="not-found" />,
+  },
+  {
+    path: "/",
+    element: <Outlet />,
   },
   ...mandaysCalculatorRoutes,
 ];

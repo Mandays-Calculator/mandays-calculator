@@ -43,8 +43,6 @@ export type User = {
 };
 
 export interface UserPermissionResponse {
-  data: {
-    user: User;
-    permissions: Permission[];
-  };
+  user: User;
+  permissions: Permission[];
 }

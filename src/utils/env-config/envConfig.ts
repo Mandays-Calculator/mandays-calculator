@@ -1,4 +1,7 @@
-import { ConfigType } from ".";
+import type { ConfigType } from ".";
+
+import { useState, useEffect } from "react";
+import { initStorage } from "../storageHelper";
 
 let config: ConfigType | null = null;
 
@@ -35,4 +38,21 @@ const getApiBasePath = (key?: ApiBasePathParam): string => {
     return (config.apiBasePath as ApiBasePath)[key];
   }
   return (config?.apiBasePath as ApiBasePath).accountsService;
+};
+
+export const useConfig = (environment: string | undefined) => {
+  const [config, setConfig] = useState<ConfigType | undefined>(undefined);
+
+  useEffect(() => {
+    if (environment) {
+      loadConfig(environment).then((res: ConfigType | null) => {
+        if (res) {
+          setConfig(res);
+          initStorage();
+        }
+      });
+    }
+  }, [environment]);
+
+  return config;
 };
