@@ -1,7 +1,16 @@
-import { useState } from "react";
 import type { APIStatus, APIError } from "./types";
+import { useState } from "react";
 import { UseMutateFunction } from "react-query";
 
+/**
+ * Custom hook to handle API requests using React Query's mutate function.
+ * It manages the API request's loading, success, and error states.
+ *
+ * @param mutateFunction - The React Query mutate function for performing the API request.
+ * @returns A tuple containing the API status and a function to trigger the API call.
+ *          The API status includes loading, error, and success states.
+ *          The function to trigger the API call accepts variables of type TVariables.
+ */
 export function useRequestHandler<TData, TError, TVariables, TContext>(
   mutateFunction: UseMutateFunction<TData, TError, TVariables, TContext>
 ): [APIStatus, (variables: TVariables) => void] {

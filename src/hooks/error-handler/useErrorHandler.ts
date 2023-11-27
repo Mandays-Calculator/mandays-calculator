@@ -5,7 +5,12 @@ import LocalizationKey from "~/i18n/key";
 
 import { ERROR_CODES } from "~/utils/constants";
 
-export function useErrorHandler(error: APIError) {
+/**
+ * Custom hook to handle API errors and return localized error messages.
+ * @param error The APIError object containing error details.
+ * @returns A string with the localized error message.
+ */
+export function useErrorHandler(error: APIError): string | "" {
   const { common } = LocalizationKey;
   const { t } = useTranslation();
 
