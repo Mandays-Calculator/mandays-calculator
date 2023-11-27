@@ -39,8 +39,8 @@ export function useRequestHandler<TData, TError, TVariables, TContext>(
       },
       onError: (error: TError) => {
         const apiError: APIError = {
-          message: (error as APIError).message || "Unknown error",
-          errorCode: (error as APIError).errorCode || "API_ERROR",
+          message: (error as APIError).message,
+          errorCode: (error as APIError).errorCode,
         };
         setStatus({
           ...status,

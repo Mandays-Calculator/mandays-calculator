@@ -1,10 +1,11 @@
 import type { ReactElement, ReactNode } from "react";
 
 import { useEffect, useState } from "react";
-import { CustomButton } from "~/components/form/button";
-import Modal from "~/components/modal/Modal";
 import WarningIcon from "@mui/icons-material/Warning";
 import { Box, Stack } from "@mui/material";
+
+import { CustomButton } from "~/components/form/button";
+import { Modal, SvgIcon } from "~/components";
 
 type ModalType =
   | "error"
@@ -27,10 +28,9 @@ interface NotificationModalProps {
 const renderIcon = (type: ModalType): ReactElement => {
   switch (type) {
     case "error":
-      return <WarningIcon color="error" sx={{ fontSize: 40 }} />;
-    case "unauthorized":
-      return <WarningIcon color="warning" sx={{ fontSize: 70 }} />;
     case "warning":
+    case "unauthorized":
+      return <SvgIcon name="warning" $size={8} />;
     case "idleTimeOut":
       return <WarningIcon color="error" sx={{ fontSize: 40 }} />;
     case "success":

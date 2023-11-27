@@ -17,6 +17,7 @@ import { useForgotPasswordMutation } from "~/queries/auth";
 import { ErrorMessage } from "~/components";
 
 import { useRequestHandler } from "~/hooks/request-handler";
+import { useErrorHandler } from "~/hooks/error-handler";
 
 const ForgotPassword = (): ReactElement => {
   const { t } = useTranslation();
@@ -79,7 +80,9 @@ const ForgotPassword = (): ReactElement => {
                 )}
               />
             </Grid>
-            {!status.loading && <ErrorMessage error={status.error.message} />}
+            {!status.loading && (
+              <ErrorMessage error={useErrorHandler(status.error, t)} />
+            )}
             <Grid item xs={12} mb={2}>
               <Link to={"/"}>{t(forgotPassword.btnlabel.back)}</Link>
             </Grid>

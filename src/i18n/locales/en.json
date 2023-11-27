@@ -49,13 +49,13 @@
     },
     "permissionError": {
       "title": "PERMISSION ERROR",
-      "description": "There was an error retrieving your permissions. Please contact your system administrator.",
-      "genericError": "There is a problem with your request. Please contact your system administrator."
+      "description": "There was an error retrieving your permissions. Please contact your system administrator."
     },
     "errorMessage": {
       "required": "This field is required.",
       "fieldRequired": "{{field}} is required.",
-      "unauthorized": "Unauthorized. Your session has expired. Please login again."
+      "unauthorized": "Unauthorized. Your session has expired. Please login again.",
+      "genericError": "There is a problem with your request. Please contact your system administrator."
     }
   },
   "login": {
@@ -121,7 +121,9 @@
       "loc": "Location"
     },
     "modal": {
-      "deleteLabel": "Are you sure you want to delete this ODC?"
+      "deleteLabel": "Are you sure you want to delete this ODC?",
+      "yesPleaseBtn": "Yes, Please",
+      "noThanksBtn": "No, Thanks"
     },
     "button": {
       "add": "Add ODC",
