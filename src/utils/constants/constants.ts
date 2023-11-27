@@ -6,3 +6,8 @@ export const ERROR_MESSAGES = {
 export const LOCAL_STORAGE_ITEMS = {
   sessionState: "sessionState",
 };
+
+export const ERROR_CODES = {
+  genericError: "GE000001",
+  userNotFound: "US000004",
+};

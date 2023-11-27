@@ -29,7 +29,8 @@ const AppBarHeader = (): ReactElement => {
   const position = "Sprint Manager";
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState<boolean>(false);
+  const [changePasswordModalOpen, setChangePasswordModalOpen] =
+    useState<boolean>(false);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget);
@@ -41,11 +42,11 @@ const AppBarHeader = (): ReactElement => {
 
   const handleChangePasswordUserMenu = (): void => {
     setAnchorElUser(null);
-    setChangePasswordModalOpen(true)
+    setChangePasswordModalOpen(true);
   };
 
   const handleLogoutUserMenu = (): void => {
-    auth.removeUser()
+    auth.removeUser();
   };
   return (
     <StyledAppBar position="sticky">
@@ -54,11 +55,16 @@ const AppBarHeader = (): ReactElement => {
           <Toolbar sx={{ justifyContent: "right" }}>
             <Box sx={{ flexGrow: 0, alignItems: "right" }}>
               <Tooltip title="Open settings">
-                <Grid container spacing={1} alignItems="center">
-                  <Grid item xs={3}>
+                <Grid
+                  container
+                  spacing={1}
+                  alignItems="center"
+                  columnSpacing={1}
+                >
+                  <Grid item xs={4}>
                     <Avatar alt={name} src={String(AvatarImg)} />
                   </Grid>
-                  <Grid item xs={8}>
+                  <Grid item xs={7}>
                     <Typography textAlign="left" fontSize={14}>
                       {name}
                     </Typography>
@@ -95,15 +101,13 @@ const AppBarHeader = (): ReactElement => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {/* {userSettings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))} */}
                 <MenuItem key="Profile" onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-                <MenuItem key="Change Password" onClick={handleChangePasswordUserMenu}>
+                <MenuItem
+                  key="Change Password"
+                  onClick={handleChangePasswordUserMenu}
+                >
                   <Typography textAlign="center">Change Password</Typography>
                 </MenuItem>
                 <MenuItem key="Logout" onClick={handleLogoutUserMenu}>
@@ -114,11 +118,11 @@ const AppBarHeader = (): ReactElement => {
           </Toolbar>
         </StyledToolBarContainer>
       </Container>
-      
+
       <ChangePasswordModal
-          open={changePasswordModalOpen}
-          onClose={() => setChangePasswordModalOpen(false)}
-        />
+        open={changePasswordModalOpen}
+        onClose={() => setChangePasswordModalOpen(false)}
+      />
     </StyledAppBar>
   );
 };

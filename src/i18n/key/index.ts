@@ -78,6 +78,7 @@ const LocalizationKey = {
       authPermissionLoading: "common.userManagement.auth.permissionLoading",
     },
     errorMessage: {
+      genericError: "common.errorMessage.genericError",
       required: "common.errorMessage.required",
       fieldRequired: "common.errorMessage.fieldRequired",
       unauthorized: "common.errorMessage.unauthorized",

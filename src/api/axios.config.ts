@@ -22,7 +22,6 @@ const init = async (): Promise<void> => {
     }
   );
 
-  // Response interceptor
   axios.interceptors.response.use(
     (response: AxiosResponse) => {
       if (response.data?.status >= 201) {
