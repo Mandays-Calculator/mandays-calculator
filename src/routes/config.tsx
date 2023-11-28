@@ -45,6 +45,10 @@ export const routes: RouteType[] = [
     element: <Outlet />,
   },
   {
+    path: "tasks",
+    element: <Tasks />,
+  },
+  {
     element: <Outlet />,
   },
   {
