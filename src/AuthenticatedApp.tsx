@@ -48,8 +48,8 @@ const AuthenticatedApp = (): ReactElement => {
     useState<boolean>(false);
 
   useEffect(() => {
+    axiosInit();
     if (user && auth.isAuthenticated) {
-      axiosInit();
       dispatch(
         fetchUserPermission({
           onSuccess: () => navigate("./"),
@@ -138,7 +138,6 @@ const AuthenticatedApp = (): ReactElement => {
       )}
     </>
   );
-
   return (
     <>
       {renderAuth()}
