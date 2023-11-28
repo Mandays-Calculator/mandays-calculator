@@ -1,9 +1,8 @@
 import { useState, type ReactElement } from "react";
 
-import { useUserList } from "~/queries/user-management/UserManagement";
 import { PageLoader, Table } from "~/components";
 
-import { userListColumns } from "./utils";
+import { isLoading, data, refetch, userListColumns } from "./utils";
 import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
 import { useTranslation } from "react-i18next";
 
@@ -12,7 +11,6 @@ import { DeleteModal } from "~/components/modal/delete-modal";
 import { UserListData } from "~/api/user-management/types";
 
 const UserList = (): ReactElement => {
-  const { data, isLoading, refetch } = useUserList();
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
 

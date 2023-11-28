@@ -7,7 +7,7 @@ import { Box, Stack } from "@mui/material";
 import { CustomButton } from "~/components/form/button";
 import { Modal, SvgIcon } from "~/components";
 
-type ModalType =
+export type ModalType =
   | "error"
   | "warning"
   | "success"

@@ -4,7 +4,7 @@ export type BaseInputProps<Type = object> = Type & {
   name?: string;
   label?: string | ReactNode;
   error?: boolean;
-  helperText?: string;
+  helperText?: string | ReactNode;
   isFastField?: boolean;
   readOnly?: boolean;
 };

@@ -21,7 +21,7 @@ import { useFormikContext } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
-import { NotificationModal } from "../../notification-modal";
+import { ModalType, NotificationModal } from "../../notification-modal";
 import moment from "moment";
 import { ImageUpload } from "~/components";
 
@@ -55,14 +55,14 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   onClose,
 }): ReactElement => {
   const [value, setValue] = useState("");
-  const [errors, setErrors] = useState<any>({
+  const [errors, setErrors] = useState({
     lastName: false,
     firstName: false,
     gender: false,
     careerStep: false,
     employeeId: false,
   });
-  const [addUserStatus, setAddUserStatus] = useState<any>({
+  const [addUserStatus, setAddUserStatus] = useState({
     status: "",
     message: "",
     show: false,
@@ -311,7 +311,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           </CustomButton>
 
           <NotificationModal
-            type={addUserStatus.status}
+            type={addUserStatus.status as ModalType}
             message={addUserStatus.message}
             open={addUserStatus.show}
             onConfirm={() => {
