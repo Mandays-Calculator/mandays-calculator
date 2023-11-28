@@ -4,6 +4,10 @@ export interface UserPermissionState {
   initialized: boolean;
   user: User | null;
   loading: boolean;
-  error: string | null;
   permissions: Permission[];
+}
+
+export interface FetchUserPermissionArgs {
+  onSuccess?: () => void;
+  onFailure?: () => void;
 }

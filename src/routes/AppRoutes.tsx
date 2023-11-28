@@ -32,7 +32,6 @@ const AppRoutes = ({
         })),
       ];
 
-  console.log("running");
   return (
     <Routes>
       {routes.map((routeItem: RouteType, index: number) => (

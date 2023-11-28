@@ -9,7 +9,7 @@ import { resourcesDetailData } from "../../utils/tableData";
 import { ResourcesListColumns } from "../../utils/columns";
 import { Form, Table } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import Accordion from "~/components/Accordion/Accordion";
+import Accordion from "~/components/accordion/Accordion";
 
 interface ResourcesProps {
   mode: EstimationDetailsMode;

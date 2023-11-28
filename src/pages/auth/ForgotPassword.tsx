@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 
 import LocalizationKey from "~/i18n/key";
@@ -16,45 +16,19 @@ import { forgotPasswordSchema } from "./schema";
 import { useForgotPasswordMutation } from "~/queries/auth";
 import { ErrorMessage } from "~/components";
 
+import { useRequestHandler } from "~/hooks/request-handler";
+import { useErrorHandler } from "~/hooks/error-handler";
+
 const ForgotPassword = (): ReactElement => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { forgotPassword } = LocalizationKey;
 
-  const [status, setStatus] = useState<{
-    loading: boolean;
-    error: string;
-    success: boolean;
-  }>({
-    loading: false,
-    error: "",
-    success: false,
-  });
-
   const forgotPasswordMutation = useForgotPasswordMutation();
+  const [status, callApi] = useRequestHandler(forgotPasswordMutation.mutate);
 
   const onSubmit = async (values: { usernameOrEmail: string }) => {
-    setStatus({
-      ...status,
-      loading: true,
-    });
-    forgotPasswordMutation.mutate(values.usernameOrEmail, {
-      onSuccess: () => {
-        setStatus({
-          ...status,
-          loading: false,
-          success: true,
-        });
-      },
-      onError: (error) => {
-        console.log("error", error);
-        setStatus({
-          error: error.message,
-          loading: false,
-          success: false,
-        });
-      },
-    });
+    callApi(values.usernameOrEmail);
   };
 
   const forgotPasswordForm = useFormik({
@@ -107,9 +81,7 @@ const ForgotPassword = (): ReactElement => {
               />
             </Grid>
             {!status.loading && (
-              <ErrorMessage
-                error={status.error && "User not found. Please try again"}
-              />
+              <ErrorMessage error={useErrorHandler(status.error, t)} />
             )}
             <Grid item xs={12} mb={2}>
               <Link to={"/"}>{t(forgotPassword.btnlabel.back)}</Link>

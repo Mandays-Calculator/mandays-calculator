@@ -1,15 +1,8 @@
-import type { ReactElement, ReactNode } from "react";
-import type {
-  CustomHeaderGroup,
-  TableProps,
-  RenderStripedRowProps,
-  TableData,
-  CellParamType,
-  DataRowType,
-} from ".";
+import type { ReactElement } from "react";
+import type { CustomHeaderGroup, TableProps } from ".";
 
-import React, { useState } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useState } from "react";
+import { useTable, useSortBy, ColumnInstance } from "react-table";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -27,81 +20,10 @@ import {
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import LocalizationKey from "~/i18n/key";
 
-import {
-  StyledCell,
-  StyledHeader,
-  StyledStripeRow,
-  StyledIconButton,
-  StyledHeaderStripeRow,
-  StyledHeaderCell,
-} from ".";
-
-const renderStripedRow = <T extends object>({
-  row,
-  onRowClick,
-  type,
-  toggleCollapse,
-  rowId,
-  isCollapsed,
-}: RenderStripedRowProps<T>): ReactNode => {
-  const renderCells = (dataRow: DataRowType) => {
-    return Object.keys(dataRow).map((key) => (
-      <StyledCell key={`${rowId}-${key}`}>{dataRow[key]}</StyledCell>
-    ));
-  };
-
-  switch (type) {
-    case "collapse":
-      return (
-        <React.Fragment key={rowId}>
-          <StyledHeaderStripeRow>
-            <StyledCell
-              colSpan={row.cells.length}
-              sx={{ position: "relative" }}
-            >
-              {row.original.label}
-              <StyledIconButton
-                size="small"
-                onClick={() => toggleCollapse(rowId)}
-              >
-                {isCollapsed ? (
-                  <KeyboardArrowUpIcon />
-                ) : (
-                  <KeyboardArrowDownIcon />
-                )}
-              </StyledIconButton>
-            </StyledCell>
-          </StyledHeaderStripeRow>
-          {!isCollapsed &&
-            row.original.data.map((dataRow: any, index: any) => (
-              <StyledStripeRow key={`${rowId}-${index}`}>
-                {renderCells(dataRow)}
-              </StyledStripeRow>
-            ))}
-        </React.Fragment>
-      );
-    default:
-      return (
-        <StyledStripeRow
-          key={rowId}
-          {...row.getRowProps({
-            onClick: onRowClick ? () => onRowClick(row.original) : undefined,
-            style: { cursor: onRowClick ? "pointer" : "default" },
-          })}
-        >
-          {row.cells.map((cell: CellParamType) => (
-            <StyledCell {...cell.getCellProps()}>
-              {cell.render("Cell")}
-            </StyledCell>
-          ))}
-        </StyledStripeRow>
-      );
-  }
-};
+import { StyledHeader, StyledHeaderCell } from ".";
+import StripedRowRenderer from "./striped-row/StripedRow";
 
 export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
   const {
@@ -112,12 +34,22 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
     onRowClick,
     type = "default",
   } = props;
+
+  const { common } = LocalizationKey;
   const { t } = useTranslation();
+
   const [collapsedRows, setCollapsedRows] = useState<Record<string, boolean>>(
     {}
   );
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable<TableData<any>>({ columns, data }, useSortBy);
+    useTable<T>(
+      {
+        columns: columns as ColumnInstance<T>[],
+        data: data as T[],
+      },
+      useSortBy
+    );
 
   // will toggle parent row if type === collapse
   const toggleCollapse = (rowId: string) => {
@@ -126,6 +58,7 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
       [rowId]: !prevState[rowId],
     }));
   };
+
   const renderSortIcon = (column: any) =>
     column.isSorted ? (
       column.isSortedDesc ? (
@@ -135,7 +68,6 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
       )
     ) : null;
 
-  const { common } = LocalizationKey;
   return (
     <Stack gap={2}>
       <TableContainer component={Paper}>
@@ -168,16 +100,18 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
           <TableBody {...getTableBodyProps()}>
             {rows.map((row, index) => {
               prepareRow(row);
-              const rowId = `row-${index}`; // or some other unique identifier from your row data
+              const rowId = `row-${index}`;
               const isCollapsed = collapsedRows[rowId];
-              return renderStripedRow({
-                row,
-                isCollapsed,
-                rowId,
-                onRowClick,
-                toggleCollapse,
-                type,
-              });
+              return (
+                <StripedRowRenderer
+                  row={row}
+                  onRowClick={onRowClick}
+                  type={type}
+                  toggleCollapse={toggleCollapse}
+                  rowId={rowId}
+                  isCollapsed={isCollapsed}
+                />
+              );
             })}
             {rows.length === 0 && (
               <TableRow>

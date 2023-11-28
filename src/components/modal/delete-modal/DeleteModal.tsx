@@ -1,7 +1,8 @@
 import type { ReactElement } from "react";
+
+import { t } from "i18next";
 import { CustomButton } from "~/components/form/button";
-import Modal from "~/components/modal/Modal";
-import WarningIcon from "@mui/icons-material/Warning";
+import { Modal, SvgIcon } from "~/components";
 import { Box, Stack } from "@mui/material";
 
 interface DeleteModalProps {
@@ -17,7 +18,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   onDeleteConfirm,
   open,
   onClose,
-  message = "Are you sure you want to delete this ODC?",
+  message = "",
   selectedRow,
   onConfirm,
 }): ReactElement => {
@@ -29,9 +30,9 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
         justifyContent="center"
         spacing={2}
       >
-        <WarningIcon color="error" style={{ fontSize: 40 }} />
+        <SvgIcon name="warning" $size={7} />
         <Box maxWidth={250} textAlign="center">
-          {message}
+          {message || t("odc.modal.deleteLabel")}
         </Box>
       </Stack>
 
@@ -42,7 +43,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
           onClick={onClose}
           style={{ marginRight: 16 }}
         >
-          No, Thanks
+          {t("odc.modal.yesPleaseBtn")}
         </CustomButton>
         <CustomButton
           variant="contained"
@@ -56,7 +57,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
             }
           }}
         >
-          Yes, Please
+          {t("odc.modal.noThanksBtn")}
         </CustomButton>
       </Box>
     </Modal>
