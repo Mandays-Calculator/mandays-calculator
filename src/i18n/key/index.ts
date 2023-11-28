@@ -48,7 +48,7 @@ const LocalizationKey = {
       back: "forgotPassword.btnlabel.back",
       process: "forgotPassword.btnlabel.process",
     },
-    placeholder: "forgotPassword.placeholder"
+    placeholder: "forgotPassword.placeholder",
   },
   footerLabel: "footer.label",
   common: {
@@ -61,6 +61,8 @@ const LocalizationKey = {
     pageNotFoundDesc: "common.notFound.description",
     permissionDeniedTitle: "common.permissionDenied.title",
     permissionDeniedDesc: "common.permissionDenied.description",
+    permissionErrorTitle: "common.permissionError.title",
+    permissionErrorDesc: "common.permissionError.description",
     goBackHomeBtnLabel: "common.button.goBackHome",
     collapse: "common.button.collapse",
     backBtn: "common.button.back",
@@ -76,6 +78,7 @@ const LocalizationKey = {
       authPermissionLoading: "common.userManagement.auth.permissionLoading",
     },
     errorMessage: {
+      genericError: "common.errorMessage.genericError",
       required: "common.errorMessage.required",
       fieldRequired: "common.errorMessage.fieldRequired",
       unauthorized: "common.errorMessage.unauthorized",
@@ -89,7 +92,8 @@ const LocalizationKey = {
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
-    modalConfirmDeleteEstimation: "mandaysCalculator.modalLabels.confirmDeleteEstimation",
+    modalConfirmDeleteEstimation:
+      "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
@@ -106,7 +110,8 @@ const LocalizationKey = {
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
-      resourceCount: "mandaysCalculator.resourceList.table.columns.resourceCount",
+      resourceCount:
+        "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
     summaryForm: {

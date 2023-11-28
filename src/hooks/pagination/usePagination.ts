@@ -1,17 +1,12 @@
+import type { PaginationItems, PaginationProps } from "./types";
 import { useState, useCallback } from "react";
 
-type PaginationProps = {
-  items: any[]; // consists of different data type;
-  itemsPerPage: number;
-};
-
-type PaginationItems = {
-  currentPage: number;
-  totalPages: number;
-  paginatedItems: () => any[]; // consists of different data type
-  handlePageChange: (value: number) => void | undefined;
-};
-
+/**
+ * Custom hook for handling pagination logic.
+ *
+ * @param {PaginationProps} - Object containing items and the number of items per page.
+ * @returns {PaginationItems} - An object containing pagination state and control functions.
+ */
 export const usePagination = ({
   items,
   itemsPerPage = 5,

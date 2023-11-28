@@ -128,11 +128,6 @@ const StyledCollapsibleItem = styled("div", {
   "& button": {
     padding: theme.spacing(2),
   },
-  [theme.breakpoints.down("xl")]: {
-    "& svg": {
-      marginRight: theme.spacing(2.1),
-    },
-  },
 }));
 
 export {

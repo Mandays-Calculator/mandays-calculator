@@ -1,6 +1,6 @@
 import { render, cleanup, screen, fireEvent } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import Accordion from "~/components/Accordion/Accordion";
+import Accordion from "~/components/accordion/Accordion";
 
 afterEach(cleanup);
 

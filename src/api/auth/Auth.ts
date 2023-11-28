@@ -13,17 +13,9 @@ export const forgotPasswordApi = async (
 ): Promise<ForgotPasswordResponse> => {
   const url = `${getApiBasePath()}/forgot-password?username=${usernameOrEmail}`;
   try {
-    const response = await axios.post<ForgotPasswordResponse>(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: "No Auth",
-        },
-      }
-    );
+    const response = await axios.post<ForgotPasswordResponse>(url);
     if (response.data && response.data.status >= 201) {
-      throw Error(response.data.message);
+      throw response.data;
     }
     return response.data;
   } catch (error) {
