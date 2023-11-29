@@ -13,7 +13,7 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 
 import { SvgIcon } from "~/components";
-import { StyledLabel, iconColorActive, borderColor } from ".";
+import { StyledLabel, iconColorActive, borderColor, StyledContent } from ".";
 
 const StepperConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -84,22 +84,34 @@ const ColorlibStepIcon = (props: StepIconProps): ReactElement => {
 };
 
 export default function Steppers(props: CustomStepperProps): ReactElement {
-  const { steps } = props;
+  const { steps, activeStep } = props;
+  const hasContent = steps.some((step) => step.content !== undefined);
   return (
-    <Stack sx={{ width: "100%" }} spacing={4}>
-      <Stepper alternativeLabel activeStep={1} connector={<StepperConnector />}>
-        {steps.map((step, index) => (
-          <Step key={index}>
-            <StepLabel
-              StepIconComponent={(stepIconProps) => (
-                <ColorlibStepIcon {...stepIconProps} icon={step.icon} />
-              )}
-            >
-              <StyledLabel>{step.label}</StyledLabel>
-            </StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-    </Stack>
+    <>
+      <Stack sx={{ width: "100%" }} spacing={4}>
+        <Stepper
+          alternativeLabel
+          activeStep={activeStep}
+          connector={<StepperConnector />}
+        >
+          {steps.map((step, index) => (
+            <Step key={index}>
+              <StepLabel
+                StepIconComponent={(stepIconProps) => (
+                  <ColorlibStepIcon {...stepIconProps} icon={step.icon} />
+                )}
+              >
+                <StyledLabel>{step.label}</StyledLabel>
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Stack>
+      {hasContent && (
+        <Stack sx={{ width: "100%" }} spacing={4} mt={3}>
+          <StyledContent>{steps[activeStep].content}</StyledContent>
+        </Stack>
+      )}
+    </>
   );
 }

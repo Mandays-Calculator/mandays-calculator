@@ -9,3 +9,7 @@ export const StyledLabel = styled(Typography)`
 
 export const borderColor = "#ADB2B2";
 export const iconColorActive = "#fff";
+
+export const StyledContent = styled("div")`
+  padding: ${({ theme }) => theme.spacing(3)};
+`;
