@@ -52,7 +52,9 @@ export const useConfig = (environment: string | undefined): ConfigResponse => {
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     setLoading(true);
-    if (environment) {
+    if (!environment) {
+      setConfig(null);
+    } else {
       loadConfig(environment)
         .then((res: ConfigType | null) => {
           if (res) {
