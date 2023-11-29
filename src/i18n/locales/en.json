@@ -23,7 +23,8 @@
       "export": "Export",
       "cancel": "Cancel",
       "save": "Save",
-      "next": "Next"
+      "next": "Next",
+      "okay": "Okay"
     },
     "label": {
       "createdDate": "Created date",
@@ -55,7 +56,26 @@
       "required": "This field is required.",
       "fieldRequired": "{{field}} is required.",
       "unauthorized": "Unauthorized. Your session has expired. Please login again.",
-      "genericError": "There is a problem with your request. Please contact your system administrator."
+      "genericError": "There is a problem with your request. Please contact your system administrator.",
+      "auth": {
+        "changePassword": {
+          "minLength": "Password must be at least 8 characters long.",
+          "uppercaseRequired": "Password must contain an uppercase letter.",
+          "lowercaseRequired": "Password must contain a lowercase letter.",
+          "numberRequired": "Password must contain a number.",
+          "specialCharRequired": "Password must contain one of the following symbols (#$-_!).",
+          "required": "Password is required.",
+          "match": "Passwords must match.",
+          "confirmRequired": "Confirm Password is required."
+        },
+        "forgotPassword": {
+          "required": "Please enter your username or email."
+        },
+        "login": {
+          "usernameRequired": "Username is required.",
+          "passwordRequired": "Password is required."
+        }
+      }
     }
   },
   "login": {
@@ -80,7 +100,9 @@
     "label": {
       "createNewPassword": "Create New Password",
       "enterNewPassword": "Enter New Password",
-      "confirmNewPassword": "Confirm New Password"
+      "confirmNewPassword": "Confirm New Password",
+      "success": "Your password has been reset. If you didn't request this, please contact our support team immediately.",
+      "title": "Password Reset Successful"
     },
     "btnlabel": {
       "changePassword": "Change Password",
@@ -102,7 +124,8 @@
   "forgotPassword": {
     "label": {
       "enterUsername": "Please enter your username or email.",
-      "link": "A link will be sent to your email in order for you to reset your password."
+      "link": "A link will be sent to your email in order for you to reset your password.",
+      "success": " A password reset link has been sent to your email address. If you don't see it in your inbox, please check your spam folder as well."
     },
     "btnlabel": {
       "send": "Send",

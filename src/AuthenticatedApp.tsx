@@ -31,6 +31,7 @@ import {
   resetUserState,
   selectUser,
 } from "~/redux/reducers/user";
+import { useLocation } from "react-router-dom";
 
 const AuthenticatedApp = (): ReactElement => {
   const config = getEnvConfig();
@@ -41,9 +42,9 @@ const AuthenticatedApp = (): ReactElement => {
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const userState: UserPermissionState = useSelector(selectUser);
-
   const [showUnauthorizedModal, setShowUnauthorizedModal] =
     useState<boolean>(false);
 
@@ -52,7 +53,11 @@ const AuthenticatedApp = (): ReactElement => {
     if (user && auth.isAuthenticated) {
       dispatch(
         fetchUserPermission({
-          onSuccess: () => navigate("./"),
+          onSuccess: () => {
+            if (location.pathname.includes("permission-error")) {
+              navigate("./");
+            }
+          },
           onFailure: () => navigate("./permission-error"),
         })
       );

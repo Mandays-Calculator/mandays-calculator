@@ -14,12 +14,18 @@ const LocalizationKey = {
       userName: "login.placeholder.userName",
       password: "login.placeholder.password",
     },
+    error: {
+      usernameRequired: "common.errorMessage.auth.login.usernameRequired",
+      passwordRequired: "common.errorMessage.auth.login.passwordRequired",
+    },
   },
   changePassword: {
     label: {
       createNewPassword: "changePassword.label.createNewPassword",
       enterNewPassword: "changePassword.label.enterNewPassword",
       confirmNewPassword: "changePassword.label.confirmNewPassword",
+      success: "changePassword.label.success",
+      title: "changePassword.label.title",
     },
     btnlabel: {
       changePassword: "changePassword.btnlabel.changePassword",
@@ -34,14 +40,29 @@ const LocalizationKey = {
       match: "changePassword.validationInfo.match",
     },
     placeholder: {
-      password: "changePassword.placeholder.userName",
-      confirmPassword: "changePassword.placeholder.password",
+      password: "changePassword.placeholder.password",
+      confirmPassword: "changePassword.placeholder.confirmPassword",
+    },
+    error: {
+      minLength: "common.errorMessage.auth.changePassword.minLength",
+      uppercaseRequired:
+        "common.errorMessage.auth.changePassword.uppercaseRequired",
+      lowercaseRequired:
+        "common.errorMessage.auth.changePassword.lowercaseRequired",
+      numberRequired: "common.errorMessage.auth.changePassword.numberRequired",
+      specialCharRequired:
+        "common.errorMessage.auth.changePassword.specialCharRequired",
+      required: "common.errorMessage.auth.changePassword.required",
+      match: "common.errorMessage.auth.changePassword.match",
+      confirmRequired:
+        "common.errorMessage.auth.changePassword.confirmRequired",
     },
   },
   forgotPassword: {
     label: {
       enterUsername: "forgotPassword.label.enterUsername",
       link: "forgotPassword.label.link",
+      success: "forgotPassword.label.success",
     },
     btnlabel: {
       send: "forgotPassword.btnlabel.send",
@@ -49,6 +70,7 @@ const LocalizationKey = {
       process: "forgotPassword.btnlabel.process",
     },
     placeholder: "forgotPassword.placeholder",
+    errorRequired: "common.errorMessage.auth.forgotPassword.required",
   },
   footerLabel: "footer.label",
   common: {
@@ -70,6 +92,7 @@ const LocalizationKey = {
     nextBtn: "common.button.next",
     exportBtn: "common.button.export",
     saveBtn: "common.button.save",
+    okayBtn: "common.button.okay",
     createdDateLabel: "common.label.createdDate",
     selectedLabel: "common.label.selected",
     userManagement: {
@@ -143,6 +166,9 @@ const LocalizationKey = {
       excel: "mandaysCalculator.options.excel",
       pdf: "mandaysCalculator.options.pdf",
     },
+  },
+  accountInfo: {
+    label: "account.info.label",
   },
 };
 

@@ -1,7 +1,12 @@
 import type { ReactElement, MouseEvent } from "react";
+import type { UserPermissionState } from "~/redux/reducers/user";
 
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+
 import {
   Box,
   Toolbar,
@@ -17,20 +22,26 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import AvatarImg from "~/assets/img/avatar.png";
-import ChangePasswordModal from "~/pages/auth/ChangePasswordModal";
+
+import { selectUser } from "~/redux/reducers/user";
 import { getUser } from "~/utils/oidc-utils";
 
+import renderRole from "~/utils/helpers/renderRoleHelper";
+
 import { StyledAppBar, StyledToolBarContainer } from ".";
+import LocalizationKey from "~/i18n/key";
 
 const AppBarHeader = (): ReactElement => {
+  const navigate = useNavigate();
   const auth = useAuth();
   const user = getUser();
+  const { t } = useTranslation();
+
   const name = user?.profile.name;
-  const position = "Sprint Manager";
+  const userState: UserPermissionState = useSelector(selectUser);
+  const positions = userState.user?.roles;
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [changePasswordModalOpen, setChangePasswordModalOpen] =
-    useState<boolean>(false);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget);
@@ -40,14 +51,21 @@ const AppBarHeader = (): ReactElement => {
     setAnchorElUser(null);
   };
 
-  const handleChangePasswordUserMenu = (): void => {
-    setAnchorElUser(null);
-    setChangePasswordModalOpen(true);
-  };
-
   const handleLogoutUserMenu = (): void => {
     auth.removeUser();
   };
+
+  const userMenu = [
+    {
+      label: t(LocalizationKey.accountInfo.label),
+      onClick: () => navigate("./account-info"),
+    },
+    {
+      label: t(LocalizationKey.common.logout),
+      onClick: handleLogoutUserMenu,
+    },
+  ];
+
   return (
     <StyledAppBar position="sticky">
       <Container maxWidth={false} disableGutters={true}>
@@ -69,7 +87,9 @@ const AppBarHeader = (): ReactElement => {
                       {name}
                     </Typography>
                     <Typography textAlign="left" fontSize={10}>
-                      {position}
+                      {positions?.map((position: string) =>
+                        renderRole(position)
+                      )}
                     </Typography>
                   </Grid>
                   <Grid item xs={1}>
@@ -101,28 +121,16 @@ const AppBarHeader = (): ReactElement => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem key="Profile" onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Profile</Typography>
-                </MenuItem>
-                <MenuItem
-                  key="Change Password"
-                  onClick={handleChangePasswordUserMenu}
-                >
-                  <Typography textAlign="center">Change Password</Typography>
-                </MenuItem>
-                <MenuItem key="Logout" onClick={handleLogoutUserMenu}>
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
+                {userMenu.map((menu) => (
+                  <MenuItem key={menu.label} onClick={menu.onClick}>
+                    <Typography textAlign="center">{menu.label}</Typography>
+                  </MenuItem>
+                ))}
               </Menu>
             </Box>
           </Toolbar>
         </StyledToolBarContainer>
       </Container>
-
-      <ChangePasswordModal
-        open={changePasswordModalOpen}
-        onClose={() => setChangePasswordModalOpen(false)}
-      />
     </StyledAppBar>
   );
 };
