@@ -78,6 +78,7 @@ const LocalizationKey = {
     complexity: "common.complexity",
     submit: "common.submit",
     somethingWentWrongTitle: "common.somethingWentWrong.title",
+    configurationErrorDesc: "common.configurationError.description",
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
     pageNotFoundDesc: "common.notFound.description",

@@ -13,13 +13,15 @@ import SomethingWentWrong from "~/assets/img/something_wrong.png";
 
 import { CustomButton } from "~/components/form/button";
 import { StyledChildContainer, StyledContainer } from ".";
+import { Footer } from "~/components";
 
 interface ErrorPageProps {
   type:
     | "something-went-wrong"
     | "not-found"
     | "permission-error"
-    | "permission-denied";
+    | "permission-denied"
+    | "configuration-error";
 }
 
 const ErrorPage = (props: ErrorPageProps): ReactElement => {
@@ -77,6 +79,17 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
             </CustomButton>
           </>
         );
+      case "configuration-error":
+        return (
+          <>
+            <Typography variant="h5" fontWeight="bold">
+              {t(common.somethingWentWrongTitle)}
+            </Typography>
+            <Typography variant="body2" fontWeight="bold">
+              {t(common.configurationErrorDesc)}
+            </Typography>
+          </>
+        );
       default:
         return (
           <>
@@ -95,7 +108,7 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
   };
 
   return (
-    <StyledContainer>
+    <StyledContainer $type={type}>
       <StyledChildContainer>
         <img
           src={type === "not-found" ? PageNotFound : SomethingWentWrong}
@@ -105,6 +118,7 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
         />
       </StyledChildContainer>
       <StyledChildContainer>{renderDetails()}</StyledChildContainer>
+      {type === "configuration-error" && <Footer />}
     </StyledContainer>
   );
 };

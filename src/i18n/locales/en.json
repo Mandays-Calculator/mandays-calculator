@@ -40,6 +40,9 @@
       "title": "SOMETHING WENT WRONG",
       "description": "Relax, you didn't break the internet. You may try refreshing the page."
     },
+    "configurationError": {
+      "description": "Configuration Error: Please check settings."
+    },
     "notFound": {
       "title": "PAGE NOT FOUND",
       "description": "Couldn't find that. Try something else or go back home."
