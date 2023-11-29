@@ -72,7 +72,7 @@
           "confirmRequired": "Confirm Password is required."
         },
         "forgotPassword": {
-          "required": "Please enter your username or email."
+          "required": "Please enter your email."
         },
         "login": {
           "usernameRequired": "Username is required.",
@@ -126,7 +126,7 @@
   },
   "forgotPassword": {
     "label": {
-      "enterUsername": "Please enter your username or email.",
+      "enterUsername": "Please enter your email.",
       "link": "A link will be sent to your email in order for you to reset your password.",
       "success": " A password reset link has been sent to your email address. If you don't see it in your inbox, please check your spam folder as well."
     },
@@ -135,7 +135,7 @@
       "back": "Back to Login",
       "process": "Processing..."
     },
-    "placeholder": "Username or Email"
+    "placeholder": "Email"
   },
   "odc": {
     "management": {

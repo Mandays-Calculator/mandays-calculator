@@ -12,7 +12,7 @@ import ErrorPage from "~/pages/common/error-page";
 const App = (): ReactElement => {
   const environment = import.meta.env.VITE_ENVIRONMENT;
   const { config, loading } = useConfig(environment);
-
+  console.log(environment);
   if (!_.isNull(config)) {
     if (!_.isUndefined(config) && !loading) {
       const OIDCConfig = {
