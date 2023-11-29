@@ -4,7 +4,7 @@ import type { ExportFormValues } from "../../types";
 
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 
 import LocalizationKey from "~/i18n/key";
 
@@ -71,16 +71,16 @@ const ExportModal = ({
         </Grid>
         <Grid container justifyContent="space-between" sx={{ mt: 1 }}>
           <Grid item xs={6} sx={{ p: 1 }}>
-            <CustomButton
+            <Button
+              variant="outlined"
               fullWidth
               onClick={() => {
                 setIsExport(false);
                 exportForm.resetForm();
               }}
-              colorVariant="error"
             >
               {t(common.backBtn)}
-            </CustomButton>
+            </Button>
           </Grid>
           <Grid item xs={6} sx={{ p: 1 }}>
             <CustomButton fullWidth type="submit">

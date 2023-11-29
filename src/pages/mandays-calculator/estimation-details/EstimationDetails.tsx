@@ -180,7 +180,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           t={t}
         />
       )}
-      {true && (
+      {false && (
         <ShareModal
           isShare={true}
           setIsShare={() => console.log("running")}
