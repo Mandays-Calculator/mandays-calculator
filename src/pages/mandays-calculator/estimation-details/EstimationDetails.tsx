@@ -1,5 +1,5 @@
 import { type ReactElement } from "react";
-import type { EstimationDetailsMode } from ".";
+import type { EstimationDetailsMode, EstimationDetailsProps } from ".";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,7 +26,8 @@ import Resources from "./resources";
 import { ExportModal } from "./components/export-modal";
 import { ActionButtons } from "./components/action-buttons";
 
-const EstimationDetails = (): ReactElement => {
+const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
+  const { isShared } = props;
   const { mandaysCalculator, common } = LocalizationKey;
 
   const navigate = useNavigate();
@@ -115,6 +116,7 @@ const EstimationDetails = (): ReactElement => {
           </Grid>
           <Grid item>
             <Select
+              disabled={isShared}
               name="team"
               value={"enrollment"}
               sx={{ background: "#fff" }}
@@ -129,18 +131,20 @@ const EstimationDetails = (): ReactElement => {
                 {sprintName}
               </Typography>
             </Grid>
-            <Grid item xs={2}>
-              <Grid container justifyContent={"right"}>
-                <Grid item xs={5}>
-                  <CustomButton onClick={() => setIsExport(true)}>
-                    {t(common.exportBtn)}
-                  </CustomButton>
-                </Grid>
-                <Grid item xs={5}>
-                  <CustomButton>{t(common.shareBtn)}</CustomButton>
+            {!isShared && (
+              <Grid item xs={2}>
+                <Grid container justifyContent={"right"}>
+                  <Grid item xs={5}>
+                    <CustomButton onClick={() => setIsExport(true)}>
+                      {t(common.exportBtn)}
+                    </CustomButton>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <CustomButton>{t(common.shareBtn)}</CustomButton>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            )}
           </Grid>
           <CustomTab
             onTabChange={(_, value) => setActiveTab(value)}

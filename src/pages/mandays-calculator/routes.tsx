@@ -1,6 +1,7 @@
 import type { RouteType } from "~/routes";
 import { MandaysCalculator } from "~/pages/mandays-calculator";
 import { EstimationDetails } from "~/pages/mandays-calculator/estimation-details";
+import { ShareEstimationDetails } from "./share-estimation-details";
 
 export const mandaysCalculatorRoutes: RouteType[] = [
   {
@@ -13,7 +14,7 @@ export const mandaysCalculatorRoutes: RouteType[] = [
   },
   {
     path: "mandays-estimation-detail",
-    element: <EstimationDetails />,
+    element: <ShareEstimationDetails />,
     protected: false,
   },
   {
