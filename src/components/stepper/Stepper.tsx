@@ -1,10 +1,11 @@
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 import type { StepIconProps } from "@mui/material/StepIcon";
 import type { SvgIconsType } from "../svc-icons/types";
+import type { CustomStepperProps } from ".";
 
 import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
-import Stepper, { StepperProps } from "@mui/material/Stepper";
+import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import StepConnector, {
@@ -81,16 +82,6 @@ const ColorlibStepIcon = (props: StepIconProps): ReactElement => {
     </StepperIcon>
   );
 };
-
-interface CustomSteps {
-  label: string | ReactNode;
-  icon?: ReactNode | string;
-}
-
-interface CustomStepperProps extends StepperProps {
-  steps: CustomSteps[];
-  activeStep: number;
-}
 
 export default function Steppers(props: CustomStepperProps): ReactElement {
   const { steps } = props;
