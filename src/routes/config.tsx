@@ -7,6 +7,8 @@ import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import { Tasks } from "~/pages/tasks";
 import { Complexity } from "~/pages/complexity";
+import { Dashboard } from "~/pages/dashboard";
+
 import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
 import { accountInfoRoutes } from "~/pages/account-info/routes";
 
@@ -19,7 +21,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "dashboard",
-    element: <Outlet />,
+    element: <Dashboard />,
   },
   {
     path: "odc-management",
