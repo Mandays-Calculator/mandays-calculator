@@ -1,6 +1,5 @@
 import type { ReactNode, Ref, ReactElement, SyntheticEvent } from "react";
 import type { TransitionProps } from "@mui/material/transitions";
-import type { DialogProps } from "@mui/material/Dialog";
 import type { SxProps } from "@mui/material";
 
 import { forwardRef } from "react";
@@ -15,9 +14,9 @@ import MuiDialogTitle from "@mui/material/DialogTitle";
 import MuiDialogContent from "@mui/material/DialogContent";
 import Slide from "@mui/material/Slide";
 
-interface ModalProps extends DialogProps {
+interface ModalProps {
   open: boolean;
-  title: string;
+  title?: string | ReactNode;
   maxWidth: "xs" | "sm" | "md" | "lg";
   dividers?: boolean;
   actions?: ReactNode;
@@ -104,7 +103,13 @@ export const Modal = (props: ModalProps): ReactElement => {
     >
       <Stack direction="row" display="flex" minHeight={35}>
         <Box flexGrow={1}>
-          {title ? <DialogTitle>{title}</DialogTitle> : null}
+          {title ? (
+            typeof title === "string" ? (
+              <DialogTitle>{title}</DialogTitle>
+            ) : (
+              title
+            )
+          ) : null}
         </Box>
         <Offset />
       </Stack>
