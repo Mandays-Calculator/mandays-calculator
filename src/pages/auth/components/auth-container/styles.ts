@@ -1,6 +1,7 @@
 import { Container, Grid, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+const containerHeight = 90;
 const StyledAuthContainer = styled("div")`
   height: 100%;
   background: ${({ theme }) => theme.palette.primary.light};
@@ -19,7 +20,7 @@ const StyledContainer = styled(Container)`
 `;
 
 const StyledGrid = styled(Grid)`
-  height: ${({ theme }) => theme.spacing(75)};
+  height: ${({ theme }) => theme.spacing(containerHeight)};
   background: #fefefe;
   display: flex;
   width: ${({ theme }) => theme.spacing(62.5)};
@@ -34,7 +35,7 @@ const StyledGrid = styled(Grid)`
 `;
 
 const StyledImageContainer = styled("div")`
-  height: ${({ theme }) => theme.spacing(75)};
+  height: ${({ theme }) => theme.spacing(containerHeight)};
   position: absolute;
   left: ${({ theme }) => theme.spacing(-15.5)};
   right: ${({ theme }) => theme.spacing(-4)};
@@ -50,7 +51,7 @@ const StyledLogoContainer = styled("div")`
 `;
 
 const AuthImageContainer = styled(Grid)`
-  height: ${({ theme }) => theme.spacing(75)};
+  height: ${({ theme }) => theme.spacing(containerHeight)};
   position: relative;
   border-radius: ${({ theme }) => theme.spacing(3.75, 0, 0, 3.75)};
   background: #1aa9e8;

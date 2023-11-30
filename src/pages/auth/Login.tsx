@@ -26,7 +26,7 @@ const Login = (): ReactElement => {
       username: "",
       password: "",
     },
-    validationSchema: loginSchema,
+    validationSchema: loginSchema(t),
     validateOnChange: false,
     onSubmit: async (values) => {
       await auth.signinResourceOwnerCredentials({

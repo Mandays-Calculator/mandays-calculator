@@ -10,6 +10,7 @@ export * from "./page-container";
 export * from "./tab";
 export * from "./pagination";
 export * from "./timer";
+export * from "./stepper";
 
 // Exporting form-related components
 export * from "./form/text-field";

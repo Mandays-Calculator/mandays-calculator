@@ -7,7 +7,10 @@ import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import { Tasks } from "~/pages/tasks";
 import { Complexity } from "~/pages/complexity";
+import { Dashboard } from "~/pages/dashboard";
+
 import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
+import { accountInfoRoutes } from "~/pages/account-info/routes";
 
 import ErrorPage from "~/pages/common/error-page";
 
@@ -18,7 +21,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "dashboard",
-    element: <Outlet />,
+    element: <Dashboard />,
   },
   {
     path: "odc-management",
@@ -55,6 +58,8 @@ export const routes: RouteType[] = [
     path: "/permission-error",
     element: <ErrorPage type="permission-error" />,
   },
+  ...mandaysCalculatorRoutes,
+  ...accountInfoRoutes,
   {
     path: "/*",
     element: <ErrorPage type="not-found" />,
@@ -63,5 +68,4 @@ export const routes: RouteType[] = [
     path: "/",
     element: <Outlet />,
   },
-  ...mandaysCalculatorRoutes,
 ];
