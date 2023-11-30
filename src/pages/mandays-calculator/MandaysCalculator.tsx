@@ -11,7 +11,7 @@ import LocalizationKey from "~/i18n/key";
 
 import { mandaysCalculatorData } from "./utils/tableData";
 import { SprintListColumns } from "./utils/columns";
-import { DeleteModal } from "~/components/modal/delete-modal";
+import { ConfirmModal } from "~/components/modal/confirm-modal";
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
@@ -93,7 +93,7 @@ const MandaysCalculator = (): ReactElement => {
           data={mandaysCalculatorData}
         />
       </PageContainer>
-      <DeleteModal
+      <ConfirmModal
         onConfirm={deleteSelectedSprint} // apply delete integration
         open={deleteModalOpen.open}
         message={t(mandaysCalculator.modalConfirmDeleteEstimation)}

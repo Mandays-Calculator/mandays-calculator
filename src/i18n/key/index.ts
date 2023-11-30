@@ -94,6 +94,7 @@ const LocalizationKey = {
     exportBtn: "common.button.export",
     saveBtn: "common.button.save",
     okayBtn: "common.button.okay",
+    cancelBtn: "common.button.cancel",
     createdDateLabel: "common.label.createdDate",
     selectedLabel: "common.label.selected",
     userManagement: {
