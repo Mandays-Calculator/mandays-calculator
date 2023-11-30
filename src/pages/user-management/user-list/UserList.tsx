@@ -3,7 +3,7 @@ import { useState, type ReactElement } from "react";
 import { PageLoader, Table } from "~/components";
 
 import { userListColumns } from "./utils";
-import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
+import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -16,7 +16,7 @@ import { UserListData } from "~/api/user-management/types";
 const UserList = (): ReactElement => {
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
-  const { data, isLoading, refetch } = useUserList();
+  const userList = useUserList();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [currentUserData, setCurrentUserData] = useState<UserListData>();
@@ -34,7 +34,7 @@ const UserList = (): ReactElement => {
     setRowId(rowId);
   };
 
-  if (isLoading) {
+  if (userList.isLoading) {
     return <PageLoader />;
   } else {
     return (
@@ -46,7 +46,7 @@ const UserList = (): ReactElement => {
             onDeleteUser: handleDeleteUser,
             onEditUser: handleEditUser,
           })}
-          data={data?.data}
+          data={userList.data?.data}
         />
 
         <EditUserModal
@@ -64,7 +64,7 @@ const UserList = (): ReactElement => {
                 onSuccess: (data) => {
                   setDeleteModalOpen(false);
                   console.log("success", data);
-                  refetch();
+                  userList.refetch();
                 },
                 onError: (error) => {
                   console.log(error);

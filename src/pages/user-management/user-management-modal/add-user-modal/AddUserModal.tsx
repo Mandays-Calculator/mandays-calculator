@@ -21,7 +21,10 @@ import { useFormikContext } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
-import { ModalType, NotificationModal } from "../../notification-modal";
+import {
+  ModalType,
+  NotificationModal,
+} from "../../../../components/modal/notification-modal";
 import moment from "moment";
 import { ImageUpload } from "~/components";
 

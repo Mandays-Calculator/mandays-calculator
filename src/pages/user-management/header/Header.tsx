@@ -6,7 +6,7 @@ import { styled } from "@mui/material";
 
 import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { AddUserModal } from "~/components/modal/user-management/add-user-modal";
+import { AddUserModal } from "~/pages/user-management/user-management-modal/add-user-modal";
 // import { BulkUserModal } from "~/components/modal/user-management/bulk-user-modal";
 
 const StyledButton = styled(CustomButton, {

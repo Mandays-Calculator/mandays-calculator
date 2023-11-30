@@ -16,7 +16,10 @@ import {
   useEditUser,
   useUserList,
 } from "~/queries/user-management/UserManagement";
-import { ModalType, NotificationModal } from "../../notification-modal";
+import {
+  ModalType,
+  NotificationModal,
+} from "../../../../components/modal/notification-modal";
 import { ImageUpload } from "~/components";
 import { UserListData } from "~/api/user-management/types";
 
