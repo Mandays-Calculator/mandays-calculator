@@ -36,18 +36,19 @@ const TaskDetailsCard = ({ data }: TaskDetailsCardProps): ReactElement => {
         <div style={{ marginBottom: 5 }}>
           Complexity Rating: {data.complexity}
         </div>
+
         <Stack
-          display={"flex"}
           direction={"row"}
           justifyContent={"space-between"}
+          flexWrap="wrap"
         >
-          <Stack direction={"row"} spacing={1}>
+          <Stack direction="row" gap={0.5}>
             <Box
               sx={{ borderRadius: "5px", bgcolor: "#dedede", padding: "0 3px" }}
               display={"flex"}
               alignItems={"center"}
             >
-              <TextsmsOutlinedIcon sx={{ padding: "2px" }} />{" "}
+              <TextsmsOutlinedIcon sx={{ padding: "2px" }} />
               <span style={{ marginRight: 3 }}>1</span>
             </Box>
             <Box
@@ -55,9 +56,10 @@ const TaskDetailsCard = ({ data }: TaskDetailsCardProps): ReactElement => {
                 borderRadius: "5px",
                 bgcolor: "error.main",
                 padding: "2px 8px",
+                color: "#FFFFFF",
               }}
             >
-              <Box sx={{ color: "#FFFFFF" }}>Bug</Box>
+              Bug
             </Box>
             <Box
               sx={{
@@ -69,7 +71,7 @@ const TaskDetailsCard = ({ data }: TaskDetailsCardProps): ReactElement => {
               <Box sx={{ color: "#FFFFFF" }}>Needs Work</Box>
             </Box>
           </Stack>
-          <Stack display={"flex"} direction={"row"} spacing={1}>
+          <Stack display={"flex"} direction={"row"} spacing={0.5}>
             <EditOutlinedIcon
               color="primary"
               style={{

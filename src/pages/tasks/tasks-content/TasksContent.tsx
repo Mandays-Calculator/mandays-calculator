@@ -35,7 +35,7 @@ const TasksContent = (): ReactElement => {
   const [mockData, setMockData] = useState<Task[]>([
     {
       taskTitle: "BE - Database Structure",
-      desc: "lorem kineme",
+      desc: "lorem kineme.",
       date: "11/13/2023",
       sprint: "1",
       complexity: "13",
@@ -167,12 +167,13 @@ const TasksContent = (): ReactElement => {
           ]}
         />
         <Divider sx={{ mb: 7 }} style={{ marginTop: 20 }} />
-        <Grid container spacing={0} justifyContent="space-between">
+
+        <Grid container spacing={1} justifyContent="space-evenly">
           {status.map((i) => {
             const filteredData = mockData.filter((task) => task.status === i);
 
             return (
-              <Grid item xs={2} key={i}>
+              <Grid item xs={2.4} key={i}>
                 <Droppable droppableId={i}>
                   {(provided) => (
                     <div
@@ -190,7 +191,7 @@ const TasksContent = (): ReactElement => {
                             ? "#FFCECE"
                             : "#D5FFCD",
                         borderRadius: 10,
-                        padding: 20,
+                        padding: 5,
                       }}
                       {...provided.droppableProps}
                     >
