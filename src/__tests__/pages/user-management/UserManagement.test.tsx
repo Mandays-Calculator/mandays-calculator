@@ -6,38 +6,40 @@ import {
   waitFor,
 } from "@testing-library/react";
 import UserEvent from "@testing-library/user-event";
-import ProviderWrapper from "~/__tests__/utils/ProviderWrapper";
 import { Table } from "~/components/table";
 
 import { UserManagement } from "~/pages/user-management/";
-import { UserList } from "./utils/editUserValues";
+import { userListData } from "./utils/tableUserValues";
 import { userListColumns } from "~/pages/user-management/user-list/utils";
 import { useTranslation } from "react-i18next";
-// import { mockUseUserList } from "./utils/mockUserManagementApis";
-
+import { mockUseUserList } from "./utils/mockUserManagementApis";
+import ProviderWrapper from "~/__tests__/utils/ProviderWrapper";
+jest.mock("~/queries/user-management/UserManagement");
 jest.mock("react-i18next", () => ({
   ...jest.requireActual("react-i18next"),
   useTranslation: () => ({ t: (key: any) => key }),
 }));
 
-jest.mock("formik", () => ({
-  useFormikContext: () => {
-    return {
-      values: UserList,
-    };
-  },
+jest.mock("react-query", () => ({
+  ...jest.requireActual("react-query"),
+  useQuery: jest.fn(),
 }));
 
 describe("View User Management", () => {
-  const component = (
-    <ProviderWrapper>
-      <UserManagement />
-    </ProviderWrapper>
-  );
-  afterEach(cleanup);
+  afterEach(() => {
+    cleanup();
+  });
+
   test("Render User Management", async () => {
     const user = UserEvent.setup();
-    render(component);
+
+    render(
+      <ProviderWrapper>
+        <UserManagement />
+      </ProviderWrapper>
+    );
+
+    expect(mockUseUserList).toHaveBeenCalled();
     await waitFor(() => {
       const title = screen.getByText(/User Management/i);
       expect(title).toBeInTheDocument();
@@ -48,31 +50,20 @@ describe("View User Management", () => {
     });
   });
 
-  // test("Render User Management View List", async () => {
-  //   const user = UserEvent.setup();
-
-  //   expect(mockUseUserList).toHaveBeenCalled();
-
-  //   render(
-  //     <ProviderWrapper>
-  //       <UserManagement />
-  //     </ProviderWrapper>
-  //   );
-
-  //   await waitFor(() => {
-  //     // expect(mockQueryUserListApi as jest.Mock).toHaveBeenCalledTimes(1);
-  //     const editButton = screen.getByTestId("test-edit-user-btn");
-  //     user.click(editButton);
-  //     expect(editButton).toBeInTheDocument();
-  //   });
-  // });
+  jest.mock("formik", () => ({
+    useFormikContext: () => {
+      return {
+        values: userListData,
+      };
+    },
+  }));
 
   test("user management table and edit button test", async () => {
     const { t } = useTranslation();
     const { getByTestId, container } = render(
       <Table
         name={"user-list"}
-        data={UserList}
+        data={userListData}
         columns={userListColumns({
           t,
           onDeleteUser: jest.fn(),

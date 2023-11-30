@@ -2,18 +2,21 @@ import { useState, type ReactElement } from "react";
 
 import { PageLoader, Table } from "~/components";
 
-import { isLoading, data, refetch, userListColumns } from "./utils";
+import { userListColumns } from "./utils";
 import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
 import { useTranslation } from "react-i18next";
 
-import { useDeleteUser } from "~/queries/user-management/UserManagement";
+import {
+  useDeleteUser,
+  useUserList,
+} from "~/queries/user-management/UserManagement";
 import { DeleteModal } from "~/components/modal/delete-modal";
 import { UserListData } from "~/api/user-management/types";
 
 const UserList = (): ReactElement => {
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
-
+  const { data, isLoading, refetch } = useUserList();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [currentUserData, setCurrentUserData] = useState<UserListData>();

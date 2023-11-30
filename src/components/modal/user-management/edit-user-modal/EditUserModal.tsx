@@ -12,11 +12,13 @@ import {
   UpdateUserManagementParams,
   UserManagementForms,
 } from "~/pages/user-management/types";
-import { useEditUser } from "~/queries/user-management/UserManagement";
+import {
+  useEditUser,
+  useUserList,
+} from "~/queries/user-management/UserManagement";
 import { ModalType, NotificationModal } from "../../notification-modal";
 import { ImageUpload } from "~/components";
 import { UserListData } from "~/api/user-management/types";
-import { refetch } from "~/pages/user-management/user-list/utils";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -47,7 +49,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   currentUser,
 }): ReactElement => {
   const { values, setFieldValue } = useFormikContext<UserManagementForms>();
-
+  const { refetch } = useUserList();
   const EditUser = useEditUser(currentUser?.id ?? "");
   const [editUserStatus, setEditUserStatus] = useState({
     status: "",

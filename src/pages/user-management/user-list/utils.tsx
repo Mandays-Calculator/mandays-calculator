@@ -3,9 +3,6 @@ import { IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
 import { UserListData } from "~/api/user-management/types";
 import { UserColumnsProps, UserListColumnsType } from "./types";
-import { useUserList } from "~/queries/user-management/UserManagement";
-
-export const { data, isLoading, refetch } = useUserList();
 
 export const userListColumns = ({
   t,
