@@ -1,5 +1,10 @@
 import { GenericErrorResponse } from "../types";
 
-export interface ForgotPasswordResponse extends GenericErrorResponse {
+export interface AuthAPIResponse extends GenericErrorResponse {
   status: number;
+}
+
+export interface ResetPasswordParams {
+  authorizationCode: string;
+  newPassword: string;
 }
