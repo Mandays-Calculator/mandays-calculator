@@ -40,19 +40,35 @@ const getApiBasePath = (key?: ApiBasePathParam): string => {
   return (config?.apiBasePath as ApiBasePath).accountsService;
 };
 
-export const useConfig = (environment: string | undefined) => {
-  const [config, setConfig] = useState<ConfigType | undefined>(undefined);
+interface ConfigResponse {
+  config: ConfigType | undefined | null;
+  loading: boolean;
+}
 
+export const useConfig = (environment: string | undefined): ConfigResponse => {
+  const [config, setConfig] = useState<ConfigType | undefined | null>(
+    undefined
+  );
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
-    if (environment) {
-      loadConfig(environment).then((res: ConfigType | null) => {
-        if (res) {
-          setConfig(res);
-          initStorage();
-        }
-      });
+    setLoading(true);
+    if (!environment) {
+      setConfig(null);
+    } else {
+      loadConfig(environment)
+        .then((res: ConfigType | null) => {
+          if (res) {
+            setConfig(res);
+            initStorage();
+          }
+        })
+        .catch((e: Error) => {
+          console.log("Error in loading config: ", e);
+          setConfig(null);
+        });
     }
+    setLoading(false);
   }, [environment]);
 
-  return config;
+  return { config, loading };
 };

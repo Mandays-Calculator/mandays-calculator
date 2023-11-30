@@ -7,7 +7,7 @@ import { Grid, Typography } from "@mui/material";
 
 import { CustomButton as Button } from "~/components/form/button";
 import Form from "~/components/form/Form";
-import { useResetPasswordMutation } from "~/queries/auth";
+import { useResetPasswordMutation } from "~/mutations/auth";
 import LocalizationKey from "~/i18n/key";
 
 import { tryDecodeURIComponent } from "~/utils/helpers/decodeURI";
