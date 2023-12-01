@@ -22,7 +22,7 @@ export const UserManagementSchema = yup.object({
     .string()
     .min(2, "too short")
     .max(50, "Too Long!")
-    .required("Required"),
+    .required("Last Name is required"),
   firstName: yup.string().default(""),
   middleName: yup.string().default(""),
   odcId: yup.string().default(""),

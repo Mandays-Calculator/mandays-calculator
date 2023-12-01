@@ -7,6 +7,8 @@ import { styled } from "@mui/material";
 import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { AddUserModal } from "~/pages/user-management/user-management-modal/add-user-modal";
+import { FormikInstance } from "formik";
+import { UserManagementForms } from "../types";
 // import { BulkUserModal } from "~/components/modal/user-management/bulk-user-modal";
 
 const StyledButton = styled(CustomButton, {
@@ -16,7 +18,12 @@ const StyledButton = styled(CustomButton, {
   height: "100%",
 }));
 
-const Header = (): ReactElement => {
+interface HeaderProps {
+  form: FormikInstance<UserManagementForms>;
+}
+
+const Header = (props: HeaderProps): ReactElement => {
+  const { form } = props;
   const [addModal, setAddModal] = useState(false);
   // const [bulkmodal, setBulkModal] = useState(false);
   return (
@@ -79,6 +86,8 @@ const Header = (): ReactElement => {
           }}
         /> */}
         <AddUserModal
+          form={form}
+          onSubmit={() => form.submitForm()}
           open={addModal}
           onAddUser={() => setAddModal(false)}
           onClose={() => setAddModal(false)}

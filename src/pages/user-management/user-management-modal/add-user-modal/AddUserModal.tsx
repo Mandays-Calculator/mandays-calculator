@@ -2,6 +2,7 @@ import { useState, type ReactElement } from "react";
 import { CustomButton } from "~/components/form/button";
 import {
   Box,
+  Button,
   Dialog,
   FormControl,
   FormControlLabel,
@@ -17,12 +18,17 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { useFormikContext } from "formik";
+import { ErrorMessage, FormikInstance, useFormikContext } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
-import { useAddUser } from "~/queries/user-management/UserManagement";
+
 import { genders, rolesData } from "../utils";
 import moment from "moment";
 import { Alert, AlertTypes, ImageUpload } from "~/components";
+import { getFieldError } from "~/components/form/utils";
+import { useRequestHandler } from "~/hooks/request-handler";
+import { useAddUser } from "~/queries/user-management/UserManagement";
+import { useErrorHandler } from "~/hooks/error-handler";
+import { t } from "i18next";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -47,11 +53,15 @@ interface AddUserModalProps {
   onAddUser: () => void;
   open: boolean;
   onClose: () => void;
+  form: FormikInstance<UserManagementForms>;
+  onSubmit: () => void;
 }
 
 export const AddUserModal: React.FC<AddUserModalProps> = ({
   open,
   onClose,
+  form,
+  onSubmit,
 }): ReactElement => {
   const [value, setValue] = useState("");
   const [errors, setErrors] = useState({
@@ -61,6 +71,10 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     careerStep: false,
     employeeId: false,
   });
+  const AddUser = useAddUser();
+
+  const [status] = useRequestHandler(AddUser.mutate);
+  console.log(status);
   const [addUserStatus, setAddUserStatus] = useState({
     status: "",
     message: "",
@@ -75,7 +89,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     employeeId: "Employee ID is required",
   };
 
-  const AddUser = useAddUser();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
@@ -112,6 +125,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     let requiredError = false;
     let requiredErrors = { ...errors };
     for (const field in errors) {
+      console.log(errors, "errors");
       if (AddUserForm[field as keyof UserManagementForms] === "") {
         requiredErrors = { ...requiredErrors, ...{ [field]: true } };
         requiredError = true;
@@ -122,6 +136,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     setErrors(requiredErrors);
     return requiredError;
   };
+
+  console.log(form);
 
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
@@ -140,7 +156,10 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 label="Last Name"
                 placeholder="Dela Cruz"
                 error={errors.lastName}
-                helperText={errors.lastName && errorMessage.lastName}
+                helperText={getFieldError(
+                  form.errors as any, // need to fix your type here
+                  "lastName"
+                )}
               />
             </Grid>
             <Grid item xs={6}>
@@ -280,39 +299,15 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           >
             Cancel
           </CustomButton>
-          <CustomButton
+          <Button
+            type="submit"
             variant="contained"
             color="primary"
-            onClick={() => {
-              if (!validateForm()) {
-                console.log(AddUserForm);
-                AddUser.mutate(AddUserForm, {
-                  onSuccess: () => {
-                    setAddUserStatus({
-                      status: "success",
-                      message: "User successfully added.",
-                      show: true,
-                    });
-                  },
-                  onError: (error) => {
-                    setAddUserStatus({
-                      status: "error",
-                      message: error.message,
-                      show: true,
-                    });
-                    console.log(error);
-                  },
-                });
-              }
-            }}
+            onClick={onSubmit}
           >
             Add User
-          </CustomButton>
-          <Alert
-            open={addUserStatus.show}
-            message={addUserStatus.message}
-            type={addUserStatus.status as AlertTypes}
-          />
+          </Button>
+
           {/* <NotificationModal
             onConfirm={() => {
               setAddUserStatus({
