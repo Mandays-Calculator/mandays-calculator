@@ -19,7 +19,6 @@ import {
   DataTypeSchema,
   IntValuesSchema,
   //SubmitFormat
-  FakeHoliday,
   NewHolidayData,
 } from "../utils";
 import { AddEditFormat } from ".";
@@ -153,8 +152,6 @@ const AddODC = (props: AddProps): ReactElement => {
     setIsAdd(false);
   };
 
-  console.log('!values!', values);
-
   return (
     <>
       <PageContainer sx={{ background: "#FFFFFF" }}>
@@ -218,7 +215,7 @@ const AddODC = (props: AddProps): ReactElement => {
           <Table
             name="HolidayTable"
             columns={HolidayColumn(t, editIdx, setEditIdx, idx)}
-            data={isEdit ? holidays : FakeHoliday}
+            data={isEdit ? holidays : []}
           />
           <Grid container spacing={2} alignItems="center" mt={1}>
             <Grid item xs={12} container justifyContent="flex-end">
