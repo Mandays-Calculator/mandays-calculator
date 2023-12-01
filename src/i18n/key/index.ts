@@ -86,6 +86,8 @@ const LocalizationKey = {
     permissionDeniedDesc: "common.permissionDenied.description",
     permissionErrorTitle: "common.permissionError.title",
     permissionErrorDesc: "common.permissionError.description",
+    pageInProgressTitle: "common.label.pageInProgressTitle",
+    pageInProgressDesc: "common.label.pageInProgressDescription",
     goBackHomeBtnLabel: "common.button.goBackHome",
     collapse: "common.button.collapse",
     backBtn: "common.button.back",
@@ -96,6 +98,7 @@ const LocalizationKey = {
     okayBtn: "common.button.okay",
     createdDateLabel: "common.label.createdDate",
     selectedLabel: "common.label.selected",
+    loadingLabel: "common.label.loading",
     userManagement: {
       authSignInLoading: "common.userManagement.auth.signInLoading",
       authSignOutLoading: "common.userManagement.auth.signOutLoading",
@@ -170,6 +173,10 @@ const LocalizationKey = {
   },
   accountInfo: {
     label: "account.info.label",
+  },
+  history: {
+    detailsBtn: "history.button.details",
+    filterPlacholder: "history.filter.placeholder",
   },
 };
 

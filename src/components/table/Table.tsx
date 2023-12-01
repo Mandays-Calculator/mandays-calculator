@@ -33,6 +33,7 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
     noDataLabel,
     onRowClick,
     type = "default",
+    loading = false,
   } = props;
 
   const { common } = LocalizationKey;
@@ -98,27 +99,42 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
             ))}
           </TableHead>
           <TableBody {...getTableBodyProps()}>
-            {rows.map((row, index) => {
-              prepareRow(row);
-              const rowId = `row-${index}`;
-              const isCollapsed = collapsedRows[rowId];
-              return (
-                <StripedRowRenderer
-                  row={row}
-                  onRowClick={onRowClick}
-                  type={type}
-                  toggleCollapse={toggleCollapse}
-                  rowId={rowId}
-                  isCollapsed={isCollapsed}
-                />
-              );
-            })}
-            {rows.length === 0 && (
+            {loading ? (
               <TableRow>
-                <TableCell colSpan={columns.length} align="center">
-                  {noDataLabel || t(common.noDataLabel)}
+                <TableCell
+                  colSpan={columns.length}
+                  align="center"
+                  sx={{ padding: 5 }}
+                >
+                  {t(common.loadingLabel)}
                 </TableCell>
               </TableRow>
+            ) : (
+              <>
+                {rows.map((row, index) => {
+                  prepareRow(row);
+                  const rowId = `row-${index}`;
+                  const isCollapsed = collapsedRows[rowId];
+                  return (
+                    <StripedRowRenderer
+                      key={rowId}
+                      row={row}
+                      onRowClick={onRowClick}
+                      type={type}
+                      toggleCollapse={toggleCollapse}
+                      rowId={rowId}
+                      isCollapsed={isCollapsed}
+                    />
+                  );
+                })}
+                {rows.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} align="center">
+                      {noDataLabel || t(common.noDataLabel)}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
             )}
           </TableBody>
         </MuiTable>

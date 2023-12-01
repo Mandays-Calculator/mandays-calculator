@@ -21,7 +21,8 @@ interface ErrorPageProps {
     | "not-found"
     | "permission-error"
     | "permission-denied"
-    | "configuration-error";
+    | "configuration-error"
+    | "development-mode";
 }
 
 const ErrorPage = (props: ErrorPageProps): ReactElement => {
@@ -87,6 +88,17 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
             </Typography>
             <Typography variant="body2" fontWeight="bold">
               {t(common.configurationErrorDesc)}
+            </Typography>
+          </>
+        );
+      case "development-mode":
+        return (
+          <>
+            <Typography variant="h5" fontWeight="bold">
+              {t(common.pageInProgressTitle)}
+            </Typography>
+            <Typography variant="body2" fontWeight="bold">
+              {t(common.pageInProgressDesc)}
             </Typography>
           </>
         );
