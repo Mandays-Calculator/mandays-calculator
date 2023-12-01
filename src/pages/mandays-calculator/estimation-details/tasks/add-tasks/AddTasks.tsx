@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
-import type { TaskType } from ".";
+import type { MandaysForm, TaskType } from "../..";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -15,39 +15,19 @@ import LocalizationKey from "~/i18n/key";
 import { usePagination } from "~/hooks/pagination";
 
 import { StyledCardContainer, StyledGridItem, StyledNoDataContainer, StyledDropContainer } from ".";
-import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import { dateFormat } from "~/utils/date";
+import { getIn, useFormikContext } from "formik";
 
 const AddTasks = (): ReactElement => {
-  const { data, isSuccess } = useGetTasks({
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
-  const tasksData: TaskType[] =
-    data?.data.map((task) => {
-      return {
-        id: task.id,
-        title: task.name,
-        description: task.description,
-        createdDate: task.createdDate,
-      };
-    }) || [];
-
-  const [tasks, setTask] = useState<TaskType[]>([]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTask(tasksData);
-    }
-  }, [isSuccess]);
-
   const [selectedTasks, setSelectedTasks] = useState<TaskType[]>([]);
   const [tasksField, setTaskField] = useState<string>("");
   const [selectedTasksField, setSelectedTasksField] = useState<string>("");
   /**
    * Pagination properties
    */
+
+  const { values, setValues } = useFormikContext<MandaysForm>();
+  const tasks: TaskType[] = getIn(values, "tasks");
   const {
     currentPage,
     totalPages,
@@ -63,16 +43,17 @@ const AddTasks = (): ReactElement => {
       drop: (item: TaskType) => {
         const updatedTask = tasks.filter((task) => task.id !== item.id);
         setSelectedTasks((prev: any) => [...prev, item]);
-        setTask(updatedTask);
+        console.log(updatedTask);
+        setValues({ ...values, tasks: updatedTask });
       },
     }));
 
     return (
       <StyledDropContainer ref={drop}>
         {selectedTasks.length > 0 ? (
-          selectedTasks.map((task, index) => (
+          selectedTasks.map((task) => (
             <StyledCardContainer
-              key={index}
+              key={task.id}
               headerTitle={task.title}
               sx={{ background: "#EBF5FB" }}
               actionHeader={
@@ -177,6 +158,7 @@ const AddTasks = (): ReactElement => {
             <DraggableTask
               task={task}
               index={index}
+              key={task.id}
             />
           ))
         ) : (
@@ -274,8 +256,8 @@ const AddTasks = (): ReactElement => {
             container
             justifyContent="space-evenly"
           >
-            <RenderDraggableTasks key={"dragzone"} />
-            <RenderDropZoneTasks key={"dropzone"} />
+            <RenderDraggableTasks />
+            <RenderDropZoneTasks />
           </Grid>
         </DndProvider>
       </Grid>
