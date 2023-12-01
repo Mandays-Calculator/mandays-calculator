@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 
 import { useODCList } from "~/queries/odc/ODC";
 import { PageLoader, Title, Form } from "~/components";
-import { DeleteModal } from "~/components/modal/delete-modal";
+import { ConfirmModal } from "~/components/modal/confirm-modal";
 
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
@@ -59,8 +59,8 @@ const ODCManagement = (): ReactElement => {
           )}
         </Form>
 
-        <DeleteModal
-          onDeleteConfirm={(): void => {
+        <ConfirmModal
+          onConfirmWithIndex={(): void => {
             const dIdx = delIdx || 0;
             const arr = ODCForm.values.odcList;
             // arr.splice(dIdx, 1);
