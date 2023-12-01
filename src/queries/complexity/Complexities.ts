@@ -1,7 +1,37 @@
-import { useQuery } from "react-query";
-import { getComplexities, Complexities } from "~/api/complexity";
+import type {
+  ForPostComplexities,
+  GetComplexities,
+  PostComplexities,
+  PutComplexities,
+  ForPutComplexities,
+  ForGetComplexities,
+} from "~/api/complexity";
 
-export const useGetComplexities = (id: string = "") =>
-  useQuery<Complexities[], Error>(["getComplexities", id], () =>
-    getComplexities(id)
+import {
+  getComplexities,
+  getComplexitiesbyId,
+  postComplexities,
+  putComplexities,
+} from "~/api/complexity";
+import { useMutation, useQuery } from "react-query";
+
+export const useGetComplexities = () =>
+  useQuery<GetComplexities<ForGetComplexities[]>, Error>(
+    "getComplexities",
+    getComplexities
   );
+
+export const useGetComplexitiesbyId = (id: string, shouldFetch: boolean) =>
+  useQuery<GetComplexities<ForGetComplexities>, Error>(
+    ["getComplexities", id],
+    () => getComplexitiesbyId(id),
+    {
+      enabled: shouldFetch,
+    }
+  );
+
+export const usePostComplexities = () =>
+  useMutation<PostComplexities, Error, ForPostComplexities[]>(postComplexities);
+
+export const usePutComplexities = () =>
+  useMutation<PutComplexities, Error, ForPutComplexities>(putComplexities);
