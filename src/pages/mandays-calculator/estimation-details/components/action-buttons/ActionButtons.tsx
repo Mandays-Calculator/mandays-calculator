@@ -10,10 +10,11 @@ type ActionButtonsProps = {
   handleNext: () => void;
   handleSave: () => void;
   activeTab: number;
+  length: number;
 };
 
 const ActionButtons = (props: ActionButtonsProps): ReactElement => {
-  const { handleBackEvent, handleNext, handleSave, activeTab } = props;
+  const { handleBackEvent, handleNext, handleSave, activeTab, length } = props;
   const { common } = LocalizationKey;
   const { t } = useTranslation();
   return (
@@ -23,12 +24,28 @@ const ActionButtons = (props: ActionButtonsProps): ReactElement => {
       flexDirection={"row"}
       gap={2}
     >
-      <CustomButton onClick={handleBackEvent}>{t(common.backBtn)}</CustomButton>
-      {activeTab <= 2 && (
-        <CustomButton onClick={handleNext}>{t(common.nextBtn)}</CustomButton>
+      <CustomButton
+        colorVariant="neutral"
+        onClick={handleBackEvent}
+        type="button"
+      >
+        {t(common.backBtn)}
+      </CustomButton>
+      {activeTab < length && (
+        <CustomButton
+          onClick={handleNext}
+          type="button"
+        >
+          {t(common.nextBtn)}
+        </CustomButton>
       )}
-      {activeTab === 3 && (
-        <CustomButton onClick={handleSave}>{t(common.saveBtn)}</CustomButton>
+      {length === activeTab && (
+        <CustomButton
+          onClick={handleSave}
+          type="submit"
+        >
+          {t(common.saveBtn)}
+        </CustomButton>
       )}
     </Stack>
   );
