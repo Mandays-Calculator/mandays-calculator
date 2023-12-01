@@ -21,12 +21,8 @@ import { useFormikContext } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 import { useAddUser } from "~/queries/user-management/UserManagement";
 import { genders, rolesData } from "../utils";
-import {
-  ModalType,
-  NotificationModal,
-} from "../../../../components/modal/notification-modal";
 import moment from "moment";
-import { ImageUpload } from "~/components";
+import { Alert, AlertTypes, ImageUpload } from "~/components";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -274,6 +270,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             />
           </Grid>
         </Grid>
+
         <Box display="flex" justifyContent="flex-end" my={2}>
           <CustomButton
             variant="contained"
@@ -287,7 +284,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              console.log("test", AddUserForm);
               if (!validateForm()) {
                 console.log(AddUserForm);
                 AddUser.mutate(AddUserForm, {
@@ -301,7 +297,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                   onError: (error) => {
                     setAddUserStatus({
                       status: "error",
-                      message: "Please try again later.",
+                      message: error.message,
                       show: true,
                     });
                     console.log(error);
@@ -312,11 +308,12 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           >
             Add User
           </CustomButton>
-
-          <NotificationModal
-            type={addUserStatus.status as ModalType}
-            message={addUserStatus.message}
+          <Alert
             open={addUserStatus.show}
+            message={addUserStatus.message}
+            type={addUserStatus.status as AlertTypes}
+          />
+          {/* <NotificationModal
             onConfirm={() => {
               setAddUserStatus({
                 status: "",
@@ -325,7 +322,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               });
               onClose();
             }}
-          />
+          /> */}
         </Box>
       </Stack>
     </Dialog>

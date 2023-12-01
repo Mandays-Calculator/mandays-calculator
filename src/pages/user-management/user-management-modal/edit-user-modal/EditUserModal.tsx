@@ -244,7 +244,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
                 onError: (error) => {
                   setEditUserStatus({
                     status: "error",
-                    message: "User successfully updated",
+                    message: error?.message ?? "Error",
                     show: true,
                   });
                   console.log(error);
