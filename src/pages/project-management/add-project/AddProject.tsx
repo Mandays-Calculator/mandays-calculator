@@ -37,7 +37,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const [showTeamForm, setShowTeamForm] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [teamIndex, setTeamIndex] = useState<number>(0);
-  const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>('');
+  const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleToggleEdit = (teamId: number): void => {
@@ -59,7 +59,10 @@ const AddProject = (props: ProjectListProps): ReactElement => {
         teamName: team.teamName,
         leadName: team.teamLead,
         isActive: 0,
-        teamMembers: team.teamMembers.map(({ name }) => ({ name, isActive: 0 })),
+        teamMembers: team.teamMembers.map(({ name }) => ({
+          name,
+          isActive: 0,
+        })),
       })),
     };
 
@@ -77,31 +80,34 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const onValidateForm = async () => {
     const errors = await projectForm.validateForm();
     if (Object.entries(errors).length) {
-      let errorMessage = typeof errors.teams === 'string' ? 'Must have at least 1 team in the project' : '';
+      let errorMessage =
+        typeof errors.teams === "string"
+          ? "Must have at least 1 team in the project"
+          : "";
 
-      if (typeof errors.teams === 'object') {
-        errorMessage = 'Edit team to add members';
+      if (typeof errors.teams === "object") {
+        errorMessage = "Edit team to add members";
       }
 
       showError(errorMessage);
     }
-  }
+  };
 
   const showError = (error: any) => {
     setAddProjectErrorMsg(error);
     setTimeout(() => {
-      setAddProjectErrorMsg('');
+      setAddProjectErrorMsg("");
     }, 2000);
-  }
+  };
 
   const isErrorField = (field: string) => {
     return projectForm.errors[field as keyof {}] ? true : false;
-  }
+  };
 
   return (
     <PageContainer>
@@ -111,8 +117,10 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             name="projectName"
             placeholder="Enter keyword here..."
             label="Project Name"
-            error={isErrorField('projectName')}
-            helperText={isErrorField('projectName') ? 'Please Input Project Name' : ''}
+            error={isErrorField("projectName")}
+            helperText={
+              isErrorField("projectName") ? "Please Input Project Name" : ""
+            }
           />
           <TeamList toggleEdit={(teamIndex) => handleToggleEdit(teamIndex)} />
           <Grid paddingY={2}></Grid>
@@ -142,11 +150,15 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             >
               Cancel
             </CustomButton>
-            <CustomButton type="submit" onClick={onValidateForm} disabled={isLoading}>
-              {isLoading ? 'Loading...' : 'Add Project'}
+            <CustomButton
+              type="submit"
+              onClick={onValidateForm}
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Add Project"}
             </CustomButton>
           </Stack>
-          <ErrorMessage error={addProjectErrorMsg} type={'alert'} duration={2000}/>
+          <ErrorMessage error={addProjectErrorMsg} type={"alert"} />
         </Form>
       ) : (
         <Form instance={projectForm}>

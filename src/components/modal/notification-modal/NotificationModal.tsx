@@ -1,9 +1,12 @@
 import type { ReactElement, ReactNode } from "react";
 
 import { useEffect, useState } from "react";
-import WarningIcon from "@mui/icons-material/Warning";
+import { useTranslation } from "react-i18next";
 import { Box, Stack } from "@mui/material";
 
+import WarningIcon from "@mui/icons-material/Warning";
+
+import LocalizationKey from "~/i18n/key";
 import { CustomButton } from "~/components/form/button";
 import { Modal, SvgIcon } from "~/components";
 
@@ -44,16 +47,22 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
   onConfirm,
   open,
   onClose,
-  message,
+  message = "",
   onCloseLabel,
   onConfirmLabel,
   title,
 }): ReactElement => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState<boolean>(open);
 
   useEffect(() => {
     setIsOpen(open);
   }, [open]);
+
+  const handleClose = () => {
+    if (onClose) onClose();
+    setIsOpen(false);
+  };
 
   switch (type) {
     case "unauthorized":
@@ -78,7 +87,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
           >
             {renderIcon(type)}
             <Box maxWidth={250} textAlign="center">
-              {message}
+              {message || t(LocalizationKey.common.errorMessage.genericError)}
             </Box>
           </Stack>
 
@@ -87,12 +96,13 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
               <CustomButton
                 variant="contained"
                 colorVariant="neutral"
-                onClick={onClose}
+                onClick={handleClose}
                 style={{ marginRight: 16 }}
               >
-                {onCloseLabel}
+                {onCloseLabel || t(LocalizationKey.common.cancelBtn)}
               </CustomButton>
             )}
+
             <CustomButton
               variant="contained"
               color="primary"
@@ -103,7 +113,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
                 }
               }}
             >
-              {onConfirmLabel || "Okay"}
+              {onConfirmLabel || t(LocalizationKey.common.okayBtn)}
             </CustomButton>
           </Box>
         </Modal>
