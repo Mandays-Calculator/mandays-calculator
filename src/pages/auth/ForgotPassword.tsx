@@ -13,7 +13,7 @@ import Form from "~/components/form/Form";
 
 import { StyledLabel } from "./components/auth-container";
 import { forgotPasswordSchema } from "./schema";
-import { useForgotPasswordMutation } from "~/queries/auth";
+import { useForgotPasswordMutation } from "~/mutations/auth";
 import { ErrorMessage } from "~/components";
 
 import { useRequestHandler } from "~/hooks/request-handler";

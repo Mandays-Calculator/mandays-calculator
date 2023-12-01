@@ -10,7 +10,7 @@ import {
   useDeleteUser,
   useUserList,
 } from "~/queries/user-management/UserManagement";
-import { DeleteModal } from "~/components/modal/delete-modal";
+import { ConfirmModal } from "~/components/modal/confirm-modal";
 import { UserListData } from "~/api/user-management/types";
 
 const UserList = (): ReactElement => {
@@ -56,8 +56,8 @@ const UserList = (): ReactElement => {
           onClose={() => setEditModalOpen(false)}
         />
 
-        <DeleteModal
-          onDeleteConfirm={(): void => {
+        <ConfirmModal
+          onConfirmWithIndex={(): void => {
             DeleteUser.mutate(
               { id: currentUser },
               {

@@ -78,6 +78,7 @@ const LocalizationKey = {
     complexity: "common.complexity",
     submit: "common.submit",
     somethingWentWrongTitle: "common.somethingWentWrong.title",
+    configurationErrorDesc: "common.configurationError.description",
     somethingWentWrongDesc: "common.somethingWentWrong.description",
     pageNotFoundTitle: "common.notFound.title",
     pageNotFoundDesc: "common.notFound.description",
@@ -93,6 +94,7 @@ const LocalizationKey = {
     exportBtn: "common.button.export",
     saveBtn: "common.button.save",
     okayBtn: "common.button.okay",
+    cancelBtn: "common.button.cancel",
     createdDateLabel: "common.label.createdDate",
     selectedLabel: "common.label.selected",
     userManagement: {
