@@ -22,7 +22,8 @@ export type SvgIconsType =
   | "collapse_right"
   | "complexity"
   | "dashboard"
-  | "arrow_down";
+  | "arrow_down"
+  | "mandays_estimation_tool";
 
 export interface SvgIconsProps {
   name: SvgIconsType;

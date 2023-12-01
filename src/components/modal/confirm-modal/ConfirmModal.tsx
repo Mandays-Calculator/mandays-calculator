@@ -1,26 +1,33 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
+import type { SvgIconsType } from "~/components/svc-icons/types";
 
 import { t } from "i18next";
 import { CustomButton } from "~/components/form/button";
 import { Modal, SvgIcon } from "~/components";
 import { Box, Stack } from "@mui/material";
 
-interface DeleteModalProps {
-  onDeleteConfirm?: (rowIndex: number) => void;
+interface ConfirmModalProps {
+  onConfirmWithIndex?: (rowIndex: number) => void;
   onConfirm?: () => void;
+  confirmLabel?: string;
   open: boolean;
   onClose: () => void;
   message?: string;
   selectedRow: number | null;
+  confirmIcon?: SvgIconsType | ReactNode | string;
+  closeLabel?: string;
 }
 
-export const DeleteModal: React.FC<DeleteModalProps> = ({
-  onDeleteConfirm,
-  open,
-  onClose,
-  message = "",
+export const ConfirmModal: React.FC<ConfirmModalProps> = ({
+  onConfirmWithIndex,
   selectedRow,
   onConfirm,
+  confirmLabel,
+  confirmIcon,
+  message = "",
+  open,
+  onClose,
+  closeLabel,
 }): ReactElement => {
   return (
     <Modal open={open} title="" maxWidth="xs" onClose={onClose}>
@@ -30,7 +37,15 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
         justifyContent="center"
         spacing={2}
       >
-        <SvgIcon name="warning" $size={7} />
+        {confirmIcon ? (
+          typeof confirmIcon === "string" ? (
+            <SvgIcon name={confirmIcon as SvgIconsType} $size={7} />
+          ) : (
+            confirmIcon
+          )
+        ) : (
+          <SvgIcon name="warning" $size={7} />
+        )}
         <Box maxWidth={250} textAlign="center">
           {message || t("odc.modal.deleteLabel")}
         </Box>
@@ -43,25 +58,25 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
           onClick={onClose}
           style={{ marginRight: 16 }}
         >
-          {t("odc.modal.yesPleaseBtn")}
+          {confirmLabel || t("odc.modal.yesPleaseBtn")}
         </CustomButton>
         <CustomButton
           variant="contained"
           color="primary"
           onClick={() => {
-            if (selectedRow !== null && onDeleteConfirm) {
-              onDeleteConfirm(selectedRow);
+            if (selectedRow !== null && onConfirmWithIndex) {
+              onConfirmWithIndex(selectedRow);
             }
             if (onConfirm) {
               onConfirm();
             }
           }}
         >
-          {t("odc.modal.noThanksBtn")}
+          {closeLabel || t("odc.modal.noThanksBtn")}
         </CustomButton>
       </Box>
     </Modal>
   );
 };
 
-export default DeleteModal;
+export default ConfirmModal;

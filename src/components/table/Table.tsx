@@ -26,30 +26,20 @@ import { StyledHeader, StyledHeaderCell } from ".";
 import StripedRowRenderer from "./striped-row/StripedRow";
 
 export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
-  const {
-    title,
-    columns,
-    data = [],
-    noDataLabel,
-    onRowClick,
-    type = "default",
-  } = props;
+  const { title, columns, data = [], noDataLabel, onRowClick, type = "default" } = props;
 
   const { common } = LocalizationKey;
   const { t } = useTranslation();
 
-  const [collapsedRows, setCollapsedRows] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [collapsedRows, setCollapsedRows] = useState<Record<string, boolean>>({});
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable<T>(
-      {
-        columns: columns as ColumnInstance<T>[],
-        data: data as T[],
-      },
-      useSortBy
-    );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>(
+    {
+      columns: columns as ColumnInstance<T>[],
+      data: data as T[],
+    },
+    useSortBy
+  );
 
   // will toggle parent row if type === collapse
   const toggleCollapse = (rowId: string) => {
@@ -62,9 +52,15 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
   const renderSortIcon = (column: any) =>
     column.isSorted ? (
       column.isSortedDesc ? (
-        <ArrowDropDownIcon sx={{ ml: 1 }} fontSize="small" />
+        <ArrowDropDownIcon
+          sx={{ ml: 1 }}
+          fontSize="small"
+        />
       ) : (
-        <ArrowDropUpIcon sx={{ ml: 1 }} fontSize="small" />
+        <ArrowDropUpIcon
+          sx={{ ml: 1 }}
+          fontSize="small"
+        />
       )
     ) : null;
 
@@ -72,11 +68,18 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
     <Stack gap={2}>
       <TableContainer component={Paper}>
         {title && (
-          <Typography variant="h5" gutterBottom>
+          <Typography
+            variant="h5"
+            gutterBottom
+          >
             {title}
           </Typography>
         )}
-        <MuiTable {...getTableProps()} size="small" aria-label={props.name}>
+        <MuiTable
+          {...getTableProps()}
+          size="small"
+          aria-label={props.name}
+        >
           <TableHead>
             {headerGroups.map((headerGroup) => (
               <StyledHeader {...headerGroup.getHeaderGroupProps()}>
@@ -87,7 +90,10 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
                     )}
                   >
                     <Box sx={{ display: "inline-flex", alignItems: "center" }}>
-                      <Typography variant="body1" component="span">
+                      <Typography
+                        variant="body1"
+                        component="span"
+                      >
                         {column.render("Header")}
                       </Typography>
                       {renderSortIcon(column)}
@@ -110,12 +116,16 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
                   toggleCollapse={toggleCollapse}
                   rowId={rowId}
                   isCollapsed={isCollapsed}
+                  key={index}
                 />
               );
             })}
             {rows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={columns.length} align="center">
+                <TableCell
+                  colSpan={columns.length}
+                  align="center"
+                >
                   {noDataLabel || t(common.noDataLabel)}
                 </TableCell>
               </TableRow>

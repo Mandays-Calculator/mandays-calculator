@@ -65,3 +65,7 @@ export const checkDateFormat = (date: string): boolean => {
   const regExDate = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|1\d|2\d|3[01])&/;
   return regExDate.test(date);
 };
+
+export const dateFormat = (date: string): string => {
+  return moment(new Date(date)).format("yyyy-MM-dd");
+};
