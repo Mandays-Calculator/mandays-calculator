@@ -150,6 +150,7 @@ const TasksContent = (): ReactElement => {
           open={modalOpen}
           onClose={handleCloseModal}
           onCreateTask={handleCreateTask}
+          reOpenCreateTask={handleModalState}
         />
         <Select
           name="filter"
