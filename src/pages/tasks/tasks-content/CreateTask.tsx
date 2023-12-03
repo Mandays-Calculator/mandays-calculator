@@ -7,10 +7,20 @@ import { Select, TextField, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
 import ComplexityDetails from "./complexity-details";
 
+interface Task {
+  taskTitle: string;
+  desc: string;
+  date: string;
+  sprint: string;
+  complexity: string;
+  status: string;
+  type: string;
+}
+
 interface ModalProps {
   open: boolean;
   onClose: () => void;
-  onCreateTask: (task: any) => void;
+  onCreateTask: (task: Task) => void;
   reOpenCreateTask: () => void;
 }
 
@@ -21,7 +31,7 @@ const CreateTask: React.FC<ModalProps> = ({
   reOpenCreateTask,
 }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [newTask, setNewTask] = useState({
+  const [newTask, setNewTask] = useState<Task>({
     taskTitle: "",
     desc: "",
     date: "",
@@ -32,7 +42,7 @@ const CreateTask: React.FC<ModalProps> = ({
   });
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
-  const handleCreateTask = () => {
+  const handleCreateTask = (): void => {
     onCreateTask(newTask);
     setNewTask({
       taskTitle: "",
