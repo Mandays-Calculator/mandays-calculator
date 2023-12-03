@@ -1,13 +1,7 @@
 import { type ReactElement, useState, ChangeEvent, useEffect } from "react";
 import { Column } from "react-table";
 import { useFormikContext } from "formik";
-import {
-  Grid,
-  Typography,
-  Stack,
-  Box,
-  IconButton,
-} from "@mui/material";
+import { Grid, Typography, Stack, Box, IconButton } from "@mui/material";
 
 import { CustomButton } from "~/components/form/button";
 import { AddTeamForm as AddTeamFormType, TeamObject } from "../types";
@@ -32,7 +26,9 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const { teamIndex, onCancel } = props;
   const { values, setValues } = useFormikContext<AddTeamFormType>();
 
-  let team: TeamObject = values.teams.find((_val, index) => index === teamIndex) as TeamObject;
+  let team: TeamObject = values.teams.find(
+    (_val, index) => index === teamIndex
+  ) as TeamObject;
 
   const [projectName, setProjectName] = useState<string>(values.projectName);
   const [teamName, setTeamName] = useState<string>(team.teamName);
@@ -42,7 +38,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
   const [tableData, setTableData] = useState<Members[]>([]);
   const [showMemberDialog, setMemberDialog] = useState<boolean>(false);
-  const [errorEditTeamMsg, setErrorEditTeamMsg] = useState<string>('');
+  const [errorEditTeamMsg, setErrorEditTeamMsg] = useState<string>("");
 
   const editTeam = (): void => {
     if (projectName === "") {
@@ -73,11 +69,13 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
         teams: teams,
       });
 
-      const selectedTeam = teams.find(x => x.teamMembers.length);
+      const selectedTeam = teams.find((x) => x.teamMembers.length);
       if (!selectedTeam) {
-        setErrorEditTeamMsg('Team members are required. Select at least 1(one) of the members');
+        setErrorEditTeamMsg(
+          "Team members are required. Select at least 1(one) of the members"
+        );
 
-        setTimeout(() => setErrorEditTeamMsg(''), 3100);
+        setTimeout(() => setErrorEditTeamMsg(""), 3100);
       } else {
         onCancel(teamIndex);
       }
@@ -95,15 +93,17 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setTableData(
       selectedUsers.map((user) => ({
         ...user,
-        name: `${user.firstName}, ${user.lastName} ${user.middleName ?? ''}`.trim(),
+        name: `${user.firstName}, ${user.lastName} ${
+          user.middleName ?? ""
+        }`.trim(),
         abbreviation: user.odc.abbreviation,
       }))
     );
-  }
+  };
 
   const onTableRowClick = ($event: any) => {
     console.log($event);
-  }
+  };
 
   const getProjectName = (e: ChangeEvent<HTMLInputElement>): void => {
     setProjectName(e.target.value);
@@ -164,7 +164,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               fullWidth
               error={projectNameError}
               helperText={projectNameError && "Please Input Project Name."}
-              inputProps={{ 'data-testid': 'test-project-name' }}
+              inputProps={{ "data-testid": "test-project-name" }}
             />
           </Grid>
           <Grid item xs={4}>
@@ -176,7 +176,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               fullWidth
               error={teamNameError}
               helperText={teamNameError && "Please Input Team Name."}
-              inputProps={{ 'data-testid': 'test-team-name' }}
+              inputProps={{ "data-testid": "test-team-name" }}
             />
           </Grid>
           <Grid item xs={4}>
@@ -188,7 +188,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               fullWidth
               error={teamLeadError}
               helperText={teamLeadError && "Please Input Team Lead."}
-              inputProps={{ 'data-testid': 'test-team-lead' }}
+              inputProps={{ "data-testid": "test-team-lead" }}
             />
           </Grid>
         </Grid>
@@ -207,14 +207,23 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
             />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
-            <CustomButton type="button" onClick={() => onToggleDialog()} data-testid="test-add-members-btn">
+            <CustomButton
+              type="button"
+              onClick={() => onToggleDialog()}
+              data-testid="test-add-members-btn"
+            >
               Add Members
             </CustomButton>
           </Grid>
         </Grid>
 
         <Box sx={{ padding: "0 1rem 0 1rem" }}>
-          <Table name="ODCTable" columns={columns} data={tableData} onRowClick={onTableRowClick} />
+          <Table
+            name="ODCTable"
+            columns={columns}
+            data={tableData}
+            onRowClick={onTableRowClick}
+          />
         </Box>
 
         <Stack
@@ -233,11 +242,16 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
           >
             Cancel
           </CustomButton>
-          <CustomButton onClick={editTeam} data-testid="test-done-edit-btn">Done</CustomButton>
+          <CustomButton onClick={editTeam} data-testid="test-done-edit-btn">
+            Done
+          </CustomButton>
         </Stack>
       </Stack>
-      <DialogSearchUser showMemberDialog={showMemberDialog} toggleDialog={($event) => onToggleDialog($event)}/>
-      <ErrorMessage error={errorEditTeamMsg} type={'alert'} duration={3000}/>
+      <DialogSearchUser
+        showMemberDialog={showMemberDialog}
+        toggleDialog={($event) => onToggleDialog($event)}
+      />
+      <ErrorMessage error={errorEditTeamMsg} type={"alert"} />
     </>
   );
 };
