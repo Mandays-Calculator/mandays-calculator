@@ -6,12 +6,10 @@ import { userListColumns } from "./utils";
 import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
 import { useTranslation } from "react-i18next";
 
-import {
-  useDeleteUser,
-  useUserList,
-} from "~/queries/user-management/UserManagement";
+import { useUserList } from "~/queries/user-management/UserManagement";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 import { UserListData } from "~/api/user-management/types";
+import { useDeleteUser } from "~/mutations/user-management";
 
 const UserList = (): ReactElement => {
   const { t } = useTranslation();

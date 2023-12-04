@@ -12,16 +12,16 @@ import {
   UpdateUserManagementParams,
   UserManagementForms,
 } from "~/pages/user-management/types";
-import {
-  useEditUser,
-  useUserList,
-} from "~/queries/user-management/UserManagement";
+import { useUserList } from "~/queries/user-management/UserManagement";
 import {
   ModalType,
   NotificationModal,
 } from "../../../../components/modal/notification-modal";
 import { ImageUpload } from "~/components";
 import { UserListData } from "~/api/user-management/types";
+import { useEditUser } from "~/mutations/user-management";
+import { useRequestHandler } from "~/hooks/request-handler";
+import { Alert } from "~/components";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -54,6 +54,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const { values, setFieldValue } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
   const EditUser = useEditUser(currentUser?.id ?? "");
+  const [status, callApi] = useRequestHandler(EditUser.mutate);
   const [editUserStatus, setEditUserStatus] = useState({
     status: "",
     message: "",
@@ -107,7 +108,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateRoles: currentUser?.roles ?? [],
     });
   }, [currentUser]);
-
+  console.log("aaa", status);
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -231,29 +232,19 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              EditUser.mutate(EditUserForm, {
-                onSuccess: (data) => {
-                  setEditUserStatus({
-                    status: "success",
-                    message: "User successfully updated",
-                    show: true,
-                  });
-                  refetch();
-                  console.log("success", data);
-                },
-                onError: (error) => {
-                  setEditUserStatus({
-                    status: "error",
-                    message: error?.message ?? "Error",
-                    show: true,
-                  });
-                  console.log(error);
-                },
-              });
+              callApi(EditUserForm);
+              refetch();
             }}
           >
             Save
           </CustomButton>
+          {status.loading && (
+            <Alert
+              open={status.success}
+              message={"User successfully updated"}
+              type={"success"}
+            />
+          )}
           <NotificationModal
             type={editUserStatus.status as ModalType}
             message={editUserStatus.message}

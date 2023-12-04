@@ -18,17 +18,16 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { ErrorMessage, FormikInstance, useFormikContext } from "formik";
+import { FormikInstance } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 
 import { genders, rolesData } from "../utils";
 import moment from "moment";
-import { Alert, AlertTypes, ImageUpload } from "~/components";
+import { ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
+import { FormErrors } from "~/components/form/types";
 import { useRequestHandler } from "~/hooks/request-handler";
-import { useAddUser } from "~/queries/user-management/UserManagement";
-import { useErrorHandler } from "~/hooks/error-handler";
-import { t } from "i18next";
+import { useAddUser } from "~/mutations/user-management";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -45,6 +44,15 @@ const StyledTitle = styled(Typography)({
   fontWeight: "400",
   wordWrap: "break-word",
 });
+const StyledError = styled(Typography)({
+  color: "#FF4545",
+  fontSize: "0.85rem",
+  fontFamily: "Montserrat",
+  fontWeight: "400",
+  marginTop: "3px",
+  marginBottom: "0",
+  marginLeft: "12px",
+});
 const StyledFormControlLabel = styled(FormControlLabel)({
   height: "35px",
 });
@@ -54,91 +62,25 @@ interface AddUserModalProps {
   open: boolean;
   onClose: () => void;
   form: FormikInstance<UserManagementForms>;
-  onSubmit: () => void;
+  OnSubmit: () => void;
 }
 
 export const AddUserModal: React.FC<AddUserModalProps> = ({
   open,
   onClose,
   form,
-  onSubmit,
+  OnSubmit,
 }): ReactElement => {
   const [value, setValue] = useState("");
-  const [errors, setErrors] = useState({
-    lastName: false,
-    firstName: false,
-    gender: false,
-    careerStep: false,
-    employeeId: false,
-  });
-  const AddUser = useAddUser();
 
-  const [status] = useRequestHandler(AddUser.mutate);
+  const [status] = useRequestHandler(useAddUser);
   console.log(status);
-  const [addUserStatus, setAddUserStatus] = useState({
-    status: "",
-    message: "",
-    show: false,
-  });
-
-  const errorMessage = {
-    lastName: "Last Name is required",
-    firstName: "First Name is required",
-    gender: "Gender is required",
-    careerStep: "Career Step is required",
-    employeeId: "Employee ID is required",
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
-  const { values, setFieldValue } = useFormikContext<UserManagementForms>();
-  const gender = () => {
-    if (values.gender == "FEMALE") {
-      return 1;
-    } else if (values.gender == "MALE") {
-      return 2;
-    } else if (values.gender == "NON_BINARY") {
-      return 3;
-    } else if (values.gender == "PREFER_NOT_TO_SAY") {
-      return 4;
-    }
-  };
-  const AddUserForm: UserManagementForms = {
-    firstName: values.firstName,
-    lastName: values.lastName,
-    middleName: values.middleName,
-    suffix: values.suffix,
-    gender: gender() ?? 0,
-    // image: values.image,
-    email: values.email,
-    employeeId: values.employeeId,
-    odcId: values.odcId,
-    careerStep: values.careerStep,
-    joiningDate: values.joiningDate,
-    projectId: values.projectId,
-    teamId: values.teamId,
-    roles: values.roles,
-  };
-
-  const validateForm = (): boolean => {
-    let requiredError = false;
-    let requiredErrors = { ...errors };
-    for (const field in errors) {
-      console.log(errors, "errors");
-      if (AddUserForm[field as keyof UserManagementForms] === "") {
-        requiredErrors = { ...requiredErrors, ...{ [field]: true } };
-        requiredError = true;
-      } else {
-        requiredErrors = { ...requiredErrors, ...{ [field]: false } };
-      }
-    }
-    setErrors(requiredErrors);
-    return requiredError;
-  };
+  // const { setFieldValue } = useFormikContext<UserManagementForms>();
 
   console.log(form);
-
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -146,7 +88,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <ImageUpload name="image" setFieldValue={setFieldValue} />
+              <ImageUpload name="image" setFieldValue={form.setFieldValue} />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>
@@ -155,9 +97,9 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="lastName"
                 label="Last Name"
                 placeholder="Dela Cruz"
-                error={errors.lastName}
+                error={!!form.errors.lastName}
                 helperText={getFieldError(
-                  form.errors as any, // need to fix your type here
+                  form.errors as FormErrors,
                   "lastName"
                 )}
               />
@@ -167,8 +109,11 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="firstName"
                 label="First Name"
                 placeholder="Juan"
-                error={errors.firstName}
-                helperText={errors.firstName && errorMessage.firstName}
+                error={!!form.errors.firstName}
+                helperText={getFieldError(
+                  form.errors as FormErrors,
+                  "firstName"
+                )}
               />
             </Grid>
             <Grid item xs={6}>
@@ -191,9 +136,11 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="gender"
                 options={genders}
                 placeholder="Male"
-                error={errors.gender}
-                helperText={errors.gender && errorMessage.gender}
+                error={!!form.errors.gender}
               />
+              <StyledError>
+                {getFieldError(form.errors as FormErrors, "gender")}
+              </StyledError>
             </Grid>
           </Grid>
           <Grid item xs={9} mt={1}>
@@ -201,15 +148,20 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="email"
               label="Email Address"
               placeholder="juandelacruz103@gmail.com"
+              error={!!form.errors.email}
+              helperText={getFieldError(form.errors as FormErrors, "email")}
             />
           </Grid>
           <Grid item xs={3} mt={1}>
             <ControlledTextField
               name="careerStep"
-              label="Carrer Step"
+              label="Career Step"
               placeholder="I03"
-              error={errors.careerStep}
-              helperText={errors.careerStep && errorMessage.careerStep}
+              error={!!form.errors.careerStep}
+              helperText={getFieldError(
+                form.errors as FormErrors,
+                "careerStep"
+              )}
             />
           </Grid>
           <Grid item xs={12} mb={1}>
@@ -254,8 +206,11 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="employeeId"
               label="Employee Id"
               placeholder="82000000"
-              error={errors.employeeId}
-              helperText={errors.employeeId && errorMessage.employeeId}
+              error={!!form.errors.employeeId}
+              helperText={getFieldError(
+                form.errors as FormErrors,
+                "employeeId"
+              )}
             />
           </Grid>
           <Grid item xs={3.5}>
@@ -303,11 +258,15 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             type="submit"
             variant="contained"
             color="primary"
-            onClick={onSubmit}
+            onClick={OnSubmit}
           >
             Add User
           </Button>
-
+          {/* <Alert
+            open={addUserStatus.show}
+            message={addUserStatus.message}
+            type={addUserStatus.status as AlertTypes}
+          /> */}
           {/* <NotificationModal
             onConfirm={() => {
               setAddUserStatus({
