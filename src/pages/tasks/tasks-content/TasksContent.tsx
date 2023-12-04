@@ -169,7 +169,7 @@ const TasksContent = (): ReactElement => {
         />
         <Divider sx={{ mb: 7 }} style={{ marginTop: 20 }} />
 
-        <Grid container spacing={1} justifyContent="space-evenly">
+        <Grid container spacing={1} justifyContent="space-between">
           {status.map((i) => {
             const filteredData = mockData.filter((task) => task.status === i);
 
@@ -192,7 +192,7 @@ const TasksContent = (): ReactElement => {
                             ? "#FFCECE"
                             : "#D5FFCD",
                         borderRadius: 10,
-                        padding: 5,
+                        padding: 15,
                       }}
                       {...provided.droppableProps}
                     >
