@@ -30,14 +30,13 @@ interface Task {
 interface EditTaskProps {
   open: boolean;
   onClose: () => void;
-  task: Task | null; // Allow Task or null for the task prop
+  task: Task | null;
 }
 
 const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task }) => {
   const [newTask, setNewTask] = useState<Task | null>(task);
 
   useEffect(() => {
-    // Update newTask state when the task prop changes
     setNewTask(task);
   }, [task]);
   const handleCreateTask = (): void => {
