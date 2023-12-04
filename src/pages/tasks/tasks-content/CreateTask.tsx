@@ -15,6 +15,7 @@ interface Task {
   complexity: string;
   status: string;
   type: string;
+  functionality: string;
 }
 
 interface ModalProps {
@@ -39,6 +40,7 @@ const CreateTask: React.FC<ModalProps> = ({
     complexity: "",
     status: "Backlog",
     type: "",
+    functionality: "",
   });
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
@@ -52,6 +54,7 @@ const CreateTask: React.FC<ModalProps> = ({
       complexity: "",
       status: "Backlog",
       type: "",
+      functionality: "",
     });
     setSelectedTags([]);
     onClose();
@@ -71,8 +74,21 @@ const CreateTask: React.FC<ModalProps> = ({
 
   return (
     <>
-      <Modal open={open} title="Task Name" maxWidth="md" onClose={onClose}>
-        <Stack direction="column" gap={2}>
+      <Modal open={open} title="" maxWidth="md" onClose={onClose}>
+        <Stack gap={2}>
+          <Grid container>
+            <Grid item xs={6}>
+              <TextField
+                name="taskTitle"
+                label="TaskName"
+                onChange={(e) =>
+                  setNewTask({ ...newTask, taskTitle: e.target.value })
+                }
+                value={newTask.taskTitle}
+              />
+            </Grid>
+          </Grid>
+
           <TextField
             name="desc"
             label="Description"
@@ -83,17 +99,30 @@ const CreateTask: React.FC<ModalProps> = ({
             onChange={(e) => setNewTask({ ...newTask, desc: e.target.value })}
             value={newTask.desc}
           />
+
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField
-                name="function"
-                label="Function"
-                fullWidth
-                onChange={(e) =>
-                  setNewTask({ ...newTask, taskTitle: e.target.value })
-                }
-              />
+              <Stack gap={1}>
+                <Typography>Functionality</Typography>
+                <Select
+                  name="functionality"
+                  placeholder="Select Text"
+                  fullWidth
+                  onChange={(e) =>
+                    handleSelectChange(
+                      "functionality",
+                      e.target.value as string
+                    )
+                  }
+                  value={newTask.functionality}
+                  options={[
+                    { value: "sample1", label: "Sample 1" },
+                    { value: "sample2", label: "Sample 2" },
+                  ]}
+                />
+              </Stack>
             </Grid>
+
             <Grid item xs={6}>
               <Stack gap={1}>
                 <Stack
@@ -128,23 +157,26 @@ const CreateTask: React.FC<ModalProps> = ({
                 />
               </Stack>
             </Grid>
+
+            <Grid item xs={6}>
+              <Stack gap={1}>
+                <Typography>Tags</Typography>
+                <Select
+                  name="tags"
+                  placeholder="Tags"
+                  multiple={true}
+                  fullWidth
+                  onChange={(e) => setSelectedTags(e.target.value as string[])}
+                  value={selectedTags}
+                  options={[
+                    { value: "sample1", label: "Sample 1" },
+                    { value: "sample2", label: "Sample 2" },
+                  ]}
+                />
+              </Stack>
+            </Grid>
           </Grid>
 
-          <Stack direction="column" gap={1}>
-            <Typography>Tags</Typography>
-            <Select
-              name="tags"
-              placeholder="Tags"
-              multiple={true}
-              fullWidth
-              onChange={(e) => setSelectedTags(e.target.value as string[])}
-              value={selectedTags}
-              options={[
-                { value: "sample1", label: "Sample 1" },
-                { value: "sample2", label: "Sample 2" },
-              ]}
-            />
-          </Stack>
           <Stack
             direction="row"
             display="flex"
