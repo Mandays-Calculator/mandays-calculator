@@ -59,13 +59,25 @@ export const SprintListColumns = ({
       Cell: ({ row }: CellProps<SprintListDataType>) => (
         <>
           <IconButton onClick={() => onViewSprintDetails(row.original.id)}>
-            <SvgIcon name="history" $size={2} color="primary" />
+            <SvgIcon
+              name="history"
+              $size={2}
+              color="primary"
+            />
           </IconButton>
           <IconButton onClick={() => onEditSprintDetails(row.original.id)}>
-            <SvgIcon name="edit" $size={2} color="primary" />
+            <SvgIcon
+              name="edit"
+              $size={2}
+              color="primary"
+            />
           </IconButton>
           <IconButton onClick={() => onDeleteSprintDetails(row.original.id)}>
-            <SvgIcon name="delete" $size={2} color="error" />
+            <SvgIcon
+              name="delete"
+              $size={2}
+              color="error"
+            />
           </IconButton>
         </>
       ),
@@ -73,9 +85,7 @@ export const SprintListColumns = ({
   ];
 };
 
-export const SummaryListColumns = ({
-  t,
-}: TasksColumnsProps): SummaryListColumnsType[] => {
+export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
       Header: t(summaryTableColumns.functionality),
@@ -92,9 +102,7 @@ export const SummaryListColumns = ({
   ];
 };
 
-export const TasksListColumns = ({
-  t,
-}: TasksColumnsProps): TasksListColumnsType[] => {
+export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType[] => {
   return [
     {
       Header: t(tasksTableColumns.tasks),
@@ -131,10 +139,7 @@ export const TasksListColumns = ({
   ];
 };
 
-export const LegendListColumns = ({
-  t,
-  isInput,
-}: LegendColumnProps): Column<LegendColumn>[] => {
+export const LegendListColumns = ({ t, isInput }: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
@@ -145,7 +150,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i03`} />
+            <ControlledTextField name={`legend.${index}.i03`} />
           </>
         ) : (
           <> {row.original.i03} </>
@@ -157,7 +162,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i04`} />
+            <ControlledTextField name={`legend.${index}.i04`} />
           </>
         ) : (
           <> {row.original.i04} </>
@@ -169,7 +174,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i05`} />
+            <ControlledTextField name={`legend.${index}.i05`} />
           </>
         ) : (
           <> {row.original.i05} </>
@@ -181,7 +186,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i06`} />
+            <ControlledTextField name={`legend.${index}.i06`} />
           </>
         ) : (
           <> {row.original.i06} </>
@@ -193,7 +198,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legendValues.${index}.i07`} />
+            <ControlledTextField name={`legend.${index}.i07`} />
           </>
         ) : (
           <> {row.original.i07} </>
@@ -218,7 +223,7 @@ export const ResourcesListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`resValues.${index}.resourceCount`} />
+            <ControlledTextField name={`resource.${index}.resourceCount`} />
           </>
         ) : (
           <> {row.original.resourceCount} </>
@@ -230,7 +235,7 @@ export const ResourcesListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`resValues.${index}.annualLeaves`} />
+            <ControlledTextField name={`resource.${index}.annualLeaves`} />
           </>
         ) : (
           <> {row.original.annualLeaves} </>

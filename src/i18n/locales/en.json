@@ -252,6 +252,9 @@
     "options": {
       "pdf": "PDF",
       "excel": "Excel"
+    },
+    "estimation": {
+      "title": "Estimation"
     }
   },
   "history": {
