@@ -12,6 +12,7 @@ import { Select, PageContainer } from "~/components";
 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateTask from "./CreateTask";
+import EditTask from "./EditTask";
 
 interface Task {
   taskTitle: string;
@@ -21,10 +22,14 @@ interface Task {
   complexity: string;
   status: string;
   type: string;
+  functionality: string;
 }
 
 const TasksContent = (): ReactElement => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
+  const [modalEditOpen, setEditModalOpen] = useState<boolean>(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+
   const status = [
     "Backlog",
     "Not Yet Started",
@@ -41,6 +46,7 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Backlog",
       type: "Bug",
+      functionality: "",
     },
     {
       taskTitle: "BE - Database Structure 1",
@@ -50,6 +56,7 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Backlog",
       type: "Bug",
+      functionality: "",
     },
     {
       taskTitle: "BE - Database Structure 2",
@@ -59,6 +66,7 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Backlog",
       type: "Bug",
+      functionality: "",
     },
     {
       taskTitle: "BE - Database Structure 3",
@@ -68,6 +76,7 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Not Yet Started",
       type: "Bug",
+      functionality: "",
     },
     {
       taskTitle: "Optimization",
@@ -77,6 +86,7 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "In Progress",
       type: "Bug",
+      functionality: "",
     },
     {
       taskTitle: "Integration",
@@ -86,6 +96,7 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "On Hold",
       type: "Bug",
+      functionality: "",
     },
     {
       taskTitle: "Project Management - UI",
@@ -95,15 +106,24 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Completed",
       type: "Bug",
+      functionality: "",
     },
   ]);
 
-  const handleModalState: () => void = () => {
-    setModalOpen(!modalOpen);
+  const handleAddModalState: () => void = () => {
+    setAddModalOpen(!modalAddOpen);
   };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
+  const handleCloseAddModalState = () => {
+    setAddModalOpen(false);
+  };
+  const handleEditModalState = (task: Task) => {
+    setSelectedTask(task);
+    setEditModalOpen(!modalEditOpen);
+  };
+
+  const handleCloseEditModalState = () => {
+    setEditModalOpen(false);
   };
 
   const handleCreateTask = (task: Task) => {
@@ -147,10 +167,15 @@ const TasksContent = (): ReactElement => {
     <DragDropContext onDragEnd={handleDragEnd}>
       <PageContainer>
         <CreateTask
-          open={modalOpen}
-          onClose={handleCloseModal}
+          open={modalAddOpen}
+          onClose={handleCloseAddModalState}
           onCreateTask={handleCreateTask}
-          reOpenCreateTask={handleModalState}
+          reOpenCreateTask={handleAddModalState}
+        />
+        <EditTask
+          open={modalEditOpen}
+          onClose={handleCloseEditModalState}
+          task={selectedTask}
         />
         <Select
           name="filter"
@@ -226,7 +251,7 @@ const TasksContent = (): ReactElement => {
                               cursor: "pointer",
                               display: i !== "Backlog" ? "none" : "",
                             }}
-                            onClick={handleModalState}
+                            onClick={handleAddModalState}
                           >
                             +
                           </div>
@@ -245,6 +270,7 @@ const TasksContent = (): ReactElement => {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
+                              onClick={() => handleEditModalState(task)}
                             >
                               <TaskDetailsCard data={task} />
                             </div>
