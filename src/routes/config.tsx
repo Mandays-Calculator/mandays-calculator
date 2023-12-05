@@ -7,7 +7,7 @@ import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import { Tasks } from "~/pages/tasks";
 import { Complexity } from "~/pages/complexity";
-import { Dashboard } from "~/pages/dashboard";
+import { History } from "~/pages/history";
 
 import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
 import { accountInfoRoutes } from "~/pages/account-info/routes";
@@ -21,7 +21,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "dashboard",
-    element: <Dashboard />,
+    element: <ErrorPage type="development-mode" />,
   },
   {
     path: "odc-management",
@@ -30,6 +30,10 @@ export const routes: RouteType[] = [
   {
     path: "user-management",
     element: <UserManagement />,
+  },
+  {
+    path: "team-management",
+    element: <ErrorPage type="development-mode" />,
   },
   {
     path: "tasks",
@@ -41,18 +45,16 @@ export const routes: RouteType[] = [
   },
   {
     path: "settings",
-    element: <Outlet />,
+    element: <ErrorPage type="development-mode" />,
   },
   {
     path: "account-info",
-    element: <Outlet />,
+    element: <ErrorPage type="development-mode" />,
   },
   {
-    path: "tasks",
-    element: <Tasks />,
-  },
-  {
-    element: <Outlet />,
+    path: "history",
+    element: <History />,
+    pageTitle: "History",
   },
   {
     path: "/permission-error",
