@@ -10,11 +10,11 @@ const ShareEstimationDetails = (): ReactElement => {
   return (
     <>
       {isAuthenticated ? (
-        <EstimationDetails isShared={true} />
+        <EstimationDetails isExposed={true} />
       ) : (
         <Grid container justifyContent={"center"} p={3}>
           <Grid item xs={10}>
-            <EstimationDetails isShared={true} />
+            <EstimationDetails isExposed={true} />
           </Grid>
         </Grid>
       )}

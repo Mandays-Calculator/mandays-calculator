@@ -35,7 +35,7 @@ import Estimation from "./estimation";
 import { initMandays } from "./utils";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
-  const { isShared } = props;
+  const { isExposed } = props;
   const { mandaysCalculator, common } = LocalizationKey;
 
   const navigate = useNavigate();
@@ -45,6 +45,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [isExport, setIsExport] = useState<boolean>(false);
+  const [isShare, setIsShare] = useState<boolean>(false);
 
   const mode = state?.mode || "view";
   const sprintName = "Sprint 1"; // Note: will come from API
@@ -176,7 +177,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           </Grid>
           <Grid item>
             <Select
-              disabled={isShared}
+              disabled={isExposed}
               name="team"
               value={"enrollment"}
               sx={{ background: "#fff" }}
@@ -192,25 +193,23 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
             <Grid item>
               <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>{sprintName}</Typography>
             </Grid>
-            <Grid
-              item
-              xs={2}
-            >
-              <Grid
-                item
-                xs={5}
-              >
-                <CustomButton onClick={() => setIsExport(true)}>
-                  {t(common.exportBtn)}
-                </CustomButton>
+            {!isExposed && (
+              <Grid item xs={2}>
+                <Grid container justifyContent={"right"}>
+                  <Grid item xs={5}>
+                    <CustomButton onClick={() => setIsExport(true)}>
+                      {t(common.exportBtn)}
+                    </CustomButton>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <CustomButton onClick={() => setIsShare(true)}>
+                      {t(common.shareBtn)}
+                    </CustomButton>
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid
-                item
-                xs={5}
-              >
-                <CustomButton>{t(common.shareBtn)}</CustomButton>
-              </Grid>
-            </Grid>
+            )}
+            {/* </Grid> */}
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
@@ -236,10 +235,10 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           t={t}
         />
       )}
-      {false && (
+      {isShare && (
         <ShareModal
-          isShare={true}
-          setIsShare={() => console.log("running")}
+          isShare={isShare}
+          setIsShare={setIsShare}
           t={t}
           handleSubmit={() => console.log("submit")}
         />

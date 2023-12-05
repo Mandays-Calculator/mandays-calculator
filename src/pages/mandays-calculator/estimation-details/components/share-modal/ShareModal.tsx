@@ -3,20 +3,23 @@ import type { TFunction } from "i18next";
 import type { ShareFormValues } from "../../types";
 
 import { useState } from "react";
-import * as yup from "yup";
 import { useFormik } from "formik";
+import * as yup from "yup";
 import { Grid, Typography, Button } from "@mui/material";
-
-import LocalizationKey from "~/i18n/key";
 
 import { Form, Modal, ErrorMessage } from "~/components";
 import {
   ControlledSelect,
-  ControlledDateTimePicker,
   ControlledTextField,
 } from "~/components/form/controlled";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
+import LocalizationKey from "~/i18n/key";
+
+import { 
+  timeTypeOptions,
+  expiryOptions,
+} from "./utils";
 
 type ShareModalProps = {
   isShare: boolean;
@@ -38,6 +41,7 @@ const ShareModal = ({
     initialValues: {
       shareBy: "",
       expiredIn: "",
+      timeType: "",
     },
     validationSchema: yup.object({
       shareBy: yup.string().required(t(common.errorMessage.required)),
@@ -45,7 +49,7 @@ const ShareModal = ({
         .string()
         .nullable()
         .when("shareBy", (shareBy, schema) => {
-          return shareBy.includes("lta")
+          return shareBy.includes("custom")
             ? schema.required("Please select the expiration date")
             : schema.nullable().notRequired();
         }),
@@ -53,6 +57,25 @@ const ShareModal = ({
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values: ShareFormValues) => {
+      const hrsNo = (): number | undefined => {
+        if (values?.shareBy !== 'noExpiration') {
+          if (!+values?.shareBy) {
+            switch (values?.timeType) {
+              case 'minutes':
+                return +values?.expiredIn / 60;
+              case 'hours': 
+                return +values?.expiredIn;
+              case 'days':
+                return +values?.expiredIn * 24;
+            }
+          } 
+          return +values?.shareBy
+        }
+      }
+
+      console.log('@@hrsNo', hrsNo())
+      console.log('@@values', values)
+      console.log('@@@handle submit', handleSubmit(values))
       handleSubmit(values);
       setIsLinkGeneratedSuccess(true);
     },
@@ -60,10 +83,17 @@ const ShareModal = ({
 
   const renderExpirationSelection = (): ReactElement => {
     return (
-      <Grid container sx={{ p: 1, mt: 3 }}>
-        <Grid item xs={12}>
-          <ControlledDateTimePicker
+      <Grid container sx={{ p: 1, mt: 3 }} spacing={2}>
+        <Grid item xs={6}>
+          <ControlledTextField
             name="expiredIn"
+            helperText={getFieldError(shareForm.errors, "expiredIn")}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <ControlledSelect
+            name="timeType"
+            options={timeTypeOptions}
             helperText={getFieldError(shareForm.errors, "expiredIn")}
           />
         </Grid>
@@ -82,7 +112,7 @@ const ShareModal = ({
         </Grid>
         <Grid container justifyContent="s" sx={{ mt: 1 }} rowGap={1}>
           <Grid item xs={3}>
-            <Button variant="outlined">Back</Button>
+            <Button variant="outlined" onClick={() => setIsShare(false)}>Back</Button>
           </Grid>
           <Grid item xs={9}>
             <Grid container justifyContent={"end"} rowGap={2} columnGap={2}>
@@ -118,7 +148,7 @@ const ShareModal = ({
     >
       <Form instance={shareForm}>
         <Typography variant="subtitle1" sx={{ mb: 1 }}>
-          Share estimation details link:
+          Access Expiry:
         </Typography>
         {
           // need to change into 12h, 24h, 48h, custom options
@@ -126,18 +156,9 @@ const ShareModal = ({
         <ControlledSelect
           name="shareBy"
           helperText={getFieldError(shareForm.errors, "shareBy")}
-          options={[
-            {
-              label: "Limited-Time Access",
-              value: "lta",
-            },
-            {
-              label: "Permanent Access",
-              value: "permanent",
-            },
-          ]}
+          options={expiryOptions}
         />
-        {shareForm.values.shareBy === "lta" &&
+        {shareForm.values.shareBy === "custom" &&
           !isLinkGeneratedSuccess &&
           renderExpirationSelection()}
         {isLinkGeneratedSuccess &&
