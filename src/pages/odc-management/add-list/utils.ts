@@ -13,7 +13,7 @@ export const AddEditFormat = (
     name: fieldValues.name,
     abbreviation: abbrValue,
     location: fieldValues.location,
-    holidays: null,
+    holidays: fieldValues.holidays,
     active: true,
   };
 

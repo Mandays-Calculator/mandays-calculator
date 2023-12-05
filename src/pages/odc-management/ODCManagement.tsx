@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import type { IntValues } from "./utils";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useFormik } from "formik";
 
@@ -20,6 +21,7 @@ const ODCManagement = (): ReactElement => {
   const [delIdx, setDelIdx] = useState<number | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
+  const { t } = useTranslation();
   const { data, isLoading } = useODCList();
   const InitialValue = { odcList: data || [] };
 
@@ -44,10 +46,15 @@ const ODCManagement = (): ReactElement => {
   } else {
     return (
       <>
-        <Title title="ODC Management" />
+        <Title title={t("odc.management.label")} />
         <Form instance={ODCForm}>
           {isAdd ? (
-            <AddODC setIsAdd={setIsAdd} isEdit={isEdit} idx={idx} />
+            <AddODC
+              setIsAdd={setIsAdd}
+              isEdit={isEdit}
+              idx={idx}
+              data={InitialValue.odcList}
+            />
           ) : (
             <ViewODC
               setIsAdd={setIsAdd}

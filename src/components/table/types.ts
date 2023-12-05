@@ -31,6 +31,7 @@ export interface TableProps<Type extends object> {
   onRowClick?: (data: Type) => void;
   expandedData?: boolean;
   type?: "collapse" | "default";
+  loading?: boolean;
 }
 
 export interface CustomHeaderGroup<Type extends object>

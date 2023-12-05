@@ -1,4 +1,5 @@
 import type { ReactElement, Dispatch, SetStateAction, ChangeEvent } from "react";
+import type { ODCListResponse } from "~/api/odc";
 import type { IntValues } from "../utils/interface";
 
 import { useState, useEffect } from "react";
@@ -12,7 +13,6 @@ import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
 
 import { ODCColumns } from "../utils/columns";
-import { ODCListResponse } from "~/api/odc";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
@@ -41,10 +41,20 @@ const ViewODC = (props: ViewProps): ReactElement => {
     setIsEdit(false);
   };
 
+  const handleLowerCase = (value: string): string => value.toLocaleLowerCase();
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setFilterData(
       values?.odcList?.filter(
-        (obj: ODCListResponse) => obj.active === true && obj.name.includes(event.target.value)
+        (obj: ODCListResponse) => {
+          const value = handleLowerCase(event.target.value);
+          return obj.active === true &&
+          (
+            handleLowerCase(obj.name).includes(value) ||
+            handleLowerCase(obj.abbreviation).includes(value) ||
+            handleLowerCase(obj.location).includes(value)
+          )
+        }
       )
     );
   };
@@ -56,13 +66,13 @@ const ViewODC = (props: ViewProps): ReactElement => {
           <Grid item xs={5}>
             <StyledTextField
               size="small"
-              placeholder="Enter keyword here..."
+              placeholder={t("odc.placeholder")}
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
             <CustomButton type="button" onClick={handleAdd}>
-              {t("odc.button.add")}
+              {t("odc.btnlabel.addOdc")}
             </CustomButton>
           </Grid>
         </Grid>
@@ -75,7 +85,8 @@ const ViewODC = (props: ViewProps): ReactElement => {
               setIsEdit,
               setIdx,
               setDelIdx,
-              setDeleteModalOpen
+              setDeleteModalOpen,
+              t
             )}
             data={filterData}
           />
