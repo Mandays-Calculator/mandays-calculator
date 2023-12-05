@@ -1,6 +1,7 @@
 import type { Column, CellProps } from "react-table"
 import { DataType, FormContext } from ".";
 import { CustomButton } from "~/components/form/button";
+import { useDeleteComplexities } from "~/queries/complexity/Complexities";
 
 export const complexityColumns = (
 	isDaysChecked: boolean,
@@ -22,15 +23,16 @@ export const complexityColumns = (
 		{ Header: 'Samples', accessor: 'sample', },
 		{
 			Header: 'Action', Cell: ({ row: { original: { id } } }: CellProps<DataType>) => {
-
+				const { mutate } = useDeleteComplexities();
 				const handleContext = (context: FormContext): void => {
+					if (context === 'Delete') mutate(id);
 					setContext(context)
 					handleComplexityId(id)
 				}
 				return (
 					<>
 						<CustomButton onClick={() => handleContext('Edit')}>Edit</CustomButton>
-						<CustomButton colorVariant="error" onClick={() => handleContext('')}>Delete</CustomButton>
+						{/* <CustomButton colorVariant="error" onClick={() => handleContext('Delete')}>Delete</CustomButton> */}
 					</>
 				)
 			}

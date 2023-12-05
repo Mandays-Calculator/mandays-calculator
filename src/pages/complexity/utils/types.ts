@@ -1,6 +1,6 @@
 import { ForGetComplexities } from "~/api/complexity";
 
-export type FormContext = '' | 'Add' | 'Edit'
+export type FormContext = '' | 'Add' | 'Edit' | 'Delete'
 
 export type DataType = ForGetComplexities;
 

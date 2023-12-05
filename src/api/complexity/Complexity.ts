@@ -1,4 +1,5 @@
 import type {
+  DeleteComplexities,
   ForGetComplexities,
   ForPostComplexities,
   ForPutComplexities,
@@ -53,5 +54,18 @@ export const putComplexities = async ({
     `${apiBasePathComplexity}/complexities/${id}`,
     requestBody
   );
+
   return response.data;
 };
+
+export const deleteComplexities = async (
+  id: string
+): Promise<DeleteComplexities> => {
+  const { apiBasePathComplexity } = mockEnvConfig();
+  const response = await axios.delete(
+    `${apiBasePathComplexity}/complexities/${id}`
+  );
+
+  return response.data;
+};
+  

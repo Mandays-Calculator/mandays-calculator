@@ -27,6 +27,11 @@ export interface ForPutComplexities extends CommonComplexity {
   active: boolean;
 }
 
+export interface DeleteComplexities {
+  status: number;
+  data: string;
+}
+
 interface CommonComplexity {
   name: string;
   numberOfDays: string;

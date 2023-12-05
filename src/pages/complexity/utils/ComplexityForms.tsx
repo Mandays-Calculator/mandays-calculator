@@ -9,7 +9,7 @@ import { Card, Form } from '~/components';
 import { ControlledTextField } from '~/components/form/controlled';
 import { CircularProgress, Divider, Stack, Typography } from '@mui/material';
 import { CustomButton } from '~/components/form/button';
-import { complexityInitialValues, complexityFormSchema } from './util';
+import { complexityInitialValues, complexityFormSchema, handleSplitValues, mutationOptions } from './util';
 import { useGetComplexitiesbyId, usePostComplexities, usePutComplexities } from '~/queries/complexity/Complexities';
 
 type ComplexityFormsType = {
@@ -19,8 +19,11 @@ type ComplexityFormsType = {
 }
 
 const ComplexityForms = ({ formContext, setContext, complexityId }: ComplexityFormsType): ReactElement => {
+
 	const [initialValue, setInitialValue] = useState<ComplexityForm>(complexityInitialValues);
+
 	const { data: apiData, isLoading } = useGetComplexitiesbyId(complexityId, formContext === 'Edit');
+
 	const {
 		name: complexityName = '',
 		numberOfDays,
@@ -28,13 +31,11 @@ const ComplexityForms = ({ formContext, setContext, complexityId }: ComplexityFo
 		description = '',
 		sample: samples = ''
 	} = apiData?.data ?? {}
-	const [numberOfDayFrom, numberOfDayTo] = numberOfDays?.
-		split('-').map((value) => value === ' ' ? '' : Number(value)) ?? [];
-	const [numberOfFeaturesFrom, numberOfFeaturesTo] = numberOfFeatures?.
-		split('-').map((value) => value === ' ' ? '' : Number(value)) ?? [];
+	const [numberOfDayFrom, numberOfDayTo] = handleSplitValues(numberOfDays);
+	const [numberOfFeaturesFrom, numberOfFeaturesTo] = handleSplitValues(numberOfFeatures);
+
 	const { mutate: mutateAddComplexities } = usePostComplexities();
 	const { mutate: mutateEditComplexities } = usePutComplexities();
-
 
 	const ComplexityForm = useFormik<ComplexityForm>({
 		initialValues: initialValue,
@@ -59,31 +60,16 @@ const ComplexityForms = ({ formContext, setContext, complexityId }: ComplexityFo
 				isActive: true,
 			}
 
-
 			if (formContext === 'Add') mutateAddComplexities([addFormData],
-				{
-					onSuccess: (data) => {
-						alert(`success ${data.status}`)
-						setContext('');
-					},
-					onError: (err) => console.error(err),
-
-				}
+				mutationOptions(setContext)
 			)
-			
+
 			const { isActive, ...editFormData } = addFormData;
 			if (formContext === 'Edit')
-				mutateEditComplexities({ id: complexityId, active: true, ...editFormData }, {
-					onSuccess: (data) => {
-						alert(`success ${data.status}`)
-						setContext('');
-					},
-					onError: (err) => console.error(err),
-
-				})
+				mutateEditComplexities({ id: complexityId, active: isActive, ...editFormData }, mutationOptions(setContext))
 		},
 	});
-	
+
 	useEffect(() => {
 		if (formContext === 'Add') setInitialValue(complexityInitialValues)
 		if (formContext === 'Edit')
@@ -143,8 +129,13 @@ const ComplexityForms = ({ formContext, setContext, complexityId }: ComplexityFo
 						<Grid item xs={12}>
 							<ControlledTextField name='samples' label='Samples' />
 						</Grid>
+						<Grid item xs={12}>
+							<Stack direction='row' justifyContent='flex-end'>
+								<CustomButton type='submit'>Submit</CustomButton>
+							</Stack>
+						</Grid>
 					</Grid>
-					<CustomButton type='submit'>test</CustomButton>
+
 				</Form>
 			</Card>
 		</>

@@ -5,9 +5,11 @@ import type {
   PutComplexities,
   ForPutComplexities,
   ForGetComplexities,
+  DeleteComplexities,
 } from "~/api/complexity";
 
 import {
+  deleteComplexities,
   getComplexities,
   getComplexitiesbyId,
   postComplexities,
@@ -35,3 +37,6 @@ export const usePostComplexities = () =>
 
 export const usePutComplexities = () =>
   useMutation<PutComplexities, Error, ForPutComplexities>(putComplexities);
+
+export const useDeleteComplexities = () =>
+  useMutation<DeleteComplexities, Error, string>(deleteComplexities);
