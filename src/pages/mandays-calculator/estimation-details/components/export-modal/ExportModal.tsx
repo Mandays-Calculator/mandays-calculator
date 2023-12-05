@@ -1,12 +1,8 @@
+import type { FormikInstance } from "formik";
 import type { ReactElement } from "react";
-import type { TFunction } from "i18next";
-import type { ExportFormValues } from "../../types";
-
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { Button, Grid } from "@mui/material";
-
 import LocalizationKey from "~/i18n/key";
+
+import { Grid } from "@mui/material";
 
 import { Form, Modal, ErrorMessage } from "~/components";
 import { ControlledSelect } from "~/components/form/controlled";
@@ -16,31 +12,17 @@ import { getFieldError } from "~/components/form/utils";
 type ExportModalProps = {
   isExport: boolean;
   setIsExport: (value: boolean) => void;
-  t: TFunction<"translation", undefined>;
-  handleSubmit: (values: ExportFormValues) => void;
+  exportForm: FormikInstance<{ exportBy: string }>;
+  t: any;
 };
 
 const ExportModal = ({
   isExport,
   setIsExport,
+  exportForm,
   t,
-  handleSubmit,
 }: ExportModalProps): ReactElement => {
   const { mandaysCalculator, common } = LocalizationKey;
-
-  const exportForm = useFormik<ExportFormValues>({
-    initialValues: {
-      exportBy: "",
-    },
-    validationSchema: yup.object({
-      exportBy: yup.string().required(t(common.errorMessage.required)),
-    }),
-    validateOnChange: true,
-    onSubmit: (values: ExportFormValues) => {
-      handleSubmit(values);
-    },
-  });
-
   return (
     <Modal
       open={isExport}
@@ -71,16 +53,16 @@ const ExportModal = ({
         </Grid>
         <Grid container justifyContent="space-between" sx={{ mt: 1 }}>
           <Grid item xs={6} sx={{ p: 1 }}>
-            <Button
-              variant="outlined"
+            <CustomButton
               fullWidth
               onClick={() => {
                 setIsExport(false);
                 exportForm.resetForm();
               }}
+              colorVariant="error"
             >
               {t(common.backBtn)}
-            </Button>
+            </CustomButton>
           </Grid>
           <Grid item xs={6} sx={{ p: 1 }}>
             <CustomButton fullWidth type="submit">
