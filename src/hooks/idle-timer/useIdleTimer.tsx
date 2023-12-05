@@ -3,11 +3,12 @@ import { IdleTimerProvider } from "react-idle-timer";
 import { BroadcastChannel } from "broadcast-channel";
 import { useAuth } from "react-oidc-context";
 
-import { NotificationModal, Timer } from "~/components";
+import { Timer } from "~/components";
 import { logout } from "~/utils/oidc-utils";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import { getEnvConfig } from "~/utils/env-config";
+import NotificationModal from "~/components/modal/notification-modal/NotificationModal";
 
 interface WithIdleTimerProps {
   timeout?: number;

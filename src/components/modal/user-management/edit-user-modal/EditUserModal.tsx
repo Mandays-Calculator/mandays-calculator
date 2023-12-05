@@ -16,9 +16,9 @@ import {
   useEditUser,
   useUserList,
 } from "~/queries/user-management/UserManagement";
-import { NotificationModal } from "../../notification-modal";
 import { ImageUpload } from "~/components";
 import { UserListData } from "~/api/user-management/types";
+import NotificationModal from "../../notification-modal/NotificationModal";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,

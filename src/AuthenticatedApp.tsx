@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useAuth } from "react-oidc-context";
 
-import { PageLoader, Layout, NotificationModal } from "~/components";
+import { PageLoader, Layout } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
 import { getUser, logout } from "~/utils/oidc-utils";
@@ -32,6 +32,7 @@ import {
   selectUser,
 } from "~/redux/reducers/user";
 import { useLocation } from "react-router-dom";
+import NotificationModal from "./components/modal/notification-modal/NotificationModal";
 
 const AuthenticatedApp = (): ReactElement => {
   const config = getEnvConfig();

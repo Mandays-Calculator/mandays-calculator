@@ -94,13 +94,12 @@ export const Modal = (props: ModalProps): ReactElement => {
     <Dialog
       TransitionComponent={Transition}
       TransitionProps={{ onEnter, onExited }}
-      fullWidth
+      sx={{ maxWidth: "100%", ...sx }}
       disableScrollLock={true}
       keepMounted={false}
       maxWidth={maxWidth}
       open={open}
       onClose={handleBackDrop}
-      sx={sx}
     >
       <Stack direction="row" display="flex" minHeight={35}>
         <Box flexGrow={1}>
