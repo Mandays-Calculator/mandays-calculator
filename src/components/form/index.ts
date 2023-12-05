@@ -4,3 +4,4 @@ export * from "./text-field";
 export * from "./date-picker";
 export * from "./search-select";
 export * from "./Form";
+export * from "./number-input";
