@@ -58,7 +58,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           onClick={onClose}
           style={{ marginRight: 16 }}
         >
-          {confirmLabel || t("odc.modal.yesPleaseBtn")}
+          {closeLabel || t("odc.modal.noThanksBtn")}
         </CustomButton>
         <CustomButton
           variant="contained"
@@ -72,7 +72,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             }
           }}
         >
-          {closeLabel || t("odc.modal.noThanksBtn")}
+          {confirmLabel || t("odc.modal.yesPleaseBtn")}
         </CustomButton>
       </Box>
     </Modal>

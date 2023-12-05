@@ -28,7 +28,10 @@
     },
     "label": {
       "createdDate": "Created date",
-      "selected": "Selected"
+      "selected": "Selected",
+      "loading": "Loading ..",
+      "pageInProgressTitle": "Hello!",
+      "pageInProgressDescription": "This page is currently under construction. Check back soon!"
     },
     "idleTimeOut": {
       "label": "You will be automatically logged off in",
@@ -249,6 +252,17 @@
     "options": {
       "pdf": "PDF",
       "excel": "Excel"
+    },
+    "estimation": {
+      "title": "Estimation"
+    }
+  },
+  "history": {
+    "button": {
+      "details": "Details"
+    },
+    "filter": {
+      "placeholder": "Enter Keyword  to  filter  list.."
     }
   }
 }

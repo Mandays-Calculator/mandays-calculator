@@ -12,6 +12,6 @@ const StyledLayoutContent = styled("div")`
 `;
 
 const ContentContainer = styled("div")`
-  padding: ${({ theme }) => theme.spacing(4)};
+  padding: ${({ theme }) => theme.spacing(4, 4, 12)};
 `;
 export { StyledLayoutContainer, StyledLayoutContent, ContentContainer };

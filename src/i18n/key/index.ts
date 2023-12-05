@@ -45,17 +45,13 @@ const LocalizationKey = {
     },
     error: {
       minLength: "common.errorMessage.auth.changePassword.minLength",
-      uppercaseRequired:
-        "common.errorMessage.auth.changePassword.uppercaseRequired",
-      lowercaseRequired:
-        "common.errorMessage.auth.changePassword.lowercaseRequired",
+      uppercaseRequired: "common.errorMessage.auth.changePassword.uppercaseRequired",
+      lowercaseRequired: "common.errorMessage.auth.changePassword.lowercaseRequired",
       numberRequired: "common.errorMessage.auth.changePassword.numberRequired",
-      specialCharRequired:
-        "common.errorMessage.auth.changePassword.specialCharRequired",
+      specialCharRequired: "common.errorMessage.auth.changePassword.specialCharRequired",
       required: "common.errorMessage.auth.changePassword.required",
       match: "common.errorMessage.auth.changePassword.match",
-      confirmRequired:
-        "common.errorMessage.auth.changePassword.confirmRequired",
+      confirmRequired: "common.errorMessage.auth.changePassword.confirmRequired",
     },
   },
   forgotPassword: {
@@ -86,6 +82,8 @@ const LocalizationKey = {
     permissionDeniedDesc: "common.permissionDenied.description",
     permissionErrorTitle: "common.permissionError.title",
     permissionErrorDesc: "common.permissionError.description",
+    pageInProgressTitle: "common.label.pageInProgressTitle",
+    pageInProgressDesc: "common.label.pageInProgressDescription",
     goBackHomeBtnLabel: "common.button.goBackHome",
     collapse: "common.button.collapse",
     backBtn: "common.button.back",
@@ -97,6 +95,7 @@ const LocalizationKey = {
     cancelBtn: "common.button.cancel",
     createdDateLabel: "common.label.createdDate",
     selectedLabel: "common.label.selected",
+    loadingLabel: "common.label.loading",
     userManagement: {
       authSignInLoading: "common.userManagement.auth.signInLoading",
       authSignOutLoading: "common.userManagement.auth.signOutLoading",
@@ -117,8 +116,7 @@ const LocalizationKey = {
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
-    modalConfirmDeleteEstimation:
-      "mandaysCalculator.modalLabels.confirmDeleteEstimation",
+    modalConfirmDeleteEstimation: "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
@@ -135,8 +133,7 @@ const LocalizationKey = {
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
-      resourceCount:
-        "mandaysCalculator.resourceList.table.columns.resourceCount",
+      resourceCount: "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
     summaryForm: {
@@ -168,9 +165,16 @@ const LocalizationKey = {
       excel: "mandaysCalculator.options.excel",
       pdf: "mandaysCalculator.options.pdf",
     },
+    estimation: {
+      title: "mandaysCalculator.estimation.title",
+    },
   },
   accountInfo: {
     label: "account.info.label",
+  },
+  history: {
+    detailsBtn: "history.button.details",
+    filterPlacholder: "history.filter.placeholder",
   },
 };
 
