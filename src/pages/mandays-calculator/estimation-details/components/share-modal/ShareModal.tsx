@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import type { TFunction } from "i18next";
 import type { ShareFormValues } from "../../types";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Grid, Typography, Button } from "@mui/material";
@@ -16,9 +16,12 @@ import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
 import LocalizationKey from "~/i18n/key";
 
+import GeneratedLink from "./generated-link";
+
 import { 
   timeTypeOptions,
   expiryOptions,
+  hrsNo,
 } from "./utils";
 
 type ShareModalProps = {
@@ -37,6 +40,7 @@ const ShareModal = ({
   const { common } = LocalizationKey;
   const [isLinkGeneratedSuccess, setIsLinkGeneratedSuccess] =
     useState<boolean>(false);
+    
   const shareForm = useFormik<ShareFormValues>({
     initialValues: {
       shareBy: "",
@@ -57,29 +61,13 @@ const ShareModal = ({
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values: ShareFormValues) => {
-      const hrsNo = (): number | undefined => {
-        if (values?.shareBy !== 'noExpiration') {
-          if (!+values?.shareBy) {
-            switch (values?.timeType) {
-              case 'minutes':
-                return +values?.expiredIn / 60;
-              case 'hours': 
-                return +values?.expiredIn;
-              case 'days':
-                return +values?.expiredIn * 24;
-            }
-          } 
-          return +values?.shareBy
-        }
-      }
-
-      console.log('@@hrsNo', hrsNo())
-      console.log('@@values', values)
-      console.log('@@@handle submit', handleSubmit(values))
+      console.log('total hours', hrsNo(values))
       handleSubmit(values);
       setIsLinkGeneratedSuccess(true);
     },
   });
+
+  useEffect(() => setIsLinkGeneratedSuccess(false), [shareForm?.values?.shareBy])
 
   const renderExpirationSelection = (): ReactElement => {
     return (
@@ -96,34 +84,6 @@ const ShareModal = ({
             options={timeTypeOptions}
             helperText={getFieldError(shareForm.errors, "expiredIn")}
           />
-        </Grid>
-      </Grid>
-    );
-  };
-
-  const renderLink = (link: string): ReactElement => {
-    return (
-      <Grid container sx={{ mt: 4 }}>
-        <Grid item xs={12}>
-          <Typography variant="body1" fontWeight="bold">
-            Link:
-          </Typography>
-          <ControlledTextField name="link" disabled value={link} />
-        </Grid>
-        <Grid container justifyContent="s" sx={{ mt: 1 }} rowGap={1}>
-          <Grid item xs={3}>
-            <Button variant="outlined" onClick={() => setIsShare(false)}>Back</Button>
-          </Grid>
-          <Grid item xs={9}>
-            <Grid container justifyContent={"end"} rowGap={2} columnGap={2}>
-              <Grid item>
-                <Button variant="outlined">Go to link</Button>
-              </Grid>
-              <Grid item>
-                <CustomButton>Copy to clipboard</CustomButton>
-              </Grid>
-            </Grid>
-          </Grid>
         </Grid>
       </Grid>
     );
@@ -161,10 +121,12 @@ const ShareModal = ({
         {shareForm.values.shareBy === "custom" &&
           !isLinkGeneratedSuccess &&
           renderExpirationSelection()}
-        {isLinkGeneratedSuccess &&
-          renderLink(
-            `${window.location.origin}/mandays-estimation-details?isShared=true`
-          )}
+        {isLinkGeneratedSuccess && 
+          <GeneratedLink 
+            link={`${window.location.origin}/mandays-estimation-details?isShared=true`}
+            setIsShare={setIsShare} 
+          />
+        }
         <Grid container mt={1}>
           <ErrorMessage error={getFieldError(shareForm.errors, "ShareBy")} />
         </Grid>

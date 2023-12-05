@@ -209,7 +209,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                 </Grid>
               </Grid>
             )}
-            {/* </Grid> */}
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
