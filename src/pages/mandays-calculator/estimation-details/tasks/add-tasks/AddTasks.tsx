@@ -1,8 +1,8 @@
 import type { ReactElement } from "react";
-import type { TaskType } from ".";
+import type { MandaysForm, TaskType } from "../..";
+
 import { useState } from "react";
 
-import moment from "moment";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 
@@ -14,23 +14,20 @@ import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import { usePagination } from "~/hooks/pagination";
 
-import { tasksData } from "~/pages/mandays-calculator/utils/tableData";
-import {
-  StyledCardContainer,
-  StyledGridItem,
-  StyledNoDataContainer,
-  StyledDropContainer,
-} from ".";
+import { StyledCardContainer, StyledGridItem, StyledNoDataContainer, StyledDropContainer } from ".";
+import { dateFormat } from "~/utils/date";
+import { getIn, useFormikContext } from "formik";
 
 const AddTasks = (): ReactElement => {
   const [selectedTasks, setSelectedTasks] = useState<TaskType[]>([]);
-  const [tasks, setTask] = useState<TaskType[]>(tasksData);
   const [tasksField, setTaskField] = useState<string>("");
   const [selectedTasksField, setSelectedTasksField] = useState<string>("");
-
   /**
    * Pagination properties
    */
+
+  const { values, setValues } = useFormikContext<MandaysForm>();
+  const tasks: TaskType[] = getIn(values, "tasks");
   const {
     currentPage,
     totalPages,
@@ -44,20 +41,19 @@ const AddTasks = (): ReactElement => {
     const [, drop] = useDrop(() => ({
       accept: "TASK",
       drop: (item: TaskType) => {
-        const idx: any = item.id ? item.id : 0;
-        const droppedTask = tasksData[idx];
-        const updatedTask = tasksData.filter((task) => task.id !== item.id);
-        setSelectedTasks((prev: any) => [...prev, droppedTask]);
-        setTask(updatedTask);
+        const updatedTask = tasks.filter((task) => task.id !== item.id);
+        setSelectedTasks((prev: any) => [...prev, item]);
+        console.log(updatedTask);
+        setValues({ ...values, tasks: updatedTask });
       },
     }));
 
     return (
       <StyledDropContainer ref={drop}>
         {selectedTasks.length > 0 ? (
-          selectedTasks.map((task: any, index) => (
+          selectedTasks.map((task) => (
             <StyledCardContainer
-              key={index}
+              key={task.id}
               headerTitle={task.title}
               sx={{ background: "#EBF5FB" }}
               actionHeader={
@@ -66,19 +62,21 @@ const AddTasks = (): ReactElement => {
                   sx={{ color: "#7AC0EF", cursor: "pointer" }}
                 />
               }
-              subHeader={`Created date: ${moment(new Date().toString()).format(
-                "MM-DD-YYYY"
-              )}`}
+              subHeader={`Created date: ${dateFormat(task.createdDate)}`}
             >
-              <Typography>
-                {t(mandaysCalculator.taskDescriptionLabel)}:
-              </Typography>
+              <Typography>{t(mandaysCalculator.taskDescriptionLabel)}:</Typography>
               <Typography>{task.description}</Typography>
             </StyledCardContainer>
           ))
         ) : (
-          <StyledNoDataContainer item xs={12}>
-            <Typography variant="h2" color="primary">
+          <StyledNoDataContainer
+            item
+            xs={12}
+          >
+            <Typography
+              variant="h2"
+              color="primary"
+            >
               {t(mandaysCalculator.noSelectedTaskLabel)}
             </Typography>
           </StyledNoDataContainer>
@@ -87,26 +85,23 @@ const AddTasks = (): ReactElement => {
     );
   };
 
-  const renderDraggableTasks = (): ReactElement => {
+  const RenderDraggableTasks = (): ReactElement => {
     const { mandaysCalculator, common } = LocalizationKey;
     const { t } = useTranslation();
-    const DraggableTask = ({
-      task,
-      index,
-    }: {
-      task: TaskType;
-      index: number;
-    }): ReactElement => {
+    const DraggableTask = ({ task, index }: { task: TaskType; index: number }): ReactElement => {
       const [{ isDragging }, drag] = useDrag(() => ({
         type: "TASK",
-        item: { id: index, ...task },
+        item: task,
         collect: (monitor) => ({
           isDragging: !!monitor.isDragging(),
         }),
       }));
 
       return (
-        <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+        <div
+          ref={drag}
+          style={{ opacity: isDragging ? 0.5 : 1 }}
+        >
           <StyledCardContainer
             key={index}
             headerTitle={task.title}
@@ -116,13 +111,9 @@ const AddTasks = (): ReactElement => {
                 sx={{ color: "#7AC0EF", cursor: "pointer" }}
               />
             }
-            subHeader={`${t(common.createdDateLabel)}: ${moment(
-              new Date().toString()
-            ).format("MM-DD-YYYY")}`}
+            subHeader={`${t(common.createdDateLabel)}: ${dateFormat(task.createdDate)}`}
           >
-            <Typography>
-              {t(mandaysCalculator.taskDescriptionLabel)}:
-            </Typography>
+            <Typography>{t(mandaysCalculator.taskDescriptionLabel)}:</Typography>
             <Typography>{task.description}</Typography>
           </StyledCardContainer>
         </div>
@@ -130,14 +121,31 @@ const AddTasks = (): ReactElement => {
     };
 
     return (
-      <StyledGridItem item xs={6} key={"draggable-tasks"}>
-        <Grid container sx={{ mb: 5 }} justifyContent="space-between">
-          <Grid item xs={4}>
-            <Typography color={"primary"} variant="h5" fontWeight="bold">
+      <StyledGridItem
+        item
+        xs={6}
+      >
+        <Grid
+          container
+          sx={{ mb: 5 }}
+          justifyContent="space-between"
+        >
+          <Grid
+            item
+            xs={4}
+          >
+            <Typography
+              color={"primary"}
+              variant="h5"
+              fontWeight="bold"
+            >
               {t(mandaysCalculator.tasksListLabel)}
             </Typography>
           </Grid>
-          <Grid item xs={5}>
+          <Grid
+            item
+            xs={5}
+          >
             <TextField
               value={tasksField}
               name="tasks"
@@ -147,11 +155,21 @@ const AddTasks = (): ReactElement => {
         </Grid>
         {paginatedTasks().length > 0 ? (
           paginatedTasks().map((task, index) => (
-            <DraggableTask task={task} index={index} />
+            <DraggableTask
+              task={task}
+              index={index}
+              key={task.id}
+            />
           ))
         ) : (
-          <StyledNoDataContainer item xs={12}>
-            <Typography variant="h2" color="primary">
+          <StyledNoDataContainer
+            item
+            xs={12}
+          >
+            <Typography
+              variant="h2"
+              color="primary"
+            >
               {t(mandaysCalculator.noTaskLabel)}
             </Typography>
           </StyledNoDataContainer>
@@ -167,18 +185,35 @@ const AddTasks = (): ReactElement => {
     );
   };
 
-  const renderDropZoneTasks = (): ReactElement => {
+  const RenderDropZoneTasks = (): ReactElement => {
     const { t } = useTranslation();
     const { common } = LocalizationKey;
     return (
-      <StyledGridItem item xs={6} key={"dropzone-tasks"}>
-        <Grid container sx={{ mb: 5 }} justifyContent="space-between">
-          <Grid item xs={4}>
-            <Typography color={"primary"} variant="h5" fontWeight="bold">
+      <StyledGridItem
+        item
+        xs={6}
+      >
+        <Grid
+          container
+          sx={{ mb: 5 }}
+          justifyContent="space-between"
+        >
+          <Grid
+            item
+            xs={4}
+          >
+            <Typography
+              color={"primary"}
+              variant="h5"
+              fontWeight="bold"
+            >
               {t(common.selectedLabel)}
             </Typography>
           </Grid>
-          <Grid item xs={5}>
+          <Grid
+            item
+            xs={5}
+          >
             <TextField
               value={selectedTasksField}
               onChange={(e) => setSelectedTasksField(e.target.value)}
@@ -187,11 +222,20 @@ const AddTasks = (): ReactElement => {
           </Grid>
         </Grid>
         <Grid container>
-          <Grid item xs={12}>
+          <Grid
+            item
+            xs={12}
+          >
             <DropZone />
           </Grid>
-          <Grid item xs={12}>
-            <Pagination totalItems={selectedTasks.length} itemsPerPage={3} />
+          <Grid
+            item
+            xs={12}
+          >
+            <Pagination
+              totalItems={selectedTasks.length}
+              itemsPerPage={3}
+            />
           </Grid>
         </Grid>
       </StyledGridItem>
@@ -199,12 +243,21 @@ const AddTasks = (): ReactElement => {
   };
 
   return (
-    <Grid container sx={{ paddingBottom: 10 }}>
-      <Grid item xs={12}>
+    <Grid
+      container
+      sx={{ paddingBottom: 10 }}
+    >
+      <Grid
+        item
+        xs={12}
+      >
         <DndProvider backend={HTML5Backend}>
-          <Grid container justifyContent="space-evenly">
-            {renderDraggableTasks()}
-            {renderDropZoneTasks()}
+          <Grid
+            container
+            justifyContent="space-evenly"
+          >
+            <RenderDraggableTasks />
+            <RenderDropZoneTasks />
           </Grid>
         </DndProvider>
       </Grid>

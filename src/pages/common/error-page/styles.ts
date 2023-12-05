@@ -1,15 +1,18 @@
 import { styled } from "@mui/material";
 
-export const StyledContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  padding: theme.spacing(4),
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: theme.spacing(2),
-  flex: "1 0 0",
-  alignSelf: "stretch",
-}));
+export const StyledContainer = styled("div")<{ $type: string }>(
+  ({ theme, $type }) => ({
+    display: "flex",
+    padding: theme.spacing(4),
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: theme.spacing(2),
+    flex: "1 0 0",
+    alignSelf: "stretch",
+    height: $type === "configuration-error" ? "90vh" : "auto",
+  })
+);
 
 export const StyledChildContainer = styled("div")(() => ({
   display: "flex",

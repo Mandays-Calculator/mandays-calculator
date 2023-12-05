@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import type { EstimationDetailsMode } from "../";
 import { useTranslation } from "react-i18next";
 
 import { Table } from "~/components";

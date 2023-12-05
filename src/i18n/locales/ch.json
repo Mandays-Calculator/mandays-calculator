@@ -39,7 +39,9 @@
     "label": {
       "createNewPassword": "Create New Password",
       "enterNewPassword": "Enter New Password",
-      "confirmNewPassword": "Confirm New Password"
+      "confirmNewPassword": "Confirm New Password",
+      "success": "Your password has been reset. If you didn't request this, please contact our support team immediately.",
+      "title": "Password Reset Successful"
     },
     "btnlabel": {
       "changePassword": "Change Password",

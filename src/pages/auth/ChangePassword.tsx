@@ -1,100 +1,53 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
-import { Grid, ListItem, ListItemIcon } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
 
-import LocalizationKey from "~/i18n/key";
-import Form from "~/components/form/Form";
+import { Grid, Typography } from "@mui/material";
+
 import { CustomButton as Button } from "~/components/form/button";
+import Form from "~/components/form/Form";
+import { useResetPasswordMutation } from "~/mutations/auth";
+import LocalizationKey from "~/i18n/key";
+
+import { tryDecodeURIComponent } from "~/utils/helpers/decodeURI";
 
 import PasswordInput from "./components/password-input/PasswordInput";
 import { StyledTitle, StyledLabel } from "./components/auth-container";
+import ValidationResult from "./components/validation-result/ValidationResult";
+
 import { changePasswordSchema } from "./schema";
-
-interface ValidationResultProps {
-  values: any;
-}
-
-const ValidationResult = ({ values }: ValidationResultProps): ReactNode => {
-  const { t } = useTranslation();
-  const { changePassword } = LocalizationKey;
-  const validationItems = [
-    {
-      test: values.password.length >= 8,
-      testId: "length",
-      message: t(changePassword.validationInfo.charCount),
-    },
-    {
-      test: /[A-Z]/.test(values.password),
-      testId: "uppecase",
-      message: t(changePassword.validationInfo.uppercase),
-    },
-    {
-      test: /[a-z]/.test(values.password),
-      testId: "lowercase",
-      message: t(changePassword.validationInfo.lowercase),
-    },
-    {
-      test: /[0-9]/.test(values.password),
-      testId: "number",
-      message: t(changePassword.validationInfo.number),
-    },
-    {
-      test: /(?=.*\W)/.test(values.password),
-      testId: "symbol",
-      message: t(changePassword.validationInfo.symbol),
-    },
-    {
-      test:
-        values.password === values.confirmPassword && values.password !== "",
-      testId: "match",
-      message: t(changePassword.validationInfo.match),
-    },
-  ];
-
-  return (
-    <>
-      {validationItems.map(({ test, testId, message }) => (
-        <ListItem key={testId} disablePadding={true}>
-          <ListItemIcon>
-            {test ? (
-              <CheckCircleIcon
-                style={{ color: "green" }}
-                data-testid={`green-icon-password-${testId}`}
-              />
-            ) : (
-              <CancelIcon
-                style={{ color: "red" }}
-                data-testid={`red-icon-password-${testId}`}
-              />
-            )}
-          </ListItemIcon>
-          {message}
-        </ListItem>
-      ))}
-    </>
-  );
-};
+import { useRequestHandler } from "~/hooks/request-handler";
+import { useErrorHandler } from "~/hooks/error-handler";
+import { ErrorMessage } from "~/components";
 
 const ChangePassword = (): ReactElement => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const codeParam = searchParams.get("code");
-  const decodedCode = codeParam ? decodeURIComponent(codeParam) : "";
-  console.log(decodedCode, "decoded code");
+  const decodedCode = codeParam ? tryDecodeURIComponent(codeParam) : "";
+
+  const resetPassMutation = useResetPasswordMutation();
+  const [status, callApi] = useRequestHandler(resetPassMutation.mutate);
+
+  useEffect(() => {
+    if (!codeParam) {
+      navigate("./login");
+    }
+  }, [searchParams]);
+
   const { changePassword } = LocalizationKey;
   const changePasswordForm = useFormik({
     initialValues: {
       password: "",
       confirmPassword: "",
     },
-    validationSchema: changePasswordSchema,
+    validationSchema: changePasswordSchema(t),
     validateOnChange: true,
-    onSubmit: () => {},
+    onSubmit: ({ confirmPassword }) => {
+      callApi({ code: decodedCode, newPassword: confirmPassword });
+    },
   });
 
   const goBack = (): void => {
@@ -102,42 +55,71 @@ const ChangePassword = (): ReactElement => {
   };
 
   const { values } = changePasswordForm;
-
   return (
-    <Form instance={changePasswordForm}>
-      <StyledTitle>{t(changePassword.label.createNewPassword)}</StyledTitle>
-      <Grid container>
-        <Grid item xs={12} mb={2}>
-          <StyledLabel>{t(changePassword.label.enterNewPassword)}</StyledLabel>
-          <PasswordInput
-            name="password"
-            placeholder={t(changePassword.placeholder.password)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <StyledLabel>
-            {t(changePassword.label.confirmNewPassword)}
-          </StyledLabel>
-          <PasswordInput
-            name="confirmPassword"
-            placeholder={t(changePassword.placeholder.confirmPassword)}
-          />
-        </Grid>
-        <Grid item xs={12} mt={2}>
-          <ValidationResult values={values} />
-        </Grid>
-        <Grid item xs={6} mt={3} padding="10px">
-          <Button fullWidth colorVariant="primaryLight" onClick={goBack}>
-            {t(changePassword.btnlabel.cancel)}
+    <>
+      {status.success ? (
+        <Grid container>
+          <Grid item xs={12} sx={{ mb: 3 }}>
+            <Typography variant="h6" fontWeight="bold" textAlign={"justify"}>
+              {t(LocalizationKey.changePassword.label.title)}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sx={{ mb: 3 }}>
+            <Typography variant="body1" textAlign={"justify"}>
+              {t(LocalizationKey.changePassword.label.success)}
+            </Typography>
+          </Grid>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              navigate(window.origin);
+            }}
+          >
+            {t(LocalizationKey.login.btnlabel.signIn)}
           </Button>
         </Grid>
-        <Grid item xs={6} mt={3} padding="10px">
-          <Button type="submit" fullWidth>
-            {t(changePassword.btnlabel.changePassword)}
-          </Button>
-        </Grid>
-      </Grid>
-    </Form>
+      ) : (
+        <Form instance={changePasswordForm}>
+          <StyledTitle>{t(changePassword.label.createNewPassword)}</StyledTitle>
+          <Grid container mt={4}>
+            <Grid item xs={12} mb={2}>
+              <StyledLabel>
+                {t(changePassword.label.enterNewPassword)}
+              </StyledLabel>
+              <PasswordInput
+                name="password"
+                placeholder={t(changePassword.placeholder.password)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <StyledLabel>
+                {t(changePassword.label.confirmNewPassword)}
+              </StyledLabel>
+              <PasswordInput
+                name="confirmPassword"
+                placeholder={t(changePassword.placeholder.confirmPassword)}
+              />
+            </Grid>
+            <Grid item xs={12} mt={2}>
+              {!status.loading && (
+                <ErrorMessage error={useErrorHandler(status.error, t)} />
+              )}
+              <ValidationResult values={values} />
+            </Grid>
+            <Grid item xs={6} mt={3} p={2}>
+              <Button fullWidth colorVariant="primaryLight" onClick={goBack}>
+                {t(changePassword.btnlabel.cancel)}
+              </Button>
+            </Grid>
+            <Grid item xs={6} mt={3} p={2}>
+              <Button type="submit" fullWidth>
+                {t(changePassword.btnlabel.changePassword)}
+              </Button>
+            </Grid>
+          </Grid>
+        </Form>
+      )}
+    </>
   );
 };
 

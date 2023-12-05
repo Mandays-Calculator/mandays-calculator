@@ -13,7 +13,7 @@ import Form from "~/components/form/Form";
 
 import { StyledLabel } from "./components/auth-container";
 import { forgotPasswordSchema } from "./schema";
-import { useForgotPasswordMutation } from "~/queries/auth";
+import { useForgotPasswordMutation } from "~/mutations/auth";
 import { ErrorMessage } from "~/components";
 
 import { useRequestHandler } from "~/hooks/request-handler";
@@ -35,7 +35,7 @@ const ForgotPassword = (): ReactElement => {
     initialValues: {
       usernameOrEmail: "",
     },
-    validationSchema: forgotPasswordSchema,
+    validationSchema: forgotPasswordSchema(t),
     validateOnChange: false,
     onSubmit,
   });
@@ -46,8 +46,7 @@ const ForgotPassword = (): ReactElement => {
         <Grid container>
           <Grid item xs={12} sx={{ mb: 3 }}>
             <Typography variant="body1" textAlign={"justify"}>
-              A password reset link has been sent to your email address. If you
-              don't see it in your inbox, please check your spam folder as well.
+              {t(LocalizationKey.forgotPassword.label.success)}
             </Typography>
           </Grid>
           <Button
@@ -57,7 +56,7 @@ const ForgotPassword = (): ReactElement => {
               navigate(window.origin);
             }}
           >
-            Okay
+            {t(LocalizationKey.common.okayBtn)}
           </Button>
         </Grid>
       ) : (

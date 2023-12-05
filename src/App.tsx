@@ -7,25 +7,29 @@ import { useConfig } from "~/utils/env-config";
 import { PageLoader } from "./components";
 import AuthenticatedApp from "./AuthenticatedApp";
 
+import ErrorPage from "~/pages/common/error-page";
+
 const App = (): ReactElement => {
   const environment = import.meta.env.VITE_ENVIRONMENT;
-  const config = useConfig(environment);
+  const { config, loading } = useConfig(environment);
 
-  if (!_.isUndefined(config)) {
-    const OIDCConfig = {
-      ...config.oidcConfig,
-      client_secret: import.meta.env.VITE_SECRET_KEY,
-      redirect_uri: window.location.origin,
-    };
+  if (!_.isNull(config)) {
+    if (!_.isUndefined(config) && !loading) {
+      const OIDCConfig = {
+        ...config.oidcConfig,
+        client_secret: import.meta.env.VITE_SECRET_KEY,
+        redirect_uri: window.location.origin,
+      };
 
-    return (
-      <AuthProvider {...OIDCConfig}>
-        <AuthenticatedApp />
-      </AuthProvider>
-    );
+      return (
+        <AuthProvider {...OIDCConfig}>
+          <AuthenticatedApp />
+        </AuthProvider>
+      );
+    }
+    return <PageLoader />;
   }
-
-  return <PageLoader />;
+  return <ErrorPage type="configuration-error" />;
 };
 
 export default App;

@@ -7,7 +7,10 @@ import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
 import { Tasks } from "~/pages/tasks";
 import { Complexity } from "~/pages/complexity";
+import { History } from "~/pages/history";
+
 import { mandaysCalculatorRoutes } from "~/pages/mandays-calculator/routes";
+import { accountInfoRoutes } from "~/pages/account-info/routes";
 
 import ErrorPage from "~/pages/common/error-page";
 
@@ -18,7 +21,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "dashboard",
-    element: <Outlet />,
+    element: <ErrorPage type="development-mode" />,
   },
   {
     path: "odc-management",
@@ -27,6 +30,10 @@ export const routes: RouteType[] = [
   {
     path: "user-management",
     element: <UserManagement />,
+  },
+  {
+    path: "team-management",
+    element: <ErrorPage type="development-mode" />,
   },
   {
     path: "tasks",
@@ -38,19 +45,23 @@ export const routes: RouteType[] = [
   },
   {
     path: "settings",
-    element: <Outlet />,
+    element: <ErrorPage type="development-mode" />,
   },
   {
     path: "account-info",
-    element: <Outlet />,
+    element: <ErrorPage type="development-mode" />,
   },
   {
-    element: <Outlet />,
+    path: "history",
+    element: <History />,
+    pageTitle: "History",
   },
   {
     path: "/permission-error",
     element: <ErrorPage type="permission-error" />,
   },
+  ...mandaysCalculatorRoutes,
+  ...accountInfoRoutes,
   {
     path: "/*",
     element: <ErrorPage type="not-found" />,
@@ -59,5 +70,4 @@ export const routes: RouteType[] = [
     path: "/",
     element: <Outlet />,
   },
-  ...mandaysCalculatorRoutes,
 ];
