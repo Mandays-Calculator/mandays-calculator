@@ -16,6 +16,10 @@ interface Task {
   status: string;
   type: string;
   functionality: string;
+  comments: {
+    name: string;
+    comment: string;
+  }[];
 }
 
 interface ModalProps {
@@ -41,6 +45,12 @@ const CreateTask: React.FC<ModalProps> = ({
     status: "Backlog",
     type: "",
     functionality: "",
+    comments: [
+      {
+        name: "Zad Geron",
+        comment: "This is a test",
+      },
+    ],
   });
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
@@ -55,6 +65,12 @@ const CreateTask: React.FC<ModalProps> = ({
       status: "Backlog",
       type: "",
       functionality: "",
+      comments: [
+        {
+          name: "",
+          comment: "",
+        },
+      ],
     });
     setSelectedTags([]);
     onClose();

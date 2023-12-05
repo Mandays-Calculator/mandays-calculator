@@ -25,32 +25,46 @@ interface Task {
   status: string;
   type: string;
   functionality: string;
+  comments: {
+    name: string;
+    comment: string;
+  }[];
 }
 
 interface EditTaskProps {
   open: boolean;
   onClose: () => void;
   task: Task | null;
+  onSave: (updatedTask: Task) => void;
 }
 
-const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task }) => {
+const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
   const [newTask, setNewTask] = useState<Task | null>(task);
+  const [newComment, setNewComment] = useState<{
+    name: string;
+    comment: string;
+  }>({
+    name: "Zad Geron",
+    comment: "",
+  });
 
   useEffect(() => {
     setNewTask(task);
   }, [task]);
-  const handleCreateTask = (): void => {
-    setNewTask({
-      taskTitle: "",
-      desc: "",
-      date: "",
-      sprint: "",
-      complexity: "",
-      status: "Backlog",
-      type: "",
-      functionality: "",
-    });
-    onClose();
+
+  const handleSaveTask = (): void => {
+    if (newTask) {
+      onSave(newTask);
+      onClose();
+    }
+  };
+
+  const handleAddComment = (): void => {
+    if (newTask && newComment.comment.trim() !== "") {
+      const updatedComments = [...(newTask.comments || []), newComment];
+      setNewTask({ ...newTask, comments: updatedComments });
+      setNewComment({ name: "Zad Geron", comment: "" });
+    }
   };
 
   return (
@@ -164,34 +178,48 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task }) => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <IconButton aria-label="Send" edge="end">
+                          <IconButton
+                            aria-label="Send"
+                            edge="end"
+                            onClick={handleAddComment}
+                          >
                             <SendOutlinedIcon />
                           </IconButton>
                         </InputAdornment>
                       ),
                     }}
+                    value={newComment.comment}
+                    onChange={(e) =>
+                      setNewComment({ ...newComment, comment: e.target.value })
+                    }
                   />
                 </Grid>
               </Grid>
-              <div style={{ marginTop: 15 }}>
-                <Grid container spacing={1} alignItems="center">
-                  <Grid item>
-                    <Avatar alt="User Avatar" />
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Paper
-                      elevation={0}
-                      variant="outlined"
-                      sx={{ padding: "10px", backgroundColor: "#EAF3F4" }}
-                    >
-                      <Typography variant="subtitle1">John Doe</Typography>
-                      <Typography variant="body1">
-                        Acknowledge. Will start reviewing this task.
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                </Grid>
-              </div>
+              {newTask?.comments.map((comment) => {
+                return (
+                  <div style={{ marginTop: 15 }}>
+                    <Grid container spacing={1} alignItems="center">
+                      <Grid item>
+                        <Avatar alt="User Avatar" />
+                      </Grid>
+                      <Grid item xs={8}>
+                        <Paper
+                          elevation={0}
+                          variant="outlined"
+                          sx={{ padding: "10px", backgroundColor: "#EAF3F4" }}
+                        >
+                          <Typography variant="subtitle1">
+                            {comment ? comment.name : ""}
+                          </Typography>
+                          <Typography variant="body1">
+                            {comment ? comment.comment : ""}
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                    </Grid>
+                  </div>
+                );
+              })}
             </div>
             <Stack
               direction="row"
@@ -202,7 +230,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task }) => {
               <CustomButton
                 type="button"
                 colorVariant="neutral"
-                onClick={handleCreateTask}
+                onClick={handleSaveTask}
               >
                 Back
               </CustomButton>

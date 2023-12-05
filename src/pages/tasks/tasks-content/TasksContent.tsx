@@ -23,6 +23,10 @@ interface Task {
   status: string;
   type: string;
   functionality: string;
+  comments: {
+    name: string;
+    comment: string;
+  }[];
 }
 
 const TasksContent = (): ReactElement => {
@@ -47,6 +51,12 @@ const TasksContent = (): ReactElement => {
       status: "Backlog",
       type: "Bug",
       functionality: "",
+      comments: [
+        {
+          name: "Zad Geron",
+          comment: "This is a test",
+        },
+      ],
     },
     {
       taskTitle: "BE - Database Structure 1",
@@ -57,6 +67,12 @@ const TasksContent = (): ReactElement => {
       status: "Backlog",
       type: "Bug",
       functionality: "",
+      comments: [
+        {
+          name: "Zad Geron",
+          comment: "This is a test",
+        },
+      ],
     },
     {
       taskTitle: "BE - Database Structure 2",
@@ -67,6 +83,12 @@ const TasksContent = (): ReactElement => {
       status: "Backlog",
       type: "Bug",
       functionality: "",
+      comments: [
+        {
+          name: "Zad Geron",
+          comment: "This is a test",
+        },
+      ],
     },
     {
       taskTitle: "BE - Database Structure 3",
@@ -77,6 +99,12 @@ const TasksContent = (): ReactElement => {
       status: "Not Yet Started",
       type: "Bug",
       functionality: "",
+      comments: [
+        {
+          name: "Zad Geron",
+          comment: "This is a test",
+        },
+      ],
     },
     {
       taskTitle: "Optimization",
@@ -87,6 +115,12 @@ const TasksContent = (): ReactElement => {
       status: "In Progress",
       type: "Bug",
       functionality: "",
+      comments: [
+        {
+          name: "Zad Geron",
+          comment: "This is a test",
+        },
+      ],
     },
     {
       taskTitle: "Integration",
@@ -97,6 +131,12 @@ const TasksContent = (): ReactElement => {
       status: "On Hold",
       type: "Bug",
       functionality: "",
+      comments: [
+        {
+          name: "Zad Geron",
+          comment: "This is a test",
+        },
+      ],
     },
     {
       taskTitle: "Project Management - UI",
@@ -107,6 +147,12 @@ const TasksContent = (): ReactElement => {
       status: "Completed",
       type: "Bug",
       functionality: "",
+      comments: [
+        {
+          name: "Zad Geron",
+          comment: "This is a test",
+        },
+      ],
     },
   ]);
 
@@ -129,6 +175,15 @@ const TasksContent = (): ReactElement => {
   const handleCreateTask = (task: Task) => {
     const updatedMockData = [...mockData, task];
     setMockData(updatedMockData);
+  };
+  const handleSaveTask = (updatedTask: Task): void => {
+    const updatedMockData = mockData.map((task) => {
+      if (task.taskTitle === updatedTask.taskTitle) {
+        return updatedTask; // Update the task in the mockData array
+      }
+      return task;
+    });
+    setMockData(updatedMockData); // Update mockData with the updated task
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -176,6 +231,7 @@ const TasksContent = (): ReactElement => {
           open={modalEditOpen}
           onClose={handleCloseEditModalState}
           task={selectedTask}
+          onSave={handleSaveTask}
         />
         <Select
           name="filter"
