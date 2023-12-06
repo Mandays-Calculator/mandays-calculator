@@ -16,6 +16,8 @@ export type SvgIconsType =
   | "settings"
   | "user_management"
   | "arrow_up"
+  | "arrow_up_v2"
+  | "arrow_down_v2"
   | "add_v2"
   | "history"
   | "collapse_left"
