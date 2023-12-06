@@ -8,5 +8,6 @@
     "accountsService": "http://localhost:18000",
     "mandaysEstimateService": "http://localhost:18001"
   },
-  "enableAuth": true
+  "enableAuth": true,
+  "encryptData": false
 }

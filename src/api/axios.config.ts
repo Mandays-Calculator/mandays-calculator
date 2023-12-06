@@ -6,7 +6,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 
-import { getUser } from "~/utils/storageHelper";
+import { getUser } from "~/utils/helpers";
 import { CHANNELS } from "~/utils/constants";
 
 /**

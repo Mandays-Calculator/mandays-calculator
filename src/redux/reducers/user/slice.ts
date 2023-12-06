@@ -4,6 +4,9 @@ import type { UserPermissionState } from "./types";
 import type { GenericErrorResponse } from "~/api/types";
 
 import { createSlice } from "@reduxjs/toolkit";
+import { decryptObjectWithAES } from "~/utils/cryptoUtils";
+import { getEnvConfig } from "~/utils/env-config";
+
 import { login } from "./actions";
 
 /**
@@ -70,10 +73,16 @@ export const userSlice = createSlice({
       state: UserPermissionState,
       action: PayloadAction<LoginResponse>
     ) => {
+      const config = getEnvConfig();
       const { user, permissions } = action.payload;
+      const decryptedUserData = decryptObjectWithAES(user, config.encryptData);
+      const decryptedPermissionsData = decryptObjectWithAES(
+        permissions,
+        !config.encryptData
+      );
       state.loading = false;
-      state.user = user;
-      state.permissions = permissions;
+      state.user = decryptedUserData;
+      state.permissions = decryptedPermissionsData;
       state.tokenExpiry = action.payload.token.expiresInMs;
       state.isAuthenticated = true;
       return state;

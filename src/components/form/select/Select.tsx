@@ -62,12 +62,7 @@ export const Select = (props: SelectProps): ReactElement => {
               variant="filled"
               label={getOptionLabel(keyBy(options, getOptionValue)[value])}
               key={value}
-              deleteIcon={
-                <SvgIcon
-                  name="cross"
-                  $size={1}
-                />
-              }
+              deleteIcon={<SvgIcon name="cross" $size={1} />}
               onMouseDown={(e) => e.stopPropagation()}
             />
           ))}
@@ -78,7 +73,10 @@ export const Select = (props: SelectProps): ReactElement => {
     return getOptionLabel(keyBy(options, getOptionValue)[selected as string]);
   };
 
-  const renderOptions = (valueOption: string, labelOption: string): ReactNode => {
+  const renderOptions = (
+    valueOption: string,
+    labelOption: string
+  ): ReactNode => {
     const filteredProps = {
       key: valueOption,
       value: valueOption,
@@ -105,11 +103,7 @@ export const Select = (props: SelectProps): ReactElement => {
   };
 
   return (
-    <FormControl
-      component="fieldset"
-      error={error}
-      fullWidth
-    >
+    <FormControl component="fieldset" error={error} fullWidth>
       <MuiSelect
         id={name}
         labelId={name}

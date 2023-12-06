@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { PageLoader, Layout, NotificationModal } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
-import { useUserAuth, logout, checkUserAuthentication } from "~/hooks/user";
+import { useUserAuth, checkUserAuthentication } from "~/hooks/user";
 import { useIdleTimer } from "~/hooks/idle-timer";
 import { getEnvConfig } from "~/utils/env-config";
 
@@ -14,7 +14,7 @@ import axiosInit from "~/api/axios.config";
 import { useDispatch } from "react-redux";
 import { updateUserState } from "./redux/reducers/user";
 import { useUnauthorizedModal } from "./hooks/modal";
-import { removeStateStorage } from "./utils/storageHelper";
+import { removeStateStorage } from "./utils/helpers";
 
 const AuthenticatedApp = (): ReactElement => {
   const config = getEnvConfig();
@@ -24,7 +24,10 @@ const AuthenticatedApp = (): ReactElement => {
   //loader used for checking if user is authenticated
   const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
 
-  const { loading, isAuthenticated } = useUserAuth();
+  const {
+    state: { loading, isAuthenticated },
+    logout,
+  } = useUserAuth();
   const showUnauthorizedModal = useUnauthorizedModal();
 
   useEffect(() => {

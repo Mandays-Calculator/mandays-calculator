@@ -8,4 +8,5 @@ export type ConfigType = {
   apiBasePath: string | ApiBasePath;
   enableAuth: boolean;
   idleTimeoutConfig: IdleTimeoutConfig;
+  encryptData: boolean;
 };

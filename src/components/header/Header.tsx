@@ -28,7 +28,10 @@ import { StyledAppBar, StyledToolBarContainer } from ".";
 
 const AppBarHeader = (): ReactElement => {
   const navigate = useNavigate();
-  const { user } = useUserAuth();
+  const {
+    state: { user },
+    logout,
+  } = useUserAuth();
   const { t } = useTranslation();
 
   const name = `${user?.firstName} ${user?.lastName}`;
@@ -45,7 +48,7 @@ const AppBarHeader = (): ReactElement => {
   };
 
   const handleLogoutUserMenu = (): void => {
-    console.log("logout");
+    logout();
   };
 
   const userMenu = [

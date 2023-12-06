@@ -1,5 +1,5 @@
 import { LoginResponse } from "~/api/auth";
-import { SESSION_STORAGE_ITEMS } from "./constants";
+import { SESSION_STORAGE_ITEMS } from "../constants";
 
 type STORAGE = "local" | "session" | undefined;
 /**

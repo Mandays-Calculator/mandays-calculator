@@ -18,7 +18,7 @@ export const AddUser = async (
   params: AddUserParams
 ): Promise<AddUserResponse> => {
   const { apiBasePath } = getEnvConfig();
-  const res = await axios.post<AddUserResponse>(`${apiBasePath}/user`, {
+  const res = await axios.post<AddUserResponse>(`${apiBasePath}/users`, {
     ...params,
   });
   return res;

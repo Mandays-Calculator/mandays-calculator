@@ -23,7 +23,9 @@ import {
 
 const Drawer = (): ReactElement => {
   const [open, setOpen] = useState<boolean>(false);
-  const { permissions, loading } = useUserAuth();
+  const {
+    state: { permissions, loading },
+  } = useUserAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
 

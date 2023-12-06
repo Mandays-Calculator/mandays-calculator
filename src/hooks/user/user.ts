@@ -1,9 +1,10 @@
 import type { UserPermissionState } from "~/redux/reducers/user/types";
-import { useSelector } from "react-redux";
-import { selectUser } from "~/redux/reducers/user";
-import { getItemStorage } from "~/utils/storageHelper";
+import { useDispatch, useSelector } from "react-redux";
+import { resetUserState, selectUser } from "~/redux/reducers/user";
+import { getItemStorage, removeStateStorage } from "~/utils/helpers";
 import { SESSION_STORAGE_ITEMS } from "~/utils/constants";
 import { LoginResponse } from "~/api/auth";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Custom hook to access the user's authentication state.
@@ -11,19 +12,21 @@ import { LoginResponse } from "~/api/auth";
  *
  * @returns {UserPermissionState} The current state of the user's permissions.
  */
-export const useUserAuth = (): UserPermissionState => {
+export const useUserAuth = (): {
+  state: UserPermissionState;
+  logout: () => void;
+} => {
   const userState: UserPermissionState = useSelector(selectUser);
-  return userState;
-};
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-/**
- * Function to perform logout operation.
- * Currently, this function only logs to the console.
- * In a real application, this would handle the logout logic such as
- * dispatching a logout action, clearing relevant state, and redirecting the user.
- */
-export const logout = (): void => {
-  console.log("dispatching logout for user");
+  const handleLogout = (): void => {
+    dispatch(resetUserState());
+    removeStateStorage("session");
+    navigate("./login");
+  };
+
+  return { state: userState, logout: handleLogout };
 };
 
 export const checkUserAuthentication = (): {

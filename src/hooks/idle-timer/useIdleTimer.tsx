@@ -6,6 +6,7 @@ import { NotificationModal, Timer } from "~/components";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import { getEnvConfig } from "~/utils/env-config";
+import { useUserAuth } from "../user";
 
 interface WithIdleTimerProps {
   timeout?: number;
@@ -17,7 +18,7 @@ export const useIdleTimer = <P extends object>(
 ): ComponentType<P> => {
   return (props: P): ReactElement => {
     const [isIdle, setIsIdle] = useState<boolean>(false);
-
+    const { logout } = useUserAuth();
     const config = getEnvConfig();
     const { t } = useTranslation();
     const channel = new BroadcastChannel("idle_timer_channel");
@@ -48,10 +49,6 @@ export const useIdleTimer = <P extends object>(
       setIsIdle(false);
     };
 
-    const handleLogout = (): void => {
-      console.log("logout");
-    };
-
     return (
       <React.Fragment>
         <IdleTimerProvider
@@ -66,7 +63,7 @@ export const useIdleTimer = <P extends object>(
             <>
               {t(common.idleTimeOutLabel)}{" "}
               <Timer
-                onEndCountdown={handleLogout}
+                onEndCountdown={logout}
                 milliseconds={
                   config.idleTimeoutConfig.confirmationWindowSeconds
                 }
@@ -74,7 +71,7 @@ export const useIdleTimer = <P extends object>(
             </>
           }
           open={isIdle}
-          onClose={handleLogout}
+          onClose={logout}
           onCloseLabel={t(common.logout)}
           onConfirmLabel={t(common.idleTimeOutButtonLoggedIn)}
           onConfirm={handleOnActive}

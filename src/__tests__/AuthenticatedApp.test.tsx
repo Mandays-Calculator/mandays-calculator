@@ -11,7 +11,7 @@ import i18n from "i18next";
 
 import AuthenticatedApp from "~/AuthenticatedApp";
 import { getEnvConfig } from "~/utils/env-config";
-import { getUser } from "~/utils/storageHelper";
+import { getUser } from "~/utils/helpers/storageHelper";
 
 import { cleanAllCallback } from "./pages/auth/utils/auth-utils";
 import { LoginResponse } from "~/api/auth";

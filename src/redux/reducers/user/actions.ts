@@ -2,7 +2,9 @@ import type { AsyncActionCallbacks } from "~/redux/store";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { loginApi } from "~/api/auth";
-import { setItemStorage } from "~/utils/storageHelper";
+import { setItemStorage } from "~/utils/helpers";
+import { encryptObjectWithAES } from "~/utils/cryptoUtils";
+import { getEnvConfig } from "~/utils/env-config";
 
 interface LoginParams {
   username: string;
@@ -18,6 +20,8 @@ interface LoginParams {
 export const login = createAsyncThunk(
   "auth/login",
   async (args: LoginParams, thunkAPI) => {
+    const config = getEnvConfig();
+
     try {
       const response = await loginApi({
         username: args.username,
@@ -28,7 +32,18 @@ export const login = createAsyncThunk(
       if (args.callbacks?.onSuccess) args.callbacks.onSuccess();
 
       // Save user and token properties to session storage
-      setItemStorage("mc-user", response, "session");
+      setItemStorage(
+        "mc-user",
+        {
+          token: response.token,
+          permissions: encryptObjectWithAES(
+            response.permissions,
+            !config.encryptData
+          ),
+          user: encryptObjectWithAES(response.user, !config.encryptData),
+        },
+        "session"
+      );
       return response;
     } catch (error) {
       if (args.callbacks?.onFailure) args.callbacks.onFailure();
