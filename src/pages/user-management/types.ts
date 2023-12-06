@@ -1,5 +1,6 @@
 export type UserManagementForms = AddUserManagementParams &
-  UpdateUserManagementParams;
+  UpdateUserManagementParams &
+  UserManagementFilterParams;
 
 export interface UpdateUserManagementParams {
   updateFirstName?: string;
@@ -32,4 +33,9 @@ export interface AddUserManagementParams {
   projectId: string;
   teamId: string;
   roles: string[];
+}
+
+export interface UserManagementFilterParams {
+  filterProperty?: string;
+  filterValue?: string;
 }

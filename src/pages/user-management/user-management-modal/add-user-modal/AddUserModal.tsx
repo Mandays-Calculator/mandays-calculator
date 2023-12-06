@@ -17,7 +17,7 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { FormikInstance } from "formik";
+import { FormikContextType } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 
 import { genders, rolesData } from "../utils";
@@ -61,7 +61,7 @@ interface AddUserModalProps {
   onAddUser: () => void;
   open: boolean;
   onClose: () => void;
-  form: FormikInstance<UserManagementForms>;
+  form: FormikContextType<UserManagementForms>;
   OnSubmit: () => void;
   status: APIStatus;
 }
@@ -197,7 +197,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 {value == "recentlyJoined" ? (
                   <ControlledDatePicker
                     name="joiningDate"
-                    value={moment().format("yyyy/MM/D")}
+                    value={moment().format("YYYY-MM-DD")}
                     placeholderText="2023/12/31"
                     dateFormat="yyyy/MM/dd"
                     disabled
