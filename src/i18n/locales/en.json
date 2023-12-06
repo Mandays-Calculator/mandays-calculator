@@ -246,7 +246,7 @@
         }
       },
       "noTaskLabel": "No task.",
-      "noSelectedTaskLabel": "No selected task.",
+      "noSelectedTaskLabel": "No Data.",
       "descriptionLabel": "Description",
       "tasksListLabel": "Tasks list"
     },
@@ -261,7 +261,14 @@
       "excel": "Excel"
     },
     "estimation": {
-      "title": "Estimation"
+      "title": "Estimation",
+      "estimationColumns": {
+        "taskName": "Task Name",
+        "complexity": "Complexity",
+        "noOfResources": "No. of Resources",
+        "totalManHours": "Total Man Hours",
+        "totalManDays": "Total Man Days"
+      }
     }
   },
   "history": {

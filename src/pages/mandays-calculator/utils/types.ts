@@ -82,3 +82,24 @@ export type ResourcesColumnsProps = {
   t: TFunction<"translation", undefined>;
   isInput?: boolean;
 };
+
+export interface EstimationColumn {
+  taskName: string;
+  complexity: string;
+  resourcesNo: string;
+  totalManHours: number;
+  totalManDays: number;
+}
+
+export interface EstimationSubColumn {
+  iO3: number;
+  iO4: number;
+  iO5: number;
+  iO6: number;
+  iO7: number;
+}
+
+export type EstimationColumnProps = {
+  t: TFunction<"translation", undefined>;
+  isInput?: boolean;
+};
