@@ -264,5 +264,27 @@
     "filter": {
       "placeholder": "Enter Keyword  to  filter  list.."
     }
+  },
+  "userManagement": {
+    "label": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "middleName": "Middle Name",
+      "suffix": "Suffix",
+      "gender": "Gender",
+      "email": "Email Address",
+      "careerStep": "Career Step",
+      "employeeId": "Employee Id",
+      "odcId": "ODC",
+      "joiningDate": "User recently joined the organization",
+      "joiningDateEdit": "Joining Date",
+      "joiningAtLaterDate":"User recently joined the organization at a later date",
+      "projectId": "Project",
+      "teamId": "Team",
+      "roles": "Role/s"
+    },
+    "errorMessage": {
+      "email": "Invalid email format."
+    }
   }
 }

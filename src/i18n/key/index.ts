@@ -45,13 +45,17 @@ const LocalizationKey = {
     },
     error: {
       minLength: "common.errorMessage.auth.changePassword.minLength",
-      uppercaseRequired: "common.errorMessage.auth.changePassword.uppercaseRequired",
-      lowercaseRequired: "common.errorMessage.auth.changePassword.lowercaseRequired",
+      uppercaseRequired:
+        "common.errorMessage.auth.changePassword.uppercaseRequired",
+      lowercaseRequired:
+        "common.errorMessage.auth.changePassword.lowercaseRequired",
       numberRequired: "common.errorMessage.auth.changePassword.numberRequired",
-      specialCharRequired: "common.errorMessage.auth.changePassword.specialCharRequired",
+      specialCharRequired:
+        "common.errorMessage.auth.changePassword.specialCharRequired",
       required: "common.errorMessage.auth.changePassword.required",
       match: "common.errorMessage.auth.changePassword.match",
-      confirmRequired: "common.errorMessage.auth.changePassword.confirmRequired",
+      confirmRequired:
+        "common.errorMessage.auth.changePassword.confirmRequired",
     },
   },
   forgotPassword: {
@@ -116,7 +120,8 @@ const LocalizationKey = {
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
-    modalConfirmDeleteEstimation: "mandaysCalculator.modalLabels.confirmDeleteEstimation",
+    modalConfirmDeleteEstimation:
+      "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
@@ -133,7 +138,8 @@ const LocalizationKey = {
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
-      resourceCount: "mandaysCalculator.resourceList.table.columns.resourceCount",
+      resourceCount:
+        "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
     summaryForm: {
@@ -175,6 +181,29 @@ const LocalizationKey = {
   history: {
     detailsBtn: "history.button.details",
     filterPlacholder: "history.filter.placeholder",
+  },
+  userManagement: {
+    label: {
+      firstName: "userManagement.label.firstName",
+      lastName: "userManagement.label.lastName",
+      middleName: "userManagement.label.middleName",
+      suffix: "userManagement.label.suffix",
+      gender: "userManagement.label.gender",
+      email: "userManagement.label.email",
+      careerStep: "userManagement.label.careerStep",
+      employeeId: "userManagement.label.employeeId",
+      odcId: "userManagement.label.odcId",
+      joiningDate: "userManagement.label.joiningDate",
+      joiningDateEdit: "userManagement.label.joiningDateEdit",
+      joiningAtLaterDate: "userManagement.label.joiningAtLaterDate",
+      projectId: "userManagement.label.projectId",
+      teamId: "userManagement.label.teamId",
+      roles: "userManagement.label.roles",
+    },
+
+    errorMessage: {
+      email: "userManagement.errorMessage.email",
+    },
   },
 };
 

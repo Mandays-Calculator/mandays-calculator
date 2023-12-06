@@ -9,6 +9,7 @@ import { CustomButton } from "~/components/form/button";
 import { AddUserModal } from "~/pages/user-management/user-management-modal/add-user-modal";
 import { UserManagementForms } from "../types";
 import { FormikInstance } from "formik";
+import { APIStatus } from "~/hooks/request-handler";
 // import { BulkUserModal } from "~/components/modal/user-management/bulk-user-modal";
 
 const StyledButton = styled(CustomButton, {
@@ -19,9 +20,10 @@ const StyledButton = styled(CustomButton, {
 }));
 interface HeaderProps {
   form: FormikInstance<UserManagementForms>;
+  status: APIStatus;
 }
 const Header = (props: HeaderProps): ReactElement => {
-  const { form } = props;
+  const { form, status } = props;
   const [addModal, setAddModal] = useState(false);
   // const [bulkmodal, setBulkModal] = useState(false);
   return (
@@ -84,6 +86,7 @@ const Header = (props: HeaderProps): ReactElement => {
           }}
         /> */}
         <AddUserModal
+          status={status}
           form={form}
           OnSubmit={() => form.submitForm()}
           open={addModal}

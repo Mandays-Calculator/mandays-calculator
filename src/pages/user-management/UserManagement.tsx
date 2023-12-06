@@ -13,15 +13,16 @@ import { UserManagementFormValues, UserManagementSchema } from "./utils";
 import { UserManagementForms } from "./types";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useAddUser } from "~/mutations/user-management";
-import { Alert } from "~/components";
+import { useTranslation } from "react-i18next";
 
 const UserManagement = (): ReactElement => {
+  const { t } = useTranslation();
   const AddUser = useAddUser();
   const [status, callApi] = useRequestHandler(AddUser.mutate);
 
   const UserManagementForm = useFormik<UserManagementForms>({
     initialValues: UserManagementFormValues,
-    validationSchema: UserManagementSchema,
+    validationSchema: UserManagementSchema(t),
     validateOnChange: true,
 
     onSubmit: (values) => {
@@ -53,29 +54,20 @@ const UserManagement = (): ReactElement => {
         roles: values.roles,
       };
       callApi(AddUserForm);
-      // console.log("values", AddUserForm);
-      console.log(status);
     },
   });
+
   return (
     <>
       <Title title="User Management" />
       <PageContainer>
         <Form instance={UserManagementForm}>
           <Stack direction={"column"} spacing={2}>
-            <Header form={UserManagementForm} />
+            <Header status={status} form={UserManagementForm} />
             <UserList />
           </Stack>
         </Form>
       </PageContainer>
-
-      {status.loading && (
-        <Alert
-          open={!status.success}
-          message={"There is a problem with your request"}
-          type={"error"}
-        />
-      )}
     </>
   );
 };
