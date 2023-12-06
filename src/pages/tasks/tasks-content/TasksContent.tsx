@@ -14,7 +14,7 @@ import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateTask from "./CreateTask";
 import EditTask from "./EditTask";
 
-interface Task {
+export interface Task {
   taskTitle: string;
   desc: string;
   date: string;
@@ -282,7 +282,7 @@ const TasksContent = (): ReactElement => {
                           item
                           xs={8}
                           style={{
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: "bold",
                             color:
                               i === "Not Yet Started"
@@ -326,9 +326,9 @@ const TasksContent = (): ReactElement => {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              onClick={() => handleEditModalState(task)}
+                              
                             >
-                              <TaskDetailsCard data={task} />
+                              <TaskDetailsCard data={task} handleEdit={handleEditModalState}/>
                             </div>
                           )}
                         </Draggable>

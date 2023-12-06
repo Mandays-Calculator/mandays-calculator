@@ -22,14 +22,14 @@ interface Task {
   }[];
 }
 
-interface ModalProps {
+interface CreateModalProps {
   open: boolean;
   onClose: () => void;
   onCreateTask: (task: Task) => void;
   reOpenCreateTask: () => void;
 }
 
-const CreateTask: React.FC<ModalProps> = ({
+const CreateTask: React.FC<CreateModalProps> = ({
   open,
   onClose,
   onCreateTask,
@@ -39,8 +39,8 @@ const CreateTask: React.FC<ModalProps> = ({
   const [newTask, setNewTask] = useState<Task>({
     taskTitle: "",
     desc: "",
-    date: "",
-    sprint: "",
+    date: "12/16/2023",
+    sprint: "2",
     complexity: "",
     status: "Backlog",
     type: "",
