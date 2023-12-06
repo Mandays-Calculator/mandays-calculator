@@ -11,8 +11,12 @@ import { useDeleteUser } from "~/queries/user-management/UserManagement";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 import { UserListData } from "~/api/user-management/types";
 
-const UserList = (): ReactElement => {
-  const { data, isLoading, refetch } = useUserList();
+interface UserListProps {
+  userListData?: UserListData[];
+}
+
+const UserList = ({ userListData }: UserListProps): ReactElement => {
+  const { isLoading, refetch } = useUserList();
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
 
@@ -45,7 +49,7 @@ const UserList = (): ReactElement => {
             onDeleteUser: handleDeleteUser,
             onEditUser: handleEditUser,
           })}
-          data={data?.data}
+          data={userListData}
         />
 
         <EditUserModal

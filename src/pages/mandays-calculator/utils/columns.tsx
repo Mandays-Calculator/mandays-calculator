@@ -16,7 +16,10 @@ import type {
 import { CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
-import { ControlledTextField } from "~/components/form/controlled";
+import {
+  ControlledNumberInput,
+  ControlledTextField,
+} from "~/components/form/controlled";
 
 import LocalizationKey from "~/i18n/key";
 
@@ -59,25 +62,13 @@ export const SprintListColumns = ({
       Cell: ({ row }: CellProps<SprintListDataType>) => (
         <>
           <IconButton onClick={() => onViewSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="history"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="history" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onEditSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="edit"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="edit" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onDeleteSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="delete"
-              $size={2}
-              color="error"
-            />
+            <SvgIcon name="delete" $size={2} color="error" />
           </IconButton>
         </>
       ),
@@ -85,7 +76,9 @@ export const SprintListColumns = ({
   ];
 };
 
-export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumnsType[] => {
+export const SummaryListColumns = ({
+  t,
+}: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
       Header: t(summaryTableColumns.functionality),
@@ -102,7 +95,9 @@ export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumns
   ];
 };
 
-export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType[] => {
+export const TasksListColumns = ({
+  t,
+}: TasksColumnsProps): TasksListColumnsType[] => {
   return [
     {
       Header: t(tasksTableColumns.tasks),
@@ -139,7 +134,10 @@ export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType
   ];
 };
 
-export const LegendListColumns = ({ t, isInput }: LegendColumnProps): Column<LegendColumn>[] => {
+export const LegendListColumns = ({
+  t,
+  isInput,
+}: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
@@ -223,7 +221,7 @@ export const ResourcesListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`resource.${index}.resourceCount`} />
+            <ControlledNumberInput name={`resource.${index}.resourceCount`} />
           </>
         ) : (
           <> {row.original.resourceCount} </>
@@ -235,7 +233,7 @@ export const ResourcesListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`resource.${index}.annualLeaves`} />
+            <ControlledNumberInput name={`resource.${index}.annualLeaves`} />
           </>
         ) : (
           <> {row.original.annualLeaves} </>

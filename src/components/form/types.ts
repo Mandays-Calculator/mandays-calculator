@@ -15,7 +15,8 @@ export type WithInputControllerType =
   | "dropzone"
   | "pin-code"
   | "autocomplete"
-  | "checkbox-group";
+  | "checkbox-group"
+  | "number-input";
 
 export type BaseInputPropsWithAdornment<Type = object> = Type & {
   name: string;
