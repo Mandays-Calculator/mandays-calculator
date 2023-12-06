@@ -1,10 +1,8 @@
 import React, { useState, useEffect, ComponentType, ReactElement } from "react";
 import { IdleTimerProvider } from "react-idle-timer";
 import { BroadcastChannel } from "broadcast-channel";
-import { useAuth } from "react-oidc-context";
 
 import { NotificationModal, Timer } from "~/components";
-import { logout } from "~/utils/oidc-utils";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import { getEnvConfig } from "~/utils/env-config";
@@ -22,7 +20,6 @@ export const useIdleTimer = <P extends object>(
 
     const config = getEnvConfig();
     const { t } = useTranslation();
-    const auth = useAuth();
     const channel = new BroadcastChannel("idle_timer_channel");
 
     const { common } = LocalizationKey;
@@ -52,7 +49,7 @@ export const useIdleTimer = <P extends object>(
     };
 
     const handleLogout = (): void => {
-      logout(auth);
+      console.log("logout");
     };
 
     return (

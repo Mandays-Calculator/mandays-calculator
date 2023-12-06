@@ -1,44 +1,57 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { UserPermissionResponse } from "~/api/user";
+import type { LoginResponse } from "~/api/auth";
+import type { UserPermissionState } from "./types";
+import type { GenericErrorResponse } from "~/api/types";
 
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUserPermission } from "./actions";
+import { login } from "./actions";
 
-import { UserPermissionState } from "./types";
-
+/**
+ * User state for Authentication and User
+ */
 const initialState: UserPermissionState = {
-  user: null,
+  // Auth
+  isAuthenticated: false,
+  error: null,
+  tokenExpiry: null,
   loading: false,
+  // User
+  user: null,
   permissions: [],
-  initialized: false,
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchUserPermission.pending, (state) => {
+    builder.addCase(login.pending, (state) => {
       state.loading = true;
+      return state;
     });
     builder.addCase(
-      fetchUserPermission.fulfilled,
-      (state, action: PayloadAction<UserPermissionResponse>) => {
-        state.loading = false;
+      login.fulfilled,
+      (state, action: PayloadAction<LoginResponse>) => {
         const { user, permissions } = action.payload;
+        state.loading = false;
         state.user = user;
         state.permissions = permissions;
-        state.initialized = true;
+        state.tokenExpiry = action.payload.token.expiresInMs;
+        state.isAuthenticated = true;
+        return state;
       }
     );
-    builder.addCase(fetchUserPermission.rejected, (state) => {
+    builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
       state.user = null;
       state.permissions = [];
-      state.initialized = true;
+      state.tokenExpiry = null;
+      state.isAuthenticated = false;
+      state.error = action.payload as GenericErrorResponse;
+      return state;
     });
     // Adding success and failed callback
     builder.addMatcher(
-      (action) => action.type.startsWith("user/fetchUserPermission/"),
+      (action) => action.type.startsWith("auth/login/"),
       (_, action) => {
         const { onSuccess, onFailure } = action.meta.arg;
         if (action.type.endsWith("fulfilled")) {
@@ -53,8 +66,20 @@ export const userSlice = createSlice({
     resetUserState: () => {
       return initialState;
     },
+    updateUserState: (
+      state: UserPermissionState,
+      action: PayloadAction<LoginResponse>
+    ) => {
+      const { user, permissions } = action.payload;
+      state.loading = false;
+      state.user = user;
+      state.permissions = permissions;
+      state.tokenExpiry = action.payload.token.expiresInMs;
+      state.isAuthenticated = true;
+      return state;
+    },
   },
 });
 
-export const { resetUserState } = userSlice.actions;
+export const { resetUserState, updateUserState } = userSlice.actions;
 export default userSlice.reducer;

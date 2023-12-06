@@ -20,7 +20,7 @@ export function useErrorHandler(
     switch (error.errorCode) {
       // only need to add common cases
       case ERROR_CODES.genericError:
-        return t(common.errorMessage.genericError);
+        return error.message || t(common.errorMessage.genericError);
       case "":
       case null:
       case undefined:

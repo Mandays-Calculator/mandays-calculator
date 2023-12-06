@@ -1,10 +1,7 @@
 import type { ReactElement, MouseEvent } from "react";
-import type { UserPermissionState } from "~/redux/reducers/user";
 
 import { useState } from "react";
-import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -19,27 +16,23 @@ import {
   Avatar,
   Tooltip,
 } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-import AvatarImg from "~/assets/img/avatar.png";
-
-import { selectUser } from "~/redux/reducers/user";
-import { getUser } from "~/utils/oidc-utils";
-
+import { useUserAuth } from "~/hooks/user";
 import renderRole from "~/utils/helpers/renderRoleHelper";
 
-import { StyledAppBar, StyledToolBarContainer } from ".";
 import LocalizationKey from "~/i18n/key";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import AvatarImg from "~/assets/img/avatar.png";
+
+import { StyledAppBar, StyledToolBarContainer } from ".";
 
 const AppBarHeader = (): ReactElement => {
   const navigate = useNavigate();
-  const auth = useAuth();
-  const user = getUser();
+  const { user } = useUserAuth();
   const { t } = useTranslation();
 
-  const name = user?.profile.name;
-  const userState: UserPermissionState = useSelector(selectUser);
-  const positions = userState.user?.roles;
+  const name = `${user?.firstName} ${user?.lastName}`;
+  const positions = user?.roles;
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -52,7 +45,7 @@ const AppBarHeader = (): ReactElement => {
   };
 
   const handleLogoutUserMenu = (): void => {
-    auth.removeUser();
+    console.log("logout");
   };
 
   const userMenu = [

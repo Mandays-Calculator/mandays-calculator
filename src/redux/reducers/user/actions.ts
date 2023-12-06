@@ -1,17 +1,37 @@
 import type { AsyncActionCallbacks } from "~/redux/store";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getUserPermission } from "~/api/user";
+import { loginApi } from "~/api/auth";
+import { setItemStorage } from "~/utils/storageHelper";
 
-export const fetchUserPermission = createAsyncThunk(
-  "user/fetchUserPermission",
-  async (args: AsyncActionCallbacks, thunkAPI) => {
+interface LoginParams {
+  username: string;
+  password: string;
+  callbacks?: AsyncActionCallbacks;
+}
+
+/**
+ * Asynchronous action creator for user login.
+ * This thunk will perform a login operation using the provided username and password.
+ * On successful login, it will save the user data and token to session storage.
+ */
+export const login = createAsyncThunk(
+  "auth/login",
+  async (args: LoginParams, thunkAPI) => {
     try {
-      const response = await getUserPermission();
-      if (args.onSuccess) args.onSuccess();
+      const response = await loginApi({
+        username: args.username,
+        password: args.password,
+      });
+
+      // Invoke onSuccess callback if provided
+      if (args.callbacks?.onSuccess) args.callbacks.onSuccess();
+
+      // Save user and token properties to session storage
+      setItemStorage("mc-user", response, "session");
       return response;
     } catch (error) {
-      if (args.onFailure) args.onFailure();
+      if (args.callbacks?.onFailure) args.callbacks.onFailure();
       return thunkAPI.rejectWithValue(error);
     }
   }

@@ -3,8 +3,17 @@ export const ERROR_MESSAGES = {
     "Access denied. The token provided is unauthorized or has expired.",
 };
 
-export const LOCAL_STORAGE_ITEMS = {
-  sessionState: "sessionState",
+export const CHANNELS = {
+  items: {
+    sessionState: "sessionState",
+  },
+  events: {
+    unauthorized: "Unauthorized",
+  },
+};
+
+export const SESSION_STORAGE_ITEMS = {
+  mcUser: "mc-user",
 };
 
 export const ERROR_CODES = {
