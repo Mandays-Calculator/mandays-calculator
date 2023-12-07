@@ -16,10 +16,7 @@ import type {
 import { CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
-import {
-  ControlledNumberInput,
-  ControlledTextField,
-} from "~/components/form/controlled";
+import { ControlledNumberInput } from "~/components/form/controlled";
 
 import LocalizationKey from "~/i18n/key";
 
@@ -148,7 +145,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i03`} />
+            <ControlledNumberInput name={`legend.${index}.i03`} />
           </>
         ) : (
           <> {row.original.i03} </>
@@ -160,7 +157,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i04`} />
+            <ControlledNumberInput name={`legend.${index}.i04`} />
           </>
         ) : (
           <> {row.original.i04} </>
@@ -172,7 +169,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i05`} />
+            <ControlledNumberInput name={`legend.${index}.i05`} />
           </>
         ) : (
           <> {row.original.i05} </>
@@ -184,7 +181,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i06`} />
+            <ControlledNumberInput name={`legend.${index}.i06`} />
           </>
         ) : (
           <> {row.original.i06} </>
@@ -196,7 +193,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i07`} />
+            <ControlledNumberInput name={`legend.${index}.i07`} />
           </>
         ) : (
           <> {row.original.i07} </>

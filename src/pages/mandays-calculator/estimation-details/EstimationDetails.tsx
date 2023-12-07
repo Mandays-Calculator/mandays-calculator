@@ -91,7 +91,7 @@ const EstimationDetails = (): ReactElement => {
 
   const mandaysForm = useFormik<MandaysForm>({
     initialValues: { ...initMandays, tasks: tasksData },
-    onSubmit: (val) => console.log(val),
+    onSubmit: (val) => navigate("./../summary", {state: val}),
     enableReinitialize: true,
   });
 

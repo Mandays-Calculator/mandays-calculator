@@ -3,20 +3,20 @@ export type UserManagementForms = AddUserManagementParams &
   UserManagementFilterParams;
 
 export interface UpdateUserManagementParams {
-  UpdateFirstName?: string;
-  UpdateLastName?: string;
-  UpdateMiddleName?: string;
-  UpdateSuffix?: string;
-  UpdateGender?: string | number;
-  UpdateEmail?: string;
-  UpdateOdcId?: string;
-  UpdateImage?: string;
-  UpdateEmployeeId?: string;
-  UpdateJoiningDate?: string;
-  UpdateCareerStep?: string;
-  UpdateProjectId?: string;
-  UpdateTeamId?: string;
-  UpdateRoles?: string[];
+  updateFirstName?: string;
+  updateLastName?: string;
+  updateMiddleName?: string;
+  updateSuffix?: string;
+  updateGender?: string | number;
+  updateEmail?: string;
+  updateOdcId?: string;
+  updateImage?: string;
+  updateEmployeeId?: string;
+  updateJoiningDate?: string;
+  updateCareerStep?: string;
+  updateProjectId?: string;
+  updateTeamId?: string;
+  updateRoles?: string[];
 }
 export interface AddUserManagementParams {
   firstName: string;
