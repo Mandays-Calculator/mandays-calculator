@@ -47,7 +47,6 @@ const styles = {
       marginBottom: 5,
     },
   },
-  // Define other styles similarly for different elements
 };
 
 interface TaskDetailsCardProps {
