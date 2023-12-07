@@ -19,7 +19,7 @@ import {
 	usePutComplexities
 } from '~/queries/complexity/Complexities';
 import { Form } from '~/components';
-import { ControlledTextField } from '~/components/form/controlled';
+import { ControlledTextField, ControlledTextArea } from '~/components/form/controlled';
 import { getFieldError } from "~/components/form/utils";
 import { CustomButton } from '~/components/form/button';
 import LocalizationKey from "~/i18n/key";
@@ -181,19 +181,20 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 						)}
 					</Grid>
 				</Grid>
-				{/* Need to change into ControlledTextArea */}
 				<Grid item xs={12}>
-					<ControlledTextField
+					<ControlledTextArea
 						name="description"
 						label={t(label.description)}
+						minRows={5}
 						error={handleError(errors.description)}
 						helperText={getFieldError(errors, "description")}
 					/>
 				</Grid>
 				<Grid item xs={12}>
-					<ControlledTextField
+					<ControlledTextArea
 						name="samples"
 						label={t(label.samples)}
+						minRows={5}
 						error={handleError(errors.samples)}
 						helperText={getFieldError(errors, "samples")}
 					/>
