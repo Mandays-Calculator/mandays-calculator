@@ -3,6 +3,7 @@ import { IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
 import { UserListData } from "~/api/user-management/types";
 import { UserColumnsProps, UserListColumnsType } from "./types";
+import moment from "moment";
 
 export const userListColumns = ({
   t,
@@ -28,6 +29,9 @@ export const userListColumns = ({
     {
       accessor: "joiningDate",
       Header: "Joining Date",
+      Cell: ({ row }: CellProps<UserListData>) => {
+        return moment(row.original.joiningDate).format("MM-DD-YYYY");
+      },
     },
     {
       accessor: "roles",

@@ -18,7 +18,7 @@ export const AddUser = async (
   params: AddUserParams
 ): Promise<AddUserResponse> => {
   const { apiBasePath } = getEnvConfig();
-  const res = await axios.post<AddUserResponse>(`${apiBasePath}/user`, {
+  const res = await axios.post<AddUserResponse>(`${apiBasePath}/users`, {
     ...params,
   });
   return res;
@@ -29,7 +29,7 @@ export const EditUser = async (
   id: string
 ): Promise<AddUserResponse> => {
   const { apiBasePath } = getEnvConfig();
-  const res = await axios.put<AddUserResponse>(`${apiBasePath}/user/${id}`, {
+  const res = await axios.put<AddUserResponse>(`${apiBasePath}/users/${id}`, {
     ...params,
   });
   return res;
@@ -39,7 +39,7 @@ export const DeleteUser = async (
 ): Promise<DeleteUserResponse> => {
   const { apiBasePath } = getEnvConfig();
   const res = await axios.delete<DeleteUserResponse>(
-    `${apiBasePath}/user/${param.id}`
+    `${apiBasePath}/users/${param.id}`
   );
   return res.data;
 };
