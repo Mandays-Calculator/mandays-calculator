@@ -4,19 +4,65 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import WarningIcon from "@mui/icons-material/Warning";
 
-import { Modal } from "~/components";
+import { Modal, SvgIcon } from "~/components";
 import LocalizationKey from "~/i18n/key";
 import { CustomButton } from "~/components/form/button";
 
-import { NotificationModalProps } from "./types";
-import { TimerSection, renderIcon } from "./utils";
+import { ModalType, NotificationModalProps } from "./types";
+
+const StyledModalTitle = styled(Typography)({
+  color: "white",
+  fontWeight: "bold",
+  marginTop: ".5rem",
+});
+
+const StyledModalHeader = styled(Box)({
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "4.5rem",
+  position: "absolute",
+  background: "#1e90ff",
+});
+
+const StyledIconButton = styled(IconButton)({
+  position: "absolute",
+  top: 5,
+  right: 8,
+  color: "white",
+});
+
+const StyledTitlePosition = styled(Box)({
+  position: "absolute",
+  top: 8,
+  left: 8,
+});
+
+const renderIcon = (type: ModalType): ReactElement => {
+  switch (type) {
+    case "error":
+    case "warning":
+    case "unauthorized":
+      return <SvgIcon name="warning" $size={8} />;
+    case "idleTimeOut":
+      return (
+        <WarningIcon color="error" sx={{ marginTop: "1rem", fontSize: 45 }} />
+      );
+    case "success":
+    default:
+      return <WarningIcon color="success" />;
+  }
+};
 
 const NotificationModal: React.FC<NotificationModalProps> = ({
   type = "error",
   onConfirm,
   open,
+  message,
   onClose,
   onCloseLabel,
   onConfirmLabel,
@@ -24,44 +70,10 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 }): ReactElement => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState<boolean>(open);
-  const [idleTimer, setIdleTimer] = useState(5);
-  const [idleTimerSeconds, setIdleTimerSeconds] = useState(0);
 
   useEffect(() => {
     setIsOpen(open);
-    if (open) {
-      setIdleTimer(5);
-      setIdleTimerSeconds(0);
-    }
   }, [open]);
-
-  useEffect(() => {
-    let timerInterval: NodeJS.Timeout;
-
-    const startTimer = () => {
-      timerInterval = setInterval(() => {
-        if (idleTimer > 0 || idleTimerSeconds > 0) {
-          setIdleTimerSeconds((prevSeconds) =>
-            prevSeconds === 0 ? 59 : prevSeconds - 1
-          );
-
-          if (idleTimerSeconds === 0) {
-            setIdleTimer((prevIdleTimer) => prevIdleTimer - 1);
-          }
-        } else {
-          handleClose();
-        }
-      }, 1000);
-    };
-
-    if (isOpen) {
-      startTimer();
-    }
-
-    return () => {
-      clearInterval(timerInterval);
-    };
-  }, [isOpen, idleTimer, idleTimerSeconds]);
 
   const handleClose = () => {
     if (onClose) onClose();
@@ -69,8 +81,6 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   };
 
   const handleStayLoggedOn = () => {
-    setIdleTimer(5);
-    setIdleTimerSeconds(0);
     setIsOpen(false);
     if (onConfirm) onConfirm();
   };
@@ -87,72 +97,34 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
       title={title as string}
       onClose={handleClose}
     >
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "4.5rem",
-          background: "#1e90ff",
-        }}
-      />
-      <IconButton
-        color="inherit"
-        onClick={handleClose}
-        style={{
-          position: "absolute",
-          top: 5,
-          right: 8,
-          color: "white",
-        }}
-      >
+      <StyledModalHeader />
+
+      <StyledIconButton color="inherit" onClick={handleClose}>
         <CloseIcon fontSize="large" />
-      </IconButton>
-      <Box
-        style={{
-          position: "absolute",
-          top: 8,
-          left: 8,
-        }}
-      >
-        <Typography
-          variant="h5"
-          align="left"
-          style={{ color: "white", fontWeight: "bold", marginTop: ".5rem" }}
-        >
+      </StyledIconButton>
+
+      <StyledTitlePosition>
+        <StyledModalTitle variant="h5" align="left">
           Session Timeout
-        </Typography>
-      </Box>
+        </StyledModalTitle>
+      </StyledTitlePosition>
 
-      <Stack
-        marginTop="1.5rem"
-        width="100%"
-        direction="row"
-        justifyContent="center"
-        alignContent="center"
-      >
-        {renderIcon(type)}
-        <Typography variant="h5" style={{ margin: "1rem" }}>
-          Your online session will expire in
-        </Typography>
-      </Stack>
+      <Grid container spacing={1}>
+        <Grid item xs={1.5}>
+          {renderIcon(type)}
+        </Grid>
+        <Grid item xs={10.5} mt={4} style={{ fontSize: "1.5rem" }}>
+          {message || t(LocalizationKey.common.errorMessage.genericError)}
+        </Grid>
+      </Grid>
 
-      <TimerSection idleTimer={idleTimer} idleTimerSeconds={idleTimerSeconds} />
-
-      <Box marginY="1rem" ml="5.5rem">
+      <Box marginY="1rem" ml="4.7rem">
         {onCloseLabel && (
           <CustomButton
             variant="outlined"
             colorVariant="neutral"
             onClick={handleClose}
-            style={{
-              marginRight: "1.3rem",
-              fontWeight: "bold",
-              color: "#1e90ff",
-              padding: "1rem 2rem",
-              fontSize: "medium",
-            }}
+            style={{ color: "#1e90ff" }}
           >
             {onCloseLabel || t(LocalizationKey.common.cancelBtn)}
           </CustomButton>

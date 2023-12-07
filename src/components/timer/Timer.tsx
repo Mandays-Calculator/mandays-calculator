@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { formatTime } from "~/utils/date";
+
+const StyledIdleTimer = styled(Typography)({
+  margin: "1rem 2.5rem",
+  marginLeft: "2.5rem",
+  fontSize: "3rem",
+});
 
 interface TimerProps {
   milliseconds: number;
@@ -23,7 +30,9 @@ const Timer: React.FC<TimerProps> = ({ milliseconds, onEndCountdown }) => {
     return () => clearInterval(intervalId);
   }, [timeLeft, onEndCountdown]);
 
-  return <Typography variant="body1">{formatTime(timeLeft)}</Typography>;
+  return (
+    <StyledIdleTimer variant="body1">{formatTime(timeLeft)}</StyledIdleTimer>
+  );
 };
 
 export default Timer;
