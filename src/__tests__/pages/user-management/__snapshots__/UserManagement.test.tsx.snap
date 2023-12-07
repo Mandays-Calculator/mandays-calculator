@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`View User Management user management table and edit button test: user-management-table-edit 1`] = `
+exports[`View User Management user management table,edit and delete button test: user-management-table-edit-delete 1`] = `
 <div>
   <div
     class="MuiStack-root css-1ucnu3w-MuiStack-root"

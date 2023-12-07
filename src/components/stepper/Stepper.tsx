@@ -8,7 +8,9 @@ import Stack from "@mui/material/Stack";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
 
 import { SvgIcon } from "~/components";
 import { StyledLabel, iconColorActive, borderColor, StyledContent } from ".";
@@ -32,7 +34,8 @@ const StepperConnector = styled(StepConnector)(({ theme }) => ({
   [`& .${stepConnectorClasses.line}`]: {
     height: 6,
     border: 0,
-    backgroundColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : "#ADB2B2",
+    backgroundColor:
+      theme.palette.mode === "dark" ? theme.palette.grey[800] : "#ADB2B2",
     borderRadius: 4,
   },
 }));
@@ -73,10 +76,7 @@ const ColorlibStepIcon = (props: StepIconProps): ReactElement => {
     props.icon
   );
   return (
-    <StepperIcon
-      ownerState={{ completed, active }}
-      className={className}
-    >
+    <StepperIcon ownerState={{ completed, active }} className={className}>
       {iconContent}
     </StepperIcon>
   );
@@ -87,10 +87,7 @@ export default function Steppers(props: CustomStepperProps): ReactElement {
   const hasContent = steps.some((step) => step.content !== undefined);
   return (
     <>
-      <Stack
-        sx={{ width: "100%" }}
-        spacing={4}
-      >
+      <Stack sx={{ width: "100%", justifyContent: "flex-start" }} spacing={4}>
         <Stepper
           alternativeLabel
           activeStep={activeStep}
@@ -100,10 +97,7 @@ export default function Steppers(props: CustomStepperProps): ReactElement {
             <Step key={index}>
               <StepLabel
                 StepIconComponent={(stepIconProps) => (
-                  <ColorlibStepIcon
-                    {...stepIconProps}
-                    icon={step.icon}
-                  />
+                  <ColorlibStepIcon {...stepIconProps} icon={step.icon} />
                 )}
               >
                 <StyledLabel>{step.label}</StyledLabel>
@@ -113,11 +107,7 @@ export default function Steppers(props: CustomStepperProps): ReactElement {
         </Stepper>
       </Stack>
       {hasContent && (
-        <Stack
-          sx={{ width: "100%" }}
-          spacing={4}
-          mt={3}
-        >
+        <Stack sx={{ width: "100%" }} spacing={4} mt={3}>
           <StyledContent>{steps[activeStep]?.content}</StyledContent>
         </Stack>
       )}

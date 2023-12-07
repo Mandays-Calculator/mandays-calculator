@@ -10,7 +10,7 @@ import LocalizationKey from "~/i18n/key";
 import { CustomButton } from "~/components/form/button";
 import { Modal, SvgIcon } from "~/components";
 
-type ModalType =
+export type ModalType =
   | "error"
   | "warning"
   | "success"

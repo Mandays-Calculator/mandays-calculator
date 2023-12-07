@@ -55,6 +55,7 @@ const EstimationDetails = (): ReactElement => {
         title: task.name,
         description: task.description,
         createdDate: task.createdDate,
+        status: "unselected",
       };
     }) || [];
 
@@ -81,7 +82,7 @@ const EstimationDetails = (): ReactElement => {
 
   const mandaysForm = useFormik<MandaysForm>({
     initialValues: { ...initMandays, tasks: tasksData },
-    onSubmit: (val) => console.log(val),
+    onSubmit: (val) => navigate("./../summary", {state: val}),
     enableReinitialize: true,
   });
 
@@ -185,30 +186,32 @@ const EstimationDetails = (): ReactElement => {
             <Grid item>
               <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>{sprintName}</Typography>
             </Grid>
-            <Grid
-              item
-              xs={2}
-            >
+            {mode === "view" && (
               <Grid
-                container
-                justifyContent={"right"}
+                item
+                xs={2}
               >
                 <Grid
-                  item
-                  xs={5}
+                  container
+                  justifyContent={"right"}
                 >
-                  <CustomButton onClick={() => setIsExport(true)}>
-                    {t(common.exportBtn)}
-                  </CustomButton>
-                </Grid>
-                <Grid
-                  item
-                  xs={5}
-                >
-                  <CustomButton>{t(common.shareBtn)}</CustomButton>
+                  <Grid
+                    item
+                    xs={5}
+                  >
+                    <CustomButton onClick={() => setIsExport(true)}>
+                      {t(common.exportBtn)}
+                    </CustomButton>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={5}
+                  >
+                    <CustomButton>{t(common.shareBtn)}</CustomButton>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            )}
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>

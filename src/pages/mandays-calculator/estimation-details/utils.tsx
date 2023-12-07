@@ -36,5 +36,4 @@ export const initMandays: MandaysForm = {
     },
   ],
   tasks: [],
-  unselected: [],
 };

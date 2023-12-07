@@ -207,6 +207,7 @@
     },
     "summary": {
       "title": "Summary",
+      "subtitle": "Please check the details below before adding the estimation.",
       "table": {
         "columns": {
           "functionality": "Functionality",
@@ -246,7 +247,7 @@
         }
       },
       "noTaskLabel": "No task.",
-      "noSelectedTaskLabel": "No selected task.",
+      "noSelectedTaskLabel": "No Data.",
       "descriptionLabel": "Description",
       "tasksListLabel": "Tasks list"
     },
@@ -261,7 +262,14 @@
       "excel": "Excel"
     },
     "estimation": {
-      "title": "Estimation"
+      "title": "Estimation",
+      "estimationColumns": {
+        "taskName": "Task Name",
+        "complexity": "Complexity",
+        "noOfResources": "No. of Resources",
+        "totalManHours": "Total Man Hours",
+        "totalManDays": "Total Man Days"
+      }
     }
   },
   "history": {
@@ -270,6 +278,28 @@
     },
     "filter": {
       "placeholder": "Enter Keyword  to  filter  list.."
+    }
+  },
+  "userManagement": {
+    "label": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "middleName": "Middle Name",
+      "suffix": "Suffix",
+      "gender": "Gender",
+      "email": "Email Address",
+      "careerStep": "Career Step",
+      "employeeId": "Employee Id",
+      "odcId": "ODC",
+      "joiningDate": "User recently joined the organization",
+      "joiningDateEdit": "Joining Date",
+      "joiningAtLaterDate":"User recently joined the organization at a later date",
+      "projectId": "Project",
+      "teamId": "Team",
+      "roles": "Role/s"
+    },
+    "errorMessage": {
+      "email": "Invalid email format."
     }
   }
 }
