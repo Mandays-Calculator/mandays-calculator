@@ -73,7 +73,7 @@ const TaskDetailsCard = ({
   handleEdit,
 }: TaskDetailsCardProps): ReactElement => {
   return (
-    <PageContainer>
+    <PageContainer onClick={() => handleEdit(data)}>
       <div style={styles.taskTitle}>{data.taskTitle}</div>
       <div style={styles.marginBottom.mbFive}>{data.desc}</div>
       <div style={styles.infoSection}>
@@ -107,7 +107,6 @@ const TaskDetailsCard = ({
                   : "",
               cursor: "pointer",
             }}
-            onClick={() => handleEdit(data)}
           />
           <DeleteOutlinedIcon
             color="error"
