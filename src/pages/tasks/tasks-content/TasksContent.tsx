@@ -239,6 +239,7 @@ const TasksContent = (): ReactElement => {
 
     const draggedTask = mockData.find((task) => task.taskTitle === draggableId);
 
+    // Limit dragging and dropping between Backlog and On Hold
     if (
       (sourceStatus === "Backlog" && destinationStatus === "On Hold") ||
       (sourceStatus === "On Hold" && destinationStatus === "Backlog")
@@ -260,37 +261,36 @@ const TasksContent = (): ReactElement => {
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <PageContainer>
-        <CreateTask
-          open={modalAddOpen}
-          onClose={handleCloseAddModalState}
-          onCreateTask={handleCreateTask}
-          reOpenCreateTask={handleAddModalState}
-        />
-        <EditTask
-          open={modalEditOpen}
-          onClose={handleCloseEditModalState}
-          task={selectedTask}
-          onSave={handleSaveTask}
-        />
-        <Select
-          name="filter"
-          placeholder="Team Name"
-          style={{ width: 200 }}
-          options={[
-            {
-              value: "1",
-              label: "Team 1",
-            },
-            {
-              value: "2",
-              label: "Team 2",
-            },
-          ]}
-        />
-        <Divider style={{ margin: "2rem 0 3rem 0" }} />
-
+    <PageContainer>
+      <CreateTask
+        open={modalAddOpen}
+        onClose={handleCloseAddModalState}
+        onCreateTask={handleCreateTask}
+        reOpenCreateTask={handleAddModalState}
+      />
+      <EditTask
+        open={modalEditOpen}
+        onClose={handleCloseEditModalState}
+        task={selectedTask}
+        onSave={handleSaveTask}
+      />
+      <Select
+        name="filter"
+        placeholder="Team Name"
+        style={{ width: 200 }}
+        options={[
+          {
+            value: "1",
+            label: "Team 1",
+          },
+          {
+            value: "2",
+            label: "Team 2",
+          },
+        ]}
+      />
+      <Divider style={{ margin: "2rem 0 3rem 0" }} />
+      <DragDropContext onDragEnd={handleDragEnd}>
         <Grid container spacing={1} justifyContent="space-between">
           {status.map((i) => {
             const filteredData = mockData.filter((task) => task.status === i);
@@ -323,7 +323,7 @@ const TasksContent = (): ReactElement => {
                       {filteredData.map((task, index) => (
                         <Draggable
                           key={task.taskTitle}
-                          draggableId={`${task.taskTitle}-${index}`}
+                          draggableId={task.taskTitle}
                           index={index}
                         >
                           {(provided) => (
@@ -348,8 +348,8 @@ const TasksContent = (): ReactElement => {
             );
           })}
         </Grid>
-      </PageContainer>
-    </DragDropContext>
+      </DragDropContext>
+    </PageContainer>
   );
 };
 
