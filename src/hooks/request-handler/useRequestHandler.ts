@@ -24,7 +24,9 @@ export function useRequestHandler<TData, TError, TVariables, TContext>(
   });
 
   const callApi = (variables: TVariables) => {
-    setStatus({ ...status, loading: true });
+    setTimeout(() => {
+      setStatus({ ...status, loading: true });
+    }, 300);
     mutateFunction(variables, {
       onSuccess: (_: TData) => {
         setStatus({
