@@ -18,10 +18,14 @@ export const AddUser = async (
   params: AddUserParams
 ): Promise<AddUserResponse> => {
   const { apiBasePath } = getEnvConfig();
-  const res = await axios.post<AddUserResponse>(`${apiBasePath}/users`, {
-    ...params,
-  });
-  return res;
+  try {
+    const res = await axios.post<AddUserResponse>(`${apiBasePath}/users`, {
+      ...params,
+    });
+    return res;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const EditUser = async (
