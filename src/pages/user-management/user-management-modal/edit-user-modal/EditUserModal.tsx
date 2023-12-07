@@ -76,7 +76,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     middleName: values?.updateMiddleName ?? "",
     suffix: values?.updateSuffix ?? "",
     gender: gender() ?? 0,
-    // image: values.updateImage ?? "",
     email: values?.updateEmail ?? "",
     employeeId: values?.updateEmployeeId ?? "",
     odcId: values?.updateOdcId ?? "",
@@ -95,7 +94,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateSuffix: currentUser?.suffix ?? "",
       updateGender: currentUser?.gender ?? "",
       updateEmail: currentUser?.email ?? "",
-      // updateImage: currentUser?.image ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
       updateOdcId: "",
       updateCareerStep: currentUser?.careerStep ?? "",
@@ -104,8 +102,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateRoles: currentUser?.roles ?? [],
     });
   }, [currentUser]);
-
-  console.log("aaa", currentUser?.joiningDate);
 
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>

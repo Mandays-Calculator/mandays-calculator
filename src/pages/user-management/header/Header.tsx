@@ -8,7 +8,6 @@ import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { AddUserModal } from "~/pages/user-management/user-management-modal/add-user-modal";
 import { APIStatus } from "~/hooks/request-handler";
-// import { BulkUserModal } from "~/components/modal/user-management/bulk-user-modal";
 import { filterOptions } from "./utils";
 import { FormikContextType } from "formik";
 import { UserManagementForms } from "../types";

@@ -16,7 +16,6 @@ interface UserListProps {
 }
 
 const UserList = ({ userListData }: UserListProps): ReactElement => {
-  // const { isLoading, refetch } = useUserList();
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
   const userList = useUserList();

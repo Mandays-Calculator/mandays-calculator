@@ -44,7 +44,6 @@ const UserManagement = (): ReactElement => {
         middleName: values.middleName,
         suffix: values.suffix,
         gender: gender() ?? 0,
-        // image: values.image,
         email: values.email,
         employeeId: values.employeeId,
         odcId: values.odcId,

@@ -77,7 +77,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const [value, setValue] = useState("");
 
-  console.log("ff", status);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
@@ -89,7 +88,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     }
   };
 
-  // console.log(form);
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -289,21 +287,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               />
             </>
           )}
-          {/* <Alert
-            open={addUserStatus.show}
-            message={addUserStatus.message}
-            type={addUserStatus.status as AlertTypes}
-          /> */}
-          {/* <NotificationModal
-            onConfirm={() => {
-              setAddUserStatus({
-                status: "",
-                message: "",
-                show: false,
-              });
-              onClose();
-            }}
-          /> */}
         </Box>
       </Stack>
     </Dialog>
