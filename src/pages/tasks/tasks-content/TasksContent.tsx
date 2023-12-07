@@ -1,5 +1,6 @@
 import { ReactElement, useState } from "react";
 
+import { styled } from "@mui/material/styles";
 import { Divider, Grid } from "@mui/material";
 import {
   DragDropContext,
@@ -28,6 +29,46 @@ export interface Task {
     comment: string;
   }[];
 }
+
+const StyleDiv = styled("div")(
+  ({ backgroundColor }: { backgroundColor: string }) => ({
+    backgroundColor:
+      backgroundColor === "Backlog"
+        ? "#E3E6E7"
+        : backgroundColor === "Not Yet Started"
+        ? "#E4F7F9"
+        : backgroundColor === "In Progress"
+        ? "#FFF4D4"
+        : backgroundColor === "On Hold"
+        ? "#FFCECE"
+        : "#D5FFCD",
+    borderRadius: 10,
+    padding: 15,
+  })
+);
+
+const StyledTitle = styled(Grid)(({ color }: { color: string }) => ({
+  fontSize: 18,
+  fontWeight: "bold",
+  color:
+    color === "Not Yet Started"
+      ? "#2C8ED1"
+      : color === "In Progress"
+      ? "#796101"
+      : color === "On Hold"
+      ? "#D54147"
+      : color === "Completed"
+      ? "#177006"
+      : "black",
+}));
+
+const StyledAdd = styled(Grid)(({ display }: { display: string }) => ({
+  fontSize: 25,
+  fontWeight: "bolder",
+  float: "right",
+  cursor: "pointer",
+  display: display !== "Backlog" ? "none" : "",
+}));
 
 const TasksContent = (): ReactElement => {
   const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
@@ -248,7 +289,7 @@ const TasksContent = (): ReactElement => {
             },
           ]}
         />
-        <Divider sx={{ mb: 7 }} style={{ marginTop: 20 }} />
+        <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
         <Grid container spacing={1} justifyContent="space-between">
           {status.map((i) => {
@@ -258,67 +299,31 @@ const TasksContent = (): ReactElement => {
               <Grid item xs={2.4} key={i}>
                 <Droppable droppableId={i}>
                   {(provided) => (
-                    <div
+                    <StyleDiv
+                      backgroundColor={i}
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      style={{
-                        backgroundColor:
-                          i === "Backlog"
-                            ? "#E3E6E7"
-                            : i === "Not Yet Started"
-                            ? "#E4F7F9"
-                            : i === "In Progress"
-                            ? "#FFF4D4"
-                            : i === "On Hold"
-                            ? "#FFCECE"
-                            : "#D5FFCD",
-                        borderRadius: 10,
-                        padding: 15,
-                      }}
                       {...provided.droppableProps}
                     >
-                      <Grid container spacing={0}>
-                        <Grid
-                          item
-                          xs={8}
-                          style={{
-                            fontSize: 18,
-                            fontWeight: "bold",
-                            color:
-                              i === "Not Yet Started"
-                                ? "#2C8ED1"
-                                : i === "In Progress"
-                                ? "#796101"
-                                : i === "On Hold"
-                                ? "#D54147"
-                                : i === "Completed"
-                                ? "#177006"
-                                : "black",
-                          }}
-                        >
+                      <Grid container alignItems={"center"}>
+                        <StyledTitle item xs={11} color={i}>
                           {i}
-                        </Grid>
-                        <Grid item xs={4}>
-                          <div
-                            style={{
-                              fontSize: 25,
-                              fontWeight: "bolder",
-                              float: "right",
-                              cursor: "pointer",
-                              display: i !== "Backlog" ? "none" : "",
-                            }}
-                            onClick={handleAddModalState}
-                          >
-                            +
-                          </div>
-                        </Grid>
+                        </StyledTitle>
+                        <StyledAdd
+                          item
+                          xs={1}
+                          display={i}
+                          onClick={handleAddModalState}
+                        >
+                          +
+                        </StyledAdd>
                       </Grid>
 
                       <Divider />
                       {filteredData.map((task, index) => (
                         <Draggable
                           key={task.taskTitle}
-                          draggableId={task.taskTitle}
+                          draggableId={`${task.taskTitle}-${index}`}
                           index={index}
                         >
                           {(provided) => (
@@ -326,15 +331,17 @@ const TasksContent = (): ReactElement => {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              
                             >
-                              <TaskDetailsCard data={task} handleEdit={handleEditModalState}/>
+                              <TaskDetailsCard
+                                data={task}
+                                handleEdit={handleEditModalState}
+                              />
                             </div>
                           )}
                         </Draggable>
                       ))}
                       {provided.placeholder}
-                    </div>
+                    </StyleDiv>
                   )}
                 </Droppable>
               </Grid>

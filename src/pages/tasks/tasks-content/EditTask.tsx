@@ -15,6 +15,7 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
 import { TextField, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
+import theme from "~/theme";
 
 interface Task {
   taskTitle: string;
@@ -30,6 +31,29 @@ interface Task {
     comment: string;
   }[];
 }
+
+const styles = {
+  container: {
+    padding: "0px 10px 10px 10px",
+  },
+  styledTypographyBold: {
+    fontWeight: "bold",
+  },
+  tags: {
+    bug: {
+      borderRadius: "5px",
+      backgroundColor: theme.palette.error.main,
+      padding: "2px 8px",
+      color: "#FFFFFF",
+    },
+    needWork: {
+      borderRadius: "5px",
+      backgroundColor: theme.palette.warning.main,
+      padding: "2px 8px",
+      color: "#FFFFFF",
+    },
+  },
+};
 
 interface EditTaskProps {
   open: boolean;
@@ -75,168 +99,143 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
         maxWidth="sm"
         onClose={onClose}
       >
-        <div style={{ padding: "0px 10px 10px 10px" }}>
-          <Stack gap={2}>
-            <TextField
-              name="desc"
-              label="Description"
-              fullWidth
-              multiline
-              rows={4}
-              maxRows={4}
-              onChange={(e) =>
-                newTask && setNewTask({ ...newTask, desc: e.target.value })
-              }
-              value={newTask?.desc || ""}
-            />
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Stack gap={1}>
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    Functionality
-                  </Typography>
-                  <Typography>
-                    {newTask ? newTask.functionality : ""}
-                  </Typography>
-                </Stack>
-              </Grid>
-
-              <Grid item xs={6}>
-                <Stack gap={1}>
-                  <Stack direction="row" spacing={1} sx={{ cursor: "pointer" }}>
-                    <Typography sx={{ fontWeight: "bold" }}>
-                      Complexity
-                    </Typography>
-                  </Stack>
-                  <Typography>{newTask ? newTask.complexity : ""}</Typography>
-                </Stack>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Stack gap={1}>
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    Date Started
-                  </Typography>
-                  <Typography>{newTask ? newTask.date : ""}</Typography>
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack gap={1}>
-                  <Typography sx={{ fontWeight: "bold" }}>Sprint</Typography>
-                  <Typography>
-                    Sprint #{newTask ? newTask.sprint : ""}
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography sx={{ fontWeight: "bold" }}>Tags</Typography>
-                <Stack
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  flexWrap="wrap"
-                >
-                  <Stack direction="row" gap={0.5}>
-                    <Box
-                      sx={{
-                        borderRadius: "5px",
-                        bgcolor: "error.main",
-                        padding: "2px 8px",
-                        color: "#FFFFFF",
-                      }}
-                    >
-                      Bug
-                    </Box>
-                    <Box
-                      sx={{
-                        borderRadius: "5px",
-                        bgcolor: "warning.main",
-                        padding: "2px 8px",
-                      }}
-                    >
-                      <Box sx={{ color: "#FFFFFF" }}>Needs Work</Box>
-                    </Box>
-                  </Stack>
-                </Stack>
-              </Grid>
+        <Stack gap={2} style={styles.container}>
+          <TextField
+            name="desc"
+            label="Description"
+            fullWidth
+            multiline
+            rows={4}
+            maxRows={4}
+            onChange={(e) =>
+              newTask && setNewTask({ ...newTask, desc: e.target.value })
+            }
+            value={newTask?.desc || ""}
+          />
+          <Grid container spacing={2} marginBottom={4}>
+            <Grid item xs={6}>
+              <Stack gap={1}>
+                <Typography style={styles.styledTypographyBold}>
+                  Functionality
+                </Typography>
+                <Typography>{newTask ? newTask.functionality : ""}</Typography>
+              </Stack>
             </Grid>
-            <br />
-            <Typography sx={{ fontWeight: "bold" }}>Comments</Typography>
-            <Divider />
-            <div>
-              <Grid container spacing={1} alignItems="center">
+
+            <Grid item xs={6}>
+              <Stack gap={1}>
+                <Stack direction="row" style={{ cursor: "pointer" }}>
+                  <Typography style={styles.styledTypographyBold}>
+                    Complexity
+                  </Typography>
+                </Stack>
+                <Typography>{newTask ? newTask.complexity : ""}</Typography>
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Stack gap={1}>
+                <Typography style={styles.styledTypographyBold}>
+                  Date Started
+                </Typography>
+                <Typography>{newTask ? newTask.date : ""}</Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack gap={1}>
+                <Typography style={styles.styledTypographyBold}>
+                  Sprint
+                </Typography>
+                <Typography>Sprint #{newTask ? newTask.sprint : ""}</Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography style={styles.styledTypographyBold}>Tags</Typography>
+
+              <Stack direction="row" gap={0.5} flexWrap="wrap">
+                <Box style={styles.tags.bug}>Bug</Box>
+                <Box style={styles.tags.needWork}>Needs Work</Box>
+              </Stack>
+            </Grid>
+          </Grid>
+
+          <Typography style={styles.styledTypographyBold}>Comments</Typography>
+          <Divider />
+
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <Avatar alt="User Avatar" />
+            </Grid>
+            <Grid item style={{ flex: 1 }}>
+              <TextField
+                name="commentInput"
+                fullWidth
+                multiline
+                rows={4}
+                maxRows={4}
+                style={{ backgroundColor: "#EAF3F4" }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="Send"
+                        edge="end"
+                        onClick={handleAddComment}
+                      >
+                        <SendOutlinedIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                value={newComment.comment}
+                onChange={(e) =>
+                  setNewComment({ ...newComment, comment: e.target.value })
+                }
+              />
+            </Grid>
+          </Grid>
+          {newTask?.comments.map((comment) => {
+            return (
+              <Grid container spacing={1} alignItems="center" marginTop={0.5}>
                 <Grid item>
                   <Avatar alt="User Avatar" />
                 </Grid>
-                <Grid item sx={{ flex: 1 }}>
-                  <TextField
-                    name="commentInput"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    maxRows={4}
-                    sx={{ backgroundColor: "#EAF3F4" }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="Send"
-                            edge="end"
-                            onClick={handleAddComment}
-                          >
-                            <SendOutlinedIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
+                <Grid item xs={8}>
+                  <Paper
+                    elevation={0}
+                    variant="outlined"
+                    style={{
+                      padding: "10px",
+                      backgroundColor: "#EAF3F4",
                     }}
-                    value={newComment.comment}
-                    onChange={(e) =>
-                      setNewComment({ ...newComment, comment: e.target.value })
-                    }
-                  />
+                  >
+                    <Typography variant="subtitle1">
+                      {comment ? comment.name : ""}
+                    </Typography>
+                    <Typography variant="body1">
+                      {comment ? comment.comment : ""}
+                    </Typography>
+                  </Paper>
                 </Grid>
               </Grid>
-              {newTask?.comments.map((comment) => {
-                return (
-                  <div style={{ marginTop: 15 }}>
-                    <Grid container spacing={1} alignItems="center">
-                      <Grid item>
-                        <Avatar alt="User Avatar" />
-                      </Grid>
-                      <Grid item xs={8}>
-                        <Paper
-                          elevation={0}
-                          variant="outlined"
-                          sx={{ padding: "10px", backgroundColor: "#EAF3F4" }}
-                        >
-                          <Typography variant="subtitle1">
-                            {comment ? comment.name : ""}
-                          </Typography>
-                          <Typography variant="body1">
-                            {comment ? comment.comment : ""}
-                          </Typography>
-                        </Paper>
-                      </Grid>
-                    </Grid>
-                  </div>
-                );
-              })}
-            </div>
-            <Stack
-              direction="row"
-              display="flex"
-              justifyContent="flex-end"
-              gap={1}
+            );
+          })}
+          <Stack
+            direction="row"
+            display="flex"
+            justifyContent="flex-end"
+            gap={1}
+          >
+            <CustomButton
+              type="button"
+              colorVariant="neutral"
+              variant="contained"
+              onClick={handleSaveTask}
             >
-              <CustomButton
-                type="button"
-                colorVariant="neutral"
-                onClick={handleSaveTask}
-              >
-                Back
-              </CustomButton>
-            </Stack>
+              Back
+            </CustomButton>
           </Stack>
-        </div>
+        </Stack>
       </Modal>
     </>
   );
