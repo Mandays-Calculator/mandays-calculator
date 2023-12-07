@@ -207,6 +207,7 @@
     },
     "summary": {
       "title": "Summary",
+      "subtitle": "Please check the details below before adding the estimation.",
       "table": {
         "columns": {
           "functionality": "Functionality",

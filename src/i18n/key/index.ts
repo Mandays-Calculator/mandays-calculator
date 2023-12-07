@@ -130,6 +130,7 @@ const LocalizationKey = {
       totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
     summaryTitle: "mandaysCalculator.summary.title",
+    summarySubtitle: "mandaysCalculator.summary.subtitle",
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
