@@ -32,7 +32,7 @@ export const complexityColumns = (
 				return (
 					<>
 						<CustomButton onClick={() => handleContext('Edit')}>Edit</CustomButton>
-						{/* <CustomButton colorVariant="error" onClick={() => handleContext('Delete')}>Delete</CustomButton> */}
+						<CustomButton colorVariant="error" onClick={() => handleContext('Delete')}>Delete</CustomButton>
 					</>
 				)
 			}

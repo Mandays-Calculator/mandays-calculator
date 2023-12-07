@@ -70,6 +70,11 @@ const ComplexityForms = ({ formContext, setContext, complexityId }: ComplexityFo
 		},
 	});
 
+	const handleCancel = (): void => {
+		setContext('');
+		ComplexityForm.resetForm();
+	}
+
 	useEffect(() => {
 		if (formContext === 'Add') setInitialValue(complexityInitialValues)
 		if (formContext === 'Edit')
@@ -130,12 +135,12 @@ const ComplexityForms = ({ formContext, setContext, complexityId }: ComplexityFo
 							<ControlledTextField name='samples' label='Samples' />
 						</Grid>
 						<Grid item xs={12}>
-							<Stack direction='row' justifyContent='flex-end'>
+							<Stack gap={2} direction='row' justifyContent='flex-end'>
+								<CustomButton onClick={handleCancel} variant='outlined' colorVariant='neutral'>Cancel</CustomButton>
 								<CustomButton type='submit'>Submit</CustomButton>
 							</Stack>
 						</Grid>
 					</Grid>
-
 				</Form>
 			</Card>
 		</>

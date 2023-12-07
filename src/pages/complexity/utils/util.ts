@@ -30,8 +30,7 @@ export const mutationOptions = <T extends { status: number }, U>(
   setContext: (context: FormContext) => void
 ): MutationOptions<T, Error, U> => {
   return {
-    onSuccess: (data) => {
-      alert(`success ${data.status}`);
+    onSuccess: () => {
       setContext("");
     },
     onError: (err) => console.error(err),

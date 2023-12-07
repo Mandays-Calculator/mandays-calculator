@@ -29,7 +29,7 @@ const Complexity = (): ReactElement => {
 		setFormContext(context)
 
 	const renderComplexityForm = (): ReactNode =>
-		formContext === 'Delete' || formContext &&
+		formContext !== 'Delete' && formContext &&
 		<ComplexityForms
 			formContext={formContext}
 			setContext={handleFormContext}
