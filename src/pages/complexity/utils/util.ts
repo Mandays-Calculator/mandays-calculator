@@ -1,8 +1,6 @@
 import { MutationOptions } from "react-query";
 import { ComplexityForm, FormContext } from ".";
 
-import { Schema, object, string, number, ref } from "yup";
-
 export const complexityInitialValues: ComplexityForm = {
   complexityName: "",
   numberOfDayFrom: "",
@@ -12,16 +10,6 @@ export const complexityInitialValues: ComplexityForm = {
   description: "",
   samples: "",
 };
-
-export const complexityFormSchema: Schema<ComplexityForm> = object({
-  complexityName: string().required().max(20),
-  numberOfDayFrom: number().integer().positive(),
-  numberOfDayTo: number().integer().min(ref("numberOfDayFrom")),
-  numberOfFeaturesFrom: number().integer(),
-  numberOfFeaturesTo: number().integer().min(ref("numberOfFeaturesFrom")),
-  description: string().required().max(256),
-  samples: string().required().max(1024),
-});
 
 export const handleSplitValues = (value: string = "") =>
   value?.split("-").map((value) => (value === " " ? "" : Number(value)));
