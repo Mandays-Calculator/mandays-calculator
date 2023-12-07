@@ -323,7 +323,7 @@ const TasksContent = (): ReactElement => {
                       {filteredData.map((task, index) => (
                         <Draggable
                           key={task.taskTitle}
-                          draggableId={`${task.taskTitle}-${index}`}
+                          draggableId={task.taskTitle}
                           index={index}
                         >
                           {(provided) => (
