@@ -174,6 +174,13 @@ const LocalizationKey = {
     },
     estimation: {
       title: "mandaysCalculator.estimation.title",
+      estimationColumns: {
+        taskName: "mandaysCalculator.estimation.estimationColumns.taskName",
+        complexity: "mandaysCalculator.estimation.estimationColumns.complexity",
+        noOfResources: "mandaysCalculator.estimation.estimationColumns.noOfResources",
+        totalManHours: "mandaysCalculator.estimation.estimationColumns.totalManHours",
+        totalManDays: "mandaysCalculator.estimation.estimationColumns.totalManDays",
+      },
     },
   },
   accountInfo: {

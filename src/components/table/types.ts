@@ -1,10 +1,5 @@
 import { JSX } from "react/jsx-runtime";
-import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-} from "react";
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 import { Column, HeaderGroup } from "react-table";
 import { MUIStyledCommonProps } from "@mui/system";
 import { TableCellProps, Theme } from "@mui/material";
@@ -25,6 +20,7 @@ export type TableData<Type extends object> = Type | CollapseData<Type>;
 export interface TableProps<Type extends object> {
   name: string;
   title?: string;
+  noColor?: boolean;
   columns: Column<Type>[];
   data?: TableData<Type>[];
   noDataLabel?: string;
@@ -34,11 +30,8 @@ export interface TableProps<Type extends object> {
   loading?: boolean;
 }
 
-export interface CustomHeaderGroup<Type extends object>
-  extends HeaderGroup<Type> {
-  getSortByToggleProps: (
-    props?: any
-  ) => import("react-table").HeaderPropGetter<Type>;
+export interface CustomHeaderGroup<Type extends object> extends HeaderGroup<Type> {
+  getSortByToggleProps: (props?: any) => import("react-table").HeaderPropGetter<Type>;
   isSorted?: boolean;
   isSortedDesc?: boolean;
 }
@@ -58,9 +51,7 @@ export type RowProps = {
 };
 
 export type CellParamType = {
-  getCellProps: () => JSX.IntrinsicAttributes &
-    TableCellProps &
-    MUIStyledCommonProps<Theme>;
+  getCellProps: () => JSX.IntrinsicAttributes & TableCellProps & MUIStyledCommonProps<Theme>;
   render: (
     arg0: string
   ) =>
