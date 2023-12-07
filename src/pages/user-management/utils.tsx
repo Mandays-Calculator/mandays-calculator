@@ -1,5 +1,10 @@
+import type { TFunction } from "i18next";
 import { UserManagementForms } from "./types";
 import * as yup from "yup";
+import LocalizationKey from "~/i18n/key";
+
+const { common, userManagement } = LocalizationKey;
+
 export const UserManagementFormValues: UserManagementForms = {
   image: "",
   lastName: "",
@@ -17,21 +22,22 @@ export const UserManagementFormValues: UserManagementForms = {
   roles: [],
 };
 
-export const UserManagementSchema = yup.object({
-  lastName: yup
-    .string()
-    .min(2, "too short")
-    .max(50, "Too Long!")
-    .required("Required"),
-  firstName: yup.string().default(""),
-  middleName: yup.string().default(""),
-  odcId: yup.string().default(""),
-  suffix: yup.string().default(""),
-  gender: yup.string().default(""),
-  emailAddress: yup.string().default(""),
-  employeeId: yup.string().default(""),
-  careerStep: yup.string().default(""),
-  projectName: yup.string().default(""),
-  teamName: yup.string().default(""),
-  roles: yup.string().default(""),
-});
+export const UserManagementSchema = (t: TFunction) => {
+  return yup.object({
+    lastName: yup.string().required(t(common.errorMessage.required)),
+    firstName: yup.string().required(t(common.errorMessage.required)),
+    careerStep: yup.string().required(t(common.errorMessage.required)),
+    employeeId: yup.string().required(t(common.errorMessage.required)),
+    gender: yup.string().required(t(common.errorMessage.required)),
+    middleName: yup.string(),
+    odcId: yup.string(),
+    suffix: yup.string(),
+    email: yup
+      .string()
+      .email(t(userManagement.errorMessage.email))
+      .required(t(common.errorMessage.required)),
+    projectName: yup.string(),
+    teamName: yup.string(),
+    roles: yup.array(),
+  });
+};

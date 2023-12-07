@@ -6,7 +6,8 @@ import { styled } from "@mui/material";
 
 import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { AddUserModal } from "~/components/modal/user-management/add-user-modal";
+import { AddUserModal } from "~/pages/user-management/user-management-modal/add-user-modal";
+import { APIStatus } from "~/hooks/request-handler";
 import { filterOptions } from "./utils";
 import { FormikContextType } from "formik";
 import { UserManagementForms } from "../types";
@@ -17,12 +18,12 @@ const StyledButton = styled(CustomButton, {
   border: noBorder ? "none" : "1px solid #414145",
   height: "100%",
 }));
-
-const Header = ({
-  formik,
-}: {
+interface HeaderProps {
+  status: APIStatus;
   formik: FormikContextType<UserManagementForms>;
-}): ReactElement => {
+}
+const Header = (props: HeaderProps): ReactElement => {
+  const { status, formik } = props;
   const [addModal, setAddModal] = useState(false);
 
   return (
@@ -64,6 +65,9 @@ const Header = ({
           </StyledButton>
         </Grid>
         <AddUserModal
+          status={status}
+          form={formik}
+          OnSubmit={() => formik.submitForm()}
           open={addModal}
           onAddUser={() => setAddModal(false)}
           onClose={() => setAddModal(false)}
