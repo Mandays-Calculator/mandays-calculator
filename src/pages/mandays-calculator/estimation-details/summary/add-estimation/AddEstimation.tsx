@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 
 import {
   ControlledDatePicker,
+  ControlledNumberInput,
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
@@ -75,10 +76,9 @@ const AddEstimation = (): ReactElement => {
           <>
             <Grid container alignItems="top">
               <Grid item sx={{ mr: 1 }}>
-                <ControlledTextField
+                <ControlledNumberInput
                   placeholder="50"
                   name="summary.utilRate"
-                  sx={{ maxWidth: 50 }}
                 />
               </Grid>
               <Grid item>
