@@ -1,267 +1,159 @@
-import type { ReactElement } from "react";
-import type { MandaysForm, TaskType } from "../..";
+import type { ChangeEvent, ReactElement } from "react";
+import type { DropResult } from "react-beautiful-dnd";
+import type { MandaysForm, Status, TaskType } from "../..";
 
-import { useState } from "react";
-
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-
-import { Grid, Typography } from "@mui/material";
-import { SvgIcon, Pagination } from "~/components";
-import { TextField } from "~/components/form";
+import { Fragment, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
 
-import LocalizationKey from "~/i18n/key";
-import { usePagination } from "~/hooks/pagination";
-
-import { StyledCardContainer, StyledGridItem, StyledNoDataContainer, StyledDropContainer } from ".";
-import { dateFormat } from "~/utils/date";
 import { getIn, useFormikContext } from "formik";
 
+import { StyledCardContainer, StyledGridItem, StyledNoDataContainer } from ".";
+
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+
+import { SvgIcon, TextField } from "~/components";
+import { dateFormat } from "~/utils/date";
+import LocalizationKey from "~/i18n/key";
+
 const AddTasks = (): ReactElement => {
-  const [selectedTasks, setSelectedTasks] = useState<TaskType[]>([]);
-  const [tasksField, setTaskField] = useState<string>("");
-  const [selectedTasksField, setSelectedTasksField] = useState<string>("");
-  /**
-   * Pagination properties
-   */
-
+  const droppableList: Status[] = ["unselected", "selected"];
   const { values, setValues } = useFormikContext<MandaysForm>();
+  const [notSelected, setNotSelected] = useState<string>("");
+  const [selected, setSelected] = useState<string>("");
   const tasks: TaskType[] = getIn(values, "tasks");
-  const {
-    currentPage,
-    totalPages,
-    paginatedItems: paginatedTasks,
-    handlePageChange,
-  } = usePagination({ items: tasks, itemsPerPage: 2 });
+  const { mandaysCalculator, common } = LocalizationKey;
+  const { t } = useTranslation();
 
-  const DropZone = (): ReactElement => {
-    const { mandaysCalculator } = LocalizationKey;
-    const { t } = useTranslation();
-    const [, drop] = useDrop(() => ({
-      accept: "TASK",
-      drop: (item: TaskType) => {
-        const updatedTask = tasks.filter((task) => task.id !== item.id);
-        setSelectedTasks((prev: any) => [...prev, item]);
-        console.log(updatedTask);
-        setValues({ ...values, tasks: updatedTask });
-      },
-    }));
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, draggableId } = result;
+    if (!destination) return;
 
-    return (
-      <StyledDropContainer ref={drop}>
-        {selectedTasks.length > 0 ? (
-          selectedTasks.map((task) => (
-            <StyledCardContainer
-              key={task.id}
-              headerTitle={task.title}
-              sx={{ background: "#EBF5FB" }}
-              actionHeader={
-                <SvgIcon
-                  name="edit"
-                  sx={{ color: "#7AC0EF", cursor: "pointer" }}
-                />
-              }
-              subHeader={`Created date: ${dateFormat(task.createdDate)}`}
-            >
-              <Typography>{t(mandaysCalculator.taskDescriptionLabel)}:</Typography>
-              <Typography>{task.description}</Typography>
-            </StyledCardContainer>
-          ))
-        ) : (
-          <StyledNoDataContainer
-            item
-            xs={12}
-          >
-            <Typography
-              variant="h2"
-              color="primary"
-            >
-              {t(mandaysCalculator.noSelectedTaskLabel)}
-            </Typography>
-          </StyledNoDataContainer>
-        )}
-      </StyledDropContainer>
-    );
+    const destinationStatus = destination.droppableId as Status;
+    const draggedTask = tasks.find((task) => task.id === draggableId);
+    if (draggedTask) {
+      const updatedData: TaskType[] = tasks.map((task) => {
+        if (task.id === draggableId) {
+          return {
+            ...task,
+            status: destinationStatus,
+          };
+        }
+        return task;
+      });
+
+      setValues({ ...values, tasks: updatedData });
+    }
   };
 
-  const RenderDraggableTasks = (): ReactElement => {
-    const { mandaysCalculator, common } = LocalizationKey;
-    const { t } = useTranslation();
-    const DraggableTask = ({ task, index }: { task: TaskType; index: number }): ReactElement => {
-      const [{ isDragging }, drag] = useDrag(() => ({
-        type: "TASK",
-        item: task,
-        collect: (monitor) => ({
-          isDragging: !!monitor.isDragging(),
-        }),
-      }));
-
-      return (
-        <div
-          ref={drag}
-          style={{ opacity: isDragging ? 0.5 : 1 }}
-        >
-          <StyledCardContainer
-            key={index}
-            headerTitle={task.title}
-            actionHeader={
-              <SvgIcon
-                name="edit"
-                sx={{ color: "#7AC0EF", cursor: "pointer" }}
-              />
-            }
-            subHeader={`${t(common.createdDateLabel)}: ${dateFormat(task.createdDate)}`}
-          >
-            <Typography>{t(mandaysCalculator.taskDescriptionLabel)}:</Typography>
-            <Typography>{task.description}</Typography>
-          </StyledCardContainer>
-        </div>
-      );
-    };
-
-    return (
-      <StyledGridItem
-        item
-        xs={6}
-      >
-        <Grid
-          container
-          sx={{ mb: 5 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            xs={4}
-          >
-            <Typography
-              color={"primary"}
-              variant="h5"
-              fontWeight="bold"
-            >
-              {t(mandaysCalculator.tasksListLabel)}
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={5}
-          >
-            <TextField
-              value={tasksField}
-              name="tasks"
-              onChange={(e) => setTaskField(e.target.value)}
-            />
-          </Grid>
-        </Grid>
-        {paginatedTasks().length > 0 ? (
-          paginatedTasks().map((task, index) => (
-            <DraggableTask
-              task={task}
-              index={index}
-              key={task.id}
-            />
-          ))
-        ) : (
-          <StyledNoDataContainer
-            item
-            xs={12}
-          >
-            <Typography
-              variant="h2"
-              color="primary"
-            >
-              {t(mandaysCalculator.noTaskLabel)}
-            </Typography>
-          </StyledNoDataContainer>
-        )}
-        <Pagination
-          totalItems={totalPages}
-          itemsPerPage={5}
-          handleChange={handlePageChange}
-          page={currentPage}
-          count={totalPages}
-        />
-      </StyledGridItem>
-    );
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>, status: Status): void => {
+    if (status === "selected") {
+      setSelected(e.target.value);
+    } else {
+      setNotSelected(e.target.value);
+    }
   };
-
-  const RenderDropZoneTasks = (): ReactElement => {
-    const { t } = useTranslation();
-    const { common } = LocalizationKey;
-    return (
-      <StyledGridItem
-        item
-        xs={6}
-      >
-        <Grid
-          container
-          sx={{ mb: 5 }}
-          justifyContent="space-between"
-        >
-          <Grid
-            item
-            xs={4}
-          >
-            <Typography
-              color={"primary"}
-              variant="h5"
-              fontWeight="bold"
-            >
-              {t(common.selectedLabel)}
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={5}
-          >
-            <TextField
-              value={selectedTasksField}
-              onChange={(e) => setSelectedTasksField(e.target.value)}
-              name="selectedTask"
-            />
-          </Grid>
-        </Grid>
-        <Grid container>
-          <Grid
-            item
-            xs={12}
-          >
-            <DropZone />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-          >
-            <Pagination
-              totalItems={selectedTasks.length}
-              itemsPerPage={3}
-            />
-          </Grid>
-        </Grid>
-      </StyledGridItem>
-    );
-  };
-
   return (
-    <Grid
-      container
-      sx={{ paddingBottom: 10 }}
-    >
-      <Grid
-        item
-        xs={12}
-      >
-        <DndProvider backend={HTML5Backend}>
-          <Grid
-            container
-            justifyContent="space-evenly"
-          >
-            <RenderDraggableTasks />
-            <RenderDropZoneTasks />
-          </Grid>
-        </DndProvider>
-      </Grid>
-    </Grid>
+    <Fragment>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent={"space-between"}
+        >
+          {droppableList.map((droppable, index) => (
+            <StyledGridItem
+              $type={droppable}
+              item
+              xs={5.9}
+              key={index}
+            >
+              <Droppable droppableId={droppable}>
+                {(provided) => {
+                  const filteredData = tasks.filter((filtered) => filtered.status === droppable);
+                  return (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      <Typography
+                        variant="h5"
+                        color={"primary"}
+                        fontWeight={"bold"}
+                        display={"flex"}
+                        justifyContent={"center"}
+                        marginBottom={"1rem"}
+                      >
+                        {droppable === "selected" ? "Selected" : "Task List"}
+                      </Typography>
+
+                      <TextField
+                        name={`mandays-${droppable}`}
+                        value={droppable === "selected" ? selected : notSelected}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearch(e, droppable)}
+                        margin="normal"
+                      />
+
+                      {filteredData.length !== 0 ? (
+                        filteredData.map((task, index) => (
+                          <Draggable
+                            draggableId={task.id}
+                            key={task.id}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <StyledCardContainer
+                                  key={index}
+                                  headerTitle={task.title}
+                                  actionHeader={
+                                    <SvgIcon
+                                      name="edit"
+                                      sx={{ color: "#7AC0EF", cursor: "pointer" }}
+                                    />
+                                  }
+                                  subHeader={`${t(common.createdDateLabel)}: ${dateFormat(
+                                    task.createdDate
+                                  )}`}
+                                >
+                                  <Typography>
+                                    {t(mandaysCalculator.taskDescriptionLabel)}:
+                                  </Typography>
+                                  <Typography>{task.description}</Typography>
+                                </StyledCardContainer>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))
+                      ) : (
+                        <StyledNoDataContainer
+                          item
+                          xs={12}
+                        >
+                          <Typography
+                            variant="h2"
+                            color="primary"
+                          >
+                            {t(mandaysCalculator.noSelectedTaskLabel)}
+                          </Typography>
+                        </StyledNoDataContainer>
+                      )}
+
+                      {provided.placeholder}
+                    </div>
+                  );
+                }}
+              </Droppable>
+            </StyledGridItem>
+          ))}
+        </Grid>
+      </DragDropContext>
+    </Fragment>
   );
 };
 
