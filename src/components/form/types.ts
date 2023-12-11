@@ -4,7 +4,7 @@ export type BaseInputProps<Type = object> = Type & {
   name?: string;
   label?: string | ReactNode;
   error?: boolean;
-  helperText?: string;
+  helperText?: string | ReactNode;
   isFastField?: boolean;
   readOnly?: boolean;
 };
@@ -15,7 +15,8 @@ export type WithInputControllerType =
   | "dropzone"
   | "pin-code"
   | "autocomplete"
-  | "checkbox-group";
+  | "checkbox-group"
+  | "number-input";
 
 export type BaseInputPropsWithAdornment<Type = object> = Type & {
   name: string;

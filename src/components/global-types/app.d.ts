@@ -25,5 +25,11 @@ declare global {
     mandaysEstimateService: string;
   }
 
+  export interface CustomSteps {
+    label: string | ReactNode;
+    icon?: ReactNode | string;
+    content?: ReactNode;
+  }
+
   type BaseResponse<T> = Promise<AxiosResponse<T, any>>;
 }

@@ -86,6 +86,8 @@ const LocalizationKey = {
     permissionDeniedDesc: "common.permissionDenied.description",
     permissionErrorTitle: "common.permissionError.title",
     permissionErrorDesc: "common.permissionError.description",
+    pageInProgressTitle: "common.label.pageInProgressTitle",
+    pageInProgressDesc: "common.label.pageInProgressDescription",
     goBackHomeBtnLabel: "common.button.goBackHome",
     collapse: "common.button.collapse",
     backBtn: "common.button.back",
@@ -97,6 +99,7 @@ const LocalizationKey = {
     cancelBtn: "common.button.cancel",
     createdDateLabel: "common.label.createdDate",
     selectedLabel: "common.label.selected",
+    loadingLabel: "common.label.loading",
     userManagement: {
       authSignInLoading: "common.userManagement.auth.signInLoading",
       authSignOutLoading: "common.userManagement.auth.signOutLoading",
@@ -132,6 +135,7 @@ const LocalizationKey = {
       totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
     summaryTitle: "mandaysCalculator.summary.title",
+    summarySubtitle: "mandaysCalculator.summary.subtitle",
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
@@ -168,9 +172,66 @@ const LocalizationKey = {
       excel: "mandaysCalculator.options.excel",
       pdf: "mandaysCalculator.options.pdf",
     },
+    estimation: {
+      title: "mandaysCalculator.estimation.title",
+      estimationColumns: {
+        taskName: "mandaysCalculator.estimation.estimationColumns.taskName",
+        complexity: "mandaysCalculator.estimation.estimationColumns.complexity",
+        noOfResources: "mandaysCalculator.estimation.estimationColumns.noOfResources",
+        totalManHours: "mandaysCalculator.estimation.estimationColumns.totalManHours",
+        totalManDays: "mandaysCalculator.estimation.estimationColumns.totalManDays",
+      },
+    },
   },
   accountInfo: {
     label: "account.info.label",
+  },
+  tasks: {
+    createTask: {
+      modalTitle: "tasks.createTask.modalTitle",
+      label: {
+        taskTitle: "tasks.createTask.label.taskTitle",
+        description: "tasks.createTask.label.description",
+        functionality: "tasks.createTask.label.functionality",
+        complexity: "tasks.createTask.label.complexity",
+        tags: "tasks.createTask.label.tags"
+      },
+      placeholder: {
+        functionality: "tasks.createTask.placeholder.functionality",
+        complexity: "tasks.createTask.placeholder.complexity",
+        tags: "tasks.createTask.placeholder.tags"
+      },
+      btnLabel: {
+        create: "tasks.createTask.btnLabel.create",
+      }
+    }
+  },
+  history: {
+    detailsBtn: "history.button.details",
+    filterPlacholder: "history.filter.placeholder",
+  },
+  userManagement: {
+    label: {
+      firstName: "userManagement.label.firstName",
+      lastName: "userManagement.label.lastName",
+      middleName: "userManagement.label.middleName",
+      suffix: "userManagement.label.suffix",
+      gender: "userManagement.label.gender",
+      email: "userManagement.label.email",
+      careerStep: "userManagement.label.careerStep",
+      employeeId: "userManagement.label.employeeId",
+      odcId: "userManagement.label.odcId",
+      joiningDate: "userManagement.label.joiningDate",
+      joiningDateEdit: "userManagement.label.joiningDateEdit",
+      joiningAtLaterDate: "userManagement.label.joiningAtLaterDate",
+      projectId: "userManagement.label.projectId",
+      teamId: "userManagement.label.teamId",
+      roles: "userManagement.label.roles",
+    },
+
+    errorMessage: {
+      email: "userManagement.errorMessage.email",
+    },
   },
 };
 

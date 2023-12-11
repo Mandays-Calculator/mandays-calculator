@@ -1,4 +1,4 @@
-import { useState, type ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect } from "react";
 import { CustomButton } from "~/components/form/button";
 import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
 import {
@@ -12,13 +12,16 @@ import {
   UpdateUserManagementParams,
   UserManagementForms,
 } from "~/pages/user-management/types";
-import {
-  useEditUser,
-  useUserList,
-} from "~/queries/user-management/UserManagement";
+import { useUserList } from "~/queries/user-management/UserManagement";
+
 import { ImageUpload } from "~/components";
 import { UserListData } from "~/api/user-management/types";
-import NotificationModal from "../../notification-modal/NotificationModal";
+import { useEditUser } from "~/mutations/user-management";
+import { useRequestHandler } from "~/hooks/request-handler";
+import { Alert } from "~/components";
+import LocalizationKey from "~/i18n/key";
+import { useTranslation } from "react-i18next";
+import moment from "moment";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -48,59 +51,55 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   onClose,
   currentUser,
 }): ReactElement => {
+  const date = moment(currentUser?.joiningDate).format("YYYY-MM-DD");
+  const { t } = useTranslation();
+  const { userManagement } = LocalizationKey;
   const { values, setFieldValue } = useFormikContext<UserManagementForms>();
-
-  const EditUser = useEditUser(currentUser?.id ?? "");
-  const [editUserStatus, setEditUserStatus] = useState<any>({
-    message: "",
-    show: false,
-  });
   const { refetch } = useUserList();
+  const EditUser = useEditUser(currentUser?.id ?? "");
+  const [status, callApi] = useRequestHandler(EditUser.mutate);
+
   const gender = () => {
-    if (values.UpdateGender == "FEMALE") {
+    if (values.updateGender == "FEMALE") {
       return 1;
-    } else if (values.UpdateGender == "MALE") {
+    } else if (values.updateGender == "MALE") {
       return 2;
-    } else if (values.UpdateGender == "NON_BINARY") {
+    } else if (values.updateGender == "NON_BINARY") {
       return 3;
-    } else if (values.UpdateGender == "PREFER_NOT_TO_SAY") {
+    } else if (values.updateGender == "PREFER_NOT_TO_SAY") {
       return 4;
     }
   };
   const EditUserForm: UserManagementForms = {
-    firstName: values?.UpdateFirstName ?? "",
-    lastName: values?.UpdateLastName ?? "",
-    middleName: values?.UpdateMiddleName ?? "",
-    suffix: values?.UpdateSuffix ?? "",
+    firstName: values?.updateFirstName ?? "",
+    lastName: values?.updateLastName ?? "",
+    middleName: values?.updateMiddleName ?? "",
+    suffix: values?.updateSuffix ?? "",
     gender: gender() ?? 0,
-    // image: values.UpdateImage ?? "",
-    email: values?.UpdateEmail ?? "",
-    employeeId: values?.UpdateEmployeeId ?? "",
-    odcId: values?.UpdateOdcId ?? "",
-    careerStep: values?.UpdateCareerStep ?? "",
-    joiningDate: values?.UpdateJoiningDate ?? "",
-    projectId: values?.UpdateProjectId ?? "",
-    teamId: values?.UpdateTeamId ?? "",
-    roles: values?.UpdateRoles ?? [],
+    email: values?.updateEmail ?? "",
+    employeeId: values?.updateEmployeeId ?? "",
+    odcId: values?.updateOdcId ?? "",
+    careerStep: values?.updateCareerStep ?? "",
+    joiningDate: moment(values?.updateJoiningDate).format("YYYY-MM-DD") ?? date,
+    projectId: values?.updateProjectId ?? "",
+    teamId: values?.updateTeamId ?? "",
+    roles: values?.updateRoles ?? [],
   };
-
   const form = useFormikContext<UpdateUserManagementParams>();
   useEffect(() => {
     form.setValues({
-      UpdateFirstName: currentUser?.firstName ?? "",
-      UpdateLastName: currentUser?.lastName ?? "",
-      UpdateMiddleName: currentUser?.middleName ?? "",
-      UpdateSuffix: currentUser?.suffix ?? "",
-      UpdateGender: currentUser?.gender ?? "",
-      UpdateEmail: currentUser?.email ?? "",
-      // UpdateImage: currentUser?.image ?? "",
-      UpdateEmployeeId: currentUser?.employeeId ?? "",
-      UpdateOdcId: "",
-      UpdateCareerStep: currentUser?.careerStep ?? "",
-      UpdateJoiningDate: currentUser?.joiningDate ?? "",
-      UpdateProjectId: "",
-      UpdateTeamId: "",
-      UpdateRoles: currentUser?.roles ?? [],
+      updateFirstName: currentUser?.firstName ?? "",
+      updateLastName: currentUser?.lastName ?? "",
+      updateMiddleName: currentUser?.middleName ?? "",
+      updateSuffix: currentUser?.suffix ?? "",
+      updateGender: currentUser?.gender ?? "",
+      updateEmail: currentUser?.email ?? "",
+      updateEmployeeId: currentUser?.employeeId ?? "",
+      updateOdcId: "",
+      updateCareerStep: currentUser?.careerStep ?? "",
+      updateProjectId: "",
+      updateTeamId: "",
+      updateRoles: currentUser?.roles ?? [],
     });
   }, [currentUser]);
 
@@ -111,42 +110,44 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <ImageUpload name="UpdateImage" setFieldValue={setFieldValue} />
+              <ImageUpload name="updateImage" setFieldValue={setFieldValue} />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>
             <Grid item xs={6}>
               <ControlledTextField
-                name="UpdateLastName"
-                label="Last Name"
+                name="updateLastName"
+                label={t(userManagement.label.lastName)}
                 placeholder="Dela Cruz"
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
-                name="UpdateFirstName"
-                label="First Name"
+                name="updateFirstName"
+                label={t(userManagement.label.firstName)}
                 placeholder=" Juan"
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
-                name="UpdateMiddleName"
-                label="Middle Name"
+                name="updateMiddleName"
+                label={t(userManagement.label.middleName)}
                 placeholder="Jose"
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
-                name="UpdateSuffix"
-                label="Suffix"
+                name="updateSuffix"
+                label={t(userManagement.label.suffix)}
                 placeholder="Jr"
               />
             </Grid>
             <Grid item xs={3}>
-              <StyledTitle mb={0.5}>Gender</StyledTitle>
+              <StyledTitle mb={0.5}>
+                {t(userManagement.label.gender)}
+              </StyledTitle>
               <ControlledSelect
-                name="UpdateGender"
+                name="updateGender"
                 options={genders}
                 placeholder="Male"
               />
@@ -154,62 +155,64 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           </Grid>
           <Grid item xs={10} mt={1}>
             <ControlledTextField
-              name="UpdateEmail"
-              label="Email Address"
+              name="updateEmail"
+              label={t(userManagement.label.email)}
               placeholder="juandelacruz103@gmail.com"
             />
           </Grid>
           <Grid item xs={2} mt={1}>
             <ControlledTextField
-              name="UpdateCareerStep"
-              label="Carrer Step"
+              name="updateCareerStep"
+              label={t(userManagement.label.careerStep)}
               placeholder="I03"
             />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
-              name="UpdateEmployeeId"
-              label="Employee Id"
+              name="updateEmployeeId"
+              label={t(userManagement.label.employeeId)}
               placeholder="82000000"
             />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
-              name="UpdateOdcId"
-              label="ODC"
+              name="updateOdcId"
+              label={t(userManagement.label.odcId)}
               placeholder="philippines"
             />
           </Grid>
 
           <Grid item xs={2} fontSize={"5px"}>
-            <StyledTitle mb={1}>Joining Date</StyledTitle>
+            <StyledTitle mb={1}>
+              {t(userManagement.label.joiningDateEdit)}
+            </StyledTitle>
 
             <ControlledDatePicker
-              name="UpdateDate"
-              placeholderText="2023/12/31"
-              dateFormat="yyyy/MM/dd"
+              name="updateJoiningDate"
+              placeholderText={date}
+              dateFormat="MM/dd/yyyy"
             />
           </Grid>
           <Grid item xs={7.7}>
             <ControlledTextField
-              name="UpdateProjectName"
-              label="Project"
+              name="updateProjectName"
+              label={t(userManagement.label.projectId)}
               placeholder="eMPF"
             />
           </Grid>
           <Grid item xs={4.3}>
             <ControlledTextField
-              name="UpdateTeamName"
-              label="Team"
+              name="updateTeamName"
+              label={t(userManagement.label.teamId)}
               placeholder="Developer Team"
             />
           </Grid>
           <Grid item xs={5}>
-            <StyledTitle mb={1}>Role</StyledTitle>
+            <StyledTitle mb={1}>{t(userManagement.label.roles)}</StyledTitle>
             <ControlledSelect
               multiple
               options={rolesData}
-              name="UpdateRoles"
+              name="updateRoles"
               placeholder="Sprint manager"
             />
           </Grid>
@@ -227,38 +230,21 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             variant="contained"
             color="primary"
             onClick={() => {
-              console.log("test", EditUserForm);
-
-              EditUser.mutate(EditUserForm, {
-                onSuccess: (data) => {
-                  setEditUserStatus({
-                    message: "User successfully updated",
-                    show: true,
-                  });
-                  refetch();
-                  console.log("success", data);
-                },
-                onError: (error) => {
-                  alert(error.message);
-                  console.log(error);
-                },
-              });
+              callApi(EditUserForm);
+              refetch();
             }}
           >
             Save
           </CustomButton>
-          <NotificationModal
-            type={"success"}
-            message={editUserStatus.message}
-            open={editUserStatus.show}
-            onConfirm={() => {
-              setEditUserStatus({
-                message: "",
-                show: false,
-              });
-              onClose();
-            }}
-          />
+          {status.loading && (
+            <>
+              <Alert
+                open={status.success}
+                message={"User successfully updated"}
+                type={"success"}
+              />
+            </>
+          )}
         </Box>
       </Stack>
     </Dialog>

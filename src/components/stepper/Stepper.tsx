@@ -28,8 +28,7 @@ const StepperConnector = styled(StepConnector)(({ theme }) => ({
   },
   [`&.${stepConnectorClasses.completed}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      backgroundImage:
-        "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 80%)",
+      background: theme.palette.primary.main,
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
@@ -88,7 +87,7 @@ export default function Steppers(props: CustomStepperProps): ReactElement {
   const hasContent = steps.some((step) => step.content !== undefined);
   return (
     <>
-      <Stack sx={{ width: "100%" }} spacing={4}>
+      <Stack sx={{ width: "100%", justifyContent: "flex-start" }} spacing={4}>
         <Stepper
           alternativeLabel
           activeStep={activeStep}
@@ -109,7 +108,7 @@ export default function Steppers(props: CustomStepperProps): ReactElement {
       </Stack>
       {hasContent && (
         <Stack sx={{ width: "100%" }} spacing={4} mt={3}>
-          <StyledContent>{steps[activeStep].content}</StyledContent>
+          <StyledContent>{steps[activeStep]?.content}</StyledContent>
         </Stack>
       )}
     </>

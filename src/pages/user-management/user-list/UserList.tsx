@@ -1,21 +1,24 @@
 import { useState, type ReactElement } from "react";
 
-import { useUserList } from "~/queries/user-management/UserManagement";
 import { PageLoader, Table } from "~/components";
 
 import { userListColumns } from "./utils";
-import { EditUserModal } from "~/components/modal/user-management/edit-user-modal";
+import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
 import { useTranslation } from "react-i18next";
 
-import { useDeleteUser } from "~/queries/user-management/UserManagement";
+import { useUserList } from "~/queries/user-management/UserManagement";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 import { UserListData } from "~/api/user-management/types";
+import { useDeleteUser } from "~/mutations/user-management";
 
-const UserList = (): ReactElement => {
-  const { data, isLoading, refetch } = useUserList();
+interface UserListProps {
+  userListData?: UserListData[];
+}
+
+const UserList = ({ userListData }: UserListProps): ReactElement => {
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
-
+  const userList = useUserList();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [currentUserData, setCurrentUserData] = useState<UserListData>();
@@ -33,7 +36,7 @@ const UserList = (): ReactElement => {
     setRowId(rowId);
   };
 
-  if (isLoading) {
+  if (userList.isLoading) {
     return <PageLoader />;
   } else {
     return (
@@ -45,7 +48,7 @@ const UserList = (): ReactElement => {
             onDeleteUser: handleDeleteUser,
             onEditUser: handleEditUser,
           })}
-          data={data?.data}
+          data={userListData}
         />
 
         <EditUserModal
@@ -63,7 +66,7 @@ const UserList = (): ReactElement => {
                 onSuccess: (data) => {
                   setDeleteModalOpen(false);
                   console.log("success", data);
-                  refetch();
+                  userList.refetch();
                 },
                 onError: (error) => {
                   console.log(error);

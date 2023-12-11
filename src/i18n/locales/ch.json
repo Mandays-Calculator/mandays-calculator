@@ -81,6 +81,26 @@
       "label": "Project Management"
     }
   },
+  "tasks": {
+    "createTask": {
+      "modalTitle": "Create New Task",
+      "label": {
+        "taskTitle": "Task Title",
+        "description": "Description",
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "placeholder": {
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "btnLabel": {
+        "create": "Create"
+      }
+    }
+  },
   "user": {
     "management": {
       "label": "User Management"

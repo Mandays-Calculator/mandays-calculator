@@ -30,6 +30,10 @@ export const withInputController = <Type extends FormikValues>(
     const fieldTouched = form.touched[name] || getIn(form.touched, name);
     const hasError = Boolean(fieldError) && Boolean(fieldTouched);
 
+    const handleInputNumberChange = (_: any, value: number): void => {
+      form.setFieldValue(name, value);
+    };
+
     const handleDateChange = (date: ReactDatePickerFunctionParams): void => {
       form.setFieldValue(name, date);
     };
@@ -66,6 +70,7 @@ export const withInputController = <Type extends FormikValues>(
       | typeof handlePinCodeChange
       | typeof handleCheckBoxChanges
       | typeof handleAutoComplete
+      | typeof handleInputNumberChange
       | typeof form.handleChange => {
       switch (inputType) {
         case "date-picker":
@@ -78,6 +83,8 @@ export const withInputController = <Type extends FormikValues>(
           return handleCheckBoxChanges;
         case "autocomplete":
           return handleAutoComplete;
+        case "number-input":
+          return handleInputNumberChange;
         default:
           return form.handleChange(name);
       }
