@@ -23,14 +23,15 @@ interface HeaderProps {
   formik: FormikContextType<UserManagementForms>;
   isSuccess: boolean;
   resetIsSuccess: () => void;
+  isError: boolean;
 }
 const Header = (props: HeaderProps): ReactElement => {
-  const { status, formik, isSuccess, resetIsSuccess } = props;
+  const { status, formik, isSuccess, isError, resetIsSuccess } = props;
   const [addModal, setAddModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (isSuccess) {
-      setAddModal(false);
+      setTimeout(() => setAddModal(false), 1000);
     }
   }, [isSuccess]);
 
@@ -76,6 +77,7 @@ const Header = (props: HeaderProps): ReactElement => {
           </StyledButton>
         </Grid>
         <AddUserModal
+          isError={isError}
           isSuccess={isSuccess}
           status={status}
           form={formik}

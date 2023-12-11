@@ -20,7 +20,6 @@ import {
 import { FormikContextType } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 
-import { genders, rolesData } from "../utils";
 import moment from "moment";
 import { Alert, ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
@@ -28,6 +27,7 @@ import { FormErrors } from "~/components/form/types";
 import { APIStatus } from "~/hooks/request-handler";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
+import { genders, rolesData } from "~/utils/constants";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -65,6 +65,7 @@ interface AddUserModalProps {
   OnSubmit: () => void;
   status: APIStatus;
   isSuccess: boolean;
+  isError: boolean;
 }
 
 export const AddUserModal: React.FC<AddUserModalProps> = ({
@@ -74,6 +75,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   OnSubmit,
   status,
   isSuccess,
+  isError,
 }): ReactElement => {
   const { t } = useTranslation();
   const { userManagement } = LocalizationKey;
@@ -273,7 +275,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           {!status.loading && (
             <>
               <Alert
-                open={status.error.errorCode !== ""}
+                open={isError}
                 message={
                   "There is a problem in your submitted data. Please check"
                 }

@@ -1,4 +1,4 @@
-import { type ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 import { CustomButton } from "~/components/form/button";
 import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
 import {
@@ -6,7 +6,6 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { genders, rolesData } from "../utils";
 import { useFormikContext } from "formik";
 import {
   UpdateUserManagementParams,
@@ -14,14 +13,16 @@ import {
 } from "~/pages/user-management/types";
 import { useUserList } from "~/queries/user-management/UserManagement";
 
+import { gender } from "~/pages/user-management/utils";
 import { ImageUpload } from "~/components";
 import { UserListData } from "~/api/user-management/types";
 import { useEditUser } from "~/mutations/user-management";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { Alert } from "~/components";
-import LocalizationKey from "~/i18n/key";
 import { useTranslation } from "react-i18next";
+import LocalizationKey from "~/i18n/key";
 import moment from "moment";
+import { genders, rolesData } from "~/utils/constants";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -56,26 +57,21 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const { values, setFieldValue } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
+  const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
+  const [isEditError, setIsEditError] = useState<boolean>(false);
   const EditUser = useEditUser(currentUser?.id ?? "");
-  const [status, callApi] = useRequestHandler(EditUser.mutate);
+  const [status, callApi] = useRequestHandler(
+    EditUser.mutate,
+    () => setIsEditSuccess(true),
+    () => setIsEditError(true)
+  );
 
-  const gender = () => {
-    if (values.updateGender == "FEMALE") {
-      return 1;
-    } else if (values.updateGender == "MALE") {
-      return 2;
-    } else if (values.updateGender == "NON_BINARY") {
-      return 3;
-    } else if (values.updateGender == "PREFER_NOT_TO_SAY") {
-      return 4;
-    }
-  };
   const EditUserForm: UserManagementForms = {
     firstName: values?.updateFirstName ?? "",
     lastName: values?.updateLastName ?? "",
     middleName: values?.updateMiddleName ?? "",
     suffix: values?.updateSuffix ?? "",
-    gender: gender() ?? 0,
+    gender: gender(values?.updateGender) ?? 0,
     email: values?.updateEmail ?? "",
     employeeId: values?.updateEmployeeId ?? "",
     odcId: values?.updateOdcId ?? "",
@@ -85,6 +81,10 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     teamId: values?.updateTeamId ?? "",
     roles: values?.updateRoles ?? [],
   };
+  const submit = () => {
+    callApi(EditUserForm);
+  };
+
   const form = useFormikContext<UpdateUserManagementParams>();
   useEffect(() => {
     form.setValues({
@@ -102,6 +102,17 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateRoles: currentUser?.roles ?? [],
     });
   }, [currentUser]);
+
+  useEffect(() => {
+    if (isEditSuccess) {
+      setTimeout(() => {
+        onClose(), refetch(), setIsEditSuccess(false);
+      }, 1000);
+    }
+    if (isEditError) {
+      setIsEditError(false);
+    }
+  }, [isEditSuccess, isEditError]);
 
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
@@ -226,20 +237,20 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           >
             Cancel
           </CustomButton>
-          <CustomButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              callApi(EditUserForm);
-              refetch();
-            }}
-          >
+          <CustomButton variant="contained" color="primary" onClick={submit}>
             Save
           </CustomButton>
-          {status.loading && (
+          {!status.loading && (
             <>
               <Alert
-                open={status.success}
+                open={isEditError}
+                message={
+                  "There is a problem in your submitted data. Please check"
+                }
+                type={"error"}
+              />
+              <Alert
+                open={isEditSuccess}
                 message={"User successfully updated"}
                 type={"success"}
               />

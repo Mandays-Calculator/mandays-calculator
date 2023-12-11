@@ -8,7 +8,11 @@ import Title from "~/components/title/Title";
 import { PageContainer } from "~/components/page-container";
 import { useUserList } from "~/queries/user-management/UserManagement";
 import { UserListData } from "~/api/user-management/types";
-import { UserManagementFormValues, UserManagementSchema } from "./utils";
+import {
+  UserManagementFormValues,
+  UserManagementSchema,
+  gender,
+} from "./utils";
 
 import { useFormik } from "formik";
 import { UserManagementForms } from "./types";
@@ -20,33 +24,24 @@ const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
   const AddUser = useAddUser();
   const [successAddUser, setSuccessAddUser] = useState<boolean>(false);
-  const [status, callApi] = useRequestHandler(AddUser.mutate, () =>
-    setSuccessAddUser(true)
+  const [errorAddUser, setErrorAddUser] = useState<boolean>(false);
+  const [status, callApi] = useRequestHandler(
+    AddUser.mutate,
+    () => setSuccessAddUser(true),
+    () => setErrorAddUser(true)
   );
-
   const UserManagementForm = useFormik<UserManagementForms>({
     initialValues: UserManagementFormValues,
     validationSchema: UserManagementSchema(t),
     validateOnChange: true,
 
     onSubmit: (values) => {
-      const gender = () => {
-        if (values.gender == "FEMALE") {
-          return 1;
-        } else if (values.gender == "MALE") {
-          return 2;
-        } else if (values.gender == "NON_BINARY") {
-          return 3;
-        } else if (values.gender == "PREFER_NOT_TO_SAY") {
-          return 4;
-        }
-      };
       const AddUserForm: UserManagementForms = {
         firstName: values.firstName,
         lastName: values.lastName,
         middleName: values.middleName,
         suffix: values.suffix,
-        gender: gender() ?? 0,
+        gender: gender(values?.gender) ?? 0,
         email: values.email,
         employeeId: values.employeeId,
         odcId: values.odcId,
@@ -122,7 +117,10 @@ const UserManagement = (): ReactElement => {
               formik={UserManagementForm}
               status={status}
               isSuccess={successAddUser}
-              resetIsSuccess={() => setSuccessAddUser(false)}
+              isError={errorAddUser}
+              resetIsSuccess={() => {
+                setErrorAddUser(false), setSuccessAddUser(false);
+              }}
             />
             <UserList userListData={filteredData} />
           </Stack>

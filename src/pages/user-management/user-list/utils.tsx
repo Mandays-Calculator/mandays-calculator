@@ -4,6 +4,7 @@ import { SvgIcon } from "~/components";
 import { UserListData } from "~/api/user-management/types";
 import { UserColumnsProps, UserListColumnsType } from "./types";
 import moment from "moment";
+import renderRole from "~/utils/helpers/renderRoleHelper";
 
 export const userListColumns = ({
   t,
@@ -37,7 +38,7 @@ export const userListColumns = ({
       accessor: "roles",
       Header: t("Roles"),
       Cell: ({ row }: CellProps<UserListData>) => {
-        return row.original.roles.join(", ");
+        return renderRole(row.original.roles.join(", "));
       },
     },
     {
