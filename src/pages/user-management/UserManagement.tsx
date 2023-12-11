@@ -33,7 +33,7 @@ const UserManagement = (): ReactElement => {
   const UserManagementForm = useFormik<UserManagementForms>({
     initialValues: UserManagementFormValues,
     validationSchema: UserManagementSchema(t),
-    validateOnChange: true,
+    validateOnChange: false,
 
     onSubmit: (values) => {
       const AddUserForm: UserManagementForms = {

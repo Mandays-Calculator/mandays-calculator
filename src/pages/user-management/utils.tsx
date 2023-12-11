@@ -52,5 +52,12 @@ export const UserManagementSchema = (t: TFunction) => {
     projectName: yup.string(),
     teamName: yup.string(),
     roles: yup.array(),
+    joiningDate: yup
+      .string()
+      .when("recentlyJoinedlaterDate", (recentlyJoinedlaterDate, schema) => {
+        return recentlyJoinedlaterDate
+          ? schema.required(t(common.errorMessage.required))
+          : schema.notRequired();
+      }),
   });
 };

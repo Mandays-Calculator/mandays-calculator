@@ -20,6 +20,12 @@ import {
 import { FormikContextType } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 
+import {
+  careerStepOptions,
+  odcOptions,
+  projectOptions,
+  teamOptions,
+} from "../utils";
 import moment from "moment";
 import { Alert, ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
@@ -163,9 +169,12 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={3} mt={1}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.careerStep)}
+            </StyledTitle>
+            <ControlledSelect
+              options={careerStepOptions}
               name="careerStep"
-              label={t(userManagement.label.careerStep)}
               placeholder="I03"
               error={!!form.errors.careerStep}
               helperText={getFieldError(
@@ -206,6 +215,11 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                     name="joiningDate"
                     placeholderText="2023/12/31"
                     dateFormat="yyyy/MM/dd"
+                    error={!!form.errors.joiningDate}
+                    helperText={getFieldError(
+                      form.errors as FormErrors,
+                      "joiningDate"
+                    )}
                   />
                 )}
               </Stack>
@@ -224,10 +238,11 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={3.5}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
+            <ControlledSelect
+              options={odcOptions}
               name="odcId"
-              label={t(userManagement.label.odcId)}
-              placeholder="philippines"
+              placeholder="Philippines"
             />
           </Grid>
           <Grid item xs={5}>
@@ -240,19 +255,27 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={7}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.projectId)}
+            </StyledTitle>
+            <ControlledSelect
+              options={projectOptions}
               name="projectId"
-              label={t(userManagement.label.projectId)}
               placeholder="eMPF"
             />
           </Grid>
-          <Grid item xs={5}>
-            <ControlledTextField
-              name="teamId"
-              label={t(userManagement.label.teamId)}
-              placeholder="Developer Team"
-            />
-          </Grid>
+          {form.values.projectId && (
+            <Grid item xs={5}>
+              <StyledTitle mb={0.5}>
+                {t(userManagement.label.teamId)}
+              </StyledTitle>
+              <ControlledSelect
+                options={teamOptions}
+                name="teamId"
+                placeholder="Developer Team"
+              />
+            </Grid>
+          )}
         </Grid>
 
         <Box display="flex" justifyContent="flex-end" my={2}>
