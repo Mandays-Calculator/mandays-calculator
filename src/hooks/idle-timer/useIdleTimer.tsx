@@ -66,9 +66,10 @@ export const useIdleTimer = <P extends object>(
         <WrappedComponent {...props} />
         <NotificationModal
           type="idleTimeOut"
+          modalTitle={t(common.idleTimeOutTitle)}
           message={
             <>
-              {t(common.idleTimeOutLabel)}{" "}
+              {t(common.idleTimeOutLabel)}:{" "}
               <Timer
                 onEndCountdown={handleLogout}
                 milliseconds={

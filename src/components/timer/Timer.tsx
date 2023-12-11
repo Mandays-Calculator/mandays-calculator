@@ -6,7 +6,8 @@ import { formatTime } from "~/utils/date";
 const StyledIdleTimer = styled(Typography)({
   margin: "1rem 2.5rem",
   marginLeft: "2.5rem",
-  fontSize: "3rem",
+  fontSize: "2.5rem",
+  textAlign: "center",
 });
 
 interface TimerProps {

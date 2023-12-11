@@ -16,4 +16,5 @@ export interface NotificationModalProps {
   onConfirmLabel?: string;
   type?: ModalType;
   title?: string;
+  modalTitle?: string | ReactNode;
 }

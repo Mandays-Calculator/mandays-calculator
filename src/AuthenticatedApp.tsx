@@ -140,6 +140,8 @@ const AuthenticatedApp = (): ReactElement => {
           message={t(LocalizationKey.common.errorMessage.unauthorized)}
           open={showUnauthorizedModal}
           onConfirm={handleLogout}
+          onCloseLabel="close"
+          modalTitle={t(LocalizationKey.common.unauthorizedTitle)}
         />
       )}
     </>

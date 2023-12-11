@@ -102,10 +102,14 @@ export const Modal = (props: ModalProps): ReactElement => {
       onClose={handleBackDrop}
     >
       <Stack direction="row" display="flex" minHeight={35}>
-        <Box flexGrow={1}>
-          {title ? <DialogTitle>{title}</DialogTitle> : null}
-        </Box>
-        <Offset />
+        {title && (
+          <>
+            <Box flexGrow={1}>
+              <DialogTitle>{title}</DialogTitle>
+            </Box>
+            <Offset />
+          </>
+        )}
       </Stack>
       <DialogContent dividers={dividers}>{children}</DialogContent>
       {actions ? <DialogActions>{actions}</DialogActions> : null}
