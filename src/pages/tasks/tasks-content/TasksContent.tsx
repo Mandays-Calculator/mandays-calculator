@@ -220,11 +220,11 @@ const TasksContent = (): ReactElement => {
   const handleSaveTask = (updatedTask: Task): void => {
     const updatedMockData = mockData.map((task) => {
       if (task.taskTitle === updatedTask.taskTitle) {
-        return updatedTask; // Update the task in the mockData array
+        return updatedTask;
       }
       return task;
     });
-    setMockData(updatedMockData); // Update mockData with the updated task
+    setMockData(updatedMockData);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -323,7 +323,7 @@ const TasksContent = (): ReactElement => {
                       {filteredData.map((task, index) => (
                         <Draggable
                           key={task.taskTitle}
-                          draggableId={`${task.taskTitle}-${index}`}
+                          draggableId={task.taskTitle}
                           index={index}
                         >
                           {(provided) => (

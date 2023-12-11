@@ -112,8 +112,10 @@ const LocalizationKey = {
       unauthorized: "common.errorMessage.unauthorized",
     },
     idleTimeOutLabel: "common.idleTimeOut.label",
+    idleTimeOutTitle: "common.idleTimeOut.title",
     idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
     logout: "common.idleTimeOut.logout",
+    unauthorizedTitle: "common.unauthorized.title",
   },
   mandaysCalculator: {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
@@ -177,9 +179,12 @@ const LocalizationKey = {
       estimationColumns: {
         taskName: "mandaysCalculator.estimation.estimationColumns.taskName",
         complexity: "mandaysCalculator.estimation.estimationColumns.complexity",
-        noOfResources: "mandaysCalculator.estimation.estimationColumns.noOfResources",
-        totalManHours: "mandaysCalculator.estimation.estimationColumns.totalManHours",
-        totalManDays: "mandaysCalculator.estimation.estimationColumns.totalManDays",
+        noOfResources:
+          "mandaysCalculator.estimation.estimationColumns.noOfResources",
+        totalManHours:
+          "mandaysCalculator.estimation.estimationColumns.totalManHours",
+        totalManDays:
+          "mandaysCalculator.estimation.estimationColumns.totalManDays",
       },
     },
   },
@@ -194,17 +199,17 @@ const LocalizationKey = {
         description: "tasks.createTask.label.description",
         functionality: "tasks.createTask.label.functionality",
         complexity: "tasks.createTask.label.complexity",
-        tags: "tasks.createTask.label.tags"
+        tags: "tasks.createTask.label.tags",
       },
       placeholder: {
         functionality: "tasks.createTask.placeholder.functionality",
         complexity: "tasks.createTask.placeholder.complexity",
-        tags: "tasks.createTask.placeholder.tags"
+        tags: "tasks.createTask.placeholder.tags",
       },
       btnLabel: {
         create: "tasks.createTask.btnLabel.create",
-      }
-    }
+      },
+    },
   },
   history: {
     detailsBtn: "history.button.details",
