@@ -12,21 +12,26 @@ type TextareaAutosizeProps = BaseInputProps<MuiTextAreaAutoSizeProps>;
 
 const StyledTextArea = styled(BaseTextareaAutosize)(({ theme }) => ({
   width: "100%",
-  ["&:hover"]: {
-    borderColor: theme.palette.primary.main,
+  borderColor: theme.palette.grey[500],
+  border: `2px solid inherit`,
+  "&:hover": {
+    border: `1px solid rgba(0, 0, 0, 0.87)`,
   },
-  [`&:focus`]: {
-    borderColor: theme.palette.primary.main,
+  "&:focus, &:focus-visible": {
+    border: `2px solid ${theme.palette.primary.main}`,
+    outline: theme.palette.primary.main,
   },
+  padding: theme.spacing(2.3, 2),
+  font: "inherit",
+  background: "transparent",
+  borderRadius: 4,
+  minHeight: "100px",
 }));
 
 const TextArea = (props: TextareaAutosizeProps): ReactElement => {
   const { name, label, placeholder = "Please Input", minRows, ...rest } = props;
   return (
-    <Stack
-      direction="column"
-      gap={1}
-    >
+    <Stack direction="column" gap={1}>
       {label ? <Typography>{label}</Typography> : null}
       <StyledTextArea
         id={name}
