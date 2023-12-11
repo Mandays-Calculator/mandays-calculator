@@ -45,7 +45,7 @@ export const Select = (props: SelectProps): ReactElement => {
       return (
         <MenuItem
           disabled
-          sx={{ minHeight: "1em", lineHeight: "0.3em" }}
+          sx={{ minHeight: "1em", lineHeight: "0.3em", padding: "1em 0" }}
           data-testid="select-placeholder"
         >
           <em>{placeholder}</em>

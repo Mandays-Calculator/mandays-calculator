@@ -186,6 +186,26 @@ const LocalizationKey = {
   accountInfo: {
     label: "account.info.label",
   },
+  tasks: {
+    createTask: {
+      modalTitle: "tasks.createTask.modalTitle",
+      label: {
+        taskTitle: "tasks.createTask.label.taskTitle",
+        description: "tasks.createTask.label.description",
+        functionality: "tasks.createTask.label.functionality",
+        complexity: "tasks.createTask.label.complexity",
+        tags: "tasks.createTask.label.tags"
+      },
+      placeholder: {
+        functionality: "tasks.createTask.placeholder.functionality",
+        complexity: "tasks.createTask.placeholder.complexity",
+        tags: "tasks.createTask.placeholder.tags"
+      },
+      btnLabel: {
+        create: "tasks.createTask.btnLabel.create",
+      }
+    }
+  },
   history: {
     detailsBtn: "history.button.details",
     filterPlacholder: "history.filter.placeholder",
