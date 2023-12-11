@@ -64,6 +64,7 @@ interface AddUserModalProps {
   form: FormikContextType<UserManagementForms>;
   OnSubmit: () => void;
   status: APIStatus;
+  isSuccess: boolean;
 }
 
 export const AddUserModal: React.FC<AddUserModalProps> = ({
@@ -72,6 +73,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   form,
   OnSubmit,
   status,
+  isSuccess,
 }): ReactElement => {
   const { t } = useTranslation();
   const { userManagement } = LocalizationKey;
@@ -80,12 +82,9 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
+
   const submit = () => {
     OnSubmit();
-
-    if (status.success) {
-      onClose();
-    }
   };
 
   return (
@@ -271,17 +270,17 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           >
             Add User
           </CustomButton>
-          {status.loading && (
+          {!status.loading && (
             <>
               <Alert
-                open={!status.success}
+                open={status.error.errorCode !== ""}
                 message={
                   "There is a problem in your submitted data. Please check"
                 }
                 type={"error"}
               />
               <Alert
-                open={status.success}
+                open={isSuccess}
                 message={"User successfully added"}
                 type={"success"}
               />

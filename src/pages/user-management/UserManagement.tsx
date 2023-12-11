@@ -19,7 +19,10 @@ import { useTranslation } from "react-i18next";
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
   const AddUser = useAddUser();
-  const [status, callApi] = useRequestHandler(AddUser.mutate);
+  const [successAddUser, setSuccessAddUser] = useState<boolean>(false);
+  const [status, callApi] = useRequestHandler(AddUser.mutate, () =>
+    setSuccessAddUser(true)
+  );
 
   const UserManagementForm = useFormik<UserManagementForms>({
     initialValues: UserManagementFormValues,
@@ -115,7 +118,12 @@ const UserManagement = (): ReactElement => {
       <PageContainer>
         <Form instance={UserManagementForm}>
           <Stack direction={"column"} spacing={2}>
-            <Header formik={UserManagementForm} status={status} />
+            <Header
+              formik={UserManagementForm}
+              status={status}
+              isSuccess={successAddUser}
+              resetIsSuccess={() => setSuccessAddUser(false)}
+            />
             <UserList userListData={filteredData} />
           </Stack>
         </Form>
