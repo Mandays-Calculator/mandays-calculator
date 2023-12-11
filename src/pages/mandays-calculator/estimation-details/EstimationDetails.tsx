@@ -95,7 +95,6 @@ const EstimationDetails = (): ReactElement => {
     onSubmit: (val) => navigate("./../summary", { state: val }),
     enableReinitialize: true,
   });
-  console.log(mandaysForm.values, "mandaysForm");
 
   const exportForm = useFormik<{ exportBy: string }>({
     initialValues: {
