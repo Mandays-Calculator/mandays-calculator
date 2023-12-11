@@ -15,11 +15,12 @@ export const formatTime = (milliseconds: number): string => {
   const seconds = totalSeconds % 60;
 
   if (minutes > 0) {
-    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    return `${minutes} min ${seconds < 10 ? `0${seconds}` : seconds} secs`;
   } else {
-    return `${seconds} second${seconds !== 1 ? "s" : ""}`;
+    return `0 min ${seconds < 10 ? `0${seconds}` : seconds} secs`;
   }
 };
+
 
 export const getMonths = (): string[] => {
   return [
