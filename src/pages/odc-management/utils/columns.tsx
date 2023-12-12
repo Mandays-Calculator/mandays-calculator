@@ -79,16 +79,17 @@ export const HolidayColumn = (
       Header: t(label.date),
       accessor: "date",
       Cell: ({ row }: CellProps<HolidayType>) => {
-        const formatDate = moment(row.original.date, "yyyy-MM-DD hh:mm:ss").format("yyyy-MM-DD");
+        const formatDate = moment(row.original.date, "yyyy-MM-DD").format("yyyy-MM-DD");
         let valueDate = "";
         if (row.original.date !== undefined || row.original.date !== null)
-          valueDate = moment(row.original.date, "yyyy-MM-DD hh:mm:ss").format("MM/DD/yyyy");
+          valueDate = moment(row.original.date, "YYYY-MM-DD").format("YYYY-MM-DD");
         return (
           <>
             {holIdx.includes(row.index) ? (
               <ControlledDatePicker
                 name={`holidays.${row.index}.date`}
                 value={valueDate}
+                dateFormat="yyyy/MM/dd"
               />
             ) : (
               <>{formatDate}</>
@@ -99,15 +100,15 @@ export const HolidayColumn = (
     },
     {
       Header: t(label.holiday),
-      accessor: "holiday",
+      accessor: "name",
       Cell: ({ row }: CellProps<HolidayType>) => (
         <>
           {holIdx.includes(row.index) ? (
             <ControlledTextField
-              name={`holidays.${row.index}.holiday`}
+              name={`holidays.${row.index}.name`}
             />
           ) : (
-            <>{row.original.holiday}</>
+            <>{row.original.name}</>
           )}
         </>
       ),
@@ -126,7 +127,7 @@ export const HolidayColumn = (
                 <SvgIcon name="edit" $size={2} />
               </IconButton>
               <IconButton
-                onClick={() => handleDeleteHoliday(row.index)}
+                onClick={() => handleDeleteHoliday(row.original.id)}
                 aria-label={`delete-${row.index}`}
               >
                 <SvgIcon name="delete" $size={2} />

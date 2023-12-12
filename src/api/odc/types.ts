@@ -5,12 +5,19 @@ export interface ODCListResponse {
   location: string;
   holidays: HolidayType[] | null;
   active: boolean;
+  createDate: string | null;
+  lastUpdatedDate: string | null;
+
 }
 
 export type HolidayType = {
+  id: number;
+  odcId: string;
   date: string;
-  holiday: string;
-  active: boolean;
+  recurring: boolean;
+  name: string;
+  createDate: string | null;
+  lastUpdatedDate: string | null;
 };
 
 export interface ODCSubmit {

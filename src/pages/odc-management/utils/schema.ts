@@ -11,12 +11,16 @@ export const IntValuesSchema = (t: TFunction) => {
     id: yup.string().defined(),
     name: yup
       .string()
-      .required(t(validationInfo.nameReq)),
+      .required(t(validationInfo.nameReq))
+      .default(""),
     location: yup
       .string()
-      .required(t(validationInfo.locReq)),
+      .required(t(validationInfo.locReq))
+      .default(""),
     abbreviation: yup.string().default(""),
     holidays: yup.array().nullable(),
     active: yup.boolean().default(true),
+    createDate: yup.string().nullable(),
+    lastUpdatedDate: yup.string().nullable(),
   });
 };

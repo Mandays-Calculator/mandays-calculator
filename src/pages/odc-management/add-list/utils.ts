@@ -15,6 +15,8 @@ export const AddEditFormat = (
     location: fieldValues.location,
     holidays: fieldValues.holidays,
     active: true,
+    createDate: "",
+    lastUpdatedDate: "",
   };
 
   updatedValues.odcList[idx] = obj;

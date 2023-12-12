@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { HolidayType, ODCListResponse } from "~/api/odc/types";
+import type { ODCListResponse } from "~/api/odc/types";
 import type { FormContext } from "../utils";
 
 import { useState, useEffect, useMemo } from "react";
@@ -82,10 +82,9 @@ const AddODC = (props: AddProps): ReactElement => {
     setFieldValue("holidays", holidays);
   };
 
-  const handleDeleteHoliday = (index: number): void => {
-    const holidays = values.holidays || [];
-    holidays[index].active = false;
-    setFieldValue("holidays", holidays);
+  const handleDeleteHoliday = (id: number): void => {
+    //POST DeleteAPI
+    console.log("DeleteAPI", id);
   };
 
   const handleClose = (): void => setFormContext("");
@@ -94,7 +93,6 @@ const AddODC = (props: AddProps): ReactElement => {
 		return error !== undefined;
 	};
 
-  const filterData = values.holidays?.filter((v: HolidayType) => v.active === true);
   const holidayListColumn = useMemo(() => 
     HolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday)
   , [holIdx]);
@@ -154,7 +152,7 @@ const AddODC = (props: AddProps): ReactElement => {
         <Table
           name="HolidayTable"
           columns={holidayListColumn}
-          data={filterData || []}
+          data={values.holidays || []}
         />
         <Grid container spacing={2} alignItems="center" mt={1}>
           <Grid item xs={12} container justifyContent="flex-end">

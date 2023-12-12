@@ -7,12 +7,18 @@ export const NewODCData = {
   abbreviation: "",
   holidays: [],
   active: true,
+  createDate: null,
+  lastUpdatedDate: null,
 };
 
 export const NewHolidayData = {
+  id: 0,
+  odcId: "",
   date: "",
-  holiday: "",
-  active: true,
+  recurring: true,
+  name: "",
+  createDate: null,
+  lastUpdatedDate: null,
 };
 
 export const SubmitFormat = (data: ODCListResponse): ODCSubmit => {
@@ -27,13 +33,21 @@ export const SubmitFormat = (data: ODCListResponse): ODCSubmit => {
 
 export const FakeHoliday = [
   {
-    date: "2023-01-01 00:00:00",
-    holiday: "New Year's Day",
-    active: true
+    id: 1,
+    odcId: "",
+    date: "2023-01-01",
+    recurring: true,
+    name: "New Year's Day",
+    createDate: null,
+    lastUpdatedDate: null,
   },
   {
-    date: "2023-01-22 00:00:00",
-    holiday: "Lunar New Year",
-    active: true
+    id: 1,
+    odcId: "",
+    date: "2023-01-22",
+    recurring: true,
+    name: "Lunar New Year",
+    createDate: null,
+    lastUpdatedDate: null,
   }
 ];
