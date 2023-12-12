@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
 
 import Grid from "@mui/material/Grid";
@@ -21,10 +21,19 @@ const StyledButton = styled(CustomButton, {
 interface HeaderProps {
   status: APIStatus;
   formik: FormikContextType<UserManagementForms>;
+  isSuccess: boolean;
+  resetIsSuccess: () => void;
+  isError: boolean;
 }
 const Header = (props: HeaderProps): ReactElement => {
-  const { status, formik } = props;
-  const [addModal, setAddModal] = useState(false);
+  const { status, formik, isSuccess, isError, resetIsSuccess } = props;
+  const [addModal, setAddModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => setAddModal(false), 1000);
+    }
+  }, [isSuccess]);
 
   return (
     <>
@@ -57,7 +66,10 @@ const Header = (props: HeaderProps): ReactElement => {
             colorVariant="primary"
             fullWidth
             noBorder
-            onClick={() => setAddModal(true)}
+            onClick={() => {
+              setAddModal(true);
+              resetIsSuccess();
+            }}
             name="add"
             data-testid="test-add-user-btn"
           >
@@ -65,9 +77,13 @@ const Header = (props: HeaderProps): ReactElement => {
           </StyledButton>
         </Grid>
         <AddUserModal
+          isError={isError}
+          isSuccess={isSuccess}
           status={status}
           form={formik}
-          OnSubmit={() => formik.submitForm()}
+          OnSubmit={() => {
+            formik.submitForm();
+          }}
           open={addModal}
           onAddUser={() => setAddModal(false)}
           onClose={() => setAddModal(false)}
