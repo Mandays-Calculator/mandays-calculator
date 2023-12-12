@@ -81,9 +81,7 @@ const UserManagement = (): ReactElement => {
         }
 
         if (typeof propertyValue === "object") {
-          return ["role_sys_admin", "admin"].includes(
-            filterValue.toLowerCase()
-          );
+          return ["administrator", "admin"].includes(filterValue.toLowerCase());
         }
         return false;
       } else if (filterValue) {
@@ -93,7 +91,7 @@ const UserManagement = (): ReactElement => {
             : typeof value === "boolean"
             ? filterValue.toLowerCase() === "active"
             : typeof value === "object"
-            ? ["role_sys_admin", "admin"].includes(filterValue.toLowerCase())
+            ? ["administrator", "admin"].includes(filterValue.toLowerCase())
             : false
         );
       }
