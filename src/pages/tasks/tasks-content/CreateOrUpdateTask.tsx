@@ -7,23 +7,9 @@ import LocalizationKey from "~/i18n/key";
 
 import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
+
 import ComplexityDetails from "./complexity-details";
-
-interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
-
+import { Task } from "./type";
 interface CreateModalProps {
   open: boolean;
   isCreate: boolean;
@@ -34,6 +20,7 @@ interface CreateModalProps {
 }
 
 const initialTaskState: Task = {
+  taskID: "100",
   taskTitle: "Sample",
   desc: "",
   date: "12/16/2023",
@@ -42,6 +29,7 @@ const initialTaskState: Task = {
   status: "Backlog",
   type: "",
   functionality: "",
+  tags: [],
   comments: [
     {
       name: "Zad Geron",
@@ -67,6 +55,7 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
 
   useEffect(() => {
     setNewTask(task || initialTaskState);
+    setSelectedTags(task?.tags || []);
   }, [task]);
 
   const handleCreateOrUpdateTask = (): void => {
@@ -168,7 +157,7 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                   onChange={(e) =>
                     handleSelectChange("complexity", e.target.value as string)
                   }
-                  value={newTask.complexity ?? ''}
+                  value={newTask.complexity}
                   options={[
                     { value: "complexity1", label: "Complexity 1", },
                     { value: "complexity2", label: "Complexity 2", },

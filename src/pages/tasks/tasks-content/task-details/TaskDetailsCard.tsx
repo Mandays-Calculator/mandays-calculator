@@ -9,7 +9,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
 
-import { Task } from "../TasksContent";
+import { Task } from "../type";
 
 const styles = {
   taskTitle: {
@@ -51,6 +51,7 @@ const styles = {
 
 interface TaskDetailsCardProps {
   data: {
+    taskID: string;
     taskTitle: string;
     desc: string;
     date: string;
@@ -59,6 +60,7 @@ interface TaskDetailsCardProps {
     status: string;
     type: string;
     functionality: string;
+    tags: string[],
     comments: {
       name: string;
       comment: string;

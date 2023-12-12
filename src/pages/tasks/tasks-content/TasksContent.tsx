@@ -13,24 +13,9 @@ import { Select, PageContainer } from "~/components";
 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
-import EditTask from "./EditTask";
-
 import MockData from "./mockData.json";
-
-export interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
+import EditTask from "./EditTask";
+import { Task } from "./type";
 
 const StyleDiv = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
@@ -107,7 +92,7 @@ const TasksContent = (): ReactElement => {
 
   const handleUpdateTask = (updatedTask: Task): void => {
     const updatedMockData = mockData.map((task) => {
-      if (task.taskTitle === updatedTask.taskTitle) {
+      if (task.taskID === updatedTask.taskID) {
         return updatedTask;
       }
       return task;
