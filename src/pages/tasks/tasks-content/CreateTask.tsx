@@ -203,7 +203,7 @@ const CreateTask: React.FC<CreateModalProps> = ({
               justifyContent="flex-end"
             >
               <CustomButton type="button" colorVariant="primary" onClick={handleCreateTask}>
-                Create
+                {t(LocalizationKey.tasks.createTask.btnLabel.create)}
               </CustomButton>
             </Stack>
           </Grid>

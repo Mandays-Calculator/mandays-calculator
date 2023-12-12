@@ -33,15 +33,11 @@ export interface Task {
 const StyleDiv = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
     backgroundColor:
-      backgroundColor === "Backlog"
-        ? "#E3E6E7"
-        : backgroundColor === "Not Yet Started"
-        ? "#E4F7F9"
-        : backgroundColor === "In Progress"
-        ? "#FFF4D4"
-        : backgroundColor === "On Hold"
-        ? "#FFCECE"
-        : "#D5FFCD",
+      backgroundColor === "Backlog" ? "#E3E6E7"
+        : backgroundColor === "Not Yet Started" ? "#E4F7F9"
+          : backgroundColor === "In Progress" ? "#FFF4D4"
+            : backgroundColor === "On Hold" ? "#FFCECE"
+              : "#D5FFCD",
     borderRadius: 10,
     padding: 15,
   })
@@ -51,15 +47,11 @@ const StyledTitle = styled(Grid)(({ color }: { color: string }) => ({
   fontSize: 18,
   fontWeight: "bold",
   color:
-    color === "Not Yet Started"
-      ? "#2C8ED1"
-      : color === "In Progress"
-      ? "#796101"
-      : color === "On Hold"
-      ? "#D54147"
-      : color === "Completed"
-      ? "#177006"
-      : "black",
+    color === "Not Yet Started" ? "#2C8ED1"
+      : color === "In Progress" ? "#796101"
+        : color === "On Hold" ? "#D54147"
+          : color === "Completed" ? "#177006"
+            : "#000000",
 }));
 
 const StyledAdd = styled(Grid)(({ display }: { display: string }) => ({
@@ -82,6 +74,7 @@ const TasksContent = (): ReactElement => {
     "On Hold",
     "Completed",
   ];
+
   const [mockData, setMockData] = useState<Task[]>([
     {
       taskTitle: "BE - Database Structure",
@@ -204,6 +197,7 @@ const TasksContent = (): ReactElement => {
   const handleCloseAddModalState = () => {
     setAddModalOpen(false);
   };
+
   const handleEditModalState = (task: Task) => {
     setSelectedTask(task);
     setEditModalOpen(!modalEditOpen);
@@ -217,6 +211,7 @@ const TasksContent = (): ReactElement => {
     const updatedMockData = [...mockData, task];
     setMockData(updatedMockData);
   };
+
   const handleSaveTask = (updatedTask: Task): void => {
     const updatedMockData = mockData.map((task) => {
       if (task.taskTitle === updatedTask.taskTitle) {
@@ -289,65 +284,68 @@ const TasksContent = (): ReactElement => {
             },
           ]}
         />
+
         <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
-        <Grid container spacing={1} justifyContent="space-between">
-          {status.map((i) => {
-            const filteredData = mockData.filter((task) => task.status === i);
+        <div style={{ maxHeight: '960px', minWidth: '960px', overflow: 'auto' }}>
+          <Grid container spacing={1} justifyContent="space-between">
+            {status.map((i) => {
+              const filteredData = mockData.filter((task) => task.status === i);
 
-            return (
-              <Grid item xs={2.4} key={i}>
-                <Droppable droppableId={i}>
-                  {(provided) => (
-                    <StyleDiv
-                      backgroundColor={i}
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      {...provided.droppableProps}
-                    >
-                      <Grid container alignItems={"center"}>
-                        <StyledTitle item xs={11} color={i}>
-                          {i}
-                        </StyledTitle>
-                        <StyledAdd
-                          item
-                          xs={1}
-                          display={i}
-                          onClick={handleAddModalState}
-                        >
-                          +
-                        </StyledAdd>
-                      </Grid>
+              return (
+                <Grid item container xs={2.4} key={i}>
+                  <Droppable droppableId={i}>
+                    {(provided) => (
+                      <StyleDiv
+                        backgroundColor={i}
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        {...provided.droppableProps}
+                      >
+                        <Grid item container alignItems={"center"}>
+                          <Grid item xs={11}>
+                            <StyledTitle color={i}>
+                              {i}
+                            </StyledTitle>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <StyledAdd display={i} onClick={handleAddModalState}>
+                              +
+                            </StyledAdd>
+                          </Grid>
+                        </Grid>
 
-                      <Divider />
-                      {filteredData.map((task, index) => (
-                        <Draggable
-                          key={task.taskTitle}
-                          draggableId={task.taskTitle}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <TaskDetailsCard
-                                data={task}
-                                handleEdit={handleEditModalState}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </StyleDiv>
-                  )}
-                </Droppable>
-              </Grid>
-            );
-          })}
-        </Grid>
+                        <Divider />
+
+                        {filteredData.map((task, index) => (
+                          <Draggable
+                            key={task.taskTitle}
+                            draggableId={task.taskTitle}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <TaskDetailsCard
+                                  data={task}
+                                  handleEdit={handleEditModalState}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </StyleDiv>
+                    )}
+                  </Droppable>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </div>
       </PageContainer>
     </DragDropContext>
   );
