@@ -15,6 +15,8 @@ import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import EditTask from "./EditTask";
 
+import MockData from "./mockData.json";
+
 export interface Task {
   taskTitle: string;
   desc: string;
@@ -75,121 +77,7 @@ const TasksContent = (): ReactElement => {
     "On Hold",
     "Completed",
   ];
-
-  const [mockData, setMockData] = useState<Task[]>([
-    {
-      taskTitle: "BE - Database Structure",
-      desc: "lorem kineme.",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Backlog",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "BE - Database Structure 1",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Backlog",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "BE - Database Structure 2",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Backlog",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "BE - Database Structure 3",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Not Yet Started",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "Optimization",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "In Progress",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "Integration",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "On Hold",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "Project Management - UI",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Completed",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-  ]);
+  const [mockData, setMockData] = useState<Task[]>(MockData);
 
   // CREATE TASK
   const handleCreateModalState: () => void = () => {

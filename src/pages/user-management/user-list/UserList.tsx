@@ -63,9 +63,8 @@ const UserList = ({ userListData }: UserListProps): ReactElement => {
             DeleteUser.mutate(
               { id: currentUser },
               {
-                onSuccess: (data) => {
+                onSuccess: () => {
                   setDeleteModalOpen(false);
-                  console.log("success", data);
                   userList.refetch();
                 },
                 onError: (error) => {
