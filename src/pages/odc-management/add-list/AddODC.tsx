@@ -1,27 +1,28 @@
-import type { ReactElement, Dispatch, SetStateAction } from "react";
+import type { ReactElement } from "react";
 import type { HolidayType, ODCListResponse } from "~/api/odc/types";
-import type { IntValues } from "../utils/interface";
+import type { FormContext } from "../utils";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Grid, Box, styled, Typography } from "@mui/material";
-import { useFormikContext } from "formik";
-import * as yup from "yup";
-import { ValidationError, array, object } from "yup";
+import { useFormik } from "formik";
 
-import { Table, PageContainer } from "~/components";
+import { Table, Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
+import { getFieldError } from "~/components/form/utils";
 import { ControlledTextField } from "~/components/form/controlled";
+import LocalizationKey from "~/i18n/key";
 
 import {
   HolidayColumn,
-  DataTypeSchema,
   IntValuesSchema,
   //SubmitFormat
   NewHolidayData,
+  FakeHoliday,
 } from "../utils";
-import { AddEditFormat } from ".";
+// import { AddEditFormat } from ".";
+import { IsDuplicate } from ".";
 
 const StyledLabel = styled(Typography)(() => ({
   fontWeight: 600,
@@ -29,219 +30,163 @@ const StyledLabel = styled(Typography)(() => ({
 }));
 
 type AddProps = {
-  setIsAdd: Dispatch<SetStateAction<boolean>>;
-  isEdit: boolean;
-  idx: number;
-  data: ODCListResponse[];
+  apiData: ODCListResponse[];
+  data: ODCListResponse;
+  formContext: FormContext;
+  setFormContext: (context: FormContext) => void;
 };
 
 const AddODC = (props: AddProps): ReactElement => {
+  const { apiData, data, formContext, setFormContext } = props;
+
   const { t } = useTranslation();
-  const { idx, isEdit, setIsAdd, data } = props;
+  const { odc: { label, btnlabel, validationInfo } } = LocalizationKey;
 
-  const { values, setValues } = useFormikContext<IntValues>();
-  const holidays: HolidayType[] = values?.odcList[idx]?.holidays || [];
-
-  const handleFieldValue = (value: string): string => isEdit ? value : "";
-
-  const [fieldValues, setFieldValues] = useState({
-    name: handleFieldValue(values?.odcList[idx]?.name),
-    abbreviation: handleFieldValue(values?.odcList[idx]?.abbreviation),
-    location: handleFieldValue(values?.odcList[idx]?.location),
-    holidays: values?.odcList[idx]?.holidays,
+  const ODCForm = useFormik<ODCListResponse>({
+    initialValues: data,
+    validationSchema: IntValuesSchema(t),
+    enableReinitialize: true,
+    onSubmit: (): void => {},
   });
-  const [isNameError, setIsNameError] = useState<boolean>(false);
-  const [isAbbrError, setIsAbbrError] = useState<boolean>(false);
-  const [isLocError, setIsLocError] = useState<boolean>(false);
-  const [odcNameRequiredError, setOdcNameRequiredError] = useState<string | undefined>("");
-  const [odcNameUniqueError, setOdcNameUniqueError] = useState<string | undefined>("");
-  const [abbreviationRequiredError, setAbbreviationRequiredError] = useState<string | undefined>("");
-  const [abbreviationUniqueError, setAbbreviationUniqueError] = useState<string | undefined>("");
-  const [locationRequiredError, setLocationRequiredError] = useState<string | undefined>("");
-  const [locationUniqueError, setLocationUniqueError] = useState<string | undefined>("");
-  const [editIdx, setEditIdx] = useState<number[]>([]);
+
+  const { values, setFieldValue, errors } = ODCForm;
 
   useEffect(() => {
-    setIsNameError(handleError(odcNameRequiredError) || handleError(odcNameUniqueError));
-    setIsLocError(handleError(locationRequiredError) || handleError(locationUniqueError))
-    setIsAbbrError(handleError(abbreviationRequiredError) || handleError(abbreviationUniqueError));
-  }, [
-    odcNameRequiredError, odcNameUniqueError,
-    locationRequiredError, locationUniqueError,
-    abbreviationRequiredError, abbreviationUniqueError
-  ]);
+    if (formContext === "Edit")
+      setFieldValue("holidays", FakeHoliday);
+  }, [data]);
 
-  const handleFieldChange = (fieldName: string, value: string) => {
-    setFieldValues({ ...fieldValues, [fieldName]: value });
-  };
-
-  const handleError = (error: string | undefined): boolean => {
-    let retError = true;
-    if (error === undefined || error === null || error === "") retError = false;
-    return retError;
-  };
+  const [nameUnqError, setNameUnqError] = useState<boolean>(false);
+  const [nameUnqErrorMsg, setNameUnqErrorMsg] = useState<string>("");
+  const [abbrUnqError, setAbbrUnqError] = useState<boolean>(false);
+  const [abbrUnqErrorMsg, setAbbrUnqErrorMsg] = useState<string>("");
+  const [holIdx, setHolIdx] = useState<number[]>([]);
 
   const handleAddODC = (): void => {
-    setOdcNameRequiredError("");
-    setOdcNameUniqueError("");
-    setAbbreviationRequiredError("");
-    setAbbreviationUniqueError("");
-    setLocationRequiredError("");
-    setLocationUniqueError("");
-
-    const list = AddEditFormat(values, fieldValues, idx);
-
-    const validationSchema = IntValuesSchema.concat(
-      object({
-        odcList: array().of(DataTypeSchema),
-      })
-    );
-
-    try {
-      validationSchema.validateSync(
-        { odcList: list },
-        { abortEarly: false }
-      );
-      setValues({ odcList: list });
-      // UpdateAPI (Remove ID on JSON)
-      // SubmitFormat(values?.odcList[idx]);
-      // SubmitAPI (Complete)
-      // values
-      setIsAdd(false);
-    } catch (error: ValidationError | unknown) {
-      if (error instanceof yup.ValidationError) {
-        const errorMappings: Record<
-          string,
-          Dispatch<SetStateAction<string | undefined>>
-        > = {
-          [`odcList[${idx}].name`]: setOdcNameRequiredError,
-          [`odcList[${idx}].abbreviation`]: setAbbreviationRequiredError,
-          [`odcList[${idx}].location`]: setLocationRequiredError,
-          [`odcList[0].name`]: setOdcNameUniqueError,
-          [`odcList[0].abbreviation`]: setAbbreviationUniqueError,
-          [`odcList[0].location`]: setLocationUniqueError,
-        };
-
-        error.inner.forEach((e) => {
-          if (e.path) {
-            const setError = errorMappings[e.path];
-            if (setError) {
-              setError(e.message);
-            }
-          }
-        });
-      } else {
-        console.error(error);
-      }
-    }
+    const isNameError = IsDuplicate(apiData, values.name, "name");
+    setNameUnqError(isNameError);
+    if (isNameError) setNameUnqErrorMsg(t(validationInfo.nameUnq));
+    else setNameUnqErrorMsg("");
+    
+    const isAbbrError = IsDuplicate(apiData, values.abbreviation, "abbreviation");
+    setAbbrUnqError(isAbbrError);
+    if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
+    else setAbbrUnqErrorMsg("");
   };
 
   const handleAddHoliday = () => {
-    const updatedValues = { ...values };
-    const holiday = values.odcList[idx].holidays || [];
-    updatedValues.odcList[idx].holidays = [...holiday, NewHolidayData];
-    const upHoliday = updatedValues.odcList[idx].holidays?.length || 0;
-    setEditIdx([...editIdx, upHoliday - 1]);
-    setValues(updatedValues);
+    const holidays = values.holidays || [];
+    holidays.push(NewHolidayData);
+    const upHoliday = holidays.length;
+    setHolIdx([...holIdx, upHoliday - 1]);
+    setFieldValue("holidays", holidays);
   };
 
-  const handleClose = () => {
-    const updatedValues = { ...values };
-    updatedValues.odcList[idx] = data[idx];
-    setValues(updatedValues);
-    setIsAdd(false);
+  const handleDeleteHoliday = (index: number): void => {
+    const holidays = values.holidays || [];
+    holidays[index].active = false;
+    setFieldValue("holidays", holidays);
   };
+
+  const handleClose = (): void => setFormContext("");
+
+  const handleError = (error: string | undefined): boolean => {
+		return error !== undefined;
+	};
+
+  const filterData = values.holidays?.filter((v: HolidayType) => v.active === true);
+  const holidayListColumn = useMemo(() => 
+    HolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday)
+  , [holIdx]);
+
+  console.log('value', values)
 
   return (
-    <>
-      <PageContainer sx={{ background: "#FFFFFF" }}>
-        <Grid container spacing={2}>
-          <Grid item xs={4.5}>
-            <ControlledTextField
-              name={`odcList.${idx}.name`}
-              label={t("odc.label.name")}
-              id="name"
-              error={isNameError}
-              value={fieldValues.name}
-              onChange={(event: any) =>
-                handleFieldChange("name", event.target.value)
-              }
-              helperText={odcNameRequiredError || odcNameUniqueError}
-            />
-          </Grid>
-          <Grid item xs={4.5}>
-            <ControlledTextField
-              name={`odcList.${idx}.location`}
-              label={t("odc.label.location")}
-              id="location"
-              error={isLocError}
-              value={fieldValues.location}
-              onChange={(event) =>
-                handleFieldChange("location", event.target.value)
-              }
-              helperText={locationRequiredError || locationUniqueError}
-            />
+    <Form instance={ODCForm}>
+      <Grid container spacing={2}>
+        <Grid item xs={4.5}>
+          <ControlledTextField
+            name={"name"}
+            label={t(label.name)}
+            id="name"
+            error={handleError(errors.name) || nameUnqError}
+            helperText={getFieldError(errors, "name") || nameUnqErrorMsg}
+          />
+        </Grid>
+        <Grid item xs={4.5}>
+          <ControlledTextField
+            name={"location"}
+            label={t(label.location)}
+            id="location"
+            error={handleError(errors.location)}
+            helperText={getFieldError(errors, "location")}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <ControlledTextField
+            name={"abbreviation"}
+            label={t(label.abbreviation)}
+            id="abbreviation"
+            error={handleError(errors.abbreviation) || abbrUnqError}
+            helperText={getFieldError(errors, "abbreviation") || abbrUnqErrorMsg}
+          />
+        </Grid>
+      </Grid>
+
+      <Box margin="30px 0px 14px">
+        <Grid container spacing={2} mb={2}>
+          <Grid item xs={9}>
+            <StyledLabel>
+              {t(label.holidays)}
+            </StyledLabel>
           </Grid>
           <Grid item xs={3}>
-            <ControlledTextField
-              name={`odcList.${idx}.abbreviation`}
-              label={t("odc.label.abbreviation")}
-              id="abbreviation"
-              error={isAbbrError}
-              value={fieldValues.abbreviation}
-              onChange={(event) =>
-                handleFieldChange("abbreviation", event.target.value)
-              }
-              helperText={abbreviationRequiredError || abbreviationUniqueError}
-            />
+            <Grid container justifyContent="flex-end">
+              <CustomButton
+                type="button"
+                onClick={handleAddHoliday}
+              >
+                {t(btnlabel.addHoliday)}
+              </CustomButton>
+            </Grid>
           </Grid>
         </Grid>
-
-        <Box margin="30px 0px 14px">
-          <Grid container spacing={2} mb={2}>
-            <Grid item xs={9}>
-              <StyledLabel>
-                {t("odc.label.holidays")}
-              </StyledLabel>
-            </Grid>
-            <Grid item xs={3}>
-              <Grid container justifyContent="flex-end">
-                <CustomButton type="button" onClick={handleAddHoliday}>
-                  {t("odc.btnlabel.addHoliday")}
+        <Table
+          name="HolidayTable"
+          columns={holidayListColumn}
+          data={filterData || []}
+        />
+        <Grid container spacing={2} alignItems="center" mt={1}>
+          <Grid item xs={12} container justifyContent="flex-end">
+            {formContext === "Edit" && (
+              <>
+                <CustomButton
+                  type="submit"
+                  sx={{ mr: 2 }}
+                  onClick={handleAddODC}
+                >
+                  {t(btnlabel.save)}
                 </CustomButton>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Table
-            name="HolidayTable"
-            columns={HolidayColumn(t, editIdx, setEditIdx, idx)}
-            data={isEdit ? holidays : []}
-          />
-          <Grid container spacing={2} alignItems="center" mt={1}>
-            <Grid item xs={12} container justifyContent="flex-end">
-              {isEdit ? (
-                <>
-                  <CustomButton
-                    type="button"
-                    sx={{ mr: 2 }}
-                    onClick={handleAddODC}
-                  >
-                    {t("odc.btnlabel.save")}
-                  </CustomButton>
-                  <CustomButton type="button" onClick={handleClose}>
-                    {t("odc.btnlabel.cancel")}
-                  </CustomButton>
-                </>
-              ) : (
-                <CustomButton type="button" onClick={handleAddODC}>
-                  {t("odc.btnlabel.addOdc")}
+                <CustomButton
+                  type="button"
+                  onClick={handleClose}
+                >
+                  {t(btnlabel.cancel)}
                 </CustomButton>
-              )}
-            </Grid>
+              </>
+            )}
+            {formContext === "Add" && (
+              <CustomButton
+                type="submit"
+                onClick={handleAddODC}
+              >
+                {t(btnlabel.addOdc)}
+              </CustomButton>
+            )}
           </Grid>
-        </Box>
-      </PageContainer>
-    </>
+        </Grid>
+      </Box>
+    </Form>
   );
 };
 

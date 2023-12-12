@@ -169,6 +169,16 @@
       "cancel": "Cancel",
       "edit": "Edit"
     },
+    "validationInfo": {
+      "nameReq": "ODC name is required.",
+      "nameUnq": "ODC name must be unique.",
+      "abbrUnq": "Abbreviation must be unique.",
+      "locReq": "Location is required.",
+      "holidays": "Holidays",
+      "date": "Date",
+      "holiday": "Holiday",
+      "noHolidays": "No. Holidays"
+    },
     "placeholder": "Enter keyword here..."
   },
   "project": {

@@ -12,6 +12,7 @@ export const NewODCData = {
 export const NewHolidayData = {
   date: "",
   holiday: "",
+  active: true,
 };
 
 export const SubmitFormat = (data: ODCListResponse): ODCSubmit => {
@@ -26,11 +27,13 @@ export const SubmitFormat = (data: ODCListResponse): ODCSubmit => {
 
 export const FakeHoliday = [
   {
-    date: "01/01/2023",
-    holiday: "New Year's Day"
+    date: "2023-01-01 00:00:00",
+    holiday: "New Year's Day",
+    active: true
   },
   {
-    date: "01/22/2023",
-    holiday: "Lunar New Year"
+    date: "2023-01-22 00:00:00",
+    holiday: "Lunar New Year",
+    active: true
   }
 ];

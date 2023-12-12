@@ -4,6 +4,8 @@ export interface IntValues {
   odcList: ODCListResponse[];
 };
 
+export type FormContext = '' | 'Add' | 'Edit' | 'Delete'
+
 export type FieldValue = {
   name: string;
   abbreviation: string;

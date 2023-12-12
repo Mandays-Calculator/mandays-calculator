@@ -1,89 +1,68 @@
 import type { ReactElement } from "react";
-import type { IntValues } from "./utils";
+import type { ODCListResponse } from "~/api/odc";
+import type { FormContext } from "./utils";
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useFormik } from "formik";
-
 import { useODCList } from "~/queries/odc/ODC";
-import { PageLoader, Title, Form } from "~/components";
-import { ConfirmModal } from "~/components/modal/confirm-modal";
+import { PageLoader, Title, PageContainer, ConfirmModal } from "~/components";
+import LocalizationKey from "~/i18n/key";
 
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
-import { IntValuesSchema, NewODCData } from "./utils";
+import { NewODCData } from "./utils";
 
 const ODCManagement = (): ReactElement => {
-  const [isAdd, setIsAdd] = useState<boolean>(false);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [idx, setIdx] = useState<number>(0);
-  const [delIdx, setDelIdx] = useState<number | null>(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-
   const { t } = useTranslation();
+  const { odc: { management } } = LocalizationKey;
+  
   const { data, isLoading } = useODCList();
-  const InitialValue = { odcList: data || [] };
 
-  const ODCForm = useFormik<IntValues>({
-    initialValues: InitialValue,
-    validationSchema: IntValuesSchema,
-    enableReinitialize: true,
-    onSubmit: (): void => {},
-  });
+  const [initialValues, setInitialValues] = useState<ODCListResponse>(NewODCData);
+  const [formContext, setFormContext] = useState<FormContext>('');
+  const [idx, setIdx] = useState<number>(0);
 
   useEffect(() => {
-    if (isAdd === true && isEdit === false) {
-      const arr = ODCForm.values.odcList;
-      arr.push(NewODCData);
-      setIdx(arr.length - 1);
-      ODCForm.setFieldValue(`ocdList`, arr);
-    }
-  }, [isAdd]);
+    const APIData = data || [];
+    if (formContext === "Edit" || formContext === "Delete")
+      setInitialValues(APIData[idx]);
+    if (formContext === "Add")
+      setInitialValues(NewODCData);
+  }, [formContext]);
 
-  if (isLoading) {
-    return <PageLoader />;
-  } else {
-    return (
-      <>
-        <Title title={t("odc.management.label")} />
-        <Form instance={ODCForm}>
-          {isAdd ? (
-            <AddODC
-              setIsAdd={setIsAdd}
-              isEdit={isEdit}
-              idx={idx}
-              data={InitialValue.odcList}
-            />
-          ) : (
-            <ViewODC
-              setIsAdd={setIsAdd}
-              setDeleteModalOpen={setDeleteModalOpen}
-              setIsEdit={setIsEdit}
-              setIdx={setIdx}
-              setDelIdx={setDelIdx}
-            />
-          )}
-        </Form>
+  if (isLoading) { return <PageLoader /> };
 
-        <ConfirmModal
-          onConfirmWithIndex={(): void => {
-            const dIdx = delIdx || 0;
-            const arr = ODCForm.values.odcList;
-            // arr.splice(dIdx, 1);
-            setDeleteModalOpen(false);
-            // postUpdateAPI
-            arr[dIdx].active = false;
-            ODCForm.setFieldValue(`odcList`, arr);
-            console.log("Delete API", arr, dIdx);
-          }}
-          open={deleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-          selectedRow={delIdx}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <Title title={t(management)} />
+      <PageContainer sx={{ background: "#FFFFFF" }}>
+        {formContext === "" && (
+          <ViewODC
+            data={data || []}
+            setFormContext={setFormContext}
+            setIdx={setIdx}
+          />
+        )}
+        {(formContext === "Add" || formContext === "Edit") && (
+          <AddODC
+            apiData={data || []}
+            data={initialValues}
+            formContext={formContext}
+            setFormContext={setFormContext}
+          />
+        )}
+      </PageContainer>
+      <ConfirmModal
+        onConfirmWithIndex={(): void => {
+          setFormContext("");
+        }}
+        open={formContext === "Delete"}
+        onClose={() => setFormContext("")}
+        selectedRow={idx}
+      /> 
+    </>
+  );
 };
 
 export default ODCManagement;

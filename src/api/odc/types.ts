@@ -10,6 +10,7 @@ export interface ODCListResponse {
 export type HolidayType = {
   date: string;
   holiday: string;
+  active: boolean;
 };
 
 export interface ODCSubmit {

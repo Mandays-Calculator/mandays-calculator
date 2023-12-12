@@ -1,16 +1,15 @@
-import type { ReactElement, Dispatch, SetStateAction, ChangeEvent } from "react";
+import type { ReactElement, ChangeEvent } from "react";
 import type { ODCListResponse } from "~/api/odc";
-import type { IntValues } from "../utils/interface";
+import type { FormContext } from "../utils/interface";
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Grid, TextField, styled, Box } from "@mui/material";
-import { useFormikContext } from "formik";
 
-import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
+import LocalizationKey from "~/i18n/key";
 
 import { ODCColumns } from "../utils/columns";
 
@@ -19,33 +18,28 @@ const StyledTextField = styled(TextField)(() => ({
 }));
 
 type ViewProps = {
-  setIsAdd: Dispatch<SetStateAction<boolean>>;
-  setDeleteModalOpen: Dispatch<SetStateAction<boolean>>;
-  setIsEdit: Dispatch<SetStateAction<boolean>>;
-  setIdx: Dispatch<SetStateAction<number>>;
-  setDelIdx: Dispatch<SetStateAction<number | null>>;
+  data: ODCListResponse[];
+  setFormContext: (context: FormContext) => void;
+  setIdx: (idx: number) => void;
 };
 
 const ViewODC = (props: ViewProps): ReactElement => {
+  const { data, setFormContext, setIdx } = props;
+
   const { t } = useTranslation();
-  const { setIsAdd, setDeleteModalOpen, setIsEdit, setIdx, setDelIdx } = props;
-  const { values } = useFormikContext<IntValues>();
+  const { odc: { btnlabel, placeholder } } = LocalizationKey;
+  
   const [filterData, setFilterData] = useState<ODCListResponse[]>([]);
 
   useEffect(() => {
-    setFilterData(values?.odcList?.filter((obj: ODCListResponse) => obj.active === true));
-  }, [values]);
-
-  const handleAdd = (): void => {
-    setIsAdd(true);
-    setIsEdit(false);
-  };
+    setFilterData(data?.filter((obj: ODCListResponse) => obj.active === true));
+  }, [data]);
 
   const handleLowerCase = (value: string): string => value.toLocaleLowerCase();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setFilterData(
-      values?.odcList?.filter(
+      data?.filter(
         (obj: ODCListResponse) => {
           const value = handleLowerCase(event.target.value);
           return obj.active === true &&
@@ -61,37 +55,32 @@ const ViewODC = (props: ViewProps): ReactElement => {
 
   return (
     <>
-      <PageContainer sx={{ background: "#FFFFFF" }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={5}>
-            <StyledTextField
-              size="small"
-              placeholder={t("odc.placeholder")}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={7} container justifyContent="flex-end">
-            <CustomButton type="button" onClick={handleAdd}>
-              {t("odc.btnlabel.addOdc")}
-            </CustomButton>
-          </Grid>
-        </Grid>
-
-        <Box marginTop="14px">
-          <Table
-            name="ODCTable"
-            columns={ODCColumns(
-              setIsAdd,
-              setIsEdit,
-              setIdx,
-              setDelIdx,
-              setDeleteModalOpen,
-              t
-            )}
-            data={filterData}
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={5}>
+          <StyledTextField
+            size="small"
+            placeholder={t(placeholder)}
+            onChange={handleChange}
           />
-        </Box>
-      </PageContainer>
+        </Grid>
+        <Grid item xs={7} container justifyContent="flex-end">
+          <CustomButton type="button" onClick={() => setFormContext("Add")}>
+            {t(btnlabel.addOdc)}
+          </CustomButton>
+        </Grid>
+      </Grid>
+
+      <Box marginTop="14px">
+        <Table
+          name="ODCTable"
+          columns={ODCColumns(
+            t,
+            setFormContext,
+            setIdx,
+          )}
+          data={filterData}
+        />
+      </Box>
     </>
   );
 };

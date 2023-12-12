@@ -20,3 +20,13 @@ export const AddEditFormat = (
   updatedValues.odcList[idx] = obj;
   return updatedValues.odcList;
 };
+
+export const IsDuplicate = (arr: ODCListResponse[], value: string, name: string): boolean => {
+  const newArr: boolean[] = [];
+  arr.map((v: any) => {
+    if (v[name] === value) newArr.push(true);
+    else newArr.push(false);
+  });
+
+  return newArr.includes(true);
+};
