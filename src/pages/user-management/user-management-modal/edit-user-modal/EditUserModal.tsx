@@ -23,6 +23,12 @@ import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import moment from "moment";
 import { genders, rolesData } from "~/utils/constants";
+import {
+  careerStepOptions,
+  odcOptions,
+  projectOptions,
+  teamOptions,
+} from "../utils";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -172,9 +178,12 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={2} mt={1}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.careerStep)}
+            </StyledTitle>
+            <ControlledSelect
+              options={careerStepOptions}
               name="updateCareerStep"
-              label={t(userManagement.label.careerStep)}
               placeholder="I03"
             />
           </Grid>
@@ -186,10 +195,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={5}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
+            <ControlledSelect
+              options={odcOptions}
               name="updateOdcId"
-              label={t(userManagement.label.odcId)}
-              placeholder="philippines"
+              placeholder="Philippines"
             />
           </Grid>
 
@@ -205,16 +215,20 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={7.7}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.projectId)}
+            </StyledTitle>
+            <ControlledSelect
+              options={projectOptions}
               name="updateProjectName"
-              label={t(userManagement.label.projectId)}
               placeholder="eMPF"
             />
           </Grid>
           <Grid item xs={4.3}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>{t(userManagement.label.teamId)}</StyledTitle>
+            <ControlledSelect
+              options={teamOptions}
               name="updateTeamName"
-              label={t(userManagement.label.teamId)}
               placeholder="Developer Team"
             />
           </Grid>
