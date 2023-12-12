@@ -1,33 +1,79 @@
-export const genders = [
+export const odcOptions = [
   {
-    label: "FEMALE",
-    value: "FEMALE",
+    label: "Philippines",
+    value: "philippines",
   },
   {
-    label: "MALE",
-    value: "MALE",
+    label: "Malaysia",
+    value: "malaysia",
   },
   {
-    label: "NON-BINARY",
-    value: "NON_BINARY",
+    label: "Hong Kong",
+    value: "hongkong",
   },
   {
-    label: "PREFER NOT TO SAY",
-    value: "PREFER_NOT_TO_SAY",
+    label: "Singapore",
+    value: "singapore",
   },
 ];
 
-export const rolesData = [
+export const projectOptions = [
   {
-    label: "System Admin",
-    value: "ROLE_SYS_ADMIN",
+    label: "eMPF",
+    value: "empf",
   },
   {
-    label: "Sprint Manager",
-    value: "ROLE_SPRINT_MANAGER",
+    label: "Project Option 1",
+    value: "projectoption1",
   },
   {
-    label: "User",
-    value: "ROLE_USER",
+    label: "Project Option 2",
+    value: "projectoption2",
+  },
+];
+
+export const teamOptions = [
+  {
+    label: "Developer Team",
+    value: "developerteam",
+  },
+  {
+    label: "Team Option 1",
+    value: "teamoption1",
+  },
+  {
+    label: "Team Option 2",
+    value: "teamoption2",
+  },
+];
+
+export const careerStepOptions = [
+  {
+    label: "I03",
+    value: "I03",
+  },
+  {
+    label: "I04",
+    value: "I04",
+  },
+  {
+    label: "I05",
+    value: "I05",
+  },
+  {
+    label: "I06",
+    value: "I06",
+  },
+  {
+    label: "I07",
+    value: "I07",
+  },
+  {
+    label: "I08",
+    value: "I08",
+  },
+  {
+    label: "I09",
+    value: "I09",
   },
 ];

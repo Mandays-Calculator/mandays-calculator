@@ -34,9 +34,13 @@
       "pageInProgressDescription": "This page is currently under construction. Check back soon!"
     },
     "idleTimeOut": {
+      "title": "Session Timeout",
       "label": "You will be automatically logged off in",
       "stayLogged": "Stay Logged on",
       "logout": "Logout"
+    },
+    "unauthorized": {
+      "title": "Unauthorized"
     },
     "noData": "No Data",
     "somethingWentWrong": {
@@ -61,7 +65,7 @@
     "errorMessage": {
       "required": "This field is required.",
       "fieldRequired": "{{field}} is required.",
-      "unauthorized": "Unauthorized. Your session has expired. Please login again.",
+      "unauthorized": "Your session has expired. Please login again.",
       "genericError": "There is a problem with your request. Please contact your system administrator.",
       "auth": {
         "changePassword": {
@@ -272,6 +276,26 @@
       }
     }
   },
+  "tasks": {
+    "createTask": {
+      "modalTitle": "Create New Task",
+      "label": {
+        "taskTitle": "Task Title",
+        "description": "Description",
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "placeholder": {
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "btnLabel": {
+        "create": "Create"
+      }
+    }
+  },
   "history": {
     "button": {
       "details": "Details"
@@ -293,7 +317,7 @@
       "odcId": "ODC",
       "joiningDate": "User recently joined the organization",
       "joiningDateEdit": "Joining Date",
-      "joiningAtLaterDate":"User recently joined the organization at a later date",
+      "joiningAtLaterDate": "User recently joined the organization at a later date",
       "projectId": "Project",
       "teamId": "Team",
       "roles": "Role/s"
