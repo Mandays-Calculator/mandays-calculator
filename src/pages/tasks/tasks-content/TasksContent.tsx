@@ -12,7 +12,7 @@ import {
 import { Select, PageContainer } from "~/components";
 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
-import CreateTask from "./CreateTask";
+import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import EditTask from "./EditTask";
 
 export interface Task {
@@ -63,8 +63,9 @@ const StyledAdd = styled(Grid)(({ display }: { display: string }) => ({
 }));
 
 const TasksContent = (): ReactElement => {
-  const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
-  const [modalEditOpen, setEditModalOpen] = useState<boolean>(false);
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState<boolean>(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const status = [
@@ -190,29 +191,33 @@ const TasksContent = (): ReactElement => {
     },
   ]);
 
-  const handleAddModalState: () => void = () => {
-    setAddModalOpen(!modalAddOpen);
+  // CREATE TASK
+  const handleCreateModalState: () => void = () => {
+    setCreateModalOpen(!createModalOpen);
   };
 
-  const handleCloseAddModalState = () => {
-    setAddModalOpen(false);
+  const handleCloseCreateModalState = () => {
+    setCreateModalOpen(false);
   };
 
-  const handleEditModalState = (task: Task) => {
+  const handleCreateTask = (task: Task | null) => {
+    if (task) {
+      const updatedMockData = [...mockData, task];
+      setMockData(updatedMockData);
+    }
+  };
+
+  // UPDATE TASK
+  const handleUpdateModalState = (task: Task) => {
     setSelectedTask(task);
-    setEditModalOpen(!modalEditOpen);
+    setUpdateModalOpen(!updateModalOpen);
   };
 
-  const handleCloseEditModalState = () => {
-    setEditModalOpen(false);
+  const handleCloseUpdateModalState = () => {
+    setUpdateModalOpen(false);
   };
 
-  const handleCreateTask = (task: Task) => {
-    const updatedMockData = [...mockData, task];
-    setMockData(updatedMockData);
-  };
-
-  const handleSaveTask = (updatedTask: Task): void => {
+  const handleUpdateTask = (updatedTask: Task): void => {
     const updatedMockData = mockData.map((task) => {
       if (task.taskTitle === updatedTask.taskTitle) {
         return updatedTask;
@@ -222,6 +227,17 @@ const TasksContent = (): ReactElement => {
     setMockData(updatedMockData);
   };
 
+  // VIEW TASK
+  const handleViewDetailsModalState = (task: Task) => {
+    setSelectedTask(task);
+    setViewDetailsModalOpen(!viewDetailsModalOpen);
+  };
+
+  const handleCloseViewDetailsModalState = () => {
+    setViewDetailsModalOpen(false);
+  };
+
+  // DRAG N DROP
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
 
@@ -257,17 +273,26 @@ const TasksContent = (): ReactElement => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <PageContainer>
-        <CreateTask
-          open={modalAddOpen}
-          onClose={handleCloseAddModalState}
+        <CreateOrUpdateTask
+          open={createModalOpen}
+          isCreate={true}
+          onClose={handleCloseCreateModalState}
           onCreateTask={handleCreateTask}
-          reOpenCreateTask={handleAddModalState}
+          reOpenCreateTask={handleCreateModalState}
+        />
+        <CreateOrUpdateTask
+          open={updateModalOpen}
+          isCreate={false}
+          task={selectedTask}
+          onClose={handleCloseUpdateModalState}
+          onCreateTask={handleUpdateTask}
+          reOpenCreateTask={handleCreateModalState}
         />
         <EditTask
-          open={modalEditOpen}
-          onClose={handleCloseEditModalState}
+          open={viewDetailsModalOpen}
+          onClose={handleCloseViewDetailsModalState}
           task={selectedTask}
-          onSave={handleSaveTask}
+          onSave={handleUpdateTask}
         />
         <Select
           name="filter"
@@ -309,7 +334,7 @@ const TasksContent = (): ReactElement => {
                             </StyledTitle>
                           </Grid>
                           <Grid item xs={1}>
-                            <StyledAdd display={i} onClick={handleAddModalState}>
+                            <StyledAdd display={i} onClick={handleCreateModalState}>
                               +
                             </StyledAdd>
                           </Grid>
@@ -331,7 +356,8 @@ const TasksContent = (): ReactElement => {
                               >
                                 <TaskDetailsCard
                                   data={task}
-                                  handleEdit={handleEditModalState}
+                                  handleEdit={handleUpdateModalState}
+                                  handleViewDetails={handleViewDetailsModalState}
                                 />
                               </div>
                             )}

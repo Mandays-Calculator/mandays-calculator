@@ -294,6 +294,9 @@
       "btnLabel": {
         "create": "Create"
       }
+    },
+    "updateTask": {
+      "modalTitle": "Update Task"
     }
   },
   "history": {

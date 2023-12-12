@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Grid, Stack, Typography } from "@mui/material";
@@ -26,13 +26,15 @@ interface Task {
 
 interface CreateModalProps {
   open: boolean;
+  isCreate: boolean;
+  task?: Task | null;
   onClose: () => void;
   onCreateTask: (task: Task) => void;
   reOpenCreateTask: () => void;
 }
 
 const initialTaskState: Task = {
-  taskTitle: "",
+  taskTitle: "Sample",
   desc: "",
   date: "12/16/2023",
   sprint: "2",
@@ -48,36 +50,34 @@ const initialTaskState: Task = {
   ],
 };
 
-const CreateTask: React.FC<CreateModalProps> = ({
+const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
   open,
+  isCreate,
+  task,
   onClose,
   onCreateTask,
   reOpenCreateTask,
 }) => {
   const { t } = useTranslation();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [newTask, setNewTask] = useState<Task>(initialTaskState);
+  const [newTask, setNewTask] = useState<Task>(task || initialTaskState);
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
-  const handleCreateTask = (): void => {
-    onCreateTask(newTask);
-    setNewTask({
-      taskTitle: "",
-      desc: "",
-      date: "",
-      sprint: "",
-      complexity: "",
-      status: "Backlog",
-      type: "",
-      functionality: "",
-      comments: [
-        {
-          name: "",
-          comment: "",
-        },
-      ],
-    });
-    setSelectedTags([]);
+  console.log(task)
+
+  useEffect(() => {
+    setNewTask(task || initialTaskState);
+  }, [task]);
+
+  const handleCreateOrUpdateTask = (): void => {
+    if (isCreate) {
+      onCreateTask(newTask);
+      setNewTask(initialTaskState);
+      setSelectedTags([]);
+    } else {
+      onCreateTask(newTask);
+    }
+
     onClose();
   };
 
@@ -95,7 +95,9 @@ const CreateTask: React.FC<CreateModalProps> = ({
 
   return (
     <>
-      <Modal open={open} title={t(LocalizationKey.tasks.createTask.modalTitle)} maxWidth="sm" onClose={onClose}>
+      <Modal open={open}
+        title={isCreate ? t(LocalizationKey.tasks.createTask.modalTitle) : t(LocalizationKey.tasks.updateTask.modalTitle)}
+        maxWidth="sm" onClose={onClose}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -166,7 +168,7 @@ const CreateTask: React.FC<CreateModalProps> = ({
                   onChange={(e) =>
                     handleSelectChange("complexity", e.target.value as string)
                   }
-                  value={newTask.complexity}
+                  value={newTask.complexity ?? ''}
                   options={[
                     { value: "complexity1", label: "Complexity 1", },
                     { value: "complexity2", label: "Complexity 2", },
@@ -202,7 +204,7 @@ const CreateTask: React.FC<CreateModalProps> = ({
               display="flex"
               justifyContent="flex-end"
             >
-              <CustomButton type="button" colorVariant="primary" onClick={handleCreateTask}>
+              <CustomButton type="button" colorVariant="primary" onClick={handleCreateOrUpdateTask}>
                 {t(LocalizationKey.tasks.createTask.btnLabel.create)}
               </CustomButton>
             </Stack>
@@ -219,4 +221,4 @@ const CreateTask: React.FC<CreateModalProps> = ({
   );
 };
 
-export default CreateTask;
+export default CreateOrUpdateTask;

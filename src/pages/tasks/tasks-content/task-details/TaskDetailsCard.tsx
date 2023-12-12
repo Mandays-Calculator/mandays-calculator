@@ -65,14 +65,16 @@ interface TaskDetailsCardProps {
     }[];
   };
   handleEdit: (task: Task) => void;
+  handleViewDetails: (task: Task) => void;
 }
 
 const TaskDetailsCard = ({
   data,
   handleEdit,
+  handleViewDetails,
 }: TaskDetailsCardProps): ReactElement => {
   return (
-    <PageContainer onClick={() => handleEdit(data)}>
+    <PageContainer onClick={() => handleViewDetails(data)}>
       <div style={styles.taskTitle}>{data.taskTitle}</div>
       <div style={styles.marginBottom.mbFive}>{data.desc}</div>
       <div style={styles.infoSection}>
@@ -99,6 +101,10 @@ const TaskDetailsCard = ({
         <Stack direction={"row"} spacing={0.3} flexWrap="wrap">
           <EditOutlinedIcon
             color="action"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEdit(data)
+            }}
             style={{
               display:
                 data.status !== "On Hold" && data.status !== "Backlog"
