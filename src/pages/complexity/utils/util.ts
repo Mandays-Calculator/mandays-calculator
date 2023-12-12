@@ -1,5 +1,5 @@
 import { MutationOptions } from "react-query";
-import { ComplexityForm, FormContext } from ".";
+import { ComplexityForm } from ".";
 
 export const complexityInitialValues: ComplexityForm = {
   complexityName: "",
@@ -15,11 +15,11 @@ export const handleSplitValues = (value: string = "") =>
   value?.split("-").map((value) => (value === " " ? "" : Number(value)));
 
 export const mutationOptions = <T extends { status: number }, U>(
-  setContext: (context: FormContext) => void
+  handleClose: () => void
 ): MutationOptions<T, Error, U> => {
   return {
     onSuccess: () => {
-      setContext("");
+      handleClose();
     },
     onError: (err) => console.error(err),
   };

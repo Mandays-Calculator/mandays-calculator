@@ -4,6 +4,7 @@ import ProviderWrapper from '~/__tests__/utils/ProviderWrapper';
 
 import { Complexity } from '~/pages/complexity/';
 import * as query from '~/queries/complexity/Complexities';
+// import { complexityById, tableData } from './utils/utils';
 import { complexityById, tableData } from './utils/utils';
 
 jest.mock('react-i18next', () => ({
@@ -27,7 +28,7 @@ describe('View complexity', () => {
 			</ProviderWrapper>
 		);
 
-		const title = screen.getByText('COMPLEXITY');
+		const title = screen.getByText('complexity.title');
 		expect(title).toBeInTheDocument();
 
 		const hoursDay = screen.getByRole('checkbox');
@@ -57,29 +58,20 @@ describe('View complexity', () => {
 			</ProviderWrapper>
 		);
 
-		const addButton = screen.getByRole('button', { name: /add complexity/i });
+		const addButton = screen.getByRole('button', { name: 'complexity.btnLabel.addComplexity' });
 		await user.click(addButton);
-		const cancelButton = screen.getByRole('button', { name: /cancel/i });
+		const cancelButton = screen.getByRole('button', { name: 'complexity.btnLabel.cancel' });
 		await user.click(cancelButton);
 		await user.click(addButton);
 		const formTitle = screen.getByRole('heading');
-		expect(formTitle).toHaveTextContent('Add Complexity');
+		expect(formTitle).toHaveTextContent('complexity.label.addComplexity');
 
 		const textbox = screen.getAllByRole('textbox');
-		const [
-			complexityName,
-			_noOfDaysFrom,
-			_noOfDaysTo,
-			_noOfFeatsFrom,
-			_noOfFeatsTo,
-			description,
-			samples] = textbox;
+		const [complexityName] = textbox;
 
 		await user.type(complexityName, 'Easy');
-		await user.type(description, 'Description')
-		await user.type(samples, 'Samples')
 
-		const submitButton = screen.getByRole('button', { name: /submit/i });
+		const submitButton = screen.getByRole('button', { name: 'complexity.btnLabel.save' });
 		await user.click(submitButton);
 
 		expect(formTitle).not.toBeInTheDocument();
@@ -112,24 +104,15 @@ describe('View complexity', () => {
 		const editButtons = await screen.findAllByRole('button', { name: /edit/i });
 		await user.click(editButtons[0]);
 		const formTitle = screen.getByRole('heading');
-		expect(formTitle).toHaveTextContent('Edit Complexity');
+		expect(formTitle).toHaveTextContent('complexity.label.editComplexity');
 
 
 		const textbox = screen.getAllByRole('textbox');
-		const [
-			complexityName,
-			_noOfDaysFrom,
-			_noOfDaysTo,
-			_noOfFeatsFrom,
-			_noOfFeatsTo,
-			description,
-			samples] = textbox;
+		const [complexityName] = textbox;
 
 		await user.type(complexityName, 'Easy');
-		await user.type(description, 'Description')
-		await user.type(samples, 'Samples')
 
-		const submitButton = screen.getByRole('button', { name: /submit/i });
+		const submitButton = screen.getByRole('button', { name: 'complexity.btnLabel.save' });
 		await user.click(submitButton);
 
 		expect(formTitle).not.toBeInTheDocument();
@@ -180,26 +163,17 @@ describe('View complexity', () => {
 			</ProviderWrapper>
 		);
 
-		const addButton = screen.getByRole('button', { name: /add complexity/i });
+		const addButton = screen.getByRole('button', { name: 'complexity.btnLabel.addComplexity' });
 		await user.click(addButton);
 		const formTitle = screen.getByRole('heading');
-		expect(formTitle).toHaveTextContent('Add Complexity');
+		expect(formTitle).toHaveTextContent('complexity.label.addComplexity');
 
 		const textbox = screen.getAllByRole('textbox');
-		const [
-			complexityName,
-			_noOfDaysFrom,
-			_noOfDaysTo,
-			_noOfFeatsFrom,
-			_noOfFeatsTo,
-			description,
-			samples] = textbox;
+		const [complexityName] = textbox;
 
 		await user.type(complexityName, 'Easy');
-		await user.type(description, 'Description')
-		await user.type(samples, 'Samples')
 
-		const submitButton = screen.getByRole('button', { name: /submit/i });
+		const submitButton = screen.getByRole('button', { name: 'complexity.btnLabel.save' });
 		await user.click(submitButton);
 
 		expect(formTitle).toBeInTheDocument();
@@ -220,7 +194,7 @@ describe('View complexity', () => {
 			</ProviderWrapper>
 		);
 
-		const addButton = screen.getByRole('button', { name: /add complexity/i });
+		const addButton = screen.getByRole('button', { name: 'complexity.btnLabel.addComplexity' });
 		await user.click(addButton);
 		const svg = screen.getByRole('progressbar')
 		expect(svg).toBeInTheDocument();

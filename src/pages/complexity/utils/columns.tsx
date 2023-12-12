@@ -52,7 +52,7 @@ export const complexityColumns = (
 					handleComplexityId(id);
 					if (context === 'Edit')
 						setOpenAddEditModal(true);
-					if (context === 'Delete')
+					if (context === '')
 						mutate(id);
 				};
 

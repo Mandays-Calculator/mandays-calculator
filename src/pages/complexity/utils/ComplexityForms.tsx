@@ -53,6 +53,12 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 	const { mutate: mutateAddComplexities } = usePostComplexities();
 	const { mutate: mutateEditComplexities } = usePutComplexities();
 
+	const handleClose = (): void => {
+		addEditComplexityForm.resetForm();
+		setContext('');
+		handleCloseAddEdit();
+	};
+
 	const addEditComplexityForm = useFormik<ComplexityForm>({
 		initialValues: initialValue,
 		validationSchema: complexityFormSchema(t),
@@ -76,13 +82,13 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 			}
 
 			if (formContext === 'Add')
-				mutateAddComplexities([addFormData], mutationOptions(setContext));
+				mutateAddComplexities([addFormData], mutationOptions(handleClose));
 
 			const { isActive, ...editFormData } = addFormData;
 			if (formContext === 'Edit')
 				mutateEditComplexities(
 					{ id: complexityId, active: isActive, ...editFormData },
-					mutationOptions(setContext)
+					mutationOptions(handleClose)
 				);
 		},
 	});
@@ -106,12 +112,6 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 
 	const handleError = (error: string | undefined): boolean => {
 		return error !== undefined;
-	};
-
-	const handleClose = (): void => {
-		addEditComplexityForm.resetForm();
-		setContext('');
-		handleCloseAddEdit();
 	};
 
 	if (isLoading) return <Stack justifyContent='center' alignItems='center'>
