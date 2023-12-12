@@ -9,11 +9,13 @@ export const StyledHeaderCell = styled(TableCell)({
   padding: "16px 12px",
 });
 
-export const StyledHeader = styled(TableRow)(({ theme }) => ({
+export const StyledHeader = styled(TableRow, {
+  shouldForwardProp: (props: string) => !props.startsWith("$"),
+})<{ $noColor?: boolean }>(({ theme, $noColor = false }) => ({
   backgroundColor: theme.palette.primary.light,
   "& th": {
     cursor: "pointer",
-    background: "#D0DEEA",
+    background: $noColor ? "#fff" : "#D0DEEA",
   },
 }));
 

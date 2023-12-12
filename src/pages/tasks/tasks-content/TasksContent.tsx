@@ -228,7 +228,7 @@ const TasksContent = (): ReactElement => {
       }
       return task;
     });
-    setMockData(updatedMockData); // Update mockData with the updated task
+    setMockData(updatedMockData);
   };
 
   const handleDragEnd = (result: DropResult) => {
