@@ -1,3 +1,4 @@
+import type { GenericErrorResponse } from "./types";
 import axios, {
   InternalAxiosRequestConfig,
   AxiosError,
@@ -36,7 +37,10 @@ const init = async (): Promise<void> => {
         sessionStorage.unauthorized = true;
         setItemStorage(LOCAL_STORAGE_ITEMS.sessionState, sessionStorage);
       }
-      return Promise.reject(error);
+      const axiosError = error as AxiosError<GenericErrorResponse>;
+      return axiosError && axiosError.response
+        ? Promise.reject(axiosError.response.data)
+        : Promise.reject(error);
     }
   );
 };

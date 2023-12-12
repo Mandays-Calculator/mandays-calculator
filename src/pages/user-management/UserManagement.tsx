@@ -8,7 +8,11 @@ import Title from "~/components/title/Title";
 import { PageContainer } from "~/components/page-container";
 import { useUserList } from "~/queries/user-management/UserManagement";
 import { UserListData } from "~/api/user-management/types";
-import { UserManagementFormValues, UserManagementSchema } from "./utils";
+import {
+  UserManagementFormValues,
+  UserManagementSchema,
+  gender,
+} from "./utils";
 
 import { useFormik } from "formik";
 import { UserManagementForms } from "./types";
@@ -19,31 +23,25 @@ import { useTranslation } from "react-i18next";
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
   const AddUser = useAddUser();
-  const [status, callApi] = useRequestHandler(AddUser.mutate);
-
+  const [successAddUser, setSuccessAddUser] = useState<boolean>(false);
+  const [errorAddUser, setErrorAddUser] = useState<boolean>(false);
+  const [status, callApi] = useRequestHandler(
+    AddUser.mutate,
+    () => setSuccessAddUser(true),
+    () => setErrorAddUser(true)
+  );
   const UserManagementForm = useFormik<UserManagementForms>({
     initialValues: UserManagementFormValues,
     validationSchema: UserManagementSchema(t),
-    validateOnChange: true,
+    validateOnChange: false,
 
     onSubmit: (values) => {
-      const gender = () => {
-        if (values.gender == "FEMALE") {
-          return 1;
-        } else if (values.gender == "MALE") {
-          return 2;
-        } else if (values.gender == "NON_BINARY") {
-          return 3;
-        } else if (values.gender == "PREFER_NOT_TO_SAY") {
-          return 4;
-        }
-      };
       const AddUserForm: UserManagementForms = {
         firstName: values.firstName,
         lastName: values.lastName,
         middleName: values.middleName,
         suffix: values.suffix,
-        gender: gender() ?? 0,
+        gender: gender(values?.gender) ?? 0,
         email: values.email,
         employeeId: values.employeeId,
         odcId: values.odcId,
@@ -84,9 +82,7 @@ const UserManagement = (): ReactElement => {
         }
 
         if (typeof propertyValue === "object") {
-          return ["role_sys_admin", "admin"].includes(
-            filterValue.toLowerCase()
-          );
+          return ["administrator", "admin"].includes(filterValue.toLowerCase());
         }
         return false;
       } else if (filterValue) {
@@ -96,7 +92,7 @@ const UserManagement = (): ReactElement => {
             : typeof value === "boolean"
             ? filterValue.toLowerCase() === "active"
             : typeof value === "object"
-            ? ["role_sys_admin", "admin"].includes(filterValue.toLowerCase())
+            ? ["administrator", "admin"].includes(filterValue.toLowerCase())
             : false
         );
       }
@@ -116,7 +112,15 @@ const UserManagement = (): ReactElement => {
       <PageContainer>
         <Form instance={UserManagementForm}>
           <Stack direction={"column"} spacing={2}>
-            <Header formik={UserManagementForm} status={status} />
+            <Header
+              formik={UserManagementForm}
+              status={status}
+              isSuccess={successAddUser}
+              isError={errorAddUser}
+              resetIsSuccess={() => {
+                setErrorAddUser(false), setSuccessAddUser(false);
+              }}
+            />
             <UserList userListData={filteredData} />
           </Stack>
         </Form>
