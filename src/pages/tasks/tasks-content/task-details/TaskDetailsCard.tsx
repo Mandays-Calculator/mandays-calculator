@@ -75,7 +75,7 @@ const TaskDetailsCard = ({
   handleEdit,
 }: TaskDetailsCardProps): ReactElement => {
   return (
-    <PageContainer>
+    <PageContainer onClick={() => handleEdit(data)}>
       <div style={styles.taskTitle}>{data?.name}</div>
       <div style={styles.marginBottom.mbFive}>{data?.description}</div>
       <div style={styles.infoSection}>
