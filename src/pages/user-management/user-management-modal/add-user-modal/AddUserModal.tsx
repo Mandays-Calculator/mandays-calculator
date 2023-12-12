@@ -182,6 +182,9 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 "careerStep"
               )}
             />
+            <StyledError>
+              {getFieldError(form.errors as FormErrors, "careerStep")}
+            </StyledError>
           </Grid>
           <Grid item xs={12} mb={1}>
             <FormControl>
