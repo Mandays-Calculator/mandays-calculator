@@ -9,7 +9,8 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
 
-import { Task } from "../TasksContent";
+// import { Task } from "../TasksContent";
+import { AllTasksResponse } from "~/api/tasks";
 
 const styles = {
   taskTitle: {
@@ -51,21 +52,22 @@ const styles = {
 };
 
 interface TaskDetailsCardProps {
-  data: {
-    taskTitle: string;
-    desc: string;
-    date: string;
-    sprint: string;
-    complexity: string;
-    status: string;
-    type: string;
-    functionality: string;
-    comments: {
-      name: string;
-      comment: string;
-    }[];
-  };
-  handleEdit: (task: Task) => void;
+  data: AllTasksResponse;
+  // {
+  //   taskTitle: string;
+  //   desc: string;
+  //   date: string;
+  //   sprint: string;
+  //   complexity: string;
+  //   status: string;
+  //   type: string;
+  //   functionality: string;
+  //   comments: {
+  //     name: string;
+  //     comment: string;
+  //   }[];
+  // };
+  handleEdit: (task: AllTasksResponse) => void;
 }
 
 const TaskDetailsCard = ({
@@ -74,15 +76,15 @@ const TaskDetailsCard = ({
 }: TaskDetailsCardProps): ReactElement => {
   return (
     <PageContainer>
-      <div style={styles.taskTitle}>{data.taskTitle}</div>
-      <div style={styles.marginBottom.mbFive}>{data.desc}</div>
+      <div style={styles.taskTitle}>{data?.name}</div>
+      <div style={styles.marginBottom.mbFive}>{data?.description}</div>
       <div style={styles.infoSection}>
         <EventIcon style={{ marginRight: 5 }} />
-        {data.date}
+        {data?.completion_date}
       </div>
-      <div style={styles.marginBottom.mbTwo}>Sprint #{data.sprint}</div>
+      <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>
-        Complexity Rating: {data.complexity}
+        Complexity Rating: {data?.complexity}
       </div>
 
       <Stack direction={"row"} flexWrap="wrap" gap={0.5}>

@@ -16,21 +16,23 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import { TextField, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
 import theme from "~/theme";
+import { AllTasksResponse } from "~/api/tasks";
 
-interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
+// interface Task {
+//   taskTitle: string;
+//   desc: string;
+//   date: string;
+//   sprint: string;
+//   complexity: string;
+//   status: string;
+//   type: string;
+//   functionality: string;
+//   comments: Comment[];
+//   // {
+//   //   name: string;
+//   //   comment: string;
+//   // };
+// }
 
 const styles = {
   container: {
@@ -58,12 +60,12 @@ const styles = {
 interface EditTaskProps {
   open: boolean;
   onClose: () => void;
-  task: Task | null;
-  onSave: (updatedTask: Task) => void;
+  task: AllTasksResponse | null;
+  onSave: (updatedTask: AllTasksResponse) => void;
 }
 
 const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
-  const [newTask, setNewTask] = useState<Task | null>(task);
+  const [newTask, setNewTask] = useState<AllTasksResponse | null>(task);
   const [newComment, setNewComment] = useState<{
     name: string;
     comment: string;
@@ -95,7 +97,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
     <>
       <Modal
         open={open}
-        title={newTask ? newTask.taskTitle : ""}
+        title={newTask ? newTask.name : ""}
         maxWidth="sm"
         onClose={onClose}
       >
@@ -108,9 +110,9 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
             rows={4}
             maxRows={4}
             onChange={(e) =>
-              newTask && setNewTask({ ...newTask, desc: e.target.value })
+              newTask && setNewTask({ ...newTask, description: e.target.value })
             }
-            value={newTask?.desc || ""}
+            value={newTask?.description || ""}
           />
           <Grid container spacing={2} marginBottom={4}>
             <Grid item xs={6}>
@@ -138,7 +140,9 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                 <Typography style={styles.styledTypographyBold}>
                   Date Started
                 </Typography>
-                <Typography>{newTask ? newTask.date : ""}</Typography>
+                <Typography>
+                  {newTask ? newTask.completion_date : ""}
+                </Typography>
               </Stack>
             </Grid>
             <Grid item xs={12}>

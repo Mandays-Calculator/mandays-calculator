@@ -15,20 +15,22 @@ import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateTask from "./CreateTask";
 import EditTask from "./EditTask";
 
-export interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
+import { AllTasksResponse } from "~/api/tasks/types";
+
+// export interface Task {
+//   taskTitle: string;
+//   desc: string;
+//   date: string;
+//   sprint: string;
+//   complexity: string;
+//   status: string;
+//   type: string;
+//   functionality: string;
+//   comments: {
+//     name: string;
+//     comment: string;
+//   };
+// }
 
 const StyleDiv = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
@@ -73,7 +75,9 @@ const StyledAdd = styled(Grid)(({ display }: { display: string }) => ({
 const TasksContent = (): ReactElement => {
   const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
   const [modalEditOpen, setEditModalOpen] = useState<boolean>(false);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
+    null
+  );
 
   const status = [
     "Backlog",
@@ -82,11 +86,11 @@ const TasksContent = (): ReactElement => {
     "On Hold",
     "Completed",
   ];
-  const [mockData, setMockData] = useState<Task[]>([
+  const [mockData, setMockData] = useState<AllTasksResponse[]>([
     {
-      taskTitle: "BE - Database Structure",
-      desc: "lorem kineme.",
-      date: "11/13/2023",
+      name: "BE - Database Structure",
+      description: "lorem kineme.",
+      completion_date: "11/13/2023",
       sprint: "1",
       complexity: "13",
       status: "Backlog",
@@ -100,9 +104,9 @@ const TasksContent = (): ReactElement => {
       ],
     },
     {
-      taskTitle: "BE - Database Structure 1",
-      desc: "lorem kineme",
-      date: "11/13/2023",
+      name: "BE - Database Structure 1",
+      description: "lorem kineme",
+      completion_date: "11/13/2023",
       sprint: "1",
       complexity: "13",
       status: "Backlog",
@@ -116,9 +120,9 @@ const TasksContent = (): ReactElement => {
       ],
     },
     {
-      taskTitle: "BE - Database Structure 2",
-      desc: "lorem kineme",
-      date: "11/13/2023",
+      name: "BE - Database Structure 2",
+      description: "lorem kineme",
+      completion_date: "11/13/2023",
       sprint: "1",
       complexity: "13",
       status: "Backlog",
@@ -132,9 +136,9 @@ const TasksContent = (): ReactElement => {
       ],
     },
     {
-      taskTitle: "BE - Database Structure 3",
-      desc: "lorem kineme",
-      date: "11/13/2023",
+      name: "BE - Database Structure 3",
+      description: "lorem kineme",
+      completion_date: "11/13/2023",
       sprint: "1",
       complexity: "13",
       status: "Not Yet Started",
@@ -148,9 +152,9 @@ const TasksContent = (): ReactElement => {
       ],
     },
     {
-      taskTitle: "Optimization",
-      desc: "lorem kineme",
-      date: "11/13/2023",
+      name: "Optimization",
+      description: "lorem kineme",
+      completion_date: "11/13/2023",
       sprint: "1",
       complexity: "13",
       status: "In Progress",
@@ -164,9 +168,9 @@ const TasksContent = (): ReactElement => {
       ],
     },
     {
-      taskTitle: "Integration",
-      desc: "lorem kineme",
-      date: "11/13/2023",
+      name: "Integration",
+      description: "lorem kineme",
+      completion_date: "11/13/2023",
       sprint: "1",
       complexity: "13",
       status: "On Hold",
@@ -180,9 +184,9 @@ const TasksContent = (): ReactElement => {
       ],
     },
     {
-      taskTitle: "Project Management - UI",
-      desc: "lorem kineme",
-      date: "11/13/2023",
+      name: "Project Management - UI",
+      description: "lorem kineme",
+      completion_date: "11/13/2023",
       sprint: "1",
       complexity: "13",
       status: "Completed",
@@ -204,7 +208,7 @@ const TasksContent = (): ReactElement => {
   const handleCloseAddModalState = () => {
     setAddModalOpen(false);
   };
-  const handleEditModalState = (task: Task) => {
+  const handleEditModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setEditModalOpen(!modalEditOpen);
   };
@@ -213,13 +217,13 @@ const TasksContent = (): ReactElement => {
     setEditModalOpen(false);
   };
 
-  const handleCreateTask = (task: Task) => {
+  const handleCreateTask = (task: AllTasksResponse) => {
     const updatedMockData = [...mockData, task];
     setMockData(updatedMockData);
   };
-  const handleSaveTask = (updatedTask: Task): void => {
+  const handleSaveTask = (updatedTask: AllTasksResponse): void => {
     const updatedMockData = mockData.map((task) => {
-      if (task.taskTitle === updatedTask.taskTitle) {
+      if (task.name === updatedTask.name) {
         return updatedTask; // Update the task in the mockData array
       }
       return task;
@@ -237,7 +241,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = mockData.find((task) => task.taskTitle === draggableId);
+    const draggedTask = mockData.find((task) => task.name === draggableId);
 
     // Limit dragging and dropping between Backlog and On Hold
     if (
@@ -246,7 +250,7 @@ const TasksContent = (): ReactElement => {
     ) {
       if (draggedTask) {
         const updatedMockData = mockData.map((task) => {
-          if (task.taskTitle === draggableId) {
+          if (task.name === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -322,8 +326,8 @@ const TasksContent = (): ReactElement => {
                       <Divider />
                       {filteredData.map((task, index) => (
                         <Draggable
-                          key={task.taskTitle}
-                          draggableId={task.taskTitle}
+                          key={task.name}
+                          draggableId={task.name}
                           index={index}
                         >
                           {(provided) => (

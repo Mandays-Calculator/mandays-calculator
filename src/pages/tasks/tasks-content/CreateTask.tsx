@@ -6,26 +6,27 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Select, TextField, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
 import ComplexityDetails from "./complexity-details";
+import { AllTasksResponse } from "~/api/tasks";
 
-interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
+// interface Task {
+//   taskTitle: string;
+//   desc: string;
+//   date: string;
+//   sprint: string;
+//   complexity: string;
+//   status: string;
+//   type: string;
+//   functionality: string;
+//   comments: {
+//     name: string;
+//     comment: string;
+//   };
+// }
 
 interface CreateModalProps {
   open: boolean;
   onClose: () => void;
-  onCreateTask: (task: Task) => void;
+  onCreateTask: (task: AllTasksResponse) => void;
   reOpenCreateTask: () => void;
 }
 
@@ -36,10 +37,10 @@ const CreateTask: React.FC<CreateModalProps> = ({
   reOpenCreateTask,
 }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [newTask, setNewTask] = useState<Task>({
-    taskTitle: "",
-    desc: "",
-    date: "12/16/2023",
+  const [newTask, setNewTask] = useState<AllTasksResponse>({
+    name: "",
+    description: "",
+    completion_date: "12/16/2023",
     sprint: "2",
     complexity: "",
     status: "Backlog",
@@ -52,14 +53,15 @@ const CreateTask: React.FC<CreateModalProps> = ({
       },
     ],
   });
+
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
   const handleCreateTask = (): void => {
     onCreateTask(newTask);
     setNewTask({
-      taskTitle: "",
-      desc: "",
-      date: "",
+      name: "",
+      description: "",
+      completion_date: "",
       sprint: "",
       complexity: "",
       status: "Backlog",
@@ -95,25 +97,27 @@ const CreateTask: React.FC<CreateModalProps> = ({
           <Grid container>
             <Grid item xs={6}>
               <TextField
-                name="taskTitle"
+                name="name"
                 label="TaskName"
                 onChange={(e) =>
-                  setNewTask({ ...newTask, taskTitle: e.target.value })
+                  setNewTask({ ...newTask, name: e.target.value })
                 }
-                value={newTask.taskTitle}
+                value={newTask.name}
               />
             </Grid>
           </Grid>
 
           <TextField
-            name="desc"
+            name="description"
             label="Description"
             fullWidth
             multiline
             rows={4}
             maxRows={4}
-            onChange={(e) => setNewTask({ ...newTask, desc: e.target.value })}
-            value={newTask.desc}
+            onChange={(e) =>
+              setNewTask({ ...newTask, description: e.target.value })
+            }
+            value={newTask.description}
           />
 
           <Grid container spacing={2}>
