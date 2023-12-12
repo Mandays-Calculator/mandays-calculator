@@ -18,22 +18,6 @@ import CustomButton from "~/components/form/button/CustomButton";
 import theme from "~/theme";
 import { AllTasksResponse } from "~/api/tasks";
 
-// interface Task {
-//   taskTitle: string;
-//   desc: string;
-//   date: string;
-//   sprint: string;
-//   complexity: string;
-//   status: string;
-//   type: string;
-//   functionality: string;
-//   comments: Comment[];
-//   // {
-//   //   name: string;
-//   //   comment: string;
-//   // };
-// }
-
 const styles = {
   container: {
     padding: "0px 10px 10px 10px",

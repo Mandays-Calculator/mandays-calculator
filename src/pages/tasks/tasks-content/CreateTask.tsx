@@ -10,21 +10,6 @@ import { Select, TextField, Modal } from "~/components";
 import ComplexityDetails from "./complexity-details";
 import { AllTasksResponse } from "~/api/tasks";
 
-// interface Task {
-//   taskTitle: string;
-//   desc: string;
-//   date: string;
-//   sprint: string;
-//   complexity: string;
-//   status: string;
-//   type: string;
-//   functionality: string;
-//   comments: {
-//     name: string;
-//     comment: string;
-//   };
-// }
-
 interface CreateModalProps {
   open: boolean;
   onClose: () => void;

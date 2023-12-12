@@ -17,21 +17,6 @@ import EditTask from "./EditTask";
 
 import { AllTasksResponse } from "~/api/tasks/types";
 
-// export interface Task {
-//   taskTitle: string;
-//   desc: string;
-//   date: string;
-//   sprint: string;
-//   complexity: string;
-//   status: string;
-//   type: string;
-//   functionality: string;
-//   comments: {
-//     name: string;
-//     comment: string;
-//   };
-// }
-
 const StyleDiv = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
     backgroundColor:

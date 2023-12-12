@@ -9,7 +9,6 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
 
-// import { Task } from "../TasksContent";
 import { AllTasksResponse } from "~/api/tasks";
 
 const styles = {
@@ -53,20 +52,6 @@ const styles = {
 
 interface TaskDetailsCardProps {
   data: AllTasksResponse;
-  // {
-  //   taskTitle: string;
-  //   desc: string;
-  //   date: string;
-  //   sprint: string;
-  //   complexity: string;
-  //   status: string;
-  //   type: string;
-  //   functionality: string;
-  //   comments: {
-  //     name: string;
-  //     comment: string;
-  //   }[];
-  // };
   handleEdit: (task: AllTasksResponse) => void;
 }
 
