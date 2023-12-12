@@ -19,4 +19,5 @@ export type ComplexityFormsType = {
 	setContext: (context: FormContext) => void;
 	complexityId: string;
 	handleCloseAddEdit: () => void;
+  data: ForGetComplexities[];
 };

@@ -63,27 +63,27 @@ const Complexity = (): ReactElement => {
 						}
 						data={apiData?.data ?? []}
 					/>
-					
-					<Modal
-						title={formContext === "Add"
-							? t(label.addComplexity)
-							: t(label.editComplexity)
-						}
-						open={openAddEditModal}
-						onClose={handleCloseAddEdit}
-						children={
-							<ComplexityForms
-								formContext={formContext}
-								setContext={handleFormContext}
-								complexityId={complexityId}
-								handleCloseAddEdit={handleCloseAddEdit}
-							/>
-						}
-						actions={<></>}
-						maxWidth={'md'}
-					/>
 				</Stack>
 			</PageContainer>
+			<Modal
+				title={formContext === "Add"
+					? t(label.addComplexity)
+					: t(label.editComplexity)
+				}
+				open={openAddEditModal}
+				onClose={handleCloseAddEdit}
+				children={
+					<ComplexityForms
+						formContext={formContext}
+						setContext={handleFormContext}
+						complexityId={complexityId}
+						handleCloseAddEdit={handleCloseAddEdit}
+						data={apiData?.data ?? []}
+					/>
+				}
+				actions={<></>}
+				maxWidth={'md'}
+			/>
 		</>
 	)
 }

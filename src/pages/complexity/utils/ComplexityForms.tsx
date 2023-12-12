@@ -1,4 +1,5 @@
 import type { ReactElement, } from 'react';
+import type { ForGetComplexities } from '~/api/complexity';
 import type { ComplexityForm, ComplexityFormsType } from './types';
 
 import { useEffect, useState } from 'react'
@@ -6,18 +7,12 @@ import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
 import {
-	CircularProgress,
 	Divider,
-	Stack,
 	Typography,
 	Grid,
 } from '@mui/material';
 
-import {
-	useGetComplexitiesbyId,
-	usePostComplexities,
-	usePutComplexities
-} from '~/queries/complexity/Complexities';
+import { usePostComplexities, usePutComplexities } from '~/queries/complexity/Complexities';
 import { Form } from '~/components';
 import { ControlledTextField, ControlledTextArea } from '~/components/form/controlled';
 import { getFieldError } from "~/components/form/utils";
@@ -32,14 +27,13 @@ import {
 } from '.';
 
 const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
-	const { formContext, setContext, complexityId, handleCloseAddEdit } = props;
+	const { formContext, setContext, complexityId, handleCloseAddEdit, data } = props;
 
 	const { t } = useTranslation();
 	const { complexity: { label, btnLabel } } = LocalizationKey;
 
 	const [initialValue, setInitialValue] = useState<ComplexityForm>(complexityInitialValues);
-
-	const { data: apiData, isLoading } = useGetComplexitiesbyId(complexityId, formContext === 'Edit');
+	const apiData = data.find((value: ForGetComplexities) => value.id === complexityId);
 
 	const {
 		name: complexityName = '',
@@ -47,7 +41,7 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		numberOfFeatures,
 		description = '',
 		sample: samples = ''
-	} = apiData?.data ?? {}
+	} = apiData ?? {};
 	const [numberOfDayFrom, numberOfDayTo] = handleSplitValues(numberOfDays);
 	const [numberOfFeaturesFrom, numberOfFeaturesTo] = handleSplitValues(numberOfFeatures);
 	const { mutate: mutateAddComplexities } = usePostComplexities();
@@ -100,7 +94,7 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 				description,
 				samples,
 			});
-	}, [isLoading, apiData, formContext])
+	}, [apiData, formContext])
 
 	const { errors } = addEditComplexityForm;
 
@@ -113,10 +107,6 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		setContext('');
 		handleCloseAddEdit();
 	};
-
-	if (isLoading) return <Stack justifyContent='center' alignItems='center'>
-		<CircularProgress aria-label="loading..." />
-	</Stack>
 
 	return (
 		<Form instance={addEditComplexityForm}>
