@@ -1,4 +1,5 @@
 import type { CellProps } from "react-table";
+import React from "react";
 import { Chip, IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
 import { UserListData } from "~/api/user-management/types";
@@ -40,12 +41,12 @@ export const userListColumns = ({
       Cell: ({ row }: CellProps<UserListData>) => {
         return (
           <>
-            {row.original.roles.map((data) => {
+            {row.original.roles.map((data, index) => {
               return (
-                <>
+                <React.Fragment key={index}>
                   <Chip label={renderRole(data)} variant="outlined" />
                   &nbsp;
-                </>
+                </React.Fragment>
               );
             })}
           </>

@@ -1,6 +1,7 @@
 import type { PaginationItems, PaginationProps } from "./types";
-import { useState, useCallback } from "react";
+import { useState, useCallback, ReactElement } from "react";
 
+import { Pagination as CustomPagination } from "~/components";
 /**
  * Custom hook for handling pagination logic.
  *
@@ -23,5 +24,21 @@ export const usePagination = ({
     setCurrentPage(value);
   };
 
-  return { currentPage, totalPages, paginatedItems, handlePageChange };
+  const Pagination = (): ReactElement => {
+    return (
+      <CustomPagination
+        handleChange={handlePageChange}
+        totalItems={items.length}
+        itemsPerPage={itemsPerPage}
+      />
+    );
+  };
+
+  return {
+    currentPage,
+    totalPages,
+    paginatedItems,
+    handlePageChange,
+    Pagination,
+  };
 };
