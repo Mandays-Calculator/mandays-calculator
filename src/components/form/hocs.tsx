@@ -105,7 +105,8 @@ export const withInputController = <Type extends FormikValues>(
           };
         }
         return {
-          selected: fieldValue,
+          selected:
+            typeof fieldValue === "string" ? new Date(fieldValue) : fieldValue,
         };
       }
 
