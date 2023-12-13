@@ -20,7 +20,6 @@ import {
   SvgIcon,
   Title,
 } from "~/components";
-import { CustomButton } from "~/components/form/button";
 import { Select } from "~/components/form/select";
 import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
@@ -36,6 +35,7 @@ import Resources from "./resources";
 
 import { ExportModal } from "./components/export-modal";
 import { ActionButtons } from "./components/action-buttons";
+import { HeaderButtons } from "./components/header-buttons";
 import { ShareModal } from "./components/share-modal";
 import Estimation from "./estimation";
 import { initMandays } from "./utils";
@@ -196,22 +196,13 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                 {sprintName}
               </Typography>
             </Grid>
-            {mode === "view" && !isExposed && (
-              <Grid item xs={2}>
-                <Grid container justifyContent={"right"}>
-                  <Grid item xs={5}>
-                    <CustomButton onClick={() => setIsExport(true)}>
-                      {t(common.exportBtn)}
-                    </CustomButton>
-                  </Grid>
-                  <Grid item xs={5}>
-                    <CustomButton onClick={() => setIsShare(true)}>
-                      {t(common.shareBtn)}
-                    </CustomButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-            )}
+            <HeaderButtons
+              setIsExport={setIsExport}
+              setIsShare={setIsShare}
+              mode={mode}
+              isExposed={isExposed}
+              t={t}
+            />
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>

@@ -37,7 +37,7 @@ const ShareModal = ({
   t,
   handleSubmit,
 }: ShareModalProps): ReactElement => {
-  const { common } = LocalizationKey;
+  const { common, mandaysCalculator: { modal } } = LocalizationKey;
   const [isLinkGeneratedSuccess, setIsLinkGeneratedSuccess] =
     useState<boolean>(false);
     
@@ -67,6 +67,11 @@ const ShareModal = ({
     },
   });
 
+  const handleClick = (): void => {
+    setIsShare(false);
+    shareForm.resetForm();
+  }
+
   useEffect(() => setIsLinkGeneratedSuccess(false), [shareForm?.values?.shareBy])
 
   const renderExpirationSelection = (): ReactElement => {
@@ -93,26 +98,20 @@ const ShareModal = ({
     <Modal
       title={
         <Typography variant="h5" sx={{ p: 3 }} fontWeight="bold">
-          Share with Others
+          {t(modal.shareTitle)}
           <Typography variant="body1" sx={{ mt: 1 }}>
-            Project owned by: Registration team
+            {t(modal.shareSubtitle)}: Registration team
           </Typography>
         </Typography>
       }
       open={isShare}
       maxWidth="xs"
-      onClose={() => {
-        setIsShare(false);
-        shareForm.resetForm();
-      }}
+      onClose={handleClick}
     >
       <Form instance={shareForm}>
         <Typography variant="subtitle1" sx={{ mb: 1 }}>
-          Access Expiry:
+          {t(modal.accessExpiry)}
         </Typography>
-        {
-          // need to change into 12h, 24h, 48h, custom options
-        }
         <ControlledSelect
           name="shareBy"
           helperText={getFieldError(shareForm.errors, "shareBy")}
@@ -125,6 +124,7 @@ const ShareModal = ({
           <GeneratedLink 
             link={`${window.location.origin}/mandays-estimation-details?isShared=true`}
             setIsShare={setIsShare} 
+            t={t}
           />
         }
         <Grid container mt={1}>
@@ -135,10 +135,7 @@ const ShareModal = ({
             <Grid item xs={6} sx={{ p: 1 }}>
               <Button
                 fullWidth
-                onClick={() => {
-                  setIsShare(false);
-                  shareForm.resetForm();
-                }}
+                onClick={handleClick}
                 variant="outlined"
               >
                 {t(common.backBtn)}
@@ -146,7 +143,7 @@ const ShareModal = ({
             </Grid>
             <Grid item xs={6} sx={{ p: 1 }}>
               <CustomButton fullWidth type="submit">
-                Generate link
+                {t(modal.generate)}
               </CustomButton>
             </Grid>
           </Grid>
