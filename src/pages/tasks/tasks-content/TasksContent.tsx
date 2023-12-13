@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 
 import { styled } from "@mui/material/styles";
-import { Divider, Grid } from "@mui/material";
+import { Divider, Grid, SelectChangeEvent } from "@mui/material";
 import {
   DragDropContext,
   Droppable,
@@ -17,18 +17,29 @@ import MockData from "./mockData.json";
 import EditTask from "./EditTask";
 import { Task } from "./type";
 
-const StyleDiv = styled("div")(
-  ({ backgroundColor }: { backgroundColor: string }) => ({
-    backgroundColor:
-      backgroundColor === "Backlog" ? "#E3E6E7"
-        : backgroundColor === "Not Yet Started" ? "#E4F7F9"
-          : backgroundColor === "In Progress" ? "#FFF4D4"
-            : backgroundColor === "On Hold" ? "#FFCECE"
-              : "#D5FFCD",
-    borderRadius: 10,
-    padding: 15,
-  })
-);
+enum Status {
+  Backlog = "Backlog",
+  NotStarted = "Not Yet Started",
+  InProgress = "In Progress",
+  OnHold = "On Hold",
+  Completed = "Completed",
+}
+
+const calculateGridSize = (numStatuses: number): number => {
+  return (12 / numStatuses);
+};
+
+const StatusDiv = styled("div")(({ backgroundColor }: { backgroundColor: string }) => ({
+  backgroundColor:
+    backgroundColor === Status.Backlog ? "#E3E6E7"
+      : backgroundColor === Status.NotStarted ? "#E4F7F9"
+        : backgroundColor === Status.InProgress ? "#FFF4D4"
+          : backgroundColor === Status.OnHold ? "#FFCECE"
+            : "#D5FFCD",
+  borderRadius: 10,
+  width: '100%',
+  padding: 15,
+}));
 
 const StyledTitle = styled(Grid)(({ color }: { color: string }) => ({
   fontSize: 18,
@@ -54,14 +65,8 @@ const TasksContent = (): ReactElement => {
   const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<string | null>("");
 
-  const status = [
-    "Backlog",
-    "Not Yet Started",
-    "In Progress",
-    "On Hold",
-    "Completed",
-  ];
   const [mockData, setMockData] = useState<Task[]>(MockData);
 
   // CREATE TASK
@@ -143,6 +148,10 @@ const TasksContent = (): ReactElement => {
     }
   };
 
+  const handleChange = (e: SelectChangeEvent<unknown>) => {
+    setSelectedTeam(e.target.value as string);
+  }
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <PageContainer>
@@ -167,47 +176,52 @@ const TasksContent = (): ReactElement => {
           task={selectedTask}
           onSave={handleUpdateTask}
         />
-        <Select
-          name="filter"
-          placeholder="Team Name"
-          style={{ width: 200 }}
-          options={[
-            {
-              value: "1",
-              label: "Team 1",
-            },
-            {
-              value: "2",
-              label: "Team 2",
-            },
-          ]}
-        />
+
+        <Grid container>
+          <Grid item xs={calculateGridSize(Object.values(Status).length)}>
+            <Select
+              name="filter"
+              placeholder="Team Name"
+              options={[
+                {
+                  value: "1",
+                  label: "Team 1",
+                },
+                {
+                  value: "2",
+                  label: "Team 2",
+                }
+              ]}
+              onChange={(e) => handleChange(e)}
+              value={selectedTeam}
+            />
+          </Grid>
+        </Grid>
 
         <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
-        <div style={{ maxHeight: '960px', minWidth: '960px', overflow: 'auto' }}>
+        <div style={{ maxHeight: '960px', minWidth: '1080px', overflow: 'auto' }}>
           <Grid container spacing={1} justifyContent="space-between">
-            {status.map((i) => {
-              const filteredData = mockData.filter((task) => task.status === i);
+            {Object.values(Status).map((status) => {
+              const filteredData = mockData.filter((task) => task.status === status);
 
               return (
-                <Grid item container xs={2.4} key={i}>
-                  <Droppable droppableId={i}>
+                <Grid item container xs={calculateGridSize(Object.values(Status).length)} key={status}>
+                  <Droppable droppableId={status}>
                     {(provided) => (
-                      <StyleDiv
-                        backgroundColor={i}
+                      <StatusDiv
+                        backgroundColor={status}
                         ref={provided.innerRef}
-                        {...provided.droppableProps}
                         {...provided.droppableProps}
                       >
                         <Grid item container alignItems={"center"}>
                           <Grid item xs={11}>
-                            <StyledTitle color={i}>
-                              {i}
+                            <StyledTitle color={status}>
+                              {status}
                             </StyledTitle>
                           </Grid>
                           <Grid item xs={1}>
-                            <StyledAdd display={i} onClick={handleCreateModalState}>
+                            <StyledAdd display={status} onClick={handleCreateModalState}>
                               +
                             </StyledAdd>
                           </Grid>
@@ -237,7 +251,7 @@ const TasksContent = (): ReactElement => {
                           </Draggable>
                         ))}
                         {provided.placeholder}
-                      </StyleDiv>
+                      </StatusDiv>
                     )}
                   </Droppable>
                 </Grid>

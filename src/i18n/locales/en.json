@@ -303,7 +303,10 @@
       }
     },
     "updateTask": {
-      "modalTitle": "Update Task"
+      "modalTitle": "Update Task",
+      "btnLabel": {
+        "update": "Update"
+      }
     }
   },
   "history": {

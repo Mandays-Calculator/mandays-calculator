@@ -51,8 +51,6 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
   const [newTask, setNewTask] = useState<Task>(task || initialTaskState);
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
-  console.log(task)
-
   useEffect(() => {
     setNewTask(task || initialTaskState);
     setSelectedTags(task?.tags || []);
@@ -194,7 +192,11 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
               justifyContent="flex-end"
             >
               <CustomButton type="button" colorVariant="primary" onClick={handleCreateOrUpdateTask}>
-                {t(LocalizationKey.tasks.createTask.btnLabel.create)}
+                {
+                  isCreate ?
+                  t(LocalizationKey.tasks.createTask.btnLabel.create) :
+                  t(LocalizationKey.tasks.updateTask.btnLabel.update)
+                }
               </CustomButton>
             </Stack>
           </Grid>
