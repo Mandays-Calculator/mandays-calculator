@@ -19,55 +19,72 @@ import { Task } from "./type";
 
 enum Status {
   Backlog = "Backlog",
-  NotStarted = "Not Yet Started",
+  NotYetStarted = "Not Yet Started",
   InProgress = "In Progress",
   OnHold = "On Hold",
   Completed = "Completed",
+}
+
+enum StatusContainerColor {
+  Backlog = "#E3E6E7",
+  NotYetStarted = "#E4F7F9",
+  InProgress = "#FFF4D4",
+  OnHold = "#FFCECE",
+  Completed = "#D5FFCD",
+}
+
+enum StatusTitleColor {
+  Backlog = "#000000",
+  NotYetStarted = "#2C8ED1",
+  InProgress = "#796101",
+  OnHold = "#D54147",
+  Completed = "#177006",
 }
 
 const calculateGridSize = (numStatuses: number): number => {
   return 12 / numStatuses;
 };
 
-const StatusDiv = styled("div")(
+const StatusContainer = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
     backgroundColor:
       backgroundColor === Status.Backlog
-        ? "#E3E6E7"
-        : backgroundColor === Status.NotStarted
-        ? "#E4F7F9"
-        : backgroundColor === Status.InProgress
-        ? "#FFF4D4"
-        : backgroundColor === Status.OnHold
-        ? "#FFCECE"
-        : "#D5FFCD",
+        ? StatusContainerColor.Backlog
+        : backgroundColor === Status.NotYetStarted
+          ? StatusContainerColor.NotYetStarted
+          : backgroundColor === Status.InProgress
+            ? StatusContainerColor.InProgress
+            : backgroundColor === Status.OnHold
+              ? StatusContainerColor.OnHold
+              : StatusContainerColor.Completed,
     borderRadius: 10,
     width: "100%",
     padding: 15,
   })
 );
 
-const StyledTitle = styled(Grid)(({ color }: { color: string }) => ({
+const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
   fontSize: 18,
+  margin: color !== Status.Backlog ? "0.3em 0": 0,
   fontWeight: "bold",
   color:
-    color === "Not Yet Started"
-      ? "#2C8ED1"
-      : color === "In Progress"
-      ? "#796101"
-      : color === "On Hold"
-      ? "#D54147"
-      : color === "Completed"
-      ? "#177006"
-      : "#000000",
+    color === Status.NotYetStarted
+      ? StatusTitleColor.NotYetStarted
+      : color === Status.InProgress
+        ? StatusTitleColor.InProgress
+        : color === Status.OnHold
+          ? StatusTitleColor.OnHold
+          : color === Status.Completed
+            ? StatusTitleColor.Completed
+            : StatusTitleColor.Backlog,
 }));
 
-const StyledAdd = styled(Grid)(({ display }: { display: string }) => ({
+const StyledCreateTaskIconButton = styled(Grid)(({ display }: { display: string }) => ({
   fontSize: 25,
   fontWeight: "bolder",
   float: "right",
   cursor: "pointer",
-  display: display !== "Backlog" ? "none" : "",
+  display: display !== Status.Backlog ? "none" : "",
 }));
 
 const TasksContent = (): ReactElement => {
@@ -229,22 +246,19 @@ const TasksContent = (): ReactElement => {
                 >
                   <Droppable droppableId={status}>
                     {(provided) => (
-                      <StatusDiv
+                      <StatusContainer
                         backgroundColor={status}
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >
                         <Grid item container alignItems={"center"}>
                           <Grid item xs={11}>
-                            <StyledTitle color={status}>{status}</StyledTitle>
+                            <StyledStatusTitle color={status}>{status}</StyledStatusTitle>
                           </Grid>
                           <Grid item xs={1}>
-                            <StyledAdd
-                              display={status}
-                              onClick={handleCreateModalState}
-                            >
+                            <StyledCreateTaskIconButton display={status} onClick={handleCreateModalState}>
                               +
-                            </StyledAdd>
+                            </StyledCreateTaskIconButton>
                           </Grid>
                         </Grid>
 
@@ -274,7 +288,7 @@ const TasksContent = (): ReactElement => {
                           </Draggable>
                         ))}
                         {provided.placeholder}
-                      </StatusDiv>
+                      </StatusContainer>
                     )}
                   </Droppable>
                 </Grid>
