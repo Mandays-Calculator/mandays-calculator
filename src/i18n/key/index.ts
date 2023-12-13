@@ -238,6 +238,55 @@ const LocalizationKey = {
       email: "userManagement.errorMessage.email",
     },
   },
+  complexity: {
+    title: "complexity.title",
+    label: {
+      complexity: "complexity.label.complexity",
+      hours: "complexity.label.hours",
+      days: "complexity.label.days",
+      name: "complexity.label.name",
+      noOfDays: "complexity.label.noOfDays",
+      noOfFeatures: "complexity.label.noOfFeatures",
+      description: "complexity.label.description",
+      samples: "complexity.label.samples",
+      addComplexity: "complexity.label.addComplexity",
+      editComplexity: "complexity.label.editComplexity",
+    },
+    table: {
+      columns: {
+        complexity: "complexity.table.columns.complexity",
+        noOfDays: "complexity.table.columns.noOfDays",
+        noOfFeatures: "complexity.table.columns.noOfFeatures",
+        description: "complexity.table.columns.description",
+        samples: "complexity.table.columns.samples",
+      }
+    },
+    btnLabel: {
+      addComplexity: "complexity.btnLabel.addComplexity",
+      edit: "complexity.btnLabel.edit",
+      delete: "complexity.btnLabel.delete",
+      save: "complexity.btnLabel.save",
+      cancel: "complexity.btnLabel.cancel",
+    },
+    validationInfo: {
+      maxComplexityName: "complexity.validationInfo.maxComplexityName",
+      maxDescription: "complexity.validationInfo.maxDescription",
+      maxSamples: "complexity.validationInfo.maxSamples",
+      noOfHours: "complexity.validationInfo.noOfHours",
+      minNoOfHours: "complexity.validationInfo.minNoOfHours",
+      maxNoOfHours: "complexity.validationInfo.maxNoOfHours",
+      posNoOfHours: "complexity.validationInfo.posNoOfHours",
+      intNoOfHours: "complexity.validationInfo.intNoOfHours",
+      minNoOfFeatures: "complexity.validationInfo.minNoOfFeatures",
+      maxNoOfFeatures: "complexity.validationInfo.maxNoOfFeatures",
+      posNoOfFeatures: "complexity.validationInfo.posNoOfFeatures",
+      intNoOfFeatures: "complexity.validationInfo.intNoOfFeatures",
+      submitError: "complexity.validationInfo.submitError",
+      submitSuccess: "complexity.validationInfo.submitSuccess",
+      deleteError: "complexity.validationInfo.deleteError",
+      deleteSuccess: "complexity.validationInfo.deleteSuccess"
+    }
+  }
 };
 
 export default LocalizationKey;

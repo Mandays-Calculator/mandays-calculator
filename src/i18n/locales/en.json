@@ -325,5 +325,54 @@
     "errorMessage": {
       "email": "Invalid email format."
     }
+  },
+  "complexity": {
+    "title": "COMPLEXITY",
+    "label": {
+      "complexity": "Complexity",
+      "hours": "HOURS",
+      "days": "DAYS",
+      "name": "Complexity Name",
+      "noOfDays": "Number of Days",
+      "noOfFeatures": "Number of Features",
+      "description": "Description",
+      "samples": "Samples",
+      "addComplexity": "Add Complexity",
+      "editComplexity": "Edit Complexity"
+    },
+    "table": {
+      "columns": {
+        "complexity": "Complexity",
+        "noOfDays": "No. of Days",
+        "noOfFeatures": "No. of Features",
+        "description": "Description",
+        "samples": "Samples"
+      }
+    },
+    "btnLabel": {
+      "addComplexity": "Add Complexity",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "validationInfo": {
+      "maxComplexityName": "Complexity name cannot be longer than 20 characters.",
+      "maxDescription": "Description cannot be longer than 256 characters.",
+      "maxSamples": "Samples cannot be longer than 1024 characters.",
+      "noOfHours": "Number of hours must be number.",
+      "minNoOfHours": "The minimum number of hours should start with 1 hour.",
+      "maxNoOfHours": "The maximum number of hours should not be less than minimum number of hours",
+      "posNoOfHours": "Number of hours cannot start with a minus.",
+      "intNoOfHours": "Number of hours cannot include a decimal point.",
+      "minNoOfFeatures": "The minimum number of features should start with 1 hour.",
+      "maxNoOfFeatures": "The maximum number of features should not be less than minimum number of features",
+      "posNoOfFeatures": "Number of features cannot start with a minus.",
+      "intNoOfFeatures": "Number of features cannot include a decimal point.",
+      "submitError": "There is a problem in your submitted data. Please check.",
+      "submitSuccess": "Complexity successfully submitted.",
+      "deleteError": "There is a problem in your deleted data. Please check.",
+      "deleteSuccess": "Complexity successfully deleted."
+    }
   }
 }
