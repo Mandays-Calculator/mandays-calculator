@@ -7,10 +7,11 @@ const ShareEstimationDetails = (): ReactElement => {
   const auth = useAuth();
 
   const isAuthenticated = auth.isAuthenticated;
+  
   return (
     <>
       {isAuthenticated ? (
-        <EstimationDetails isExposed={true} />
+        <EstimationDetails isExposed={false} />
       ) : (
         <Grid container justifyContent={"center"} p={3}>
           <Grid item xs={10}>

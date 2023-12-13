@@ -34,9 +34,13 @@
       "pageInProgressDescription": "This page is currently under construction. Check back soon!"
     },
     "idleTimeOut": {
+      "title": "Session Timeout",
       "label": "You will be automatically logged off in",
       "stayLogged": "Stay Logged on",
       "logout": "Logout"
+    },
+    "unauthorized": {
+      "title": "Unauthorized"
     },
     "noData": "No Data",
     "somethingWentWrong": {
@@ -61,7 +65,7 @@
     "errorMessage": {
       "required": "This field is required.",
       "fieldRequired": "{{field}} is required.",
-      "unauthorized": "Unauthorized. Your session has expired. Please login again.",
+      "unauthorized": "Your session has expired. Please login again.",
       "genericError": "There is a problem with your request. Please contact your system administrator.",
       "auth": {
         "changePassword": {
@@ -207,6 +211,7 @@
     },
     "summary": {
       "title": "Summary",
+      "subtitle": "Please check the details below before adding the estimation.",
       "table": {
         "columns": {
           "functionality": "Functionality",
@@ -246,7 +251,7 @@
         }
       },
       "noTaskLabel": "No task.",
-      "noSelectedTaskLabel": "No selected task.",
+      "noSelectedTaskLabel": "No Data.",
       "descriptionLabel": "Description",
       "tasksListLabel": "Tasks list"
     },
@@ -261,7 +266,34 @@
       "excel": "Excel"
     },
     "estimation": {
-      "title": "Estimation"
+      "title": "Estimation",
+      "estimationColumns": {
+        "taskName": "Task Name",
+        "complexity": "Complexity",
+        "noOfResources": "No. of Resources",
+        "totalManHours": "Total Man Hours",
+        "totalManDays": "Total Man Days"
+      }
+    }
+  },
+  "tasks": {
+    "createTask": {
+      "modalTitle": "Create New Task",
+      "label": {
+        "taskTitle": "Task Title",
+        "description": "Description",
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "placeholder": {
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "btnLabel": {
+        "create": "Create"
+      }
     }
   },
   "history": {
@@ -270,6 +302,28 @@
     },
     "filter": {
       "placeholder": "Enter Keyword  to  filter  list.."
+    }
+  },
+  "userManagement": {
+    "label": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "middleName": "Middle Name",
+      "suffix": "Suffix",
+      "gender": "Gender",
+      "email": "Email Address",
+      "careerStep": "Career Step",
+      "employeeId": "Employee Id",
+      "odcId": "ODC",
+      "joiningDate": "User recently joined the organization",
+      "joiningDateEdit": "Joining Date",
+      "joiningAtLaterDate": "User recently joined the organization at a later date",
+      "projectId": "Project",
+      "teamId": "Team",
+      "roles": "Role/s"
+    },
+    "errorMessage": {
+      "email": "Invalid email format."
     }
   }
 }

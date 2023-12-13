@@ -50,7 +50,7 @@ const StyledButton = styled(
     paddingLeft: "20px",
     paddingRight: "20px",
     "&:hover": {
-      backgroundColor: colorsMap[colorVariant!], // Keep the same background color on hover
+      backgroundColor: colorsMap[colorVariant!],
       opacity: 0.9,
     },
   };

@@ -4,7 +4,7 @@ export type BaseInputProps<Type = object> = Type & {
   name?: string;
   label?: string | ReactNode;
   error?: boolean;
-  helperText?: string;
+  helperText?: string | ReactNode;
   isFastField?: boolean;
   readOnly?: boolean;
 };
@@ -16,7 +16,8 @@ export type WithInputControllerType =
   | "pin-code"
   | "autocomplete"
   | "checkbox-group"
-  | "date-time-picker";
+  | "date-time-picker"
+  | "number-input";
 
 export type BaseInputPropsWithAdornment<Type = object> = Type & {
   name: string;

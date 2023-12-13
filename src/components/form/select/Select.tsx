@@ -1,8 +1,8 @@
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement, ReactNode, SetStateAction } from "react";
 import type { SelectProps as MuiSelectProps } from "@mui/material/Select";
 import type { BaseInputProps } from "../types";
 
-import { useCallback } from "react";
+import { useCallback, useState, useEffect } from "react";
 
 import { keyBy } from "lodash";
 
@@ -22,7 +22,6 @@ interface SelectProps extends BaseInputProps<MuiSelectProps> {
   optionLabelKey?: keyof SelectObject | "label";
   name: string;
   sx?: SxProps;
-  withNoneOption?: boolean; // Render None option
 }
 
 export const Select = (props: SelectProps): ReactElement => {
@@ -34,12 +33,27 @@ export const Select = (props: SelectProps): ReactElement => {
     error,
     optionLabelKey = "label",
     optionValueKey = "value",
-    withNoneOption = false,
+    value,
     ...rest
   } = props;
 
+  const [selectedValues, setSelectedValues] = useState<SelectObject[]>([]);
+
   const getOptionLabel = getOption(optionLabelKey);
   const getOptionValue = getOption(optionValueKey);
+
+  const handleDelete = (valueToDelete: SelectObject) => {
+    const newSelectedValues = selectedValues.filter(
+      (value) => value !== valueToDelete
+    );
+    setSelectedValues(newSelectedValues);
+  };
+
+  useEffect(() => {
+    if (value) {
+      setSelectedValues(value as SetStateAction<SelectObject[]>);
+    }
+  }, [value]);
 
   const defaultValue = multiple ? [] : "";
   const renderSelectedValue = (selected: unknown): ReactNode => {
@@ -47,7 +61,7 @@ export const Select = (props: SelectProps): ReactElement => {
       return (
         <MenuItem
           disabled
-          sx={{ minHeight: "1em", lineHeight: "0.3em" }}
+          sx={{ minHeight: "1em", lineHeight: "0.3em", padding: "1em 0" }}
           data-testid="select-placeholder"
         >
           <em>{placeholder}</em>
@@ -64,7 +78,10 @@ export const Select = (props: SelectProps): ReactElement => {
               variant="filled"
               label={getOptionLabel(keyBy(options, getOptionValue)[value])}
               key={value}
-              deleteIcon={<SvgIcon name="cross" $size={1} />}
+              deleteIcon={
+                <SvgIcon name="cross" $size={2} sx={{ margin: "12px 5px 0" }} />
+              }
+              onDelete={() => handleDelete(value as unknown as SelectObject)}
               onMouseDown={(e) => e.stopPropagation()}
             />
           ))}
@@ -108,6 +125,7 @@ export const Select = (props: SelectProps): ReactElement => {
     <FormControl component="fieldset" error={error} fullWidth>
       <MuiSelect
         id={name}
+        value={selectedValues}
         labelId={name}
         multiple={multiple}
         renderValue={renderSelectedValue}
@@ -120,7 +138,7 @@ export const Select = (props: SelectProps): ReactElement => {
         {...rest}
       >
         {renderSearchOptions()}
-        {withNoneOption && renderNoneOptions()}
+        {renderNoneOptions()}
       </MuiSelect>
     </FormControl>
   );

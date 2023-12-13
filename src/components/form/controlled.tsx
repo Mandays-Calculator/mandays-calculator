@@ -1,16 +1,12 @@
-import {
-  CheckBox,
-  CheckboxGroup,
-  DatePicker,
-  SearchSelect,
-  TextField,
-} from ".";
+import { CheckBox, CheckboxGroup, DatePicker, SearchSelect, TextField, NumberInput } from ".";
 import DateTimePicker from "./date-time-picker/DateTimePicker";
 import { withInputController } from "./hocs";
 import Select from "./select/Select";
+import TextArea from "./text-area/TextArea";
 
 export const ControlledTextField = withInputController(TextField);
 export const ControlledCheckBox = withInputController(CheckBox);
+export const ControlledTextArea = withInputController(TextArea);
 export const ControlledCheckBoxGroup = withInputController(
   CheckboxGroup,
   "checkbox-group"
@@ -28,3 +24,4 @@ export const ControlledDateTimePicker = withInputController(
   DateTimePicker,
   "date-time-picker"
 );
+export const ControlledNumberInput = withInputController(NumberInput, "number-input");
