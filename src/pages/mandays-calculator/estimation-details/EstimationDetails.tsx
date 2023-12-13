@@ -62,6 +62,7 @@ const EstimationDetails = (): ReactElement => {
         title: task.name,
         description: task.description,
         createdDate: task.createdDate,
+        status: "unselected",
       };
     }) || [];
 
@@ -91,7 +92,7 @@ const EstimationDetails = (): ReactElement => {
 
   const mandaysForm = useFormik<MandaysForm>({
     initialValues: { ...initMandays, tasks: tasksData },
-    onSubmit: (val) => console.log(val),
+    onSubmit: (val) => navigate("./../summary", { state: val }),
     enableReinitialize: true,
   });
 
@@ -188,18 +189,20 @@ const EstimationDetails = (): ReactElement => {
                 {sprintName}
               </Typography>
             </Grid>
-            <Grid item xs={2}>
-              <Grid container justifyContent={"right"}>
-                <Grid item xs={5}>
-                  <CustomButton onClick={() => setIsExport(true)}>
-                    {t(common.exportBtn)}
-                  </CustomButton>
-                </Grid>
-                <Grid item xs={5}>
-                  <CustomButton>{t(common.shareBtn)}</CustomButton>
+            {mode === "view" && (
+              <Grid item xs={2}>
+                <Grid container justifyContent={"right"}>
+                  <Grid item xs={5}>
+                    <CustomButton onClick={() => setIsExport(true)}>
+                      {t(common.exportBtn)}
+                    </CustomButton>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <CustomButton>{t(common.shareBtn)}</CustomButton>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            )}
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>

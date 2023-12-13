@@ -1,4 +1,4 @@
-export const UserList = [
+export const userListData = [
   {
     id: "7bca4a73-81e9-11ee-b4f7-7478277b6a38",
     odc: {

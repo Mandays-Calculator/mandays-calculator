@@ -20,11 +20,14 @@ type LegendColumn = {
   i07: string;
 };
 
+export type Status = "selected" | "unselected";
+
 export type TaskType = {
   id: string;
   title: string;
   description: string;
   createdDate: string;
+  status?: Status;
 };
 
 export interface MandaysForm {
@@ -32,5 +35,4 @@ export interface MandaysForm {
   resource: Resource[];
   legend: LegendColumn[];
   tasks: TaskType[];
-  unselected: TaskType[];
 }

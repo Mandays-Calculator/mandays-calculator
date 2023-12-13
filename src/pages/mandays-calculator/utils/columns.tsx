@@ -11,17 +11,18 @@ import type {
   LegendColumn,
   LegendColumnProps,
   ResourcesListDataType,
+  EstimationColumn,
+  EstimationSubColumn,
+  EstimationColumnProps,
 } from "./types";
 
 import { CellProps } from "react-table";
 import { IconButton } from "@mui/material";
-import { SvgIcon } from "~/components";
-import {
-  ControlledNumberInput,
-  ControlledTextField,
-} from "~/components/form/controlled";
+import { ControlledNumberInput } from "~/components/form/controlled";
+import { SvgIcon, Table } from "~/components";
 
 import LocalizationKey from "~/i18n/key";
+import { ReactElement } from "react";
 
 const {
   mandaysCalculator: {
@@ -29,6 +30,7 @@ const {
     summaryTableColumns,
     tasksTableColumns,
     resourceListTableColumns,
+    estimation: { estimationColumns },
   },
 } = LocalizationKey;
 
@@ -62,13 +64,25 @@ export const SprintListColumns = ({
       Cell: ({ row }: CellProps<SprintListDataType>) => (
         <>
           <IconButton onClick={() => onViewSprintDetails(row.original.id)}>
-            <SvgIcon name="history" $size={2} color="primary" />
+            <SvgIcon
+              name="history"
+              $size={2}
+              color="primary"
+            />
           </IconButton>
           <IconButton onClick={() => onEditSprintDetails(row.original.id)}>
-            <SvgIcon name="edit" $size={2} color="primary" />
+            <SvgIcon
+              name="edit"
+              $size={2}
+              color="primary"
+            />
           </IconButton>
           <IconButton onClick={() => onDeleteSprintDetails(row.original.id)}>
-            <SvgIcon name="delete" $size={2} color="error" />
+            <SvgIcon
+              name="delete"
+              $size={2}
+              color="error"
+            />
           </IconButton>
         </>
       ),
@@ -76,9 +90,7 @@ export const SprintListColumns = ({
   ];
 };
 
-export const SummaryListColumns = ({
-  t,
-}: TasksColumnsProps): SummaryListColumnsType[] => {
+export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
       Header: t(summaryTableColumns.functionality),
@@ -95,9 +107,7 @@ export const SummaryListColumns = ({
   ];
 };
 
-export const TasksListColumns = ({
-  t,
-}: TasksColumnsProps): TasksListColumnsType[] => {
+export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType[] => {
   return [
     {
       Header: t(tasksTableColumns.tasks),
@@ -134,10 +144,7 @@ export const TasksListColumns = ({
   ];
 };
 
-export const LegendListColumns = ({
-  t,
-  isInput,
-}: LegendColumnProps): Column<LegendColumn>[] => {
+export const LegendListColumns = ({ t, isInput }: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
@@ -148,7 +155,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i03`} />
+            <ControlledNumberInput name={`legend.${index}.i03`} />
           </>
         ) : (
           <> {row.original.i03} </>
@@ -160,7 +167,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i04`} />
+            <ControlledNumberInput name={`legend.${index}.i04`} />
           </>
         ) : (
           <> {row.original.i04} </>
@@ -172,7 +179,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i05`} />
+            <ControlledNumberInput name={`legend.${index}.i05`} />
           </>
         ) : (
           <> {row.original.i05} </>
@@ -184,7 +191,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i06`} />
+            <ControlledNumberInput name={`legend.${index}.i06`} />
           </>
         ) : (
           <> {row.original.i06} </>
@@ -196,7 +203,7 @@ export const LegendListColumns = ({
       Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
         isInput ? (
           <>
-            <ControlledTextField name={`legend.${index}.i07`} />
+            <ControlledNumberInput name={`legend.${index}.i07`} />
           </>
         ) : (
           <> {row.original.i07} </>
@@ -241,3 +248,72 @@ export const ResourcesListColumns = ({
     },
   ];
 };
+
+const EstimationListSubColum: Column<EstimationSubColumn>[] = [
+  {
+    Header: "IO3",
+    accessor: "iO3",
+    Cell: (): ReactElement => <ControlledNumberInput name="io3" />,
+  },
+  {
+    Header: "IO4",
+    accessor: "iO4",
+    Cell: (): ReactElement => <ControlledNumberInput name="io4" />,
+  },
+  {
+    Header: "IO5",
+    accessor: "iO5",
+    Cell: (): ReactElement => <ControlledNumberInput name="io5" />,
+  },
+  {
+    Header: "IO6",
+    accessor: "iO6",
+    Cell: (): ReactElement => <ControlledNumberInput name="io6" />,
+  },
+  {
+    Header: "IO7",
+    accessor: "iO7",
+    Cell: (): ReactElement => <ControlledNumberInput name="io7" />,
+  },
+];
+
+export const EstimationListColumns = ({ t }: EstimationColumnProps): Column<EstimationColumn>[] => [
+  {
+    Header: t(estimationColumns.taskName),
+    accessor: "taskName",
+  },
+  {
+    Header: t(estimationColumns.complexity),
+    accessor: "complexity",
+  },
+  {
+    Header: t(estimationColumns.noOfResources),
+    accessor: "resourcesNo",
+    Cell: (): ReactElement => {
+      return (
+        <Table<EstimationSubColumn>
+          name="sub-table"
+          noColor
+          data={[
+            {
+              iO3: 10,
+              iO4: 10,
+              iO5: 10,
+              iO6: 10,
+              iO7: 10,
+            },
+          ]}
+          columns={EstimationListSubColum}
+        />
+      );
+    },
+  },
+  {
+    Header: t(estimationColumns.totalManHours),
+    accessor: "totalManHours",
+  },
+  {
+    Header: t(estimationColumns.totalManDays),
+    accessor: "totalManDays",
+  },
+];

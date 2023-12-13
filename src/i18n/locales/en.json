@@ -34,9 +34,13 @@
       "pageInProgressDescription": "This page is currently under construction. Check back soon!"
     },
     "idleTimeOut": {
+      "title": "Session Timeout",
       "label": "You will be automatically logged off in",
       "stayLogged": "Stay Logged on",
       "logout": "Logout"
+    },
+    "unauthorized": {
+      "title": "Unauthorized"
     },
     "noData": "No Data",
     "somethingWentWrong": {
@@ -61,7 +65,7 @@
     "errorMessage": {
       "required": "This field is required.",
       "fieldRequired": "{{field}} is required.",
-      "unauthorized": "Unauthorized. Your session has expired. Please login again.",
+      "unauthorized": "Your session has expired. Please login again.",
       "genericError": "There is a problem with your request. Please contact your system administrator.",
       "auth": {
         "changePassword": {
@@ -207,6 +211,7 @@
     },
     "summary": {
       "title": "Summary",
+      "subtitle": "Please check the details below before adding the estimation.",
       "table": {
         "columns": {
           "functionality": "Functionality",
@@ -246,7 +251,7 @@
         }
       },
       "noTaskLabel": "No task.",
-      "noSelectedTaskLabel": "No selected task.",
+      "noSelectedTaskLabel": "No Data.",
       "descriptionLabel": "Description",
       "tasksListLabel": "Tasks list"
     },
@@ -261,7 +266,34 @@
       "excel": "Excel"
     },
     "estimation": {
-      "title": "Estimation"
+      "title": "Estimation",
+      "estimationColumns": {
+        "taskName": "Task Name",
+        "complexity": "Complexity",
+        "noOfResources": "No. of Resources",
+        "totalManHours": "Total Man Hours",
+        "totalManDays": "Total Man Days"
+      }
+    }
+  },
+  "tasks": {
+    "createTask": {
+      "modalTitle": "Create New Task",
+      "label": {
+        "taskTitle": "Task Title",
+        "description": "Description",
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "placeholder": {
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "tags": "Tags"
+      },
+      "btnLabel": {
+        "create": "Create"
+      }
     }
   },
   "history": {
@@ -270,6 +302,77 @@
     },
     "filter": {
       "placeholder": "Enter Keyword  to  filter  list.."
+    }
+  },
+  "userManagement": {
+    "label": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "middleName": "Middle Name",
+      "suffix": "Suffix",
+      "gender": "Gender",
+      "email": "Email Address",
+      "careerStep": "Career Step",
+      "employeeId": "Employee Id",
+      "odcId": "ODC",
+      "joiningDate": "User recently joined the organization",
+      "joiningDateEdit": "Joining Date",
+      "joiningAtLaterDate": "User recently joined the organization at a later date",
+      "projectId": "Project",
+      "teamId": "Team",
+      "roles": "Role/s"
+    },
+    "errorMessage": {
+      "email": "Invalid email format."
+    }
+  },
+  "complexity": {
+    "title": "COMPLEXITY",
+    "label": {
+      "complexity": "Complexity",
+      "hours": "HOURS",
+      "days": "DAYS",
+      "name": "Complexity Name",
+      "noOfDays": "Number of Days",
+      "noOfFeatures": "Number of Features",
+      "description": "Description",
+      "samples": "Samples",
+      "addComplexity": "Add Complexity",
+      "editComplexity": "Edit Complexity"
+    },
+    "table": {
+      "columns": {
+        "complexity": "Complexity",
+        "noOfDays": "No. of Days",
+        "noOfFeatures": "No. of Features",
+        "description": "Description",
+        "samples": "Samples"
+      }
+    },
+    "btnLabel": {
+      "addComplexity": "Add Complexity",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "validationInfo": {
+      "maxComplexityName": "Complexity name cannot be longer than 20 characters.",
+      "maxDescription": "Description cannot be longer than 256 characters.",
+      "maxSamples": "Samples cannot be longer than 1024 characters.",
+      "noOfHours": "Number of hours must be number.",
+      "minNoOfHours": "The minimum number of hours should start with 1 hour.",
+      "maxNoOfHours": "The maximum number of hours should not be less than minimum number of hours",
+      "posNoOfHours": "Number of hours cannot start with a minus.",
+      "intNoOfHours": "Number of hours cannot include a decimal point.",
+      "minNoOfFeatures": "The minimum number of features should start with 1 hour.",
+      "maxNoOfFeatures": "The maximum number of features should not be less than minimum number of features",
+      "posNoOfFeatures": "Number of features cannot start with a minus.",
+      "intNoOfFeatures": "Number of features cannot include a decimal point.",
+      "submitError": "There is a problem in your submitted data. Please check.",
+      "submitSuccess": "Complexity successfully submitted.",
+      "deleteError": "There is a problem in your deleted data. Please check.",
+      "deleteSuccess": "Complexity successfully deleted."
     }
   }
 }

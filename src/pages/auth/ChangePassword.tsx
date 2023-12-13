@@ -58,7 +58,7 @@ const ChangePassword = (): ReactElement => {
   const { values } = changePasswordForm;
   return (
     <>
-      {!status.success ? (
+      {status.success ? (
         <Grid container>
           <Grid item xs={12} sx={{ mb: 3 }}>
             <CustomCheckIcon>

@@ -2,7 +2,9 @@ import React, { useState, useEffect, ComponentType, ReactElement } from "react";
 import { IdleTimerProvider } from "react-idle-timer";
 import { BroadcastChannel } from "broadcast-channel";
 
-import { NotificationModal, Timer } from "~/components";
+import { Timer } from "~/components";
+import NotificationModal from "~/components/modal/notification-modal/NotificationModal";
+
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import { getEnvConfig } from "~/utils/env-config";
@@ -59,9 +61,10 @@ export const useIdleTimer = <P extends object>(
         <WrappedComponent {...props} />
         <NotificationModal
           type="idleTimeOut"
+          modalTitle={t(common.idleTimeOutTitle)}
           message={
             <>
-              {t(common.idleTimeOutLabel)}{" "}
+              {t(common.idleTimeOutLabel)}:{" "}
               <Timer
                 onEndCountdown={logout}
                 milliseconds={

@@ -1,8 +1,11 @@
 import type { CellProps } from "react-table";
-import { IconButton } from "@mui/material";
+import React from "react";
+import { Chip, IconButton } from "@mui/material";
 import { SvgIcon } from "~/components";
 import { UserListData } from "~/api/user-management/types";
 import { UserColumnsProps, UserListColumnsType } from "./types";
+import moment from "moment";
+import renderRole from "~/utils/helpers/renderRoleHelper";
 
 export const userListColumns = ({
   t,
@@ -28,12 +31,26 @@ export const userListColumns = ({
     {
       accessor: "joiningDate",
       Header: "Joining Date",
+      Cell: ({ row }: CellProps<UserListData>) => {
+        return moment(row.original.joiningDate).format("MM-DD-YYYY");
+      },
     },
     {
       accessor: "roles",
       Header: t("Roles"),
       Cell: ({ row }: CellProps<UserListData>) => {
-        return row.original.roles.join(", ");
+        return (
+          <>
+            {row.original.roles.map((data, index) => {
+              return (
+                <React.Fragment key={index}>
+                  <Chip label={renderRole(data)} variant="outlined" />
+                  &nbsp;
+                </React.Fragment>
+              );
+            })}
+          </>
+        );
       },
     },
     {
