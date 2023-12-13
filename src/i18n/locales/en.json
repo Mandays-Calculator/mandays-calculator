@@ -195,7 +195,14 @@
     "generatingPDFLabel": "Generating your PDF. Please wait ...",
     "modalLabels": {
       "exportConfirmation": "Export Estimation details by:",
-      "confirmDeleteEstimation": "Are you sure you want to delete this estimation?"
+      "confirmDeleteEstimation": "Are you sure you want to delete this estimation?",
+      "shareTitle": "Share with Others",
+      "shareSubtitle": "Project owned by",
+      "accessExpiry": "Access Expiry",
+      "link": "Link",
+      "generate": "Generate link",
+      "redirect": "Go to link",
+      "copyLink": "Copy to clipboard"
     },
     "sprintList": {
       "label": "List of Sprints",

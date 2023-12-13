@@ -1,10 +1,16 @@
 import type { ReactElement } from "react";
-import type { MandaysForm, TaskType } from ".";
+import type { 
+  MandaysForm, 
+  TaskType,
+  EstimationDetailsMode,
+  EstimationDetailsProps,
+} from ".";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Location, useLocation, useNavigate } from "react-router-dom";
-
+import { useFormik } from "formik";
+import * as yup from "yup";
 import { Typography, Grid } from "@mui/material";
 import {
   Form,
@@ -14,11 +20,8 @@ import {
   SvgIcon,
   Title,
 } from "~/components";
-import { CustomButton } from "~/components/form/button";
 import { Select } from "~/components/form/select";
-import * as yup from "yup";
-import { useFormik } from "formik";
-
+import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
 
 import { createExcel, generateEstimationData } from "../utils/excelHelper";
@@ -32,11 +35,13 @@ import Resources from "./resources";
 
 import { ExportModal } from "./components/export-modal";
 import { ActionButtons } from "./components/action-buttons";
+import { HeaderButtons } from "./components/header-buttons";
+import { ShareModal } from "./components/share-modal";
 import Estimation from "./estimation";
 import { initMandays } from "./utils";
-import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 
-const EstimationDetails = (): ReactElement => {
+const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
+  const { isExposed } = props;
   const { mandaysCalculator, common } = LocalizationKey;
 
   const navigate = useNavigate();
@@ -46,6 +51,7 @@ const EstimationDetails = (): ReactElement => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [isExport, setIsExport] = useState<boolean>(false);
+  const [isShare, setIsShare] = useState<boolean>(false);
 
   const mode = state?.mode || "view";
   const sprintName = "Sprint 1"; // Note: will come from API
@@ -175,6 +181,7 @@ const EstimationDetails = (): ReactElement => {
           </Grid>
           <Grid item>
             <Select
+              disabled={isExposed}
               name="team"
               value={"enrollment"}
               sx={{ background: "#fff" }}
@@ -189,20 +196,13 @@ const EstimationDetails = (): ReactElement => {
                 {sprintName}
               </Typography>
             </Grid>
-            {mode === "view" && (
-              <Grid item xs={2}>
-                <Grid container justifyContent={"right"}>
-                  <Grid item xs={5}>
-                    <CustomButton onClick={() => setIsExport(true)}>
-                      {t(common.exportBtn)}
-                    </CustomButton>
-                  </Grid>
-                  <Grid item xs={5}>
-                    <CustomButton>{t(common.shareBtn)}</CustomButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-            )}
+            <HeaderButtons
+              setIsExport={setIsExport}
+              setIsShare={setIsShare}
+              mode={mode}
+              isExposed={isExposed}
+              t={t}
+            />
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
@@ -223,6 +223,14 @@ const EstimationDetails = (): ReactElement => {
           setIsExport={setIsExport}
           exportForm={exportForm}
           t={t}
+        />
+      )}
+      {isShare && (
+        <ShareModal
+          isShare={isShare}
+          setIsShare={setIsShare}
+          t={t}
+          handleSubmit={() => console.log("submit")}
         />
       )}
     </>
