@@ -43,6 +43,7 @@ const StyledModalTitle = styled(Typography)({
   fontSize: "1.125rem",
   paddingBottom: "18px",
 });
+
 const StyledTitle = styled(Typography)({
   color: "#414145",
   fontSize: 14,
@@ -50,6 +51,7 @@ const StyledTitle = styled(Typography)({
   fontWeight: "400",
   wordWrap: "break-word",
 });
+
 const StyledError = styled(Typography)({
   color: "#FF4545",
   fontSize: "0.75rem",
@@ -93,6 +95,25 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
 
   const submit = () => {
     OnSubmit();
+  };
+
+  const renderAlert = (): ReactElement | undefined => {
+    if (!isSuccess) {
+      return (
+        <Alert
+          open={isError}
+          message={"There is a problem in your submitted data. Please check"}
+          type={"error"}
+        />
+      );
+    }
+    return (
+      <Alert
+        open={isSuccess}
+        message={"User successfully added"}
+        type={"success"}
+      />
+    );
   };
 
   return (
@@ -298,22 +319,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           >
             Add User
           </CustomButton>
-          {!status.loading && (
-            <>
-              <Alert
-                open={isError}
-                message={
-                  "There is a problem in your submitted data. Please check"
-                }
-                type={"error"}
-              />
-              <Alert
-                open={isSuccess}
-                message={"User successfully added"}
-                type={"success"}
-              />
-            </>
-          )}
+          {!status.loading && renderAlert()}
         </Box>
       </Stack>
     </Dialog>
