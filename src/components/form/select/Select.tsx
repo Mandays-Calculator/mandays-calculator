@@ -78,9 +78,7 @@ export const Select = (props: SelectProps): ReactElement => {
               variant="filled"
               label={getOptionLabel(keyBy(options, getOptionValue)[value])}
               key={value}
-              deleteIcon={
-                <SvgIcon name="cross" $size={2} sx={{ margin: "12px 5px 0" }} />
-              }
+              deleteIcon={<SvgIcon name="cross" $size={2} />}
               onDelete={() => handleDelete(value as unknown as SelectObject)}
               onMouseDown={(e) => e.stopPropagation()}
             />

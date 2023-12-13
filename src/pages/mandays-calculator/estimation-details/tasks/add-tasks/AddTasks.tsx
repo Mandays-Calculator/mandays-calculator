@@ -16,6 +16,7 @@ import Grid from "@mui/material/Grid";
 import { SvgIcon, TextField } from "~/components";
 import { dateFormat } from "~/utils/date";
 import LocalizationKey from "~/i18n/key";
+import { usePagination } from "~/hooks/pagination";
 
 const AddTasks = (): ReactElement => {
   const droppableList: Status[] = ["unselected", "selected"];
@@ -47,7 +48,10 @@ const AddTasks = (): ReactElement => {
     }
   };
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>, status: Status): void => {
+  const handleSearch = (
+    e: ChangeEvent<HTMLInputElement>,
+    status: Status
+  ): void => {
     if (status === "selected") {
       setSelected(e.target.value);
     } else {
@@ -57,26 +61,23 @@ const AddTasks = (): ReactElement => {
   return (
     <Fragment>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Grid
-          container
-          spacing={2}
-          justifyContent={"space-between"}
-        >
+        <Grid container spacing={2} justifyContent={"space-between"}>
           {droppableList.map((droppable, index) => (
-            <StyledGridItem
-              $type={droppable}
-              item
-              xs={5.9}
-              key={index}
-            >
+            <StyledGridItem $type={droppable} item xs={5.9} key={index}>
               <Droppable droppableId={droppable}>
                 {(provided) => {
-                  const filteredData = tasks.filter((filtered) => filtered.status === droppable);
+                  const filteredData = tasks.filter(
+                    (filtered) => filtered.status === droppable
+                  );
+
+                  const { paginatedItems, Pagination } = usePagination({
+                    items: filteredData,
+                    itemsPerPage: 2,
+                  });
+
+                  console.log(paginatedItems(), "paginated items");
                   return (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                    >
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
                       <Typography
                         variant="h5"
                         color={"primary"}
@@ -90,60 +91,66 @@ const AddTasks = (): ReactElement => {
 
                       <TextField
                         name={`mandays-${droppable}`}
-                        value={droppable === "selected" ? selected : notSelected}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearch(e, droppable)}
+                        value={
+                          droppable === "selected" ? selected : notSelected
+                        }
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          handleSearch(e, droppable)
+                        }
                         margin="normal"
                       />
 
-                      {filteredData.length !== 0 ? (
-                        filteredData.map((task, index) => (
+                      {paginatedItems().length !== 0 ? (
+                        paginatedItems().map((task, index) => (
                           <Draggable
                             draggableId={task.id}
                             key={task.id}
                             index={index}
                           >
-                            {(provided) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <StyledCardContainer
-                                  key={index}
-                                  headerTitle={task.title}
-                                  actionHeader={
-                                    <SvgIcon
-                                      name="edit"
-                                      sx={{ color: "#7AC0EF", cursor: "pointer" }}
-                                    />
-                                  }
-                                  subHeader={`${t(common.createdDateLabel)}: ${dateFormat(
-                                    task.createdDate
-                                  )}`}
+                            {(provided) => {
+                              return (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
                                 >
-                                  <Typography>
-                                    {t(mandaysCalculator.taskDescriptionLabel)}:
-                                  </Typography>
-                                  <Typography>{task.description}</Typography>
-                                </StyledCardContainer>
-                              </div>
-                            )}
+                                  <StyledCardContainer
+                                    key={index}
+                                    headerTitle={task.title}
+                                    actionHeader={
+                                      <SvgIcon
+                                        name="edit"
+                                        sx={{
+                                          color: "#7AC0EF",
+                                          cursor: "pointer",
+                                        }}
+                                      />
+                                    }
+                                    subHeader={`${t(
+                                      common.createdDateLabel
+                                    )}: ${dateFormat(task.createdDate)}`}
+                                  >
+                                    <Typography>
+                                      {t(
+                                        mandaysCalculator.taskDescriptionLabel
+                                      )}
+                                      :
+                                    </Typography>
+                                    <Typography>{task.description}</Typography>
+                                  </StyledCardContainer>
+                                </div>
+                              );
+                            }}
                           </Draggable>
                         ))
                       ) : (
-                        <StyledNoDataContainer
-                          item
-                          xs={12}
-                        >
-                          <Typography
-                            variant="h2"
-                            color="primary"
-                          >
+                        <StyledNoDataContainer item xs={12}>
+                          <Typography variant="h2" color="primary">
                             {t(mandaysCalculator.noSelectedTaskLabel)}
                           </Typography>
                         </StyledNoDataContainer>
                       )}
-
+                      <Pagination />
                       {provided.placeholder}
                     </div>
                   );
