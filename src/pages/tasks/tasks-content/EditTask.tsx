@@ -104,7 +104,9 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                 <Typography style={styles.styledTypographyBold}>
                   Functionality
                 </Typography>
-                <Typography>{newTask ? newTask.functionality : ""}</Typography>
+                {newTask?.functionality.map((i) => {
+                  return <Typography>{i.name}</Typography>;
+                })}
               </Stack>
             </Grid>
 

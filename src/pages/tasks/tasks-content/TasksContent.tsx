@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 import { styled } from "@mui/material/styles";
 import { Divider, Grid } from "@mui/material";
@@ -16,6 +16,7 @@ import CreateTask from "./CreateTask";
 import EditTask from "./EditTask";
 
 import { AllTasksResponse } from "~/api/tasks/types";
+import { useTasks } from "~/queries/tasks/Tasks";
 
 const StyleDiv = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
@@ -58,6 +59,15 @@ const StyledAdd = styled(Grid)(({ display }: { display: string }) => ({
 }));
 
 const TasksContent = (): ReactElement => {
+  const { data: tasksData } = useTasks("DEV");
+  const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
+
+  useEffect(() => {
+    if (tasksData) {
+      setTasks(tasksData.data);
+    }
+  }, [tasksData]);
+
   const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
   const [modalEditOpen, setEditModalOpen] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
@@ -80,7 +90,12 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Backlog",
       type: "Bug",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "Zad Geron",
@@ -96,7 +111,12 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Backlog",
       type: "Bug",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "Zad Geron",
@@ -112,7 +132,12 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Backlog",
       type: "Bug",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "Zad Geron",
@@ -128,7 +153,12 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Not Yet Started",
       type: "Bug",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "Zad Geron",
@@ -144,7 +174,12 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "In Progress",
       type: "Bug",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "Zad Geron",
@@ -160,7 +195,12 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "On Hold",
       type: "Bug",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "Zad Geron",
@@ -176,7 +216,12 @@ const TasksContent = (): ReactElement => {
       complexity: "13",
       status: "Completed",
       type: "Bug",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "Zad Geron",
@@ -282,7 +327,7 @@ const TasksContent = (): ReactElement => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Grid container spacing={1} justifyContent="space-between">
           {status.map((i) => {
-            const filteredData = mockData.filter((task) => task.status === i);
+            const filteredData = tasks.filter((task) => task.status === i);
 
             return (
               <Grid item xs={2.4} key={i}>

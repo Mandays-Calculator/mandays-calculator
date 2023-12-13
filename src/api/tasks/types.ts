@@ -8,6 +8,11 @@ interface Comment {
   comment: string;
 }
 
+interface Functionality {
+  id: string;
+  name: string;
+}
+
 export interface AllTasksResponse {
   name: string;
   description: string;
@@ -16,7 +21,7 @@ export interface AllTasksResponse {
   complexity: string;
   status: string;
   type: string;
-  functionality: string;
+  functionality: Functionality[];
   comments: Comment[];
 }
 

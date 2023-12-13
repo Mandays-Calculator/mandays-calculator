@@ -33,7 +33,12 @@ const CreateTask: React.FC<CreateModalProps> = ({
     complexity: "",
     status: "Backlog",
     type: "",
-    functionality: "",
+    functionality: [
+      {
+        id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+        name: "Simple Function",
+      },
+    ],
     comments: [
       {
         name: "Zad Geron",
@@ -54,7 +59,12 @@ const CreateTask: React.FC<CreateModalProps> = ({
       complexity: "",
       status: "Backlog",
       type: "",
-      functionality: "",
+      functionality: [
+        {
+          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+          name: "Simple Function",
+        },
+      ],
       comments: [
         {
           name: "",
