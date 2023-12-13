@@ -4,6 +4,7 @@ import ProviderWrapper from '~/__tests__/utils/ProviderWrapper';
 
 import { Complexity } from '~/pages/complexity/';
 import * as query from '~/queries/complexity/Complexities';
+import * as mutate from '~/mutations/complexity';
 // import { complexityById, tableData } from './utils/utils';
 import { complexityById, tableData } from './utils/utils';
 
@@ -44,7 +45,7 @@ describe('View complexity', () => {
 	test('Add Complexity', async () => {
 		const user = UserEvent.setup();
 
-		jest.spyOn(query, 'usePostComplexities').mockImplementation(
+		jest.spyOn(mutate, 'usePostComplexities').mockImplementation(
 			jest.fn().mockReturnValue({
 				mutate: jest.fn().mockImplementation((_data, options) => {
 					options.onSuccess({ status: 200 });
@@ -87,7 +88,7 @@ describe('View complexity', () => {
 			})
 		)
 
-		jest.spyOn(query, 'usePutComplexities').mockImplementation(
+		jest.spyOn(mutate, 'usePutComplexities').mockImplementation(
 			jest.fn().mockReturnValue({
 				mutate: jest.fn().mockImplementation((_data, options) => {
 					options.onSuccess({ status: 200 });
@@ -128,7 +129,7 @@ describe('View complexity', () => {
 			})
 		)
 
-		const deleteFn = jest.spyOn(query, 'useDeleteComplexities').mockImplementation(
+		const deleteFn = jest.spyOn(mutate, 'useDeleteComplexities').mockImplementation(
 			jest.fn().mockReturnValue({
 				mutate: jest.fn(),
 			})
@@ -149,7 +150,7 @@ describe('View complexity', () => {
 	test('Error on mutation options', async () => {
 		const user = UserEvent.setup();
 
-		jest.spyOn(query, 'usePostComplexities').mockImplementation(
+		jest.spyOn(mutate, 'usePostComplexities').mockImplementation(
 			jest.fn().mockReturnValue({
 				mutate: jest.fn().mockImplementation((_data, options) => {
 					options.onError({ status: 500 });

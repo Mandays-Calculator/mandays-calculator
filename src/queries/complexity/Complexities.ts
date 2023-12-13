@@ -1,27 +1,19 @@
-import type {
-  ForPostComplexities,
-  GetComplexities,
-  PostComplexities,
-  PutComplexities,
-  ForPutComplexities,
-  ForGetComplexities,
-  DeleteComplexities,
-} from "~/api/complexity";
+import type { GetComplexities, ForGetComplexities } from "~/api/complexity";
 
-import {
-  deleteComplexities,
-  getComplexities,
-  getComplexitiesbyId,
-  postComplexities,
-  putComplexities,
-} from "~/api/complexity";
-import { useMutation, useQuery } from "react-query";
+import { useState } from "react";
+import { useQuery } from "react-query";
 
-export const useGetComplexities = () =>
-  useQuery<GetComplexities<ForGetComplexities[]>, Error>(
+import { getComplexities, getComplexitiesbyId } from "~/api/complexity";
+
+export const useGetComplexities = () => {
+  const [hasError, setHasError] = useState(false);
+  return useQuery<GetComplexities<ForGetComplexities[]>, Error>(
     "getComplexities",
-    getComplexities
+    getComplexities,
+    { enabled: !hasError, onError: () => setHasError(true) }
   );
+};
+  
 
 export const useGetComplexitiesbyId = (id: string, shouldFetch: boolean) =>
   useQuery<GetComplexities<ForGetComplexities>, Error>(
@@ -31,12 +23,3 @@ export const useGetComplexitiesbyId = (id: string, shouldFetch: boolean) =>
       enabled: shouldFetch,
     }
   );
-
-export const usePostComplexities = () =>
-  useMutation<PostComplexities, Error, ForPostComplexities[]>(postComplexities);
-
-export const usePutComplexities = () =>
-  useMutation<PutComplexities, Error, ForPutComplexities>(putComplexities);
-
-export const useDeleteComplexities = () =>
-  useMutation<DeleteComplexities, Error, string>(deleteComplexities);

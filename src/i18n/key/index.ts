@@ -281,6 +281,10 @@ const LocalizationKey = {
       maxNoOfFeatures: "complexity.validationInfo.maxNoOfFeatures",
       posNoOfFeatures: "complexity.validationInfo.posNoOfFeatures",
       intNoOfFeatures: "complexity.validationInfo.intNoOfFeatures",
+      submitError: "complexity.validationInfo.submitError",
+      submitSuccess: "complexity.validationInfo.submitSuccess",
+      deleteError: "complexity.validationInfo.deleteError",
+      deleteSuccess: "complexity.validationInfo.deleteSuccess"
     }
   }
 };

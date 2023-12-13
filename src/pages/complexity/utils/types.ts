@@ -20,4 +20,6 @@ export type ComplexityFormsType = {
 	complexityId: string;
 	handleCloseAddEdit: () => void;
   data: ForGetComplexities[];
+  setIsEditError: (isEditError: boolean) => void;
+  setIsEditSuccess: (isEditSuccess: boolean) => void;
 };

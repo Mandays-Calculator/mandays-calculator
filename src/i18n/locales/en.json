@@ -368,7 +368,11 @@
       "minNoOfFeatures": "The minimum number of features should start with 1 hour.",
       "maxNoOfFeatures": "The maximum number of features should not be less than minimum number of features",
       "posNoOfFeatures": "Number of features cannot start with a minus.",
-      "intNoOfFeatures": "Number of features cannot include a decimal point."
+      "intNoOfFeatures": "Number of features cannot include a decimal point.",
+      "submitError": "There is a problem in your submitted data. Please check.",
+      "submitSuccess": "Complexity successfully submitted.",
+      "deleteError": "There is a problem in your deleted data. Please check.",
+      "deleteSuccess": "Complexity successfully deleted."
     }
   }
 }

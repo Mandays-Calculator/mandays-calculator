@@ -12,7 +12,7 @@ import {
 	Grid,
 } from '@mui/material';
 
-import { usePostComplexities, usePutComplexities } from '~/queries/complexity/Complexities';
+import { usePostComplexities, usePutComplexities } from '~/mutations/complexity';
 import { Form } from '~/components';
 import { ControlledTextField, ControlledTextArea } from '~/components/form/controlled';
 import { getFieldError } from "~/components/form/utils";
@@ -27,7 +27,15 @@ import {
 } from '.';
 
 const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
-	const { formContext, setContext, complexityId, handleCloseAddEdit, data } = props;
+	const {
+		formContext,
+		setContext,
+		complexityId,
+		handleCloseAddEdit,
+		data,
+		setIsEditError,
+		setIsEditSuccess,
+	} = props;
 
 	const { t } = useTranslation();
 	const { complexity: { label, btnLabel } } = LocalizationKey;
@@ -76,13 +84,16 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 			}
 
 			if (formContext === 'Add')
-				mutateAddComplexities([addFormData], mutationOptions(handleClose));
+				mutateAddComplexities(
+					[addFormData],
+					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
+				);
 
 			const { isActive, ...editFormData } = addFormData;
 			if (formContext === 'Edit')
 				mutateEditComplexities(
 					{ id: complexityId, active: isActive, ...editFormData },
-					mutationOptions(handleClose)
+					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
 				);
 		},
 	});
@@ -175,7 +186,6 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 					<ControlledTextArea
 						name="description"
 						label={t(label.description)}
-						minRows={5}
 						error={handleError(errors.description)}
 						helperText={getFieldError(errors, "description")}
 					/>
@@ -184,7 +194,6 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 					<ControlledTextArea
 						name="samples"
 						label={t(label.samples)}
-						minRows={5}
 						error={handleError(errors.samples)}
 						helperText={getFieldError(errors, "samples")}
 					/>

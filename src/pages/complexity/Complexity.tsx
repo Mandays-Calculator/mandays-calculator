@@ -1,14 +1,15 @@
 import type { ReactElement } from 'react';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Stack, Switch } from '@mui/material';
 
 import LocalizationKey from "~/i18n/key";
 import { useGetComplexities } from '~/queries/complexity/Complexities';
+import { useDeleteComplexities } from "~/mutations/complexity";
 import { CustomButton } from '~/components/form/button';
-import { Table, Title, Modal, PageContainer } from '~/components';
+import { Table, Title, Modal, PageContainer, Alert, PageLoader } from '~/components';
 
 import { complexityColumns, ComplexityForms, FormContext } from './utils';
 
@@ -17,13 +18,17 @@ const Complexity = (): ReactElement => {
 	const [complexityId, setComplexityId] = useState<string>('');
 	const [formContext, setFormContext] = useState<FormContext>('');
 	const [openAddEditModal, setOpenAddEditModal] = useState<boolean>(false);
+	const [isEditError, setIsEditError] = useState<boolean>(false);
+	const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
 
-	const { data: apiData, refetch } = useGetComplexities();
+	const { data: apiData, isError, isLoading } = useGetComplexities();
 	const { t } = useTranslation();
-	const { complexity: { title, btnLabel, label } } = LocalizationKey;
+	const {
+		complexity: { title, btnLabel, label, validationInfo },
+		common: { errorMessage: { genericError } }
+	} = LocalizationKey;
 
 	const handleDaysOrHours = (): void => setIsDaysChecked(!isDaysChecked);
-	const handleComplexityId = (id: string): void => setComplexityId(id);
 	const handleFormContext = (context: FormContext): void => setFormContext(context);
 	const handleOpenAddEdit = (context: FormContext): void => {
 		setFormContext(context);
@@ -31,9 +36,22 @@ const Complexity = (): ReactElement => {
 	};
 	const handleCloseAddEdit = (): void => setOpenAddEditModal(false);
 
-	useEffect(() => {
-		setTimeout(refetch, 5000);
-	}, [formContext]);
+	const { mutate, isError: isDeleteError, isSuccess: isDeleteSuccess } = useDeleteComplexities();
+	const handleContext = (context: FormContext, id: string): void => {
+		setFormContext(context);
+		setComplexityId(id);
+		if (context === 'Edit')
+			setOpenAddEditModal(true);
+		if (context === '')
+			mutate(id);
+	};
+
+	// useEffect(() => {
+	// 	setTimeout(refetch, 5000);
+	// }, [formContext]);
+
+	if (isLoading)
+		return <PageLoader />;
 
 	return (
 		<>
@@ -52,15 +70,7 @@ const Complexity = (): ReactElement => {
 					</Stack>
 					<Table
 						name='complexity'
-						columns={
-							complexityColumns(
-								isDaysChecked,
-								handleFormContext,
-								handleComplexityId,
-								setOpenAddEditModal,
-								t
-							)
-						}
+						columns={complexityColumns(isDaysChecked, handleContext, t)}
 						data={apiData?.data ?? []}
 					/>
 				</Stack>
@@ -79,11 +89,48 @@ const Complexity = (): ReactElement => {
 						complexityId={complexityId}
 						handleCloseAddEdit={handleCloseAddEdit}
 						data={apiData?.data ?? []}
+						setIsEditError={setIsEditError}
+						setIsEditSuccess={setIsEditSuccess}
 					/>
 				}
 				actions={<></>}
 				maxWidth={'md'}
 			/>
+			{isError && (
+				<Alert
+					open={isError}
+					message={t(genericError)}
+					type={"error"}
+				/>
+			)}
+			{isEditError && (
+				<Alert
+					open={isEditError}
+					message={t(validationInfo.submitError)}
+					type={"error"}
+				/>
+			)}
+			{isDeleteError && (
+				<Alert
+				open={isDeleteError}
+				message={t(validationInfo.deleteError)}
+				type={"error"}
+			/>
+			)}
+			{isEditSuccess && (
+				<Alert
+					open={isEditSuccess}
+					message={t(validationInfo.submitSuccess)}
+					type={"success"}
+				/>
+			)}
+			{isDeleteSuccess && (
+				<Alert
+				open={isDeleteSuccess}
+				message={t(validationInfo.deleteSuccess)}
+				type={"success"}
+			/>
+			)}
 		</>
 	)
 }

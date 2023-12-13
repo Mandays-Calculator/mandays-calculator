@@ -3,7 +3,6 @@ import type { TFunction } from "i18next";
 
 import { IconButton } from "@mui/material";
 
-import { useDeleteComplexities } from "~/queries/complexity/Complexities";
 import { SvgIcon } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
@@ -13,9 +12,7 @@ const { complexity: { table: { columns } } } = LocalizationKey;
 
 export const complexityColumns = (
 	isDaysChecked: boolean,
-	setContext: (context: FormContext) => void,
-	handleComplexityId: (id: string) => void,
-	setOpenAddEditModal: (open: boolean) => void,
+	handleContext: (complexity: FormContext, id: string) => void,
 	t: TFunction<"translation", undefined>,
 ): Column<DataType>[] =>
 	[
@@ -46,27 +43,17 @@ export const complexityColumns = (
 			id: "actions",
 			width: 200,
 			Cell: ({ row: { original: { id }, index } }: CellProps<DataType>) => {
-				const { mutate } = useDeleteComplexities();
-				const handleContext = (context: FormContext): void => {
-					setContext(context);
-					handleComplexityId(id);
-					if (context === 'Edit')
-						setOpenAddEditModal(true);
-					if (context === '')
-						mutate(id);
-				};
-
 				return (
 					<>
 						<IconButton
-							onClick={() => handleContext('Edit')}
+							onClick={() => handleContext('Edit', id)}
 							aria-label={`edit-${index}`}
 							color="primary"
 						>
 							<SvgIcon name="edit" $size={2} />
 						</IconButton>
 						<IconButton
-							onClick={() => handleContext('')}
+							onClick={() => handleContext('', id)}
 							aria-label={`delete-${index}`}
 							color="error"
 						>
