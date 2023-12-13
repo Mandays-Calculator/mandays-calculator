@@ -81,6 +81,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          ".MuiChip-deleteIcon": {
+            margin: "10px 0 0",
+          },
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         html: {

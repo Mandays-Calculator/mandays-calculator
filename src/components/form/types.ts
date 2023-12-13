@@ -16,6 +16,7 @@ export type WithInputControllerType =
   | "pin-code"
   | "autocomplete"
   | "checkbox-group"
+  | "date-time-picker"
   | "number-input";
 
 export type BaseInputPropsWithAdornment<Type = object> = Type & {

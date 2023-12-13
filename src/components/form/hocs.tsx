@@ -15,7 +15,9 @@ type WrappedInputProps<Type> = Type &
   BaseInputProps & {
     name: string;
   };
-type WithInputController<Type extends object> = (props: WrappedInputProps<Type>) => ReactElement;
+type WithInputController<Type extends object> = (
+  props: WrappedInputProps<Type>
+) => ReactElement;
 
 export const withInputController = <Type extends FormikValues>(
   WrappedInput: ComponentType<Type>,
@@ -46,7 +48,10 @@ export const withInputController = <Type extends FormikValues>(
       form.setFieldValue(name, pinCode);
     };
 
-    const handleCheckBoxChanges = (checkBoxName: string, checked: boolean): void => {
+    const handleCheckBoxChanges = (
+      checkBoxName: string,
+      checked: boolean
+    ): void => {
       if (checked) {
         form.setFieldValue(name, [checkBoxName, ...(form.values[name] ?? [])]);
       } else {
@@ -74,6 +79,7 @@ export const withInputController = <Type extends FormikValues>(
       | typeof form.handleChange => {
       switch (inputType) {
         case "date-picker":
+        case "date-time-picker":
           return handleDateChange;
         case "dropzone":
           return handleDropzoneChange;
@@ -108,7 +114,10 @@ export const withInputController = <Type extends FormikValues>(
       };
     };
 
-    const MemoriedField = useMemo(() => (isFastField ? FastField : Field), [isFastField]);
+    const MemoriedField = useMemo(
+      () => (isFastField ? FastField : Field),
+      [isFastField]
+    );
     return (
       <MemoriedField
         component={WrappedInput}

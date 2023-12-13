@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Grid, Stack, Typography } from "@mui/material";
@@ -7,72 +7,70 @@ import LocalizationKey from "~/i18n/key";
 
 import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
+
 import ComplexityDetails from "./complexity-details";
 import { AllTasksResponse } from "~/api/tasks";
 
 interface CreateModalProps {
   open: boolean;
+  isCreate: boolean;
+  task?: AllTasksResponse | null;
   onClose: () => void;
   onCreateTask: (task: AllTasksResponse) => void;
   reOpenCreateTask: () => void;
 }
 
-const CreateTask: React.FC<CreateModalProps> = ({
+const initialTaskState: AllTasksResponse = {
+  name: "Sample",
+  description: "",
+  completion_date: "12/16/2023",
+  sprint: "2",
+  complexity: "",
+  status: "Backlog",
+  type: "",
+  functionality: [
+    {
+      id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+      name: "Simple Function",
+    },
+  ],
+  comments: [
+    {
+      name: "Zad Geron",
+      comment: "This is a test",
+    },
+  ],
+};
+
+const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
   open,
+  isCreate,
+  task,
   onClose,
   onCreateTask,
   reOpenCreateTask,
 }) => {
   const { t } = useTranslation();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [newTask, setNewTask] = useState<AllTasksResponse>({
-    name: "",
-    description: "",
-    completion_date: "12/16/2023",
-    sprint: "2",
-    complexity: "",
-    status: "Backlog",
-    type: "",
-    functionality: [
-      {
-        id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-        name: "Simple Function",
-      },
-    ],
-    comments: [
-      {
-        name: "Zad Geron",
-        comment: "This is a test",
-      },
-    ],
-  });
-
+  const [newTask, setNewTask] = useState<AllTasksResponse>(
+    task || initialTaskState
+  );
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
-  const handleCreateTask = (): void => {
-    onCreateTask(newTask);
-    setNewTask({
-      name: "",
-      description: "",
-      completion_date: "",
-      sprint: "",
-      complexity: "",
-      status: "Backlog",
-      type: "",
-      functionality: [
-        {
-          id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-          name: "Simple Function",
-        },
-      ],
-      comments: [
-        {
-          name: "",
-          comment: "",
-        },
-      ],
-    });
-    setSelectedTags([]);
+  useEffect(() => {
+    setNewTask(task || initialTaskState);
+    // setSelectedTags(task?.tags || []);
+  }, [task]);
+
+  const handleCreateOrUpdateTask = (): void => {
+    if (isCreate) {
+      onCreateTask(newTask);
+      setNewTask(initialTaskState);
+      // setSelectedTags([]);
+    } else {
+      onCreateTask(newTask);
+    }
+
     onClose();
   };
 
@@ -92,7 +90,11 @@ const CreateTask: React.FC<CreateModalProps> = ({
     <>
       <Modal
         open={open}
-        title={t(LocalizationKey.tasks.createTask.modalTitle)}
+        title={
+          isCreate
+            ? t(LocalizationKey.tasks.createTask.modalTitle)
+            : t(LocalizationKey.tasks.updateTask.modalTitle)
+        }
         maxWidth="sm"
         onClose={onClose}
       >
@@ -213,9 +215,11 @@ const CreateTask: React.FC<CreateModalProps> = ({
               <CustomButton
                 type="button"
                 colorVariant="primary"
-                onClick={handleCreateTask}
+                onClick={handleCreateOrUpdateTask}
               >
-                Create
+                {isCreate
+                  ? t(LocalizationKey.tasks.createTask.btnLabel.create)
+                  : t(LocalizationKey.tasks.updateTask.btnLabel.update)}
               </CustomButton>
             </Stack>
           </Grid>
@@ -231,4 +235,4 @@ const CreateTask: React.FC<CreateModalProps> = ({
   );
 };
 
-export default CreateTask;
+export default CreateOrUpdateTask;

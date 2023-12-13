@@ -53,16 +53,18 @@ const styles = {
 interface TaskDetailsCardProps {
   data: AllTasksResponse;
   handleEdit: (task: AllTasksResponse) => void;
+  handleViewDetails: (task: AllTasksResponse) => void;
 }
 
 const TaskDetailsCard = ({
   data,
   handleEdit,
+  handleViewDetails,
 }: TaskDetailsCardProps): ReactElement => {
   return (
-    <PageContainer onClick={() => handleEdit(data)}>
-      <div style={styles.taskTitle}>{data?.name}</div>
-      <div style={styles.marginBottom.mbFive}>{data?.description}</div>
+    <PageContainer onClick={() => handleViewDetails(data)}>
+      <div style={styles.taskTitle}>{data.name}</div>
+      <div style={styles.marginBottom.mbFive}>{data.description}</div>
       <div style={styles.infoSection}>
         <EventIcon style={{ marginRight: 5 }} />
         {data?.completion_date}
@@ -87,6 +89,10 @@ const TaskDetailsCard = ({
         <Stack direction={"row"} spacing={0.3} flexWrap="wrap">
           <EditOutlinedIcon
             color="action"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEdit(data);
+            }}
             style={{
               display:
                 data.status !== "On Hold" && data.status !== "Backlog"
@@ -94,7 +100,6 @@ const TaskDetailsCard = ({
                   : "",
               cursor: "pointer",
             }}
-            onClick={() => handleEdit(data)}
           />
           <DeleteOutlinedIcon
             color="error"
