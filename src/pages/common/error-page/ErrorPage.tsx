@@ -1,12 +1,10 @@
 import type { ReactElement, ReactNode } from "react";
 
-import { useAuth } from "react-oidc-context";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import LocalizationKey from "~/i18n/key";
-import { logout } from "~/utils/oidc-utils";
 
 import PageNotFound from "~/assets/img/page_not_found.png";
 import SomethingWentWrong from "~/assets/img/something_wrong.png";
@@ -29,7 +27,6 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
   const { type } = props;
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const auth = useAuth();
 
   const { common } = LocalizationKey;
   const goBack = (): void => {
@@ -75,7 +72,7 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
             <Typography variant="body2" fontWeight="bold">
               {t(common.permissionErrorDesc)}
             </Typography>
-            <CustomButton type="button" onClick={() => logout(auth)}>
+            <CustomButton type="button" onClick={() => console.log("logout")}>
               {t(common.logout)}
             </CustomButton>
           </>

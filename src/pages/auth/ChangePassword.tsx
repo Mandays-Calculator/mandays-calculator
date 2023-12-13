@@ -20,6 +20,7 @@ import { changePasswordSchema } from "./schema";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { ErrorMessage } from "~/components";
+import CustomCheckIcon from "./components/check-icon/CheckIcon";
 
 const ChangePassword = (): ReactElement => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const ChangePassword = (): ReactElement => {
   });
 
   const goBack = (): void => {
-    navigate(-1);
+    navigate("./login");
   };
 
   const { values } = changePasswordForm;
@@ -60,9 +61,11 @@ const ChangePassword = (): ReactElement => {
       {status.success ? (
         <Grid container>
           <Grid item xs={12} sx={{ mb: 3 }}>
-            <Typography variant="h6" fontWeight="bold" textAlign={"justify"}>
-              {t(LocalizationKey.changePassword.label.title)}
-            </Typography>
+            <CustomCheckIcon>
+              <Typography variant="h6" fontWeight="bold" textAlign={"justify"}>
+                {t(LocalizationKey.changePassword.label.title)}
+              </Typography>
+            </CustomCheckIcon>
           </Grid>
           <Grid item xs={12} sx={{ mb: 3 }}>
             <Typography variant="body1" textAlign={"justify"}>
