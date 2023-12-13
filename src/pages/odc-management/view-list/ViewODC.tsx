@@ -1,6 +1,6 @@
 import type { ReactElement, ChangeEvent } from "react";
 import type { ODCListResponse } from "~/api/odc";
-import type { FormContext } from "../utils/interface";
+import type { ViewProps } from "../utils";
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,17 +11,11 @@ import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
-import { ODCColumns } from "../utils/columns";
+import { ODCColumns } from "../utils";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
 }));
-
-type ViewProps = {
-  data: ODCListResponse[];
-  setFormContext: (context: FormContext) => void;
-  setIdx: (idx: number) => void;
-};
 
 const ViewODC = (props: ViewProps): ReactElement => {
   const { data, setFormContext, setIdx } = props;

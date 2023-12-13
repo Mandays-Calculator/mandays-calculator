@@ -12,3 +12,16 @@ export type FieldValue = {
   location: string;
   holidays: HolidayType[] | null;
 }
+
+export type ViewProps = {
+  data: ODCListResponse[];
+  setFormContext: (context: FormContext) => void;
+  setIdx: (idx: number) => void;
+};
+
+export type AddProps = {
+  apiData: ODCListResponse[];
+  data: ODCListResponse;
+  formContext: FormContext;
+  setFormContext: (context: FormContext) => void;
+};

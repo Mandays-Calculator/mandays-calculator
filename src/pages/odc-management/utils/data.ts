@@ -7,7 +7,7 @@ export const NewODCData = {
   abbreviation: "",
   holidays: [],
   active: true,
-  createDate: null,
+  createDate: "2020-01-23T12:18:23.000Z",
   lastUpdatedDate: null,
 };
 

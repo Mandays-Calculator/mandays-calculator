@@ -1,17 +1,19 @@
 import type { ReactElement } from "react";
 import type { ODCListResponse } from "~/api/odc/types";
-import type { FormContext } from "../utils";
+import type { AddProps } from "../utils";
 
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Grid, Box, styled, Typography } from "@mui/material";
 import { useFormik } from "formik";
+import moment from "moment";
+import { parseISO } from 'date-fns';
 
 import { Table, Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
-import { ControlledTextField } from "~/components/form/controlled";
+import { ControlledTextField, ControlledDatePicker } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
 
 import {
@@ -28,13 +30,6 @@ const StyledLabel = styled(Typography)(() => ({
   fontWeight: 600,
   fontSize: "16px",
 }));
-
-type AddProps = {
-  apiData: ODCListResponse[];
-  data: ODCListResponse;
-  formContext: FormContext;
-  setFormContext: (context: FormContext) => void;
-};
 
 const AddODC = (props: AddProps): ReactElement => {
   const { apiData, data, formContext, setFormContext } = props;
@@ -67,7 +62,7 @@ const AddODC = (props: AddProps): ReactElement => {
     setNameUnqError(isNameError);
     if (isNameError) setNameUnqErrorMsg(t(validationInfo.nameUnq));
     else setNameUnqErrorMsg("");
-    
+
     const isAbbrError = IsDuplicate(apiData, values.abbreviation, "abbreviation");
     setAbbrUnqError(isAbbrError);
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
@@ -93,12 +88,21 @@ const AddODC = (props: AddProps): ReactElement => {
 		return error !== undefined;
 	};
 
-  const holidayListColumn = useMemo(() => 
+  const holidayListColumn = useMemo(() =>
     HolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday)
   , [holIdx]);
 
-  console.log('value', values)
+  console.log('api values', values);
+  // const holidays = values.holidays || [];
+  // let valueDate = "";
+  // if (holidays?.length > 0)
+  //   valueDate = moment(holidays[0]?.date, "yyyy-MM-dd").format("yyyy/MM/DD");
 
+  let date = "";
+  if (values.createDate !== null)
+    date = moment(values.createDate).format("MM/DD/yyyy");
+
+  console.log('HA', parseISO("2016-01-01").toString(), date);
   return (
     <Form instance={ODCForm}>
       <Grid container spacing={2}>
@@ -130,6 +134,18 @@ const AddODC = (props: AddProps): ReactElement => {
           />
         </Grid>
       </Grid>
+
+      <ControlledDatePicker
+        name={"createDate"}
+        label=""
+        value={parseISO("2016-01-01").toString()}
+        // value={valueDate}
+        // onChange={(value: any) => {
+        //   valueDate = moment(value).format("yyyy/MM/DD")
+        //   console.log('onChange', value, valueDate)
+        // }}
+        dateFormat="MM/dd/yyyy"
+      />
 
       <Box margin="30px 0px 14px">
         <Grid container spacing={2} mb={2}>

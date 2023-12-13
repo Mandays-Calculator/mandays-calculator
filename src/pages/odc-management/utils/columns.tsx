@@ -82,13 +82,18 @@ export const HolidayColumn = (
         const formatDate = moment(row.original.date, "yyyy-MM-DD").format("yyyy-MM-DD");
         let valueDate = "";
         if (row.original.date !== undefined || row.original.date !== null)
-          valueDate = moment(row.original.date, "YYYY-MM-DD").format("YYYY-MM-DD");
+          valueDate = moment(row.original.date, "yyyy-MM-dd").format("yyyy/MM/DD");
+        console.log("date", valueDate);
         return (
           <>
             {holIdx.includes(row.index) ? (
               <ControlledDatePicker
-                name={`holidays.${row.index}.date`}
+                name={`holidays.3.date`}
                 value={valueDate}
+                onChange={(value: any) => {
+                  valueDate = moment(value).format("yyyy/MM/DD")
+                  console.log('onChange', value, valueDate)
+                }}
                 dateFormat="yyyy/MM/dd"
               />
             ) : (

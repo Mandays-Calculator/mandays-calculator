@@ -18,7 +18,20 @@ export const IntValuesSchema = (t: TFunction) => {
       .required(t(validationInfo.locReq))
       .default(""),
     abbreviation: yup.string().default(""),
-    holidays: yup.array().nullable(),
+    holidays: yup
+      .array()
+      .of(
+        yup.object().shape({
+          id: yup.number().nullable(),
+          odcId: yup.string().default(""),
+          date: yup.string().default(""),
+          recurring: yup.boolean().default(true),
+          name: yup.string().default(""),
+          createDate: yup.string().nullable(),
+          lastUpdatedDate: yup.string().nullable(),
+        })
+      )
+      .nullable(),
     active: yup.boolean().default(true),
     createDate: yup.string().nullable(),
     lastUpdatedDate: yup.string().nullable(),
