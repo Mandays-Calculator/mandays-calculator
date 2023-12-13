@@ -13,24 +13,11 @@ import {
 } from "@mui/material";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
-import { TextField, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
+import { TextField, Modal } from "~/components";
 import theme from "~/theme";
 
-interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
+import { Task } from "./type";
 
 const styles = {
   container: {

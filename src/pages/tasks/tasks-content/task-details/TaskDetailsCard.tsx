@@ -9,7 +9,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
 
-import { Task } from "../TasksContent";
+import { Task } from "../type";
 
 const styles = {
   taskTitle: {
@@ -51,6 +51,7 @@ const styles = {
 
 interface TaskDetailsCardProps {
   data: {
+    taskID: string;
     taskTitle: string;
     desc: string;
     date: string;
@@ -59,20 +60,23 @@ interface TaskDetailsCardProps {
     status: string;
     type: string;
     functionality: string;
+    tags: string[],
     comments: {
       name: string;
       comment: string;
     }[];
   };
   handleEdit: (task: Task) => void;
+  handleViewDetails: (task: Task) => void;
 }
 
 const TaskDetailsCard = ({
   data,
   handleEdit,
+  handleViewDetails,
 }: TaskDetailsCardProps): ReactElement => {
   return (
-    <PageContainer onClick={() => handleEdit(data)}>
+    <PageContainer onClick={() => handleViewDetails(data)}>
       <div style={styles.taskTitle}>{data.taskTitle}</div>
       <div style={styles.marginBottom.mbFive}>{data.desc}</div>
       <div style={styles.infoSection}>
@@ -99,6 +103,10 @@ const TaskDetailsCard = ({
         <Stack direction={"row"} spacing={0.3} flexWrap="wrap">
           <EditOutlinedIcon
             color="action"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEdit(data)
+            }}
             style={{
               display:
                 data.status !== "On Hold" && data.status !== "Backlog"

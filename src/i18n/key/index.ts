@@ -219,6 +219,12 @@ const LocalizationKey = {
         create: "tasks.createTask.btnLabel.create",
       },
     },
+    updateTask: {
+      modalTitle: "tasks.updateTask.modalTitle",
+      btnLabel: {
+        update: "tasks.updateTask.btnLabel.update",
+      },
+    },
   },
   history: {
     detailsBtn: "history.button.details",
