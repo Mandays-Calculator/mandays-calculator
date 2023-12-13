@@ -310,24 +310,34 @@ const TasksContent = (): ReactElement => {
 
                       <Divider />
                       {filteredData.map((task, index) => (
-                        <Draggable
-                          key={task.name}
-                          draggableId={task.name}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
+                        <div>
+                          {task.status === "Backlog" ||
+                          task.status === "On Hold" ? (
+                            <Draggable
+                              key={task.name}
+                              draggableId={task.name}
+                              index={index}
                             >
-                              <TaskDetailsCard
-                                data={task}
-                                handleEdit={handleEditModalState}
-                              />
-                            </div>
+                              {(provided) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <TaskDetailsCard
+                                    data={task}
+                                    handleEdit={handleEditModalState}
+                                  />
+                                </div>
+                              )}
+                            </Draggable>
+                          ) : (
+                            <TaskDetailsCard
+                              data={task}
+                              handleEdit={handleEditModalState}
+                            />
                           )}
-                        </Draggable>
+                        </div>
                       ))}
                       {provided.placeholder}
                     </StyleDiv>
