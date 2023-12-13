@@ -32,6 +32,7 @@ const CustomNumberInput = React.forwardRef<
       }}
       slotProps={{
         incrementButton: {
+          type: "button",
           children: <img src={IconUp} alt={"arrow-up"} />,
         },
         decrementButton: {
