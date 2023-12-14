@@ -9,5 +9,5 @@
     "mandaysEstimateService": "http://localhost:18001"
   },
   "enableAuth": true,
-  "encryptData": true
+  "encryptData": false
 }
