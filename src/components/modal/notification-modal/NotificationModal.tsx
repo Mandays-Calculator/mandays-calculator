@@ -72,6 +72,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   onConfirmLabel,
   title,
   modalTitle,
+  disableCloseHeader = false,
 }): ReactElement => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState<boolean>(open);
@@ -94,9 +95,11 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
         <>
           {typeof modalTitle === "string" ? (
             <StyledModalHeader sx={{ p: 1 }}>
-              <StyledIconButton color="inherit" onClick={handleClose}>
-                <CloseIcon fontSize="large" />
-              </StyledIconButton>
+              {!disableCloseHeader && (
+                <StyledIconButton color="inherit" onClick={handleClose}>
+                  <CloseIcon fontSize="large" />
+                </StyledIconButton>
+              )}
               <StyledTitlePosition>
                 <StyledModalTitle variant="h5" align="left">
                   {modalTitle || t(LocalizationKey.common.idleTimeOutTitle)}

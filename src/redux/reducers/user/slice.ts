@@ -75,11 +75,12 @@ export const userSlice = createSlice({
     ) => {
       const config = getEnvConfig();
       const { user, permissions } = action.payload;
-      const decryptedUserData = decryptObjectWithAES(user, config.encryptData);
+      const decryptedUserData = decryptObjectWithAES(user, !config.encryptData);
       const decryptedPermissionsData = decryptObjectWithAES(
         permissions,
         !config.encryptData
       );
+      console.log(decryptedUserData, decryptedPermissionsData);
       state.loading = false;
       state.user = decryptedUserData;
       state.permissions = decryptedPermissionsData;

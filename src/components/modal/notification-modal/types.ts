@@ -5,7 +5,8 @@ export type ModalType =
   | "warning"
   | "success"
   | "unauthorized"
-  | "idleTimeOut";
+  | "idleTimeOut"
+  | "systemError";
 
 export interface NotificationModalProps {
   onConfirm?: () => void;
@@ -17,4 +18,5 @@ export interface NotificationModalProps {
   type?: ModalType;
   title?: string;
   modalTitle?: string | ReactNode;
+  disableCloseHeader?: boolean;
 }
