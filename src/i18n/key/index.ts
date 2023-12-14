@@ -125,6 +125,15 @@ const LocalizationKey = {
     modalConfirmDeleteEstimation:
       "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
+    modal: {
+      shareTitle: "mandaysCalculator.modalLabels.shareTitle",
+      shareSubtitle: "mandaysCalculator.modalLabels.shareSubtitle",
+      accessExpiry: "mandaysCalculator.modalLabels.accessExpiry",
+      link: "mandaysCalculator.modalLabels.link",
+      generate: "mandaysCalculator.modalLabels.generate",
+      redirect: "mandaysCalculator.modalLabels.redirect",
+      copyLink: "mandaysCalculator.modalLabels.copyLink",
+    },
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
       team: "mandaysCalculator.sprintList.table.columns.team",
