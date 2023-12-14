@@ -135,46 +135,37 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               <ControlledTextField
                 name="updateLastName"
                 label={t(userManagement.label.lastName)}
-                placeholder="Dela Cruz"
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
                 name="updateFirstName"
                 label={t(userManagement.label.firstName)}
-                placeholder=" Juan"
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
                 name="updateMiddleName"
                 label={t(userManagement.label.middleName)}
-                placeholder="Jose"
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
                 name="updateSuffix"
                 label={t(userManagement.label.suffix)}
-                placeholder="Jr"
               />
             </Grid>
             <Grid item xs={3}>
               <StyledTitle mb={0.5}>
                 {t(userManagement.label.gender)}
               </StyledTitle>
-              <ControlledSelect
-                name="updateGender"
-                options={genders}
-                placeholder="Male"
-              />
+              <ControlledSelect name="updateGender" options={genders} />
             </Grid>
           </Grid>
           <Grid item xs={10} mt={1}>
             <ControlledTextField
               name="updateEmail"
               label={t(userManagement.label.email)}
-              placeholder="juandelacruz103@gmail.com"
             />
           </Grid>
           <Grid item xs={2} mt={1}>
@@ -184,23 +175,17 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <ControlledSelect
               options={careerStepOptions}
               name="updateCareerStep"
-              placeholder="I03"
             />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
               name="updateEmployeeId"
               label={t(userManagement.label.employeeId)}
-              placeholder="82000000"
             />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
-            <ControlledSelect
-              options={odcOptions}
-              name="updateOdcId"
-              placeholder="Philippines"
-            />
+            <ControlledSelect options={odcOptions} name="updateOdcId" />
           </Grid>
 
           <Grid item xs={2} fontSize={"5px"}>
@@ -210,7 +195,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
 
             <ControlledDatePicker
               name="updateJoiningDate"
-              placeholderText={date}
               dateFormat="MM/dd/yyyy"
             />
           </Grid>
@@ -221,25 +205,15 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <ControlledSelect
               options={projectOptions}
               name="updateProjectName"
-              placeholder="eMPF"
             />
           </Grid>
           <Grid item xs={4.3}>
             <StyledTitle mb={0.5}>{t(userManagement.label.teamId)}</StyledTitle>
-            <ControlledSelect
-              options={teamOptions}
-              name="updateTeamName"
-              placeholder="Developer Team"
-            />
+            <ControlledSelect options={teamOptions} name="updateTeamName" />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={1}>{t(userManagement.label.roles)}</StyledTitle>
-            <ControlledSelect
-              multiple
-              options={rolesData}
-              name="updateRoles"
-              placeholder="Sprint manager"
-            />
+            <ControlledSelect multiple options={rolesData} name="updateRoles" />
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" my={2}>
