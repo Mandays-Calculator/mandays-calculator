@@ -102,6 +102,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateEmail: currentUser?.email ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
       updateOdcId: "",
+      updateJoiningDate:
+        moment(currentUser?.joiningDate).format("YYYY-MM-DD") ?? "",
       updateCareerStep: currentUser?.careerStep ?? "",
       updateProjectId: "",
       updateTeamId: "",
@@ -120,6 +122,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     }
   }, [isEditSuccess, isEditError]);
 
+  // console.log(updateTeamId);
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
