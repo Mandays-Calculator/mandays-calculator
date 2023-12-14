@@ -9,11 +9,5 @@
     "mandaysEstimateService": "http://localhost:18001"
   },
   "enableAuth": true,
-  "oidcConfig": {
-    "authority": "http://localhost:8080/realms/mandays-calculator",
-    "realm": "mandays-calculator",
-    "client_id": "mc-client",
-    "response_type": "code",
-    "scope": "openid profile"
-  }
+  "encryptData": false
 }

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { useAuth } from "react-oidc-context";
 import { Link } from "react-router-dom";
 import { ReactElement } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import LocalizationKey from "~/i18n/key";
 import { Grid } from "@mui/material";
@@ -12,14 +12,19 @@ import { ControlledTextField } from "~/components/form/controlled";
 import { CustomButton as Button } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
 import Form from "~/components/form/Form";
+import { UserPermissionState, login, selectUser } from "~/redux/reducers/user";
 
 import { StyledLabel, StyledTitle } from "./components/auth-container";
 import PasswordInput from "./components/password-input/PasswordInput";
 import { loginSchema } from "./schema";
+import { AppDispatch } from "~/redux/store";
 
 const Login = (): ReactElement => {
   const { t } = useTranslation();
-  const auth = useAuth();
+  const dispatch: AppDispatch = useDispatch();
+  const userState: UserPermissionState = useSelector(selectUser);
+
+  const { loading, error } = userState;
 
   const loginForm = useFormik({
     initialValues: {
@@ -29,10 +34,17 @@ const Login = (): ReactElement => {
     validationSchema: loginSchema(t),
     validateOnChange: false,
     onSubmit: async (values) => {
-      await auth.signinResourceOwnerCredentials({
-        username: values.username,
-        password: values.password,
-      });
+      dispatch(
+        login({
+          username: values.username,
+          password: values.password,
+          callbacks: {
+            onSuccess: () => {
+              console.log("Login succeed");
+            },
+          },
+        })
+      );
     },
   });
 
@@ -60,10 +72,12 @@ const Login = (): ReactElement => {
             {t(LocalizationKey.login.label.forgotPassword)}
           </Link>
         </Grid>
-        <ErrorMessage error={auth.error?.message} />
+        <ErrorMessage error={error?.message} />
         <Grid item xs={12}>
           <Button fullWidth type="submit">
-            {t(LocalizationKey.login.btnlabel.signIn)}
+            {loading
+              ? t(LocalizationKey.common.userManagement.authSignInLoading)
+              : t(LocalizationKey.login.btnlabel.signIn)}
           </Button>
         </Grid>
       </Grid>

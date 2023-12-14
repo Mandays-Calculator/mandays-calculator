@@ -1,13 +1,11 @@
 import type { User, Permission } from "~/api/user";
+import type { GenericErrorResponse } from "~/api/types";
 
 export interface UserPermissionState {
-  initialized: boolean;
-  user: User | null;
+  isAuthenticated: boolean;
   loading: boolean;
+  error: GenericErrorResponse | null;
+  user: User | null;
   permissions: Permission[];
-}
-
-export interface FetchUserPermissionArgs {
-  onSuccess?: () => void;
-  onFailure?: () => void;
+  tokenExpiry: number | null;
 }

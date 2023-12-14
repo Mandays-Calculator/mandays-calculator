@@ -1,3 +1,17 @@
+export type EstimationDetailsMode = "edit" | "add" | "view";
+
+export interface EstimationDetailsProps {
+  isExposed?: boolean;
+}
+export type ExportFormValues = {
+  exportBy: string;
+};
+
+export type ShareFormValues = {
+  shareBy: string;
+  expiredIn: string;
+  timeType: string;
+};
 interface Resource {
   odc: string;
   resourceCount: string;
