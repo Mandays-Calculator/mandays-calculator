@@ -7,10 +7,12 @@ import { IconButton } from "@mui/material";
 
 import { SvgIcon } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { ControlledTextField, ControlledDatePicker } from "~/components/form/controlled";
+import {
+  ControlledTextField,
+  ControlledDatePicker,
+} from "~/components/form/controlled";
 
 type ODCColumnType = Column<ODCListResponse> & { id?: string };
-
 
 export const ODCColumns = (
   setIsAdd: Dispatch<SetStateAction<boolean>>,
@@ -18,7 +20,7 @@ export const ODCColumns = (
   setIdx: Dispatch<SetStateAction<number>>,
   setDelIdx: Dispatch<SetStateAction<number | null>>,
   setDeleteModalOpen: Dispatch<SetStateAction<boolean>>,
-  t: TFunction<"translation", undefined>,
+  t: TFunction<"translation", undefined>
 ): ODCColumnType[] => {
   return [
     {
@@ -37,7 +39,9 @@ export const ODCColumns = (
       Header: t("odc.label.noHolidays"),
       id: "holidays",
       Cell: ({ row }: CellProps<ODCListResponse>) => (
-        <>{row.original.holidays === null ? 0 : row.original.holidays?.length}</>
+        <>
+          {row.original.holidays === null ? 0 : row.original.holidays?.length}
+        </>
       ),
     },
     {
@@ -74,7 +78,7 @@ export const HolidayColumn = (
   t: TFunction<"translation", undefined>,
   editIdx: number[],
   setEditIdx: Dispatch<SetStateAction<number[]>>,
-  idx: number,
+  idx: number
 ): Column<HolidayType>[] => {
   return [
     {
@@ -115,13 +119,14 @@ export const HolidayColumn = (
           {!editIdx.includes(row.index) && (
             <CustomButton
               type="button"
-              onClick={() => { setEditIdx([row.index, ...editIdx]) }}
+              onClick={() => {
+                setEditIdx([row.index, ...editIdx]);
+              }}
             >
               {t("odc.btnlabel.edit")}
             </CustomButton>
           )}
         </>
-        
       ),
     },
   ];
