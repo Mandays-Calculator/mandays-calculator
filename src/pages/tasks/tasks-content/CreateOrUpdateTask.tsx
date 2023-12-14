@@ -9,27 +9,31 @@ import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
 
 import ComplexityDetails from "./complexity-details";
-import { Task } from "./type";
+import { AllTasksResponse } from "~/api/tasks";
+
 interface CreateModalProps {
   open: boolean;
   isCreate: boolean;
-  task?: Task | null;
+  task?: AllTasksResponse | null;
   onClose: () => void;
-  onCreateTask: (task: Task) => void;
+  onCreateTask: (task: AllTasksResponse) => void;
   reOpenCreateTask: () => void;
 }
 
-const initialTaskState: Task = {
-  taskID: "100",
-  taskTitle: "Sample",
-  desc: "",
-  date: "12/16/2023",
+const initialTaskState: AllTasksResponse = {
+  name: "Sample",
+  description: "",
+  completion_date: "12/16/2023",
   sprint: "2",
   complexity: "",
   status: "Backlog",
   type: "",
-  functionality: "",
-  tags: [],
+  functionality: [
+    {
+      id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+      name: "Simple Function",
+    },
+  ],
   comments: [
     {
       name: "Zad Geron",
@@ -48,19 +52,21 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [newTask, setNewTask] = useState<Task>(task || initialTaskState);
+  const [newTask, setNewTask] = useState<AllTasksResponse>(
+    task || initialTaskState
+  );
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
 
   useEffect(() => {
     setNewTask(task || initialTaskState);
-    setSelectedTags(task?.tags || []);
+    // setSelectedTags(task?.tags || []);
   }, [task]);
 
   const handleCreateOrUpdateTask = (): void => {
     if (isCreate) {
       onCreateTask(newTask);
       setNewTask(initialTaskState);
-      setSelectedTags([]);
+      // setSelectedTags([]);
     } else {
       onCreateTask(newTask);
     }
@@ -82,19 +88,24 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
 
   return (
     <>
-      <Modal open={open}
-        title={isCreate ? t(LocalizationKey.tasks.createTask.modalTitle) : t(LocalizationKey.tasks.updateTask.modalTitle)}
-        maxWidth="sm" onClose={onClose}>
+      <Modal
+        open={open}
+        title={
+          isCreate
+            ? t(LocalizationKey.tasks.createTask.modalTitle)
+            : t(LocalizationKey.tasks.updateTask.modalTitle)
+        }
+        maxWidth="sm"
+        onClose={onClose}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               name="taskTitle"
               label={t(LocalizationKey.tasks.createTask.label.taskTitle)}
               fullWidth
-              onChange={(e) =>
-                setNewTask({ ...newTask, taskTitle: e.target.value })
-              }
-              value={newTask.taskTitle}
+              onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
+              value={newTask.name}
             />
           </Grid>
 
@@ -106,18 +117,24 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
               multiline
               rows={4}
               maxRows={4}
-              onChange={(e) => setNewTask({ ...newTask, desc: e.target.value })}
-              value={newTask.desc}
+              onChange={(e) =>
+                setNewTask({ ...newTask, description: e.target.value })
+              }
+              value={newTask.description}
             />
           </Grid>
 
           <Grid item container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Stack gap={1}>
-                <Typography>{t(LocalizationKey.tasks.createTask.label.functionality)}</Typography>
+                <Typography>
+                  {t(LocalizationKey.tasks.createTask.label.functionality)}
+                </Typography>
                 <Select
                   name="functionality"
-                  placeholder={t(LocalizationKey.tasks.createTask.placeholder.functionality)}
+                  placeholder={t(
+                    LocalizationKey.tasks.createTask.placeholder.functionality
+                  )}
                   fullWidth
                   onChange={(e) =>
                     handleSelectChange(
@@ -143,13 +160,17 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                   onClick={() => handleOpenComplexity()}
                   style={{ cursor: "pointer" }}
                 >
-                  <Typography>{t(LocalizationKey.tasks.createTask.label.complexity)}</Typography>
+                  <Typography>
+                    {t(LocalizationKey.tasks.createTask.label.complexity)}
+                  </Typography>
                   <InfoOutlinedIcon fontSize="small" />
                 </Stack>
 
                 <Select
                   name="complexity"
-                  placeholder={t(LocalizationKey.tasks.createTask.placeholder.complexity)}
+                  placeholder={t(
+                    LocalizationKey.tasks.createTask.placeholder.complexity
+                  )}
                   defaultValue="simple"
                   fullWidth
                   onChange={(e) =>
@@ -157,9 +178,9 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                   }
                   value={newTask.complexity}
                   options={[
-                    { value: "complexity1", label: "Complexity 1", },
-                    { value: "complexity2", label: "Complexity 2", },
-                    { value: "complexity3", label: "Complexity 3", },
+                    { value: "complexity1", label: "Complexity 1" },
+                    { value: "complexity2", label: "Complexity 2" },
+                    { value: "complexity3", label: "Complexity 3" },
                   ]}
                 />
               </Stack>
@@ -168,10 +189,14 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
 
           <Grid item xs={12}>
             <Stack>
-              <Typography>{t(LocalizationKey.tasks.createTask.label.tags)}</Typography>
+              <Typography>
+                {t(LocalizationKey.tasks.createTask.label.tags)}
+              </Typography>
               <Select
                 name="tags"
-                placeholder={t(LocalizationKey.tasks.createTask.placeholder.tags)}
+                placeholder={t(
+                  LocalizationKey.tasks.createTask.placeholder.tags
+                )}
                 multiple={true}
                 fullWidth
                 onChange={(e) => setSelectedTags(e.target.value as string[])}
@@ -186,17 +211,15 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Stack
-              direction="row"
-              display="flex"
-              justifyContent="flex-end"
-            >
-              <CustomButton type="button" colorVariant="primary" onClick={handleCreateOrUpdateTask}>
-                {
-                  isCreate ?
-                  t(LocalizationKey.tasks.createTask.btnLabel.create) :
-                  t(LocalizationKey.tasks.updateTask.btnLabel.update)
-                }
+            <Stack direction="row" display="flex" justifyContent="flex-end">
+              <CustomButton
+                type="button"
+                colorVariant="primary"
+                onClick={handleCreateOrUpdateTask}
+              >
+                {isCreate
+                  ? t(LocalizationKey.tasks.createTask.btnLabel.create)
+                  : t(LocalizationKey.tasks.updateTask.btnLabel.update)}
               </CustomButton>
             </Stack>
           </Grid>

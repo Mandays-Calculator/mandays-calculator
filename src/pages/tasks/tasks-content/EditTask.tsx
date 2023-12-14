@@ -16,8 +16,7 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import CustomButton from "~/components/form/button/CustomButton";
 import { TextField, Modal } from "~/components";
 import theme from "~/theme";
-
-import { Task } from "./type";
+import { AllTasksResponse } from "~/api/tasks";
 
 const styles = {
   container: {
@@ -45,12 +44,12 @@ const styles = {
 interface EditTaskProps {
   open: boolean;
   onClose: () => void;
-  task: Task | null;
-  onSave: (updatedTask: Task) => void;
+  task: AllTasksResponse | null;
+  onSave: (updatedTask: AllTasksResponse) => void;
 }
 
 const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
-  const [newTask, setNewTask] = useState<Task | null>(task);
+  const [newTask, setNewTask] = useState<AllTasksResponse | null>(task);
   const [newComment, setNewComment] = useState<{
     name: string;
     comment: string;
@@ -82,7 +81,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
     <>
       <Modal
         open={open}
-        title={newTask ? newTask.taskTitle : ""}
+        title={newTask ? newTask.name : ""}
         maxWidth="sm"
         onClose={onClose}
       >
@@ -95,9 +94,9 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
             rows={4}
             maxRows={4}
             onChange={(e) =>
-              newTask && setNewTask({ ...newTask, desc: e.target.value })
+              newTask && setNewTask({ ...newTask, description: e.target.value })
             }
-            value={newTask?.desc || ""}
+            value={newTask?.description || ""}
           />
           <Grid container spacing={2} marginBottom={4}>
             <Grid item xs={6}>
@@ -105,7 +104,9 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                 <Typography style={styles.styledTypographyBold}>
                   Functionality
                 </Typography>
-                <Typography>{newTask ? newTask.functionality : ""}</Typography>
+                {newTask?.functionality.map((i) => {
+                  return <Typography>{i.name}</Typography>;
+                })}
               </Stack>
             </Grid>
 
@@ -125,7 +126,9 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                 <Typography style={styles.styledTypographyBold}>
                   Date Started
                 </Typography>
-                <Typography>{newTask ? newTask.date : ""}</Typography>
+                <Typography>
+                  {newTask ? newTask.completion_date : ""}
+                </Typography>
               </Stack>
             </Grid>
             <Grid item xs={12}>

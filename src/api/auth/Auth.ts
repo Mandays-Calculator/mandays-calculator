@@ -1,4 +1,8 @@
-import type { AuthAPIResponse, ResetPasswordParams } from "./types";
+import type {
+  AuthAPIResponse,
+  ResetPasswordParams,
+  LoginResponse,
+} from "./types";
 
 import axios from "axios";
 import { getEnvConfig } from "~/utils/env-config";
@@ -14,9 +18,6 @@ export const forgotPasswordApi = async (
   const url = `${getApiBasePath()}/forgot-password?username=${usernameOrEmail}`;
   try {
     const response = await axios.post<AuthAPIResponse>(url);
-    if (response.data && response.data.status >= 201) {
-      throw response.data;
-    }
     return response.data;
   } catch (error) {
     throw error;
@@ -26,16 +27,33 @@ export const forgotPasswordApi = async (
 export const resetPasswordApi = async (
   params: ResetPasswordParams
 ): Promise<AuthAPIResponse> => {
-  const url = `${getApiBasePath()}/reset-password`;
+  const { apiBasePath } = getEnvConfig();
   try {
-    const response = await axios.post<AuthAPIResponse>(url, {
-      authorizationCode: params.authorizationCode,
-      newPassword: params.newPassword,
+    const response = await axios.post(`${apiBasePath}/reset-password`, params, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
-    if (response.data && response.data.status >= 201) {
-      throw response.data;
-    }
-    return response.data;
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const loginApi = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}): Promise<LoginResponse> => {
+  const { apiBasePath } = getEnvConfig();
+  const params = new URLSearchParams();
+  params.append("username", username);
+  params.append("password", password);
+  try {
+    const response = await axios.post(`${apiBasePath}/login`, params, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+    return response.data.data;
   } catch (error) {
     throw error;
   }

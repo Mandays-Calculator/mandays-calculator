@@ -1,7 +1,5 @@
 import type { ConfigType } from ".";
-
 import { useState, useEffect } from "react";
-import { initStorage } from "../storageHelper";
 
 let config: ConfigType | null = null;
 
@@ -59,7 +57,6 @@ export const useConfig = (environment: string | undefined): ConfigResponse => {
         .then((res: ConfigType | null) => {
           if (res) {
             setConfig(res);
-            initStorage();
           }
         })
         .catch((e: Error) => {

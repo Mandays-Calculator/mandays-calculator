@@ -78,6 +78,9 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
   useEffect(() => {
     setIsOpen(open);
+    return () => {
+      setIsOpen(false);
+    };
   }, [open]);
 
   const handleClose = () => {

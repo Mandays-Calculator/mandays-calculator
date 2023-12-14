@@ -9,7 +9,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
 
-import { Task } from "../type";
+import { AllTasksResponse } from "~/api/tasks";
 
 const styles = {
   taskTitle: {
@@ -47,27 +47,13 @@ const styles = {
       marginBottom: 5,
     },
   },
+  // Define other styles similarly for different elements
 };
 
 interface TaskDetailsCardProps {
-  data: {
-    taskID: string;
-    taskTitle: string;
-    desc: string;
-    date: string;
-    sprint: string;
-    complexity: string;
-    status: string;
-    type: string;
-    functionality: string;
-    tags: string[],
-    comments: {
-      name: string;
-      comment: string;
-    }[];
-  };
-  handleEdit: (task: Task) => void;
-  handleViewDetails: (task: Task) => void;
+  data: AllTasksResponse;
+  handleEdit: (task: AllTasksResponse) => void;
+  handleViewDetails: (task: AllTasksResponse) => void;
 }
 
 const TaskDetailsCard = ({
@@ -77,15 +63,15 @@ const TaskDetailsCard = ({
 }: TaskDetailsCardProps): ReactElement => {
   return (
     <PageContainer onClick={() => handleViewDetails(data)}>
-      <div style={styles.taskTitle}>{data.taskTitle}</div>
-      <div style={styles.marginBottom.mbFive}>{data.desc}</div>
+      <div style={styles.taskTitle}>{data.name}</div>
+      <div style={styles.marginBottom.mbFive}>{data.description}</div>
       <div style={styles.infoSection}>
         <EventIcon style={{ marginRight: 5 }} />
-        {data.date}
+        {data?.completion_date}
       </div>
-      <div style={styles.marginBottom.mbTwo}>Sprint #{data.sprint}</div>
+      <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>
-        Complexity Rating: {data.complexity}
+        Complexity Rating: {data?.complexity}
       </div>
 
       <Stack direction={"row"} flexWrap="wrap" gap={0.5}>
@@ -105,7 +91,7 @@ const TaskDetailsCard = ({
             color="action"
             onClick={(e) => {
               e.stopPropagation();
-              handleEdit(data)
+              handleEdit(data);
             }}
             style={{
               display:

@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 import { styled } from "@mui/material/styles";
 import { Divider, Grid, SelectChangeEvent } from "@mui/material";
@@ -13,9 +13,11 @@ import { Select, PageContainer } from "~/components";
 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
-import MockData from "./mockData.json";
+
 import EditTask from "./EditTask";
-import { Task } from "./type";
+
+import { AllTasksResponse } from "~/api/tasks/types";
+import { useTasks } from "~/queries/tasks/Tasks";
 
 enum Status {
   Backlog = "Backlog",
@@ -88,14 +90,183 @@ const StyledCreateTaskIconButton = styled(Grid)(({ display }: { display: string 
 }));
 
 const TasksContent = (): ReactElement => {
+  const { data: tasksData } = useTasks("DEV");
+  const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
+
+  useEffect(() => {
+    if (tasksData) {
+      setTasks(tasksData.data);
+    }
+  }, [tasksData]);
+
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
-  const [viewDetailsModalOpen, setViewDetailsModalOpen] =
-    useState<boolean>(false);
+  const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
 
-  const [mockData, setMockData] = useState<Task[]>(MockData);
+  // const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
+  // const [modalEditOpen, setEditModalOpen] = useState<boolean>(false);
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
+    null
+  );
+
+  // const status = [
+  //   "Backlog",
+  //   "Not Yet Started",
+  //   "In Progress",
+  //   "On Hold",
+  //   "Completed",
+  // ];
+
+  // const [tasks, setTasks] = useState<AllTasksResponse[]>([
+  //   {
+  //     name: "BE - Database Structure",
+  //     description: "lorem kineme.",
+  //     completion_date: "11/13/2023",
+  //     sprint: "1",
+  //     complexity: "13",
+  //     status: "Backlog",
+  //     type: "Bug",
+  //     functionality: [
+  //       {
+  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+  //         name: "Simple Function",
+  //       },
+  //     ],
+  //     comments: [
+  //       {
+  //         name: "Zad Geron",
+  //         comment: "This is a test",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     name: "BE - Database Structure 1",
+  //     description: "lorem kineme",
+  //     completion_date: "11/13/2023",
+  //     sprint: "1",
+  //     complexity: "13",
+  //     status: "Backlog",
+  //     type: "Bug",
+  //     functionality: [
+  //       {
+  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+  //         name: "Simple Function",
+  //       },
+  //     ],
+  //     comments: [
+  //       {
+  //         name: "Zad Geron",
+  //         comment: "This is a test",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     name: "BE - Database Structure 2",
+  //     description: "lorem kineme",
+  //     completion_date: "11/13/2023",
+  //     sprint: "1",
+  //     complexity: "13",
+  //     status: "Backlog",
+  //     type: "Bug",
+  //     functionality: [
+  //       {
+  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+  //         name: "Simple Function",
+  //       },
+  //     ],
+  //     comments: [
+  //       {
+  //         name: "Zad Geron",
+  //         comment: "This is a test",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     name: "BE - Database Structure 3",
+  //     description: "lorem kineme",
+  //     completion_date: "11/13/2023",
+  //     sprint: "1",
+  //     complexity: "13",
+  //     status: "Not Yet Started",
+  //     type: "Bug",
+  //     functionality: [
+  //       {
+  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+  //         name: "Simple Function",
+  //       },
+  //     ],
+  //     comments: [
+  //       {
+  //         name: "Zad Geron",
+  //         comment: "This is a test",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     name: "Optimization",
+  //     description: "lorem kineme",
+  //     completion_date: "11/13/2023",
+  //     sprint: "1",
+  //     complexity: "13",
+  //     status: "In Progress",
+  //     type: "Bug",
+  //     functionality: [
+  //       {
+  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+  //         name: "Simple Function",
+  //       },
+  //     ],
+  //     comments: [
+  //       {
+  //         name: "Zad Geron",
+  //         comment: "This is a test",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     name: "Integration",
+  //     description: "lorem kineme",
+  //     completion_date: "11/13/2023",
+  //     sprint: "1",
+  //     complexity: "13",
+  //     status: "On Hold",
+  //     type: "Bug",
+  //     functionality: [
+  //       {
+  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+  //         name: "Simple Function",
+  //       },
+  //     ],
+  //     comments: [
+  //       {
+  //         name: "Zad Geron",
+  //         comment: "This is a test",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     name: "Project Management - UI",
+  //     description: "lorem kineme",
+  //     completion_date: "11/13/2023",
+  //     sprint: "1",
+  //     complexity: "13",
+  //     status: "Completed",
+  //     type: "Bug",
+  //     functionality: [
+  //       {
+  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+  //         name: "Simple Function",
+  //       },
+  //     ],
+  //     comments: [
+  //       {
+  //         name: "Zad Geron",
+  //         comment: "This is a test",
+  //       },
+  //     ],
+  //   },
+  // ]);
 
   // CREATE TASK
   const handleCreateModalState: () => void = () => {
@@ -106,15 +277,15 @@ const TasksContent = (): ReactElement => {
     setCreateModalOpen(false);
   };
 
-  const handleCreateTask = (task: Task | null) => {
+  const handleCreateTask = (task: AllTasksResponse | null) => {
     if (task) {
-      const updatedMockData = [...mockData, task];
-      setMockData(updatedMockData);
+      const updatedMockData = [...tasks, task];
+      setTasks(updatedMockData);
     }
   };
 
   // UPDATE TASK
-  const handleUpdateModalState = (task: Task) => {
+  const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
   };
@@ -123,18 +294,18 @@ const TasksContent = (): ReactElement => {
     setUpdateModalOpen(false);
   };
 
-  const handleUpdateTask = (updatedTask: Task): void => {
-    const updatedMockData = mockData.map((task) => {
-      if (task.taskID === updatedTask.taskID) {
+  const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
+    const updatedMockData = tasks.map((task) => {
+      if (task.name === updatedTask.name) {
         return updatedTask;
       }
       return task;
     });
-    setMockData(updatedMockData);
+    setTasks(updatedMockData);
   };
 
   // VIEW TASK
-  const handleViewDetailsModalState = (task: Task) => {
+  const handleViewDetailsModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setViewDetailsModalOpen(!viewDetailsModalOpen);
   };
@@ -154,15 +325,16 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = mockData.find((task) => task.taskTitle === draggableId);
+    const draggedTask = tasks.find((task) => task.name === draggableId);
 
+    // Limit dragging and dropping between Backlog and On Hold
     if (
       (sourceStatus === "Backlog" && destinationStatus === "On Hold") ||
       (sourceStatus === "On Hold" && destinationStatus === "Backlog")
     ) {
       if (draggedTask) {
-        const updatedMockData = mockData.map((task) => {
-          if (task.taskTitle === draggableId) {
+        const updatedMockData = tasks.map((task) => {
+          if (task.name === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -171,7 +343,7 @@ const TasksContent = (): ReactElement => {
           return task;
         });
 
-        setMockData(updatedMockData);
+        setTasks(updatedMockData);
       }
     }
   };
@@ -204,7 +376,6 @@ const TasksContent = (): ReactElement => {
           task={selectedTask}
           onSave={handleUpdateTask}
         />
-
         <Grid container>
           <Grid item xs={calculateGridSize(Object.values(Status).length)}>
             <Select
@@ -233,7 +404,7 @@ const TasksContent = (): ReactElement => {
         >
           <Grid container spacing={1} justifyContent="space-between">
             {Object.values(Status).map((status) => {
-              const filteredData = mockData.filter(
+              const filteredData = tasks.filter(
                 (task) => task.status === status
               );
 
@@ -268,8 +439,8 @@ const TasksContent = (): ReactElement => {
                             {task.status === "Backlog" ||
                             task.status === "On Hold" ? (
                               <Draggable
-                                key={task.taskTitle}
-                                draggableId={task.taskTitle}
+                                key={task.name}
+                                draggableId={task.name}
                                 index={index}
                               >
                                 {(provided) => (
