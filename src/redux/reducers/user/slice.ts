@@ -80,7 +80,7 @@ export const userSlice = createSlice({
         permissions,
         !config.encryptData
       );
-      console.log(decryptedUserData, decryptedPermissionsData);
+
       state.loading = false;
       state.user = decryptedUserData;
       state.permissions = decryptedPermissionsData;
