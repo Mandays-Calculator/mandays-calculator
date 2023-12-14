@@ -24,7 +24,7 @@ export const withInputController = <Type extends FormikValues>(
   inputType: WithInputControllerType = "text"
 ): WithInputController<Type> => {
   return (props: WrappedInputProps<Type>): ReactElement => {
-    const { name, helperText, isFastField, ...rest } = props;
+    const { name, isFastField, ...rest } = props;
     const form = useFormikContext<Type>();
 
     const fieldValue = form.values[name] || getIn(form.values, name);
@@ -124,7 +124,6 @@ export const withInputController = <Type extends FormikValues>(
         component={WrappedInput}
         name={name}
         error={hasError}
-        helperText={helperText}
         {...getInputValueProp()}
         onChange={getInputChange()}
         {...(rest as Type)}
