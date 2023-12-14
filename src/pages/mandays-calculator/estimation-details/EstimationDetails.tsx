@@ -6,14 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Location, useLocation, useNavigate } from "react-router-dom";
 
 import { Typography, Grid } from "@mui/material";
-import {
-  Form,
-  PageContainer,
-  PageLoader,
-  Stepper,
-  SvgIcon,
-  Title,
-} from "~/components";
+import { Form, PageContainer, PageLoader, Stepper, SvgIcon, Title } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { Select } from "~/components/form/select";
 import * as yup from "yup";
@@ -84,10 +77,7 @@ const EstimationDetails = (): ReactElement => {
     const date = now.toLocaleDateString("en-CA").replaceAll("/", "-");
     const time = now.toLocaleTimeString("en-GB").replaceAll(":", "-");
 
-    createExcel(
-      generateEstimationData({ t }),
-      `SPRINT_${sprintName}_details_${date}_${time}.xlsx`
-    );
+    createExcel(generateEstimationData({ t }), `SPRINT_${sprintName}_details_${date}_${time}.xlsx`);
   };
 
   const mandaysForm = useFormik<MandaysForm>({
@@ -144,7 +134,12 @@ const EstimationDetails = (): ReactElement => {
     {
       label: t(mandaysCalculator.resourcesTitle),
       icon: <SvgIcon name="mandays_estimation_tool" />,
-      content: <Resources isGeneratingPDF={isGeneratingPDF} mode={mode} />,
+      content: (
+        <Resources
+          isGeneratingPDF={isGeneratingPDF}
+          mode={mode}
+        />
+      ),
     },
     {
       label: t(mandaysCalculator.legend.title),
@@ -165,11 +160,12 @@ const EstimationDetails = (): ReactElement => {
 
   return (
     <>
-      {isGeneratingPDF && (
-        <PageLoader labelOnLoad={t(mandaysCalculator.generatingPDFLabel)} />
-      )}
+      {isGeneratingPDF && <PageLoader labelOnLoad={t(mandaysCalculator.generatingPDFLabel)} />}
       <div id="divToPrint">
-        <Grid container justifyContent="space-between">
+        <Grid
+          container
+          justifyContent="space-between"
+        >
           <Grid item>
             <Title title={t(mandaysCalculator.label)} />
           </Grid>
@@ -183,21 +179,34 @@ const EstimationDetails = (): ReactElement => {
           </Grid>
         </Grid>
         <PageContainer>
-          <Grid container justifyContent="space-between">
+          <Grid
+            container
+            justifyContent="space-between"
+          >
             <Grid item>
-              <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-                {sprintName}
-              </Typography>
+              <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>{sprintName}</Typography>
             </Grid>
             {mode === "view" && (
-              <Grid item xs={2}>
-                <Grid container justifyContent={"right"}>
-                  <Grid item xs={5}>
+              <Grid
+                item
+                xs={2}
+              >
+                <Grid
+                  container
+                  justifyContent={"right"}
+                >
+                  <Grid
+                    item
+                    xs={5}
+                  >
                     <CustomButton onClick={() => setIsExport(true)}>
                       {t(common.exportBtn)}
                     </CustomButton>
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid
+                    item
+                    xs={5}
+                  >
                     <CustomButton>{t(common.shareBtn)}</CustomButton>
                   </Grid>
                 </Grid>
@@ -206,7 +215,10 @@ const EstimationDetails = (): ReactElement => {
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
-            <Stepper steps={stepperObject} activeStep={activeTab} />
+            <Stepper
+              steps={stepperObject}
+              activeStep={activeTab}
+            />
             <ActionButtons
               activeTab={activeTab}
               handleBackEvent={handleBackEvent}

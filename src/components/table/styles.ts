@@ -3,11 +3,13 @@ import { styled } from "@mui/material/styles";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 
-export const StyledHeaderCell = styled(TableCell)({
-  minWidth: "150px", // Set a minimum width for each header cell
+export const StyledHeaderCell = styled(TableCell, {
+  shouldForwardProp: (props: string) => !props.startsWith("$"),
+})<{ $minWidth?: string }>(({ $minWidth = "150px" }) => ({
+  minWidth: $minWidth, // Set a minimum width for each header cell
   boxSizing: "border-box",
   padding: "16px 12px",
-});
+}));
 
 export const StyledHeader = styled(TableRow, {
   shouldForwardProp: (props: string) => !props.startsWith("$"),
