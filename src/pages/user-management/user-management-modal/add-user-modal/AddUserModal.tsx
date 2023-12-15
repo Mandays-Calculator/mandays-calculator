@@ -131,7 +131,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledTextField
                 name="lastName"
                 label={t(userManagement.label.lastName)}
-                placeholder="Dela Cruz"
                 error={!!form.errors.lastName}
                 helperText={getFieldError(
                   form.errors as FormErrors,
@@ -143,7 +142,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledTextField
                 name="firstName"
                 label={t(userManagement.label.firstName)}
-                placeholder="Juan"
                 error={!!form.errors.firstName}
                 helperText={getFieldError(
                   form.errors as FormErrors,
@@ -155,14 +153,12 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledTextField
                 name="middleName"
                 label={t(userManagement.label.middleName)}
-                placeholder="Jose"
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
                 name="suffix"
                 label={t(userManagement.label.suffix)}
-                placeholder="Jr"
               />
             </Grid>
             <Grid item xs={3}>
@@ -172,7 +168,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledSelect
                 name="gender"
                 options={genders}
-                placeholder="Male"
                 error={!!form.errors.gender}
               />
               <StyledError>
@@ -184,7 +179,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <ControlledTextField
               name="email"
               label={t(userManagement.label.email)}
-              placeholder="juandelacruz103@gmail.com"
               error={!!form.errors.email}
               helperText={getFieldError(form.errors as FormErrors, "email")}
             />
@@ -196,7 +190,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <ControlledSelect
               options={careerStepOptions}
               name="careerStep"
-              placeholder="I03"
               error={!!form.errors.careerStep}
               helperText={getFieldError(
                 form.errors as FormErrors,
@@ -230,14 +223,12 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                   <ControlledDatePicker
                     name="joiningDate"
                     value={moment().format("YYYY-MM-DD")}
-                    placeholderText="2023/12/31"
                     dateFormat="yyyy/MM/dd"
                     disabled
                   />
                 ) : (
                   <ControlledDatePicker
                     name="joiningDate"
-                    placeholderText="2023/12/31"
                     dateFormat="yyyy/MM/dd"
                     error={!!form.errors.joiningDate}
                     helperText={getFieldError(
@@ -253,7 +244,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <ControlledTextField
               name="employeeId"
               label={t(userManagement.label.employeeId)}
-              placeholder="82000000"
               error={!!form.errors.employeeId}
               helperText={getFieldError(
                 form.errors as FormErrors,
@@ -263,41 +253,24 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           </Grid>
           <Grid item xs={3.5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
-            <ControlledSelect
-              options={odcOptions}
-              name="odcId"
-              placeholder="Philippines"
-            />
+            <ControlledSelect options={odcOptions} name="odcId" />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.roles)}</StyledTitle>
-            <ControlledSelect
-              multiple
-              options={rolesData}
-              name="roles"
-              placeholder="Sprint Manager"
-            />
+            <ControlledSelect multiple options={rolesData} name="roles" />
           </Grid>
           <Grid item xs={7}>
             <StyledTitle mb={0.5}>
               {t(userManagement.label.projectId)}
             </StyledTitle>
-            <ControlledSelect
-              options={projectOptions}
-              name="projectId"
-              placeholder="eMPF"
-            />
+            <ControlledSelect options={projectOptions} name="projectId" />
           </Grid>
           {form.values.projectId && (
             <Grid item xs={5}>
               <StyledTitle mb={0.5}>
                 {t(userManagement.label.teamId)}
               </StyledTitle>
-              <ControlledSelect
-                options={teamOptions}
-                name="teamId"
-                placeholder="Developer Team"
-              />
+              <ControlledSelect options={teamOptions} name="teamId" />
             </Grid>
           )}
         </Grid>

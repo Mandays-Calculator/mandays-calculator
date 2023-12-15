@@ -75,7 +75,6 @@ const AddTasks = (): ReactElement => {
                     itemsPerPage: 2,
                   });
 
-                  console.log(paginatedItems(), "paginated items");
                   return (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       <Typography

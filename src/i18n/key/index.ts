@@ -116,6 +116,7 @@ const LocalizationKey = {
     idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
     logout: "common.idleTimeOut.logout",
     unauthorizedTitle: "common.unauthorized.title",
+    systemErrorTitle: "common.systemError.title",
   },
   mandaysCalculator: {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
@@ -125,6 +126,15 @@ const LocalizationKey = {
     modalConfirmDeleteEstimation:
       "mandaysCalculator.modalLabels.confirmDeleteEstimation",
     exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
+    modal: {
+      shareTitle: "mandaysCalculator.modalLabels.shareTitle",
+      shareSubtitle: "mandaysCalculator.modalLabels.shareSubtitle",
+      accessExpiry: "mandaysCalculator.modalLabels.accessExpiry",
+      link: "mandaysCalculator.modalLabels.link",
+      generate: "mandaysCalculator.modalLabels.generate",
+      redirect: "mandaysCalculator.modalLabels.redirect",
+      copyLink: "mandaysCalculator.modalLabels.copyLink",
+    },
     sprintListTableColumns: {
       sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
       team: "mandaysCalculator.sprintList.table.columns.team",
@@ -259,7 +269,7 @@ const LocalizationKey = {
         noOfFeatures: "complexity.table.columns.noOfFeatures",
         description: "complexity.table.columns.description",
         samples: "complexity.table.columns.samples",
-      }
+      },
     },
     btnLabel: {
       addComplexity: "complexity.btnLabel.addComplexity",
@@ -284,9 +294,9 @@ const LocalizationKey = {
       submitError: "complexity.validationInfo.submitError",
       submitSuccess: "complexity.validationInfo.submitSuccess",
       deleteError: "complexity.validationInfo.deleteError",
-      deleteSuccess: "complexity.validationInfo.deleteSuccess"
-    }
-  }
+      deleteSuccess: "complexity.validationInfo.deleteSuccess",
+    },
+  },
 };
 
 export default LocalizationKey;

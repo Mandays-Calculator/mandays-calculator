@@ -35,6 +35,7 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
     onRowClick,
     type = "default",
     loading = false,
+    width,
   } = props;
 
   const { common } = LocalizationKey;
@@ -97,6 +98,7 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
               >
                 {headerGroup.headers.map((column) => (
                   <StyledHeaderCell
+                    $minWidth={width}
                     {...column.getHeaderProps(
                       (column as CustomHeaderGroup<T>).getSortByToggleProps()
                     )}
