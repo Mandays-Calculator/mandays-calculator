@@ -43,10 +43,6 @@ const StyledButton = styled(
   };
 
   return {
-    marginRight: "1.3rem",
-    fontWeight: "bold",
-    padding: "1rem 2rem",
-    fontSize: "medium",
     backgroundColor: colorsMap[colorVariant!],
     color: contrastTextMap[colorVariant!],
     textTransform: "none",
@@ -54,7 +50,7 @@ const StyledButton = styled(
     paddingLeft: "20px",
     paddingRight: "20px",
     "&:hover": {
-      backgroundColor: colorsMap[colorVariant!], // Keep the same background color on hover
+      backgroundColor: colorsMap[colorVariant!],
       opacity: 0.9,
     },
   };

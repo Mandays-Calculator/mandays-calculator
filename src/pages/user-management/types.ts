@@ -7,7 +7,7 @@ export interface UpdateUserManagementParams {
   updateLastName?: string;
   updateMiddleName?: string;
   updateSuffix?: string;
-  updateGender?: string | number;
+  updateGender?: string;
   updateEmail?: string;
   updateOdcId?: string;
   updateImage?: string;

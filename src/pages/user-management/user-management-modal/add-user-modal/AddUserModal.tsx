@@ -20,7 +20,12 @@ import {
 import { FormikContextType } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 
-import { genders, rolesData } from "../utils";
+import {
+  careerStepOptions,
+  odcOptions,
+  projectOptions,
+  teamOptions,
+} from "../utils";
 import moment from "moment";
 import { Alert, ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
@@ -28,6 +33,7 @@ import { FormErrors } from "~/components/form/types";
 import { APIStatus } from "~/hooks/request-handler";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
+import { genders, rolesData } from "~/utils/constants";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -37,6 +43,7 @@ const StyledModalTitle = styled(Typography)({
   fontSize: "1.125rem",
   paddingBottom: "18px",
 });
+
 const StyledTitle = styled(Typography)({
   color: "#414145",
   fontSize: 14,
@@ -44,6 +51,7 @@ const StyledTitle = styled(Typography)({
   fontWeight: "400",
   wordWrap: "break-word",
 });
+
 const StyledError = styled(Typography)({
   color: "#FF4545",
   fontSize: "0.75rem",
@@ -64,6 +72,8 @@ interface AddUserModalProps {
   form: FormikContextType<UserManagementForms>;
   OnSubmit: () => void;
   status: APIStatus;
+  isSuccess: boolean;
+  isError: boolean;
 }
 
 export const AddUserModal: React.FC<AddUserModalProps> = ({
@@ -72,6 +82,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   form,
   OnSubmit,
   status,
+  isSuccess,
+  isError,
 }): ReactElement => {
   const { t } = useTranslation();
   const { userManagement } = LocalizationKey;
@@ -80,12 +92,28 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
+
   const submit = () => {
     OnSubmit();
+  };
 
-    if (status.success) {
-      onClose();
+  const renderAlert = (): ReactElement | undefined => {
+    if (!isSuccess) {
+      return (
+        <Alert
+          open={isError}
+          message={"There is a problem in your submitted data. Please check"}
+          type={"error"}
+        />
+      );
     }
+    return (
+      <Alert
+        open={isSuccess}
+        message={"User successfully added"}
+        type={"success"}
+      />
+    );
   };
 
   return (
@@ -103,7 +131,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledTextField
                 name="lastName"
                 label={t(userManagement.label.lastName)}
-                placeholder="Dela Cruz"
                 error={!!form.errors.lastName}
                 helperText={getFieldError(
                   form.errors as FormErrors,
@@ -115,7 +142,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledTextField
                 name="firstName"
                 label={t(userManagement.label.firstName)}
-                placeholder="Juan"
                 error={!!form.errors.firstName}
                 helperText={getFieldError(
                   form.errors as FormErrors,
@@ -127,14 +153,12 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledTextField
                 name="middleName"
                 label={t(userManagement.label.middleName)}
-                placeholder="Jose"
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
                 name="suffix"
                 label={t(userManagement.label.suffix)}
-                placeholder="Jr"
               />
             </Grid>
             <Grid item xs={3}>
@@ -144,7 +168,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledSelect
                 name="gender"
                 options={genders}
-                placeholder="Male"
                 error={!!form.errors.gender}
               />
               <StyledError>
@@ -156,22 +179,26 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <ControlledTextField
               name="email"
               label={t(userManagement.label.email)}
-              placeholder="juandelacruz103@gmail.com"
               error={!!form.errors.email}
               helperText={getFieldError(form.errors as FormErrors, "email")}
             />
           </Grid>
           <Grid item xs={3} mt={1}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.careerStep)}
+            </StyledTitle>
+            <ControlledSelect
+              options={careerStepOptions}
               name="careerStep"
-              label={t(userManagement.label.careerStep)}
-              placeholder="I03"
               error={!!form.errors.careerStep}
               helperText={getFieldError(
                 form.errors as FormErrors,
                 "careerStep"
               )}
             />
+            <StyledError>
+              {getFieldError(form.errors as FormErrors, "careerStep")}
+            </StyledError>
           </Grid>
           <Grid item xs={12} mb={1}>
             <FormControl>
@@ -196,15 +223,18 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                   <ControlledDatePicker
                     name="joiningDate"
                     value={moment().format("YYYY-MM-DD")}
-                    placeholderText="2023/12/31"
                     dateFormat="yyyy/MM/dd"
                     disabled
                   />
                 ) : (
                   <ControlledDatePicker
                     name="joiningDate"
-                    placeholderText="2023/12/31"
                     dateFormat="yyyy/MM/dd"
+                    error={!!form.errors.joiningDate}
+                    helperText={getFieldError(
+                      form.errors as FormErrors,
+                      "joiningDate"
+                    )}
                   />
                 )}
               </Stack>
@@ -214,7 +244,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <ControlledTextField
               name="employeeId"
               label={t(userManagement.label.employeeId)}
-              placeholder="82000000"
               error={!!form.errors.employeeId}
               helperText={getFieldError(
                 form.errors as FormErrors,
@@ -223,35 +252,27 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             />
           </Grid>
           <Grid item xs={3.5}>
-            <ControlledTextField
-              name="odcId"
-              label={t(userManagement.label.odcId)}
-              placeholder="philippines"
-            />
+            <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
+            <ControlledSelect options={odcOptions} name="odcId" />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.roles)}</StyledTitle>
-            <ControlledSelect
-              multiple
-              options={rolesData}
-              name="roles"
-              placeholder="Sprint Manager"
-            />
+            <ControlledSelect multiple options={rolesData} name="roles" />
           </Grid>
           <Grid item xs={7}>
-            <ControlledTextField
-              name="projectId"
-              label={t(userManagement.label.projectId)}
-              placeholder="eMPF"
-            />
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.projectId)}
+            </StyledTitle>
+            <ControlledSelect options={projectOptions} name="projectId" />
           </Grid>
-          <Grid item xs={5}>
-            <ControlledTextField
-              name="teamId"
-              label={t(userManagement.label.teamId)}
-              placeholder="Developer Team"
-            />
-          </Grid>
+          {form.values.projectId && (
+            <Grid item xs={5}>
+              <StyledTitle mb={0.5}>
+                {t(userManagement.label.teamId)}
+              </StyledTitle>
+              <ControlledSelect options={teamOptions} name="teamId" />
+            </Grid>
+          )}
         </Grid>
 
         <Box display="flex" justifyContent="flex-end" my={2}>
@@ -271,22 +292,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           >
             Add User
           </CustomButton>
-          {status.loading && (
-            <>
-              <Alert
-                open={!status.success}
-                message={
-                  "There is a problem in your submitted data. Please check"
-                }
-                type={"error"}
-              />
-              <Alert
-                open={status.success}
-                message={"User successfully added"}
-                type={"success"}
-              />
-            </>
-          )}
+          {!status.loading && renderAlert()}
         </Box>
       </Stack>
     </Dialog>

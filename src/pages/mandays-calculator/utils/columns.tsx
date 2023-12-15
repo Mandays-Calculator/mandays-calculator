@@ -253,27 +253,52 @@ const EstimationListSubColum: Column<EstimationSubColumn>[] = [
   {
     Header: "IO3",
     accessor: "iO3",
-    Cell: (): ReactElement => <ControlledNumberInput name="io3" />,
+    Cell: (): ReactElement => (
+      <ControlledNumberInput
+        width={7.5}
+        name="io3"
+      />
+    ),
   },
   {
     Header: "IO4",
     accessor: "iO4",
-    Cell: (): ReactElement => <ControlledNumberInput name="io4" />,
+    Cell: (): ReactElement => (
+      <ControlledNumberInput
+        width={7.5}
+        name="io4"
+      />
+    ),
   },
   {
     Header: "IO5",
     accessor: "iO5",
-    Cell: (): ReactElement => <ControlledNumberInput name="io5" />,
+    Cell: (): ReactElement => (
+      <ControlledNumberInput
+        width={7.5}
+        name="io5"
+      />
+    ),
   },
   {
     Header: "IO6",
     accessor: "iO6",
-    Cell: (): ReactElement => <ControlledNumberInput name="io6" />,
+    Cell: (): ReactElement => (
+      <ControlledNumberInput
+        width={7.5}
+        name="io6"
+      />
+    ),
   },
   {
     Header: "IO7",
     accessor: "iO7",
-    Cell: (): ReactElement => <ControlledNumberInput name="io7" />,
+    Cell: (): ReactElement => (
+      <ControlledNumberInput
+        width={7.5}
+        name="io7"
+      />
+    ),
   },
 ];
 
@@ -294,6 +319,7 @@ export const EstimationListColumns = ({ t }: EstimationColumnProps): Column<Esti
         <Table<EstimationSubColumn>
           name="sub-table"
           noColor
+          width="50px"
           data={[
             {
               iO3: 10,

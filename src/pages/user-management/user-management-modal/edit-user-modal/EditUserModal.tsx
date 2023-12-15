@@ -1,4 +1,4 @@
-import { type ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 import { CustomButton } from "~/components/form/button";
 import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
 import {
@@ -6,7 +6,6 @@ import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { genders, rolesData } from "../utils";
 import { useFormikContext } from "formik";
 import {
   UpdateUserManagementParams,
@@ -14,14 +13,22 @@ import {
 } from "~/pages/user-management/types";
 import { useUserList } from "~/queries/user-management/UserManagement";
 
+import { gender } from "~/pages/user-management/utils";
 import { ImageUpload } from "~/components";
 import { UserListData } from "~/api/user-management/types";
 import { useEditUser } from "~/mutations/user-management";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { Alert } from "~/components";
-import LocalizationKey from "~/i18n/key";
 import { useTranslation } from "react-i18next";
+import LocalizationKey from "~/i18n/key";
 import moment from "moment";
+import { genders, rolesData } from "~/utils/constants";
+import {
+  careerStepOptions,
+  odcOptions,
+  projectOptions,
+  teamOptions,
+} from "../utils";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -56,26 +63,21 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const { values, setFieldValue } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
+  const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
+  const [isEditError, setIsEditError] = useState<boolean>(false);
   const EditUser = useEditUser(currentUser?.id ?? "");
-  const [status, callApi] = useRequestHandler(EditUser.mutate);
+  const [status, callApi] = useRequestHandler(
+    EditUser.mutate,
+    () => setIsEditSuccess(true),
+    () => setIsEditError(true)
+  );
 
-  const gender = () => {
-    if (values.updateGender == "FEMALE") {
-      return 1;
-    } else if (values.updateGender == "MALE") {
-      return 2;
-    } else if (values.updateGender == "NON_BINARY") {
-      return 3;
-    } else if (values.updateGender == "PREFER_NOT_TO_SAY") {
-      return 4;
-    }
-  };
   const EditUserForm: UserManagementForms = {
     firstName: values?.updateFirstName ?? "",
     lastName: values?.updateLastName ?? "",
     middleName: values?.updateMiddleName ?? "",
     suffix: values?.updateSuffix ?? "",
-    gender: gender() ?? 0,
+    gender: gender(values?.updateGender) ?? 0,
     email: values?.updateEmail ?? "",
     employeeId: values?.updateEmployeeId ?? "",
     odcId: values?.updateOdcId ?? "",
@@ -85,6 +87,10 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     teamId: values?.updateTeamId ?? "",
     roles: values?.updateRoles ?? [],
   };
+  const submit = () => {
+    callApi(EditUserForm);
+  };
+
   const form = useFormikContext<UpdateUserManagementParams>();
   useEffect(() => {
     form.setValues({
@@ -96,6 +102,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateEmail: currentUser?.email ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
       updateOdcId: "",
+      updateJoiningDate:
+        moment(currentUser?.joiningDate).format("YYYY-MM-DD") ?? "",
       updateCareerStep: currentUser?.careerStep ?? "",
       updateProjectId: "",
       updateTeamId: "",
@@ -103,6 +111,18 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     });
   }, [currentUser]);
 
+  useEffect(() => {
+    if (isEditSuccess) {
+      setTimeout(() => {
+        onClose(), refetch(), setIsEditSuccess(false);
+      }, 1000);
+    }
+    if (isEditError) {
+      setIsEditError(false);
+    }
+  }, [isEditSuccess, isEditError]);
+
+  // console.log(updateTeamId);
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -118,68 +138,57 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               <ControlledTextField
                 name="updateLastName"
                 label={t(userManagement.label.lastName)}
-                placeholder="Dela Cruz"
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
                 name="updateFirstName"
                 label={t(userManagement.label.firstName)}
-                placeholder=" Juan"
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
                 name="updateMiddleName"
                 label={t(userManagement.label.middleName)}
-                placeholder="Jose"
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
                 name="updateSuffix"
                 label={t(userManagement.label.suffix)}
-                placeholder="Jr"
               />
             </Grid>
             <Grid item xs={3}>
               <StyledTitle mb={0.5}>
                 {t(userManagement.label.gender)}
               </StyledTitle>
-              <ControlledSelect
-                name="updateGender"
-                options={genders}
-                placeholder="Male"
-              />
+              <ControlledSelect name="updateGender" options={genders} />
             </Grid>
           </Grid>
           <Grid item xs={10} mt={1}>
             <ControlledTextField
               name="updateEmail"
               label={t(userManagement.label.email)}
-              placeholder="juandelacruz103@gmail.com"
             />
           </Grid>
           <Grid item xs={2} mt={1}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.careerStep)}
+            </StyledTitle>
+            <ControlledSelect
+              options={careerStepOptions}
               name="updateCareerStep"
-              label={t(userManagement.label.careerStep)}
-              placeholder="I03"
             />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
               name="updateEmployeeId"
               label={t(userManagement.label.employeeId)}
-              placeholder="82000000"
             />
           </Grid>
           <Grid item xs={5}>
-            <ControlledTextField
-              name="updateOdcId"
-              label={t(userManagement.label.odcId)}
-              placeholder="philippines"
-            />
+            <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
+            <ControlledSelect options={odcOptions} name="updateOdcId" />
           </Grid>
 
           <Grid item xs={2} fontSize={"5px"}>
@@ -189,32 +198,25 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
 
             <ControlledDatePicker
               name="updateJoiningDate"
-              placeholderText={date}
               dateFormat="MM/dd/yyyy"
             />
           </Grid>
           <Grid item xs={7.7}>
-            <ControlledTextField
+            <StyledTitle mb={0.5}>
+              {t(userManagement.label.projectId)}
+            </StyledTitle>
+            <ControlledSelect
+              options={projectOptions}
               name="updateProjectName"
-              label={t(userManagement.label.projectId)}
-              placeholder="eMPF"
             />
           </Grid>
           <Grid item xs={4.3}>
-            <ControlledTextField
-              name="updateTeamName"
-              label={t(userManagement.label.teamId)}
-              placeholder="Developer Team"
-            />
+            <StyledTitle mb={0.5}>{t(userManagement.label.teamId)}</StyledTitle>
+            <ControlledSelect options={teamOptions} name="updateTeamName" />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={1}>{t(userManagement.label.roles)}</StyledTitle>
-            <ControlledSelect
-              multiple
-              options={rolesData}
-              name="updateRoles"
-              placeholder="Sprint manager"
-            />
+            <ControlledSelect multiple options={rolesData} name="updateRoles" />
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" my={2}>
@@ -226,20 +228,20 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           >
             Cancel
           </CustomButton>
-          <CustomButton
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              callApi(EditUserForm);
-              refetch();
-            }}
-          >
+          <CustomButton variant="contained" color="primary" onClick={submit}>
             Save
           </CustomButton>
-          {status.loading && (
+          {!status.loading && (
             <>
               <Alert
-                open={status.success}
+                open={isEditError}
+                message={
+                  "There is a problem in your submitted data. Please check"
+                }
+                type={"error"}
+              />
+              <Alert
+                open={isEditSuccess}
                 message={"User successfully updated"}
                 type={"success"}
               />

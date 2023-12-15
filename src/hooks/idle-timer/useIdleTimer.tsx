@@ -1,14 +1,14 @@
 import React, { useState, useEffect, ComponentType, ReactElement } from "react";
 import { IdleTimerProvider } from "react-idle-timer";
 import { BroadcastChannel } from "broadcast-channel";
-import { useAuth } from "react-oidc-context";
 
 import { Timer } from "~/components";
-import { logout } from "~/utils/oidc-utils";
+import NotificationModal from "~/components/modal/notification-modal/NotificationModal";
+
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import { getEnvConfig } from "~/utils/env-config";
-import NotificationModal from "~/components/modal/notification-modal/NotificationModal";
+import { useUserAuth } from "../user";
 
 interface WithIdleTimerProps {
   timeout?: number;
@@ -20,10 +20,9 @@ export const useIdleTimer = <P extends object>(
 ): ComponentType<P> => {
   return (props: P): ReactElement => {
     const [isIdle, setIsIdle] = useState<boolean>(false);
-
+    const { logout } = useUserAuth();
     const config = getEnvConfig();
     const { t } = useTranslation();
-    const auth = useAuth();
     const channel = new BroadcastChannel("idle_timer_channel");
 
     const { common } = LocalizationKey;
@@ -52,10 +51,6 @@ export const useIdleTimer = <P extends object>(
       setIsIdle(false);
     };
 
-    const handleLogout = (): void => {
-      logout(auth);
-    };
-
     return (
       <React.Fragment>
         <IdleTimerProvider
@@ -71,7 +66,7 @@ export const useIdleTimer = <P extends object>(
             <>
               {t(common.idleTimeOutLabel)}:{" "}
               <Timer
-                onEndCountdown={handleLogout}
+                onEndCountdown={logout}
                 milliseconds={
                   config.idleTimeoutConfig.confirmationWindowSeconds
                 }
@@ -79,7 +74,7 @@ export const useIdleTimer = <P extends object>(
             </>
           }
           open={isIdle}
-          onClose={handleLogout}
+          onClose={logout}
           onCloseLabel={t(common.logout)}
           onConfirmLabel={t(common.idleTimeOutButtonLoggedIn)}
           onConfirm={handleOnActive}

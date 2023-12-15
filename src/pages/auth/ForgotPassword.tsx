@@ -19,6 +19,8 @@ import { ErrorMessage } from "~/components";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
 
+import CustomCheckIcon from "./components/check-icon/CheckIcon";
+
 const ForgotPassword = (): ReactElement => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -45,9 +47,15 @@ const ForgotPassword = (): ReactElement => {
       {status.success ? (
         <Grid container>
           <Grid item xs={12} sx={{ mb: 3 }}>
-            <Typography variant="body1" textAlign={"justify"}>
-              {t(LocalizationKey.forgotPassword.label.success)}
-            </Typography>
+            <Grid container>
+              <Grid item xs={12}>
+                <CustomCheckIcon>
+                  <Typography variant="body1" textAlign={"justify"}>
+                    {t(LocalizationKey.forgotPassword.label.success)}
+                  </Typography>
+                </CustomCheckIcon>
+              </Grid>
+            </Grid>
           </Grid>
           <Button
             variant="outlined"

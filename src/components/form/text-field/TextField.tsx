@@ -8,12 +8,16 @@ import Stack from "@mui/material/Stack";
 type TextFieldProps = BaseInputPropsWithAdornment<MuiTextFieldProps>;
 
 export const TextField = (props: TextFieldProps): ReactElement => {
-  const { name, label, endAdornment, readOnly, placeholder = "Please Input", ...rest } = props;
+  const {
+    name,
+    label,
+    endAdornment,
+    readOnly,
+    placeholder = "Please Input",
+    ...rest
+  } = props;
   return (
-    <Stack
-      direction="column"
-      gap={1}
-    >
+    <Stack direction="column" gap={1}>
       {label ? <Typography>{label}</Typography> : null}
       <MuiTextField
         id={name}

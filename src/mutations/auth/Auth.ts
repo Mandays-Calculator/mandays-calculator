@@ -20,7 +20,7 @@ export const useResetPasswordMutation = () => {
   >((params: { code: string; newPassword: string }) =>
     resetPasswordApi({
       authorizationCode: params.code,
-      newPassword: params.newPassword,
+      password: params.newPassword,
     })
   );
 };

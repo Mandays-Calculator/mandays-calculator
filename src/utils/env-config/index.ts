@@ -1,2 +1,2 @@
-export type { ConfigType, OIDCConfigType } from "./types";
+export type { ConfigType } from "./types";
 export * from "./envConfig";

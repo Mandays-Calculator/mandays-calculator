@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 
 import {
   ControlledDatePicker,
+  ControlledNumberInput,
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
@@ -20,11 +21,21 @@ interface WrapperProps {
 const Wrapper = (props: WrapperProps): ReactElement => {
   const { title, field } = props;
   return (
-    <Grid container direction={"row"} sx={{ pl: 12 }}>
-      <Grid item xs={2}>
+    <Grid
+      container
+      direction={"row"}
+      sx={{ pl: 12 }}
+    >
+      <Grid
+        item
+        xs={2}
+      >
         {title}
       </Grid>
-      <Grid item xs={6}>
+      <Grid
+        item
+        xs={6}
+      >
         {field}
       </Grid>
     </Grid>
@@ -37,10 +48,17 @@ const AddEstimation = (): ReactElement => {
     mandaysCalculator: { summaryForm },
   } = LocalizationKey;
   return (
-    <Stack direction="column" spacing={2} sx={{ pt: 5 }}>
+    <Stack
+      direction="column"
+      spacing={2}
+      sx={{ pt: 5 }}
+    >
       <Wrapper
         title={
-          <Typography fontWeight={"bold"} variant="subtitle1">
+          <Typography
+            fontWeight={"bold"}
+            variant="subtitle1"
+          >
             {t(summaryForm.name)}
           </Typography>
         }
@@ -49,7 +67,10 @@ const AddEstimation = (): ReactElement => {
 
       <Wrapper
         title={
-          <Typography fontWeight={"bold"} variant="subtitle1">
+          <Typography
+            fontWeight={"bold"}
+            variant="subtitle1"
+          >
             {t(summaryForm.team)}
           </Typography>
         }
@@ -67,22 +88,33 @@ const AddEstimation = (): ReactElement => {
       />
       <Wrapper
         title={
-          <Typography fontWeight={"bold"} variant="subtitle1">
+          <Typography
+            fontWeight={"bold"}
+            variant="subtitle1"
+          >
             {t(summaryForm.utilization)}
           </Typography>
         }
         field={
           <>
-            <Grid container alignItems="top">
-              <Grid item sx={{ mr: 1 }}>
-                <ControlledTextField
+            <Grid
+              container
+              alignItems="top"
+            >
+              <Grid
+                item
+                sx={{ mr: 1 }}
+              >
+                <ControlledNumberInput
                   placeholder="50"
                   name="summary.utilRate"
-                  sx={{ maxWidth: 50 }}
                 />
               </Grid>
               <Grid item>
-                <Typography variant="body1" fontWeight="bold">
+                <Typography
+                  variant="body1"
+                  fontWeight="bold"
+                >
                   &#37;
                 </Typography>
               </Grid>
@@ -93,7 +125,10 @@ const AddEstimation = (): ReactElement => {
 
       <Wrapper
         title={
-          <Typography fontWeight={"bold"} variant="subtitle1">
+          <Typography
+            fontWeight={"bold"}
+            variant="subtitle1"
+          >
             {t(summaryForm.startDate)}
           </Typography>
         }
@@ -102,7 +137,10 @@ const AddEstimation = (): ReactElement => {
 
       <Wrapper
         title={
-          <Typography fontWeight={"bold"} variant="subtitle1">
+          <Typography
+            fontWeight={"bold"}
+            variant="subtitle1"
+          >
             {t(summaryForm.endDate)}
           </Typography>
         }
