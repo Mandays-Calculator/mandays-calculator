@@ -174,10 +174,10 @@
       "nameUnq": "ODC name must be unique.",
       "abbrUnq": "Abbreviation must be unique.",
       "locReq": "Location is required.",
-      "holidays": "Holidays",
-      "date": "Date",
-      "holiday": "Holiday",
-      "noHolidays": "No. Holidays"
+      "submitError": "There is a problem in your submitted data. Please check.",
+      "submitSuccess": "Complexity successfully submitted.",
+      "deleteError": "There is a problem in your deleted data. Please check.",
+      "deleteSuccess": "Complexity successfully deleted."
     },
     "placeholder": "Enter keyword here..."
   },

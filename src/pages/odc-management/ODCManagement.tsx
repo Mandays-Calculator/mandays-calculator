@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { ODCListResponse } from "~/api/odc";
+import type { OdcParam } from "~/api/odc";
 import type { FormContext } from "./utils";
 
 import { useState, useEffect } from "react";
@@ -20,21 +20,20 @@ const ODCManagement = (): ReactElement => {
     common: { errorMessage: { genericError } }
   } = LocalizationKey;
   
-  const { data, isLoading, isError } = useODCList();
+  const { data: apiData, isLoading, isError } = useODCList();
 
-  const [initialValues, setInitialValues] = useState<ODCListResponse>(NewODCData);
+  const [initialValues, setInitialValues] = useState<OdcParam>(NewODCData);
   const [formContext, setFormContext] = useState<FormContext>("");
-  const [idx, setIdx] = useState<number>(0);
+  const [idx, setIdx] = useState<string>("");
 
   useEffect(() => {
-    const APIData = data || [];
     if (formContext === "Edit" || formContext === "Delete")
-      setInitialValues(APIData[idx]);
+      setInitialValues(apiData?.find((value: OdcParam) => value.id === idx) ?? NewODCData);
     if (formContext === "Add")
       setInitialValues(NewODCData);
   }, [formContext]);
 
-  console.log('error', isError);
+  const delIdx = apiData?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
 
   if (isLoading) { return <PageLoader /> };
 
@@ -44,14 +43,14 @@ const ODCManagement = (): ReactElement => {
       <PageContainer sx={{ background: "#FFFFFF" }}>
         {formContext === "" && (
           <ViewODC
-            data={data || []}
+            data={apiData || []}
             setFormContext={setFormContext}
             setIdx={setIdx}
           />
         )}
         {(formContext === "Add" || formContext === "Edit") && (
           <AddODC
-            apiData={data || []}
+            apiData={apiData || []}
             data={initialValues}
             formContext={formContext}
             setFormContext={setFormContext}
@@ -64,7 +63,7 @@ const ODCManagement = (): ReactElement => {
         }}
         open={formContext === "Delete"}
         onClose={() => setFormContext("")}
-        selectedRow={idx}
+        selectedRow={delIdx}
       />
       {isError && (
         <Alert

@@ -1,53 +1,63 @@
-import type { ODCListResponse, ODCSubmit } from "~/api/odc";
+// import type { OdcListResponse } from "~/api/odc";
 
 export const NewODCData = {
   id: "",
   name: "",
   location: "",
   abbreviation: "",
-  holidays: [],
-  active: true,
-  createDate: "2020-01-23T12:18:23.000Z",
+  holidays: null,
+  active: "true",
+  createDate: null,
   lastUpdatedDate: null,
 };
 
 export const NewHolidayData = {
-  id: 0,
+  id: "",
   odcId: "",
   date: "",
-  recurring: true,
+  recurring: "true",
   name: "",
   createDate: null,
   lastUpdatedDate: null,
 };
 
-export const SubmitFormat = (data: ODCListResponse): ODCSubmit => {
-  return {
-    name: data.name,
-    abbreviation: data.abbreviation,
-    location: data.location,
-    holidays: data.holidays,
-    active: data.active,
-  };
-};
+// export const SubmitFormat = (data: OdcListResponse): ODCSubmit => {
+//   return {
+//     name: data.name,
+//     abbreviation: data.abbreviation,
+//     location: data.location,
+//     holidays: data.holidays,
+//     active: data.active,
+//   };
+// };
 
 export const FakeHoliday = [
   {
-    id: 1,
+    id: "1",
     odcId: "",
     date: "2023-01-01",
-    recurring: true,
+    recurring: "true",
     name: "New Year's Day",
     createDate: null,
     lastUpdatedDate: null,
   },
   {
-    id: 1,
+    id: "2",
     odcId: "",
     date: "2023-01-22",
-    recurring: true,
+    recurring: "true",
     name: "Lunar New Year",
     createDate: null,
     lastUpdatedDate: null,
   }
 ];
+
+export const SucErrData = {
+  isError: false,
+  isAddError: false,
+  isAddSuccess: false,
+  isUpdateError: false,
+  isUpdateSuccess: false,
+  isDeleteError: false,
+  isDeleteSuccess: false,
+};

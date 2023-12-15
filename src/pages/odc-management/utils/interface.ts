@@ -1,7 +1,7 @@
-import type { ODCListResponse, HolidayType } from "~/api/odc";
+import type { OdcParam, HolidayParam } from "~/api/odc";
 
 export interface IntValues {
-  odcList: ODCListResponse[];
+  odcList: OdcParam[];
 };
 
 export type FormContext = '' | 'Add' | 'Edit' | 'Delete'
@@ -10,18 +10,32 @@ export type FieldValue = {
   name: string;
   abbreviation: string;
   location: string;
-  holidays: HolidayType[] | null;
+  holidays: HolidayParam[] | null;
 }
 
 export type ViewProps = {
-  data: ODCListResponse[];
+  data: OdcParam[];
   setFormContext: (context: FormContext) => void;
-  setIdx: (idx: number) => void;
+  setIdx: (idx: string) => void;
 };
 
 export type AddProps = {
-  apiData: ODCListResponse[];
-  data: ODCListResponse;
+  apiData: OdcParam[];
+  data: OdcParam;
   formContext: FormContext;
   setFormContext: (context: FormContext) => void;
+};
+
+export type EditTableProps = {
+  odcId: string;
+};
+
+export type SucErrType = {
+  isError: boolean;
+  isAddError: boolean;
+  isAddSuccess: boolean;
+  isUpdateError: boolean;
+  isUpdateSuccess: boolean;
+  isDeleteError: boolean;
+  isDeleteSuccess: boolean;
 };

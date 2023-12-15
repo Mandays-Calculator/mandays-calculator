@@ -1,35 +1,25 @@
 import type { ReactElement } from "react";
-import type { ODCListResponse } from "~/api/odc/types";
+import type { OdcParam } from "~/api/odc/types";
 import type { AddProps } from "../utils";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Grid, Box, styled, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useFormik } from "formik";
-import moment from "moment";
-import { parseISO } from 'date-fns';
 
-import { Table, Form } from "~/components";
+import { Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
-import { ControlledTextField, ControlledDatePicker } from "~/components/form/controlled";
+import { ControlledTextField } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
 
 import {
-  HolidayColumn,
   IntValuesSchema,
-  //SubmitFormat
-  NewHolidayData,
   FakeHoliday,
 } from "../utils";
-// import { AddEditFormat } from ".";
+import EditTable from "./EditTable";
 import { IsDuplicate } from ".";
-
-const StyledLabel = styled(Typography)(() => ({
-  fontWeight: 600,
-  fontSize: "16px",
-}));
 
 const AddODC = (props: AddProps): ReactElement => {
   const { apiData, data, formContext, setFormContext } = props;
@@ -37,7 +27,7 @@ const AddODC = (props: AddProps): ReactElement => {
   const { t } = useTranslation();
   const { odc: { label, btnlabel, validationInfo } } = LocalizationKey;
 
-  const ODCForm = useFormik<ODCListResponse>({
+  const ODCForm = useFormik<OdcParam>({
     initialValues: data,
     validationSchema: IntValuesSchema(t),
     enableReinitialize: true,
@@ -49,13 +39,12 @@ const AddODC = (props: AddProps): ReactElement => {
   useEffect(() => {
     if (formContext === "Edit")
       setFieldValue("holidays", FakeHoliday);
-  }, [data]);
+  }, [formContext]);
 
   const [nameUnqError, setNameUnqError] = useState<boolean>(false);
   const [nameUnqErrorMsg, setNameUnqErrorMsg] = useState<string>("");
   const [abbrUnqError, setAbbrUnqError] = useState<boolean>(false);
   const [abbrUnqErrorMsg, setAbbrUnqErrorMsg] = useState<string>("");
-  const [holIdx, setHolIdx] = useState<number[]>([]);
 
   const handleAddODC = (): void => {
     const isNameError = IsDuplicate(apiData, values.name, "name");
@@ -67,19 +56,8 @@ const AddODC = (props: AddProps): ReactElement => {
     setAbbrUnqError(isAbbrError);
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
     else setAbbrUnqErrorMsg("");
-  };
 
-  const handleAddHoliday = () => {
-    const holidays = values.holidays || [];
-    holidays.push(NewHolidayData);
-    const upHoliday = holidays.length;
-    setHolIdx([...holIdx, upHoliday - 1]);
-    setFieldValue("holidays", holidays);
-  };
-
-  const handleDeleteHoliday = (id: number): void => {
-    //POST DeleteAPI
-    console.log("DeleteAPI", id);
+    console.log('values', values);
   };
 
   const handleClose = (): void => setFormContext("");
@@ -88,21 +66,6 @@ const AddODC = (props: AddProps): ReactElement => {
 		return error !== undefined;
 	};
 
-  const holidayListColumn = useMemo(() =>
-    HolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday)
-  , [holIdx]);
-
-  console.log('api values', values);
-  // const holidays = values.holidays || [];
-  // let valueDate = "";
-  // if (holidays?.length > 0)
-  //   valueDate = moment(holidays[0]?.date, "yyyy-MM-dd").format("yyyy/MM/DD");
-
-  let date = "";
-  if (values.createDate !== null)
-    date = moment(values.createDate).format("MM/DD/yyyy");
-
-  console.log('HA', parseISO("2016-01-01").toString(), date);
   return (
     <Form instance={ODCForm}>
       <Grid container spacing={2}>
@@ -134,72 +97,38 @@ const AddODC = (props: AddProps): ReactElement => {
           />
         </Grid>
       </Grid>
-
-      <ControlledDatePicker
-        name={"createDate"}
-        label=""
-        value={parseISO("2016-01-01").toString()}
-        // value={valueDate}
-        // onChange={(value: any) => {
-        //   valueDate = moment(value).format("yyyy/MM/DD")
-        //   console.log('onChange', value, valueDate)
-        // }}
-        dateFormat="MM/dd/yyyy"
-      />
-
-      <Box margin="30px 0px 14px">
-        <Grid container spacing={2} mb={2}>
-          <Grid item xs={9}>
-            <StyledLabel>
-              {t(label.holidays)}
-            </StyledLabel>
-          </Grid>
-          <Grid item xs={3}>
-            <Grid container justifyContent="flex-end">
-              <CustomButton
-                type="button"
-                onClick={handleAddHoliday}
-              >
-                {t(btnlabel.addHoliday)}
-              </CustomButton>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Table
-          name="HolidayTable"
-          columns={holidayListColumn}
-          data={values.holidays || []}
-        />
-        <Grid container spacing={2} alignItems="center" mt={1}>
-          <Grid item xs={12} container justifyContent="flex-end">
-            {formContext === "Edit" && (
-              <>
-                <CustomButton
-                  type="submit"
-                  sx={{ mr: 2 }}
-                  onClick={handleAddODC}
-                >
-                  {t(btnlabel.save)}
-                </CustomButton>
-                <CustomButton
-                  type="button"
-                  onClick={handleClose}
-                >
-                  {t(btnlabel.cancel)}
-                </CustomButton>
-              </>
-            )}
-            {formContext === "Add" && (
+      {formContext === "Edit" && (
+        <EditTable odcId={data.id} />
+      )}
+      <Grid container spacing={2} alignItems="center" mt={1}>
+        <Grid item xs={12} container justifyContent="flex-end">
+          {formContext === "Edit" && (
+            <>
               <CustomButton
                 type="submit"
+                sx={{ mr: 2 }}
                 onClick={handleAddODC}
               >
-                {t(btnlabel.addOdc)}
+                {t(btnlabel.save)}
               </CustomButton>
-            )}
-          </Grid>
+              <CustomButton
+                type="button"
+                onClick={handleClose}
+              >
+                {t(btnlabel.cancel)}
+              </CustomButton>
+            </>
+          )}
+          {formContext === "Add" && (
+            <CustomButton
+              type="submit"
+              onClick={handleAddODC}
+            >
+              {t(btnlabel.addOdc)}
+            </CustomButton>
+          )}
         </Grid>
-      </Box>
+      </Grid>
     </Form>
   );
 };

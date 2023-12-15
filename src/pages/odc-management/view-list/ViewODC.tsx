@@ -1,5 +1,5 @@
 import type { ReactElement, ChangeEvent } from "react";
-import type { ODCListResponse } from "~/api/odc";
+import type { OdcParam } from "~/api/odc";
 import type { ViewProps } from "../utils";
 
 import { useState, useEffect } from "react";
@@ -23,10 +23,10 @@ const ViewODC = (props: ViewProps): ReactElement => {
   const { t } = useTranslation();
   const { odc: { btnlabel, placeholder } } = LocalizationKey;
   
-  const [filterData, setFilterData] = useState<ODCListResponse[]>([]);
+  const [filterData, setFilterData] = useState<OdcParam[]>([]);
 
   useEffect(() => {
-    setFilterData(data?.filter((obj: ODCListResponse) => obj.active === true));
+    setFilterData(data?.filter((obj: OdcParam) => (obj.active).toString() === "true"));
   }, [data]);
 
   const handleLowerCase = (value: string): string => value.toLocaleLowerCase();
@@ -34,9 +34,9 @@ const ViewODC = (props: ViewProps): ReactElement => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setFilterData(
       data?.filter(
-        (obj: ODCListResponse) => {
+        (obj: OdcParam) => {
           const value = handleLowerCase(event.target.value);
-          return obj.active === true &&
+          return obj.active === "true" &&
           (
             handleLowerCase(obj.name).includes(value) ||
             handleLowerCase(obj.abbreviation).includes(value) ||

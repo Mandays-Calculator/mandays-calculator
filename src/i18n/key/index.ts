@@ -266,10 +266,10 @@ const LocalizationKey = {
       nameUnq: "odc.validationInfo.nameUnq",
       abbrUnq: "odc.validationInfo.abbrUnq",
       locReq: "odc.validationInfo.locReq",
-      "holidays": "Holidays",
-      "date": "Date",
-      "holiday": "Holiday",
-      "noHolidays": "No. Holidays"
+      submitError: "odc.validationInfo.submitError",
+      submitSuccess: "odc.validationInfo.submitSuccess",
+      deleteError: "odc.validationInfo.deleteError",
+      deleteSuccess: "odc.validationInfo.deleteSuccess"
     },
     placeholder: "odc.placeholder"
   },
