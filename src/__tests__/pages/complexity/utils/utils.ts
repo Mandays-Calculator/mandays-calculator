@@ -21,18 +21,3 @@ export const tableData = {
     },
   ],
 };
-
-export const complexityById = {
-  status: 200,
-  data: {
-    id: "e94d9393-0554-4df5-9ea6-9945bac489f6",
-    name: "Average",
-    numberOfDays: "1-2",
-    numberOfFeatures: "2-10",
-    description: "Complexity Simple",
-    sample: "Feature A",
-    createdDate: "2023-11-21T04:53:26.000+00:00",
-    lastUpdatedDate: "2023-11-30T11:51:46.000+00:00",
-    active: true,
-  },
-};
