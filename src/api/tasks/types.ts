@@ -23,7 +23,7 @@ export interface AllTasksResponse {
   status: string;
   type: string;
   tags: SelectObject[];
-  functionality: Functionality[];
+  functionality: Functionality;
   comments: Comment[];
 }
 
