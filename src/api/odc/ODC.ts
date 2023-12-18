@@ -2,6 +2,7 @@ import type {
   OdcResponse,
   CreateOdcParam,
   UpdateOdcParam,
+  DeleteOdcParam,
   HolidayListResponse,
   HolidayResponse,
   CreateHoliday,
@@ -48,9 +49,9 @@ export const updateODC = async (params: UpdateOdcParam): Promise<OdcResponse> =>
   }
 };
 
-export const deleteODC = async (id: string): Promise<OdcResponse> => {
+export const deleteODC = async (params: DeleteOdcParam): Promise<OdcResponse> => {
   const { apiBasePath } = getEnvConfig();
-  const url = `${apiBasePath}/odcs/${id}`;
+  const url = `${apiBasePath}/odcs/${params.id}`;
   try {
     const response = await axios.delete<OdcResponse>(url);
     if (response.data && response.data.status >= 201) {

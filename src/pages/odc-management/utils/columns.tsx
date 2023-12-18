@@ -69,10 +69,46 @@ export const ODCColumns = (
   ];
 };
 
-export const HolidayColumn = (
+export const AddHolidayColumn = (
   t: TFunction<"translation", undefined>,
-  holIdx: number[],
-  setHolIdx: (idx: number[]) => void,
+): Column<HolidayParam>[] => {
+  return [
+    {
+      Header: t(label.date),
+      accessor: "date",
+      Cell: ({ row }: CellProps<HolidayParam>) => {
+        let valueDate = "";
+        if (row.original.date !== undefined && row.original.date !== null && row.original.date !== "")
+          valueDate = moment(row.original.date).format("yyyy/MM/DD");
+
+        return (
+          <ControlledDatePicker
+            name={`holidays.${row.index}.date`}
+            value={valueDate}
+            dateFormat="yyyy/MM/dd"
+          />
+        );
+      },
+    },
+    {
+      Header: t(label.holiday),
+      accessor: "name",
+      Cell: ({ row }: CellProps<HolidayParam>) => {
+        return (
+          <ControlledTextField
+            name={`holidays.${row.index}.name`}
+            value={row.original.name}
+          />
+        );
+      },
+    },
+  ];
+};
+
+export const EditHolidayColumn = (
+  t: TFunction<"translation", undefined>,
+  holIdx: string[],
+  setHolIdx: (holIdx: string[]) => void,
   handleDeleteHoliday: (holidayId: string) => void,
   handleUpdateHoliday: (data: HolidayParam) => void,
 ): Column<HolidayParam>[] => {
@@ -82,17 +118,19 @@ export const HolidayColumn = (
       accessor: "date",
       Cell: ({ row }: CellProps<HolidayParam>) => {
         let valueDate = "";
-        if (row.original.date !== undefined || row.original.date !== null)
+        if (row.original.date !== undefined && row.original.date !== null && row.original.date !== "")
           valueDate = moment(row.original.date).format("yyyy/MM/DD");
 
         return (
           <>
-            {holIdx.includes(row.index) ? (
-              <ControlledDatePicker
-                name={`holidays.${row.index}.date`}
-                value={valueDate}
-                dateFormat="yyyy/MM/dd"
-              />
+            {(holIdx.includes(row.original.id) || row.original.id === "") ? (
+              <>
+                <ControlledDatePicker
+                  name={`holidays.${row.index}.date`}
+                  value={valueDate}
+                  dateFormat="yyyy/MM/dd"
+                />
+              </>
             ) : (
               <>{valueDate}</>
             )}
@@ -103,27 +141,30 @@ export const HolidayColumn = (
     {
       Header: t(label.holiday),
       accessor: "name",
-      Cell: ({ row }: CellProps<HolidayParam>) => (
-        <>
-          {holIdx.includes(row.index) ? (
-            <ControlledTextField
-              name={`holidays.${row.index}.name`}
-            />
-          ) : (
-            <>{row.original.name}</>
-          )}
-        </>
-      ),
+      Cell: ({ row }: CellProps<HolidayParam>) => {
+        return (
+          <>
+            {(holIdx.includes(row.original.id) || row.original.id === "") ? (
+              <ControlledTextField
+                name={`holidays.${row.index}.name`}
+                value={row.original.name}
+              />
+            ) : (
+              <>{row.original.name}</>
+            )}
+          </>
+        );
+      },
     },
     {
       Header: "",
       id: "actions",
       Cell: ({ row }: CellProps<HolidayParam>) => (
         <>
-          {!holIdx.includes(row.index) && (
+          {(!holIdx.includes(row.original.id) && row.original.id !== "") && (
             <>
               <IconButton
-                onClick={() => setHolIdx([row.index, ...holIdx])}
+                onClick={() => setHolIdx([...holIdx, row.original.id])}
                 aria-label={`edit-${row.index}`}
               >
                 <SvgIcon name="edit" $size={2} />
@@ -136,7 +177,7 @@ export const HolidayColumn = (
               </IconButton>
             </>
           )}
-          {(holIdx.includes(row.index) && row.original.id !== "") && (
+          {(holIdx.includes(row.original.id)) && (
             <CustomButton
               type="button"
               onClick={() => handleUpdateHoliday(row.original)}
