@@ -88,8 +88,7 @@ const StyledCreateTaskIconButton = styled(Grid)(({ display }: { display: string 
 }));
 
 const TasksContent = (): ReactElement => {
-  // const { data: tasksData } = useTasks("DEV");
-  const { data: tasksData } = { data: { data: MockData } };
+  const { data: tasksData } = useTasks("DEV");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
 
   useEffect(() => {
