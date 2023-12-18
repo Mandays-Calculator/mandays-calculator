@@ -18,6 +18,7 @@ import { StyledLabel, StyledTitle } from "./components/auth-container";
 import PasswordInput from "./components/password-input/PasswordInput";
 import { loginSchema } from "./schema";
 import { AppDispatch } from "~/redux/store";
+import { useErrorHandler } from "~/hooks/error-handler";
 
 const Login = (): ReactElement => {
   const { t } = useTranslation();
@@ -72,7 +73,7 @@ const Login = (): ReactElement => {
             {t(LocalizationKey.login.label.forgotPassword)}
           </Link>
         </Grid>
-        <ErrorMessage error={error?.message} />
+        {error !== null && <ErrorMessage error={useErrorHandler(error, t)} />}
         <Grid item xs={12}>
           <Button fullWidth type="submit">
             {loading

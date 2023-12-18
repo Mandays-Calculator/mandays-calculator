@@ -28,6 +28,7 @@ export interface TableProps<Type extends object> {
   expandedData?: boolean;
   type?: "collapse" | "default";
   loading?: boolean;
+  width?: string;
 }
 
 export interface CustomHeaderGroup<Type extends object> extends HeaderGroup<Type> {

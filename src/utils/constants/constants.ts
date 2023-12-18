@@ -43,6 +43,7 @@ export const CHANNELS = {
   },
   events: {
     unauthorized: "Unauthorized",
+    systemError: "SystemError",
   },
 };
 

@@ -7,7 +7,7 @@ import axios, {
 } from "axios";
 
 import { getUser } from "~/utils/helpers";
-import { CHANNELS } from "~/utils/constants";
+import { CHANNELS, ERROR_CODES } from "~/utils/constants";
 
 /**
  * Initializes Axios with global interceptors to handle authorization and error management.
@@ -16,14 +16,14 @@ import { CHANNELS } from "~/utils/constants";
  * - Uses a broadcast channel to communicate unauthorized states across different parts of the application.
  * @param isAuthenticated - Indicates if the user is currently authenticated.
  */
-const init = async (isAuthenticated: boolean): Promise<void> => {
+const init = async (): Promise<void> => {
   const { items, events } = CHANNELS;
   const channel = new BroadcastChannel(items.sessionState);
 
   axios.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       const user = getUser();
-      if (isAuthenticated) {
+      if (user) {
         config.headers.Authorization = `Bearer ${user?.token?.accessToken}`;
       }
       return config;
@@ -34,8 +34,16 @@ const init = async (isAuthenticated: boolean): Promise<void> => {
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
-      if (error.response && error.response.status == 401 && isAuthenticated) {
+      const user = getUser();
+      if (error.response && error.response.status == 401 && user) {
         channel.postMessage(events.unauthorized);
+      }
+      if (
+        error &&
+        (error as unknown as GenericErrorResponse).errorCode ===
+          ERROR_CODES.genericError
+      ) {
+        channel.postMessage(events.systemError);
       }
       const axiosError = error as AxiosError<GenericErrorResponse>;
       return axiosError && axiosError.response
