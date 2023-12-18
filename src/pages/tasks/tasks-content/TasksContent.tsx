@@ -47,27 +47,25 @@ const calculateGridSize = (numStatuses: number): number => {
   return 12 / numStatuses;
 };
 
-const StatusContainer = styled("div")(
-  ({ backgroundColor }: { backgroundColor: string }) => ({
-    backgroundColor:
-      backgroundColor === Status.Backlog
-        ? StatusContainerColor.Backlog
-        : backgroundColor === Status.NotYetStarted
-          ? StatusContainerColor.NotYetStarted
-          : backgroundColor === Status.InProgress
-            ? StatusContainerColor.InProgress
-            : backgroundColor === Status.OnHold
-              ? StatusContainerColor.OnHold
-              : StatusContainerColor.Completed,
-    borderRadius: 10,
-    width: "100%",
-    padding: 15,
-  })
-);
+const StatusContainer = styled("div")(({ backgroundColor }: { backgroundColor: string }) => ({
+  backgroundColor:
+    backgroundColor === Status.Backlog
+      ? StatusContainerColor.Backlog
+      : backgroundColor === Status.NotYetStarted
+        ? StatusContainerColor.NotYetStarted
+        : backgroundColor === Status.InProgress
+          ? StatusContainerColor.InProgress
+          : backgroundColor === Status.OnHold
+            ? StatusContainerColor.OnHold
+            : StatusContainerColor.Completed,
+  borderRadius: 10,
+  width: "100%",
+  padding: 15,
+}));
 
 const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
   fontSize: 18,
-  margin: color !== Status.Backlog ? "0.3em 0": 0,
+  margin: color !== Status.Backlog ? "0.3em 0" : 0,
   fontWeight: "bold",
   color:
     color === Status.NotYetStarted
@@ -90,7 +88,8 @@ const StyledCreateTaskIconButton = styled(Grid)(({ display }: { display: string 
 }));
 
 const TasksContent = (): ReactElement => {
-  const { data: tasksData } = useTasks("DEV");
+  // const { data: tasksData } = useTasks("DEV");
+  const { data: tasksData } = { data: { data: MockData } };
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
 
   useEffect(() => {
@@ -102,173 +101,11 @@ const TasksContent = (): ReactElement => {
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
 
-  // const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
-  // const [modalEditOpen, setEditModalOpen] = useState<boolean>(false);
-  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
-    null
-  );
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(null);
 
-  // const status = [
-  //   "Backlog",
-  //   "Not Yet Started",
-  //   "In Progress",
-  //   "On Hold",
-  //   "Completed",
-  // ];
-
-  // const [tasks, setTasks] = useState<AllTasksResponse[]>([
-  //   {
-  //     name: "BE - Database Structure",
-  //     description: "lorem kineme.",
-  //     completion_date: "11/13/2023",
-  //     sprint: "1",
-  //     complexity: "13",
-  //     status: "Backlog",
-  //     type: "Bug",
-  //     functionality: [
-  //       {
-  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-  //         name: "Simple Function",
-  //       },
-  //     ],
-  //     comments: [
-  //       {
-  //         name: "Zad Geron",
-  //         comment: "This is a test",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: "BE - Database Structure 1",
-  //     description: "lorem kineme",
-  //     completion_date: "11/13/2023",
-  //     sprint: "1",
-  //     complexity: "13",
-  //     status: "Backlog",
-  //     type: "Bug",
-  //     functionality: [
-  //       {
-  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-  //         name: "Simple Function",
-  //       },
-  //     ],
-  //     comments: [
-  //       {
-  //         name: "Zad Geron",
-  //         comment: "This is a test",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: "BE - Database Structure 2",
-  //     description: "lorem kineme",
-  //     completion_date: "11/13/2023",
-  //     sprint: "1",
-  //     complexity: "13",
-  //     status: "Backlog",
-  //     type: "Bug",
-  //     functionality: [
-  //       {
-  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-  //         name: "Simple Function",
-  //       },
-  //     ],
-  //     comments: [
-  //       {
-  //         name: "Zad Geron",
-  //         comment: "This is a test",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: "BE - Database Structure 3",
-  //     description: "lorem kineme",
-  //     completion_date: "11/13/2023",
-  //     sprint: "1",
-  //     complexity: "13",
-  //     status: "Not Yet Started",
-  //     type: "Bug",
-  //     functionality: [
-  //       {
-  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-  //         name: "Simple Function",
-  //       },
-  //     ],
-  //     comments: [
-  //       {
-  //         name: "Zad Geron",
-  //         comment: "This is a test",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: "Optimization",
-  //     description: "lorem kineme",
-  //     completion_date: "11/13/2023",
-  //     sprint: "1",
-  //     complexity: "13",
-  //     status: "In Progress",
-  //     type: "Bug",
-  //     functionality: [
-  //       {
-  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-  //         name: "Simple Function",
-  //       },
-  //     ],
-  //     comments: [
-  //       {
-  //         name: "Zad Geron",
-  //         comment: "This is a test",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: "Integration",
-  //     description: "lorem kineme",
-  //     completion_date: "11/13/2023",
-  //     sprint: "1",
-  //     complexity: "13",
-  //     status: "On Hold",
-  //     type: "Bug",
-  //     functionality: [
-  //       {
-  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-  //         name: "Simple Function",
-  //       },
-  //     ],
-  //     comments: [
-  //       {
-  //         name: "Zad Geron",
-  //         comment: "This is a test",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     name: "Project Management - UI",
-  //     description: "lorem kineme",
-  //     completion_date: "11/13/2023",
-  //     sprint: "1",
-  //     complexity: "13",
-  //     status: "Completed",
-  //     type: "Bug",
-  //     functionality: [
-  //       {
-  //         id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-  //         name: "Simple Function",
-  //       },
-  //     ],
-  //     comments: [
-  //       {
-  //         name: "Zad Geron",
-  //         comment: "This is a test",
-  //       },
-  //     ],
-  //   },
-  // ]);
-
-  // CREATE TASK
   const handleCreateModalState: () => void = () => {
     setCreateModalOpen(!createModalOpen);
   };
@@ -329,8 +166,8 @@ const TasksContent = (): ReactElement => {
 
     // Limit dragging and dropping between Backlog and On Hold
     if (
-      (sourceStatus === "Backlog" && destinationStatus === "On Hold") ||
-      (sourceStatus === "On Hold" && destinationStatus === "Backlog")
+      (sourceStatus === Status.Backlog && destinationStatus === Status.OnHold) ||
+      (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
         const updatedMockData = tasks.map((task) => {
@@ -348,7 +185,7 @@ const TasksContent = (): ReactElement => {
     }
   };
 
-  const handleChange = (e: SelectChangeEvent<unknown>) => {
+  const handleTeamFilter = (e: SelectChangeEvent<unknown>) => {
     setSelectedTeam(e.target.value as string);
   };
 
@@ -376,6 +213,7 @@ const TasksContent = (): ReactElement => {
           task={selectedTask}
           onSave={handleUpdateTask}
         />
+
         <Grid container>
           <Grid item xs={calculateGridSize(Object.values(Status).length)}>
             <Select
@@ -391,7 +229,7 @@ const TasksContent = (): ReactElement => {
                   label: "Team 2",
                 },
               ]}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => handleTeamFilter(e)}
               value={selectedTeam}
             />
           </Grid>
@@ -399,14 +237,15 @@ const TasksContent = (): ReactElement => {
 
         <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
-        <div
-          style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}
-        >
+        <div style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}>
           <Grid container spacing={1} justifyContent="space-between">
             {Object.values(Status).map((status) => {
               const filteredData = tasks.filter(
                 (task) => task.status === status
               );
+
+              console.log("mamamo")
+              console.log(filteredData)
 
               return (
                 <Grid
@@ -436,8 +275,7 @@ const TasksContent = (): ReactElement => {
                         <Divider />
                         {filteredData.map((task, index) => (
                           <div>
-                            {task.status === "Backlog" ||
-                            task.status === "On Hold" ? (
+                            {task.status === Status.Backlog || task.status === Status.OnHold ? (
                               <Draggable
                                 key={task.name}
                                 draggableId={task.name}

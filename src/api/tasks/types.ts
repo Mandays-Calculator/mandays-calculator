@@ -14,6 +14,7 @@ interface Functionality {
 }
 
 export interface AllTasksResponse {
+  taskID: string;
   name: string;
   description: string;
   completion_date: string;
@@ -21,6 +22,7 @@ export interface AllTasksResponse {
   complexity: string;
   status: string;
   type: string;
+  tags: SelectObject[];
   functionality: Functionality[];
   comments: Comment[];
 }
