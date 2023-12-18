@@ -1,10 +1,5 @@
 import type { ReactElement } from "react";
-import type { 
-  MandaysForm, 
-  TaskType,
-  EstimationDetailsMode,
-  EstimationDetailsProps,
-} from ".";
+import type { MandaysForm, TaskType, EstimationDetailsMode, EstimationDetailsProps } from ".";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,14 +7,7 @@ import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Typography, Grid } from "@mui/material";
-import {
-  Form,
-  PageContainer,
-  PageLoader,
-  Stepper,
-  SvgIcon,
-  Title,
-} from "~/components";
+import { Form, PageContainer, PageLoader, Stepper, SvgIcon, Title } from "~/components";
 import { Select } from "~/components/form/select";
 import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
@@ -90,10 +78,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     const date = now.toLocaleDateString("en-CA").replaceAll("/", "-");
     const time = now.toLocaleTimeString("en-GB").replaceAll(":", "-");
 
-    createExcel(
-      generateEstimationData({ t }),
-      `SPRINT_${sprintName}_details_${date}_${time}.xlsx`
-    );
+    createExcel(generateEstimationData({ t }), `SPRINT_${sprintName}_details_${date}_${time}.xlsx`);
   };
 
   const mandaysForm = useFormik<MandaysForm>({
@@ -150,7 +135,12 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     {
       label: t(mandaysCalculator.resourcesTitle),
       icon: <SvgIcon name="mandays_estimation_tool" />,
-      content: <Resources isGeneratingPDF={isGeneratingPDF} mode={mode} />,
+      content: (
+        <Resources
+          isGeneratingPDF={isGeneratingPDF}
+          mode={mode}
+        />
+      ),
     },
     {
       label: t(mandaysCalculator.legend.title),
@@ -171,11 +161,12 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   return (
     <>
-      {isGeneratingPDF && (
-        <PageLoader labelOnLoad={t(mandaysCalculator.generatingPDFLabel)} />
-      )}
+      {isGeneratingPDF && <PageLoader labelOnLoad={t(mandaysCalculator.generatingPDFLabel)} />}
       <div id="divToPrint">
-        <Grid container justifyContent="space-between">
+        <Grid
+          container
+          justifyContent="space-between"
+        >
           <Grid item>
             <Title title={t(mandaysCalculator.label)} />
           </Grid>
@@ -190,11 +181,12 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           </Grid>
         </Grid>
         <PageContainer>
-          <Grid container justifyContent="space-between">
+          <Grid
+            container
+            justifyContent="space-between"
+          >
             <Grid item>
-              <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-                {sprintName}
-              </Typography>
+              <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>{sprintName}</Typography>
             </Grid>
             <HeaderButtons
               setIsExport={setIsExport}
@@ -206,7 +198,10 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
-            <Stepper steps={stepperObject} activeStep={activeTab} />
+            <Stepper
+              steps={stepperObject}
+              activeStep={activeTab}
+            />
             <ActionButtons
               activeTab={activeTab}
               handleBackEvent={handleBackEvent}

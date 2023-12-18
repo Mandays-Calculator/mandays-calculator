@@ -13,7 +13,7 @@ import AppRoutes from "~/routes/AppRoutes";
 import axiosInit from "~/api/axios.config";
 import { useDispatch } from "react-redux";
 import { updateUserState } from "./redux/reducers/user";
-import { useUnauthorizedModal } from "./hooks/modal";
+import { useErrorModals } from "./hooks/modal";
 import { removeStateStorage } from "./utils/helpers";
 
 const AuthenticatedApp = (): ReactElement => {
@@ -28,7 +28,7 @@ const AuthenticatedApp = (): ReactElement => {
     state: { loading, isAuthenticated },
     logout,
   } = useUserAuth();
-  const showUnauthorizedModal = useUnauthorizedModal();
+  const { showUnauthorizedModal, systemErrorModal } = useErrorModals();
 
   useEffect(() => {
     setLoadingAuth(true);
@@ -42,7 +42,7 @@ const AuthenticatedApp = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    axiosInit(isAuthenticated);
+    axiosInit();
   }, [isAuthenticated]);
 
   const AuthIdleApp = useIdleTimer(
@@ -76,12 +76,20 @@ const AuthenticatedApp = (): ReactElement => {
     <>
       {renderAuth()}
       <NotificationModal
+        disableCloseHeader={true}
         type="unauthorized"
         message={t(LocalizationKey.common.errorMessage.unauthorized)}
         open={showUnauthorizedModal}
         onConfirm={logout}
-        onCloseLabel="close"
         modalTitle={t(LocalizationKey.common.unauthorizedTitle)}
+      />
+      <NotificationModal
+        disableCloseHeader={true}
+        type="systemError"
+        message={t(LocalizationKey.common.errorMessage.genericError)}
+        open={systemErrorModal}
+        onConfirm={logout}
+        modalTitle={t(LocalizationKey.common.systemErrorTitle)}
       />
     </>
   );

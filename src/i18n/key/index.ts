@@ -116,6 +116,7 @@ const LocalizationKey = {
     idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
     logout: "common.idleTimeOut.logout",
     unauthorizedTitle: "common.unauthorized.title",
+    systemErrorTitle: "common.systemError.title",
   },
   mandaysCalculator: {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
@@ -274,7 +275,7 @@ const LocalizationKey = {
         noOfFeatures: "complexity.table.columns.noOfFeatures",
         description: "complexity.table.columns.description",
         samples: "complexity.table.columns.samples",
-      }
+      },
     },
     btnLabel: {
       addComplexity: "complexity.btnLabel.addComplexity",
@@ -299,9 +300,9 @@ const LocalizationKey = {
       submitError: "complexity.validationInfo.submitError",
       submitSuccess: "complexity.validationInfo.submitSuccess",
       deleteError: "complexity.validationInfo.deleteError",
-      deleteSuccess: "complexity.validationInfo.deleteSuccess"
-    }
-  }
+      deleteSuccess: "complexity.validationInfo.deleteSuccess",
+    },
+  },
 };
 
 export default LocalizationKey;

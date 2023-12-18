@@ -42,6 +42,9 @@
     "unauthorized": {
       "title": "Unauthorized"
     },
+    "systemError": {
+      "title": "System / Network Error!"
+    },
     "noData": "No Data",
     "somethingWentWrong": {
       "title": "SOMETHING WENT WRONG",
