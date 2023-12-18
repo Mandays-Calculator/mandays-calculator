@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Grid } from "@mui/material";
 import { useFormik } from "formik";
 
-import { useAddODC, useUpdateODC } from "~/mutations/odc";
+import { useAddODC, useUpdateODC, useAddHoliday } from "~/mutations/odc";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
@@ -19,7 +19,7 @@ import LocalizationKey from "~/i18n/key";
 import { IntValuesSchema, NewODCData, SucErrData } from "../utils";
 import AddTable from "./AddTable";
 import EditTable from "./EditTable";
-import { IsDuplicate, AddFormat, EditFormat } from ".";
+import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
 
 const AddODC = (props: AddProps): ReactElement => {
   const { apiData, data, formContext, setFormContext, setSuccessError } = props;
@@ -41,8 +41,10 @@ const AddODC = (props: AddProps): ReactElement => {
 
   const addMutation = useAddODC();
   const updateMutation = useUpdateODC();
+  const addHolMutation = useAddHoliday();
   const [addStatus, addCallApi] = useRequestHandler(addMutation.mutate);
   const [updateStatus, updateCallApi] = useRequestHandler(updateMutation.mutate);
+  const [addHolStatus, addHolCallApi] = useRequestHandler(addHolMutation.mutate);
 
   const [nameUnqError, setNameUnqError] = useState<boolean>(false);
   const [nameUnqErrorMsg, setNameUnqErrorMsg] = useState<string>("");
@@ -61,7 +63,13 @@ const AddODC = (props: AddProps): ReactElement => {
 
     if (!updateStatus.success && updateStatus.error.message !== "")
       setSuccessError({ ...SucErrData, isUpdateOdcError: true });
-  }, [addStatus.success, updateStatus.success]);
+
+    if (addHolStatus.success)
+      setSuccessError({ ...SucErrData, isAddHolidaySuccess: true });
+
+    if (!addHolStatus.success && addHolStatus.error.message !== "")
+      setSuccessError({ ...SucErrData, isAddHolidayError: true });
+  }, [addStatus.success, updateStatus.success, addHolStatus.success]);
 
   const handleAddODC = (): void => {
     const isNameError = IsDuplicate(apiData, values.name, "name", values.id);
@@ -74,8 +82,14 @@ const AddODC = (props: AddProps): ReactElement => {
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
     else setAbbrUnqErrorMsg("");
 
-    if (formContext === "Add") addCallApi(AddFormat(values));
-    if (formContext === "Edit") updateCallApi(EditFormat(values));
+    if (formContext === "Add") {
+      addCallApi(AddFormat(values));
+    }
+    
+    if (formContext === "Edit") {
+      updateCallApi(EditFormat(values));
+      addHolCallApi(AddHolidayFormat(values));
+    }
   };
 
   const handleClose = (): void => setFormContext("");

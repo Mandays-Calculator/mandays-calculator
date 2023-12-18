@@ -1,4 +1,4 @@
-import type { OdcParam, CreateOdcParam, UpdateOdcParam } from "~/api/odc";
+import type { OdcParam, CreateOdcParam, UpdateOdcParam, CreateHoliday, HolidayParam } from "~/api/odc";
 
 export const IsDuplicate = (
   arr: OdcParam[],
@@ -36,5 +36,32 @@ export const EditFormat = (obj: OdcParam): UpdateOdcParam => {
     active: obj.active,
     createDate: obj.createDate,
     lastUpdatedDate: obj.lastUpdatedDate,
+  };
+};
+
+export const AddHolidayFormat = (obj: OdcParam): CreateHoliday => {
+  const arr: {
+    odcId: string;
+    date: string;
+    recurring: string;
+    name: string;
+    createDate: string | null;
+    lastUpdatedDate: string | null;
+  }[] = [];
+
+  obj.holidays?.map((param: HolidayParam) => {
+    arr.push({
+      odcId: param.odcId,
+      date: param.date,
+      recurring: param.recurring,
+      name: param.name,
+      createDate: param.createDate,
+      lastUpdatedDate: param.lastUpdatedDate,
+    });
+  });
+
+  return {
+    odcId: obj.id,
+    data: arr,
   };
 };
