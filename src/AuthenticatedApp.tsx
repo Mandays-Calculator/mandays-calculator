@@ -88,7 +88,6 @@ const AuthenticatedApp = (): ReactElement => {
         type="systemError"
         message={t(LocalizationKey.common.errorMessage.genericError)}
         open={systemErrorModal}
-        onConfirm={logout}
         modalTitle={t(LocalizationKey.common.systemErrorTitle)}
       />
     </>

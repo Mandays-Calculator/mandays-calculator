@@ -58,7 +58,7 @@ const renderIcon = (type: ModalType): ReactElement => {
     case "success":
       return <WarningIcon color="success" />;
     default:
-      return <></>;
+      return <SvgIcon name="warning" $size={8} />;
   }
 };
 
