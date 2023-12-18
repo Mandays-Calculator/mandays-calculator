@@ -50,7 +50,12 @@ export const Select = (props: SelectProps): ReactElement => {
   };
 
   useEffect(() => {
-    setSelectedValues(value as SetStateAction<SelectObject[]>);
+    if (!multiple) {
+      setSelectedValues(value as SetStateAction<SelectObject[]>);
+    }
+    if (value) {
+      setSelectedValues(value as SetStateAction<SelectObject[]>);
+    }
   }, [value]);
 
   const defaultValue = multiple ? [] : "";
@@ -59,7 +64,7 @@ export const Select = (props: SelectProps): ReactElement => {
       return (
         <MenuItem
           disabled
-          sx={{ minHeight: "1em", lineHeight: "0.3em" }}
+          sx={{ minHeight: "1.1em", lineHeight: "0.3em" }}
           data-testid="select-placeholder"
         >
           <em>{placeholder}</em>
