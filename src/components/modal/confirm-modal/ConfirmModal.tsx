@@ -64,7 +64,11 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           variant="contained"
           color="primary"
           onClick={() => {
-            if (selectedRow !== null && onConfirmWithIndex && selectedRow) {
+            if (
+              selectedRow !== null &&
+              onConfirmWithIndex &&
+              selectedRow !== undefined
+            ) {
               onConfirmWithIndex(selectedRow);
             }
             if (onConfirm) {
