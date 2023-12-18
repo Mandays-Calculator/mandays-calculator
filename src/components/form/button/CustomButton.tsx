@@ -47,8 +47,7 @@ const StyledButton = styled(
     color: contrastTextMap[colorVariant!],
     textTransform: "none",
     borderRadius: "0.5rem",
-    paddingLeft: "20px",
-    paddingRight: "20px",
+    padding: theme.spacing(1.5, 2.9),
     "&:hover": {
       backgroundColor: colorsMap[colorVariant!],
       opacity: 0.9,

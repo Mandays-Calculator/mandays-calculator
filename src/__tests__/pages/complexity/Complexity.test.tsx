@@ -4,9 +4,8 @@ import ProviderWrapper from '~/__tests__/utils/ProviderWrapper';
 
 import { Complexity } from '~/pages/complexity/';
 import * as query from '~/queries/complexity/Complexities';
-import * as mutate from '~/mutations/complexity';
-// import { complexityById, tableData } from './utils/utils';
-import { complexityById, tableData } from './utils/utils';
+import * as mutate from '~/mutations/complexity/Complexity';
+import { tableData } from './utils/utils';
 
 jest.mock('react-i18next', () => ({
 	...jest.requireActual('react-i18next'),
@@ -82,9 +81,9 @@ describe('View complexity', () => {
 	test('Edit Complexity', async () => {
 		const user = UserEvent.setup();
 
-		jest.spyOn(query, 'useGetComplexitiesbyId').mockImplementation(
+		jest.spyOn(query, 'useGetComplexities').mockImplementation(
 			jest.fn().mockReturnValue({
-				data: complexityById
+				data: tableData
 			})
 		)
 
@@ -181,9 +180,7 @@ describe('View complexity', () => {
 	})
 
 	test('Loading circular progress', async () => {
-		const user = UserEvent.setup();
-
-		jest.spyOn(query, 'useGetComplexitiesbyId').mockImplementation(
+		jest.spyOn(query, 'useGetComplexities').mockImplementation(
 			jest.fn().mockReturnValue({
 				isLoading: true,
 			})
@@ -195,8 +192,6 @@ describe('View complexity', () => {
 			</ProviderWrapper>
 		);
 
-		const addButton = screen.getByRole('button', { name: 'complexity.btnLabel.addComplexity' });
-		await user.click(addButton);
 		const svg = screen.getByRole('progressbar')
 		expect(svg).toBeInTheDocument();
 	})
