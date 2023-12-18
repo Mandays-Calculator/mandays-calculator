@@ -121,14 +121,26 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
               </Stack>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Stack gap={1}>
                 <Typography style={styles.styledTypographyBold}>
                   Date Started
                 </Typography>
-                <Typography>
-                  {newTask ? newTask.completion_date : ""}
+                <Typography>{newTask ? newTask.createdDate : ""}</Typography>
+              </Stack>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                visibility: newTask?.status !== "Completed" ? "hidden" : "",
+              }}
+            >
+              <Stack gap={1}>
+                <Typography style={styles.styledTypographyBold}>
+                  Date Completed
                 </Typography>
+                <Typography>{newTask ? newTask.completionDate : ""}</Typography>
               </Stack>
             </Grid>
             <Grid item xs={12}>
