@@ -1,36 +1,57 @@
-import type { ODCListResponse, ODCSubmit } from "~/api/odc";
-
 export const NewODCData = {
   id: "",
   name: "",
   location: "",
   abbreviation: "",
-  holidays: [],
-  active: true,
+  holidays: null,
+  active: "true",
+  createDate: null,
+  lastUpdatedDate: null,
 };
 
 export const NewHolidayData = {
-  date: "",
-  holiday: "",
-};
-
-export const SubmitFormat = (data: ODCListResponse): ODCSubmit => {
-  return {
-    name: data.name,
-    abbreviation: data.abbreviation,
-    location: data.location,
-    holidays: data.holidays,
-    active: data.active,
-  };
+  id: "",
+  odcId: "",
+  recurring: "true",
+  name: "",
+  createDate: null,
+  lastUpdatedDate: null,
 };
 
 export const FakeHoliday = [
   {
-    date: "01/01/2023",
-    holiday: "New Year's Day"
+    id: "1",
+    odcId: "",
+    date: "2023-01-01",
+    recurring: "true",
+    name: "New Year's Day",
+    createDate: null,
+    lastUpdatedDate: null,
   },
   {
-    date: "01/22/2023",
-    holiday: "Lunar New Year"
+    id: "2",
+    odcId: "",
+    date: "2023-01-22",
+    recurring: "true",
+    name: "Lunar New Year",
+    createDate: null,
+    lastUpdatedDate: null,
   }
 ];
+
+export const SucErrData = {
+  isOdcError: false,
+  isHolidayError: false,
+  isAddOdcError: false,
+  isAddOdcSuccess: false,
+  isUpdateOdcError: false,
+  isUpdateOdcSuccess: false,
+  isDeleteOdcError: false,
+  isDeleteOdcSuccess: false,
+  isAddHolidayError: false,
+  isAddHolidaySuccess: false,
+  isUpdateHolidayError: false,
+  isUpdateHolidaySuccess: false,
+  isDeleteHolidayError: false,
+  isDeleteHolidaySuccess: false,
+};

@@ -17,6 +17,7 @@ import {
   Tooltip,
 } from "@mui/material";
 
+import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 import renderRole from "~/utils/helpers/renderRoleHelper";
 
@@ -38,6 +39,7 @@ const AppBarHeader = (): ReactElement => {
   const positions = user?.roles;
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [openLogoutModal, setOpenLogoutModal] = useState<boolean>(false);
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget);
@@ -48,7 +50,7 @@ const AppBarHeader = (): ReactElement => {
   };
 
   const handleLogoutUserMenu = (): void => {
-    logout();
+    setOpenLogoutModal(true);
   };
 
   const userMenu = [
@@ -127,6 +129,14 @@ const AppBarHeader = (): ReactElement => {
           </Toolbar>
         </StyledToolBarContainer>
       </Container>
+      <ConfirmModal
+        open={openLogoutModal}
+        onConfirm={() => logout()}
+        confirmLabel={t(LocalizationKey.common.logout)}
+        onClose={() => setOpenLogoutModal(false)}
+        message={t(LocalizationKey.common.idleTimeOutLabel)}
+        closeLabel={t(LocalizationKey.changePassword.btnlabel.cancel)}
+      />
     </StyledAppBar>
   );
 };

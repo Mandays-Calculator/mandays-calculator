@@ -43,12 +43,19 @@ export const Select = (props: SelectProps): ReactElement => {
   const getOptionValue = getOption(optionValueKey);
 
   const handleDelete = (valueToDelete: SelectObject) => {
-    const newSelectedValues = selectedValues.filter((value) => value !== valueToDelete);
+    const newSelectedValues = selectedValues.filter(
+      (value) => value !== valueToDelete
+    );
     setSelectedValues(newSelectedValues);
   };
 
   useEffect(() => {
-    setSelectedValues(value as SetStateAction<SelectObject[]>);
+    if (!multiple) {
+      setSelectedValues(value as SetStateAction<SelectObject[]>);
+    }
+    if (value) {
+      setSelectedValues(value as SetStateAction<SelectObject[]>);
+    }
   }, [value]);
 
   const defaultValue = multiple ? [] : "";
@@ -57,7 +64,7 @@ export const Select = (props: SelectProps): ReactElement => {
       return (
         <MenuItem
           disabled
-          sx={{ minHeight: "1em", lineHeight: "0.3em", padding: "0.5em 0" }}
+          sx={{ minHeight: "1.1em", lineHeight: "0.3em" }}
           data-testid="select-placeholder"
         >
           <em>{placeholder}</em>
@@ -74,12 +81,7 @@ export const Select = (props: SelectProps): ReactElement => {
               variant="filled"
               label={getOptionLabel(keyBy(options, getOptionValue)[value])}
               key={value}
-              deleteIcon={
-                <SvgIcon
-                  name="cross"
-                  $size={2}
-                />
-              }
+              deleteIcon={<SvgIcon name="cross" $size={2} />}
               onDelete={() => handleDelete(value as unknown as SelectObject)}
               onMouseDown={(e) => e.stopPropagation()}
             />
@@ -91,7 +93,10 @@ export const Select = (props: SelectProps): ReactElement => {
     return getOptionLabel(keyBy(options, getOptionValue)[selected as string]);
   };
 
-  const renderOptions = (valueOption: string, labelOption: string): ReactNode => {
+  const renderOptions = (
+    valueOption: string,
+    labelOption: string
+  ): ReactNode => {
     const filteredProps = {
       key: valueOption,
       value: valueOption,
@@ -118,11 +123,7 @@ export const Select = (props: SelectProps): ReactElement => {
   };
 
   return (
-    <FormControl
-      component="fieldset"
-      error={error}
-      fullWidth
-    >
+    <FormControl component="fieldset" error={error} fullWidth>
       <MuiSelect
         id={name}
         value={selectedValues}
