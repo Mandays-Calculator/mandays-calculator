@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
+// import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+
+import IconButton from "@mui/material/IconButton";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import Container from "@mui/material/Container";
+import { Typography } from "@mui/material";
 
 interface Card {
   id: number;
@@ -22,7 +25,7 @@ interface CardSliderProps {
 }
 
 const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [, setCurrentIndex] = useState(0);
 
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) =>
@@ -37,32 +40,61 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
   };
 
   return (
-    <Stack direction="row">
-      <>
-        <Container>
-          <Button variant="contained" onClick={handlePrevClick}>
-            <KeyboardArrowLeft />
-          </Button>
-          <Card
-            sx={{
-              textAlign: "center",
-              width: 250,
-            }}
-          >
-            <h2>{cards[currentIndex].title}</h2>
-            <p>{cards[currentIndex].estimated}</p>
-            <h1>{cards[currentIndex].percent1}</h1>
-            <p>{cards[currentIndex].remaining}</p>
-            <h1>{cards[currentIndex].percent2}</h1>
-            <p>{cards[currentIndex].annual}</p>
-            <h1>{cards[currentIndex].percent3}</h1>
-          </Card>
-          <Button variant="contained" size="small" onClick={handleNextClick}>
-            <KeyboardArrowRight />
-          </Button>
-        </Container>
-      </>
-    </Stack>
+    <>
+      <Stack
+        direction="row"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        spacing={1}
+      >
+        <IconButton
+          color="primary"
+          size="small"
+          aria-label="add to shopping cart"
+          onClick={handlePrevClick}
+        >
+          <KeyboardArrowLeft />
+        </IconButton>
+        <Grid container>
+          {cards.map((card) => (
+            <Grid item xs={3} paddingLeft={1} paddingRight={1}>
+              <Card>
+                <Typography align="center" color="primary" variant="h2">
+                  {card.title}
+                </Typography>
+                <Typography align="center" variant="subtitle1">
+                  {card.estimated}
+                </Typography>
+                <Typography align="center" variant="h2">
+                  {card.percent1}
+                </Typography>
+                <Typography align="center" variant="subtitle1">
+                  {card.remaining}
+                </Typography>
+                <Typography align="center" variant="subtitle1">
+                  {card.percent2}
+                </Typography>
+                <Typography align="center" variant="subtitle1">
+                  {card.annual}
+                </Typography>
+                <Typography align="center" variant="subtitle1">
+                  {card.percent3}
+                </Typography>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        <IconButton
+          color="primary"
+          size="small"
+          aria-label="add to shopping cart"
+          onClick={handleNextClick}
+        >
+          <KeyboardArrowRight />
+        </IconButton>
+      </Stack>
+    </>
   );
 };
 
