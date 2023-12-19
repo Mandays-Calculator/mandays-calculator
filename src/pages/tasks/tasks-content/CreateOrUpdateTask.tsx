@@ -1,5 +1,7 @@
-import { useTranslation } from "react-i18next";
+import { AllTasksResponse } from "~/api/tasks";
+
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Grid, Stack, Typography } from "@mui/material";
@@ -9,7 +11,6 @@ import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
 
 import ComplexityDetails from "./complexity-details";
-import { AllTasksResponse } from "~/api/tasks";
 
 interface CreateModalProps {
   open: boolean;

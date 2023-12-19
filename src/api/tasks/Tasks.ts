@@ -1,6 +1,6 @@
+import { AllTasksResponse, CreateTask, QueryResponse } from ".";
 import axios from "axios";
 import { getEnvConfig } from "~/utils/env-config";
-import { AllTasksResponse, CreateTask, QueryResponse } from ".";
 
 export const getTasks = async (
   id: string
