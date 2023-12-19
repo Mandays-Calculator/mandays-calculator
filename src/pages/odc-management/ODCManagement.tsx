@@ -1,89 +1,126 @@
 import type { ReactElement } from "react";
-import type { IntValues } from "./utils";
+import type { OdcParam } from "~/api/odc";
+import type { FormContext, SucErrType } from "./utils";
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useFormik } from "formik";
-
 import { useODCList } from "~/queries/odc/ODC";
-import { PageLoader, Title, Form } from "~/components";
-import { ConfirmModal } from "~/components/modal/confirm-modal";
+import { useDeleteODC } from "~/mutations/odc";
+import { useRequestHandler } from "~/hooks/request-handler";
+import { PageLoader, Title, PageContainer, ConfirmModal, Alert } from "~/components";
+import LocalizationKey from "~/i18n/key";
 
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
-import { IntValuesSchema, NewODCData } from "./utils";
+import { NewODCData, SucErrData, HasSuccess, HasError } from "./utils";
 
 const ODCManagement = (): ReactElement => {
-  const [isAdd, setIsAdd] = useState<boolean>(false);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [idx, setIdx] = useState<number>(0);
-  const [delIdx, setDelIdx] = useState<number | null>(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-
   const { t } = useTranslation();
-  const { data, isLoading } = useODCList();
-  const InitialValue = { odcList: data || [] };
+  const {
+    odc: { management, validationInfo },
+    common: { errorMessage: { genericError } }
+  } = LocalizationKey;
+  
+  const { data: apiData, isLoading, isError } = useODCList();
 
-  const ODCForm = useFormik<IntValues>({
-    initialValues: InitialValue,
-    validationSchema: IntValuesSchema,
-    enableReinitialize: true,
-    onSubmit: (): void => {},
-  });
+  const [initialValues, setInitialValues] = useState<OdcParam>(NewODCData);
+  const [formContext, setFormContext] = useState<FormContext>("");
+  const [idx, setIdx] = useState<string>("");
 
   useEffect(() => {
-    if (isAdd === true && isEdit === false) {
-      const arr = ODCForm.values.odcList;
-      arr.push(NewODCData);
-      setIdx(arr.length - 1);
-      ODCForm.setFieldValue(`ocdList`, arr);
-    }
-  }, [isAdd]);
+    if (formContext === "Edit" || formContext === "Delete")
+      setInitialValues(apiData?.find((value: OdcParam) => value.id === idx) ?? NewODCData);
+    if (formContext === "Add")
+      setInitialValues(NewODCData);
+  }, [formContext]);
 
-  if (isLoading) {
-    return <PageLoader />;
-  } else {
-    return (
-      <>
-        <Title title={t("odc.management.label")} />
-        <Form instance={ODCForm}>
-          {isAdd ? (
-            <AddODC
-              setIsAdd={setIsAdd}
-              isEdit={isEdit}
-              idx={idx}
-              data={InitialValue.odcList}
-            />
-          ) : (
-            <ViewODC
-              setIsAdd={setIsAdd}
-              setDeleteModalOpen={setDeleteModalOpen}
-              setIsEdit={setIsEdit}
-              setIdx={setIdx}
-              setDelIdx={setDelIdx}
-            />
-          )}
-        </Form>
+  const delIdx = apiData?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
 
-        <ConfirmModal
-          onConfirmWithIndex={(): void => {
-            const dIdx = delIdx || 0;
-            const arr = ODCForm.values.odcList;
-            // arr.splice(dIdx, 1);
-            setDeleteModalOpen(false);
-            // postUpdateAPI
-            arr[dIdx].active = false;
-            ODCForm.setFieldValue(`odcList`, arr);
-            console.log("Delete API", arr, dIdx);
-          }}
-          open={deleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-          selectedRow={delIdx}
+  const deleteMutation = useDeleteODC();
+  const [deleteStatus, deleteCallApi] = useRequestHandler(deleteMutation.mutate);
+
+  const [successError, setSuccessError] = useState<SucErrType>(SucErrData);
+
+  useEffect(() => {
+    if (isError)
+      setSuccessError({ ...SucErrData, isOdcError: true });
+
+    if (deleteStatus.success)
+      setSuccessError({ ...SucErrData, isDeleteOdcSuccess: true });
+
+    if (!deleteStatus.success && deleteStatus.error.message !== "") 
+      setSuccessError({ ...SucErrData, isDeleteOdcError: true });
+  }, [isError, deleteStatus.success]);
+
+  if (isLoading) { return <PageLoader /> };
+  return (
+    <>
+      <Title title={t(management)} />
+      <PageContainer sx={{ background: "#FFFFFF" }}>
+        {formContext === "" && (
+          <ViewODC
+            data={apiData || []}
+            setFormContext={setFormContext}
+            setIdx={setIdx}
+          />
+        )}
+        {(formContext === "Add" || formContext === "Edit") && (
+          <AddODC
+            apiData={apiData || []}
+            data={initialValues}
+            formContext={formContext}
+            setFormContext={setFormContext}
+            setSuccessError={setSuccessError}
+          />
+        )}
+      </PageContainer>
+      <ConfirmModal
+        onConfirmWithIndex={(): void => {
+          setFormContext("");
+          deleteCallApi({ id: idx });
+        }}
+        open={formContext === "Delete"}
+        onClose={() => setFormContext("")}
+        selectedRow={delIdx}
+      />
+      {(successError.isOdcError || successError.isHolidayError) && (
+        <Alert
+          open={successError.isOdcError || successError.isHolidayError}
+          message={t(genericError)}
+          type={"error"}
         />
-      </>
-    );
-  }
+      )}
+      {(successError.isDeleteOdcSuccess || successError.isDeleteHolidaySuccess) && (
+        <Alert
+          open={successError.isDeleteOdcSuccess || successError.isDeleteHolidaySuccess}
+          message={t(validationInfo.deleteSuccess)}
+          type={"success"}
+        />
+      )}
+      {(successError.isDeleteOdcError || successError.isDeleteHolidayError) && (
+        <Alert
+          open={successError.isDeleteOdcError || successError.isDeleteHolidayError}
+          message={t(validationInfo.deleteError)}
+          type={"error"}
+        />
+      )}
+      {HasSuccess(successError) && (
+        <Alert
+          open={HasSuccess(successError)}
+          message={t(validationInfo.submitSuccess)}
+          type={"success"}
+        />
+      )}
+      {HasError(successError) && (
+        <Alert
+          open={HasError(successError)}
+          message={t(validationInfo.submitError)}
+          type={"error"}
+        />
+      )}
+    </>
+  );
 };
 
 export default ODCManagement;
