@@ -17,6 +17,7 @@ import { CHANNELS, ERROR_CODES } from "~/utils/constants";
  * @param isAuthenticated - Indicates if the user is currently authenticated.
  */
 const init = async (): Promise<void> => {
+  let isUnauthorizedUser = false;
   const { items, events } = CHANNELS;
   const channel = new BroadcastChannel(items.sessionState);
 
@@ -25,6 +26,12 @@ const init = async (): Promise<void> => {
       const user = getUser();
       if (user) {
         config.headers.Authorization = `Bearer ${user?.token?.accessToken}`;
+        if (isUnauthorizedUser) {
+          // Cancel the request if a 401 error was previously received
+          const cancel = axios.CancelToken.source();
+          config.cancelToken = cancel.token;
+          cancel.cancel("Cancelled due to previously received 401 error");
+        }
       }
       return config;
     },
@@ -35,16 +42,20 @@ const init = async (): Promise<void> => {
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
       const user = getUser();
-      if (error.response && error.response.status == 401 && user) {
-        channel.postMessage(events.unauthorized);
+      if (user) {
+        if (error.response && error.response.status == 401) {
+          isUnauthorizedUser = true;
+          channel.postMessage(events.unauthorized);
+        }
+        if (
+          error &&
+          (error as unknown as GenericErrorResponse).errorCode ===
+            ERROR_CODES.genericError
+        ) {
+          channel.postMessage(events.systemError);
+        }
       }
-      if (
-        error &&
-        (error as unknown as GenericErrorResponse).errorCode ===
-          ERROR_CODES.genericError
-      ) {
-        channel.postMessage(events.systemError);
-      }
+
       const axiosError = error as AxiosError<GenericErrorResponse>;
       return axiosError && axiosError.response
         ? Promise.reject(axiosError.response.data)

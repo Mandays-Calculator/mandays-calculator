@@ -20,11 +20,12 @@ export function useErrorHandler(
     switch (error.errorCode) {
       // only need to add common cases
       case ERROR_CODES.genericError:
-        return error.message || t(common.errorMessage.genericError);
+        return t(common.errorMessage.genericError);
       case "":
       case null:
       case undefined:
         return "";
+      case ERROR_CODES.userNotFound:
       default:
         return error.message;
     }

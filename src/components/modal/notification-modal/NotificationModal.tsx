@@ -1,62 +1,32 @@
 import type { ReactElement, ReactNode } from "react";
+import type { ModalType, NotificationModalProps } from "./types";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+
 import CloseIcon from "@mui/icons-material/Close";
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
 import WarningIcon from "@mui/icons-material/Warning";
 
 import { Modal, SvgIcon } from "~/components";
-import LocalizationKey from "~/i18n/key";
 import { CustomButton } from "~/components/form/button";
+import LocalizationKey from "~/i18n/key";
 
-import { ModalType, NotificationModalProps } from "./types";
-
-const StyledModalTitle = styled(Typography)({
-  color: "white",
-  fontWeight: "bold",
-  margin: ".55rem 0 0 .55rem",
-});
-
-const StyledModalHeader = styled(Box)(({ theme }) => ({
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "4.5rem",
-  position: "absolute",
-  background: theme.palette.primary.main,
-}));
-
-const StyledIconButton = styled(IconButton)({
-  position: "absolute",
-  top: 5,
-  right: 8,
-  color: "white",
-});
-
-const StyledTitlePosition = styled(Box)({
-  position: "absolute",
-  top: 8,
-  left: 8,
-});
+import {
+  StyledIconButton,
+  StyledModalHeader,
+  StyledModalTitle,
+  StyledTitlePosition,
+} from "./styles";
 
 const renderIcon = (type: ModalType): ReactElement => {
   switch (type) {
+    case "success":
+      return <WarningIcon color="success" />;
     case "error":
     case "warning":
     case "unauthorized":
-      return <SvgIcon name="warning" $size={8} />;
-    case "success":
-      return <WarningIcon color="success" />;
     default:
       return <SvgIcon name="warning" $size={8} />;
   }
@@ -94,7 +64,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
       return (
         <>
           {typeof modalTitle === "string" ? (
-            <StyledModalHeader sx={{ p: 1 }}>
+            <StyledModalHeader sx={{ p: 1 }} type={type}>
               {!disableCloseHeader && (
                 <StyledIconButton color="inherit" onClick={handleClose}>
                   <CloseIcon fontSize="large" />
@@ -176,7 +146,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
             <Button
               variant="outlined"
               onClick={handleClose}
-              sx={{ mr: 3, width: 150, fontSize: 10 }}
+              sx={{ mr: 3, width: 150, fontSize: 14 }}
             >
               {onCloseLabel || t(LocalizationKey.common.cancelBtn)}
             </Button>
@@ -184,8 +154,8 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
           <CustomButton
             variant="contained"
-            color="primary"
-            sx={{ width: 150, fontSize: 10 }}
+            colorVariant={type !== "success" ? "error" : "primary"}
+            sx={{ width: 150, fontSize: 14 }}
             onClick={() => {
               setIsOpen(false);
               if (onConfirm) {
