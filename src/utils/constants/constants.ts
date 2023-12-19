@@ -54,4 +54,5 @@ export const SESSION_STORAGE_ITEMS = {
 export const ERROR_CODES = {
   genericError: "GE000001",
   userNotFound: "US000004",
+  networkError: "ERR_NETWORK",
 };

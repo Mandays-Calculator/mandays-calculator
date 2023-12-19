@@ -17,7 +17,7 @@ import { useCommonOption } from "~/queries/common/options/Options";
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
 
-  const userOptions = useCommonOption("user");
+  const userOptions = useCommonOption("odc");
   console.log(userOptions, "Datas");
   const [deleteModalOpen, setDeleteModalOpen] = useState<{
     open: boolean;
