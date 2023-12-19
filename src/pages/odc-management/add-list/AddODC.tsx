@@ -135,31 +135,22 @@ const AddODC = (props: AddProps): ReactElement => {
       )}
       <Grid container spacing={2} alignItems="center" mt={1}>
         <Grid item xs={12} container justifyContent="flex-end">
-          {formContext === "Edit" && (
-            <>
-              <CustomButton
-                type="submit"
-                sx={{ mr: 2 }}
-                onClick={handleAddODC}
-              >
-                {t(btnlabel.save)}
-              </CustomButton>
-              <CustomButton
-                type="button"
-                onClick={handleClose}
-              >
-                {t(btnlabel.cancel)}
-              </CustomButton>
-            </>
-          )}
-          {formContext === "Add" && (
-            <CustomButton
-              type="submit"
-              onClick={handleAddODC}
-            >
-              {t(btnlabel.addOdc)}
-            </CustomButton>
-          )}
+          <CustomButton
+            type="submit"
+            sx={{ mr: 2 }}
+            onClick={handleAddODC}
+          >
+            {formContext === "Add"
+              ? t(btnlabel.addOdc)
+              : t(btnlabel.save)
+            }
+          </CustomButton>
+          <CustomButton
+            type="button"
+            onClick={handleClose}
+          >
+            {t(btnlabel.cancel)}
+          </CustomButton>
         </Grid>
       </Grid>
     </Form>
