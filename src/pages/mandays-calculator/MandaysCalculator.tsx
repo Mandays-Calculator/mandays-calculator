@@ -15,6 +15,7 @@ import { ConfirmModal } from "~/components/modal/confirm-modal";
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
+
   const [deleteModalOpen, setDeleteModalOpen] = useState<{
     open: boolean;
     sprintId: string | null;
