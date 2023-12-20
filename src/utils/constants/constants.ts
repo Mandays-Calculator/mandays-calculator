@@ -32,6 +32,37 @@ export const rolesData = [
   },
 ];
 
+export const CAREER_STEPS = [
+  {
+    label: "I03",
+    value: "I03",
+  },
+  {
+    label: "I04",
+    value: "I04",
+  },
+  {
+    label: "I05",
+    value: "I05",
+  },
+  {
+    label: "I06",
+    value: "I06",
+  },
+  {
+    label: "I07",
+    value: "I07",
+  },
+  {
+    label: "I08",
+    value: "I08",
+  },
+  {
+    label: "I09",
+    value: "I09",
+  },
+];
+
 export const ERROR_MESSAGES = {
   unauthorized:
     "Access denied. The token provided is unauthorized or has expired.",

@@ -12,13 +12,9 @@ import LocalizationKey from "~/i18n/key";
 import { mandaysCalculatorData } from "./utils/tableData";
 import { SprintListColumns } from "./utils/columns";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
-import { useCommonOption } from "~/queries/common/options/Options";
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
-
-  const userOptions = useCommonOption("odc");
-  console.log(userOptions, "Datas");
   const [deleteModalOpen, setDeleteModalOpen] = useState<{
     open: boolean;
     sprintId: string | null;
