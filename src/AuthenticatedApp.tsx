@@ -28,7 +28,8 @@ const AuthenticatedApp = (): ReactElement => {
     state: { loading, isAuthenticated },
     logout,
   } = useUserAuth();
-  const { showUnauthorizedModal, systemErrorModal } = useErrorModals();
+  const { showUnauthorizedModal, systemErrorModal, setSystemErrorModal } =
+    useErrorModals();
 
   useEffect(() => {
     setLoadingAuth(true);
@@ -88,6 +89,11 @@ const AuthenticatedApp = (): ReactElement => {
         type="systemError"
         message={t(LocalizationKey.common.errorMessage.genericError)}
         open={systemErrorModal}
+        onConfirm={() => {
+          if (setSystemErrorModal) {
+            setSystemErrorModal(false);
+          }
+        }}
         modalTitle={t(LocalizationKey.common.systemErrorTitle)}
       />
     </>
