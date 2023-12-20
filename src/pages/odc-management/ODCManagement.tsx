@@ -7,13 +7,18 @@ import { useTranslation } from "react-i18next";
 
 import { useODCList } from "~/queries/odc/ODC";
 import { useDeleteODC } from "~/mutations/odc";
-import { useRequestHandler } from "~/hooks/request-handler";
 import { PageLoader, Title, PageContainer, ConfirmModal, Alert } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
 import AddODC from "./add-list/AddODC";
 import ViewODC from "./view-list/ViewODC";
-import { NewODCData, SucErrData, HasSuccess, HasError } from "./utils";
+import {
+  NewODCData,
+  SucErrData,
+  HasError,
+  HasSuccess,
+  MutationOptions
+} from "./utils";
 
 const ODCManagement = (): ReactElement => {
   const { t } = useTranslation();
@@ -23,10 +28,16 @@ const ODCManagement = (): ReactElement => {
   } = LocalizationKey;
   
   const { data: apiData, isLoading, isError } = useODCList();
+  const {
+    mutate: deleteMutation,
+    isError: isDeleteError,
+    isSuccess: isDeleteSuccess
+  } = useDeleteODC();
 
   const [initialValues, setInitialValues] = useState<OdcParam>(NewODCData);
   const [formContext, setFormContext] = useState<FormContext>("");
   const [idx, setIdx] = useState<string>("");
+  const [successError, setSuccessError] = useState<SucErrType>(SucErrData);
 
   useEffect(() => {
     if (formContext === "Edit" || formContext === "Delete")
@@ -35,23 +46,13 @@ const ODCManagement = (): ReactElement => {
       setInitialValues(NewODCData);
   }, [formContext]);
 
-  const delIdx = apiData?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
-
-  const deleteMutation = useDeleteODC();
-  const [deleteStatus, deleteCallApi] = useRequestHandler(deleteMutation.mutate);
-
-  const [successError, setSuccessError] = useState<SucErrType>(SucErrData);
-
   useEffect(() => {
-    if (isError)
-      setSuccessError({ ...SucErrData, isOdcError: true });
+    MutationOptions(isError, "isOdcError", setSuccessError);
+    MutationOptions(isDeleteSuccess, "isDeleteOdcSuccess", setSuccessError);
+    MutationOptions(isDeleteError, "isDeleteOdcError", setSuccessError);
+  }, [isError, isDeleteSuccess, isDeleteError]);
 
-    if (deleteStatus.success)
-      setSuccessError({ ...SucErrData, isDeleteOdcSuccess: true });
-
-    if (!deleteStatus.success && deleteStatus.error.message !== "") 
-      setSuccessError({ ...SucErrData, isDeleteOdcError: true });
-  }, [isError, deleteStatus.success]);
+  const delIdx = apiData?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
 
   if (isLoading) { return <PageLoader /> };
   return (
@@ -76,9 +77,10 @@ const ODCManagement = (): ReactElement => {
         )}
       </PageContainer>
       <ConfirmModal
-        onConfirmWithIndex={(): void => {
+        onConfirm={(): void => {
+          console.log("confirm")
           setFormContext("");
-          deleteCallApi({ id: idx });
+          deleteMutation(idx);
         }}
         open={formContext === "Delete"}
         onClose={() => setFormContext("")}
