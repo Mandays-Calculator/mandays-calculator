@@ -1,5 +1,7 @@
-import { useTranslation } from "react-i18next";
+import { AllTasksResponse } from "~/api/tasks";
+
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Grid, Stack, Typography } from "@mui/material";
@@ -9,7 +11,6 @@ import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
 
 import ComplexityDetails from "./complexity-details";
-import { AllTasksResponse } from "~/api/tasks";
 
 interface CreateModalProps {
   open: boolean;
@@ -24,17 +25,16 @@ const initialTaskState: AllTasksResponse = {
   taskID: "1",
   name: "Sample",
   description: "",
-  completion_date: "12/16/2023",
+  createdDate: "11/16/2023",
+  completionDate: "12/16/2023",
   sprint: "2",
   complexity: "",
   status: "Backlog",
   type: "",
-  functionality: [
-    {
-      id: "2413054d-9945-11ee-a2d5-244bfee2440b",
-      name: "Simple Function",
-    },
-  ],
+  functionality: {
+    id: "2413054d-9945-11ee-a2d5-244bfee2440b",
+    name: "Simple Function",
+  },
   tags: [],
   comments: [
     {
@@ -61,14 +61,12 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
 
   useEffect(() => {
     setNewTask(task || initialTaskState);
-    // setSelectedTags(task?.tags || []);
   }, [task]);
 
   const handleCreateOrUpdateTask = (): void => {
     if (isCreate) {
       onCreateTask(newTask);
       setNewTask(initialTaskState);
-      // setSelectedTags([]);
     } else {
       onCreateTask(newTask);
     }

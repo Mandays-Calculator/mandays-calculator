@@ -67,7 +67,7 @@ const TaskDetailsCard = ({
       <div style={styles.marginBottom.mbFive}>{data.description}</div>
       <div style={styles.infoSection}>
         <EventIcon style={{ marginRight: 5 }} />
-        {data?.completion_date}
+        {data?.completionDate}
       </div>
       <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>

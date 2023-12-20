@@ -115,6 +115,7 @@ const LocalizationKey = {
     idleTimeOutTitle: "common.idleTimeOut.title",
     idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
     logout: "common.idleTimeOut.logout",
+    logoutConfirmLabel: "common.idleTimeOut.logoutConfirmLabel",
     unauthorizedTitle: "common.unauthorized.title",
     systemErrorTitle: "common.systemError.title",
   },
@@ -253,6 +254,41 @@ const LocalizationKey = {
     errorMessage: {
       email: "userManagement.errorMessage.email",
     },
+  },
+  odc: {
+    management: "odc.management.label",
+    label: {
+      name: "odc.label.name",
+      abbreviation: "odc.label.abbreviation",
+      location: "odc.label.location",
+      holidays: "odc.label.holidays",
+      date: "odc.label.date",
+      holiday: "odc.label.holiday",
+      noHolidays: "odc.label.noHolidays"
+    },
+    modal: {
+      deleteLabel: "odc.modal.deleteLabel",
+      yesPleaseBtn: "odc.modal.yesPleaseBtn",
+      noThanksBtn: "odc.modal.noThanksBtn"
+    },
+    btnlabel: {
+      addOdc: "odc.btnlabel.addOdc",
+      addHoliday: "odc.btnlabel.addHoliday",
+      save: "odc.btnlabel.save",
+      cancel: "odc.btnlabel.cancel",
+      edit: "odc.btnlabel.edit"
+    },
+    validationInfo: {
+      nameReq: "odc.validationInfo.nameReq",
+      nameUnq: "odc.validationInfo.nameUnq",
+      abbrUnq: "odc.validationInfo.abbrUnq",
+      locReq: "odc.validationInfo.locReq",
+      submitError: "odc.validationInfo.submitError",
+      submitSuccess: "odc.validationInfo.submitSuccess",
+      deleteError: "odc.validationInfo.deleteError",
+      deleteSuccess: "odc.validationInfo.deleteSuccess"
+    },
+    placeholder: "odc.placeholder"
   },
   complexity: {
     title: "complexity.title",

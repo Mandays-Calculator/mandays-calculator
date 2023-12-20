@@ -17,13 +17,14 @@ export interface AllTasksResponse {
   taskID: string;
   name: string;
   description: string;
-  completion_date: string;
+  createdDate: string;
+  completionDate: string;
   sprint: string;
   complexity: string;
   status: string;
   type: string;
   tags: SelectObject[];
-  functionality: Functionality[];
+  functionality: Functionality;
   comments: Comment[];
 }
 

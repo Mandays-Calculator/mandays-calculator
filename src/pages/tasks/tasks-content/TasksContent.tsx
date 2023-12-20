@@ -47,21 +47,23 @@ const calculateGridSize = (numStatuses: number): number => {
   return 12 / numStatuses;
 };
 
-const StatusContainer = styled("div")(({ backgroundColor }: { backgroundColor: string }) => ({
-  backgroundColor:
-    backgroundColor === Status.Backlog
-      ? StatusContainerColor.Backlog
-      : backgroundColor === Status.NotYetStarted
+const StatusContainer = styled("div")(
+  ({ backgroundColor }: { backgroundColor: string }) => ({
+    backgroundColor:
+      backgroundColor === Status.Backlog
+        ? StatusContainerColor.Backlog
+        : backgroundColor === Status.NotYetStarted
         ? StatusContainerColor.NotYetStarted
         : backgroundColor === Status.InProgress
-          ? StatusContainerColor.InProgress
-          : backgroundColor === Status.OnHold
-            ? StatusContainerColor.OnHold
-            : StatusContainerColor.Completed,
-  borderRadius: 10,
-  width: "100%",
-  padding: 15,
-}));
+        ? StatusContainerColor.InProgress
+        : backgroundColor === Status.OnHold
+        ? StatusContainerColor.OnHold
+        : StatusContainerColor.Completed,
+    borderRadius: 10,
+    width: "100%",
+    padding: 15,
+  })
+);
 
 const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
   fontSize: 18,
@@ -71,24 +73,27 @@ const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
     color === Status.NotYetStarted
       ? StatusTitleColor.NotYetStarted
       : color === Status.InProgress
-        ? StatusTitleColor.InProgress
-        : color === Status.OnHold
-          ? StatusTitleColor.OnHold
-          : color === Status.Completed
-            ? StatusTitleColor.Completed
-            : StatusTitleColor.Backlog,
+      ? StatusTitleColor.InProgress
+      : color === Status.OnHold
+      ? StatusTitleColor.OnHold
+      : color === Status.Completed
+      ? StatusTitleColor.Completed
+      : StatusTitleColor.Backlog,
 }));
 
-const StyledCreateTaskIconButton = styled(Grid)(({ display }: { display: string }) => ({
-  fontSize: 25,
-  fontWeight: "bolder",
-  float: "right",
-  cursor: "pointer",
-  display: display !== Status.Backlog ? "none" : "",
-}));
+const StyledCreateTaskIconButton = styled(Grid)(
+  ({ display }: { display: string }) => ({
+    fontSize: 25,
+    fontWeight: "bolder",
+    float: "right",
+    cursor: "pointer",
+    display: display !== Status.Backlog ? "none" : "",
+  })
+);
 
 const TasksContent = (): ReactElement => {
   const { data: tasksData } = useTasks("DEV");
+  // const { data: tasksData } = { data: { data: MockData } };
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
 
   useEffect(() => {
@@ -98,12 +103,15 @@ const TasksContent = (): ReactElement => {
   }, [tasksData]);
 
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
-  const [viewDetailsModalOpen, setViewDetailsModalOpen] = useState<boolean>(false);
+  const [viewDetailsModalOpen, setViewDetailsModalOpen] =
+    useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
 
-  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(null);
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
+    null
+  );
 
   const handleCreateModalState: () => void = () => {
     setCreateModalOpen(!createModalOpen);
@@ -165,7 +173,8 @@ const TasksContent = (): ReactElement => {
 
     // Limit dragging and dropping between Backlog and On Hold
     if (
-      (sourceStatus === Status.Backlog && destinationStatus === Status.OnHold) ||
+      (sourceStatus === Status.Backlog &&
+        destinationStatus === Status.OnHold) ||
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
@@ -236,15 +245,14 @@ const TasksContent = (): ReactElement => {
 
         <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
-        <div style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}>
+        <div
+          style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}
+        >
           <Grid container spacing={1} justifyContent="space-between">
             {Object.values(Status).map((status) => {
               const filteredData = tasks.filter(
                 (task) => task.status === status
               );
-
-              console.log("mamamo")
-              console.log(filteredData)
 
               return (
                 <Grid
@@ -262,10 +270,15 @@ const TasksContent = (): ReactElement => {
                       >
                         <Grid item container alignItems={"center"}>
                           <Grid item xs={11}>
-                            <StyledStatusTitle color={status}>{status}</StyledStatusTitle>
+                            <StyledStatusTitle color={status}>
+                              {status}
+                            </StyledStatusTitle>
                           </Grid>
                           <Grid item xs={1}>
-                            <StyledCreateTaskIconButton display={status} onClick={handleCreateModalState}>
+                            <StyledCreateTaskIconButton
+                              display={status}
+                              onClick={handleCreateModalState}
+                            >
                               +
                             </StyledCreateTaskIconButton>
                           </Grid>
@@ -274,7 +287,8 @@ const TasksContent = (): ReactElement => {
                         <Divider />
                         {filteredData.map((task, index) => (
                           <div>
-                            {task.status === Status.Backlog || task.status === Status.OnHold ? (
+                            {task.status === Status.Backlog ||
+                            task.status === Status.OnHold ? (
                               <Draggable
                                 key={task.name}
                                 draggableId={task.name}
