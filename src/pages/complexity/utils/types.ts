@@ -22,4 +22,5 @@ export type ComplexityFormsType = {
   data: ForGetComplexities[];
   setIsEditError: (isEditError: boolean) => void;
   setIsEditSuccess: (isEditSuccess: boolean) => void;
+  setIsEditLoading: (isLoading: boolean) => void;
 };

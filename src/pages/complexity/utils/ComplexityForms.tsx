@@ -6,11 +6,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
-import {
-	Divider,
-	Typography,
-	Grid,
-} from '@mui/material';
+import { Divider, Typography, Grid } from '@mui/material';
 
 import { usePostComplexities, usePutComplexities } from '~/mutations/complexity';
 import { Form } from '~/components';
@@ -35,10 +31,14 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		data,
 		setIsEditError,
 		setIsEditSuccess,
+		setIsEditLoading,
 	} = props;
 
 	const { t } = useTranslation();
 	const { complexity: { label, btnLabel } } = LocalizationKey;
+
+	const { mutate: mutateAddComplexities, isLoading: isAddLoading } = usePostComplexities();
+	const { mutate: mutateEditComplexities, isLoading: isEditLoading } = usePutComplexities();
 
 	const [initialValue, setInitialValue] = useState<ComplexityForm>(complexityInitialValues);
 	const apiData = data.find((value: ForGetComplexities) => value.id === complexityId);
@@ -52,14 +52,6 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 	} = apiData ?? {};
 	const [numberOfDayFrom, numberOfDayTo] = handleSplitValues(numberOfDays);
 	const [numberOfFeaturesFrom, numberOfFeaturesTo] = handleSplitValues(numberOfFeatures);
-	const { mutate: mutateAddComplexities } = usePostComplexities();
-	const { mutate: mutateEditComplexities } = usePutComplexities();
-
-	const handleClose = (): void => {
-		addEditComplexityForm.resetForm();
-		setContext('');
-		handleCloseAddEdit();
-	};
 
 	const addEditComplexityForm = useFormik<ComplexityForm>({
 		initialValues: initialValue,
@@ -98,6 +90,8 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		},
 	});
 
+	const { errors } = addEditComplexityForm;
+
 	useEffect(() => {
 		if (formContext === 'Add')
 			setInitialValue(complexityInitialValues);
@@ -111,9 +105,18 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 				description,
 				samples,
 			});
-	}, [apiData, formContext])
+	}, [apiData, formContext]);
 
-	const { errors } = addEditComplexityForm;
+	useEffect(() => {
+		if (isAddLoading || isEditLoading)
+			setIsEditLoading(isAddLoading || isEditLoading);
+	}, [isAddLoading, isEditLoading])
+
+	const handleClose = (): void => {
+		addEditComplexityForm.resetForm();
+		setContext('');
+		handleCloseAddEdit();
+	};
 
 	const handleError = (error: string | undefined): boolean => {
 		return error !== undefined;
