@@ -1,5 +1,5 @@
 import type { UserListResponse } from "~/api/user-management";
-import type { ODCListResponse } from "~/api/odc";
+import type { OdcParam } from "~/api/odc";
 import type { RoleTypeResponse } from "~/api/common";
 import type { ForGetComplexities, GetComplexities } from "~/api/complexity";
 import type {
@@ -11,7 +11,7 @@ import type {
 
 import { useQuery, UseQueryResult } from "react-query";
 
-import { getODCList } from "~/api/odc/ODC";
+import { getODC } from "~/api/odc/ODC";
 import { getComplexities } from "~/api/complexity";
 import { getRoles } from "~/api/common/Common";
 import { getUserList } from "~/api/user-management/UserManagement";
@@ -63,7 +63,7 @@ const getCommonOption = <T>(type: CommonType): UseQueryResult<any, Error> => {
         cacheTime: cacheTime,
       });
     case "odc":
-      return useQuery<ODCListResponse[], Error>("odcList", getODCList, {
+      return useQuery<OdcParam[], Error>("odcList", getODC, {
         staleTime: Infinity,
         cacheTime: cacheTime,
       });

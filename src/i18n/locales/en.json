@@ -173,6 +173,16 @@
       "cancel": "Cancel",
       "edit": "Edit"
     },
+    "validationInfo": {
+      "nameReq": "ODC name is required.",
+      "nameUnq": "ODC name must be unique.",
+      "abbrUnq": "Abbreviation must be unique.",
+      "locReq": "Location is required.",
+      "submitError": "There is a problem in your submitted data. Please check.",
+      "submitSuccess": "Complexity successfully submitted.",
+      "deleteError": "There is a problem in your deleted data. Please check.",
+      "deleteSuccess": "Complexity successfully deleted."
+    },
     "placeholder": "Enter keyword here..."
   },
   "project": {
