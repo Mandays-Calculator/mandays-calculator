@@ -10,6 +10,8 @@ import LocalizationKey from "~/i18n/key";
 import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
 
+import { useGetComplexities } from "~/queries/complexity/Complexities";
+
 import ComplexityDetails from "./complexity-details";
 
 interface CreateModalProps {
@@ -85,6 +87,18 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
     setOpenComplexity(!openComplexity);
     onClose();
   };
+
+  const complexities = useGetComplexities();
+
+  const complexityData = complexities.data;
+  const complexityList = Array.isArray(complexityData)
+    ? complexityData?.map((data) => {
+        return {
+          label: data.name,
+          value: data.id,
+        };
+      })
+    : [];
 
   return (
     <>
@@ -177,11 +191,7 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                     handleSelectChange("complexity", e.target.value as string)
                   }
                   value={newTask.complexity}
-                  options={[
-                    { value: "complexity1", label: "Complexity 1" },
-                    { value: "complexity2", label: "Complexity 2" },
-                    { value: "complexity3", label: "Complexity 3" },
-                  ]}
+                  options={complexityList}
                 />
               </Stack>
             </Grid>
