@@ -9,14 +9,13 @@ import { Grid } from "@mui/material";
 import { useFormik } from "formik";
 
 import { useAddODC, useUpdateODC, useAddHoliday } from "~/mutations/odc";
-import { useRequestHandler } from "~/hooks/request-handler";
 import { Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
 import { ControlledTextField } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
 
-import { IntValuesSchema, NewODCData, SucErrData } from "../utils";
+import { IntValuesSchema, NewODCData, MutationOptions } from "../utils";
 import AddTable from "./AddTable";
 import EditTable from "./EditTable";
 import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
@@ -39,12 +38,24 @@ const AddODC = (props: AddProps): ReactElement => {
     setValues(data);
   }, [data]);
 
-  const addMutation = useAddODC();
-  const updateMutation = useUpdateODC();
-  const addHolMutation = useAddHoliday();
-  const [addStatus, addCallApi] = useRequestHandler(addMutation.mutate);
-  const [updateStatus, updateCallApi] = useRequestHandler(updateMutation.mutate);
-  const [addHolStatus, addHolCallApi] = useRequestHandler(addHolMutation.mutate);
+  const {
+    mutate: addMutation,
+    isSuccess: isAddOdcSuccess,
+    isError: isAddOdcError,
+    isLoading: isAddOdcLoading
+  } = useAddODC();
+  const {
+    mutate: updateMutation,
+    isSuccess: isUpdateOdcSuccess,
+    isError: isUpdateOdcError,
+    isLoading: isUpdateOdcLoading
+  } = useUpdateODC();
+  const {
+    mutate: addHolidayMutation,
+    isSuccess: isAddHolidaySuccess,
+    isError: isAddHolidayError,
+    isLoading: isAddHolidayLoading
+  } = useAddHoliday();
 
   const [nameUnqError, setNameUnqError] = useState<boolean>(false);
   const [nameUnqErrorMsg, setNameUnqErrorMsg] = useState<string>("");
@@ -52,24 +63,13 @@ const AddODC = (props: AddProps): ReactElement => {
   const [abbrUnqErrorMsg, setAbbrUnqErrorMsg] = useState<string>("");
 
   useEffect(() => {
-    if (addStatus.success)
-      setSuccessError({ ...SucErrData, isAddOdcSuccess: true });
-
-    if (!addStatus.success && addStatus.error.message !== "")
-      setSuccessError({ ...SucErrData, isAddOdcError: true });
-
-    if (updateStatus.success)
-      setSuccessError({ ...SucErrData, isUpdateOdcSuccess: true });
-
-    if (!updateStatus.success && updateStatus.error.message !== "")
-      setSuccessError({ ...SucErrData, isUpdateOdcError: true });
-
-    if (addHolStatus.success)
-      setSuccessError({ ...SucErrData, isAddHolidaySuccess: true });
-
-    if (!addHolStatus.success && addHolStatus.error.message !== "")
-      setSuccessError({ ...SucErrData, isAddHolidayError: true });
-  }, [addStatus.success, updateStatus.success, addHolStatus.success]);
+    MutationOptions(isAddOdcSuccess, "isAddOdcSuccess", setSuccessError);
+    MutationOptions(isAddOdcError, "isAddOdcError", setSuccessError);
+    MutationOptions(isUpdateOdcSuccess, "isUpdateOdcSuccess", setSuccessError);
+    MutationOptions(isUpdateOdcError, "isUpdateOdcError", setSuccessError);
+    MutationOptions(isAddHolidaySuccess, "isAddHolidaySuccess", setSuccessError);
+    MutationOptions(isAddHolidayError, "isAddHolidayError", setSuccessError);
+  }, [isAddOdcLoading, isUpdateOdcLoading, isAddHolidayLoading]);
 
   const handleAddODC = (): void => {
     const isNameError = IsDuplicate(apiData, values.name, "name", values.id);
@@ -83,12 +83,12 @@ const AddODC = (props: AddProps): ReactElement => {
     else setAbbrUnqErrorMsg("");
 
     if (formContext === "Add") {
-      addCallApi(AddFormat(values));
+      addMutation(AddFormat(values));
     }
     
     if (formContext === "Edit") {
-      updateCallApi(EditFormat(values));
-      addHolCallApi(AddHolidayFormat(values));
+      updateMutation(EditFormat(values));
+      addHolidayMutation(AddHolidayFormat(values));
     }
   };
 

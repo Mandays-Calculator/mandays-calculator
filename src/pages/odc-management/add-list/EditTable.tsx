@@ -9,12 +9,11 @@ import { useFormikContext } from "formik";
 
 import { useHolidayList } from "~/queries/odc/ODC";
 import { useDeleteHoliday, useUpdateHoliday } from "~/mutations/odc";
-import { useRequestHandler } from "~/hooks/request-handler";
 import { Table } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
-import { EditHolidayColumn, SucErrData, NewHolidayData } from "../utils";
+import { EditHolidayColumn, NewHolidayData, MutationOptions} from "../utils";
 
 const StyledLabel = styled(Typography)(() => ({
   fontWeight: 600,
@@ -29,31 +28,29 @@ const EditTable = (props: EditTableProps): ReactElement => {
 
   const { values, setFieldValue } = useFormikContext<OdcParam>();
 
-  const { data, isError } = useHolidayList(odcId);
-  const updateMutation = useUpdateHoliday();
-  const deleteMutation = useDeleteHoliday();
-  const [updateStatus, updateCallApi] = useRequestHandler(updateMutation.mutate);
-  const [deleteStatus, deleteCallApi] = useRequestHandler(deleteMutation.mutate);
+  const { data, isError, isLoading } = useHolidayList(odcId);
+  const {
+    mutate: updateMutation,
+    isSuccess: isUpdateSuccess,
+    isError: isUpdateError,
+    isLoading: isUpdateLoading
+  } = useUpdateHoliday();
+  const {
+    mutate: deleteMutation,
+    isSuccess: isDeleteSuccess,
+    isError: isDeleteError,
+    isLoading: isDeleteLoading
+  } = useDeleteHoliday();
 
   const [holIdx, setHolIdx] = useState<string[]>([]);
 
   useEffect(() => {
-    if (isError)
-      setSuccessError({ ...SucErrData, isHolidayError: true });
-
-    if (updateStatus.success)
-      setSuccessError({ ...SucErrData, isUpdateHolidaySuccess: true });
-
-    if (!updateStatus.success && updateStatus.error.message !== "")
-      setSuccessError({ ...SucErrData, isUpdateHolidayError: true });
-
-    if (deleteStatus.success)
-      setSuccessError({ ...SucErrData, isDeleteHolidaySuccess: true });
-
-    if (!deleteStatus.success && deleteStatus.error.message !== "") 
-      setSuccessError({ ...SucErrData, isDeleteHolidayError: true });
-
-  }, [isError, updateStatus.success, deleteStatus.success]);
+    MutationOptions(isError, "isHolidayError", setSuccessError);
+    MutationOptions(isUpdateSuccess, "isUpdateHolidaySuccess", setSuccessError);
+    MutationOptions(isUpdateError, "isUpdateHolidayError", setSuccessError);
+    MutationOptions(isDeleteSuccess, "isDeleteHolidaySuccess", setSuccessError);
+    MutationOptions(isDeleteError, "isDeleteHolidayError", setSuccessError);
+  }, [isLoading, isUpdateLoading, isDeleteLoading]);
 
   const handleAddHoliday = (): void => {
     const holidays = [];
@@ -68,11 +65,11 @@ const EditTable = (props: EditTableProps): ReactElement => {
   };
 
   const handleUpdateHoliday = (data: HolidayParam): void => {
-    updateCallApi({ data: data });
+    updateMutation({ data: data });
   };
 
   const handleDeleteHoliday = (holidayId: string): void => {
-    deleteCallApi({ odcId: odcId, id: holidayId });
+    deleteMutation({ odcId: odcId, id: holidayId });
   };
 
   const holidayListColumn = useMemo(() => 
