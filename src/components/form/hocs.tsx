@@ -10,6 +10,7 @@ import type { ReactDatePickerFunctionParams } from "../global-types/app";
 import { useMemo } from "react";
 import { useFormikContext, getIn, Field, FastField } from "formik";
 import { isArray } from "lodash";
+import moment from "moment";
 
 type WrappedInputProps<Type> = Type &
   BaseInputProps & {
@@ -106,7 +107,9 @@ export const withInputController = <Type extends FormikValues>(
         }
         return {
           selected:
-            typeof fieldValue === "string" ? new Date(fieldValue) : fieldValue,
+            typeof fieldValue === "string" && moment(fieldValue).isValid()
+              ? new Date(fieldValue)
+              : fieldValue,
         };
       }
 

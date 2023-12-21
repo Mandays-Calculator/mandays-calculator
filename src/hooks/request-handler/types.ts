@@ -1,6 +1,7 @@
 export interface APIError {
   message: string;
   errorCode: string;
+  code?: string;
 }
 
 export interface APIStatus {
