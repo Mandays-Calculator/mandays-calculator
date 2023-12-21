@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Avatar, Divider, Grid, SelectChangeEvent, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Divider, Grid, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import { ErrorMessage, Select, TextField } from '~/components';
 import { CustomButton } from '~/components/form/button';
 import { Modal } from '~/components/modal';
@@ -108,7 +108,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
   return (
     <>
       <Modal open={showMemberDialog} title='Search User' maxWidth={'md'} onClose={() => toggleDialog()}>
-        <div style={{ minWidth: '510px' }}>
+        <Box sx={{ minWidth: '510px' }}>
           <Stack direction='column'>
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -150,7 +150,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
               Select
             </CustomButton>
           </Stack>
-        </div>
+        </Box>
       </Modal>
       <ErrorMessage error={errorMessage} type={'alert'} />
     </>
