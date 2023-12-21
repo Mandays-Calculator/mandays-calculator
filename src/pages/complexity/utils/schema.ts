@@ -11,18 +11,18 @@ export const complexityFormSchema = (t: TFunction) => {
     complexityName: yup
       .string()
       .max(20, t(validationInfo.maxComplexityName)),
-    numberOfDayFrom: yup
+    numberOfHoursFrom: yup
       .number()
       .typeError(t(validationInfo.noOfHours))
       .integer(t(validationInfo.intNoOfHours))
       .positive(t(validationInfo.posNoOfHours))
       .min(1, t(validationInfo.minNoOfHours)),
-    numberOfDayTo: yup
+    numberOfHoursTo: yup
       .number()
       .typeError(t(validationInfo.noOfHours))
       .integer(t(validationInfo.intNoOfHours))
       .positive(t(validationInfo.posNoOfHours))
-      .min(yup.ref("numberOfDayFrom"), t(validationInfo.maxNoOfHours)),
+      .min(yup.ref("numberOfHoursFrom"), t(validationInfo.maxNoOfHours)),
     numberOfFeaturesFrom: yup
       .number()
       .integer(t(validationInfo.intNoOfFeatures))

@@ -14,7 +14,7 @@ import { Table, Title, Modal, PageContainer, Alert, PageLoader } from '~/compone
 import { complexityColumns, ComplexityForms, FormContext } from './utils';
 
 const Complexity = (): ReactElement => {
-	const [isDaysChecked, setIsDaysChecked] = useState<boolean>(true);
+	const [isDaysChecked, setIsDaysChecked] = useState<boolean>(false);
 	const [complexityId, setComplexityId] = useState<string>('');
 	const [formContext, setFormContext] = useState<FormContext>('');
 	const [openAddEditModal, setOpenAddEditModal] = useState<boolean>(false);

@@ -291,6 +291,7 @@ const LocalizationKey = {
       hours: "complexity.label.hours",
       days: "complexity.label.days",
       name: "complexity.label.name",
+      noOfHours: "complexity.label.noOfHours",
       noOfDays: "complexity.label.noOfDays",
       noOfFeatures: "complexity.label.noOfFeatures",
       description: "complexity.label.description",
@@ -301,6 +302,7 @@ const LocalizationKey = {
     table: {
       columns: {
         complexity: "complexity.table.columns.complexity",
+        noOfHours: "complexity.table.columns.noOfHours",
         noOfDays: "complexity.table.columns.noOfDays",
         noOfFeatures: "complexity.table.columns.noOfFeatures",
         description: "complexity.table.columns.description",

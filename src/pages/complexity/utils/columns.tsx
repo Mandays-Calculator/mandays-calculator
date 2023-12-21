@@ -14,17 +14,17 @@ export const complexityColumns = (
 	isDaysChecked: boolean,
 	handleContext: (complexity: FormContext, id: string) => void,
 	t: TFunction<"translation", undefined>,
-): Column<DataType>[] =>
-	[
+): Column<DataType>[] => {
+	return [
 		{
 			Header: t(columns.complexity),
 			accessor: "name",
 		},
 		{
-			Header: t(columns.noOfDays),
-			accessor: "numberOfDays",
-			Cell: ({ row: { original: { numberOfDays } } }: CellProps<DataType>) => {
-				const numberOfHours = numberOfDays.split('-').map((values) => +values * 8).join(' - ');
+			Header: t(columns.noOfHours),
+			accessor: "numberOfHours",
+			Cell: ({ row: { original: { numberOfHours } } }: CellProps<DataType>) => {
+				const numberOfDays = numberOfHours.split('-').map((values) => + values / 8).join(' - ');
 				return isDaysChecked ? numberOfDays : numberOfHours
 			}
 		},
@@ -61,6 +61,7 @@ export const complexityColumns = (
 						</IconButton>
 					</>
 				)
-			}
-		}
-	]
+			},
+		},
+	];
+};

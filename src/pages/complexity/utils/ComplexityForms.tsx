@@ -45,12 +45,12 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 
 	const {
 		name: complexityName = '',
-		numberOfDays,
+		numberOfHours,
 		numberOfFeatures,
 		description = '',
 		sample: samples = ''
 	} = apiData ?? {};
-	const [numberOfDayFrom, numberOfDayTo] = handleSplitValues(numberOfDays);
+	const [numberOfHoursFrom, numberOfHoursTo] = handleSplitValues(numberOfHours);
 	const [numberOfFeaturesFrom, numberOfFeaturesTo] = handleSplitValues(numberOfFeatures);
 
 	const addEditComplexityForm = useFormik<ComplexityForm>({
@@ -59,8 +59,8 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		enableReinitialize: true,
 		onSubmit: ({
 			complexityName,
-			numberOfDayFrom: noOfDayFrom,
-			numberOfDayTo: noOfDayTo,
+			numberOfHoursFrom: noOfHoursFrom,
+			numberOfHoursTo: noOfHoursTo,
 			numberOfFeaturesFrom: noOfFeaturesFrom,
 			numberOfFeaturesTo: noOfFeaturesTo,
 			description,
@@ -68,7 +68,7 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		}): void => {
 			const addFormData = {
 				name: complexityName,
-				numberOfDays: `${noOfDayFrom} - ${noOfDayTo}`,
+				numberOfHours: `${noOfHoursFrom} - ${noOfHoursTo}`,
 				numberOfFeatures: `${noOfFeaturesFrom} - ${noOfFeaturesTo}`,
 				description: description,
 				sample: samples,
@@ -98,8 +98,8 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		if (formContext === 'Edit')
 			setInitialValue({
 				complexityName,
-				numberOfDayFrom,
-				numberOfDayTo,
+				numberOfHoursFrom,
+				numberOfHoursTo,
 				numberOfFeaturesFrom,
 				numberOfFeaturesTo,
 				description,
@@ -135,27 +135,27 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 				</Grid>
 				<Grid container item xs={2} spacing={1} alignItems='center'>
 					<Grid item xs={12}>
-						<Typography>{t(label.noOfDays)}</Typography>
+						<Typography>{t(label.noOfHours)}</Typography>
 					</Grid>
 					<Grid item xs={5}>
 						<ControlledTextField
-							name="numberOfDayFrom"
-							error={handleError(errors.numberOfDayFrom)}
+							name="numberOfHoursFrom"
+							error={handleError(errors.numberOfHoursFrom)}
 						/>
 					</Grid>
 					<Grid item xs={1}><Divider /></Grid>
 					<Grid item xs={5}>
 						<ControlledTextField
-							name="numberOfDayTo"
-							error={handleError(errors.numberOfDayTo)}
+							name="numberOfHoursTo"
+							error={handleError(errors.numberOfHoursTo)}
 						/>
 					</Grid>
 					<Grid item xs={12}>
-						{handleError(errors.numberOfDayFrom) && (
-							<Typography color="error">{getFieldError(errors, "numberOfDayFrom")}</Typography>
+						{handleError(errors.numberOfHoursFrom) && (
+							<Typography color="error">{getFieldError(errors, "numberOfHoursFrom")}</Typography>
 						)}
-						{handleError(errors.numberOfDayTo) && (
-							<Typography color="error">{getFieldError(errors, "numberOfDayTo")}</Typography>
+						{handleError(errors.numberOfHoursTo) && (
+							<Typography color="error">{getFieldError(errors, "numberOfHoursTo")}</Typography>
 						)}
 					</Grid>
 				</Grid>
