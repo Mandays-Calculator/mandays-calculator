@@ -1,4 +1,4 @@
-import { RouteType } from ".";
+import type { RouteType } from ".";
 import { ReactElement } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -6,12 +6,17 @@ import { authRoutes, Auth } from "~/pages/auth";
 
 import RouteWithTitle from "./RouteWithTitle";
 import { seperateRoutesByType } from "./utils";
+import { Permission } from "~/api/user";
 
 const AppRoutes = ({
   isAuthenticated,
+  rolePermissions = [],
 }: {
   isAuthenticated: boolean;
+  rolePermissions?: Permission[];
 }): ReactElement => {
+  const permissions = rolePermissions.map((role) => role);
+  console.log(permissions, "user permissions"); // will use in the future
   const publicRoutes = seperateRoutesByType("public");
   const privateRoutes = seperateRoutesByType("private");
 

@@ -7,7 +7,7 @@ type ODC = {
   active: boolean;
 };
 
-export type Role = "ROLE_SPRINT_MANAGER" | "ROLE_SPRINT_MANAGER" | "ROLE_USER";
+export type Role = "ROLE_SYS_ADMIN" | "ROLE_SPRINT_MANAGER" | "ROLE_USER";
 export type Gender = "FEMALE" | "MALE" | "PREFER NOT TO SAY" | "NON-BINARY";
 
 export type Permission = {
