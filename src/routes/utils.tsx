@@ -20,13 +20,18 @@ export const seperateRoutesByType = (type: RouteTypeParam): RouteType[] => {
       _.isUndefined(routeItem.protected) || routeItem.protected === true
   );
 };
-
 export const getPermittedRoute = (
-  permittedPath: string[],
+  permittedPaths: string[],
   privateRoutes: RouteType[]
 ): RouteType[] => {
   return privateRoutes.map((privRoute: RouteType) => {
-    if (privRoute.path && !permittedPath.includes(privRoute.path)) {
+    const isPermitted = permittedPaths.some(
+      (permittedPath) =>
+        (privRoute.path && privRoute.path.startsWith(`${permittedPath}/`)) ||
+        privRoute.path === permittedPath
+    );
+
+    if (!isPermitted) {
       return {
         ...privRoute,
         element: <ErrorPage type="permission-denied" />,
