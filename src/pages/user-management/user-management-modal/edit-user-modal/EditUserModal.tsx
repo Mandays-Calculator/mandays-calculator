@@ -22,13 +22,8 @@ import { Alert } from "~/components";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import moment from "moment";
-import { genders, rolesData } from "~/utils/constants";
-import {
-  careerStepOptions,
-  odcOptions,
-  projectOptions,
-  teamOptions,
-} from "../utils";
+import { genders, rolesData, CAREER_STEPS } from "~/utils/constants";
+import { odcOptions, projectOptions, teamOptions } from "../utils";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -175,10 +170,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <StyledTitle mb={0.5}>
               {t(userManagement.label.careerStep)}
             </StyledTitle>
-            <ControlledSelect
-              options={careerStepOptions}
-              name="updateCareerStep"
-            />
+            <ControlledSelect options={CAREER_STEPS} name="updateCareerStep" />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField

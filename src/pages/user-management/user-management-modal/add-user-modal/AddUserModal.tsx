@@ -20,12 +20,7 @@ import {
 import { FormikContextType } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 
-import {
-  careerStepOptions,
-  odcOptions,
-  projectOptions,
-  teamOptions,
-} from "../utils";
+import { odcOptions, projectOptions, teamOptions } from "../utils";
 import moment from "moment";
 import { Alert, ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
@@ -33,7 +28,7 @@ import { FormErrors } from "~/components/form/types";
 import { APIStatus } from "~/hooks/request-handler";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
-import { genders, rolesData } from "~/utils/constants";
+import { genders, rolesData, CAREER_STEPS } from "~/utils/constants";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -188,7 +183,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               {t(userManagement.label.careerStep)}
             </StyledTitle>
             <ControlledSelect
-              options={careerStepOptions}
+              options={CAREER_STEPS}
               name="careerStep"
               error={!!form.errors.careerStep}
               helperText={getFieldError(
