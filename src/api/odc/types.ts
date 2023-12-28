@@ -16,6 +16,10 @@ export interface CreateOdcParam extends Omit<OdcParam, "id"> {};
 
 export interface UpdateOdcParam extends Omit<OdcParam, "holidays"> {};
 
+export interface DeleteOdcParam {
+  id: string;
+};
+
 export interface OdcResponse extends GenericErrorResponse {
   status: number;
 };

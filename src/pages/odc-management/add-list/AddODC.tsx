@@ -8,56 +8,88 @@ import { useTranslation } from "react-i18next";
 import { Grid } from "@mui/material";
 import { useFormik } from "formik";
 
+import { useAddODC, useUpdateODC, useAddHoliday } from "~/mutations/odc";
 import { Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
 import { ControlledTextField } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
 
-import {
-  IntValuesSchema,
-  FakeHoliday,
-} from "../utils";
+import { IntValuesSchema, NewODCData, MutationOptions } from "../utils";
+import AddTable from "./AddTable";
 import EditTable from "./EditTable";
-import { IsDuplicate } from ".";
+import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
 
 const AddODC = (props: AddProps): ReactElement => {
-  const { apiData, data, formContext, setFormContext } = props;
+  const { apiData, data, formContext, setFormContext, setSuccessError } = props;
 
   const { t } = useTranslation();
   const { odc: { label, btnlabel, validationInfo } } = LocalizationKey;
 
   const ODCForm = useFormik<OdcParam>({
-    initialValues: data,
+    initialValues: NewODCData,
     validationSchema: IntValuesSchema(t),
-    enableReinitialize: true,
     onSubmit: (): void => {},
   });
 
-  const { values, setFieldValue, errors } = ODCForm;
+  const { values, setValues, errors } = ODCForm;
 
   useEffect(() => {
-    if (formContext === "Edit")
-      setFieldValue("holidays", FakeHoliday);
-  }, [formContext]);
+    setValues(data);
+  }, [data]);
+
+  const {
+    mutate: addMutation,
+    isSuccess: isAddOdcSuccess,
+    isError: isAddOdcError,
+    isLoading: isAddOdcLoading
+  } = useAddODC();
+  const {
+    mutate: updateMutation,
+    isSuccess: isUpdateOdcSuccess,
+    isError: isUpdateOdcError,
+    isLoading: isUpdateOdcLoading
+  } = useUpdateODC();
+  const {
+    mutate: addHolidayMutation,
+    isSuccess: isAddHolidaySuccess,
+    isError: isAddHolidayError,
+    isLoading: isAddHolidayLoading
+  } = useAddHoliday();
 
   const [nameUnqError, setNameUnqError] = useState<boolean>(false);
   const [nameUnqErrorMsg, setNameUnqErrorMsg] = useState<string>("");
   const [abbrUnqError, setAbbrUnqError] = useState<boolean>(false);
   const [abbrUnqErrorMsg, setAbbrUnqErrorMsg] = useState<string>("");
 
+  useEffect(() => {
+    MutationOptions(isAddOdcSuccess, "isAddOdcSuccess", setSuccessError);
+    MutationOptions(isAddOdcError, "isAddOdcError", setSuccessError);
+    MutationOptions(isUpdateOdcSuccess, "isUpdateOdcSuccess", setSuccessError);
+    MutationOptions(isUpdateOdcError, "isUpdateOdcError", setSuccessError);
+    MutationOptions(isAddHolidaySuccess, "isAddHolidaySuccess", setSuccessError);
+    MutationOptions(isAddHolidayError, "isAddHolidayError", setSuccessError);
+  }, [isAddOdcLoading, isUpdateOdcLoading, isAddHolidayLoading]);
+
   const handleAddODC = (): void => {
-    const isNameError = IsDuplicate(apiData, values.name, "name");
+    const isNameError = IsDuplicate(apiData, values.name, "name", values.id);
     setNameUnqError(isNameError);
     if (isNameError) setNameUnqErrorMsg(t(validationInfo.nameUnq));
     else setNameUnqErrorMsg("");
 
-    const isAbbrError = IsDuplicate(apiData, values.abbreviation, "abbreviation");
+    const isAbbrError = IsDuplicate(apiData, values.abbreviation, "abbreviation", values.id);
     setAbbrUnqError(isAbbrError);
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
     else setAbbrUnqErrorMsg("");
 
-    console.log('values', values);
+    if (formContext === "Add") {
+      addMutation(AddFormat(values));
+    }
+    
+    if (formContext === "Edit") {
+      updateMutation(EditFormat(values));
+      addHolidayMutation(AddHolidayFormat(values));
+    }
   };
 
   const handleClose = (): void => setFormContext("");
@@ -97,36 +129,28 @@ const AddODC = (props: AddProps): ReactElement => {
           />
         </Grid>
       </Grid>
+      {formContext === "Add" && (<AddTable />)}
       {formContext === "Edit" && (
-        <EditTable odcId={data.id} />
+        <EditTable odcId={data.id} setSuccessError={setSuccessError} />
       )}
       <Grid container spacing={2} alignItems="center" mt={1}>
         <Grid item xs={12} container justifyContent="flex-end">
-          {formContext === "Edit" && (
-            <>
-              <CustomButton
-                type="submit"
-                sx={{ mr: 2 }}
-                onClick={handleAddODC}
-              >
-                {t(btnlabel.save)}
-              </CustomButton>
-              <CustomButton
-                type="button"
-                onClick={handleClose}
-              >
-                {t(btnlabel.cancel)}
-              </CustomButton>
-            </>
-          )}
-          {formContext === "Add" && (
-            <CustomButton
-              type="submit"
-              onClick={handleAddODC}
-            >
-              {t(btnlabel.addOdc)}
-            </CustomButton>
-          )}
+          <CustomButton
+            type="submit"
+            sx={{ mr: 2 }}
+            onClick={handleAddODC}
+          >
+            {formContext === "Add"
+              ? t(btnlabel.addOdc)
+              : t(btnlabel.save)
+            }
+          </CustomButton>
+          <CustomButton
+            type="button"
+            onClick={handleClose}
+          >
+            {t(btnlabel.cancel)}
+          </CustomButton>
         </Grid>
       </Grid>
     </Form>

@@ -24,18 +24,27 @@ export type AddProps = {
   data: OdcParam;
   formContext: FormContext;
   setFormContext: (context: FormContext) => void;
+  setSuccessError: (sucErr: SucErrType) => void;
 };
 
 export type EditTableProps = {
   odcId: string;
+  setSuccessError: (sucErr: SucErrType) => void;
 };
 
 export type SucErrType = {
-  isError: boolean;
-  isAddError: boolean;
-  isAddSuccess: boolean;
-  isUpdateError: boolean;
-  isUpdateSuccess: boolean;
-  isDeleteError: boolean;
-  isDeleteSuccess: boolean;
+  isOdcError: boolean;
+  isHolidayError: boolean;
+  isAddOdcError: boolean;
+  isAddOdcSuccess: boolean;
+  isUpdateOdcError: boolean;
+  isUpdateOdcSuccess: boolean;
+  isDeleteOdcError: boolean;
+  isDeleteOdcSuccess: boolean;
+  isAddHolidayError: boolean;
+  isAddHolidaySuccess: boolean;
+  isUpdateHolidayError: boolean;
+  isUpdateHolidaySuccess: boolean;
+  isDeleteHolidayError: boolean;
+  isDeleteHolidaySuccess: boolean;
 };

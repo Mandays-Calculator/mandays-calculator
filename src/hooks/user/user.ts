@@ -4,7 +4,6 @@ import { resetUserState, selectUser } from "~/redux/reducers/user";
 import { getItemStorage, removeStateStorage } from "~/utils/helpers";
 import { SESSION_STORAGE_ITEMS } from "~/utils/constants";
 import { LoginResponse } from "~/api/auth";
-import { useNavigate } from "react-router-dom";
 
 /**
  * Custom hook to access the user's authentication state.
@@ -17,13 +16,12 @@ export const useUserAuth = (): {
   logout: () => void;
 } => {
   const userState: UserPermissionState = useSelector(selectUser);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogout = (): void => {
+    window.location.reload();
     dispatch(resetUserState());
     removeStateStorage("session");
-    navigate("./login");
   };
 
   return { state: userState, logout: handleLogout };

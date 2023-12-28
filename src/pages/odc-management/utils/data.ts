@@ -1,5 +1,3 @@
-// import type { OdcListResponse } from "~/api/odc";
-
 export const NewODCData = {
   id: "",
   name: "",
@@ -14,22 +12,11 @@ export const NewODCData = {
 export const NewHolidayData = {
   id: "",
   odcId: "",
-  date: "",
   recurring: "true",
   name: "",
   createDate: null,
   lastUpdatedDate: null,
 };
-
-// export const SubmitFormat = (data: OdcListResponse): ODCSubmit => {
-//   return {
-//     name: data.name,
-//     abbreviation: data.abbreviation,
-//     location: data.location,
-//     holidays: data.holidays,
-//     active: data.active,
-//   };
-// };
 
 export const FakeHoliday = [
   {
@@ -53,11 +40,18 @@ export const FakeHoliday = [
 ];
 
 export const SucErrData = {
-  isError: false,
-  isAddError: false,
-  isAddSuccess: false,
-  isUpdateError: false,
-  isUpdateSuccess: false,
-  isDeleteError: false,
-  isDeleteSuccess: false,
+  isOdcError: false,
+  isHolidayError: false,
+  isAddOdcError: false,
+  isAddOdcSuccess: false,
+  isUpdateOdcError: false,
+  isUpdateOdcSuccess: false,
+  isDeleteOdcError: false,
+  isDeleteOdcSuccess: false,
+  isAddHolidayError: false,
+  isAddHolidaySuccess: false,
+  isUpdateHolidayError: false,
+  isUpdateHolidaySuccess: false,
+  isDeleteHolidayError: false,
+  isDeleteHolidaySuccess: false,
 };

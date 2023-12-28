@@ -13,7 +13,7 @@ interface ConfirmModalProps {
   open: boolean;
   onClose: () => void;
   message?: string;
-  selectedRow: number | null;
+  selectedRow?: number | null;
   confirmIcon?: SvgIconsType | ReactNode | string;
   closeLabel?: string;
 }
@@ -30,7 +30,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   closeLabel,
 }): ReactElement => {
   return (
-    <Modal open={open} title="" maxWidth="xs" onClose={onClose}>
+    <Modal open={open} title="" maxWidth="sm" onClose={onClose}>
       <Stack
         direction="row"
         alignItems="center"
@@ -64,7 +64,11 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           variant="contained"
           color="primary"
           onClick={() => {
-            if (selectedRow !== null && onConfirmWithIndex) {
+            if (
+              selectedRow !== null &&
+              onConfirmWithIndex &&
+              selectedRow !== undefined
+            ) {
               onConfirmWithIndex(selectedRow);
             }
             if (onConfirm) {

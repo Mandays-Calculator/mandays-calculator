@@ -34,12 +34,8 @@ export const useUpdateODC = () => {
   );
 };
 
-export const useDeleteODC = (id: string) => {
-  return useMutation<OdcResponse, AxiosError, UpdateOdcParam>(
-    "deleteODC",
-    () => deleteODC(id)
-  );
-};
+export const useDeleteODC = () =>
+  useMutation<OdcResponse, AxiosError, string>(deleteODC);
 
 export const useAddHoliday = () => {
   return useMutation<HolidayResponse, AxiosError, CreateHoliday>(
