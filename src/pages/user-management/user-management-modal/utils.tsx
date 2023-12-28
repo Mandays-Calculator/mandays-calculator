@@ -46,34 +46,3 @@ export const teamOptions = [
     value: "teamoption2",
   },
 ];
-
-export const careerStepOptions = [
-  {
-    label: "I03",
-    value: "I03",
-  },
-  {
-    label: "I04",
-    value: "I04",
-  },
-  {
-    label: "I05",
-    value: "I05",
-  },
-  {
-    label: "I06",
-    value: "I06",
-  },
-  {
-    label: "I07",
-    value: "I07",
-  },
-  {
-    label: "I08",
-    value: "I08",
-  },
-  {
-    label: "I09",
-    value: "I09",
-  },
-];
