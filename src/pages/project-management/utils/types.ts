@@ -14,3 +14,8 @@ export type ProjectListColumnsProps = {
   t: TFunction<'translation', undefined>;
   onDelete: (projectId: string) => void;
 };
+
+export type ProjectListConfirmDialogType = {
+  open: boolean;
+  id: string;
+};

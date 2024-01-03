@@ -49,3 +49,19 @@ export interface ProjectErrorResponse {
   errorCode: string;
   message: string;
 }
+
+export interface AddProjectType {
+  name: string;
+  isActive: number;
+  dateCreated: string;
+  lastUpdatedDate: string;
+  projectTeam: {
+    teamName: string;
+    leadName: string;
+    isActive: number;
+    teamMembers: {
+      name: string;
+      isActive: number;
+    }[];
+  }[];
+}

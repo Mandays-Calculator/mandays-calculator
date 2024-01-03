@@ -1,12 +1,16 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Avatar, Box, Divider, Grid, SelectChangeEvent, Stack, Typography } from '@mui/material';
-import { ErrorMessage, Select, TextField } from '~/components';
-import { CustomButton } from '~/components/form/button';
-import { Modal } from '~/components/modal';
-import { useUserList } from '~/queries/user-management/UserManagement';
+import { OdcParam } from '~/api/odc/types';
 import { UserListData } from '~/api/user-management/types';
+import { useODCList } from '~/queries/odc/ODC';
+import { useUserList } from '~/queries/user-management/UserManagement';
+import { useTimeout } from '../../utils/functions';
+import { ErrorMessage, Select, TextField } from '~/components';
+import { Modal } from '~/components/modal';
+import { CustomButton } from '~/components/form/button';
 
-type Members = UserListData & { isSelected: boolean };
+type Members = UserListData & { isSelected: boolean; fullName: string };
+type OdcDropdown = OdcParam & { value: string; label: string };
 
 type DialogSearchUserProps = {
   showMemberDialog: boolean;
@@ -16,11 +20,14 @@ type DialogSearchUserProps = {
 const DialogSearchUser = (props: DialogSearchUserProps) => {
   const { showMemberDialog, toggleDialog } = props;
   const { data } = useUserList();
-  const [odcList, setOdcList] = useState([] as any[]);
+  const { data: listOfOdc } = useODCList();
+  const [odcList, setOdcList] = useState<OdcDropdown[]>([] as any[]);
   const [userList, setUserList] = useState<Members[]>([]);
+  const [originUserList, setOriginUserList] = useState<Members[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [searchName, setSearchName] = useState('');
-  const [searchOdc, setSearchOdc] = useState('');
+  const [searchName, setSearchName] = useState<string>('');
+  const [searchOdc, setSearchOdc] = useState<string>('');
+  const [triggerTimeout] = useTimeout();
 
   const renderUserList = (user: Members, index: number) => {
     return (
@@ -63,10 +70,26 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
   };
 
   const onChangeOdc = (e: SelectChangeEvent<any>) => {
-    setSearchOdc(e.target.value);
+    const searchedOdc = e.target.value;
+    setSearchOdc(searchedOdc);
+
+    setUserList(filteredUserList(searchName, searchedOdc));
   };
+
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchName(e.target.value);
+    const searchedName = e.target.value;
+    setSearchName(searchedName);
+
+    setUserList(filteredUserList(searchedName));
+  };
+
+  const filteredUserList = (searchedName: string, searchedOdc?: string): Members[] => {
+    return originUserList.filter((user) => {
+      const name = user.fullName.toLowerCase().includes(searchedName.toLowerCase());
+      const odc = user.odc.abbreviation.toLowerCase().includes(searchedOdc?.toLowerCase() ?? '');
+
+      return name && odc;
+    });
   };
 
   const onSubmit = () => {
@@ -74,10 +97,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
 
     if (!selectedUsers.length) {
       setErrorMessage('Select at least 1(one) user to proceed');
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 2000);
-
+      triggerTimeout(() => setErrorMessage(''));
       return;
     }
     toggleDialog(selectedUsers);
@@ -88,22 +108,26 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
       try {
         const result = data && Array.isArray(data?.data) ? data.data : [];
 
-        setUserList(result.map((x) => ({ ...x, isSelected: false })));
-        setOdcList([
-          {
-            value: '1',
-            label: 'Filter 1',
-          },
-        ]);
+        const newUsers = result.map((user) => {
+          const fullName = `${user.lastName}, ${user.firstName} ${user.middleName ?? ''}`.trim();
+          return { ...user, fullName, isSelected: false };
+        });
+
+        setUserList(newUsers);
+        setOriginUserList(newUsers);
+
+        if (listOfOdc) {
+          setOdcList(listOfOdc.map((odc) => ({ ...odc, value: odc.abbreviation, label: odc.abbreviation })));
+        }
       } catch (error) {
         setUserList([]);
       }
     };
 
-    fetchData().catch((e: any) => {
+    fetchData().catch((e) => {
       console.log(e);
     });
-  }, [data]);
+  }, [data, listOfOdc]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import type { AuthAPIResponse } from '../auth';
 import axios, { AxiosResponse } from 'axios';
 import { getEnvConfig } from '~/utils/env-config';
-import { Project } from '.';
+import { AddProjectType, Project } from '.';
 
 let apiBasePath: string | ApiBasePath;
 
@@ -12,14 +12,17 @@ const getApiBasePath = () => {
   return apiBasePath;
 };
 
-export const createProject = async (params: any): Promise<AuthAPIResponse> => {
+export const createProject = async (params: AddProjectType): Promise<AuthAPIResponse> => {
   const url = `${getApiBasePath()}/projects`;
   const response = await axios.post<AuthAPIResponse>(url, params);
 
   return handleResultData(response);
 };
 
-export const updateProject = async (projectId: number | string, params: any): Promise<AuthAPIResponse> => {
+export const updateProject = async (
+  projectId: number | string,
+  params: any, // WIP from BE
+): Promise<AuthAPIResponse> => {
   const url = `${getApiBasePath()}/projects/${projectId}`;
   const response = await axios.put<AuthAPIResponse>(url, params);
 

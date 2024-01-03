@@ -1,9 +1,9 @@
-import { ReactElement, useEffect, useReducer, useState } from 'react';
+import { ChangeEvent, ReactElement, useEffect, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField, styled, Box } from '@mui/material';
 
 import { ProjectListColumns } from '../utils/columns';
-import { ProjectListDataType } from '../utils/types';
+import { ProjectListConfirmDialogType, ProjectListDataType } from '../utils/types';
 import { PageContainer } from '~/components/page-container';
 import { CustomButton } from '~/components/form/button';
 import { ConfirmModal, ErrorMessage, Table } from '~/components';
@@ -17,6 +17,11 @@ interface ProjectListProps {
   handleAddProject: () => void;
 }
 
+type ActionType = {
+  type: 'SET_VALUE' | 'SEARCH';
+  payload: Project[] | string;
+};
+
 const StyledTextField = styled(TextField)(() => ({
   width: '100%',
 }));
@@ -27,12 +32,9 @@ const initialProjectListState = {
   filteredResult: [] as ProjectListDataType[],
 };
 
-const projectListReducer = (
-  state: typeof initialProjectListState,
-  action: { type: 'SET_VALUE' | 'SEARCH'; payload: any },
-) => {
+const projectListReducer = (state: typeof initialProjectListState, action: ActionType) => {
   if (action.type === 'SET_VALUE') {
-    const mapProjectResult: (T: Project[]) => ProjectListDataType[] = (data: Project[]) => {
+    const mapProjectResult = (data: Project[]): ProjectListDataType[] => {
       return data.map((response) => {
         let userCount = 0;
 
@@ -49,13 +51,13 @@ const projectListReducer = (
       });
     };
 
-    const newResult = mapProjectResult(action.payload);
+    const newResult = mapProjectResult(action.payload as Project[]);
 
     return { ...state, results: newResult, filteredResult: newResult };
   } else if (action.type === 'SEARCH') {
-    const filteredData = state.results.filter((row) => row.prjName.toLowerCase().includes(action.payload));
+    const filteredData = state.results.filter((row) => row.prjName.toLowerCase().includes(action.payload as string));
 
-    return { ...state, filteredResult: filteredData, filteredText: action.payload };
+    return { ...state, filteredResult: filteredData, filteredText: action.payload as string };
   } else {
     return state;
   }
@@ -66,17 +68,17 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
   const { handleAddProject } = props;
   const { data, refetch } = useProjectList();
   const [projectListState, dispatchProjectList] = useReducer(projectListReducer, initialProjectListState);
-  const [confirmDialog, setConfirmDialog] = useState({ open: false, id: '' });
+  const [confirmDialog, setConfirmDialog] = useState<ProjectListConfirmDialogType>({ open: false, id: '' });
 
-  const onChangeFilterText = (e: any) => {
-    dispatchProjectList({ type: 'SEARCH', payload: e.target.value });
+  const onChangeFilterText = (e: ChangeEvent<HTMLInputElement>): void => {
+    dispatchProjectList({ type: 'SEARCH', payload: e.target.value as string });
   };
-  const onDelete = (projectId: string) => {
+  const onDelete = (projectId: string): void => {
     setConfirmDialog({ open: !confirmDialog.open, id: projectId });
   };
   const [status, callApi] = useRequestHandler(useDeleteProjectMutation().mutate, () => refetch());
 
-  const deleteProject = () => {
+  const deleteProject = (): void => {
     callApi(confirmDialog.id);
     setConfirmDialog({ ...confirmDialog, open: false });
   };
@@ -85,7 +87,7 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
     if (!data) return;
     const fetchData = async () => {
       try {
-        const result = Array.isArray(data) ? data : [];
+        const result = (Array.isArray(data) ? data : []) as Project[];
 
         dispatchProjectList({ type: 'SET_VALUE', payload: result });
       } catch (error) {

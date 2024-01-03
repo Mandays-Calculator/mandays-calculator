@@ -49,7 +49,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 
   const [status, callApi] = useRequestHandler(useCreateProjectMutation().mutate, handleAddProject);
 
-  const onSubmit = async () => {
+  const onSubmit = async (): Promise<void> => {
     if (status.loading) return;
 
     const { projectName, teams } = projectForm.values;
@@ -73,7 +73,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     callApi(createProjectParams);
   };
 
-  const onValidateForm = async () => {
+  const onValidateForm = async (): Promise<void> => {
     const errors = await projectForm.validateForm();
     if (Object.entries(errors).length) {
       let errorMessage =
@@ -89,7 +89,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     }
   };
 
-  const showError = (error: string) => {
+  const showError = (error: string): void => {
     setAddProjectErrorMsg(error);
 
     triggerTimeout(() => {
@@ -97,7 +97,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     });
   };
 
-  const isErrorField = (field: string) => {
+  const isErrorField = (field: string): boolean => {
     return projectForm.errors[field as keyof {}] ? true : false;
   };
 
