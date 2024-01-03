@@ -92,8 +92,7 @@ const StyledCreateTaskIconButton = styled(Grid)(
 );
 
 const TasksContent = (): ReactElement => {
-  const { data: tasksData } = useTasks("DEV");
-  // const { data: tasksData } = { data: { data: MockData } };
+  const { data: tasksData } = useTasks("a2eb9f01-6e4e-11ee-8624-a0291936d1c2");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
 
   useEffect(() => {
@@ -128,7 +127,6 @@ const TasksContent = (): ReactElement => {
     }
   };
 
-  // UPDATE TASK
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
@@ -148,7 +146,6 @@ const TasksContent = (): ReactElement => {
     setTasks(updatedMockData);
   };
 
-  // VIEW TASK
   const handleViewDetailsModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setViewDetailsModalOpen(!viewDetailsModalOpen);
@@ -158,7 +155,6 @@ const TasksContent = (): ReactElement => {
     setViewDetailsModalOpen(false);
   };
 
-  // DRAG N DROP
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
 
@@ -171,7 +167,6 @@ const TasksContent = (): ReactElement => {
 
     const draggedTask = tasks.find((task) => task.name === draggableId);
 
-    // Limit dragging and dropping between Backlog and On Hold
     if (
       (sourceStatus === Status.Backlog &&
         destinationStatus === Status.OnHold) ||
