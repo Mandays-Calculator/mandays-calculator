@@ -1,12 +1,9 @@
 import type { ConfigType } from "~/utils/env-config";
 
 import { BrowserRouter } from "react-router-dom";
-import { initReactI18next } from "react-i18next";
 import { useDispatch } from 'react-redux';
 
 import { render, waitFor } from "@testing-library/react";
-
-import i18n from "i18next";
 
 import { checkUserAuthentication, useUserAuth } from "~/hooks/user";
 import AuthenticatedApp from "~/AuthenticatedApp";
@@ -14,15 +11,6 @@ import { getEnvConfig } from "~/utils/env-config";
 import { useErrorModals } from "~/hooks/modal";
 
 import { cleanAllCallback } from "./pages/auth/utils/auth-utils";
-
-i18n.use(initReactI18next).init({
-  lng: "en",
-  fallbackLng: "en",
-  resources: {},
-  react: {
-    useSuspense: false,
-  },
-});
 
 jest.mock("~/api/axios.config");
 jest.mock("~/utils/env-config");
