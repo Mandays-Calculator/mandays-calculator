@@ -10,6 +10,7 @@ import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
 import { ErrorMessage, Form, SvgIcon } from "~/components";
+import { useTimeout } from "../utils/functions";
 import { StyledContainer } from "./components/TeamListCard/TeamListCard";
 import { CustomButton } from "~/components/form/button";
 import { addFormInitValue } from "./utils";
@@ -39,17 +40,14 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [teamIndex, setTeamIndex] = useState<number>(0);
   const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>("");
+  const [triggerTimeout] = useTimeout();
 
   const handleToggleEdit = (teamId: number): void => {
     setTeamIndex(teamId);
     setIsEditMode(!isEditMode);
   };
 
-  const onSuccessAddProject = (): void => {
-    handleAddProject();
-  }
-  
-  const [status, callApi] = useRequestHandler(useCreateProjectMutation().mutate, onSuccessAddProject);
+  const [status, callApi] = useRequestHandler(useCreateProjectMutation().mutate, handleAddProject);
 
   const onSubmit = async () => {
     if (status.loading) return;
@@ -91,17 +89,12 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     }
   };
 
-  const showError = (error: any) => {
-    let timeoutInstance: any = null;
+  const showError = (error: string) => {
     setAddProjectErrorMsg(error);
 
-    if (timeoutInstance) {
-      clearTimeout(timeoutInstance)
-    }
-    
-    timeoutInstance = setTimeout(() => {
+    triggerTimeout(() => {
       setAddProjectErrorMsg("");
-    }, 2000);
+    });
   };
 
   const isErrorField = (field: string) => {
