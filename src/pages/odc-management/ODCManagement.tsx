@@ -27,7 +27,7 @@ const ODCManagement = (): ReactElement => {
     common: { errorMessage: { genericError } }
   } = LocalizationKey;
   
-  const { data: apiData, isLoading, isError } = useODCList();
+  const { data: apiData, isLoading, isError, refetch } = useODCList();
   const {
     mutate: deleteMutation,
     isError: isDeleteError,
@@ -41,7 +41,7 @@ const ODCManagement = (): ReactElement => {
 
   useEffect(() => {
     if (formContext === "Edit" || formContext === "Delete")
-      setInitialValues(apiData?.find((value: OdcParam) => value.id === idx) ?? NewODCData);
+      setInitialValues(apiData?.data?.find((value: OdcParam) => value.id === idx) ?? NewODCData);
     if (formContext === "Add")
       setInitialValues(NewODCData);
   }, [formContext]);
@@ -52,23 +52,32 @@ const ODCManagement = (): ReactElement => {
     MutationOptions(isDeleteError, "isDeleteOdcError", setSuccessError);
   }, [isError, isDeleteSuccess, isDeleteError]);
 
-  const delIdx = apiData?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
+  useEffect(() => {
+    if (isDeleteSuccess) refetch();
+  }, [isDeleteSuccess]);
+
+  useEffect(() => {
+    if (successError.isAddOdcSuccess || successError.isUpdateOdcSuccess) refetch();
+  }, [successError.isAddOdcSuccess, successError.isUpdateOdcSuccess]);
+
+  const delIdx = apiData?.data?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
 
   if (isLoading) { return <PageLoader /> };
+
   return (
     <>
       <Title title={t(management)} />
       <PageContainer sx={{ background: "#FFFFFF" }}>
         {formContext === "" && (
           <ViewODC
-            data={apiData || []}
+            data={apiData?.data || []}
             setFormContext={setFormContext}
             setIdx={setIdx}
           />
         )}
         {(formContext === "Add" || formContext === "Edit") && (
           <AddODC
-            apiData={apiData || []}
+            apiData={apiData?.data || []}
             data={initialValues}
             formContext={formContext}
             setFormContext={setFormContext}
@@ -78,7 +87,6 @@ const ODCManagement = (): ReactElement => {
       </PageContainer>
       <ConfirmModal
         onConfirm={(): void => {
-          console.log("confirm")
           setFormContext("");
           deleteMutation(idx);
         }}

@@ -27,13 +27,13 @@ export const IntValuesSchema = (t: TFunction) => {
           date: yup.string().default(""),
           recurring: yup.boolean().default(true),
           name: yup.string().default(""),
-          createDate: yup.string().nullable(),
+          createdDate: yup.string().nullable(),
           lastUpdatedDate: yup.string().nullable(),
         })
       )
       .nullable(),
     active: yup.boolean().default(true),
-    createDate: yup.string().nullable(),
+    createdDate: yup.string().nullable(),
     lastUpdatedDate: yup.string().nullable(),
   });
 };

@@ -15,7 +15,7 @@ import { getFieldError } from "~/components/form/utils";
 import { ControlledTextField } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
 
-import { IntValuesSchema, NewODCData, MutationOptions } from "../utils";
+import { IntValuesSchema, NewODCData, MutationOptions, MutationOptions2 } from "../utils";
 import AddTable from "./AddTable";
 import EditTable from "./EditTable";
 import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
@@ -65,10 +65,19 @@ const AddODC = (props: AddProps): ReactElement => {
   useEffect(() => {
     MutationOptions(isAddOdcSuccess, "isAddOdcSuccess", setSuccessError);
     MutationOptions(isAddOdcError, "isAddOdcError", setSuccessError);
-    MutationOptions(isUpdateOdcSuccess, "isUpdateOdcSuccess", setSuccessError);
-    MutationOptions(isUpdateOdcError, "isUpdateOdcError", setSuccessError);
-    MutationOptions(isAddHolidaySuccess, "isAddHolidaySuccess", setSuccessError);
-    MutationOptions(isAddHolidayError, "isAddHolidayError", setSuccessError);
+    MutationOptions2(
+      isUpdateOdcSuccess,
+      isAddHolidaySuccess,
+      isUpdateOdcError,
+      isAddHolidayError,
+      "isUpdateOdcSuccess",
+      "isAddHolidaySuccess",
+      "isUpdateOdcError",
+      "isAddHolidayError",
+      setSuccessError
+    );
+
+    if (isUpdateOdcSuccess || isAddOdcSuccess) setFormContext("");
   }, [isAddOdcLoading, isUpdateOdcLoading, isAddHolidayLoading]);
 
   const handleAddODC = (): void => {

@@ -8,11 +8,19 @@ export interface OdcParam {
   location: string;
   holidays: HolidayParam[] | null;
   active: string;
-  createDate: string | null;
+  createdDate: string | null;
   lastUpdatedDate: string | null;
 };
 
-export interface CreateOdcParam extends Omit<OdcParam, "id"> {};
+export interface CreateOdcParam {
+  name: string;
+  abbreviation: string;
+  location: string;
+  holidays: CreateHolidayParam[] | null;
+  active: string;
+  createdDate: string | null;
+  lastUpdatedDate: string | null;
+};
 
 export interface UpdateOdcParam extends Omit<OdcParam, "holidays"> {};
 
@@ -30,12 +38,12 @@ export interface OdcListResponse extends OdcResponse {
 
 //Holidays
 export interface HolidayParam {
-  id: string;
+  id: number;
   odcId: string;
   date: string;
   recurring: string;
   name: string;
-  createDate: string | null;
+  createdDate: string | null;
   lastUpdatedDate: string | null;
 };
 
@@ -60,6 +68,6 @@ export interface UpdateHoliday {
 };
 
 export interface DeleteHoliday {
-  id: string;
+  id: number;
   odcId: string;
 };

@@ -5,39 +5,18 @@ export const NewODCData = {
   abbreviation: "",
   holidays: null,
   active: "true",
-  createDate: null,
+  createdDate: null,
   lastUpdatedDate: null,
 };
 
 export const NewHolidayData = {
-  id: "",
+  id: 0,
   odcId: "",
   recurring: "true",
   name: "",
-  createDate: null,
+  createdDate: null,
   lastUpdatedDate: null,
 };
-
-export const FakeHoliday = [
-  {
-    id: "1",
-    odcId: "",
-    date: "2023-01-01",
-    recurring: "true",
-    name: "New Year's Day",
-    createDate: null,
-    lastUpdatedDate: null,
-  },
-  {
-    id: "2",
-    odcId: "",
-    date: "2023-01-22",
-    recurring: "true",
-    name: "Lunar New Year",
-    createDate: null,
-    lastUpdatedDate: null,
-  }
-];
 
 export const SucErrData = {
   isOdcError: false,
