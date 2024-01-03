@@ -248,7 +248,7 @@ const TasksContent = (): ReactElement => {
               const filteredData = tasks.filter(
                 (task) => task.status === status
               );
-
+              console.log("filtered", filteredData);
               return (
                 <Grid
                   item

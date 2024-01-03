@@ -61,6 +61,7 @@ const TaskDetailsCard = ({
   handleEdit,
   handleViewDetails,
 }: TaskDetailsCardProps): ReactElement => {
+  console.log("tasks data", data);
   return (
     <PageContainer onClick={() => handleViewDetails(data)}>
       <div style={styles.taskTitle}>{data.name}</div>
@@ -71,7 +72,7 @@ const TaskDetailsCard = ({
       </div>
       <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>
-        Complexity Rating: {data?.complexity}
+        Complexity Rating: {data?.complexity.name}
       </div>
 
       <Stack direction={"row"} flexWrap="wrap" gap={0.5}>

@@ -13,6 +13,16 @@ interface Functionality {
   name: string;
 }
 
+interface Complexity {
+  active: boolean;
+  description: string;
+  id: string;
+  name: string;
+  numberOfFeatures: string;
+  numberOfHours: string;
+  sample: string;
+}
+
 export interface AllTasksResponse {
   taskID: string;
   name: string;
@@ -20,7 +30,7 @@ export interface AllTasksResponse {
   createdDate: string;
   completionDate: string;
   sprint: string;
-  complexity: string;
+  complexity: Complexity;
   status: string;
   type: string;
   tags: SelectObject[];

@@ -30,7 +30,15 @@ const initialTaskState: AllTasksResponse = {
   createdDate: "11/16/2023",
   completionDate: "12/16/2023",
   sprint: "2",
-  complexity: "",
+  complexity: {
+    id: "49a522fe-9945-11ee-a2d5-244bfee2440b",
+    name: "Sample",
+    numberOfHours: "5",
+    numberOfFeatures: "50+",
+    description: "description",
+    sample: "sample",
+    active: true,
+  },
   status: "Backlog",
   type: "",
   functionality: {

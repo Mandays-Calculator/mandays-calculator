@@ -117,7 +117,9 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                     Complexity
                   </Typography>
                 </Stack>
-                <Typography>{newTask ? newTask.complexity : ""}</Typography>
+                <Typography>
+                  {newTask ? newTask.complexity.name : ""}
+                </Typography>
               </Stack>
             </Grid>
 
