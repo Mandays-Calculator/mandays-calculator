@@ -1,22 +1,20 @@
-import type { AuthContextProps } from "react-oidc-context";
 import type { ConfigType } from "~/utils/env-config";
 
-import { useAuth } from "react-oidc-context";
 import { BrowserRouter } from "react-router-dom";
 import { initReactI18next } from "react-i18next";
+import { useDispatch } from 'react-redux';
 
 import { render, waitFor } from "@testing-library/react";
 
 import i18n from "i18next";
 
+import { checkUserAuthentication, useUserAuth } from "~/hooks/user";
 import AuthenticatedApp from "~/AuthenticatedApp";
 import { getEnvConfig } from "~/utils/env-config";
-import { getUser } from "~/utils/helpers/storageHelper";
+import { useErrorModals } from "~/hooks/modal";
 
 import { cleanAllCallback } from "./pages/auth/utils/auth-utils";
-import { LoginResponse } from "~/api/auth";
 
-// Mock the i18next translation function
 i18n.use(initReactI18next).init({
   lng: "en",
   fallbackLng: "en",
@@ -27,14 +25,25 @@ i18n.use(initReactI18next).init({
 });
 
 jest.mock("~/api/axios.config");
-jest.mock("~/utils/oidc-utils");
 jest.mock("~/utils/env-config");
-jest.mock("react-oidc-context");
+jest.mock("~/hooks/modal");
+jest.mock("~/hooks/user");
+jest.mock("react-redux");
 
-const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
-const mockGetUser = getUser as jest.MockedFunction<typeof getUser>;
 const mockGetEnvConfig = getEnvConfig as jest.MockedFunction<
   typeof getEnvConfig
+>;
+const mockCheckUserAuthentication = checkUserAuthentication as jest.MockedFunction<
+  typeof checkUserAuthentication
+>;
+const mockUseUserAuth = useUserAuth as jest.MockedFunction<
+  typeof useUserAuth
+>;
+const mockUseDispatch = useDispatch as jest.MockedFunction<
+  typeof useDispatch
+>;
+const mockUseErrorModals = useErrorModals as jest.MockedFunction<
+  typeof useErrorModals
 >;
 
 afterAll((done) => {
@@ -42,19 +51,37 @@ afterAll((done) => {
 });
 
 describe("GIVEN AuthenticatedApp Component is called", () => {
-  test("WHEN user is authenticated, THEN it should render the landing page", async () => {
-    const useAuthData = { isLoading: false, isAuthenticated: true };
-    const getUserData = {
-      access_token: "mockAccessToken",
-      profile: { name: "Juan Dela Cruz" },
+  test("WHEN page is still in verification process, THEN it should render the page loader", async () => {
+    const checkUserAuthenticationData = {
+      status: false,
+      mcUser: 'AUTHENTICATEDUSERTOKENSAMPLE',
     };
-    const getEnvConfigData = { enableAuth: true };
+    const getEnvConfigData = {
+      enableAuth: false,
+      idleTimeoutConfig: {
+        durationUntilPromptSeconds: 100
+      }
+    };
+    const useUserAuthData = {
+      state: {
+        loading: true,
+        isAuthenticated: false,
+        permissions: [{
+          displayName: "ROLE_SYS_ADMIN",
+          icon: "icon_sample",
+          path: "icon_path",
+          roles: ["ROLE_SYS_ADMIN"],
+          subMenuItems: null
+        }]
+      }
+    }
+    const useErrorModalsData = {
+      showUnauthorizedModal: false,
+      systemErrorModal: false,
+      setSystemErrorModal: jest.fn()
+    }
 
-    const renderResult = renderAuthenticatedApp(
-      useAuthData,
-      getUserData,
-      getEnvConfigData
-    );
+    const renderResult = renderAuthenticatedApp(getEnvConfigData, checkUserAuthenticationData, useUserAuthData, useErrorModalsData);
 
     if (!renderResult) {
       throw new Error("Rendering failed.");
@@ -63,20 +90,41 @@ describe("GIVEN AuthenticatedApp Component is called", () => {
     const { container } = renderResult;
 
     await waitFor(() => {
-      expect(container).toMatchSnapshot(`user-authenticated`);
+      expect(container).toMatchSnapshot(`auth-page-loader`);
     });
   });
 
-  test("WHEN user is not authenticated, THEN it should render Auth component", async () => {
-    const useAuthData = { isLoading: false, isAuthenticated: false };
-    const getUserData = {};
-    const getEnvConfigData = { enableAuth: true };
+  test("WHEN user is not authenticated, THEN it user cannot proceed to the landing page", async () => {
+    const checkUserAuthenticationData = {
+      status: false,
+      mcUser: 'AUTHENTICATEDUSERTOKENSAMPLE',
+    };
+    const getEnvConfigData = {
+      enableAuth: false,
+      idleTimeoutConfig: {
+        durationUntilPromptSeconds: 100
+      }
+    };
+    const useUserAuthData = {
+      state: {
+        loading: false,
+        isAuthenticated: false,
+        permissions: [{
+          displayName: "ROLE_SYS_ADMIN",
+          icon: "icon_sample",
+          path: "icon_path",
+          roles: ["ROLE_SYS_ADMIN"],
+          subMenuItems: null
+        }]
+      }
+    }
+    const useErrorModalsData = {
+      showUnauthorizedModal: false,
+      systemErrorModal: false,
+      setSystemErrorModal: jest.fn()
+    }
 
-    const renderResult = renderAuthenticatedApp(
-      useAuthData,
-      getUserData,
-      getEnvConfigData
-    );
+    const renderResult = renderAuthenticatedApp(getEnvConfigData, checkUserAuthenticationData, useUserAuthData, useErrorModalsData);
 
     if (!renderResult) {
       throw new Error("Rendering failed.");
@@ -89,45 +137,37 @@ describe("GIVEN AuthenticatedApp Component is called", () => {
     });
   });
 
-  test("WHEN user is already authenticated, THEN it should automatically be signedin", async () => {
-    const useAuthData = { isLoading: false, isAuthenticated: true };
-    const getUserData = {
-      access_token: "mockAccessToken",
-      profile: { name: "Juan Dela Cruz" },
+  test("WHEN user is authenticated, THEN it user should be redirected to the landing page", async () => {
+    const checkUserAuthenticationData = {
+      status: true,
+      mcUser: 'AUTHENTICATEDUSERTOKENSAMPLE',
     };
-    const getEnvConfigData = { enableAuth: false };
-
-    const renderResult = renderAuthenticatedApp(
-      useAuthData,
-      getUserData,
-      getEnvConfigData
-    );
-
-    if (!renderResult) {
-      throw new Error("Rendering failed.");
-    }
-
-    const { container } = renderResult;
-
-    await waitFor(() => {
-      expect(container).toMatchSnapshot(`user-already-authenticated`);
-    });
-  });
-
-  test("WHEN user is signing in, THEN it should display the `Signing you in...` text", async () => {
-    const useAuthData = {
-      activeNavigator: "signinSilent",
-      isLoading: true,
-      isAuthenticated: true,
+    const getEnvConfigData = {
+      enableAuth: true,
+      idleTimeoutConfig: {
+        durationUntilPromptSeconds: 100
+      }
     };
-    const getUserData = { access_token: "mockAccessToken" };
-    const getEnvConfigData = { enableAuth: true };
+    const useUserAuthData = {
+      state: {
+        loading: false,
+        isAuthenticated: true,
+        permissions: [{
+          displayName: "ROLE_SYS_ADMIN",
+          icon: "icon_sample",
+          path: "icon_path",
+          roles: ["ROLE_SYS_ADMIN"],
+          subMenuItems: null
+        }]
+      }
+    }
+    const useErrorModalsData = {
+      showUnauthorizedModal: false,
+      systemErrorModal: false,
+      setSystemErrorModal: jest.fn()
+    }
 
-    const renderResult = renderAuthenticatedApp(
-      useAuthData,
-      getUserData,
-      getEnvConfigData
-    );
+    const renderResult = renderAuthenticatedApp(getEnvConfigData, checkUserAuthenticationData, useUserAuthData, useErrorModalsData);
 
     if (!renderResult) {
       throw new Error("Rendering failed.");
@@ -136,79 +176,45 @@ describe("GIVEN AuthenticatedApp Component is called", () => {
     const { container } = renderResult;
 
     await waitFor(() => {
-      expect(container).toMatchSnapshot(`user-signin`);
-    });
-  });
-
-  test("WHEN user is signing out, THEN it should display the `Signing you out...` text", async () => {
-    const useAuthData = {
-      activeNavigator: "signoutRedirect",
-      isLoading: false,
-      isAuthenticated: true,
-    };
-    const getUserData = {};
-    const getEnvConfigData = { enableAuth: true };
-
-    const renderResult = renderAuthenticatedApp(
-      useAuthData,
-      getUserData,
-      getEnvConfigData
-    );
-
-    if (!renderResult) {
-      throw new Error("Rendering failed.");
-    }
-
-    const { container } = renderResult;
-
-    await waitFor(() => {
-      expect(container).toMatchSnapshot(`user-signout`);
-    });
-  });
-
-  test("WHEN page loads, THEN it should display the PageLoader", async () => {
-    const useAuthData = { isLoading: true, isAuthenticated: false };
-    const getUserData = {};
-    const getEnvConfigData = { enableAuth: true };
-
-    const renderResult = renderAuthenticatedApp(
-      useAuthData,
-      getUserData,
-      getEnvConfigData
-    );
-
-    if (!renderResult) {
-      throw new Error("Rendering failed.");
-    }
-
-    const { container } = renderResult;
-
-    await waitFor(() => {
-      expect(container).toMatchSnapshot(`page-loading`);
+      expect(container).toMatchSnapshot(`user-authenticated`);
     });
   });
 });
 
 const renderAuthenticatedApp = (
-  useAuthData: object,
-  getUserData: object,
-  getEnvConfigData: object
+  getEnvConfigData: object,
+  checkUserAuthenticationData: object,
+  useUserAuthData: object,
+  useErrorModalsData: object
 ): ReturnType<typeof render> | undefined => {
-  runAuthenticatedAppMocks(useAuthData, getUserData, getEnvConfigData);
+  runAuthenticatedAppMocks(getEnvConfigData, checkUserAuthenticationData, useUserAuthData, useErrorModalsData);
 
   return render(
     <BrowserRouter>
       <AuthenticatedApp />
     </BrowserRouter>
-  );
+  );;
 };
 
 const runAuthenticatedAppMocks = (
-  useAuthData: object,
-  getUserData: object,
-  getEnvConfigData: object
+  getEnvConfigData: object,
+  checkUserAuthenticationData: object,
+  useUserAuthData: object,
+  useErrorModalsData: object
 ): void => {
-  mockUseAuth.mockReturnValue(useAuthData as unknown as AuthContextProps);
-  mockGetUser.mockReturnValue(getUserData as unknown as LoginResponse);
   mockGetEnvConfig.mockReturnValue(getEnvConfigData as unknown as ConfigType);
+  mockCheckUserAuthentication.mockReturnValue(
+    checkUserAuthenticationData as unknown as ReturnType<
+      typeof checkUserAuthentication
+    >
+  );
+  mockUseUserAuth.mockReturnValue(useUserAuthData as unknown as ReturnType<
+    typeof useUserAuth
+  >);
+  mockUseDispatch.mockReturnValue(jest.fn() as unknown as ReturnType<
+    typeof useDispatch
+  >);
+  mockUseErrorModals.mockReturnValue(useErrorModalsData as unknown as ReturnType<
+    typeof useErrorModals
+  >);
 };
