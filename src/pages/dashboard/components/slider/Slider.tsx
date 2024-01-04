@@ -68,9 +68,10 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
             sx={{
               color: "FEFEFE",
               borderRadius: 5.5,
+              padding: 12,
             }}
           >
-            <Stack gap={8}>
+            <Stack gap={2} spacing={2}>
               <Typography
                 fontWeight="bold"
                 align="center"
