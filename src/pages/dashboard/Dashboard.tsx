@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import AlertAction from "./components/alert/AlertAction";
 import Slider from "./components/slider/Slider";
 import Stack from "@mui/material/Stack";
@@ -47,8 +48,19 @@ const cards = [
 
 function Dashboard() {
   return (
-    <Stack sx={{ width: "100%" }} spacing={2}>
-      <>
+    <>
+      <Stack sx={{ width: "100%" }} spacing={2}>
+        <Typography
+          sx={{
+            fontSize: 18,
+            fontStyle: "Montserrat",
+            fontWeight: 600,
+            color: "#414145",
+            fontFamily: "Montserrat",
+          }}
+        >
+          Notifications
+        </Typography>
         <AlertAction
           message="Let's celebrate independence day! save the date, June 12, 2023."
           type="error"
@@ -69,9 +81,20 @@ function Dashboard() {
           message="Juan Dela Cruz commented on ticket number XXXX-XXXX"
           type="error"
         />
+        <Typography
+          sx={{
+            fontSize: 18,
+            fontStyle: "Montserrat",
+            fontWeight: 600,
+            color: "#414145",
+            fontFamily: "Montserrat",
+          }}
+        >
+          Active Sprints
+        </Typography>
         <Slider cards={cards} />
-      </>
-    </Stack>
+      </Stack>
+    </>
   );
 }
 

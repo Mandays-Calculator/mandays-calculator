@@ -29,7 +29,12 @@ const AlertAction: React.FC<AlertProps> = ({ message, type }) => {
                   setVisible(false);
                 }}
               >
-                <CloseIcon fontSize="inherit" />
+                <CloseIcon
+                  fontSize="inherit"
+                  sx={{
+                    alignItems: "center",
+                  }}
+                />
               </IconButton>
             }
           >

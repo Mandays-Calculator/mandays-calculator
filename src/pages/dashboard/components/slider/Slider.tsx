@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
-// import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 
 import IconButton from "@mui/material/IconButton";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -56,35 +54,45 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
         >
           <KeyboardArrowLeft />
         </IconButton>
-        <Grid container>
-          {cards.map((card) => (
-            <Grid item xs={3} paddingLeft={1} paddingRight={1}>
-              <Card>
-                <Typography align="center" color="primary" variant="h2">
-                  {card.title}
-                </Typography>
-                <Typography align="center" variant="subtitle1">
-                  {card.estimated}
-                </Typography>
-                <Typography align="center" variant="h2">
-                  {card.percent1}
-                </Typography>
-                <Typography align="center" variant="subtitle1">
-                  {card.remaining}
-                </Typography>
-                <Typography align="center" variant="subtitle1">
-                  {card.percent2}
-                </Typography>
-                <Typography align="center" variant="subtitle1">
-                  {card.annual}
-                </Typography>
-                <Typography align="center" variant="subtitle1">
-                  {card.percent3}
-                </Typography>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+
+        {cards.map((card) => (
+          <Card
+            sx={{
+              color: "FEFEFE",
+              borderRadius: 5.5,
+            }}
+          >
+            <Stack gap={8}>
+              <Typography
+                fontWeight="bold"
+                align="center"
+                color="primary"
+                variant="h2"
+              >
+                {card.title}
+              </Typography>
+              <Typography align="center" variant="subtitle1">
+                {card.estimated}
+              </Typography>
+              <Typography fontWeight="bold" align="center" variant="h2">
+                {card.percent1}
+              </Typography>
+              <Typography align="center" variant="subtitle1">
+                {card.remaining}
+              </Typography>
+              <Typography fontWeight="bold" align="center" variant="subtitle1">
+                {card.percent2}
+              </Typography>
+              <Typography align="center" variant="subtitle1">
+                {card.annual}
+              </Typography>
+              <Typography fontWeight="bold" align="center" variant="subtitle1">
+                {card.percent3}
+              </Typography>
+            </Stack>
+          </Card>
+        ))}
+
         <IconButton
           color="primary"
           size="small"
