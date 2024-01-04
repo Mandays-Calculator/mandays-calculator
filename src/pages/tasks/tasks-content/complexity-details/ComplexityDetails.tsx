@@ -67,8 +67,8 @@ const ComplexityDetails = (props: ComplexityDetailsProps): ReactElement => {
         <Typography>{details.description}</Typography>
         <Typography fontWeight={600}> Sample</Typography>
         <ul>
-          {details.sampleList.map((details) => (
-            <li>{details}</li>
+          {details.sampleList.map((details, index) => (
+            <li key={index}>{details}</li>
           ))}
         </ul>
       </Stack>
