@@ -217,9 +217,6 @@ const TasksContent = (): ReactElement => {
 
         <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
-        {/* <div
-          style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}
-        > */}
         <Grid
           container
           spacing={1}
@@ -228,7 +225,6 @@ const TasksContent = (): ReactElement => {
         >
           {Object.values(Status).map((status) => {
             const filteredData = tasks.filter((task) => task.status === status);
-            console.log("filtered", filteredData);
             return (
               <Grid
                 item
@@ -302,7 +298,6 @@ const TasksContent = (): ReactElement => {
             );
           })}
         </Grid>
-        {/* </div> */}
       </PageContainer>
     </DragDropContext>
   );
