@@ -36,6 +36,14 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
     );
   };
 
+  // Calculate the indices for the 4 cards to display
+  const displayIndices = [
+    (currentIndex - 1 + cards.length) % cards.length,
+    currentIndex,
+    (currentIndex + 1) % cards.length,
+    (currentIndex + 2) % cards.length,
+  ];
+
   return (
     <>
       <Stack
@@ -54,7 +62,7 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
           <KeyboardArrowLeft />
         </IconButton>
 
-        {cards.slice(currentIndex, currentIndex + 4).map((card, index) => (
+        {displayIndices.map((offset, index) => (
           <Card
             key={index}
             sx={{
@@ -69,25 +77,25 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
                 color="primary"
                 variant="h2"
               >
-                {card.title}
+                {cards[offset].title}
               </Typography>
               <Typography align="center" variant="subtitle1">
-                {card.estimated}
+                {cards[offset].estimated}
               </Typography>
               <Typography fontWeight="bold" align="center" variant="h2">
-                {card.percent1}
+                {cards[offset].percent1}
               </Typography>
               <Typography align="center" variant="subtitle1">
-                {card.remaining}
+                {cards[offset].remaining}
               </Typography>
               <Typography fontWeight="bold" align="center" variant="subtitle1">
-                {card.percent2}
+                {cards[offset].percent2}
               </Typography>
               <Typography align="center" variant="subtitle1">
-                {card.annual}
+                {cards[offset].annual}
               </Typography>
               <Typography fontWeight="bold" align="center" variant="subtitle1">
-                {card.percent3}
+                {cards[offset].percent3}
               </Typography>
             </Stack>
           </Card>
