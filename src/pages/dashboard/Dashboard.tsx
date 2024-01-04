@@ -44,6 +44,16 @@ const cards = [
     annual: "Annual Leaves",
     percent3: 5,
   },
+  {
+    id: 5,
+    title: "Sprint 5",
+    estimated: "Estimated total Mandays:",
+    percent1: 100,
+    remaining: "Remaining Man Days",
+    percent2: 50,
+    annual: "Annual Leaves",
+    percent3: 5,
+  },
 ];
 
 function Dashboard() {

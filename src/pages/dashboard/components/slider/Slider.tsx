@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
-
 import IconButton from "@mui/material/IconButton";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { Typography } from "@mui/material";
 
-interface Card {
+interface CardItem {
   id: number;
   title: string;
   estimated: string;
@@ -19,11 +18,11 @@ interface Card {
 }
 
 interface CardSliderProps {
-  cards: Card[];
+  cards: CardItem[];
 }
 
 const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
-  const [, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) =>
@@ -49,14 +48,15 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
         <IconButton
           color="primary"
           size="small"
-          aria-label="add to shopping cart"
+          aria-label="previous"
           onClick={handlePrevClick}
         >
           <KeyboardArrowLeft />
         </IconButton>
 
-        {cards.map((card) => (
+        {cards.slice(currentIndex, currentIndex + 4).map((card, index) => (
           <Card
+            key={index}
             sx={{
               color: "FEFEFE",
               borderRadius: 5.5,
@@ -96,7 +96,7 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
         <IconButton
           color="primary"
           size="small"
-          aria-label="add to shopping cart"
+          aria-label="next"
           onClick={handleNextClick}
         >
           <KeyboardArrowRight />
