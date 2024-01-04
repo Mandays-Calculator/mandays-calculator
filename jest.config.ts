@@ -36,6 +36,10 @@ const config: Config = {
     "!<rootDir>/**/*.d.ts",
     "!<rootDir>/vite.config.ts",
   ],
+  coveragePathIgnorePatterns: [
+    "<rootDir>/src/utils",
+    "<rootDir>/src/components/form/hocs.tsx",
+  ],
 };
 
 export default config;

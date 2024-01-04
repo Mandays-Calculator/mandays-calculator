@@ -3,12 +3,12 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "target": "ES2020",
+    "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable", "ES2021"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "types": ["jest", "node", "@testing-library/jest-dom"],
+    "types": ["jest", "node", "@testing-library/jest-dom", "react"],
     "esModuleInterop": true,
 
     /* Bundler mode */
