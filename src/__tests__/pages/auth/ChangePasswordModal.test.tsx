@@ -48,8 +48,8 @@ jest.mock('react-router-dom', () => ({
 const CHANGE_PASSWORD_TEXT = {
     label: 'changePassword.label.createNewPassword',
     placeholder: {
-        password: "changePassword.placeholder.userName",
-        confirmPassword: "changePassword.placeholder.password"
+        password: "changePassword.placeholder.password",
+        confirmPassword: "changePassword.placeholder.confirmPassword"
     },
     button: 'changePassword.btnlabel.changePassword'
 };
