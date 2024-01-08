@@ -3,6 +3,7 @@ import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 
 import { render, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { Formik } from 'formik';
 import i18n from '~/i18n';
@@ -11,8 +12,8 @@ import { useResetPasswordMutation } from '~/mutations/auth';
 import { useRequestHandler } from '~/hooks/request-handler';
 import { ChangePassword } from '~/pages/auth';
 
+import { CHANGEPASSWORD_TESTCASES, CHANGE_PASSWORD_TEXT } from '~/__tests__/__mocks__/dataMock';
 import { cleanAllCallback } from './utils/auth-utils';
-import userEvent from '@testing-library/user-event';
 
 // Mock the i18next translation function
 i18n.init({
@@ -52,18 +53,6 @@ jest.mock("react-router-dom", () => ({
 jest.mock("~/mutations/auth");
 jest.mock("~/hooks/request-handler");
 
-const CHANGE_PASSWORD_TEXT = {
-    label: 'changePassword.label.createNewPassword',
-    placeholder: {
-        password: "changePassword.placeholder.password",
-        confirmPassword: "changePassword.placeholder.confirmPassword"
-    },
-    btnlabel: {
-        changePassword: 'changePassword.btnlabel.changePassword',
-        cancel: 'changePassword.btnlabel.cancel'
-    }
-};
-
 const mockUseSearchParams = useSearchParams as jest.MockedFunction<
     typeof useSearchParams
 >;
@@ -86,108 +75,7 @@ const queryClient = new QueryClient();
 const handleSubmit = jest.fn();
 
 describe('GIVEN ChangePassword component is called,', () => {
-    interface TestConfig {
-        title: string;
-        password: string;
-        confirmPassword: string;
-        expectedResults: Record<string, boolean>;
-    }
-
-    const testCases: TestConfig[] = [
-        {
-            title: 'WHEN the passwords entered by the user are matched and valid, THEN all validations are passed',
-            password: 'Passw0rd!',
-            confirmPassword: 'Passw0rd!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user is less than the minimum characters, THEN `length` validation must be red',
-            password: 'P0d!',
-            confirmPassword: 'P0d!',
-            expectedResults: {
-                'red-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no uppercase, THEN `no uppercase` validation must be red',
-            password: 'passw0rd!',
-            confirmPassword: 'passw0rd!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'red-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no lowercase, THEN `no lowercase` validation must be red',
-            password: 'PASSW0RD!',
-            confirmPassword: 'PASSW0RD!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'red-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no number, THEN `no number` validation must be red',
-            password: 'Password!',
-            confirmPassword: 'Password!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'red-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no symbol, THEN `no symbol` validation must be red',
-            password: 'Passw0rd1',
-            confirmPassword: 'Passw0rd1',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'red-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user are not matched, THEN `not match` validation must be red',
-            password: 'Passw0rd!',
-            confirmPassword: 'Passw0rd!!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'red-icon-password-match': true,
-            },
-        },
-    ];
-
-    test.each(testCases)(
+    test.each(CHANGEPASSWORD_TESTCASES)(
         `%s`,
         async ({ password, confirmPassword, expectedResults }) => {
             const { getByPlaceholderText, queryByTestId } = renderChangePassword(false, false);
