@@ -2,22 +2,23 @@ import { useState, type ReactElement } from "react";
 import type { AddTeamForm as AddTeamFormType } from "./types";
 
 import { useFormik } from "formik";
-
-import { createProject } from "~/api/projects";
+import { useTranslation } from "react-i18next";
+import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
+import { useCreateProjectMutation } from "~/mutations/projects";
+import { useRequestHandler } from "~/hooks/request-handler";
+import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
 import { ErrorMessage, Form, SvgIcon } from "~/components";
+import { useTimeout } from "../utils/functions";
 import { StyledContainer } from "./components/TeamListCard/TeamListCard";
 import { CustomButton } from "~/components/form/button";
-
-import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
-
 import { addFormInitValue } from "./utils";
 import { appProjectSchema } from "./project-schema";
-
 import AddTeamForm from "./add-team-form";
 import EditTeamForm from "./edit-team-form/EditTeamForm";
 import TeamList from "./team-list";
+
 
 const StyledTextField = styled(ControlledTextField)(() => ({
   width: "50%",
@@ -28,6 +29,7 @@ interface ProjectListProps {
 }
 
 const AddProject = (props: ProjectListProps): ReactElement => {
+  const { t } = useTranslation();
   const { handleAddProject } = props;
   const projectForm = useFormik<AddTeamFormType>({
     initialValues: addFormInitValue,
@@ -38,15 +40,17 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [teamIndex, setTeamIndex] = useState<number>(0);
   const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [triggerTimeout] = useTimeout();
 
   const handleToggleEdit = (teamId: number): void => {
     setTeamIndex(teamId);
     setIsEditMode(!isEditMode);
   };
 
-  const onSubmit = async () => {
-    if (isLoading) return;
+  const [status, callApi] = useRequestHandler(useCreateProjectMutation().mutate, handleAddProject);
+
+  const onSubmit = async (): Promise<void> => {
+    if (status.loading) return;
 
     const { projectName, teams } = projectForm.values;
 
@@ -66,23 +70,10 @@ const AddProject = (props: ProjectListProps): ReactElement => {
       })),
     };
 
-    try {
-      setIsLoading(true);
-
-      const result = await createProject(createProjectParams);
-      if (result.data.status == 200) {
-        handleAddProject();
-      } else {
-        showError(result.data.message);
-      }
-    } catch (error: any) {
-      showError(error);
-    } finally {
-      setIsLoading(false);
-    }
+    callApi(createProjectParams);
   };
 
-  const onValidateForm = async () => {
+  const onValidateForm = async (): Promise<void> => {
     const errors = await projectForm.validateForm();
     if (Object.entries(errors).length) {
       let errorMessage =
@@ -98,14 +89,15 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     }
   };
 
-  const showError = (error: any) => {
+  const showError = (error: string): void => {
     setAddProjectErrorMsg(error);
-    setTimeout(() => {
+
+    triggerTimeout(() => {
       setAddProjectErrorMsg("");
-    }, 2000);
+    });
   };
 
-  const isErrorField = (field: string) => {
+  const isErrorField = (field: string): boolean => {
     return projectForm.errors[field as keyof {}] ? true : false;
   };
 
@@ -153,12 +145,15 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             <CustomButton
               type="submit"
               onClick={onValidateForm}
-              disabled={isLoading}
+              disabled={status.loading}
             >
-              {isLoading ? "Loading..." : "Add Project"}
+              {status.loading ? "Loading..." : "Add Project"}
             </CustomButton>
+            
           </Stack>
-          <ErrorMessage error={addProjectErrorMsg} type={"alert"} />
+          {!status.loading && (
+              <ErrorMessage error={useErrorHandler(status.error, t) || t(addProjectErrorMsg)} type="alert" />
+            )}
         </Form>
       ) : (
         <Form instance={projectForm}>

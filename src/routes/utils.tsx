@@ -1,11 +1,14 @@
-import { Navigate } from "react-router-dom";
 import type { RouteType } from ".";
-import { routesConfig } from ".";
+import { routesConfig, errorRoutes } from ".";
 import _ from "lodash";
+import ErrorPage from "~/pages/common/error-page/ErrorPage";
 
-type RouteTypeParam = "public" | "private";
+type RouteTypeParam = "public" | "private" | "error";
 
 export const seperateRoutesByType = (type: RouteTypeParam): RouteType[] => {
+  if (type === "error") {
+    return errorRoutes;
+  }
   if (type === "public") {
     return routesConfig.filter(
       (routeItem: RouteType) =>
@@ -17,17 +20,21 @@ export const seperateRoutesByType = (type: RouteTypeParam): RouteType[] => {
       _.isUndefined(routeItem.protected) || routeItem.protected === true
   );
 };
-
 export const getPermittedRoute = (
-  permittedPath: string[],
+  permittedPaths: string[],
   privateRoutes: RouteType[]
 ): RouteType[] => {
   return privateRoutes.map((privRoute: RouteType) => {
-    console.log(privRoute, "private route", permittedPath);
-    if (privRoute.path && !permittedPath.includes(privRoute.path)) {
+    const isPermitted = permittedPaths.some(
+      (permittedPath) =>
+        (privRoute.path && privRoute.path.startsWith(`${permittedPath}/`)) ||
+        privRoute.path === permittedPath
+    );
+
+    if (!isPermitted) {
       return {
         ...privRoute,
-        element: <Navigate to="/permission-denied" />,
+        element: <ErrorPage type="permission-denied" />,
       };
     }
     return privRoute;

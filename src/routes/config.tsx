@@ -14,6 +14,25 @@ import { accountInfoRoutes } from "~/pages/account-info/routes";
 
 import ErrorPage from "~/pages/common/error-page";
 
+export const errorRoutes: RouteType[] = [
+  {
+    path: "/permission-error",
+    element: <ErrorPage type="permission-error" />,
+  },
+  {
+    path: "/permission-denied",
+    element: <ErrorPage type="permission-denied" />,
+  },
+  {
+    path: "/*",
+    element: <ErrorPage type="not-found" />,
+  },
+  {
+    path: "/",
+    element: <Outlet />,
+  },
+];
+
 export const routes: RouteType[] = [
   {
     path: "project-management",
@@ -56,18 +75,6 @@ export const routes: RouteType[] = [
     element: <History />,
     pageTitle: "History",
   },
-  {
-    path: "/permission-error",
-    element: <ErrorPage type="permission-error" />,
-  },
   ...mandaysCalculatorRoutes,
   ...accountInfoRoutes,
-  {
-    path: "/*",
-    element: <ErrorPage type="not-found" />,
-  },
-  {
-    path: "/",
-    element: <Outlet />,
-  },
 ];
