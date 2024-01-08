@@ -1,7 +1,13 @@
 // CONSTANT NAME SHOULD BE IN UPPERCASE AND UNDERSCORE FOR SPACES
 
 export const CHANGE_PASSWORD_TEXT = {
-    label: 'changePassword.label.createNewPassword',
+    label: {
+        createNewPassword: "changePassword.label.createNewPassword",
+        enterNewPassword: "changePassword.label.enterNewPassword",
+        confirmNewPassword: "changePassword.label.confirmNewPassword",
+        success: "changePassword.label.success",
+        title: "changePassword.label.title",
+    },
     placeholder: {
         password: "changePassword.placeholder.password",
         confirmPassword: "changePassword.placeholder.confirmPassword"

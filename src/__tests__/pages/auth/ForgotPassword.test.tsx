@@ -46,7 +46,7 @@ const FORGOT_PASSWORD_TEXT = {
     common: {
         okayBtn: "common.button.okay",
     }
-}
+};
 const forgotPasswordData = {
     usernameOrEmail: 'testuser@gmail.com',
     invalid: 'abc1234'
@@ -63,7 +63,7 @@ describe("GIVEN ForgotPassword Component is called", () => {
 
         const goBackLink = screen.getByRole('link', { name: FORGOT_PASSWORD_TEXT.btnlabel.back });
         const forgotPassTextField = screen.getByPlaceholderText(FORGOT_PASSWORD_TEXT.placeholder);
-        const sendButton = screen.getByRole('button', { name: FORGOT_PASSWORD_TEXT.btnlabel.send })
+        const sendButton = screen.getByRole('button', { name: FORGOT_PASSWORD_TEXT.btnlabel.send });
 
         await waitFor(async () => {
             await user.type(forgotPassTextField, forgotPasswordData.usernameOrEmail);
@@ -102,7 +102,7 @@ describe("GIVEN ForgotPassword Component is called", () => {
         renderForgotPassword(false, true);
         const user = userEvent.setup();
 
-        const okayButton = screen.getByRole('button', { name: FORGOT_PASSWORD_TEXT.common.okayBtn })
+        const okayButton = screen.getByRole('button', { name: FORGOT_PASSWORD_TEXT.common.okayBtn });
         await user.click(okayButton);
 
         waitFor(() => {
@@ -119,7 +119,7 @@ describe("GIVEN ForgotPassword Component is called", () => {
         const user = userEvent.setup();
 
         const forgotPassTextField = screen.getByPlaceholderText(FORGOT_PASSWORD_TEXT.placeholder);
-        const sendButton = screen.getByRole('button', { name: FORGOT_PASSWORD_TEXT.btnlabel.send })
+        const sendButton = screen.getByRole('button', { name: FORGOT_PASSWORD_TEXT.btnlabel.send });
 
         await waitFor(async () => {
             await user.type(forgotPassTextField, forgotPasswordData.invalid);

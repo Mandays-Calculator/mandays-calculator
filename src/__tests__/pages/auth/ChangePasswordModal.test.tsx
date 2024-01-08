@@ -6,8 +6,9 @@ import userEvent from '@testing-library/user-event';
 import { Formik } from 'formik';
 import i18n from '~/i18n';
 
-import { CHANGEPASSWORD_TESTCASES, CHANGE_PASSWORD_TEXT } from '~/__tests__/__mocks__/dataMock';
 import ChangePasswordModal from '~/pages/auth/ChangePasswordModal';
+
+import { CHANGEPASSWORD_TESTCASES, CHANGE_PASSWORD_TEXT } from '~/__tests__/__mocks__/dataMock';
 import { cleanAllCallback } from './utils/auth-utils';
 
 // Mock the i18next translation function
@@ -39,15 +40,22 @@ describe('GIVEN user changes password via modal,', () => {
     test('WHEN ChangePasswordModal is closed, THEN it should not render the ChangePassword Modal', () => {
         renderChangePasswordModal(false);
 
-        expect(screen.queryByText(CHANGE_PASSWORD_TEXT.label)).toBeNull();
+        expect(screen.queryByText(CHANGE_PASSWORD_TEXT.label.createNewPassword)).toBeNull();
     });
 
     test('WHEN user access the ChangePasswordModal, THEN it should render the ChangePassword Modal correctly', () => {
         renderChangePasswordModal(true);
 
-        expect(screen.getByText(CHANGE_PASSWORD_TEXT.label)).toBeInTheDocument();
+        // Labels
+        expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.createNewPassword)).toBeInTheDocument();
+        expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.enterNewPassword)).toBeInTheDocument();
+        expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.confirmNewPassword)).toBeInTheDocument();
+
+        // Fields
         expect(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password)).toBeInTheDocument();
         expect(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword)).toBeInTheDocument();
+
+        // Buttons
         expect(screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.btnlabel.changePassword })).toBeInTheDocument();
     });
 
