@@ -36,7 +36,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
       data?.filter(
         (obj: OdcParam) => {
           const value = handleLowerCase(event.target.value);
-          return obj.active === "true" &&
+          return obj.active === true &&
           (
             handleLowerCase(obj.name).includes(value) ||
             handleLowerCase(obj.abbreviation).includes(value) ||

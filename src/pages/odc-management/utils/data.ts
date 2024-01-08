@@ -4,7 +4,7 @@ export const NewODCData = {
   location: "",
   abbreviation: "",
   holidays: null,
-  active: "true",
+  active: true,
   createdDate: null,
   lastUpdatedDate: null,
 };

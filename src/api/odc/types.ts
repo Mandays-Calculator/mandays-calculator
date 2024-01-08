@@ -7,7 +7,7 @@ export interface OdcParam {
   abbreviation: string;
   location: string;
   holidays: HolidayParam[] | null;
-  active: string;
+  active: boolean;
   createdDate: string | null;
   lastUpdatedDate: string | null;
 };
@@ -17,7 +17,7 @@ export interface CreateOdcParam {
   abbreviation: string;
   location: string;
   holidays: CreateHolidayParam[] | null;
-  active: string;
+  active: boolean;
   createdDate: string | null;
   lastUpdatedDate: string | null;
 };
