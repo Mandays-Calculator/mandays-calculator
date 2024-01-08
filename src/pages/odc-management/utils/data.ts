@@ -12,7 +12,7 @@ export const NewODCData = {
 export const NewHolidayData = {
   id: 0,
   odcId: "",
-  recurring: "true",
+  recurring: "false",
   name: "",
   createdDate: null,
   lastUpdatedDate: null,

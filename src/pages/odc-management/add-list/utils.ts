@@ -26,7 +26,7 @@ export const AddFormat = (obj: OdcParam): CreateOdcParam => {
     createdDate: string | null;
     lastUpdatedDate: string | null;
   }[] = [];
-  const cDate = moment().format("YYYY-MM-DD HH:MM:SS.S");
+  const cDate = moment().format("YYYY-MM-DD HH:MM:SS");
 
   if (
     (obj.holidays !== undefined && obj.holidays !== null) &&
@@ -57,7 +57,7 @@ export const AddFormat = (obj: OdcParam): CreateOdcParam => {
 };
 
 export const EditFormat = (obj: OdcParam): UpdateOdcParam => {
-  const date = moment().format("YYYY-MM-DD HH:MM:SS.S");
+  const date = moment().format("YYYY-MM-DD HH:MM:SS");
 
   return {
     id: obj.id,
@@ -79,7 +79,7 @@ export const AddHolidayFormat = (obj: OdcParam): CreateHoliday => {
     createdDate: string | null;
     lastUpdatedDate: string | null;
   }[] = [];
-  const cDate = moment().format("YYYY-MM-DD HH:MM:SS.S");
+  const cDate = moment().format("YYYY-MM-DD HH:MM:SS");
 
   obj.holidays?.map((param: HolidayParam) => {
     const date = moment(param.date).format("YYYY-MM-DD");
@@ -105,7 +105,7 @@ export const AddHoliday = (odcId: string) => {
   return {
     id: 0,
     odcId: odcId,
-    recurring: "true",
+    recurring: "false",
     name: "",
     createDate: null,
     lastUpdatedDate: null,
