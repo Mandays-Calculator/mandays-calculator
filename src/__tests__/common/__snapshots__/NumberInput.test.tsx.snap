@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NumberInput Component renders without errors 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="test"
+    class="MuiNumberInput-root css-1o7x22k"
+    data-testid="number-input-component"
+    name="test"
+  >
+    <button
+      aria-controls=":r0:"
+      aria-disabled="false"
+      class="MuiNumberInput-decrementButton css-m39jb1"
+      tabindex="-1"
+    >
+      <img
+        alt="arrow-down"
+        src="[object Object]"
+      />
+    </button>
+    <button
+      aria-controls=":r0:"
+      aria-disabled="false"
+      class="MuiNumberInput-incrementButton css-m39jb1"
+      tabindex="-1"
+      type="button"
+    >
+      <img
+        alt="arrow-up"
+        src="[object Object]"
+      />
+    </button>
+    <input
+      aria-disabled="false"
+      aria-valuemin="0"
+      aria-valuenow=""
+      aria-valuetext=""
+      autocomplete="off"
+      autocorrect="off"
+      class="MuiNumberInput-input css-zilv34"
+      id=":r0:"
+      spellcheck="false"
+      type="text"
+      value=""
+    />
+  </div>
+</DocumentFragment>
+`;
