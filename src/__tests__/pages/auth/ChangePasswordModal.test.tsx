@@ -13,29 +13,7 @@ import { cleanAllCallback } from './utils/auth-utils';
 // Mock the i18next translation function
 i18n.init({
     resources: {
-        en: {
-            translation: {
-                "changePassword": {
-                    "label": {
-                        "createNewPassword": "Create New Password",
-                        "enterNewPassword": "Enter new password",
-                        "confirmNewPassword": "Confirm new password"
-                    },
-                    "btnlabel": {
-                        "changePassword": "Change Password",
-                        "cancel": "Cancel"
-                    },
-                    "validationInfo": {
-                        "charCount": "Password must be at least 8 characters long",
-                        "uppercase": "Password must contain an uppercase letter",
-                        "lowercase": "Password must contain a lowercase letter",
-                        "number": "Password must contain a number",
-                        "symbol": "Password must contain one of the following symbols (#$-_!)",
-                        "match": "New password and confirm new password must match."
-                    }
-                },
-            },
-        },
+        en: {},
     },
     lng: 'en',
     interpolation: { escapeValue: false }, // react already safes from xss
@@ -97,7 +75,7 @@ describe('GIVEN user changes password via modal,', () => {
     );
 });
 
-const renderChangePasswordModal = (open: boolean) => {
+const renderChangePasswordModal = (open: boolean): void => {
     render(
         <I18nextProvider i18n={i18n}>
             <Formik initialValues={{}} onSubmit={handleSubmit}>

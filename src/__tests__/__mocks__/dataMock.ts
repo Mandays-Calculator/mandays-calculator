@@ -1,3 +1,5 @@
+// CONSTANT NAME SHOULD BE IN UPPERCASE AND UNDERSCORE FOR SPACES
+
 export const CHANGE_PASSWORD_TEXT = {
     label: 'changePassword.label.createNewPassword',
     placeholder: {
