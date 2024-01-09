@@ -5,3 +5,4 @@ export * from "./date-picker";
 export * from "./search-select";
 export * from "./Form";
 export * from "./number-input";
+export * from "./text-area";

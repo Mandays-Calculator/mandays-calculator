@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Stack, Switch } from '@mui/material';
@@ -14,14 +14,21 @@ import { Table, Title, Modal, PageContainer, Alert, PageLoader } from '~/compone
 import { complexityColumns, ComplexityForms, FormContext } from './utils';
 
 const Complexity = (): ReactElement => {
-	const [isDaysChecked, setIsDaysChecked] = useState<boolean>(true);
+	const [isDaysChecked, setIsDaysChecked] = useState<boolean>(false);
 	const [complexityId, setComplexityId] = useState<string>('');
 	const [formContext, setFormContext] = useState<FormContext>('');
 	const [openAddEditModal, setOpenAddEditModal] = useState<boolean>(false);
 	const [isEditError, setIsEditError] = useState<boolean>(false);
 	const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
+	const [isEditLoading, setIsEditLoading] = useState<boolean>(false);
 
-	const { data: apiData, isError, isLoading } = useGetComplexities();
+	const { data: apiData, isError, isLoading, refetch } = useGetComplexities();
+	const {
+		mutate,
+		isError: isDeleteError,
+		isSuccess: isDeleteSuccess,
+		isLoading: isDeleteLoading,
+	} = useDeleteComplexities();
 	const { t } = useTranslation();
 	const {
 		complexity: { title, btnLabel, label, validationInfo },
@@ -36,7 +43,6 @@ const Complexity = (): ReactElement => {
 	};
 	const handleCloseAddEdit = (): void => setOpenAddEditModal(false);
 
-	const { mutate, isError: isDeleteError, isSuccess: isDeleteSuccess } = useDeleteComplexities();
 	const handleContext = (context: FormContext, id: string): void => {
 		setFormContext(context);
 		setComplexityId(id);
@@ -46,9 +52,9 @@ const Complexity = (): ReactElement => {
 			mutate(id);
 	};
 
-	// useEffect(() => {
-	// 	setTimeout(refetch, 5000);
-	// }, [formContext]);
+	useEffect(() => {
+		if (isDeleteSuccess || isEditSuccess) refetch();
+	}, [isDeleteLoading, isEditLoading]);
 
 	if (isLoading)
 		return <PageLoader />;
@@ -91,40 +97,41 @@ const Complexity = (): ReactElement => {
 						data={apiData?.data ?? []}
 						setIsEditError={setIsEditError}
 						setIsEditSuccess={setIsEditSuccess}
+						setIsEditLoading={setIsEditLoading}
 					/>
 				}
 				actions={<></>}
 				maxWidth={'md'}
 			/>
-			{isError && (
+			{(isLoading && isError) && (
 				<Alert
 					open={isError}
 					message={t(genericError)}
 					type={"error"}
 				/>
 			)}
-			{isEditError && (
+			{(isEditLoading && isEditError) && (
 				<Alert
 					open={isEditError}
 					message={t(validationInfo.submitError)}
 					type={"error"}
 				/>
 			)}
-			{isDeleteError && (
-				<Alert
-				open={isDeleteError}
-				message={t(validationInfo.deleteError)}
-				type={"error"}
-			/>
-			)}
-			{isEditSuccess && (
+			{(isEditLoading && isEditSuccess) && (
 				<Alert
 					open={isEditSuccess}
 					message={t(validationInfo.submitSuccess)}
 					type={"success"}
 				/>
 			)}
-			{isDeleteSuccess && (
+			{(isDeleteLoading && isDeleteError) && (
+				<Alert
+				open={isDeleteError}
+				message={t(validationInfo.deleteError)}
+				type={"error"}
+			/>
+			)}
+			{(isDeleteLoading && isDeleteSuccess) && (
 				<Alert
 				open={isDeleteSuccess}
 				message={t(validationInfo.deleteSuccess)}

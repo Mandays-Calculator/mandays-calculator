@@ -50,6 +50,7 @@ const CustomNumberInput = React.forwardRef<HTMLDivElement, CustomNumberInputProp
           ),
         },
         decrementButton: {
+          type: "button",
           children: (
             <img
               src={IconDown}
@@ -74,6 +75,7 @@ export default function NumberInputIntroduction(props: CustomNumberInputProps) {
       name={name}
       width={width}
       placeholder={placeholder}
+      data-testid="number-input-component"
     />
   );
 }

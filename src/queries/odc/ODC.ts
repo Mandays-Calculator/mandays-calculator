@@ -1,4 +1,4 @@
-import type { OdcParam, HolidayListResponse } from "~/api/odc";
+import type { OdcListResponse, HolidayListResponse } from "~/api/odc";
 
 import { useState } from "react";
 import { useQuery } from "react-query";
@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import { getODC, getHoliday } from "~/api/odc/ODC";
 
 export const useODCList = () => {
-  return useQuery<OdcParam[], Error>("odcList", getODC);
+  return useQuery<OdcListResponse, Error>("odcList", getODC);
 };
 
 export const useHolidayList = (id: string) => {

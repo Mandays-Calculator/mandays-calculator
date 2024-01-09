@@ -16,7 +16,7 @@ type TextareaAutosizeProps = BaseInputProps<MuiTextAreaAutoSizeProps>;
 const StyledTextArea = styled(BaseTextareaAutosize)(
   ({ theme, error }: { error: boolean | undefined; theme?: Theme }) => ({
     width: "100%",
-    borderColor: theme?.palette.grey[500],
+    borderColor: error ? theme?.palette.error.main : theme?.palette.grey[500],
     border: `2px solid inherit`,
     "&:hover": {
       border: error ? `2px solid inherit` : `1px solid rgba(0, 0, 0, 0.87)`,
@@ -25,7 +25,7 @@ const StyledTextArea = styled(BaseTextareaAutosize)(
       border: error
         ? `2px solid inherit`
         : `2px solid ${theme?.palette.primary.main}`,
-      outline: theme?.palette.primary.main,
+      outline: error ? theme?.palette.error.main : theme?.palette.primary.main,
     },
     padding: theme?.spacing(2.3, 2),
     font: "inherit",
@@ -36,7 +36,7 @@ const StyledTextArea = styled(BaseTextareaAutosize)(
   })
 );
 
-const TextArea = (props: TextareaAutosizeProps): ReactElement => {
+export const TextArea = (props: TextareaAutosizeProps): ReactElement => {
   const {
     name,
     label,
@@ -56,12 +56,7 @@ const TextArea = (props: TextareaAutosizeProps): ReactElement => {
           aria-label={name}
           minRows={minRows}
           placeholder={placeholder}
-          sx={{
-            borderColor: error ? "error.main" : "",
-            "&:focus": {
-              outlineColor: error ? "error.main" : "",
-            },
-          }}
+          data-testid="text-area-component"
           {...rest}
         />
         {helperText && <FormHelperText>{helperText}</FormHelperText>}

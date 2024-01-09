@@ -107,9 +107,9 @@ export const AddHolidayColumn = (
 
 export const EditHolidayColumn = (
   t: TFunction<"translation", undefined>,
-  holIdx: string[],
-  setHolIdx: (holIdx: string[]) => void,
-  handleDeleteHoliday: (holidayId: string) => void,
+  holIdx: number[],
+  setHolIdx: (holIdx: number[]) => void,
+  handleDeleteHoliday: (id: string, holidayId: number) => void,
   handleUpdateHoliday: (data: HolidayParam) => void,
 ): Column<HolidayParam>[] => {
   return [
@@ -123,7 +123,7 @@ export const EditHolidayColumn = (
 
         return (
           <>
-            {(holIdx.includes(row.original.id) || row.original.id === "") ? (
+            {(holIdx.includes(row.original.id) || row.original.id === 0) ? (
               <>
                 <ControlledDatePicker
                   name={`holidays.${row.index}.date`}
@@ -144,7 +144,7 @@ export const EditHolidayColumn = (
       Cell: ({ row }: CellProps<HolidayParam>) => {
         return (
           <>
-            {(holIdx.includes(row.original.id) || row.original.id === "") ? (
+            {(holIdx.includes(row.original.id) || row.original.id === 0) ? (
               <ControlledTextField
                 name={`holidays.${row.index}.name`}
                 value={row.original.name}
@@ -161,7 +161,7 @@ export const EditHolidayColumn = (
       id: "actions",
       Cell: ({ row }: CellProps<HolidayParam>) => (
         <>
-          {(!holIdx.includes(row.original.id) && row.original.id !== "") && (
+          {(!holIdx.includes(row.original.id) && row.original.id !== 0) && (
             <>
               <IconButton
                 onClick={() => setHolIdx([...holIdx, row.original.id])}
@@ -170,7 +170,7 @@ export const EditHolidayColumn = (
                 <SvgIcon name="edit" $size={2} />
               </IconButton>
               <IconButton
-                onClick={() => handleDeleteHoliday(row.original.id)}
+                onClick={() => handleDeleteHoliday(row.original.odcId, row.original.id)}
                 aria-label={`delete-${row.index}`}
               >
                 <SvgIcon name="delete" $size={2} />

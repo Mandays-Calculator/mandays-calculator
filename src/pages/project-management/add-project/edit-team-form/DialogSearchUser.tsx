@@ -1,13 +1,21 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { Avatar, Box, Divider, Grid, SelectChangeEvent, Stack, Typography } from '@mui/material';
-import { OdcParam } from '~/api/odc/types';
-import { UserListData } from '~/api/user-management/types';
-import { useODCList } from '~/queries/odc/ODC';
-import { useUserList } from '~/queries/user-management/UserManagement';
-import { useTimeout } from '../../utils/functions';
-import { ErrorMessage, Select, TextField } from '~/components';
-import { Modal } from '~/components/modal';
-import { CustomButton } from '~/components/form/button';
+import { ChangeEvent, useEffect, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Divider,
+  Grid,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { OdcParam } from "~/api/odc/types";
+import { UserListData } from "~/api/user-management/types";
+import { useODCList } from "~/queries/odc/ODC";
+import { useUserList } from "~/queries/user-management/UserManagement";
+import { useTimeout } from "../../utils/functions";
+import { ErrorMessage, Select, TextField } from "~/components";
+import { Modal } from "~/components/modal";
+import { CustomButton } from "~/components/form/button";
 
 type Members = UserListData & { isSelected: boolean; fullName: string };
 type OdcDropdown = OdcParam & { value: string; label: string };
@@ -24,30 +32,30 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
   const [odcList, setOdcList] = useState<OdcDropdown[]>([] as any[]);
   const [userList, setUserList] = useState<Members[]>([]);
   const [originUserList, setOriginUserList] = useState<Members[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [searchName, setSearchName] = useState<string>('');
-  const [searchOdc, setSearchOdc] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [searchName, setSearchName] = useState<string>("");
+  const [searchOdc, setSearchOdc] = useState<string>("");
   const [triggerTimeout] = useTimeout();
 
   const renderUserList = (user: Members, index: number) => {
     return (
       <Grid item xs={2} sm={4} md={4} key={index}>
         <Grid
-          display={'flex'}
-          alignItems={'center'}
+          display={"flex"}
+          alignItems={"center"}
           sx={{
-            width: '100%',
-            borderRadius: '7px',
-            padding: '0.4rem',
-            cursor: 'pointer',
-            backgroundColor: user.isSelected ? '#ecebeb' : '',
+            width: "100%",
+            borderRadius: "7px",
+            padding: "0.4rem",
+            cursor: "pointer",
+            backgroundColor: user.isSelected ? "#ecebeb" : "",
           }}
           onClick={() => onSelectUser(user)}
         >
-          <Avatar alt='Remy Sharp' />
-          <div style={{ marginLeft: '10px' }}>
+          <Avatar alt="Remy Sharp" />
+          <div style={{ marginLeft: "10px" }}>
             <Typography>
-              {user.lastName}, {user.firstName} {user.middleName ?? ''}
+              {user.lastName}, {user.firstName} {user.middleName ?? ""}
             </Typography>
             <Typography>{user.odc.abbreviation}</Typography>
             <Typography>{user.careerStep}</Typography>
@@ -65,7 +73,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
           newUser.isSelected = !newUser.isSelected;
         }
         return newUser;
-      }),
+      })
     );
   };
 
@@ -83,10 +91,17 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
     setUserList(filteredUserList(searchedName));
   };
 
-  const filteredUserList = (searchedName: string, searchedOdc?: string): Members[] => {
+  const filteredUserList = (
+    searchedName: string,
+    searchedOdc?: string
+  ): Members[] => {
     return originUserList.filter((user) => {
-      const name = user.fullName.toLowerCase().includes(searchedName.toLowerCase());
-      const odc = user.odc.abbreviation.toLowerCase().includes(searchedOdc?.toLowerCase() ?? '');
+      const name = user.fullName
+        .toLowerCase()
+        .includes(searchedName.toLowerCase());
+      const odc = user.odc.abbreviation
+        .toLowerCase()
+        .includes(searchedOdc?.toLowerCase() ?? "");
 
       return name && odc;
     });
@@ -96,8 +111,8 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
     let selectedUsers = userList.filter((user) => user.isSelected);
 
     if (!selectedUsers.length) {
-      setErrorMessage('Select at least 1(one) user to proceed');
-      triggerTimeout(() => setErrorMessage(''));
+      setErrorMessage("Select at least 1(one) user to proceed");
+      triggerTimeout(() => setErrorMessage(""));
       return;
     }
     toggleDialog(selectedUsers);
@@ -109,7 +124,9 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
         const result = data && Array.isArray(data?.data) ? data.data : [];
 
         const newUsers = result.map((user) => {
-          const fullName = `${user.lastName}, ${user.firstName} ${user.middleName ?? ''}`.trim();
+          const fullName = `${user.lastName}, ${user.firstName} ${
+            user.middleName ?? ""
+          }`.trim();
           return { ...user, fullName, isSelected: false };
         });
 
@@ -117,7 +134,13 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
         setOriginUserList(newUsers);
 
         if (listOfOdc) {
-          setOdcList(listOfOdc.map((odc) => ({ ...odc, value: odc.abbreviation, label: odc.abbreviation })));
+          setOdcList(
+            (listOfOdc.data).map((odc) => ({
+              ...odc,
+              value: odc.abbreviation,
+              label: odc.abbreviation,
+            }))
+          );
         }
       } catch (error) {
         setUserList([]);
@@ -131,19 +154,30 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
 
   return (
     <>
-      <Modal open={showMemberDialog} title='Search User' maxWidth={'md'} onClose={() => toggleDialog()}>
-        <Box sx={{ minWidth: '510px' }}>
-          <Stack direction='column'>
+      <Modal
+        open={showMemberDialog}
+        title="Search User"
+        maxWidth={"md"}
+        onClose={() => toggleDialog()}
+      >
+        <Box sx={{ minWidth: "510px" }}>
+          <Stack direction="column">
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField name='name' label='Name' fullWidth value={searchName} onChange={onChangeName} />
+                <TextField
+                  name="name"
+                  label="Name"
+                  fullWidth
+                  value={searchName}
+                  onChange={onChangeName}
+                />
               </Grid>
               <Grid item xs={6}>
-                <Stack direction='column' gap={1}>
+                <Stack direction="column" gap={1}>
                   <Typography>ODC</Typography>
                   <Select
-                    name='odc'
-                    placeholder='ODC'
+                    name="odc"
+                    placeholder="ODC"
                     fullWidth
                     value={searchOdc}
                     onChange={onChangeOdc}
@@ -153,30 +187,44 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
               </Grid>
             </Grid>
           </Stack>
-          <Divider sx={{ m: '10px 1rem 0' }} />
+          <Divider sx={{ m: "10px 1rem 0" }} />
 
-          <Stack direction={'row'} sx={{ p: '1rem' }}>
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+          <Stack direction={"row"} sx={{ p: "1rem" }}>
+            <Grid
+              container
+              spacing={{ xs: 2, md: 3 }}
+              columns={{ xs: 4, sm: 8, md: 12 }}
+            >
               {userList.map((user, index) => renderUserList(user, index))}
             </Grid>
           </Stack>
 
-          <Stack direction='row' display='flex' justifyContent='flex-end' gap={1}>
+          <Stack
+            direction="row"
+            display="flex"
+            justifyContent="flex-end"
+            gap={1}
+          >
             <CustomButton
-              type='button'
-              colorVariant='secondary'
+              type="button"
+              colorVariant="secondary"
               onClick={() => toggleDialog()}
-              data-testid='test-cancel-btn'
+              data-testid="test-cancel-btn"
             >
               Cancel
             </CustomButton>
-            <CustomButton type='button' colorVariant='primary' onClick={onSubmit} data-testid='test-select-btn'>
+            <CustomButton
+              type="button"
+              colorVariant="primary"
+              onClick={onSubmit}
+              data-testid="test-select-btn"
+            >
               Select
             </CustomButton>
           </Stack>
         </Box>
       </Modal>
-      <ErrorMessage error={errorMessage} type={'alert'} />
+      <ErrorMessage error={errorMessage} type={"alert"} />
     </>
   );
 };
