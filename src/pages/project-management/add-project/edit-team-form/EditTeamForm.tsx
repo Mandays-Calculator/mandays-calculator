@@ -3,11 +3,12 @@ import { Column } from "react-table";
 import { useFormikContext } from "formik";
 import { Grid, Typography, Stack, Box, IconButton } from "@mui/material";
 
-import { CustomButton } from "~/components/form/button";
-import { AddTeamForm as AddTeamFormType, TeamObject } from "../types";
-import { Table, TextField, SvgIcon, ErrorMessage } from "~/components";
-import DialogSearchUser from "./DialogSearchUser";
 import { User } from "~/api/user";
+import { CustomButton } from "~/components/form/button";
+import { Table, TextField, SvgIcon, ErrorMessage } from "~/components";
+import { useTimeout } from "../../utils/functions";
+import { AddTeamForm as AddTeamFormType, TeamObject } from "../types";
+import DialogSearchUser from "./DialogSearchUser";
 
 type Members = {
   name: string;
@@ -39,6 +40,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const [tableData, setTableData] = useState<Members[]>([]);
   const [showMemberDialog, setMemberDialog] = useState<boolean>(false);
   const [errorEditTeamMsg, setErrorEditTeamMsg] = useState<string>("");
+  const [triggerTimeout] = useTimeout();
 
   const editTeam = (): void => {
     if (projectName === "") {
@@ -75,7 +77,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
           "Team members are required. Select at least 1(one) of the members"
         );
 
-        setTimeout(() => setErrorEditTeamMsg(""), 3100);
+        triggerTimeout(() => setErrorEditTeamMsg(""))
       } else {
         onCancel(teamIndex);
       }

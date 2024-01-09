@@ -1,59 +1,54 @@
-import type { Dispatch, SetStateAction } from "react";
-import type { ODCListResponse, HolidayType } from "~/api/odc";
+import type { OdcParam, HolidayParam } from "~/api/odc";
 import type { TFunction } from "i18next";
+import type { FormContext } from "../utils";
 
 import { Column, CellProps } from "react-table";
 import { IconButton } from "@mui/material";
+import moment from "moment";
 
 import { SvgIcon } from "~/components";
+import { ControlledTextField, ControlledDatePicker } from "~/components/form/controlled";
 import { CustomButton } from "~/components/form/button";
-import {
-  ControlledTextField,
-  ControlledDatePicker,
-} from "~/components/form/controlled";
+import LocalizationKey from "~/i18n/key";
 
-type ODCColumnType = Column<ODCListResponse> & { id?: string };
+type ODCColumnType = Column<OdcParam> & { id?: string };
+
+const { odc: { label, btnlabel } } = LocalizationKey;
 
 export const ODCColumns = (
-  setIsAdd: Dispatch<SetStateAction<boolean>>,
-  setIsEdit: Dispatch<SetStateAction<boolean>>,
-  setIdx: Dispatch<SetStateAction<number>>,
-  setDelIdx: Dispatch<SetStateAction<number | null>>,
-  setDeleteModalOpen: Dispatch<SetStateAction<boolean>>,
-  t: TFunction<"translation", undefined>
+  t: TFunction<"translation", undefined>,
+  setFormContext: (context: FormContext) => void,
+  setIdx: (idx: string) => void,
 ): ODCColumnType[] => {
   return [
     {
-      Header: t("odc.label.name"),
+      Header: t(label.name),
       accessor: "name",
     },
     {
-      Header: t("odc.label.location"),
+      Header: t(label.location),
       accessor: "location",
     },
     {
-      Header: t("odc.label.abbreviation"),
+      Header: t(label.abbreviation),
       accessor: "abbreviation",
     },
     {
-      Header: t("odc.label.noHolidays"),
+      Header: t(label.noHolidays),
       id: "holidays",
-      Cell: ({ row }: CellProps<ODCListResponse>) => (
-        <>
-          {row.original.holidays === null ? 0 : row.original.holidays?.length}
-        </>
+      Cell: ({ row }: CellProps<OdcParam>) => (
+        <>{row.original.holidays === null ? 0 : row.original.holidays?.length}</>
       ),
     },
     {
       Header: "",
       id: "actions",
-      Cell: ({ row }: CellProps<ODCListResponse>) => (
+      Cell: ({ row }: CellProps<OdcParam>) => (
         <>
           <IconButton
             onClick={() => {
-              setIsAdd(true);
-              setIsEdit(true);
-              setIdx(row.index);
+              setFormContext("Edit");
+              setIdx(row.original.id);
             }}
             aria-label={`edit-${row.index}`}
           >
@@ -61,8 +56,8 @@ export const ODCColumns = (
           </IconButton>
           <IconButton
             onClick={() => {
-              setDeleteModalOpen(true);
-              setDelIdx(row.index);
+              setFormContext("Delete");
+              setIdx(row.original.id);
             }}
             aria-label={`delete-${row.index}`}
           >
@@ -74,56 +69,120 @@ export const ODCColumns = (
   ];
 };
 
-export const HolidayColumn = (
+export const AddHolidayColumn = (
   t: TFunction<"translation", undefined>,
-  editIdx: number[],
-  setEditIdx: Dispatch<SetStateAction<number[]>>,
-  idx: number
-): Column<HolidayType>[] => {
+): Column<HolidayParam>[] => {
   return [
     {
-      Header: t("odc.label.date"),
+      Header: t(label.date),
       accessor: "date",
-      Cell: ({ row }: CellProps<HolidayType>) => (
-        <>
-          {editIdx.includes(row.index) ? (
-            <ControlledDatePicker
-              name={`odcList.${idx}.holidays.${row.index}.date`}
-            />
-          ) : (
-            <>{row.original.date}</>
-          )}
-        </>
-      ),
+      Cell: ({ row }: CellProps<HolidayParam>) => {
+        let valueDate = "";
+        if (row.original.date !== undefined && row.original.date !== null && row.original.date !== "")
+          valueDate = moment(row.original.date).format("yyyy/MM/DD");
+
+        return (
+          <ControlledDatePicker
+            name={`holidays.${row.index}.date`}
+            value={valueDate}
+            dateFormat="yyyy/MM/dd"
+          />
+        );
+      },
     },
     {
-      Header: t("odc.label.holiday"),
-      accessor: "holiday",
-      Cell: ({ row }: CellProps<HolidayType>) => (
-        <>
-          {editIdx.includes(row.index) ? (
-            <ControlledTextField
-              name={`odcList.${idx}.holidays.${row.index}.holiday`}
-            />
-          ) : (
-            <>{row.original.holiday}</>
-          )}
-        </>
-      ),
+      Header: t(label.holiday),
+      accessor: "name",
+      Cell: ({ row }: CellProps<HolidayParam>) => {
+        return (
+          <ControlledTextField
+            name={`holidays.${row.index}.name`}
+            value={row.original.name}
+          />
+        );
+      },
+    },
+  ];
+};
+
+export const EditHolidayColumn = (
+  t: TFunction<"translation", undefined>,
+  holIdx: number[],
+  setHolIdx: (holIdx: number[]) => void,
+  handleDeleteHoliday: (id: string, holidayId: number) => void,
+  handleUpdateHoliday: (data: HolidayParam) => void,
+): Column<HolidayParam>[] => {
+  return [
+    {
+      Header: t(label.date),
+      accessor: "date",
+      Cell: ({ row }: CellProps<HolidayParam>) => {
+        let valueDate = "";
+        if (row.original.date !== undefined && row.original.date !== null && row.original.date !== "")
+          valueDate = moment(row.original.date).format("yyyy/MM/DD");
+
+        return (
+          <>
+            {(holIdx.includes(row.original.id) || row.original.id === 0) ? (
+              <>
+                <ControlledDatePicker
+                  name={`holidays.${row.index}.date`}
+                  value={valueDate}
+                  dateFormat="yyyy/MM/dd"
+                />
+              </>
+            ) : (
+              <>{valueDate}</>
+            )}
+          </>
+        )
+      },
+    },
+    {
+      Header: t(label.holiday),
+      accessor: "name",
+      Cell: ({ row }: CellProps<HolidayParam>) => {
+        return (
+          <>
+            {(holIdx.includes(row.original.id) || row.original.id === 0) ? (
+              <ControlledTextField
+                name={`holidays.${row.index}.name`}
+                value={row.original.name}
+              />
+            ) : (
+              <>{row.original.name}</>
+            )}
+          </>
+        );
+      },
     },
     {
       Header: "",
       id: "actions",
-      Cell: ({ row }: CellProps<HolidayType>) => (
+      Cell: ({ row }: CellProps<HolidayParam>) => (
         <>
-          {!editIdx.includes(row.index) && (
+          {(!holIdx.includes(row.original.id) && row.original.id !== 0) && (
+            <>
+              <IconButton
+                onClick={() => setHolIdx([...holIdx, row.original.id])}
+                aria-label={`edit-${row.index}`}
+              >
+                <SvgIcon name="edit" $size={2} />
+              </IconButton>
+              <IconButton
+                onClick={() => handleDeleteHoliday(row.original.odcId, row.original.id)}
+                aria-label={`delete-${row.index}`}
+              >
+                <SvgIcon name="delete" $size={2} />
+              </IconButton>
+            </>
+          )}
+          {(holIdx.includes(row.original.id)) && (
             <CustomButton
               type="button"
-              onClick={() => {
-                setEditIdx([row.index, ...editIdx]);
-              }}
+              onClick={() => handleUpdateHoliday(row.original)}
             >
-              {t("odc.btnlabel.edit")}
+              {t(btnlabel.save)}
             </CustomButton>
           )}
         </>

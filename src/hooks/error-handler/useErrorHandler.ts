@@ -17,14 +17,17 @@ export function useErrorHandler(
   const { common } = LocalizationKey;
 
   function getErrorMessage(error: APIError): string | "" {
-    switch (error.errorCode) {
+    switch (error.errorCode || error.code) {
       // only need to add common cases
       case ERROR_CODES.genericError:
-        return error.message || t(common.errorMessage.genericError);
+        return t(common.errorMessage.genericError);
+      case ERROR_CODES.networkError:
+        return error.message;
       case "":
       case null:
       case undefined:
         return "";
+      case ERROR_CODES.userNotFound:
       default:
         return error.message;
     }

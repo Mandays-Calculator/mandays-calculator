@@ -1,63 +1,39 @@
-import { Schema, array, object, string, boolean } from "yup";
-import { IntValues } from "./interface";
-import { ODCListResponse } from "~/api/odc/types";
+import type { TFunction } from "i18next";
 
-interface DataType {
-  id: string;
-  name: string;
-  abbreviation: string;
-  location: string;
-  holidays: string | null;
-  active: boolean;
-}
-export const DataTypeSchema: Schema<DataType> = object().shape({
-  id: string().default("0"),
-  name: string()
-    .required("ODC Name is required")
-    .test({
-      name: "is-unique-name",
-      message: "ODC Name must be unique",
-      test: function (value) {
-        let isNotDuplicate = true;
-        if (this.from && this.from.length > 1) {
-          const odcList: ODCListResponse[] = (this.from[1].value as IntValues)
-            .odcList;
-          if (this.path === "odcList[0].name") {
-            const otherODCNames = odcList
-              .filter((_odc, index: number) => index !== 0)
-              .map((odc) => odc?.name?.toLowerCase());
-            return otherODCNames.includes(value.toLowerCase()) ? false : true;
-          }
-        }
-        return isNotDuplicate;
-      },
-    }),
-  location: string().required("Location is required"),
-  abbreviation: string()
-    .default("")
-    .test({
-      name: "is-unique-abbreviation",
-      message: "Abbreviation must be unique",
-      test: function (value) {
-        let isNotDuplicate = true;
-        if (this.from && this.from.length > 1) {
-          const odcList = (this.from[1].value as IntValues).odcList;
-          if (this.path === "odcList[0].abbreviation") {
-            const otherAbbreviations = odcList
-              .filter((_odc, index: number) => index !== 0)
-              .map((odc) => odc?.abbreviation?.toLowerCase());
-            return otherAbbreviations.includes(value.toLowerCase())
-              ? false
-              : true;
-          }
-        }
-        return isNotDuplicate;
-      },
-    }),
-  holidays: string().nullable().defined(),
-  active: boolean().default(true),
-});
+import * as yup from "yup";
 
-export const IntValuesSchema = object().shape({
-  odcList: array().of(DataTypeSchema),
-});
+import LocalizationKey from "~/i18n/key";
+
+const { odc: { validationInfo } } = LocalizationKey;
+
+export const IntValuesSchema = (t: TFunction) => {
+  return yup.object().shape({
+    id: yup.string().defined(),
+    name: yup
+      .string()
+      .required(t(validationInfo.nameReq))
+      .default(""),
+    location: yup
+      .string()
+      .required(t(validationInfo.locReq))
+      .default(""),
+    abbreviation: yup.string().default(""),
+    holidays: yup
+      .array()
+      .of(
+        yup.object().shape({
+          id: yup.number().nullable(),
+          odcId: yup.string().default(""),
+          date: yup.string().default(""),
+          recurring: yup.boolean().default(true),
+          name: yup.string().default(""),
+          createdDate: yup.string().nullable(),
+          lastUpdatedDate: yup.string().nullable(),
+        })
+      )
+      .nullable(),
+    active: yup.boolean().default(true),
+    createdDate: yup.string().nullable(),
+    lastUpdatedDate: yup.string().nullable(),
+  });
+};

@@ -1,2 +1,2 @@
-export { getODCList } from "./ODC";
+export * from "./ODC";
 export * from "./types";

@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js";
 
-const base64Key = import.meta.env.VITE_KEY;
-const base64Iv = import.meta.env.VITE_IV;
+const base64Key = process.env.VITE_KEY;
+const base64Iv = process.env.VITE_IV;
 
 /**
  * Encrypts an object using AES encryption with a Base64 encoded key and IV.

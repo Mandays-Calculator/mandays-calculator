@@ -25,10 +25,11 @@ const AuthenticatedApp = (): ReactElement => {
   const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
 
   const {
-    state: { loading, isAuthenticated },
+    state: { loading, isAuthenticated, permissions },
     logout,
   } = useUserAuth();
-  const { showUnauthorizedModal, systemErrorModal } = useErrorModals();
+  const { showUnauthorizedModal, systemErrorModal, setSystemErrorModal } =
+    useErrorModals();
 
   useEffect(() => {
     setLoadingAuth(true);
@@ -48,7 +49,10 @@ const AuthenticatedApp = (): ReactElement => {
   const AuthIdleApp = useIdleTimer(
     (): ReactElement => (
       <Layout>
-        <AppRoutes isAuthenticated={!config.enableAuth || isAuthenticated} />
+        <AppRoutes
+          isAuthenticated={!config.enableAuth || isAuthenticated}
+          rolePermissions={permissions}
+        />
       </Layout>
     ),
     {
@@ -69,7 +73,7 @@ const AuthenticatedApp = (): ReactElement => {
     if (!config.enableAuth || isAuthenticated) {
       return <AuthIdleApp />;
     }
-    return <AppRoutes isAuthenticated={false} />;
+    return <AppRoutes isAuthenticated={false} rolePermissions={permissions} />;
   };
 
   return (
@@ -88,6 +92,11 @@ const AuthenticatedApp = (): ReactElement => {
         type="systemError"
         message={t(LocalizationKey.common.errorMessage.genericError)}
         open={systemErrorModal}
+        onConfirm={() => {
+          if (setSystemErrorModal) {
+            setSystemErrorModal(false);
+          }
+        }}
         modalTitle={t(LocalizationKey.common.systemErrorTitle)}
       />
     </>

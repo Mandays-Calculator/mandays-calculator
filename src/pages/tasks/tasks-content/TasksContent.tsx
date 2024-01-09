@@ -1,7 +1,9 @@
-import { ReactElement, useState } from "react";
+import { AllTasksResponse } from "~/api/tasks/types";
+
+import { ReactElement, useEffect, useState } from "react";
 
 import { styled } from "@mui/material/styles";
-import { Divider, Grid } from "@mui/material";
+import { Divider, Grid, SelectChangeEvent, Stack } from "@mui/material";
 import {
   DragDropContext,
   Droppable,
@@ -10,221 +12,124 @@ import {
 } from "react-beautiful-dnd";
 
 import { Select, PageContainer } from "~/components";
+import { useTasks } from "~/queries/tasks/Tasks";
+
+import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
-import CreateTask from "./CreateTask";
+import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import EditTask from "./EditTask";
 
-export interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
+const calculateGridSize = (numStatuses: number): number => {
+  return 12 / numStatuses;
+};
 
-const StyleDiv = styled("div")(
+const StatusContainer = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
     backgroundColor:
-      backgroundColor === "Backlog"
-        ? "#E3E6E7"
-        : backgroundColor === "Not Yet Started"
-        ? "#E4F7F9"
-        : backgroundColor === "In Progress"
-        ? "#FFF4D4"
-        : backgroundColor === "On Hold"
-        ? "#FFCECE"
-        : "#D5FFCD",
+      backgroundColor === Status.Backlog
+        ? StatusContainerColor.Backlog
+        : backgroundColor === Status.NotYetStarted
+        ? StatusContainerColor.NotYetStarted
+        : backgroundColor === Status.InProgress
+        ? StatusContainerColor.InProgress
+        : backgroundColor === Status.OnHold
+        ? StatusContainerColor.OnHold
+        : StatusContainerColor.Completed,
     borderRadius: 10,
+    width: "100%",
     padding: 15,
   })
 );
 
-const StyledTitle = styled(Grid)(({ color }: { color: string }) => ({
+const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
   fontSize: 18,
+  margin: color !== Status.Backlog ? "0.3em 0" : 0,
   fontWeight: "bold",
   color:
-    color === "Not Yet Started"
-      ? "#2C8ED1"
-      : color === "In Progress"
-      ? "#796101"
-      : color === "On Hold"
-      ? "#D54147"
-      : color === "Completed"
-      ? "#177006"
-      : "black",
+    color === Status.NotYetStarted
+      ? StatusTitleColor.NotYetStarted
+      : color === Status.InProgress
+      ? StatusTitleColor.InProgress
+      : color === Status.OnHold
+      ? StatusTitleColor.OnHold
+      : color === Status.Completed
+      ? StatusTitleColor.Completed
+      : StatusTitleColor.Backlog,
 }));
 
-const StyledAdd = styled(Grid)(({ display }: { display: string }) => ({
-  fontSize: 25,
-  fontWeight: "bolder",
-  float: "right",
-  cursor: "pointer",
-  display: display !== "Backlog" ? "none" : "",
-}));
+const StyledCreateTaskIconButton = styled(Grid)(
+  ({ display }: { display: string }) => ({
+    fontSize: 25,
+    fontWeight: "bolder",
+    float: "right",
+    cursor: "pointer",
+    display: display !== Status.Backlog ? "none" : "",
+  })
+);
 
 const TasksContent = (): ReactElement => {
-  const [modalAddOpen, setAddModalOpen] = useState<boolean>(false);
-  const [modalEditOpen, setEditModalOpen] = useState<boolean>(false);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const { data: tasksData } = useTasks("a2eb9f01-6e4e-11ee-8624-a0291936d1c2");
+  const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
 
-  const status = [
-    "Backlog",
-    "Not Yet Started",
-    "In Progress",
-    "On Hold",
-    "Completed",
-  ];
-  const [mockData, setMockData] = useState<Task[]>([
-    {
-      taskTitle: "BE - Database Structure",
-      desc: "lorem kineme.",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Backlog",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "BE - Database Structure 1",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Backlog",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "BE - Database Structure 2",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Backlog",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "BE - Database Structure 3",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Not Yet Started",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "Optimization",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "In Progress",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "Integration",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "On Hold",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-    {
-      taskTitle: "Project Management - UI",
-      desc: "lorem kineme",
-      date: "11/13/2023",
-      sprint: "1",
-      complexity: "13",
-      status: "Completed",
-      type: "Bug",
-      functionality: "",
-      comments: [
-        {
-          name: "Zad Geron",
-          comment: "This is a test",
-        },
-      ],
-    },
-  ]);
+  useEffect(() => {
+    if (tasksData) {
+      setTasks(tasksData.data);
+    }
+  }, [tasksData]);
 
-  const handleAddModalState: () => void = () => {
-    setAddModalOpen(!modalAddOpen);
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  const [viewDetailsModalOpen, setViewDetailsModalOpen] =
+    useState<boolean>(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+
+  const [selectedTeam, setSelectedTeam] = useState<string | null>("");
+
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
+    null
+  );
+
+  const handleCreateModalState: () => void = () => {
+    setCreateModalOpen(!createModalOpen);
   };
 
-  const handleCloseAddModalState = () => {
-    setAddModalOpen(false);
+  const handleCloseCreateModalState = () => {
+    setCreateModalOpen(false);
   };
-  const handleEditModalState = (task: Task) => {
+
+  const handleCreateTask = (task: AllTasksResponse | null) => {
+    if (task) {
+      const updatedMockData = [...tasks, task];
+      setTasks(updatedMockData);
+    }
+  };
+
+  const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
-    setEditModalOpen(!modalEditOpen);
+    setUpdateModalOpen(!updateModalOpen);
   };
 
-  const handleCloseEditModalState = () => {
-    setEditModalOpen(false);
+  const handleCloseUpdateModalState = () => {
+    setUpdateModalOpen(false);
   };
 
-  const handleCreateTask = (task: Task) => {
-    const updatedMockData = [...mockData, task];
-    setMockData(updatedMockData);
-  };
-  const handleSaveTask = (updatedTask: Task): void => {
-    const updatedMockData = mockData.map((task) => {
-      if (task.taskTitle === updatedTask.taskTitle) {
+  const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
+    const updatedMockData = tasks.map((task) => {
+      if (task.name === updatedTask.name) {
         return updatedTask;
       }
       return task;
     });
-    setMockData(updatedMockData);
+    setTasks(updatedMockData);
+  };
+
+  const handleViewDetailsModalState = (task: AllTasksResponse) => {
+    setSelectedTask(task);
+    setViewDetailsModalOpen(!viewDetailsModalOpen);
+  };
+
+  const handleCloseViewDetailsModalState = () => {
+    setViewDetailsModalOpen(false);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -237,15 +142,16 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = mockData.find((task) => task.taskTitle === draggableId);
+    const draggedTask = tasks.find((task) => task.name === draggableId);
 
     if (
-      (sourceStatus === "Backlog" && destinationStatus === "On Hold") ||
-      (sourceStatus === "On Hold" && destinationStatus === "Backlog")
+      (sourceStatus === Status.Backlog &&
+        destinationStatus === Status.OnHold) ||
+      (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedMockData = mockData.map((task) => {
-          if (task.taskTitle === draggableId) {
+        const updatedMockData = tasks.map((task) => {
+          if (task.name === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -254,94 +160,138 @@ const TasksContent = (): ReactElement => {
           return task;
         });
 
-        setMockData(updatedMockData);
+        setTasks(updatedMockData);
       }
     }
+  };
+
+  const handleTeamFilter = (e: SelectChangeEvent<unknown>) => {
+    setSelectedTeam(e.target.value as string);
   };
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <PageContainer>
-        <CreateTask
-          open={modalAddOpen}
-          onClose={handleCloseAddModalState}
+        <CreateOrUpdateTask
+          open={createModalOpen}
+          isCreate={true}
+          onClose={handleCloseCreateModalState}
           onCreateTask={handleCreateTask}
-          reOpenCreateTask={handleAddModalState}
+          reOpenCreateTask={handleCreateModalState}
+        />
+        <CreateOrUpdateTask
+          open={updateModalOpen}
+          isCreate={false}
+          task={selectedTask}
+          onClose={handleCloseUpdateModalState}
+          onCreateTask={handleUpdateTask}
+          reOpenCreateTask={handleCreateModalState}
         />
         <EditTask
-          open={modalEditOpen}
-          onClose={handleCloseEditModalState}
+          open={viewDetailsModalOpen}
+          onClose={handleCloseViewDetailsModalState}
           task={selectedTask}
-          onSave={handleSaveTask}
+          onSave={handleUpdateTask}
         />
-        <Select
-          name="filter"
-          placeholder="Team Name"
-          style={{ width: 200 }}
-          options={[
-            {
-              value: "1",
-              label: "Team 1",
-            },
-            {
-              value: "2",
-              label: "Team 2",
-            },
-          ]}
-        />
+
+        <Grid container>
+          <Grid item xs={calculateGridSize(Object.values(Status).length)}>
+            <Select
+              name="filter"
+              placeholder="Team Name"
+              options={[
+                {
+                  value: "1",
+                  label: "Team 1",
+                },
+                {
+                  value: "2",
+                  label: "Team 2",
+                },
+              ]}
+              onChange={(e) => handleTeamFilter(e)}
+              value={selectedTeam}
+            />
+          </Grid>
+        </Grid>
+
         <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
-        <Grid container spacing={1} justifyContent="space-between">
-          {status.map((i) => {
-            const filteredData = mockData.filter((task) => task.status === i);
-
+        <Grid
+          container
+          spacing={1}
+          justifyContent="space-between"
+          style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}
+        >
+          {Object.values(Status).map((status) => {
+            const filteredData = tasks.filter((task) => task.status === status);
             return (
-              <Grid item xs={2.4} key={i}>
-                <Droppable droppableId={i}>
+              <Grid
+                item
+                container
+                xs={calculateGridSize(Object.values(Status).length)}
+                key={status}
+              >
+                <Droppable droppableId={status}>
                   {(provided) => (
-                    <StyleDiv
-                      backgroundColor={i}
+                    <StatusContainer
+                      backgroundColor={status}
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      {...provided.droppableProps}
                     >
-                      <Grid container alignItems={"center"}>
-                        <StyledTitle item xs={11} color={i}>
-                          {i}
-                        </StyledTitle>
-                        <StyledAdd
-                          item
-                          xs={1}
-                          display={i}
-                          onClick={handleAddModalState}
-                        >
-                          +
-                        </StyledAdd>
+                      <Grid item container alignItems={"center"}>
+                        <Grid item xs={11}>
+                          <StyledStatusTitle color={status}>
+                            {status}
+                          </StyledStatusTitle>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <StyledCreateTaskIconButton
+                            display={status}
+                            onClick={handleCreateModalState}
+                          >
+                            +
+                          </StyledCreateTaskIconButton>
+                        </Grid>
                       </Grid>
 
                       <Divider />
                       {filteredData.map((task, index) => (
-                        <Draggable
-                          key={task.taskTitle}
-                          draggableId={task.taskTitle}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
+                        <Stack key={`${status}_${task.name}_${index}`}>
+                          {task.status === Status.Backlog ||
+                          task.status === Status.OnHold ? (
+                            <Draggable
+                              key={task.name}
+                              draggableId={task.name}
+                              index={index}
                             >
-                              <TaskDetailsCard
-                                data={task}
-                                handleEdit={handleEditModalState}
-                              />
-                            </div>
+                              {(provided) => (
+                                <Stack
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <TaskDetailsCard
+                                    data={task}
+                                    handleEdit={handleUpdateModalState}
+                                    handleViewDetails={
+                                      handleViewDetailsModalState
+                                    }
+                                  />
+                                </Stack>
+                              )}
+                            </Draggable>
+                          ) : (
+                            <TaskDetailsCard
+                              data={task}
+                              handleEdit={handleUpdateModalState}
+                              handleViewDetails={handleViewDetailsModalState}
+                            />
                           )}
-                        </Draggable>
+                        </Stack>
                       ))}
                       {provided.placeholder}
-                    </StyleDiv>
+                    </StatusContainer>
                   )}
                 </Droppable>
               </Grid>
