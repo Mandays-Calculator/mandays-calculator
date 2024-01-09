@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Stack, Switch } from '@mui/material';
@@ -21,7 +21,7 @@ const Complexity = (): ReactElement => {
 	const [isEditError, setIsEditError] = useState<boolean>(false);
 	const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
 
-	const { data: apiData, isError, isLoading } = useGetComplexities();
+	const { data: apiData, isError, isLoading, refetch } = useGetComplexities();
 	const { t } = useTranslation();
 	const {
 		complexity: { title, btnLabel, label, validationInfo },
@@ -46,9 +46,9 @@ const Complexity = (): ReactElement => {
 			mutate(id);
 	};
 
-	// useEffect(() => {
-	// 	setTimeout(refetch, 5000);
-	// }, [formContext]);
+	useEffect(() => {
+		if (isEditSuccess || isDeleteSuccess) refetch();
+	}, [isEditSuccess, isDeleteSuccess]);
 
 	if (isLoading)
 		return <PageLoader />;

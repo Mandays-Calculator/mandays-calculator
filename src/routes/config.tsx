@@ -55,7 +55,7 @@ export const routes: RouteType[] = [
     element: <ErrorPage type="development-mode" />,
   },
   {
-    path: "tasks",
+    path: "task-management",
     element: <Tasks />,
   },
   {
