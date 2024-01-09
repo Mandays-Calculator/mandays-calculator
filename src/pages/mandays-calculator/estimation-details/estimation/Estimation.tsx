@@ -1,4 +1,6 @@
-import { ReactElement, useMemo } from "react";
+import type { ReactElement } from "react";
+
+import { useMemo, useState } from "react";
 
 import Stack from "@mui/material/Stack";
 
@@ -28,6 +30,7 @@ const StyledFooter = styled("div")(() => ({
 
 const Estimation = (props: EstimationProps): ReactElement => {
   const { mode } = props;
+  const [estimation, setEstimation] = useState<string>("");
   console.log(mode);
   const { t } = useTranslation();
   const estimationListColumn = useMemo(() => EstimationListColumns({ t }), []);
@@ -45,6 +48,8 @@ const Estimation = (props: EstimationProps): ReactElement => {
           <Select
             name="select-estimation"
             options={[{ label: "DEV", value: "dev" }]}
+            value={estimation}
+            onChange={(val) => setEstimation(val.target.value as string)}
           />
         </div>
         <CustomButton colorVariant="primary">Add Phase</CustomButton>
