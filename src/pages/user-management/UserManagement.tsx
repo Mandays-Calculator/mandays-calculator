@@ -50,14 +50,13 @@ const UserManagement = (): ReactElement => {
         projectId: values.projectId,
         teamId: values.teamId,
         roles: values.roles,
+        image: values.image,
       };
       callApi(AddUserForm);
     },
   });
-
   const { data } = useUserList();
   const [filteredData, setFilteredData] = useState<UserListData[]>([]);
-
   useEffect(() => {
     if (!data) {
       setFilteredData([]);

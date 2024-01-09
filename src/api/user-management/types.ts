@@ -43,6 +43,7 @@ export interface AddUserParams {
   projectId: string;
   teamId: string;
   roles: string[];
+  image?: string;
 }
 
 export interface DeleteUserResponse {
