@@ -135,7 +135,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
 
         if (listOfOdc) {
           setOdcList(
-            (listOfOdc as unknown as any).map((odc: { abbreviation: any }) => ({
+            (listOfOdc.data).map((odc) => ({
               ...odc,
               value: odc.abbreviation,
               label: odc.abbreviation,
