@@ -50,7 +50,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     refetchOnMount: false,
   });
   const tasksData: TaskType[] =
-    data?.data.map((task) => {
+    data?.data?.map((task) => {
       return {
         id: task.id,
         title: task.name,
