@@ -3,8 +3,8 @@ import { ComplexityForm } from ".";
 
 export const complexityInitialValues: ComplexityForm = {
   complexityName: "",
-  numberOfDayFrom: "",
-  numberOfDayTo: "",
+  numberOfHoursFrom: "",
+  numberOfHoursTo: "",
   numberOfFeaturesFrom: "",
   numberOfFeaturesTo: "",
   description: "",
