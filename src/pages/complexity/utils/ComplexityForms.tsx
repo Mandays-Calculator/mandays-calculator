@@ -77,7 +77,7 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 
 			if (formContext === 'Add')
 				mutateAddComplexities(
-					[addFormData],
+					{ complexities: [addFormData] },
 					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
 				);
 
