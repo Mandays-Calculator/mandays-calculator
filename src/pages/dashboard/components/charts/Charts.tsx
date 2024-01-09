@@ -87,12 +87,14 @@ const Charts: React.FC<ChartProps> = ({ type, data, labels, colors = [] }) => {
                 calculateAlphaColor(color, 1)
               ),
               borderWidth: 2,
+            //   spacing: 10,
             },
           ],
         },
         options: {
           responsive: true,
-          maintainAspectRatio: true,
+          maintainAspectRatio: false,
+          aspectRatio: 1,
           plugins: {
             legend: {
               display: type === "doughnut" || type === "pie",
