@@ -9,7 +9,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
 
-import { Task } from "../TasksContent";
+import { AllTasksResponse } from "~/api/tasks";
 
 const styles = {
   taskTitle: {
@@ -47,41 +47,32 @@ const styles = {
       marginBottom: 5,
     },
   },
+  // Define other styles similarly for different elements
 };
 
 interface TaskDetailsCardProps {
-  data: {
-    taskTitle: string;
-    desc: string;
-    date: string;
-    sprint: string;
-    complexity: string;
-    status: string;
-    type: string;
-    functionality: string;
-    comments: {
-      name: string;
-      comment: string;
-    }[];
-  };
-  handleEdit: (task: Task) => void;
+  data: AllTasksResponse;
+  handleEdit: (task: AllTasksResponse) => void;
+  handleViewDetails: (task: AllTasksResponse) => void;
 }
 
 const TaskDetailsCard = ({
   data,
   handleEdit,
+  handleViewDetails,
 }: TaskDetailsCardProps): ReactElement => {
+  console.log("tasks data", data);
   return (
-    <PageContainer onClick={() => handleEdit(data)}>
-      <div style={styles.taskTitle}>{data.taskTitle}</div>
-      <div style={styles.marginBottom.mbFive}>{data.desc}</div>
+    <PageContainer onClick={() => handleViewDetails(data)}>
+      <div style={styles.taskTitle}>{data.name}</div>
+      <div style={styles.marginBottom.mbFive}>{data.description}</div>
       <div style={styles.infoSection}>
         <EventIcon style={{ marginRight: 5 }} />
-        {data.date}
+        {data?.completionDate}
       </div>
-      <div style={styles.marginBottom.mbTwo}>Sprint #{data.sprint}</div>
+      <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>
-        Complexity Rating: {data.complexity}
+        Complexity Rating: {data?.complexity.name}
       </div>
 
       <Stack direction={"row"} flexWrap="wrap" gap={0.5}>
@@ -99,6 +90,10 @@ const TaskDetailsCard = ({
         <Stack direction={"row"} spacing={0.3} flexWrap="wrap">
           <EditOutlinedIcon
             color="action"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEdit(data);
+            }}
             style={{
               display:
                 data.status !== "On Hold" && data.status !== "Backlog"

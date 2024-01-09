@@ -2,7 +2,6 @@ import type {
   OdcResponse,
   CreateOdcParam,
   UpdateOdcParam,
-  DeleteOdcParam,
   HolidayResponse,
   CreateHoliday,
   UpdateHoliday,
@@ -35,12 +34,8 @@ export const useUpdateODC = () => {
   );
 };
 
-export const useDeleteODC = () => {
-  return useMutation<OdcResponse, AxiosError, DeleteOdcParam>(
-    "deleteODC",
-    (params) => deleteODC(params)
-  );
-};
+export const useDeleteODC = () =>
+  useMutation<OdcResponse, AxiosError, string>(deleteODC);
 
 export const useAddHoliday = () => {
   return useMutation<HolidayResponse, AxiosError, CreateHoliday>(

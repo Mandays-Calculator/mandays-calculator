@@ -25,7 +25,7 @@ const AuthenticatedApp = (): ReactElement => {
   const [loadingAuth, setLoadingAuth] = useState<boolean>(true);
 
   const {
-    state: { loading, isAuthenticated },
+    state: { loading, isAuthenticated, permissions },
     logout,
   } = useUserAuth();
   const { showUnauthorizedModal, systemErrorModal, setSystemErrorModal } =
@@ -49,7 +49,10 @@ const AuthenticatedApp = (): ReactElement => {
   const AuthIdleApp = useIdleTimer(
     (): ReactElement => (
       <Layout>
-        <AppRoutes isAuthenticated={!config.enableAuth || isAuthenticated} />
+        <AppRoutes
+          isAuthenticated={!config.enableAuth || isAuthenticated}
+          rolePermissions={permissions}
+        />
       </Layout>
     ),
     {
@@ -70,7 +73,7 @@ const AuthenticatedApp = (): ReactElement => {
     if (!config.enableAuth || isAuthenticated) {
       return <AuthIdleApp />;
     }
-    return <AppRoutes isAuthenticated={false} />;
+    return <AppRoutes isAuthenticated={false} rolePermissions={permissions} />;
   };
 
   return (

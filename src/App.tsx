@@ -8,7 +8,7 @@ import { PageLoader } from "~/components";
 import AuthenticatedApp from "~/AuthenticatedApp";
 
 const App = (): ReactElement => {
-  const environment = import.meta.env.VITE_ENVIRONMENT;
+  const environment = process.env.VITE_ENVIRONMENT;
   const { config, loading } = useConfig(environment);
 
   if (!_.isNull(config)) {

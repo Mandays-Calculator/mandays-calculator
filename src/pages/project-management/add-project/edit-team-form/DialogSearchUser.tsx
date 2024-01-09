@@ -1,11 +1,24 @@
-import { useEffect, useState } from "react";
-import { Avatar, Divider, Grid, Stack, Typography } from "@mui/material";
-import { User, getUsers } from "~/api/user";
+import { ChangeEvent, useEffect, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Divider,
+  Grid,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { OdcParam } from "~/api/odc/types";
+import { UserListData } from "~/api/user-management/types";
+import { useODCList } from "~/queries/odc/ODC";
+import { useUserList } from "~/queries/user-management/UserManagement";
+import { useTimeout } from "../../utils/functions";
 import { ErrorMessage, Select, TextField } from "~/components";
-import { CustomButton } from "~/components/form/button";
 import { Modal } from "~/components/modal";
+import { CustomButton } from "~/components/form/button";
 
-type Members = User & { isSelected: boolean };
+type Members = UserListData & { isSelected: boolean; fullName: string };
+type OdcDropdown = OdcParam & { value: string; label: string };
 
 type DialogSearchUserProps = {
   showMemberDialog: boolean;
@@ -14,9 +27,15 @@ type DialogSearchUserProps = {
 
 const DialogSearchUser = (props: DialogSearchUserProps) => {
   const { showMemberDialog, toggleDialog } = props;
-  const [odcList, setOdcList] = useState([] as any[]);
+  const { data } = useUserList();
+  const { data: listOfOdc } = useODCList();
+  const [odcList, setOdcList] = useState<OdcDropdown[]>([] as any[]);
   const [userList, setUserList] = useState<Members[]>([]);
+  const [originUserList, setOriginUserList] = useState<Members[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [searchName, setSearchName] = useState<string>("");
+  const [searchOdc, setSearchOdc] = useState<string>("");
+  const [triggerTimeout] = useTimeout();
 
   const renderUserList = (user: Members, index: number) => {
     return (
@@ -58,15 +77,42 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
     );
   };
 
+  const onChangeOdc = (e: SelectChangeEvent<any>) => {
+    const searchedOdc = e.target.value;
+    setSearchOdc(searchedOdc);
+
+    setUserList(filteredUserList(searchName, searchedOdc));
+  };
+
+  const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedName = e.target.value;
+    setSearchName(searchedName);
+
+    setUserList(filteredUserList(searchedName));
+  };
+
+  const filteredUserList = (
+    searchedName: string,
+    searchedOdc?: string
+  ): Members[] => {
+    return originUserList.filter((user) => {
+      const name = user.fullName
+        .toLowerCase()
+        .includes(searchedName.toLowerCase());
+      const odc = user.odc.abbreviation
+        .toLowerCase()
+        .includes(searchedOdc?.toLowerCase() ?? "");
+
+      return name && odc;
+    });
+  };
+
   const onSubmit = () => {
     let selectedUsers = userList.filter((user) => user.isSelected);
 
     if (!selectedUsers.length) {
       setErrorMessage("Select at least 1(one) user to proceed");
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 2000);
-
+      triggerTimeout(() => setErrorMessage(""));
       return;
     }
     toggleDialog(selectedUsers);
@@ -75,82 +121,108 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getUsers();
-        const result = Array.isArray(response?.data) ? response.data : [];
+        const result = data && Array.isArray(data?.data) ? data.data : [];
 
-        setUserList(result.map((x) => ({ ...x, isSelected: false })));
-        setOdcList([
-          {
-            value: "1",
-            label: "Filter 1",
-          },
-        ]);
+        const newUsers = result.map((user) => {
+          const fullName = `${user.lastName}, ${user.firstName} ${
+            user.middleName ?? ""
+          }`.trim();
+          return { ...user, fullName, isSelected: false };
+        });
+
+        setUserList(newUsers);
+        setOriginUserList(newUsers);
+
+        if (listOfOdc) {
+          setOdcList(
+            (listOfOdc as unknown as any).map((odc: { abbreviation: any }) => ({
+              ...odc,
+              value: odc.abbreviation,
+              label: odc.abbreviation,
+            }))
+          );
+        }
       } catch (error) {
         setUserList([]);
       }
     };
 
-    fetchData().catch((e: any) => {
+    fetchData().catch((e) => {
       console.log(e);
     });
-  }, []);
+  }, [data, listOfOdc]);
 
   return (
     <>
       <Modal
         open={showMemberDialog}
         title="Search User"
-        maxWidth="sm"
+        maxWidth={"md"}
         onClose={() => toggleDialog()}
       >
-        <Stack direction="column">
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField name="name" label="Name" fullWidth />
-            </Grid>
-            <Grid item xs={6}>
-              <Stack direction="column" gap={1}>
-                <Typography>ODC</Typography>
-                <Select
-                  name="odc"
-                  placeholder="ODC"
+        <Box sx={{ minWidth: "510px" }}>
+          <Stack direction="column">
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  name="name"
+                  label="Name"
                   fullWidth
-                  options={odcList}
+                  value={searchName}
+                  onChange={onChangeName}
                 />
-              </Stack>
+              </Grid>
+              <Grid item xs={6}>
+                <Stack direction="column" gap={1}>
+                  <Typography>ODC</Typography>
+                  <Select
+                    name="odc"
+                    placeholder="ODC"
+                    fullWidth
+                    value={searchOdc}
+                    onChange={onChangeOdc}
+                    options={odcList}
+                  />
+                </Stack>
+              </Grid>
             </Grid>
-          </Grid>
-        </Stack>
-        <Divider sx={{ m: "10px 1rem 0" }} />
+          </Stack>
+          <Divider sx={{ m: "10px 1rem 0" }} />
 
-        <Stack direction={"row"} sx={{ p: "1rem" }}>
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
-          >
-            {userList.map((user, index) => renderUserList(user, index))}
-          </Grid>
-        </Stack>
+          <Stack direction={"row"} sx={{ p: "1rem" }}>
+            <Grid
+              container
+              spacing={{ xs: 2, md: 3 }}
+              columns={{ xs: 4, sm: 8, md: 12 }}
+            >
+              {userList.map((user, index) => renderUserList(user, index))}
+            </Grid>
+          </Stack>
 
-        <Stack direction="row" display="flex" justifyContent="flex-end" gap={1}>
-          <CustomButton
-            type="button"
-            colorVariant="secondary"
-            onClick={() => toggleDialog()}
-            data-testid="test-cancel-btn"
+          <Stack
+            direction="row"
+            display="flex"
+            justifyContent="flex-end"
+            gap={1}
           >
-            Cancel
-          </CustomButton>
-          <CustomButton
-            type="button"
-            colorVariant="primary"
-            onClick={onSubmit}
-            data-testid="test-select-btn"
-          >
-            Select
-          </CustomButton>
-        </Stack>
+            <CustomButton
+              type="button"
+              colorVariant="secondary"
+              onClick={() => toggleDialog()}
+              data-testid="test-cancel-btn"
+            >
+              Cancel
+            </CustomButton>
+            <CustomButton
+              type="button"
+              colorVariant="primary"
+              onClick={onSubmit}
+              data-testid="test-select-btn"
+            >
+              Select
+            </CustomButton>
+          </Stack>
+        </Box>
       </Modal>
       <ErrorMessage error={errorMessage} type={"alert"} />
     </>

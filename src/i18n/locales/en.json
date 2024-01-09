@@ -315,6 +315,12 @@
       "btnLabel": {
         "create": "Create"
       }
+    },
+    "updateTask": {
+      "modalTitle": "Update Task",
+      "btnLabel": {
+        "update": "Update"
+      }
     }
   },
   "history": {

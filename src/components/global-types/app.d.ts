@@ -1,6 +1,8 @@
 export type ReactDatePickerParam = Date | null;
 export type ReactDatePickerRangeParam = [Date | null, Date | null] | null;
-export type ReactDatePickerFunctionParams = ReactDatePickerParam | ReactDatePickerRangeParam;
+export type ReactDatePickerFunctionParams =
+  | ReactDatePickerParam
+  | ReactDatePickerRangeParam;
 export type ReactDatePickerFormat =
   | "MM/dd/yyyy"
   | "yyyy/MM/dd"
@@ -33,3 +35,5 @@ declare global {
 
   type BaseResponse<T> = Promise<AxiosResponse<T, any>>;
 }
+
+export type Role = "ROLE_SYS_ADMIN" | "ROLE_SPRINT_MANAGER" | "ROLE_USER";

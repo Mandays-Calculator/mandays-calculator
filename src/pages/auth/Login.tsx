@@ -24,7 +24,6 @@ const Login = (): ReactElement => {
   const { t } = useTranslation();
   const dispatch: AppDispatch = useDispatch();
   const userState: UserPermissionState = useSelector(selectUser);
-
   const { loading, error } = userState;
 
   const loginForm = useFormik({
