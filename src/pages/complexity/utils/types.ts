@@ -6,8 +6,8 @@ export type DataType = ForGetComplexities;
 
 export type ComplexityForm = {
   complexityName: string;
-  numberOfDayFrom: number | string;
-  numberOfDayTo: number | string;
+  numberOfHoursFrom: number | string;
+  numberOfHoursTo: number | string;
   numberOfFeaturesFrom: number | string;
   numberOfFeaturesTo: number | string;
   description: string;
@@ -22,4 +22,5 @@ export type ComplexityFormsType = {
   data: ForGetComplexities[];
   setIsEditError: (isEditError: boolean) => void;
   setIsEditSuccess: (isEditSuccess: boolean) => void;
+  setIsEditLoading: (isLoading: boolean) => void;
 };

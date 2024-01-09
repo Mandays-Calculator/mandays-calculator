@@ -34,7 +34,7 @@ export interface DeleteComplexities {
 
 interface CommonComplexity {
   name: string;
-  numberOfDays: string;
+  numberOfHours: string;
   numberOfFeatures: string;
   description: string;
   sample: string;
