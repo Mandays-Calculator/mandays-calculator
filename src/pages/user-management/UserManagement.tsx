@@ -19,6 +19,7 @@ import { UserManagementForms } from "./types";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useAddUser } from "~/mutations/user-management";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
@@ -39,19 +40,20 @@ const UserManagement = (): ReactElement => {
       const AddUserForm: UserManagementForms = {
         firstName: values.firstName,
         lastName: values.lastName,
-        middleName: values.middleName,
-        suffix: values.suffix,
+        middleName: values.middleName || "",
+        suffix: values.suffix || "",
         gender: gender(values?.gender) ?? 0,
         email: values.email,
         employeeId: values.employeeId,
-        odcId: values.odcId,
-        careerStep: values.careerStep,
-        joiningDate: values.joiningDate,
-        projectId: values.projectId,
-        teamId: values.teamId,
-        roles: values.roles,
-        image: values.image,
+        odcId: values.odcId || "",
+        careerStep: values.careerStep || "",
+        joiningDate: values.joiningDate || moment().format("YYYY-MM-DD"),
+        projectId: values.projectId || "",
+        teamId: values.teamId || "",
+        roles: values.roles || "",
+        image: values.image || "",
       };
+
       callApi(AddUserForm);
     },
   });
