@@ -2,7 +2,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { Formik } from 'formik';
 import i18n from '~/i18n';
@@ -11,35 +12,13 @@ import { useResetPasswordMutation } from '~/mutations/auth';
 import { useRequestHandler } from '~/hooks/request-handler';
 import { ChangePassword } from '~/pages/auth';
 
+import { CHANGEPASSWORD_TESTCASES, CHANGE_PASSWORD_TEXT } from '~/__tests__/__mocks__/dataMock';
 import { cleanAllCallback } from './utils/auth-utils';
-import userEvent from '@testing-library/user-event';
 
 // Mock the i18next translation function
 i18n.init({
     resources: {
-        en: {
-            translation: {
-                "changePassword": {
-                    "label": {
-                        "createNewPassword": "Create New Password",
-                        "enterNewPassword": "Enter new password",
-                        "confirmNewPassword": "Confirm new password"
-                    },
-                    "btnlabel": {
-                        "changePassword": "Change Password",
-                        "cancel": "Cancel"
-                    },
-                    "validationInfo": {
-                        "charCount": "Password must be at least 8 characters long",
-                        "uppercase": "Password must contain an uppercase letter",
-                        "lowercase": "Password must contain a lowercase letter",
-                        "number": "Password must contain a number",
-                        "symbol": "Password must contain one of the following symbols (#$-_!)",
-                        "match": "New password and confirm new password must match."
-                    }
-                },
-            },
-        },
+        en: {},
     },
     lng: 'en',
     interpolation: { escapeValue: false }, // react already safes from xss
@@ -62,6 +41,11 @@ const mockUseRequestHandler = useRequestHandler as jest.MockedFunction<
     typeof useRequestHandler
 >;
 
+const queryClient = new QueryClient();
+const handleSubmit = jest.fn();
+
+const SIGNIN_BTN_LABEL = 'login.btnlabel.signIn';
+
 afterEach((done) => {
     cleanAllCallback(done);
 });
@@ -70,38 +54,94 @@ afterAll((done) => {
     cleanAllCallback(done);
 });
 
-const queryClient = new QueryClient();
-const handleSubmit = jest.fn();
-
 describe('GIVEN ChangePassword component is called,', () => {
-    test('WHEN user changes password, THEN it should display correctly', async () => {
-        const { container, getByRole } = renderChangePassword(false, false);
+    test.each(CHANGEPASSWORD_TESTCASES)(
+        `%s`,
+        async ({ password, confirmPassword, expectedResults }) => {
+            renderChangePassword(false, false);
+            const user = userEvent.setup();
+
+            await user.type(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password), password);
+            await user.type(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword), confirmPassword);
+
+            await waitFor(() => {
+                Object.entries(expectedResults).forEach(([testId, shouldExist]) => {
+                    const element = screen.queryByTestId(testId);
+                    if (shouldExist) {
+                        expect(element).toBeInTheDocument();
+                    } else {
+                        expect(element).toBeNull();
+                    }
+                });
+            });
+        }
+    );
+
+    test('WHEN user wants to access the ChangePassword page, THEN it should display correctly', async () => {
+        renderChangePassword(false, false);
         const user = userEvent.setup();
 
-        await user.click(getByRole('button', { name: 'changePassword.btnlabel.changePassword' }));
-        await user.click(getByRole('button', { name: 'changePassword.btnlabel.cancel' }));
+        const passwordTextField = screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password);
+        const confirmPasswordTextField = screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword);
+        const changePasswordButton = screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.btnlabel.changePassword });
+        const cancelButton = screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.btnlabel.cancel });
+
+        await user.type(passwordTextField, 'Passw0rd'!);
+        await user.type(confirmPasswordTextField, 'Passw0rd!');
+        await user.click(changePasswordButton);
 
         await waitFor(() => {
-            expect(container).toMatchSnapshot(`change-password`);
+            // Labels
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.createNewPassword)).toBeInTheDocument();
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.enterNewPassword)).toBeInTheDocument();
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.confirmNewPassword)).toBeInTheDocument();
+
+            // Fields
+            expect(passwordTextField).toBeInTheDocument();
+            expect(confirmPasswordTextField).toBeInTheDocument();
+
+            // Buttons
+            expect(changePasswordButton).toBeInTheDocument();
+            expect(cancelButton).toBeInTheDocument();
         });
     });
 
     test('WHEN user succesfully changes the password, THEN it should display a success message', async () => {
-        const { container, getByRole } = renderChangePassword(true, true);
+        renderChangePassword(true, true);
         const user = userEvent.setup();
 
-        await user.click(getByRole('button', { name: 'login.btnlabel.signIn' }));
+        const signInlButton = screen.getByRole('button', { name: SIGNIN_BTN_LABEL });
+
+        await user.click(signInlButton);
 
         await waitFor(() => {
-            expect(container).toMatchSnapshot(`change-password-success`);
+            // Labels
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.title)).toBeInTheDocument();
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.success)).toBeInTheDocument();
+
+            // Buttons
+            expect(signInlButton).toBeInTheDocument();
+        });
+    });
+
+    test('WHEN user wants to cancel changing the password, THEN system should redirect user to the Login page', async () => {
+        renderChangePassword(false, false);
+        const user = userEvent.setup();
+
+        const cancelButton = screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.btnlabel.cancel });
+
+        await user.click(cancelButton);
+
+        await waitFor(() => {
+            expect(window.location.pathname).toBe('/login');
         });
     });
 });
 
-const renderChangePassword = (codeParam: boolean, successChangePassword: boolean) => {
+const renderChangePassword = (codeParam: boolean, successChangePassword: boolean): void => {
     runChangePasswordMocks(codeParam, successChangePassword);
 
-    return render(
+    render(
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
                 <I18nextProvider i18n={i18n}>
@@ -127,7 +167,7 @@ const runChangePasswordMocks = (codeParam: boolean, successChangePassword: boole
 
     const useResetPasswordMutationData = {
         mutate: null
-    }
+    };
 
     mockUseResetPasswordMutation.mockImplementation(() => useResetPasswordMutationData as unknown as ReturnType<
         typeof useResetPasswordMutation

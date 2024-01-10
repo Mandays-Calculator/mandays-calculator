@@ -1,9 +1,12 @@
 import type { ConfigType } from "~/utils/env-config";
 
 import { BrowserRouter } from "react-router-dom";
+import { I18nextProvider } from "react-i18next";
 import { useDispatch } from 'react-redux';
 
 import { render, waitFor } from "@testing-library/react";
+
+import i18n from "~/i18n";
 
 import { checkUserAuthentication, useUserAuth } from "~/hooks/user";
 import AuthenticatedApp from "~/AuthenticatedApp";
@@ -11,6 +14,15 @@ import { getEnvConfig } from "~/utils/env-config";
 import { useErrorModals } from "~/hooks/modal";
 
 import { cleanAllCallback } from "./pages/auth/utils/auth-utils";
+
+// Mock the i18next translation function
+i18n.init({
+  resources: {
+    en: {},
+  },
+  lng: 'en',
+  interpolation: { escapeValue: false }, // react already safes from xss
+});
 
 jest.mock("~/api/axios.config");
 jest.mock("~/utils/env-config");
@@ -62,12 +74,12 @@ describe("GIVEN AuthenticatedApp Component is called", () => {
           subMenuItems: null
         }]
       }
-    }
+    };
     const useErrorModalsData = {
       showUnauthorizedModal: false,
       systemErrorModal: false,
       setSystemErrorModal: jest.fn()
-    }
+    };
 
     const renderResult = renderAuthenticatedApp(getEnvConfigData, checkUserAuthenticationData, useUserAuthData, useErrorModalsData);
 
@@ -105,12 +117,12 @@ describe("GIVEN AuthenticatedApp Component is called", () => {
           subMenuItems: null
         }]
       }
-    }
+    };
     const useErrorModalsData = {
       showUnauthorizedModal: false,
       systemErrorModal: false,
       setSystemErrorModal: jest.fn()
-    }
+    };
 
     const renderResult = renderAuthenticatedApp(getEnvConfigData, checkUserAuthenticationData, useUserAuthData, useErrorModalsData);
 
@@ -148,12 +160,12 @@ describe("GIVEN AuthenticatedApp Component is called", () => {
           subMenuItems: null
         }]
       }
-    }
+    };
     const useErrorModalsData = {
       showUnauthorizedModal: false,
       systemErrorModal: false,
       setSystemErrorModal: jest.fn()
-    }
+    };
 
     const renderResult = renderAuthenticatedApp(getEnvConfigData, checkUserAuthenticationData, useUserAuthData, useErrorModalsData);
 
@@ -179,9 +191,11 @@ const renderAuthenticatedApp = (
 
   return render(
     <BrowserRouter>
-      <AuthenticatedApp />
+      <I18nextProvider i18n={i18n}>
+        <AuthenticatedApp />
+      </I18nextProvider>
     </BrowserRouter>
-  );;
+  );
 };
 
 const runAuthenticatedAppMocks = (
