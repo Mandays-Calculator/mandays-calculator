@@ -22,9 +22,8 @@ export interface PutComplexities {
   status: number;
 }
 
-export interface ForPutComplexities extends Omit<CommonComplexity, "isActive"> {
+export interface ForPutComplexities extends CommonComplexity {
   id: string;
-  active: boolean;
 }
 
 export interface DeleteComplexities {
@@ -34,8 +33,10 @@ export interface DeleteComplexities {
 
 interface CommonComplexity {
   name: string;
-  numberOfHours: string;
-  numberOfFeatures: string;
+  minFeatures: string;
+  maxFeatures: string;
+  minHours: string;
+  maxHours: string;
   description: string;
   sample: string;
   isActive: boolean;

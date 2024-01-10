@@ -17,7 +17,7 @@ export const getComplexities = async (): Promise<
 > => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
   const response = await axios.get(`${apiBasePath}/complexities`);
-  return response.data;
+  return response;
 };
 
 export const postComplexities = async (
