@@ -54,7 +54,7 @@ const Complexity = (): ReactElement => {
 
 	useEffect(() => {
 		if (isDeleteSuccess || isEditSuccess) refetch();
-	}, [isDeleteLoading, isEditLoading]);
+	}, [isDeleteLoading, isEditSuccess]);
 
 	if (isLoading)
 		return <PageLoader />;
