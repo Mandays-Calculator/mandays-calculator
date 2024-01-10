@@ -234,7 +234,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 ) : (
                   <ControlledDatePicker
                     name="joiningDate"
-                    value={moment().format("YYYY-MM-DD")}
                     dateFormat="yyyy/MM/dd"
                     error={!!form.errors.joiningDate}
                     helperText={getFieldError(

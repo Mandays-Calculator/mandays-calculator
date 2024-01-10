@@ -50,7 +50,7 @@ const UserManagement = (): ReactElement => {
         joiningDate: values.joiningDate || moment().format("YYYY-MM-DD"),
         projectId: values.projectId || "",
         teamId: values.teamId || "",
-        roles: values.roles || "",
+        roles: values.roles || [],
         image: values.image || "",
       };
 
