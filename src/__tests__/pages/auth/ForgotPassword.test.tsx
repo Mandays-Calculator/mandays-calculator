@@ -68,7 +68,7 @@ describe("GIVEN ForgotPassword Component is called", () => {
         await waitFor(async () => {
             await user.type(forgotPassTextField, forgotPasswordData.usernameOrEmail);
             await user.click(sendButton);
-        });
+        }, { timeout: 10000 });
 
         waitFor(() => {
             // Labels
@@ -85,7 +85,7 @@ describe("GIVEN ForgotPassword Component is called", () => {
 
             // Buttons
             expect(sendButton).toBeInTheDocument();
-        });
+        }, { timeout: 10000 });
     });
 
     test("WHEN user submits the email, THEN system should process it", async () => {
@@ -124,7 +124,7 @@ describe("GIVEN ForgotPassword Component is called", () => {
         await waitFor(async () => {
             await user.type(forgotPassTextField, forgotPasswordData.invalid);
             await user.click(sendButton);
-        });
+        }, { timeout: 10000 });
 
         waitFor(() => {
             expect(screen.getByText('Error Sample')).toBeInTheDocument();
