@@ -56,7 +56,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const date = moment(currentUser?.joiningDate).format("YYYY-MM-DD");
   const { t } = useTranslation();
   const { userManagement } = LocalizationKey;
-  const { values, setFieldValue } = useFormikContext<UserManagementForms>();
+  const { values } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
   const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
   const [isEditError, setIsEditError] = useState<boolean>(false);
@@ -81,6 +81,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     projectId: values?.updateProjectId ?? "",
     teamId: values?.updateTeamId ?? "",
     roles: values?.updateRoles ?? [],
+    image: values.updateImage || "",
   };
   const submit = () => {
     callApi(EditUserForm);
@@ -95,6 +96,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateSuffix: currentUser?.suffix ?? "",
       updateGender: currentUser?.gender ?? "",
       updateEmail: currentUser?.email ?? "",
+      updateImage: currentUser?.image ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
       updateOdcId: "",
       updateJoiningDate:
@@ -117,7 +119,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     }
   }, [isEditSuccess, isEditError]);
 
-  // console.log(updateTeamId);
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -125,7 +126,10 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <ImageUpload name="updateImage" setFieldValue={setFieldValue} />
+              <ImageUpload
+                name="updateImage"
+                setFieldValue={form.setFieldValue}
+              />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>

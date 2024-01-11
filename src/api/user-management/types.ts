@@ -23,6 +23,7 @@ export interface UserListData {
   joiningDate: string;
   roles: string[];
   active: boolean;
+  image?: string;
 }
 export interface AddUserResponse {
   status: number;
