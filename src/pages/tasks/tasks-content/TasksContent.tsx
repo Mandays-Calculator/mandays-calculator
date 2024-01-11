@@ -11,7 +11,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 
-import { Select, PageContainer } from "~/components";
+import { Select, PageContainer, ErrorMessage } from "~/components";
 import { useTasks } from "~/queries/tasks/Tasks";
 
 import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
@@ -71,9 +71,15 @@ const StyledCreateTaskIconButton = styled(Grid)(
 const TasksContent = (): ReactElement => {
   const { data: tasksData } = useTasks("a2eb9f01-6e4e-11ee-8624-a0291936d1c2");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
-    if (tasksData) {
+    if (tasksData && tasksData.hasOwnProperty("errorCode")) {
+      setErrorMessage("Unable to fetch Data");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+    } else if (tasksData && tasksData.data) {
       setTasks(tasksData.data);
     }
   }, [tasksData]);
@@ -170,136 +176,141 @@ const TasksContent = (): ReactElement => {
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <PageContainer>
-        <CreateOrUpdateTask
-          open={createModalOpen}
-          isCreate={true}
-          onClose={handleCloseCreateModalState}
-          onCreateTask={handleCreateTask}
-          reOpenCreateTask={handleCreateModalState}
-        />
-        <CreateOrUpdateTask
-          open={updateModalOpen}
-          isCreate={false}
-          task={selectedTask}
-          onClose={handleCloseUpdateModalState}
-          onCreateTask={handleUpdateTask}
-          reOpenCreateTask={handleCreateModalState}
-        />
-        <EditTask
-          open={viewDetailsModalOpen}
-          onClose={handleCloseViewDetailsModalState}
-          task={selectedTask}
-          onSave={handleUpdateTask}
-        />
+    <>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <PageContainer>
+          <CreateOrUpdateTask
+            open={createModalOpen}
+            isCreate={true}
+            onClose={handleCloseCreateModalState}
+            onCreateTask={handleCreateTask}
+            reOpenCreateTask={handleCreateModalState}
+          />
+          <CreateOrUpdateTask
+            open={updateModalOpen}
+            isCreate={false}
+            task={selectedTask}
+            onClose={handleCloseUpdateModalState}
+            onCreateTask={handleUpdateTask}
+            reOpenCreateTask={handleCreateModalState}
+          />
+          <EditTask
+            open={viewDetailsModalOpen}
+            onClose={handleCloseViewDetailsModalState}
+            task={selectedTask}
+            onSave={handleUpdateTask}
+          />
 
-        <Grid container>
-          <Grid item xs={calculateGridSize(Object.values(Status).length)}>
-            <Select
-              name="filter"
-              placeholder="Team Name"
-              options={[
-                {
-                  value: "1",
-                  label: "Team 1",
-                },
-                {
-                  value: "2",
-                  label: "Team 2",
-                },
-              ]}
-              onChange={(e) => handleTeamFilter(e)}
-              value={selectedTeam}
-            />
+          <Grid container>
+            <Grid item xs={calculateGridSize(Object.values(Status).length)}>
+              <Select
+                name="filter"
+                placeholder="Team Name"
+                options={[
+                  {
+                    value: "1",
+                    label: "Team 1",
+                  },
+                  {
+                    value: "2",
+                    label: "Team 2",
+                  },
+                ]}
+                onChange={(e) => handleTeamFilter(e)}
+                value={selectedTeam}
+              />
+            </Grid>
           </Grid>
-        </Grid>
 
-        <Divider style={{ margin: "2rem 0 3rem 0" }} />
+          <Divider style={{ margin: "2rem 0 3rem 0" }} />
 
-        <Grid
-          container
-          spacing={1}
-          justifyContent="space-between"
-          style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}
-        >
-          {Object.values(Status).map((status) => {
-            const filteredData = tasks.filter((task) => task.status === status);
-            return (
-              <Grid
-                item
-                container
-                xs={calculateGridSize(Object.values(Status).length)}
-                key={status}
-              >
-                <Droppable droppableId={status}>
-                  {(provided) => (
-                    <StatusContainer
-                      backgroundColor={status}
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                    >
-                      <Grid item container alignItems={"center"}>
-                        <Grid item xs={11}>
-                          <StyledStatusTitle color={status}>
-                            {status}
-                          </StyledStatusTitle>
-                        </Grid>
-                        <Grid item xs={1}>
-                          <StyledCreateTaskIconButton
-                            display={status}
-                            onClick={handleCreateModalState}
-                          >
-                            +
-                          </StyledCreateTaskIconButton>
-                        </Grid>
-                      </Grid>
-
-                      <Divider />
-                      {filteredData.map((task, index) => (
-                        <Stack key={`${status}_${task.name}_${index}`}>
-                          {task.status === Status.Backlog ||
-                          task.status === Status.OnHold ? (
-                            <Draggable
-                              key={task.name}
-                              draggableId={task.name}
-                              index={index}
+          <Grid
+            container
+            spacing={1}
+            justifyContent="space-between"
+            style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}
+          >
+            {Object.values(Status).map((status) => {
+              const filteredData = tasks.filter(
+                (task) => task.status === status
+              );
+              return (
+                <Grid
+                  item
+                  container
+                  xs={calculateGridSize(Object.values(Status).length)}
+                  key={status}
+                >
+                  <Droppable droppableId={status}>
+                    {(provided) => (
+                      <StatusContainer
+                        backgroundColor={status}
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                      >
+                        <Grid item container alignItems={"center"}>
+                          <Grid item xs={11}>
+                            <StyledStatusTitle color={status}>
+                              {status}
+                            </StyledStatusTitle>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <StyledCreateTaskIconButton
+                              display={status}
+                              onClick={handleCreateModalState}
                             >
-                              {(provided) => (
-                                <Stack
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <TaskDetailsCard
-                                    data={task}
-                                    handleEdit={handleUpdateModalState}
-                                    handleViewDetails={
-                                      handleViewDetailsModalState
-                                    }
-                                  />
-                                </Stack>
-                              )}
-                            </Draggable>
-                          ) : (
-                            <TaskDetailsCard
-                              data={task}
-                              handleEdit={handleUpdateModalState}
-                              handleViewDetails={handleViewDetailsModalState}
-                            />
-                          )}
-                        </Stack>
-                      ))}
-                      {provided.placeholder}
-                    </StatusContainer>
-                  )}
-                </Droppable>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </PageContainer>
-    </DragDropContext>
+                              +
+                            </StyledCreateTaskIconButton>
+                          </Grid>
+                        </Grid>
+
+                        <Divider />
+                        {filteredData.map((task, index) => (
+                          <Stack key={`${status}_${task.name}_${index}`}>
+                            {task.status === Status.Backlog ||
+                            task.status === Status.OnHold ? (
+                              <Draggable
+                                key={task.name}
+                                draggableId={task.name}
+                                index={index}
+                              >
+                                {(provided) => (
+                                  <Stack
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <TaskDetailsCard
+                                      data={task}
+                                      handleEdit={handleUpdateModalState}
+                                      handleViewDetails={
+                                        handleViewDetailsModalState
+                                      }
+                                    />
+                                  </Stack>
+                                )}
+                              </Draggable>
+                            ) : (
+                              <TaskDetailsCard
+                                data={task}
+                                handleEdit={handleUpdateModalState}
+                                handleViewDetails={handleViewDetailsModalState}
+                              />
+                            )}
+                          </Stack>
+                        ))}
+                        {provided.placeholder}
+                      </StatusContainer>
+                    )}
+                  </Droppable>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </PageContainer>
+      </DragDropContext>
+      <ErrorMessage error={errorMessage} type="alert" />
+    </>
   );
 };
 

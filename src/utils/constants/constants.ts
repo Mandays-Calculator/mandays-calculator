@@ -87,3 +87,26 @@ export const ERROR_CODES = {
   userNotFound: "US000004",
   networkError: "ERR_NETWORK",
 };
+
+export const country = [
+  {
+    label: "CHINA",
+    value: "CHINA",
+  },
+  {
+    label: "HONG KONG",
+    value: "HONG_KONG",
+  },
+  {
+    label: "MALAYSIA",
+    value: "MALAYSIA",
+  },
+  {
+    label: "PHILIPPINES",
+    value: "PHILIPPINES",
+  },
+  {
+    label: "SINGAPORE",
+    value: "SINGAPORE",
+  },
+];

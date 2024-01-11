@@ -2,6 +2,7 @@ import type { RouteType } from ".";
 
 import { Outlet } from "react-router-dom";
 
+import { Dashboard } from "~/pages/dashboard";
 import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
@@ -40,7 +41,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "dashboard",
-    element: <ErrorPage type="development-mode" />,
+    element: <Dashboard />,
   },
   {
     path: "odc-management",
