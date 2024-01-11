@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react"; // For testing hooks
+import { renderHook } from "@testing-library/react";
 import { t } from "i18next";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { APIError } from "~/hooks/request-handler";
