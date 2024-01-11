@@ -1,0 +1,367 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN page is still in verification process, THEN it should render the page loader: auth-page-loader 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-1g5urev"
+  >
+    <span
+      aria-label="loading..."
+      class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
+      role="progressbar"
+      style="width: 40px; height: 40px;"
+    >
+      <svg
+        class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+        viewBox="22 22 44 44"
+      >
+        <circle
+          class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+          cx="44"
+          cy="44"
+          fill="none"
+          r="20.2"
+          stroke-width="3.6"
+        />
+      </svg>
+    </span>
+    <h6
+      class="MuiTypography-root MuiTypography-subtitle1 css-10wpov9-MuiTypography-root"
+    >
+      common.userManagement.auth.signInLoading
+    </h6>
+  </div>
+</div>
+`;
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN user is authenticated, THEN it user should be redirected to the landing page: user-authenticated 1`] = `
+<div>
+  <div
+    class="css-1ezlr65"
+    id="layout-container"
+  >
+    <div
+      class="MuiBox-root css-k008qs"
+    >
+      <div
+        class="MuiDrawer-root MuiDrawer-docked css-j1fxea-MuiDrawer-docked"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiDrawer-paper MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft css-12i7wg6-MuiPaper-root-MuiDrawer-paper"
+        >
+          <ul
+            class="MuiList-root MuiList-padding css-gygkfk-MuiList-root"
+          >
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-icon_sample"
+                  />
+                </svg>
+              </div>
+            </li>
+          </ul>
+          <div
+            class="css-4w50jn"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+                data-testid="svg-component"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <use
+                  href="#icon-collapse_right"
+                />
+              </svg>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-lo1nes"
+    >
+      <header
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionSticky css-lr6u4k-MuiPaper-root-MuiAppBar-root"
+      >
+        <div
+          class="MuiContainer-root MuiContainer-disableGutters css-idqxm-MuiContainer-root"
+        >
+          <div
+            class="css-vgodjd"
+          >
+            <div
+              class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1hq4vw-MuiToolbar-root"
+            >
+              <div
+                class="MuiBox-root css-lr0ish"
+              >
+                <div
+                  aria-label="Open settings"
+                  class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-7ldjcq-MuiGrid-root"
+                  data-mui-internal-clone-element="true"
+                >
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4 css-gj1fbr-MuiGrid-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="undefined undefined"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="[object Object]"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-7 css-uqwprf-MuiGrid-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-p8vqrd-MuiTypography-root"
+                    >
+                      undefined undefined
+                    </p>
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-11ine16-MuiTypography-root"
+                    />
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1 css-u78q51-MuiGrid-root"
+                  >
+                    <button
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      aria-label="account of current user"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-nff64r-MuiButtonBase-root-MuiIconButton-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-tzssek-MuiSvgIcon-root"
+                        data-testid="ArrowDropDownIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="m7 10 5 5 5-5z"
+                        />
+                      </svg>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div
+        class="css-18gt0qv"
+      />
+    </div>
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-19bwc11-MuiPaper-root-MuiAppBar-root"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-184l77m-MuiTypography-root"
+      >
+        © 
+        2024
+         
+        footer.label
+      </p>
+    </header>
+  </div>
+</div>
+`;
+
+exports[`GIVEN AuthenticatedApp Component is called WHEN user is not authenticated, THEN it user cannot proceed to the landing page: user-not-authenticated 1`] = `
+<div>
+  <div
+    class="css-1ezlr65"
+    id="layout-container"
+  >
+    <div
+      class="MuiBox-root css-k008qs"
+    >
+      <div
+        class="MuiDrawer-root MuiDrawer-docked css-j1fxea-MuiDrawer-docked"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiDrawer-paper MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft css-12i7wg6-MuiPaper-root-MuiDrawer-paper"
+        >
+          <ul
+            class="MuiList-root MuiList-padding css-gygkfk-MuiList-root"
+          >
+            <li
+              class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1z0797q-MuiListItem-root"
+            >
+              <div
+                class="MuiListItemIcon-root css-19vlph4-MuiListItemIcon-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium css-18t382g-MuiSvgIcon-root"
+                  data-testid="svg-component"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <use
+                    href="#icon-icon_sample"
+                  />
+                </svg>
+              </div>
+            </li>
+          </ul>
+          <div
+            class="css-4w50jn"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-3bwekg-MuiSvgIcon-root"
+                data-testid="svg-component"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <use
+                  href="#icon-collapse_right"
+                />
+              </svg>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-lo1nes"
+    >
+      <header
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionSticky css-lr6u4k-MuiPaper-root-MuiAppBar-root"
+      >
+        <div
+          class="MuiContainer-root MuiContainer-disableGutters css-idqxm-MuiContainer-root"
+        >
+          <div
+            class="css-vgodjd"
+          >
+            <div
+              class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1hq4vw-MuiToolbar-root"
+            >
+              <div
+                class="MuiBox-root css-lr0ish"
+              >
+                <div
+                  aria-label="Open settings"
+                  class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-7ldjcq-MuiGrid-root"
+                  data-mui-internal-clone-element="true"
+                >
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4 css-gj1fbr-MuiGrid-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="undefined undefined"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="[object Object]"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-7 css-uqwprf-MuiGrid-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-p8vqrd-MuiTypography-root"
+                    >
+                      undefined undefined
+                    </p>
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-11ine16-MuiTypography-root"
+                    />
+                  </div>
+                  <div
+                    class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1 css-u78q51-MuiGrid-root"
+                  >
+                    <button
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      aria-label="account of current user"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-nff64r-MuiButtonBase-root-MuiIconButton-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-tzssek-MuiSvgIcon-root"
+                        data-testid="ArrowDropDownIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="m7 10 5 5 5-5z"
+                        />
+                      </svg>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div
+        class="css-18gt0qv"
+      />
+    </div>
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-19bwc11-MuiPaper-root-MuiAppBar-root"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body2 MuiTypography-alignCenter css-184l77m-MuiTypography-root"
+      >
+        © 
+        2024
+         
+        footer.label
+      </p>
+    </header>
+  </div>
+</div>
+`;

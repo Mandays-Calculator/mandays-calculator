@@ -2,7 +2,7 @@ import type { ReactElement, ChangeEvent } from "react";
 import type { OdcParam } from "~/api/odc";
 import type { ViewProps } from "../utils";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Grid, TextField, styled, Box } from "@mui/material";
@@ -29,14 +29,14 @@ const ViewODC = (props: ViewProps): ReactElement => {
     setFilterData(data?.filter((obj: OdcParam) => (obj.active).toString() === "true"));
   }, [data]);
 
-  const handleLowerCase = (value: string): string => value.toLocaleLowerCase();
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    const handleLowerCase = (value: string): string => value.toLocaleLowerCase();
+
     setFilterData(
       data?.filter(
         (obj: OdcParam) => {
           const value = handleLowerCase(event.target.value);
-          return obj.active === "true" &&
+          return obj.active === true &&
           (
             handleLowerCase(obj.name).includes(value) ||
             handleLowerCase(obj.abbreviation).includes(value) ||
@@ -46,6 +46,8 @@ const ViewODC = (props: ViewProps): ReactElement => {
       )
     );
   };
+
+  const odcListColumn = useMemo(() => ODCColumns(t, setFormContext, setIdx), []);
 
   return (
     <>
@@ -67,11 +69,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
       <Box marginTop="14px">
         <Table
           name="ODCTable"
-          columns={ODCColumns(
-            t,
-            setFormContext,
-            setIdx,
-          )}
+          columns={odcListColumn}
           data={filterData}
         />
       </Box>

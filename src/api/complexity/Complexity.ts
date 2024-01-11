@@ -10,62 +10,37 @@ import type {
 
 import axios from "axios";
 
-const mockEnvConfig = (): { apiBasePathComplexity: string } => ({
-  apiBasePathComplexity: "http://localhost:18001",
-});
+import { getEnvConfig } from "~/utils/env-config";
 
 export const getComplexities = async (): Promise<
   GetComplexities<ForGetComplexities[]>
 > => {
-  const { apiBasePathComplexity } = mockEnvConfig();
-  const response = await axios.get(`${apiBasePathComplexity}/complexities`);
-
-  return response.data;
-};
-
-export const getComplexitiesbyId = async (
-  id: string
-): Promise<GetComplexities<ForGetComplexities>> => {
-  const { apiBasePathComplexity } = mockEnvConfig();
-  const response = await axios.get(
-    `${apiBasePathComplexity}/complexities/${id}`
-  );
-
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+  const response = await axios.get(`${apiBasePath}/complexities`);
   return response.data;
 };
 
 export const postComplexities = async (
-  requestBody: ForPostComplexities[]
+  requestBody: ForPostComplexities
 ): Promise<PostComplexities> => {
-  const { apiBasePathComplexity } = mockEnvConfig();
-  const response = await axios.post(
-    `${apiBasePathComplexity}/complexities`,
-    requestBody
-  );
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+  const response = await axios.post(`${apiBasePath}/complexities`, requestBody);
   return response.data;
 };
 
-export const putComplexities = async ({
-  id,
-  ...requestBody
-}: ForPutComplexities): Promise<PutComplexities> => {
-  const { apiBasePathComplexity } = mockEnvConfig();
-  const response = await axios.put(
-    `${apiBasePathComplexity}/complexities/${id}`,
-    requestBody
-  );
-
+export const putComplexities = async (
+  { id, ...requestBody }: ForPutComplexities
+): Promise<PutComplexities> => {
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+  const response = await axios.put(`${apiBasePath}/complexities/${id}`, requestBody);
   return response.data;
 };
 
 export const deleteComplexities = async (
   id: string
 ): Promise<DeleteComplexities> => {
-  const { apiBasePathComplexity } = mockEnvConfig();
-  const response = await axios.delete(
-    `${apiBasePathComplexity}/complexities/${id}`
-  );
-
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+  const response = await axios.delete(`${apiBasePath}/complexities/${id}`);
   return response.data;
 };
   

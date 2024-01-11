@@ -1,13 +1,14 @@
 import type { ReactElement } from "react";
 import { Grid } from "@mui/material";
-import { useAuth } from "react-oidc-context";
+import { useUserAuth } from "~/hooks/user";
+
 import { EstimationDetails } from "../estimation-details";
 
 const ShareEstimationDetails = (): ReactElement => {
-  const auth = useAuth();
+  const auth = useUserAuth();
 
-  const isAuthenticated = auth.isAuthenticated;
-  
+  const isAuthenticated = auth.state.isAuthenticated;
+
   return (
     <>
       {isAuthenticated ? (

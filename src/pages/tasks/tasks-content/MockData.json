@@ -1,0 +1,258 @@
+[
+  {
+    "taskID": "1",
+    "name": "Operation Strix",
+    "description": "Transcription: \"Operēshon <Sutorikusu>\"\n(Japanese: オペレーション〈梟ストリクス〉)",
+    "completionDate": "04/09/2023",
+    "sprint": "1",
+    "complexity": "complexity1",
+    "status": "Backlog",
+    "type": "Feature",
+    "functionality": [
+      {
+        "id": "functionality1",
+        "name": "Functionality 1"
+      },
+      {
+        "id": "functionality2",
+        "name": "Functionality 2"
+      },
+      {
+        "id": "functionality3",
+        "name": "Functionality 3"
+      }
+    ],
+    "tags": [
+      {
+        "label": "Tag 1",
+        "value": "tag1"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Zad Geron",
+        "comment": "This is a test"
+      }
+    ]
+  },
+  {
+    "taskID": "2",
+    "name": "Secure a Wife",
+    "description": "Transcription: \"Tsuma-yaku o Kakuho Seyo\"\n(Japanese: 妻役を確保せよ)",
+    "completionDate": "05/16/2023",
+    "sprint": "1",
+    "complexity": "complexity2",
+    "status": "Backlog",
+    "type": "Bug",
+    "functionality": [
+      {
+        "id": "functionality2",
+        "name": "Functionality 2"
+      }
+    ],
+    "tags": [
+      {
+        "label": "Tag 1",
+        "value": "tag1"
+      },
+      {
+        "label": "Tag 2",
+        "value": "tag2"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Zad Geron",
+        "comment": "This is a test"
+      }
+    ]
+  },
+  {
+    "taskID": "3",
+    "name": "Prepare for the Interview",
+    "description": "Transcription: \"Juken Taisaku o Seyo\"\n(Japanese: 受験対策をせよ)",
+    "completionDate": "06/23/2023",
+    "sprint": "1",
+    "complexity": "0",
+    "status": "Backlog",
+    "type": "Bug",
+    "functionality": [
+      {
+        "id": "functionality3",
+        "name": "Functionality 3"
+      }
+    ],
+    "tags": [
+      {
+        "label": "Tag 1",
+        "value": "tag1"
+      },
+      {
+        "label": "Tag 2",
+        "value": "tag2"
+      },
+      {
+        "label": "Tag 3",
+        "value": "tag3"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Zad Geron",
+        "comment": "This is a test"
+      }
+    ]
+  },
+  {
+    "taskID": "4",
+    "name": "The Prestigious School's Interview",
+    "description": "Transcription: \"Meimonkō Mensetsu Shiken\" (Japanese: 名門校面接試験)",
+    "completionDate": "07/30/2023",
+    "sprint": "1",
+    "complexity": "complexity3",
+    "status": "Not Yet Started",
+    "type": "Bug",
+    "functionality": [
+      {
+        "id": "functionality1",
+        "name": "Functionality 1"
+      }
+    ],
+    "tags": [
+      {
+        "label": "Tag 2",
+        "value": "tag2"
+      },
+      {
+        "label": "Tag 3",
+        "value": "tag3"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Zad Geron",
+        "comment": "This is a test"
+      }
+    ]
+  },
+  {
+    "taskID": "5",
+    "name": "Will They Pass or Fail?",
+    "description": "Transcription: \"Gōhi no Yukue\"\n(Japanese: 合否の行方)",
+    "completionDate": "08/7/2023",
+    "sprint": "1",
+    "complexity": "2",
+    "status": "In Progress",
+    "type": "Enhancement",
+    "functionality": [
+      {
+        "id": "functionality1",
+        "name": "Functionality 1"
+      },
+      {
+        "id": "functionality2",
+        "name": "Functionality 2"
+      }
+    ],
+    "tags": [
+      {
+        "label": "Tag 1",
+        "value": "tag1"
+      },
+      {
+        "label": "Tag 3",
+        "value": "tag3"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Zad Geron",
+        "comment": "This is a test"
+      }
+    ]
+  },
+  {
+    "taskID": "6",
+    "name": "The Friendship Scheme",
+    "description": "Transcription: \"Nakayoshi Sakusen\"\n(Japanese: ナカヨシ作戦)",
+    "completionDate": "09/14/2023",
+    "sprint": "1",
+    "complexity": "complexity2",
+    "status": "On Hold",
+    "type": "API",
+    "functionality": [
+      {
+        "id": "functionality1",
+        "name": "Functionality 1"
+      },
+      {
+        "id": "functionality3",
+        "name": "Functionality 3"
+      }
+    ],
+    "tags": [
+      {
+        "label": "Tag 2",
+        "value": "tag2"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Zad Geron",
+        "comment": "This is a test"
+      },
+      {
+        "name": "Tony Stark",
+        "comment": "This is a test"
+      },
+      {
+        "name": "Natasha Romanoff",
+        "comment": "This is a test"
+      },
+      {
+        "name": "Bruce Banner",
+        "comment": "This is a test"
+      },
+      {
+        "name": "T'Challa",
+        "comment": "This is a test"
+      }
+    ]
+  },
+  {
+    "taskID": "7",
+    "name": "The Target's Second Son",
+    "description": "Transcription: \"Tāgetto no Jinan\"\n(Japanese: 標的ターゲットの次男)",
+    "completionDate": "10/21/2023",
+    "sprint": "1",
+    "complexity": "complexity1",
+    "status": "Completed",
+    "type": "Enhancement",
+    "functionality": [
+      {
+        "id": "functionality2",
+        "name": "Functionality 2"
+      },
+      {
+        "id": "functionality3",
+        "name": "Functionality 3"
+      }
+    ],
+    "tags": [
+      {
+        "label": "Tag 3",
+        "value": "tag3"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Zad Geron",
+        "comment": "This is a test"
+      },
+      {
+        "name": "Steve Rogers",
+        "comment": "This is a test"
+      }
+    ]
+  }
+]

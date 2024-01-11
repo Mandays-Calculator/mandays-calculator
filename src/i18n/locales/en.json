@@ -315,6 +315,12 @@
       "btnLabel": {
         "create": "Create"
       }
+    },
+    "updateTask": {
+      "modalTitle": "Update Task",
+      "btnLabel": {
+        "update": "Update"
+      }
     }
   },
   "history": {
@@ -354,6 +360,7 @@
       "hours": "HOURS",
       "days": "DAYS",
       "name": "Complexity Name",
+      "noOfHours": "Number of Hours",
       "noOfDays": "Number of Days",
       "noOfFeatures": "Number of Features",
       "description": "Description",
@@ -364,6 +371,7 @@
     "table": {
       "columns": {
         "complexity": "Complexity",
+        "noOfHours": "No. of Hours",
         "noOfDays": "No. of Days",
         "noOfFeatures": "No. of Features",
         "description": "Description",

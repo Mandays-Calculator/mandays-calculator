@@ -3,18 +3,18 @@ export interface GetComplexities<T> {
   status: number;
 }
 
-export interface ForGetComplexities extends CommonComplexity {
+export interface ForGetComplexities extends Omit<CommonComplexity, "isActive"> {
   id: string;
   active: boolean;
 }
 
 export interface PostComplexities {
-  data: ForPostComplexities[];
+  data: ForPostComplexities;
   status: number;
 }
 
-export interface ForPostComplexities extends CommonComplexity {
-  isActive: boolean;
+export interface ForPostComplexities {
+  complexities: CommonComplexity[];
 }
 
 export interface PutComplexities {
@@ -22,7 +22,7 @@ export interface PutComplexities {
   status: number;
 }
 
-export interface ForPutComplexities extends CommonComplexity {
+export interface ForPutComplexities extends Omit<CommonComplexity, "isActive"> {
   id: string;
   active: boolean;
 }
@@ -34,8 +34,9 @@ export interface DeleteComplexities {
 
 interface CommonComplexity {
   name: string;
-  numberOfDays: string;
+  numberOfHours: string;
   numberOfFeatures: string;
   description: string;
   sample: string;
+  isActive: boolean;
 }
