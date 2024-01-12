@@ -87,7 +87,7 @@ const Charts: React.FC<ChartProps> = ({ type, data, labels, colors = [] }) => {
                 calculateAlphaColor(color, 1)
               ),
               borderWidth: 2,
-            //   spacing: 10,
+              //   spacing: 10,
             },
           ],
         },
