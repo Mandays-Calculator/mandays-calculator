@@ -90,12 +90,12 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   };
 
   const initializeSelectedMembers = (selectedUsers: User[]) => {
-    const members = selectedUsers.map((user) => {
+    const users = selectedUsers.map((user) => {
       const memberName =
         user.firstName && user.lastName
           ? `${user.firstName}, ${user.lastName} ${user.middleName ?? ''}`
           : 'Lorem Ipsum'; //TODO: Remove soon
-      
+
       return {
         ...user,
         name: memberName.trim(),
@@ -104,9 +104,17 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
       } as TeamMembers;
     });
 
-    setTableData(members);
-    setOriginTableData(members);
+    let newMembers: TeamMembers[] = originTableData;
+    
+    for (const user of users) {
+      const isMemberExists = originTableData.find((originMember) => originMember.id == user.id);
+      if (!isMemberExists) newMembers.push(user);
+    }
+    
+    setTableData(newMembers);
+    setOriginTableData(newMembers);
   };
+
 
   const onTableRowClick = ($event: any) => {
     console.log($event);

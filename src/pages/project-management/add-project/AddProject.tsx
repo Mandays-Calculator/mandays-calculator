@@ -73,8 +73,12 @@ const AddProject = (props: ProjectListProps): ReactElement => {
         teamMembers: team.teamMembers.map(({ id }) => id),
       })),
     };
-debugger
-    callApi(createProjectParams);
+
+    if (selectedProject) {
+      // WIP
+    } else {
+      callApi(createProjectParams);
+    }
   };
 
   const onValidateForm = async (): Promise<void> => {
