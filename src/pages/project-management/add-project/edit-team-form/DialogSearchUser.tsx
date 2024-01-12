@@ -96,10 +96,10 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
     searchedOdc?: string
   ): Members[] => {
     return originUserList.filter((user) => {
-      const name = user.fullName
+      const name = user?.fullName
         .toLowerCase()
         .includes(searchedName.toLowerCase());
-      const odc = user.odc.abbreviation
+      const odc = user?.odc?.abbreviation
         .toLowerCase()
         .includes(searchedOdc?.toLowerCase() ?? "");
 
