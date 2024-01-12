@@ -5,25 +5,27 @@ import ProjectList from './project-list';
 import { Project } from '~/api/projects';
 
 const ProjectManagement = (): ReactElement => {
-  const [showAddProject, setShowAddProject] = useState<boolean>(false);
+  const [showProjectForm, setShowProjectForm] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | undefined>();
-
-  const handleAddProject = (): void => {
-    setShowAddProject(!showAddProject);
-  };
 
   const handleEditProject = (project: Project) => {
     setSelectedProject(project);
-    handleAddProject();
+    setShowProjectForm(!showProjectForm);
   };
 
   return (
     <>
       <Title title='Project Management' />
-      {showAddProject === false ? (
-        <ProjectList handleAddProject={handleAddProject} handleEditProject={handleEditProject} />
+      {showProjectForm === false ? (
+        <ProjectList
+          handleAddProject={() => setShowProjectForm(!showProjectForm)}
+          handleEditProject={handleEditProject}
+        />
       ) : (
-        <AddProject selectedProject={selectedProject} handleAddProject={handleAddProject} />
+        <AddProject
+          selectedProject={selectedProject}
+          handleAddEditProject={() => setShowProjectForm(!showProjectForm)}
+        />
       )}
     </>
   );

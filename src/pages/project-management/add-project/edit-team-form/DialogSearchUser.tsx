@@ -157,10 +157,10 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
       <Modal
         open={showMemberDialog}
         title="Search User"
-        maxWidth={"md"}
+        maxWidth={"lg"}
         onClose={() => toggleDialog()}
       >
-        <Box sx={{ minWidth: "510px" }}>
+        <Box sx={{ minWidth: "550px" }}>
           <Stack direction="column">
             <Grid container spacing={2}>
               <Grid item xs={6}>

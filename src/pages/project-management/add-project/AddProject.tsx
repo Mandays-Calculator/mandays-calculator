@@ -5,8 +5,8 @@ import type { AddTeamForm as AddTeamFormType } from "./types";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
-import { useCreateProjectMutation } from "~/mutations/projects";
-import { useRequestHandler } from "~/hooks/request-handler";
+import { useCreateProjectMutation, useUpdateProjectMutation } from "~/mutations/projects";
+import { APIError, APIStatus, useRequestHandler } from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
@@ -27,12 +27,12 @@ const StyledTextField = styled(ControlledTextField)(() => ({
 
 interface ProjectListProps {
   selectedProject: Project | undefined;
-  handleAddProject: () => void;
+  handleAddEditProject: () => void;
 }
 
 const AddProject = (props: ProjectListProps): ReactElement => {
   const { t } = useTranslation();
-  const { handleAddProject, selectedProject } = props;
+  const { handleAddEditProject, selectedProject } = props;
   const projectForm = useFormik<AddTeamFormType>({
     initialValues: addFormInitValue,
     validationSchema: appProjectSchema,
@@ -52,10 +52,11 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     setAddProjectErrorMsg('An error has occured!');
     triggerTimeout(() => setAddProjectErrorMsg(''));
   }
-  const [status, callApi] = useRequestHandler(useCreateProjectMutation().mutate, handleAddProject, onErrorAddProject);
+  const [createProjectStatus, createProject] = useRequestHandler(useCreateProjectMutation().mutate, handleAddEditProject, onErrorAddProject);
+  const [updateProjectStatus, updateProject] = useRequestHandler(useUpdateProjectMutation().mutate, handleAddEditProject, onErrorAddProject);
 
   const onSubmit = async (): Promise<void> => {
-    if (status.loading) return;
+    if (createProjectStatus.loading) return;
 
     const { projectName, teams: teamForm } = projectForm.values;
 
@@ -76,8 +77,9 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 
     if (selectedProject) {
       // WIP
+      updateProject(createProjectParams);
     } else {
-      callApi(createProjectParams);
+      createProject(createProjectParams);
     }
   };
 
@@ -104,6 +106,10 @@ const AddProject = (props: ProjectListProps): ReactElement => {
       setAddProjectErrorMsg("");
     });
   };
+
+  const projecAPIStatus = (prop: keyof APIStatus): boolean | APIError => {
+    return createProjectStatus[prop] || updateProjectStatus[prop];
+  }
 
   const isErrorField = (field: string): boolean => {
     return projectForm.errors[field as keyof {}] ? true : false;
@@ -160,21 +166,21 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             <CustomButton
               colorVariant="secondary"
               type="button"
-              onClick={handleAddProject}
+              onClick={handleAddEditProject}
             >
               Cancel
             </CustomButton>
             <CustomButton
               type="submit"
               onClick={onValidateForm}
-              disabled={status.loading}
+              disabled={projecAPIStatus('loading') as boolean}
             >
-              {status.loading ? "Loading..." : "Add Project"}
+              {projecAPIStatus('loading') ? "Loading..." : "Add Project"}
             </CustomButton>
             
           </Stack>
-          {!status.loading && (
-              <ErrorMessage error={useErrorHandler(status.error, t) || t(addProjectErrorMsg)} type="alert" />
+          {!projecAPIStatus('loading') && (
+              <ErrorMessage error={useErrorHandler(projecAPIStatus('error') as APIError, t) || t(addProjectErrorMsg)} type="alert" />
             )}
         </Form>
       ) : (
