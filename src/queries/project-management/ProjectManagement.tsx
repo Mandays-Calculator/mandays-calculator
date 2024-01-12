@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
-import { Project, getProjects } from '~/api/projects';
+import { ProjectListResponse, getProjects } from '~/api/projects';
 
 export const useProjectList = () => {
-  return useQuery<Project, Error>('projectList', getProjects);
+  return useQuery<ProjectListResponse, Error>('projectList', getProjects);
 };

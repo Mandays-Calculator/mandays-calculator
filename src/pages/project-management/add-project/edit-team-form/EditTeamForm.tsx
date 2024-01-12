@@ -1,22 +1,16 @@
 import { type ReactElement, useState, ChangeEvent, useEffect } from "react";
-import { Column } from "react-table";
+import type { User } from "~/api/user/types";
+import type { AddTeamForm as AddTeamFormType, TeamObject } from "../types";
+import type { ProjectListConfirmDialogType, TeamMembers } from "../../utils/types";
+
+import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
-import { Grid, Typography, Stack, Box, IconButton } from "@mui/material";
-
-import { User } from "~/api/user";
+import { Grid, Typography, Stack, Box } from "@mui/material";
+import { Table, TextField, ErrorMessage, ConfirmModal } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { Table, TextField, SvgIcon, ErrorMessage } from "~/components";
 import { useTimeout } from "../../utils/functions";
-import { AddTeamForm as AddTeamFormType, TeamObject } from "../types";
+import { TeamListColumns } from "../../utils/columns";
 import DialogSearchUser from "./DialogSearchUser";
-
-type Members = {
-  name: string;
-  abbreviation: string;
-  careerStep: string;
-};
-
-type ColumnType = Column<Members> & { id?: string };
 
 interface EditTeamFormProps {
   teamIndex: number;
@@ -25,6 +19,7 @@ interface EditTeamFormProps {
 
 const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const { teamIndex, onCancel } = props;
+  const { t } = useTranslation();
   const { values, setValues } = useFormikContext<AddTeamFormType>();
 
   let team: TeamObject = values.teams.find(
@@ -37,9 +32,12 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const [projectNameError, setProjectNameError] = useState<boolean>(false);
   const [teamNameError, setTeamNameError] = useState<boolean>(false);
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
-  const [tableData, setTableData] = useState<Members[]>([]);
+  const [searchMember, setSearchMember] = useState<string>('');
+  const [tableData, setTableData] = useState<TeamMembers[]>([]);
+  const [originTableData, setOriginTableData] = useState<TeamMembers[]>([]);
   const [showMemberDialog, setMemberDialog] = useState<boolean>(false);
   const [errorEditTeamMsg, setErrorEditTeamMsg] = useState<string>("");
+  const [confirmDialog, setConfirmDialog] = useState<ProjectListConfirmDialogType>({ open: false, id: '' });
   const [triggerTimeout] = useTimeout();
 
   const editTeam = (): void => {
@@ -68,7 +66,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
       setValues({
         ...values,
         projectName: projectName,
-        teams: teams,
+        teams: teams as TeamObject[],
       });
 
       const selectedTeam = teams.find((x) => x.teamMembers.length);
@@ -92,15 +90,22 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   };
 
   const initializeSelectedMembers = (selectedUsers: User[]) => {
-    setTableData(
-      selectedUsers.map((user) => ({
+    const members = selectedUsers.map((user) => {
+      const memberName =
+        user.firstName && user.lastName
+          ? `${user.firstName}, ${user.lastName} ${user.middleName ?? ''}`
+          : 'Lorem Ipsum'; //TODO: Remove soon
+      
+      return {
         ...user,
-        name: `${user.firstName}, ${user.lastName} ${
-          user.middleName ?? ""
-        }`.trim(),
-        abbreviation: user.odc.abbreviation,
-      }))
-    );
+        name: memberName.trim(),
+        careerStep: user.careerStep ?? 'I05', //TODO: Remove soon
+        abbreviation: user.odc?.abbreviation ?? 'PHODC', //TODO: Remove soon
+      } as TeamMembers;
+    });
+
+    setTableData(members);
+    setOriginTableData(members);
   };
 
   const onTableRowClick = ($event: any) => {
@@ -119,31 +124,34 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setTeamLead(e.target.value);
   };
 
-  const columns: ColumnType[] = [
-    {
-      Header: "Name",
-      accessor: "name",
-    },
-    {
-      Header: "ODC",
-      accessor: "abbreviation",
-    },
-    {
-      Header: "Career Step",
-      accessor: "careerStep",
-    },
-    {
-      Header: "",
-      id: "actions",
-      Cell: () => (
-        <>
-          <IconButton>
-            <SvgIcon name="delete" color="error" $size={2} />
-          </IconButton>
-        </>
-      ),
-    },
-  ];
+  const onChangeMember = (e: ChangeEvent<HTMLInputElement>) => {
+    const keyword = e.target.value;
+    setSearchMember(keyword);
+
+    setTableData(filteredMemberList(keyword));
+  };
+
+  const filteredMemberList = (keyword: string): TeamMembers[] => {;
+    return originTableData.filter((user) => {
+      function isIncludes(property: string) {
+        property = user[property as keyof TeamMembers] as string;
+        return property.toLowerCase().includes(keyword.toLowerCase());
+      }
+
+      return isIncludes('name') || isIncludes('abbreviation') || isIncludes('careerStep');
+    });
+  };
+  
+  const onDelete = (userId: string): void => {
+    setConfirmDialog({ open: !confirmDialog.open, id: userId });
+  };
+  
+  const deleteMembers = () => {
+    const newList = originTableData.filter(row => row.id != confirmDialog.id);
+    setTableData(newList);
+    setOriginTableData(newList);
+    setConfirmDialog({ ...confirmDialog, open: false });
+  }
 
   useEffect(() => {
     const teamMembers = values.teams[teamIndex].teamMembers;
@@ -206,6 +214,8 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               name="members"
               label="Members"
               placeholder="Enter keyword here..."
+              value={searchMember}
+              onChange={onChangeMember}
             />
           </Grid>
           <Grid item xs={7} container justifyContent="flex-end">
@@ -222,7 +232,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
         <Box sx={{ padding: "0 1rem 0 1rem" }}>
           <Table
             name="ODCTable"
-            columns={columns}
+            columns={TeamListColumns({t, onDelete})}
             data={tableData}
             onRowClick={onTableRowClick}
           />
@@ -249,9 +259,22 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
           </CustomButton>
         </Stack>
       </Stack>
-      <DialogSearchUser
-        showMemberDialog={showMemberDialog}
-        toggleDialog={($event) => onToggleDialog($event)}
+
+      {showMemberDialog ? (
+        <DialogSearchUser showMemberDialog={showMemberDialog} toggleDialog={($event) => onToggleDialog($event)} />
+      ) : null}
+      
+      <ConfirmModal
+        onConfirm={deleteMembers}
+        open={confirmDialog.open}
+        message={t('Are you sure you want to delete?')}
+        onClose={() =>
+          setConfirmDialog({
+            open: false,
+            id: '',
+          })
+        }
+        selectedRow={null}
       />
       <ErrorMessage error={errorEditTeamMsg} type={"alert"} />
     </>
