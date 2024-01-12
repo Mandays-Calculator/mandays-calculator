@@ -65,13 +65,13 @@ const Drawer = (): ReactElement => {
               }
             })}
           </StyledList>
-          <StyledCollapsibleItem open={open}>
-            <IconButton onClick={() => setOpen(!open)}>
-              <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
-            </IconButton>
-            {open && <Typography>{t(common.collapse)}</Typography>}
-          </StyledCollapsibleItem>
         </StyledDrawer>
+        <StyledCollapsibleItem open={open}>
+          <IconButton onClick={() => setOpen(!open)}>
+            <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
+          </IconButton>
+          {open && <Typography>{t(common.collapse)}</Typography>}
+        </StyledCollapsibleItem>
       </Box>
     );
 
