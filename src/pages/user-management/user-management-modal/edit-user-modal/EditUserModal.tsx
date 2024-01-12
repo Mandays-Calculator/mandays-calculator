@@ -161,7 +161,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               <StyledTitle mb={0.5}>
                 {t(userManagement.label.gender)}
               </StyledTitle>
-              <ControlledSelect name="updateGender" options={genders} />
+              <ControlledSelect
+                name="updateGender"
+                options={genders}
+                value={form.values.updateGender || ""}
+              />
             </Grid>
           </Grid>
           <Grid item xs={10} mt={1}>
@@ -174,7 +178,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <StyledTitle mb={0.5}>
               {t(userManagement.label.careerStep)}
             </StyledTitle>
-            <ControlledSelect options={CAREER_STEPS} name="updateCareerStep" />
+            <ControlledSelect
+              options={CAREER_STEPS}
+              name="updateCareerStep"
+              value={form.values.updateCareerStep || ""}
+            />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
@@ -184,7 +192,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
-            <ControlledSelect options={odcOptions} name="updateOdcId" />
+            <ControlledSelect
+              options={odcOptions}
+              name="updateOdcId"
+              value={form.values.updateOdcId || ""}
+            />
           </Grid>
 
           <Grid item xs={2} fontSize={"5px"}>
@@ -203,16 +215,30 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             </StyledTitle>
             <ControlledSelect
               options={projectOptions}
+              value={form.values.updateProjectId || ""}
               name="updateProjectName"
             />
           </Grid>
           <Grid item xs={4.3}>
             <StyledTitle mb={0.5}>{t(userManagement.label.teamId)}</StyledTitle>
-            <ControlledSelect options={teamOptions} name="updateTeamName" />
+            <ControlledSelect
+              options={teamOptions}
+              name="updateTeamName"
+              value={form.values.updateTeamId || ""}
+            />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={1}>{t(userManagement.label.roles)}</StyledTitle>
-            <ControlledSelect multiple options={rolesData} name="updateRoles" />
+            <ControlledSelect
+              multiple
+              options={rolesData}
+              name="updateRoles"
+              value={
+                Array.isArray(form.values.updateRoles)
+                  ? form.values.updateRoles
+                  : []
+              }
+            />
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" my={2}>
