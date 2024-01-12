@@ -55,13 +55,20 @@ const transformDataToOption = (
   return [];
 };
 
-const getCommonOption = <T>(type: CommonType): UseQueryResult<any, Error> => {
+const getCommonOption = <T>(
+  type: CommonType,
+  params: any
+): UseQueryResult<any, Error> => {
   switch (type) {
     case "user":
-      return useQuery<UserListResponse, Error>("userList", getUserList, {
-        staleTime: Infinity,
-        cacheTime: cacheTime,
-      });
+      return useQuery<UserListResponse, Error>(
+        ["userList", params],
+        () => getUserList(params),
+        {
+          staleTime: Infinity,
+          cacheTime: cacheTime,
+        }
+      );
     case "odc":
       return useQuery<OdcListResponse, Error>("odcList", getODC, {
         staleTime: Infinity,
@@ -91,7 +98,7 @@ const getCommonOption = <T>(type: CommonType): UseQueryResult<any, Error> => {
   }
 };
 
-export const useCommonOption = (type: CommonType) => {
-  const queryResult = getCommonOption<CommonDataResponse>(type);
+export const useCommonOption = (type: CommonType, params: any) => {
+  const queryResult = getCommonOption<CommonDataResponse>(type, params);
   return transformDataToOption(queryResult, type);
 };

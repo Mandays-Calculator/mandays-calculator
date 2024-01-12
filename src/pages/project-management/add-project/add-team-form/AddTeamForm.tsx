@@ -4,10 +4,12 @@ import type { AddTeamForm as AddTeamFormType } from "../types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+import { Autocomplete } from "@mui/material";
 
 import { CustomButton } from "~/components/form/button";
 import { TextField } from "~/components";
 import { useFormikContext } from "formik";
+import { useCommonOption } from "~/queries/common/options";
 
 interface AddTeamFormProps {
   onCancel: () => void;
@@ -17,9 +19,14 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
   const { onCancel } = props;
   const { values, setValues } = useFormikContext<AddTeamFormType>();
   const [teamName, setTeamName] = useState<string>("");
-  const [teamLead, setTeamLead] = useState<string>("");
+  const [teamLead, setTeamLead] = useState<{ value: string; label: string }>({
+    label: "",
+    value: "",
+  });
+  const [teamLeadFilter, setTeamLeadFilter] = useState<string>("");
   const [teamNameError, setTeamNameError] = useState<boolean>(false);
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
+  const users = useCommonOption("user", { keyword: "" });
 
   const addTeam = (): void => {
     if (teamName === "") {
@@ -27,28 +34,27 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
     } else {
       setTeamNameError(false);
     }
-    if (teamLead === "") {
+    if (teamLead.value === "") {
       setTeamLeadError(true);
     } else {
       setTeamLeadError(false);
     }
-    if (teamName !== "" && teamLead !== "") {
+    if (teamName !== "" && teamLead.value !== "") {
       setValues({
         ...values,
-        teams: [...values.teams, { teamName: teamName, teamLead: teamLead, teamMembers: [] }],
+        teams: [
+          ...values.teams,
+          { teamName: teamName, teamLead: teamLead.value, teamMembers: [] },
+        ],
       });
       setTeamName("");
-      setTeamLead("");
+      setTeamLead({ label: "", value: "" });
       onCancel();
     }
   };
 
   const getTeamName = (e: ChangeEvent<HTMLInputElement>): void => {
     setTeamName(e.target.value);
-  };
-
-  const getTeamLead = (e: ChangeEvent<HTMLInputElement>): void => {
-    setTeamLead(e.target.value);
   };
 
   return (
@@ -69,14 +75,27 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField
-            name="teamLead"
-            label="Team Lead"
+          <Autocomplete
+            disablePortal
             value={teamLead}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => getTeamLead(e)}
-            fullWidth
-            error={teamLeadError}
-            helperText={teamLeadError && "Please Input Team Lead."}
+            options={users}
+            onChange={(_, value) => {
+              setTeamLead(value as { label: string; value: string });
+            }}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Team Lead"
+                name="teamLead"
+                value={teamLeadFilter}
+                onChange={(e) => {
+                  setTeamLeadFilter(e.target.value);
+                }}
+                error={teamLeadError}
+                helperText={teamLeadError && "Please Input Team Lead."}
+              />
+            )}
           />
         </Grid>
       </Grid>

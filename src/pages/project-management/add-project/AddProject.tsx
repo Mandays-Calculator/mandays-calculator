@@ -5,8 +5,15 @@ import type { AddTeamForm as AddTeamFormType } from "./types";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
-import { useCreateProjectMutation, useUpdateProjectMutation } from "~/mutations/projects";
-import { APIError, APIStatus, useRequestHandler } from "~/hooks/request-handler";
+import {
+  useCreateProjectMutation,
+  useUpdateProjectMutation,
+} from "~/mutations/projects";
+import {
+  APIError,
+  APIStatus,
+  useRequestHandler,
+} from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
@@ -19,7 +26,6 @@ import { appProjectSchema } from "./project-schema";
 import AddTeamForm from "./add-team-form";
 import EditTeamForm from "./edit-team-form/EditTeamForm";
 import TeamList from "./team-list";
-
 
 const StyledTextField = styled(ControlledTextField)(() => ({
   width: "50%",
@@ -43,17 +49,25 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const [teamIndex, setTeamIndex] = useState<number>(0);
   const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>("");
   const [triggerTimeout] = useTimeout();
-  
+
   const handleToggleEdit = (teamId: number): void => {
     setTeamIndex(teamId);
     setIsEditMode(!isEditMode);
   };
   const onErrorAddProject = () => {
-    setAddProjectErrorMsg('An error has occured!');
-    triggerTimeout(() => setAddProjectErrorMsg(''));
-  }
-  const [createProjectStatus, createProject] = useRequestHandler(useCreateProjectMutation().mutate, handleAddEditProject, onErrorAddProject);
-  const [updateProjectStatus, updateProject] = useRequestHandler(useUpdateProjectMutation().mutate, handleAddEditProject, onErrorAddProject);
+    setAddProjectErrorMsg("An error has occured!");
+    triggerTimeout(() => setAddProjectErrorMsg(""));
+  };
+  const [createProjectStatus, createProject] = useRequestHandler(
+    useCreateProjectMutation().mutate,
+    handleAddEditProject,
+    onErrorAddProject
+  );
+  const [updateProjectStatus, updateProject] = useRequestHandler(
+    useUpdateProjectMutation().mutate,
+    handleAddEditProject,
+    onErrorAddProject
+  );
 
   const onSubmit = async (): Promise<void> => {
     if (createProjectStatus.loading) return;
@@ -109,7 +123,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 
   const projecAPIStatus = (prop: keyof APIStatus): boolean | APIError => {
     return createProjectStatus[prop] || updateProjectStatus[prop];
-  }
+  };
 
   const isErrorField = (field: string): boolean => {
     return projectForm.errors[field as keyof {}] ? true : false;
@@ -120,13 +134,12 @@ const AddProject = (props: ProjectListProps): ReactElement => {
       projectForm.setValues({
         projectName: selectedProject.name,
         teams: selectedProject.teams.map(({ name, teamLead, teamMembers }) => ({
-          teamName: name ?? 'N/A', // WIP ask BE
+          teamName: name ?? "N/A", // WIP ask BE
           teamLead,
           teamMembers,
         })),
       });
     }
-
   }, [selectedProject]);
 
   return (
@@ -173,15 +186,20 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             <CustomButton
               type="submit"
               onClick={onValidateForm}
-              disabled={projecAPIStatus('loading') as boolean}
+              disabled={projecAPIStatus("loading") as boolean}
             >
-              {projecAPIStatus('loading') ? "Loading..." : "Add Project"}
+              {projecAPIStatus("loading") ? "Loading..." : "Add Project"}
             </CustomButton>
-            
           </Stack>
-          {!projecAPIStatus('loading') && (
-              <ErrorMessage error={useErrorHandler(projecAPIStatus('error') as APIError, t) || t(addProjectErrorMsg)} type="alert" />
-            )}
+          {!projecAPIStatus("loading") && (
+            <ErrorMessage
+              error={
+                useErrorHandler(projecAPIStatus("error") as APIError, t) ||
+                t(addProjectErrorMsg)
+              }
+              type="alert"
+            />
+          )}
         </Form>
       ) : (
         <Form instance={projectForm}>

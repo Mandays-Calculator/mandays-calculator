@@ -57,7 +57,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
             <Typography>
               {user.lastName}, {user.firstName} {user.middleName ?? ""}
             </Typography>
-            <Typography>{user.odc.abbreviation}</Typography>
+            <Typography>{user.odc?.abbreviation}</Typography>
             <Typography>{user.careerStep}</Typography>
           </div>
         </Grid>
@@ -99,7 +99,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
       const name = user.fullName
         .toLowerCase()
         .includes(searchedName.toLowerCase());
-      const odc = user.odc.abbreviation
+      const odc = user.odc?.abbreviation
         .toLowerCase()
         .includes(searchedOdc?.toLowerCase() ?? "");
 
