@@ -18,7 +18,6 @@ import LocalizationKey from "~/i18n/key";
 import {
 	complexityInitialValues,
 	complexityFormSchema,
-	handleSplitValues,
 	mutationOptions
 } from '.';
 
@@ -45,13 +44,13 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 
 	const {
 		name: complexityName = '',
-		numberOfHours,
-		numberOfFeatures,
+		minFeatures,
+		maxFeatures,
+		minHours,
+		maxHours,
 		description = '',
 		sample: samples = ''
 	} = apiData ?? {};
-	const [numberOfHoursFrom, numberOfHoursTo] = handleSplitValues(numberOfHours);
-	const [numberOfFeaturesFrom, numberOfFeaturesTo] = handleSplitValues(numberOfFeatures);
 
 	const addEditComplexityForm = useFormik<ComplexityForm>({
 		initialValues: initialValue,
@@ -59,21 +58,24 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		enableReinitialize: true,
 		onSubmit: ({
 			complexityName,
-			numberOfHoursFrom: noOfHoursFrom,
-			numberOfHoursTo: noOfHoursTo,
-			numberOfFeaturesFrom: noOfFeaturesFrom,
-			numberOfFeaturesTo: noOfFeaturesTo,
+			numberOfHoursFrom,
+			numberOfHoursTo,
+			numberOfFeaturesFrom,
+			numberOfFeaturesTo,
 			description,
 			samples
 		}): void => {
 			const addFormData = {
 				name: complexityName,
-				numberOfHours: `${noOfHoursFrom} - ${noOfHoursTo}`,
-				numberOfFeatures: `${noOfFeaturesFrom} - ${noOfFeaturesTo}`,
+				minHours: `${numberOfHoursFrom}`,
+				maxHours: `${numberOfHoursTo}`,
+				minFeatures: `${numberOfFeaturesFrom}`,
+				maxFeatures: `${numberOfFeaturesTo}`,
 				description: description,
 				sample: samples,
 				isActive: true,
 			}
+			console.log('parameter', addFormData)
 
 			if (formContext === 'Add')
 				mutateAddComplexities(
@@ -84,7 +86,7 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 			const { isActive, ...editFormData } = addFormData;
 			if (formContext === 'Edit')
 				mutateEditComplexities(
-					{ id: complexityId, active: isActive, ...editFormData },
+					{ id: complexityId, isActive: isActive, ...editFormData },
 					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
 				);
 		},
@@ -98,10 +100,10 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		if (formContext === 'Edit')
 			setInitialValue({
 				complexityName,
-				numberOfHoursFrom,
-				numberOfHoursTo,
-				numberOfFeaturesFrom,
-				numberOfFeaturesTo,
+				numberOfHoursFrom: minHours ?? '',
+				numberOfHoursTo: maxHours ?? '',
+				numberOfFeaturesFrom: minFeatures ?? '',
+				numberOfFeaturesTo: maxFeatures ?? '',
 				description,
 				samples,
 			});

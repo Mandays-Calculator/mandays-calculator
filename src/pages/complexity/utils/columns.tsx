@@ -22,10 +22,24 @@ export const complexityColumns = (
 		},
 		{
 			Header: t(columns.noOfHours),
-			accessor: "numberOfHours",
-			Cell: ({ row: { original: { numberOfHours } } }: CellProps<DataType>) => {
-				const numberOfDays = numberOfHours.split('-').map((values) => + values / 8).join(' - ');
-				return isDaysChecked ? numberOfDays : numberOfHours
+			accessor: "minHours",
+			Cell: ({ row: { original: { minHours, maxHours } } }: CellProps<DataType>) => {
+				const minimumHours = (minHours !== undefined || minHours !== null)
+					? minHours
+					: "";
+				const maximumHours = (maxHours !== undefined || maxHours !== null)
+					? maxHours
+					: "";
+				const minimumDays = (minimumHours !== "")
+					? (parseInt(minimumHours) / 8).toString()
+					: "";
+				const maximumDays = (maximumHours !== "")
+					? (parseInt(maximumHours) / 8).toString()
+					: "";
+
+				return isDaysChecked
+					? `${minimumDays} - ${maximumDays}`
+					: `${minimumHours} - ${maximumHours}`
 			}
 		},
 		{
