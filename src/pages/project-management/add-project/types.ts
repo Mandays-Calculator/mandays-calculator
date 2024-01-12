@@ -6,6 +6,11 @@ export interface AddTeamForm {
 }
 
 export interface TeamObject {
+  projectId?: string;
+  teamId?: string;
+  active?: boolean;
+  dateCreated?: string;
+  lastUpdatedDate?: string;
   teamName: string;
   teamLead: string;
   teamMembers: TeamMembers[];
