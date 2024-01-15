@@ -94,13 +94,13 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
       const memberName =
         user.firstName && user.lastName
           ? `${user.firstName}, ${user.lastName} ${user.middleName ?? ''}`
-          : 'Lorem Ipsum'; //TODO: Remove soon
+          : '-';
 
       return {
         ...user,
         name: memberName.trim(),
-        careerStep: user.careerStep ?? 'I05', //TODO: Remove soon
-        abbreviation: user.odc?.abbreviation ?? 'PHODC', //TODO: Remove soon
+        careerStep: user.careerStep ?? '-',
+        abbreviation: user.odc?.abbreviation ?? '-',
       } as TeamMembers;
     });
 

@@ -57,7 +57,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
             <Typography>
               {user.lastName}, {user.firstName} {user.middleName ?? ""}
             </Typography>
-            <Typography>{user.odc?.abbreviation ?? 'N/A'}</Typography>
+            <Typography>{user.odc?.abbreviation ?? '-'}</Typography>
             <Typography>{user.careerStep}</Typography>
           </div>
         </Grid>

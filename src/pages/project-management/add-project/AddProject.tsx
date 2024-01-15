@@ -150,11 +150,11 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             const memberName =
               member.firstName && member.lastName
                 ? `${member.firstName}, ${member.lastName} ${member.middleName ?? ''}`
-                : 'Lorem Ipsum'; //TODO: Remove soon
+                : '-';
                 
             return { ...member, name: memberName };
           }),
-          teamName: name ?? 'N/A', // WIP ask BE
+          teamName: name ?? '-',
         })),
       });
     }
