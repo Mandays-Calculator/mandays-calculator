@@ -22,7 +22,7 @@ import {
 } from ".";
 
 const Drawer = (): ReactElement => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const {
     state: { permissions, loading },
   } = useUserAuth();
