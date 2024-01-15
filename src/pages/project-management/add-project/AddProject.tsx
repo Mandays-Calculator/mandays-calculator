@@ -81,7 +81,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
       lastUpdatedDate: Date.now(),
       teams: teamForm.map((team) => ({
         teamName: team.teamName,
-        teamLead: team.teamLead,
+        teamLead: team.teamLead.value,
         active: true,
         dateCreated: Date.now(),
         lastUpdatedDate: Date.now(),

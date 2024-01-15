@@ -4,12 +4,12 @@ import type { AddTeamForm as AddTeamFormType } from "../types";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import { Autocomplete } from "@mui/material";
 
 import { CustomButton } from "~/components/form/button";
 import { TextField } from "~/components";
 import { useFormikContext } from "formik";
-import { useCommonOption } from "~/queries/common/options";
+
+import UsersSelect from "../components/TeamListCard/users-select/UsersSelect";
 
 interface AddTeamFormProps {
   onCancel: () => void;
@@ -19,15 +19,13 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
   const { onCancel } = props;
   const { values, setValues } = useFormikContext<AddTeamFormType>();
   const [teamName, setTeamName] = useState<string>("");
-  const [teamLead, setTeamLead] = useState<{ value: string; label: string }>({
+  const [teamLead, setTeamLead] = useState<SelectObject>({
     label: "",
     value: "",
   });
-  const [teamLeadFilter, setTeamLeadFilter] = useState<string>("");
+
   const [teamNameError, setTeamNameError] = useState<boolean>(false);
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
-  const users = useCommonOption("user", { keyword: "" });
-
   const addTeam = (): void => {
     if (teamName === "") {
       setTeamNameError(true);
@@ -44,7 +42,7 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
         ...values,
         teams: [
           ...values.teams,
-          { teamName: teamName, teamLead: teamLead.value, teamMembers: [] },
+          { teamName: teamName, teamLead: teamLead, teamMembers: [] },
         ],
       });
       setTeamName("");
@@ -75,27 +73,15 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
           />
         </Grid>
         <Grid item xs={6}>
-          <Autocomplete
-            disablePortal
+          <UsersSelect
             value={teamLead}
-            options={users}
+            label="Team Lead"
             onChange={(_, value) => {
-              setTeamLead(value as { label: string; value: string });
+              setTeamLead(value as SelectObject);
             }}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Team Lead"
-                name="teamLead"
-                value={teamLeadFilter}
-                onChange={(e) => {
-                  setTeamLeadFilter(e.target.value);
-                }}
-                error={teamLeadError}
-                helperText={teamLeadError && "Please Input Team Lead."}
-              />
-            )}
+            error={teamLeadError}
+            name="teamLead"
+            helperText={teamLeadError ? "Please Input Team Lead." : ""}
           />
         </Grid>
       </Grid>
