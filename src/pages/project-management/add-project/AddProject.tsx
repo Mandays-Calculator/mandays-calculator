@@ -26,7 +26,7 @@ const StyledTextField = styled(ControlledTextField)(() => ({
 }));
 
 interface ProjectListProps {
-  selectedProject: Project | undefined;
+  selectedProject: Project | null;
   handleAddEditProject: () => void;
 }
 
@@ -207,7 +207,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
               onClick={onValidateForm}
               disabled={projecAPIStatus('loading') as boolean}
             >
-              {projecAPIStatus('loading') ? "Loading..." : "Add Project"}
+              {projecAPIStatus('loading') ? "Loading..." : (selectedProject ? "Update" : "Add") + " Project"}
             </CustomButton>
             
           </Stack>

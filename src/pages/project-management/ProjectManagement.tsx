@@ -6,7 +6,12 @@ import { Project } from '~/api/projects';
 
 const ProjectManagement = (): ReactElement => {
   const [showProjectForm, setShowProjectForm] = useState<boolean>(false);
-  const [selectedProject, setSelectedProject] = useState<Project | undefined>();
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const handleAddProject = () => {
+    setSelectedProject(null);
+    setShowProjectForm(!showProjectForm)
+  }
 
   const handleEditProject = (project: Project) => {
     setSelectedProject(project);
@@ -18,7 +23,7 @@ const ProjectManagement = (): ReactElement => {
       <Title title='Project Management' />
       {showProjectForm === false ? (
         <ProjectList
-          handleAddProject={() => setShowProjectForm(!showProjectForm)}
+          handleAddProject={handleAddProject}
           handleEditProject={handleEditProject}
         />
       ) : (
