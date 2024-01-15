@@ -3,7 +3,7 @@
 exports[`CustomButton renders with different color variants 1`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-dg6wbr-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -17,7 +17,7 @@ exports[`CustomButton renders with different color variants 1`] = `
 exports[`CustomButton renders with different color variants 2`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-t5cdwg-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1rhiqgn-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -31,7 +31,7 @@ exports[`CustomButton renders with different color variants 2`] = `
 exports[`CustomButton renders with different color variants 3`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-19575oc-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-4xozga-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -45,7 +45,7 @@ exports[`CustomButton renders with different color variants 3`] = `
 exports[`CustomButton renders with different color variants 4`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-bt8ywo-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1mokwrb-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -59,7 +59,7 @@ exports[`CustomButton renders with different color variants 4`] = `
 exports[`CustomButton renders with different color variants 5`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-uq8efq-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-8oaw9m-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -73,7 +73,7 @@ exports[`CustomButton renders with different color variants 5`] = `
 exports[`CustomButton renders with different color variants 6`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-9vtvyq-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-eehcb-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -87,7 +87,7 @@ exports[`CustomButton renders with different color variants 6`] = `
 exports[`CustomButton renders with different color variants 7`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-h7qbqx-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-lij1tq-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -101,7 +101,7 @@ exports[`CustomButton renders with different color variants 7`] = `
 exports[`CustomButton renders with different color variants 8`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1cv601t-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-uq2qh4-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
@@ -115,7 +115,7 @@ exports[`CustomButton renders with different color variants 8`] = `
 exports[`CustomButton renders without crashing 1`] = `
 <DocumentFragment>
   <button
-    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-u89a6x-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-dg6wbr-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
