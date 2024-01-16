@@ -5,8 +5,15 @@ import type { AddTeamForm as AddTeamFormType, TeamObject } from "./types";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
-import { useCreateProjectMutation, useUpdateProjectMutation } from "~/mutations/projects";
-import { APIError, APIStatus, useRequestHandler } from "~/hooks/request-handler";
+import {
+  useCreateProjectMutation,
+  useUpdateProjectMutation,
+} from "~/mutations/projects";
+import {
+  APIError,
+  APIStatus,
+  useRequestHandler,
+} from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
@@ -19,7 +26,6 @@ import { appProjectSchema } from "./project-schema";
 import AddTeamForm from "./add-team-form";
 import EditTeamForm from "./edit-team-form/EditTeamForm";
 import TeamList from "./team-list";
-
 
 const StyledTextField = styled(ControlledTextField)(() => ({
   width: "50%",
@@ -43,7 +49,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const [teamIndex, setTeamIndex] = useState<number>(0);
   const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>("");
   const [triggerTimeout] = useTimeout();
-  
+
   const handleToggleEdit = (teamId: number): void => {
     setTeamIndex(teamId);
     setIsEditMode(!isEditMode);
@@ -75,7 +81,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
       lastUpdatedDate: Date.now(),
       teams: teamForm.map((team) => ({
         teamName: team.teamName,
-        teamLead: team.teamLead,
+        teamLead: team.teamLead.value,
         active: true,
         dateCreated: Date.now(),
         lastUpdatedDate: Date.now(),
@@ -134,7 +140,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 
   const projecAPIStatus = (prop: keyof APIStatus): boolean | APIError => {
     return createProjectStatus[prop] || updateProjectStatus[prop];
-  }
+  };
 
   const isErrorField = (field: string): boolean => {
     return projectForm.errors[field as keyof {}] ? true : false;
@@ -158,7 +164,6 @@ const AddProject = (props: ProjectListProps): ReactElement => {
         })),
       });
     }
-
   }, [selectedProject]);
 
   return (
@@ -205,15 +210,20 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             <CustomButton
               type="submit"
               onClick={onValidateForm}
-              disabled={projecAPIStatus('loading') as boolean}
+              disabled={projecAPIStatus("loading") as boolean}
             >
               {projecAPIStatus('loading') ? "Loading..." : (selectedProject ? "Update" : "Add") + " Project"}
             </CustomButton>
-            
           </Stack>
-          {!projecAPIStatus('loading') && (
-              <ErrorMessage error={useErrorHandler(projecAPIStatus('error') as APIError, t) || t(addProjectErrorMsg)} type="alert" />
-            )}
+          {!projecAPIStatus("loading") && (
+            <ErrorMessage
+              error={
+                useErrorHandler(projecAPIStatus("error") as APIError, t) ||
+                t(addProjectErrorMsg)
+              }
+              type="alert"
+            />
+          )}
         </Form>
       ) : (
         <Form instance={projectForm}>

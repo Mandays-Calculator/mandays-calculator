@@ -1,4 +1,4 @@
-import type { TeamMembers } from '~/api/projects';
+import type { TeamMembers } from "~/api/projects";
 
 export interface AddTeamForm {
   projectName: string;
@@ -12,6 +12,9 @@ export interface TeamObject {
   dateCreated?: string;
   lastUpdatedDate?: string;
   teamName: string;
-  teamLead: string;
+  teamLead: {
+    label: string;
+    value: string;
+  };
   teamMembers: TeamMembers[];
 }
