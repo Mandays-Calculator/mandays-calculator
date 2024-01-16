@@ -1,6 +1,6 @@
 import { ForGetComplexities } from "~/api/complexity";
 
-export type FormContext = '' | 'Add' | 'Edit' | 'Delete'
+export type FormContext = "" | "Add" | "Edit" | "Delete"
 
 export type DataType = ForGetComplexities;
 
@@ -20,7 +20,15 @@ export type ComplexityFormsType = {
 	complexityId: string;
 	handleCloseAddEdit: () => void;
   data: ForGetComplexities[];
-  setIsEditError: (isEditError: boolean) => void;
-  setIsEditSuccess: (isEditSuccess: boolean) => void;
-  setIsEditLoading: (isLoading: boolean) => void;
+  setSuccessError: (sucErr: SucErrType) => void;
+};
+
+export type SucErrType = {
+  isError: boolean;
+  isAddError: boolean;
+  isAddSuccess: boolean;
+  isUpdateError: boolean;
+  isUpdateSuccess: boolean;
+  isDeleteError: boolean;
+  isDeleteSuccess: boolean;
 };
