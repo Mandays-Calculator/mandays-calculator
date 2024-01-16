@@ -80,14 +80,20 @@ const AppBarHeader = (): ReactElement => {
                   <Grid item xs={4}>
                     <Avatar alt={name} src={String(AvatarImg)} />
                   </Grid>
-                  <Grid item xs={7}>
-                    <Typography textAlign="left" fontSize={14}>
+                  <Grid item xs={7} sx={{ p: 1 }}>
+                    <Typography
+                      textAlign="left"
+                      fontSize={14}
+                      sx={{ pt: 1, fontWeight: 700 }}
+                    >
                       {name}
                     </Typography>
-                    <Typography textAlign="left" fontSize={10}>
-                      {positions?.map((position: string) =>
-                        renderRole(position)
-                      )}
+                    <Typography textAlign="left" fontSize={9}>
+                      {positions?.map((position: string) => (
+                        <span style={{ display: "block" }}>
+                          {renderRole(position)}
+                        </span>
+                      ))}
                     </Typography>
                   </Grid>
                   <Grid item xs={1}>
@@ -131,6 +137,7 @@ const AppBarHeader = (): ReactElement => {
       </Container>
       <ConfirmModal
         open={openLogoutModal}
+        maxWidth="lg"
         onConfirm={() => logout()}
         confirmLabel={t(LocalizationKey.common.logout)}
         onClose={() => setOpenLogoutModal(false)}
