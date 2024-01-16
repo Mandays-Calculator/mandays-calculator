@@ -88,7 +88,7 @@ const AppBarHeader = (): ReactElement => {
                     >
                       {name}
                     </Typography>
-                    <Typography textAlign="left" fontSize={8}>
+                    <Typography textAlign="left" fontSize={9}>
                       {positions?.map((position: string) => (
                         <span style={{ display: "block" }}>
                           {renderRole(position)}

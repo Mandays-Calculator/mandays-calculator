@@ -1,7 +1,8 @@
 import type { ReactElement } from "react";
-import type { MandaysForm } from "..";
+import type { Location } from "react-router-dom";
+import type { ReviewSummaryType } from "..";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Stack from "@mui/material/Stack"; 
@@ -13,12 +14,20 @@ import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 import SummaryContent from "../summary/summary-content";
 
+
 const ReviewSummary = (): ReactElement => {
-  const stateLocation = useLocation()?.state as MandaysForm;
+  const { state }: Location<ReviewSummaryType> = useLocation();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { mandaysCalculator, common } = LocalizationKey;
-  
-  const handleApiSubmit = (): void => console.log(stateLocation);
+
+  const handleApiSubmit = (): void => console.log(state);
+
+  const handleBack = (): void => {
+    navigate(`./../add-sprint`, {
+      state: state
+    })
+  }
 
   return (
     <PageContainer>
@@ -37,7 +46,10 @@ const ReviewSummary = (): ReactElement => {
       </Stack>
       <Grid container textAlign="center">
         <Grid item xs={12}>
-          <CustomButton colorVariant="neutral">
+          <CustomButton 
+            colorVariant="neutral"
+            onClick={handleBack}
+          >
             {t(common.cancelBtn)}
           </CustomButton>
           <CustomButton onClick={() => handleApiSubmit()}>
