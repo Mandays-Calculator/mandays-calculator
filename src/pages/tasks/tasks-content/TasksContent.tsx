@@ -19,6 +19,7 @@ import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import EditTask from "./EditTask";
+// import MockData from "./MockData.json";
 
 const calculateGridSize = (numStatuses: number): number => {
   return 12 / numStatuses;
@@ -69,7 +70,7 @@ const StyledCreateTaskIconButton = styled(Grid)(
 );
 
 const TasksContent = (): ReactElement => {
-  const { data: tasksData } = useTasks("a2eb9f01-6e4e-11ee-8624-a0291936d1c2");
+  const { data: tasksData } = useTasks("a0f17dfd-aaa8-11ee-a5cd-a0291936d3a2");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -113,6 +114,10 @@ const TasksContent = (): ReactElement => {
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
+  };
+  const handleDelete = (name: string) => {
+    const deletedTask = tasks.filter((task) => task.name !== name);
+    setTasks(deletedTask);
   };
 
   const handleCloseUpdateModalState = () => {
@@ -286,6 +291,7 @@ const TasksContent = (): ReactElement => {
                                       handleViewDetails={
                                         handleViewDetailsModalState
                                       }
+                                      onDelete={() => handleDelete(task.name)}
                                     />
                                   </Stack>
                                 )}
@@ -295,6 +301,7 @@ const TasksContent = (): ReactElement => {
                                 data={task}
                                 handleEdit={handleUpdateModalState}
                                 handleViewDetails={handleViewDetailsModalState}
+                                onDelete={() => handleDelete(task.name)}
                               />
                             )}
                           </Stack>

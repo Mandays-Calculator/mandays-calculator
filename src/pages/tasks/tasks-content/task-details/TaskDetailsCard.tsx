@@ -54,12 +54,14 @@ interface TaskDetailsCardProps {
   data: AllTasksResponse;
   handleEdit: (task: AllTasksResponse) => void;
   handleViewDetails: (task: AllTasksResponse) => void;
+  onDelete: (task: AllTasksResponse) => void;
 }
 
 const TaskDetailsCard = ({
   data,
   handleEdit,
   handleViewDetails,
+  onDelete,
 }: TaskDetailsCardProps): ReactElement => {
   console.log("tasks data", data);
   return (
@@ -110,6 +112,10 @@ const TaskDetailsCard = ({
                   ? "none"
                   : "",
               cursor: "pointer",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(data);
             }}
           />
         </Stack>
