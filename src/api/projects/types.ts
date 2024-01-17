@@ -17,7 +17,7 @@ export interface Teams {
   projectId: string;
   name: string;
   teamId: string;
-  teamLead: SelectObject;
+  teamLead: SelectObject | string;
   isActive: number;
   teamMembers: TeamMembers[];
 }
