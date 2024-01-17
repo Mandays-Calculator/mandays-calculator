@@ -5,20 +5,22 @@ import type { AddProps } from "../utils";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useFormik } from "formik";
 
 import { useAddODC, useUpdateODC, useAddHoliday } from "~/mutations/odc";
 import { Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
-import { ControlledTextField } from "~/components/form/controlled";
+import { ControlledTextField, ControlledSelect } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
+import { country } from "~/utils/constants";
 
-import { IntValuesSchema, NewODCData, MutationOptions } from "../utils";
+import { IntValuesSchema, NewODCData, MutationOptions, MutationOptions2 } from "../utils";
 import AddTable from "./AddTable";
 import EditTable from "./EditTable";
 import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
+import { StyledError } from "./styles";
 
 const AddODC = (props: AddProps): ReactElement => {
   const { apiData, data, formContext, setFormContext, setSuccessError } = props;
@@ -65,10 +67,19 @@ const AddODC = (props: AddProps): ReactElement => {
   useEffect(() => {
     MutationOptions(isAddOdcSuccess, "isAddOdcSuccess", setSuccessError);
     MutationOptions(isAddOdcError, "isAddOdcError", setSuccessError);
-    MutationOptions(isUpdateOdcSuccess, "isUpdateOdcSuccess", setSuccessError);
-    MutationOptions(isUpdateOdcError, "isUpdateOdcError", setSuccessError);
-    MutationOptions(isAddHolidaySuccess, "isAddHolidaySuccess", setSuccessError);
-    MutationOptions(isAddHolidayError, "isAddHolidayError", setSuccessError);
+    MutationOptions2(
+      isUpdateOdcSuccess,
+      isAddHolidaySuccess,
+      isUpdateOdcError,
+      isAddHolidayError,
+      "isUpdateOdcSuccess",
+      "isAddHolidaySuccess",
+      "isUpdateOdcError",
+      "isAddHolidayError",
+      setSuccessError
+    );
+
+    if (isUpdateOdcSuccess || isAddOdcSuccess) setFormContext("");
   }, [isAddOdcLoading, isUpdateOdcLoading, isAddHolidayLoading]);
 
   const handleAddODC = (): void => {
@@ -82,11 +93,11 @@ const AddODC = (props: AddProps): ReactElement => {
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
     else setAbbrUnqErrorMsg("");
 
-    if (formContext === "Add") {
+    if (formContext === "Add" && !isNameError && !isAbbrError) {
       addMutation(AddFormat(values));
     }
     
-    if (formContext === "Edit") {
+    if (formContext === "Edit" && !isNameError && !isAbbrError) {
       updateMutation(EditFormat(values));
       addHolidayMutation(AddHolidayFormat(values));
     }
@@ -111,13 +122,14 @@ const AddODC = (props: AddProps): ReactElement => {
           />
         </Grid>
         <Grid item xs={4.5}>
-          <ControlledTextField
+          <Typography mb={1}>{t(label.location)}</Typography>
+          <ControlledSelect
             name={"location"}
-            label={t(label.location)}
             id="location"
+            options={country}
             error={handleError(errors.location)}
-            helperText={getFieldError(errors, "location")}
           />
+          <StyledError>{getFieldError(errors, "location")}</StyledError>
         </Grid>
         <Grid item xs={3}>
           <ControlledTextField
@@ -129,7 +141,9 @@ const AddODC = (props: AddProps): ReactElement => {
           />
         </Grid>
       </Grid>
-      {formContext === "Add" && (<AddTable />)}
+      {formContext === "Add" && (
+        <AddTable setSuccessError={setSuccessError} />
+      )}
       {formContext === "Edit" && (
         <EditTable odcId={data.id} setSuccessError={setSuccessError} />
       )}

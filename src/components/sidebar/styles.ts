@@ -28,6 +28,9 @@ const closedMixin = (theme: Theme): CSSObject => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
+  [theme.breakpoints.down("xl")]: {
+    width: `calc(${theme.spacing(10)} + 1px)`,
+  },
 });
 
 const StyledDrawer = styled(Drawer, {
@@ -47,6 +50,24 @@ const StyledDrawer = styled(Drawer, {
     ...closedMixin(theme),
     "& .MuiDrawer-paper": closedMixin(theme),
   }),
+  "*::-webkit-scrollbar": {
+    width: "6px",
+    height: "6px",
+  },
+  "*::-webkit-scrollbar-track": {
+    borderRadius: "10px",
+    background: "rgba(0,0,0,0.1)",
+  },
+  "*::-webkit-scrollbar-thumb": {
+    borderRadius: "10px",
+    background: "rgba(0,0,0,0.2)",
+  },
+  "*::-webkit-scrollbar-thumb:hover": {
+    background: "rgba(0,0,0,0.4)",
+  },
+  "*::-webkit-scrollbar-thumb:active": {
+    background: theme.palette.primary.main,
+  },
 }));
 
 const StyledListItemIcon = styled(ListItemIcon)``;
@@ -83,8 +104,14 @@ div {
 
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== "open",
-})<{ open: boolean }>(({ open }) => ({
+})<{ open: boolean }>(({ open, theme }) => ({
   padding: open ? "0 0.7rem" : 0,
+
+  [theme.breakpoints.down("xl")]: {
+    maxHeight: 525,
+    overflowY: "scroll",
+    overflowX: "hidden",
+  },
 }));
 
 const StyledItemText = styled(ListItemText)(({ theme }) => ({
@@ -113,12 +140,13 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const StyledCollapsibleItem = styled("div", {
   shouldForwardProp: (prop) => prop !== "open",
 })<{ open: boolean }>(({ open, theme }) => ({
+  zIndex: 2000,
   display: "flex",
   position: "absolute",
   left: open ? "16px" : "0",
-  bottom: "24px",
   justifyContent: "center",
   minHeight: "48px",
+  bottom: 10,
   cursor: "pointer",
   alignItems: "center",
   "& p": {
@@ -127,6 +155,14 @@ const StyledCollapsibleItem = styled("div", {
   },
   "& button": {
     padding: theme.spacing(2),
+  },
+  [theme.breakpoints.down("xl")]: {
+    ...(!open && {
+      left: "0.5%",
+    }),
+    "& p": {
+      fontSize: "1rem",
+    },
   },
 }));
 

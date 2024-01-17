@@ -1,30 +1,67 @@
-export interface ProjectResponse {
-  project_id: string;
-  name: string;
-  is_active: number;
-  date_created: string;
-  last_updated_date: string;
+export interface ProjectListResponse {
+  status: number;
+  data: Project[];
+}
+export interface Project {
   projectId: string;
-  project_team: ProjectTeam[];
+  name: string;
+  active: number;
+  dateCreated: string;
+  lastUpdatedDate: string;
+  teams: Teams[];
 }
 
-export interface ProjectTeam {
-  project_id: string;
-  team_name: string;
-  team_id: string;
-  team_members: TeamMembers[];
+export interface Teams {
+  projectId: string;
+  teamName: string;
+  teamId: string;
+  teamLead: string;
+  isActive: number;
+  teamMembers: TeamMembers[];
 }
 
 export interface TeamMembers {
-  member_id: string;
-  name: string;
-  lead_name: string;
-  team_id: string;
-  project_id: string;
+  id: string;
+  firstPage: number;
+  lastPage: number;
+  maxResults: number;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  suffix: string;
+  gender: string;
+  email: string;
+  employeeId: string;
+  careerStep: string;
+  odcId: string;
+  isActive: boolean;
+  joiningDate: string;
+  projectId: string;
+  teamId: string;
+  roles: string;
+  keyword: string;
+  joiningStartDate: string;
+  joiningEndDate: string;
 }
 
 export interface ProjectErrorResponse {
   status: number;
   errorCode: string;
   message: string;
+}
+
+export interface AddProjectType {
+  name: string;
+  isActive: number;
+  dateCreated: string;
+  lastUpdatedDate: string;
+  projectTeam: {
+    teamName: string;
+    leadName: string;
+    isActive: number;
+    teamMembers: {
+      name: string;
+      isActive: number;
+    }[];
+  }[];
 }

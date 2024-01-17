@@ -13,24 +13,10 @@ import {
 } from "@mui/material";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
-import { TextField, Modal } from "~/components";
 import CustomButton from "~/components/form/button/CustomButton";
+import { TextField, Modal } from "~/components";
 import theme from "~/theme";
-
-interface Task {
-  taskTitle: string;
-  desc: string;
-  date: string;
-  sprint: string;
-  complexity: string;
-  status: string;
-  type: string;
-  functionality: string;
-  comments: {
-    name: string;
-    comment: string;
-  }[];
-}
+import { AllTasksResponse } from "~/api/tasks";
 
 const styles = {
   container: {
@@ -58,12 +44,12 @@ const styles = {
 interface EditTaskProps {
   open: boolean;
   onClose: () => void;
-  task: Task | null;
-  onSave: (updatedTask: Task) => void;
+  task: AllTasksResponse | null;
+  onSave: (updatedTask: AllTasksResponse) => void;
 }
 
 const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
-  const [newTask, setNewTask] = useState<Task | null>(task);
+  const [newTask, setNewTask] = useState<AllTasksResponse | null>(task);
   const [newComment, setNewComment] = useState<{
     name: string;
     comment: string;
@@ -95,7 +81,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
     <>
       <Modal
         open={open}
-        title={newTask ? newTask.taskTitle : ""}
+        title={newTask ? newTask.name : ""}
         maxWidth="sm"
         onClose={onClose}
       >
@@ -108,19 +94,21 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
             rows={4}
             maxRows={4}
             onChange={(e) =>
-              newTask && setNewTask({ ...newTask, desc: e.target.value })
+              newTask && setNewTask({ ...newTask, description: e.target.value })
             }
-            value={newTask?.desc || ""}
+            value={newTask?.description || ""}
           />
           <Grid container spacing={2} marginBottom={4}>
-            <Grid item xs={6}>
-              <Stack gap={1}>
-                <Typography style={styles.styledTypographyBold}>
-                  Functionality
-                </Typography>
-                <Typography>{newTask ? newTask.functionality : ""}</Typography>
-              </Stack>
-            </Grid>
+            {newTask && (
+              <Grid item xs={6}>
+                <Stack gap={1}>
+                  <Typography style={styles.styledTypographyBold}>
+                    Functionality
+                  </Typography>
+                  <Typography>{newTask.functionality.name}</Typography>
+                </Stack>
+              </Grid>
+            )}
 
             <Grid item xs={6}>
               <Stack gap={1}>
@@ -129,16 +117,32 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                     Complexity
                   </Typography>
                 </Stack>
-                <Typography>{newTask ? newTask.complexity : ""}</Typography>
+                <Typography>
+                  {newTask ? newTask.complexity.name : ""}
+                </Typography>
               </Stack>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Stack gap={1}>
                 <Typography style={styles.styledTypographyBold}>
                   Date Started
                 </Typography>
-                <Typography>{newTask ? newTask.date : ""}</Typography>
+                <Typography>{newTask ? newTask.createdDate : ""}</Typography>
+              </Stack>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                visibility: newTask?.status !== "Completed" ? "hidden" : "",
+              }}
+            >
+              <Stack gap={1}>
+                <Typography style={styles.styledTypographyBold}>
+                  Date Completed
+                </Typography>
+                <Typography>{newTask ? newTask.completionDate : ""}</Typography>
               </Stack>
             </Grid>
             <Grid item xs={12}>
@@ -194,32 +198,31 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
               />
             </Grid>
           </Grid>
-          {newTask?.comments.map((comment) => {
-            return (
-              <Grid container spacing={1} alignItems="center" marginTop={0.5}>
-                <Grid item>
-                  <Avatar alt="User Avatar" />
+          {newTask?.comments &&
+            newTask.comments.map((comment) => {
+              return (
+                <Grid container spacing={1} alignItems="center" marginTop={0.5}>
+                  <Grid item>
+                    <Avatar alt="User Avatar" />
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      style={{
+                        padding: "10px",
+                        backgroundColor: "#EAF3F4",
+                      }}
+                    >
+                      <Typography variant="subtitle1">
+                        {comment.name}
+                      </Typography>
+                      <Typography variant="body1">{comment.comment}</Typography>
+                    </Paper>
+                  </Grid>
                 </Grid>
-                <Grid item xs={8}>
-                  <Paper
-                    elevation={0}
-                    variant="outlined"
-                    style={{
-                      padding: "10px",
-                      backgroundColor: "#EAF3F4",
-                    }}
-                  >
-                    <Typography variant="subtitle1">
-                      {comment ? comment.name : ""}
-                    </Typography>
-                    <Typography variant="body1">
-                      {comment ? comment.comment : ""}
-                    </Typography>
-                  </Paper>
-                </Grid>
-              </Grid>
-            );
-          })}
+              );
+            })}
           <Stack
             direction="row"
             display="flex"

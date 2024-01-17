@@ -1,5 +1,6 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -7,56 +8,43 @@ import userEvent from '@testing-library/user-event';
 import { Formik } from 'formik';
 import i18n from '~/i18n';
 
+import { useResetPasswordMutation } from '~/mutations/auth';
+import { useRequestHandler } from '~/hooks/request-handler';
 import { ChangePassword } from '~/pages/auth';
 
+import { CHANGEPASSWORD_TESTCASES, CHANGE_PASSWORD_TEXT } from '~/__tests__/__mocks__/dataMock';
 import { cleanAllCallback } from './utils/auth-utils';
 
 // Mock the i18next translation function
 i18n.init({
     resources: {
-        en: {
-            translation: {
-                "changePassword": {
-                    "label": {
-                        "createNewPassword": "Create New Password",
-                        "enterNewPassword": "Enter new password",
-                        "confirmNewPassword": "Confirm new password"
-                    },
-                    "btnlabel": {
-                        "changePassword": "Change Password",
-                        "cancel": "Cancel"
-                    },
-                    "validationInfo": {
-                        "charCount": "Password must be at least 8 characters long",
-                        "uppercase": "Password must contain an uppercase letter",
-                        "lowercase": "Password must contain a lowercase letter",
-                        "number": "Password must contain a number",
-                        "symbol": "Password must contain one of the following symbols (#$-_!)",
-                        "match": "New password and confirm new password must match."
-                    }
-                },
-            },
-        },
+        en: {},
     },
     lng: 'en',
     interpolation: { escapeValue: false }, // react already safes from xss
 });
 
-jest.mock('react-router-dom', () => ({
+jest.mock("react-router-dom", () => ({
     ...jest.requireActual('react-router-dom'),
-    useNavigate: jest.fn(),
+    useSearchParams: jest.fn(),
 }));
+jest.mock("~/mutations/auth");
+jest.mock("~/hooks/request-handler");
 
-const CHANGE_PASSWORD_TEXT = {
-    label: 'changePassword.label.createNewPassword',
-    placeholder: {
-        password: "changePassword.placeholder.userName",
-        confirmPassword: "changePassword.placeholder.password"
-    },
-    button: 'changePassword.btnlabel.changePassword'
-};
+const mockUseSearchParams = useSearchParams as jest.MockedFunction<
+    typeof useSearchParams
+>;
+const mockUseResetPasswordMutation = useResetPasswordMutation as jest.MockedFunction<
+    typeof useResetPasswordMutation
+>;
+const mockUseRequestHandler = useRequestHandler as jest.MockedFunction<
+    typeof useRequestHandler
+>;
 
+const queryClient = new QueryClient();
 const handleSubmit = jest.fn();
+
+const SIGNIN_BTN_LABEL = 'login.btnlabel.signIn';
 
 afterEach((done) => {
     cleanAllCallback(done);
@@ -66,126 +54,15 @@ afterAll((done) => {
     cleanAllCallback(done);
 });
 
-describe('GIVEN user changes password,', () => {
-    interface TestConfig {
-        title: string;
-        password: string;
-        confirmPassword: string;
-        expectedResults: Record<string, boolean>;
-    }
-
-    const testCases: TestConfig[] = [
-        {
-            title: 'WHEN the passwords entered by the user are matched and valid, THEN all validations are passed',
-            password: 'Passw0rd!',
-            confirmPassword: 'Passw0rd!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user is less than the minimum characters, THEN `length` validation must be red',
-            password: 'P0d!',
-            confirmPassword: 'P0d!',
-            expectedResults: {
-                'red-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no uppercase, THEN `no uppercase` validation must be red',
-            password: 'passw0rd!',
-            confirmPassword: 'passw0rd!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'red-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no lowercase, THEN `no lowercase` validation must be red',
-            password: 'PASSW0RD!',
-            confirmPassword: 'PASSW0RD!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'red-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no number, THEN `no number` validation must be red',
-            password: 'Password!',
-            confirmPassword: 'Password!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'red-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user has no symbol, THEN `no symbol` validation must be red',
-            password: 'Passw0rd1',
-            confirmPassword: 'Passw0rd1',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'red-icon-password-symbol': true,
-                'green-icon-password-match': true,
-            },
-        },
-        {
-            title: 'WHEN the passwords entered by the user are not matched, THEN `not match` validation must be red',
-            password: 'Passw0rd!',
-            confirmPassword: 'Passw0rd!!',
-            expectedResults: {
-                'green-icon-password-length': true,
-                'green-icon-password-uppecase': true,
-                'green-icon-password-lowercase': true,
-                'green-icon-password-number': true,
-                'green-icon-password-symbol': true,
-                'red-icon-password-match': true,
-            },
-        },
-    ];
-
-    test('WHEN user access the ChangePassword page, THEN it should render the ChangePassword component correctly', () => {
-        renderChangePassword();
-
-        expect(screen.getByText(CHANGE_PASSWORD_TEXT.label)).toBeInTheDocument();
-        expect(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password)).toBeInTheDocument();
-        expect(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.button })).toBeInTheDocument();
-    });
-
-    test.each(testCases)(
+describe('GIVEN ChangePassword component is called,', () => {
+    test.each(CHANGEPASSWORD_TESTCASES)(
         `%s`,
         async ({ password, confirmPassword, expectedResults }) => {
-            renderChangePassword();
+            renderChangePassword(false, false);
             const user = userEvent.setup();
 
             await user.type(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password), password);
             await user.type(screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword), confirmPassword);
-            await user.click(screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.button }));
 
             await waitFor(() => {
                 Object.entries(expectedResults).forEach(([testId, shouldExist]) => {
@@ -199,29 +76,116 @@ describe('GIVEN user changes password,', () => {
             });
         }
     );
-});
 
-describe('GIVEN user wants to go cancel changing password,', () => {
-    test('WHEN user clicks the cancel button, THEN it should navigate back', async () => {
-        const mockNavigate = jest.fn();
-        (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+    test('WHEN user wants to access the ChangePassword page, THEN it should display correctly', async () => {
+        renderChangePassword(false, false);
+        const user = userEvent.setup();
 
-        renderChangePassword();
+        const passwordTextField = screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.password);
+        const confirmPasswordTextField = screen.getByPlaceholderText(CHANGE_PASSWORD_TEXT.placeholder.confirmPassword);
+        const changePasswordButton = screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.btnlabel.changePassword });
+        const cancelButton = screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.btnlabel.cancel });
 
-        await userEvent.click(screen.getByRole('button', { name: /Cancel/i }));
+        await user.type(passwordTextField, 'Passw0rd'!);
+        await user.type(confirmPasswordTextField, 'Passw0rd!');
+        await user.click(changePasswordButton);
 
         await waitFor(() => {
-            expect(mockNavigate).toHaveBeenCalledWith(-1);
+            // Labels
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.createNewPassword)).toBeInTheDocument();
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.enterNewPassword)).toBeInTheDocument();
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.confirmNewPassword)).toBeInTheDocument();
+
+            // Fields
+            expect(passwordTextField).toBeInTheDocument();
+            expect(confirmPasswordTextField).toBeInTheDocument();
+
+            // Buttons
+            expect(changePasswordButton).toBeInTheDocument();
+            expect(cancelButton).toBeInTheDocument();
+        });
+    });
+
+    test('WHEN user succesfully changes the password, THEN it should display a success message', async () => {
+        renderChangePassword(true, true);
+        const user = userEvent.setup();
+
+        const signInlButton = screen.getByRole('button', { name: SIGNIN_BTN_LABEL });
+
+        await user.click(signInlButton);
+
+        await waitFor(() => {
+            // Labels
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.title)).toBeInTheDocument();
+            expect(screen.getByText(CHANGE_PASSWORD_TEXT.label.success)).toBeInTheDocument();
+
+            // Buttons
+            expect(signInlButton).toBeInTheDocument();
+        });
+    });
+
+    test('WHEN user wants to cancel changing the password, THEN system should redirect user to the Login page', async () => {
+        renderChangePassword(false, false);
+        const user = userEvent.setup();
+
+        const cancelButton = screen.getByRole('button', { name: CHANGE_PASSWORD_TEXT.btnlabel.cancel });
+
+        await user.click(cancelButton);
+
+        await waitFor(() => {
+            expect(window.location.pathname).toBe('/login');
         });
     });
 });
 
-const renderChangePassword = () => {
+const renderChangePassword = (codeParam: boolean, successChangePassword: boolean): void => {
+    runChangePasswordMocks(codeParam, successChangePassword);
+
     render(
-        <I18nextProvider i18n={i18n}>
-            <Formik initialValues={{}} onSubmit={handleSubmit}>
-                <ChangePassword />
-            </Formik>
-        </I18nextProvider>
+        <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+                <I18nextProvider i18n={i18n}>
+                    <Formik initialValues={{}} onSubmit={handleSubmit}>
+                        <ChangePassword />
+                    </Formik>
+                </I18nextProvider>
+            </BrowserRouter>
+        </QueryClientProvider>
     );
+};
+
+const runChangePasswordMocks = (codeParam: boolean, successChangePassword: boolean): void => {
+    const useSearchParamsData = [
+        {
+            get: jest.fn(() => codeParam)
+        }
+    ];
+
+    mockUseSearchParams.mockImplementation(() => useSearchParamsData as unknown as ReturnType<
+        typeof useSearchParams
+    >);
+
+    const useResetPasswordMutationData = {
+        mutate: null
+    };
+
+    mockUseResetPasswordMutation.mockImplementation(() => useResetPasswordMutationData as unknown as ReturnType<
+        typeof useResetPasswordMutation
+    >);
+
+    const useRequestHandlerData = [
+        {
+            loading: false,
+            error: {
+                message: '',
+                errorCode: '',
+            },
+            success: successChangePassword,
+        },
+        jest.fn()
+    ];
+
+    mockUseRequestHandler.mockImplementation(() => useRequestHandlerData as unknown as ReturnType<
+        typeof useRequestHandler
+    >);
 };

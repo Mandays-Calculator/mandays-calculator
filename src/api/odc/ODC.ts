@@ -2,22 +2,21 @@ import type {
   OdcResponse,
   CreateOdcParam,
   UpdateOdcParam,
-  // DeleteOdcParam,
   HolidayListResponse,
   HolidayResponse,
   CreateHoliday,
   UpdateHoliday,
   DeleteHoliday,
-  OdcParam,
+  OdcListResponse,
 } from ".";
 
 import axios from "axios";
 
 import { getEnvConfig } from "~/utils/env-config";
 
-export const getODC = async (): Promise<OdcParam[]> => {
+export const getODC = async (): Promise<OdcListResponse> => {
   const { apiBasePath } = getEnvConfig();
-  const response = await axios.get<OdcParam[]>(`${apiBasePath}/odcs`);
+  const response = await axios.get<OdcListResponse>(`${apiBasePath}/odcs`);
   return response.data;
 };
 
@@ -75,7 +74,7 @@ export const addHoliday = async (params: CreateHoliday): Promise<HolidayResponse
   const { apiBasePath } = getEnvConfig();
   const url = `${apiBasePath}/odcs/${params.odcId}/holidays`;
   try {
-    const response = await axios.post<OdcResponse>(url, { ...params.data });
+    const response = await axios.post<OdcResponse>(url, params.data);
     if (response.data && response.data.status >= 201) {
       throw response.data;
     }

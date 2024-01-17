@@ -1,5 +1,10 @@
 import type { ReactElement } from "react";
-import type { MandaysForm, TaskType, EstimationDetailsMode, EstimationDetailsProps } from ".";
+import type { 
+  MandaysForm, 
+  TaskType, 
+  EstimationDetailsProps,
+  ReviewSummaryType, 
+} from ".";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -33,7 +38,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const { mandaysCalculator, common } = LocalizationKey;
 
   const navigate = useNavigate();
-  const { state }: Location<{ mode: EstimationDetailsMode }> = useLocation();
+  const { state }: Location<ReviewSummaryType> = useLocation();
   const { t } = useTranslation();
 
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -50,7 +55,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     refetchOnMount: false,
   });
   const tasksData: TaskType[] =
-    data?.data.map((task) => {
+    data?.data?.map((task) => {
       return {
         id: task.id,
         title: task.name,
@@ -83,7 +88,13 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const mandaysForm = useFormik<MandaysForm>({
     initialValues: { ...initMandays, tasks: tasksData },
-    onSubmit: (val) => navigate("./../summary", { state: val }),
+    onSubmit: (val) => navigate("./../summary", { 
+      state: {
+        ...val, 
+        sprintName: sprintName,
+        mode: mode,
+      }
+    }),
     enableReinitialize: true,
   });
 
@@ -199,7 +210,11 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
             <Stepper
-              steps={stepperObject}
+              steps={
+                mode === 'view' 
+                  ? stepperObject.slice(0, -1) 
+                  : stepperObject
+              }
               activeStep={activeTab}
             />
             <ActionButtons

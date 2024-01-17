@@ -2,6 +2,7 @@ import type { RouteType } from ".";
 
 import { Outlet } from "react-router-dom";
 
+import { Dashboard } from "~/pages/dashboard";
 import { ODCManagement } from "~/pages/odc-management";
 import { UserManagement } from "~/pages/user-management";
 import { ProjectManagement } from "~/pages/project-management";
@@ -14,6 +15,25 @@ import { accountInfoRoutes } from "~/pages/account-info/routes";
 
 import ErrorPage from "~/pages/common/error-page";
 
+export const errorRoutes: RouteType[] = [
+  {
+    path: "/permission-error",
+    element: <ErrorPage type="permission-error" />,
+  },
+  {
+    path: "/permission-denied",
+    element: <ErrorPage type="permission-denied" />,
+  },
+  {
+    path: "/*",
+    element: <ErrorPage type="not-found" />,
+  },
+  {
+    path: "/",
+    element: <Outlet />,
+  },
+];
+
 export const routes: RouteType[] = [
   {
     path: "project-management",
@@ -21,7 +41,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "dashboard",
-    element: <ErrorPage type="development-mode" />,
+    element: <Dashboard />,
   },
   {
     path: "odc-management",
@@ -36,7 +56,7 @@ export const routes: RouteType[] = [
     element: <ErrorPage type="development-mode" />,
   },
   {
-    path: "tasks",
+    path: "task-management",
     element: <Tasks />,
   },
   {
@@ -56,18 +76,6 @@ export const routes: RouteType[] = [
     element: <History />,
     pageTitle: "History",
   },
-  {
-    path: "/permission-error",
-    element: <ErrorPage type="permission-error" />,
-  },
   ...mandaysCalculatorRoutes,
   ...accountInfoRoutes,
-  {
-    path: "/*",
-    element: <ErrorPage type="not-found" />,
-  },
-  {
-    path: "/",
-    element: <Outlet />,
-  },
 ];

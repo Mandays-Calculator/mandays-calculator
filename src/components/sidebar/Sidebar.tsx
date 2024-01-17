@@ -22,7 +22,7 @@ import {
 } from ".";
 
 const Drawer = (): ReactElement => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const {
     state: { permissions, loading },
   } = useUserAuth();
@@ -65,13 +65,13 @@ const Drawer = (): ReactElement => {
               }
             })}
           </StyledList>
-          <StyledCollapsibleItem open={open}>
-            <IconButton onClick={() => setOpen(!open)}>
-              <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
-            </IconButton>
-            {open && <Typography>{t(common.collapse)}</Typography>}
-          </StyledCollapsibleItem>
         </StyledDrawer>
+        <StyledCollapsibleItem open={open}>
+          <IconButton onClick={() => setOpen(!open)}>
+            <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
+          </IconButton>
+          {open && <Typography>{t(common.collapse)}</Typography>}
+        </StyledCollapsibleItem>
       </Box>
     );
 

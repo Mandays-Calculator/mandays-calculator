@@ -13,7 +13,8 @@ import { Table } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
-import { EditHolidayColumn, NewHolidayData, MutationOptions} from "../utils";
+import { EditHolidayColumn, MutationOptions} from "../utils";
+import { AddHoliday, removeItem } from ".";
 
 const StyledLabel = styled(Typography)(() => ({
   fontWeight: 600,
@@ -28,7 +29,7 @@ const EditTable = (props: EditTableProps): ReactElement => {
 
   const { values, setFieldValue } = useFormikContext<OdcParam>();
 
-  const { data, isError, isLoading } = useHolidayList(odcId);
+  const { data, isError, isLoading, refetch } = useHolidayList(odcId);
   const {
     mutate: updateMutation,
     isSuccess: isUpdateSuccess,
@@ -42,7 +43,7 @@ const EditTable = (props: EditTableProps): ReactElement => {
     isLoading: isDeleteLoading
   } = useDeleteHoliday();
 
-  const [holIdx, setHolIdx] = useState<string[]>([]);
+  const [holIdx, setHolIdx] = useState<number[]>([]);
 
   useEffect(() => {
     MutationOptions(isError, "isHolidayError", setSuccessError);
@@ -50,30 +51,39 @@ const EditTable = (props: EditTableProps): ReactElement => {
     MutationOptions(isUpdateError, "isUpdateHolidayError", setSuccessError);
     MutationOptions(isDeleteSuccess, "isDeleteHolidaySuccess", setSuccessError);
     MutationOptions(isDeleteError, "isDeleteHolidayError", setSuccessError);
+
+    if (isDeleteSuccess) refetch();
   }, [isLoading, isUpdateLoading, isDeleteLoading]);
+
+  useEffect(() => {
+    const apiData = data?.data || [];
+    setFieldValue("holidays", apiData);
+  }, [data]);
 
   const handleAddHoliday = (): void => {
     const holidays = [];
     const apiData = data?.data || [];
-    const valueHolidays = values.holidays || [];
+    const valueHolidays = values.holidays?.filter((value: HolidayParam) => value.id === 0) || [];
 
     holidays.push(...apiData);
     holidays.push(...valueHolidays);
-    holidays.push(NewHolidayData);
+    holidays.push(AddHoliday(odcId));
   
     setFieldValue("holidays", holidays);
   };
 
   const handleUpdateHoliday = (data: HolidayParam): void => {
+    const arr = removeItem(holIdx, data.id);
+    setHolIdx(arr);
     updateMutation({ data: data });
   };
 
-  const handleDeleteHoliday = (holidayId: string): void => {
-    deleteMutation({ odcId: odcId, id: holidayId });
+  const handleDeleteHoliday = (id: string, holidayId: number): void => {
+    deleteMutation({ odcId: id, id: holidayId });
   };
 
   const holidayListColumn = useMemo(() => 
-    EditHolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday, handleUpdateHoliday), []);
+    EditHolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday, handleUpdateHoliday, setSuccessError), [holIdx]);
 
   return (
     <>

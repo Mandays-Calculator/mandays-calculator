@@ -17,6 +17,7 @@ export type ViewProps = {
   data: OdcParam[];
   setFormContext: (context: FormContext) => void;
   setIdx: (idx: string) => void;
+  setSuccessError: (sucErr: SucErrType) => void;
 };
 
 export type AddProps = {
@@ -24,6 +25,10 @@ export type AddProps = {
   data: OdcParam;
   formContext: FormContext;
   setFormContext: (context: FormContext) => void;
+  setSuccessError: (sucErr: SucErrType) => void;
+};
+
+export type AddTableProps = {
   setSuccessError: (sucErr: SucErrType) => void;
 };
 

@@ -6,11 +6,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
-import {
-	Divider,
-	Typography,
-	Grid,
-} from '@mui/material';
+import { Divider, Typography, Grid } from '@mui/material';
 
 import { usePostComplexities, usePutComplexities } from '~/mutations/complexity';
 import { Form } from '~/components';
@@ -22,7 +18,6 @@ import LocalizationKey from "~/i18n/key";
 import {
 	complexityInitialValues,
 	complexityFormSchema,
-	handleSplitValues,
 	mutationOptions
 } from '.';
 
@@ -35,31 +30,27 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		data,
 		setIsEditError,
 		setIsEditSuccess,
+		setIsEditLoading,
 	} = props;
 
 	const { t } = useTranslation();
 	const { complexity: { label, btnLabel } } = LocalizationKey;
+
+	const { mutate: mutateAddComplexities, isLoading: isAddLoading } = usePostComplexities();
+	const { mutate: mutateEditComplexities, isLoading: isEditLoading } = usePutComplexities();
 
 	const [initialValue, setInitialValue] = useState<ComplexityForm>(complexityInitialValues);
 	const apiData = data.find((value: ForGetComplexities) => value.id === complexityId);
 
 	const {
 		name: complexityName = '',
-		numberOfDays,
-		numberOfFeatures,
+		minFeatures,
+		maxFeatures,
+		minHours,
+		maxHours,
 		description = '',
 		sample: samples = ''
 	} = apiData ?? {};
-	const [numberOfDayFrom, numberOfDayTo] = handleSplitValues(numberOfDays);
-	const [numberOfFeaturesFrom, numberOfFeaturesTo] = handleSplitValues(numberOfFeatures);
-	const { mutate: mutateAddComplexities } = usePostComplexities();
-	const { mutate: mutateEditComplexities } = usePutComplexities();
-
-	const handleClose = (): void => {
-		addEditComplexityForm.resetForm();
-		setContext('');
-		handleCloseAddEdit();
-	};
 
 	const addEditComplexityForm = useFormik<ComplexityForm>({
 		initialValues: initialValue,
@@ -67,36 +58,41 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		enableReinitialize: true,
 		onSubmit: ({
 			complexityName,
-			numberOfDayFrom: noOfDayFrom,
-			numberOfDayTo: noOfDayTo,
-			numberOfFeaturesFrom: noOfFeaturesFrom,
-			numberOfFeaturesTo: noOfFeaturesTo,
+			numberOfHoursFrom,
+			numberOfHoursTo,
+			numberOfFeaturesFrom,
+			numberOfFeaturesTo,
 			description,
 			samples
 		}): void => {
 			const addFormData = {
 				name: complexityName,
-				numberOfDays: `${noOfDayFrom} - ${noOfDayTo}`,
-				numberOfFeatures: `${noOfFeaturesFrom} - ${noOfFeaturesTo}`,
+				minHours: `${numberOfHoursFrom}`,
+				maxHours: `${numberOfHoursTo}`,
+				minFeatures: `${numberOfFeaturesFrom}`,
+				maxFeatures: `${numberOfFeaturesTo}`,
 				description: description,
 				sample: samples,
 				isActive: true,
 			}
+			console.log('parameter', addFormData)
 
 			if (formContext === 'Add')
 				mutateAddComplexities(
-					[addFormData],
+					{ complexities: [addFormData] },
 					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
 				);
 
 			const { isActive, ...editFormData } = addFormData;
 			if (formContext === 'Edit')
 				mutateEditComplexities(
-					{ id: complexityId, active: isActive, ...editFormData },
+					{ id: complexityId, isActive: isActive, ...editFormData },
 					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
 				);
 		},
 	});
+
+	const { errors } = addEditComplexityForm;
 
 	useEffect(() => {
 		if (formContext === 'Add')
@@ -104,16 +100,25 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		if (formContext === 'Edit')
 			setInitialValue({
 				complexityName,
-				numberOfDayFrom,
-				numberOfDayTo,
-				numberOfFeaturesFrom,
-				numberOfFeaturesTo,
+				numberOfHoursFrom: minHours ?? '',
+				numberOfHoursTo: maxHours ?? '',
+				numberOfFeaturesFrom: minFeatures ?? '',
+				numberOfFeaturesTo: maxFeatures ?? '',
 				description,
 				samples,
 			});
-	}, [apiData, formContext])
+	}, [apiData, formContext]);
 
-	const { errors } = addEditComplexityForm;
+	useEffect(() => {
+		if (isAddLoading || isEditLoading)
+			setIsEditLoading(isAddLoading || isEditLoading);
+	}, [isAddLoading, isEditLoading])
+
+	const handleClose = (): void => {
+		addEditComplexityForm.resetForm();
+		setContext('');
+		handleCloseAddEdit();
+	};
 
 	const handleError = (error: string | undefined): boolean => {
 		return error !== undefined;
@@ -132,27 +137,27 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 				</Grid>
 				<Grid container item xs={2} spacing={1} alignItems='center'>
 					<Grid item xs={12}>
-						<Typography>{t(label.noOfDays)}</Typography>
+						<Typography>{t(label.noOfHours)}</Typography>
 					</Grid>
 					<Grid item xs={5}>
 						<ControlledTextField
-							name="numberOfDayFrom"
-							error={handleError(errors.numberOfDayFrom)}
+							name="numberOfHoursFrom"
+							error={handleError(errors.numberOfHoursFrom)}
 						/>
 					</Grid>
 					<Grid item xs={1}><Divider /></Grid>
 					<Grid item xs={5}>
 						<ControlledTextField
-							name="numberOfDayTo"
-							error={handleError(errors.numberOfDayTo)}
+							name="numberOfHoursTo"
+							error={handleError(errors.numberOfHoursTo)}
 						/>
 					</Grid>
 					<Grid item xs={12}>
-						{handleError(errors.numberOfDayFrom) && (
-							<Typography color="error">{getFieldError(errors, "numberOfDayFrom")}</Typography>
+						{handleError(errors.numberOfHoursFrom) && (
+							<Typography color="error">{getFieldError(errors, "numberOfHoursFrom")}</Typography>
 						)}
-						{handleError(errors.numberOfDayTo) && (
-							<Typography color="error">{getFieldError(errors, "numberOfDayTo")}</Typography>
+						{handleError(errors.numberOfHoursTo) && (
+							<Typography color="error">{getFieldError(errors, "numberOfHoursTo")}</Typography>
 						)}
 					</Grid>
 				</Grid>
