@@ -11,14 +11,14 @@ import { CustomButton } from "~/components/form/button";
 import { Table } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
-import { ODCColumns } from "../utils";
+import { ODCColumns, SucErrData } from "../utils";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
 }));
 
 const ViewODC = (props: ViewProps): ReactElement => {
-  const { data, setFormContext, setIdx } = props;
+  const { data, setFormContext, setIdx, setSuccessError } = props;
 
   const { t } = useTranslation();
   const { odc: { btnlabel, placeholder } } = LocalizationKey;
@@ -28,6 +28,11 @@ const ViewODC = (props: ViewProps): ReactElement => {
   useEffect(() => {
     setFilterData(data?.filter((obj: OdcParam) => (obj.active).toString() === "true"));
   }, [data]);
+
+  const handleAdd = (): void => {
+    setFormContext("Add");
+    setSuccessError(SucErrData);
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const handleLowerCase = (value: string): string => value.toLocaleLowerCase();
@@ -47,7 +52,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
     );
   };
 
-  const odcListColumn = useMemo(() => ODCColumns(t, setFormContext, setIdx), []);
+  const odcListColumn = useMemo(() => ODCColumns(t, setFormContext, setIdx, setSuccessError), []);
 
   return (
     <>
@@ -60,7 +65,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
           />
         </Grid>
         <Grid item xs={7} container justifyContent="flex-end">
-          <CustomButton type="button" onClick={() => setFormContext("Add")}>
+          <CustomButton type="button" onClick={handleAdd}>
             {t(btnlabel.addOdc)}
           </CustomButton>
         </Grid>

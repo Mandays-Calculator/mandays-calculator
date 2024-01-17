@@ -93,11 +93,11 @@ const AddODC = (props: AddProps): ReactElement => {
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
     else setAbbrUnqErrorMsg("");
 
-    if (formContext === "Add") {
+    if (formContext === "Add" && !isNameError && !isAbbrError) {
       addMutation(AddFormat(values));
     }
     
-    if (formContext === "Edit") {
+    if (formContext === "Edit" && !isNameError && !isAbbrError) {
       updateMutation(EditFormat(values));
       addHolidayMutation(AddHolidayFormat(values));
     }
@@ -141,7 +141,9 @@ const AddODC = (props: AddProps): ReactElement => {
           />
         </Grid>
       </Grid>
-      {formContext === "Add" && (<AddTable />)}
+      {formContext === "Add" && (
+        <AddTable setSuccessError={setSuccessError} />
+      )}
       {formContext === "Edit" && (
         <EditTable odcId={data.id} setSuccessError={setSuccessError} />
       )}

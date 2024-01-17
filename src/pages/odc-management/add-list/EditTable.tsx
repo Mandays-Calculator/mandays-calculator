@@ -83,7 +83,7 @@ const EditTable = (props: EditTableProps): ReactElement => {
   };
 
   const holidayListColumn = useMemo(() => 
-    EditHolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday, handleUpdateHoliday), [holIdx]);
+    EditHolidayColumn(t, holIdx, setHolIdx, handleDeleteHoliday, handleUpdateHoliday, setSuccessError), [holIdx]);
 
   return (
     <>
