@@ -17,7 +17,7 @@ export interface Teams {
   projectId: string;
   name: string;
   teamId: string;
-  teamLead: SelectObject | string;
+  teamLead: SelectObject;
   isActive: number;
   teamMembers: TeamMembers[];
 }
@@ -65,7 +65,7 @@ export interface AddProjectType {
   lastUpdatedDate: number;
   teams: {
     teamName: string;
-    teamLead: string;
+    teamLead: SelectObject | string;
     active: boolean;
     dateCreated: number;
     lastUpdatedDate: number;

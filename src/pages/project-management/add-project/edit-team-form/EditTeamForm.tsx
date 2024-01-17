@@ -141,6 +141,19 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setTableData(filteredMemberList(keyword));
   };
 
+  const onChangeTeamLead = (teamLeadObject: SelectObject | null) => {
+    if (!teamLeadObject) return;
+    
+    const isTeamMemberExist = originTableData.find(tableData => tableData.id === teamLeadObject.value);
+
+    if (isTeamMemberExist) {
+      setTableData(tableData.filter((tableData) => tableData.id !== teamLeadObject.value));
+      setOriginTableData(originTableData.filter((tableData) => tableData.id !== teamLeadObject.value));
+    }
+
+    setTeamLead(teamLeadObject);
+  }
+
   const filteredMemberList = (keyword: string): TeamMembers[] => {
     return originTableData.filter((user) => {
       function isIncludes(property: string) {
@@ -208,9 +221,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               name="teamLead"
               label="Team Lead"
               value={teamLead}
-              onChange={(_, value) => {
-                setTeamLead(value as SelectObject);
-              }}
+              onChange={(_, value) => onChangeTeamLead(value)}
               fullWidth
               error={teamLeadError}
               helperText={teamLeadError ? "Please Input Team Lead." : ""}
@@ -278,6 +289,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
 
       {showMemberDialog ? (
         <DialogSearchUser
+          selectedTeamLead={teamLead}
           showMemberDialog={showMemberDialog}
           toggleDialog={($event) => onToggleDialog($event)}
         />

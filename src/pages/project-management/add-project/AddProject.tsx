@@ -14,7 +14,6 @@ import {
   APIStatus,
   useRequestHandler,
 } from "~/hooks/request-handler";
-import { useCommonOption } from "~/queries/common/options";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
@@ -50,8 +49,6 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const [teamIndex, setTeamIndex] = useState<number>(0);
   const [addProjectErrorMsg, setAddProjectErrorMsg] = useState<string>("");
   const [triggerTimeout] = useTimeout();
-
-  const users = useCommonOption('user', { keyword: '' });
 
   const handleToggleEdit = (teamId: number): void => {
     setTeamIndex(teamId);
@@ -153,9 +150,8 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     if (selectedProject) {
       projectForm.setValues({
         projectName: selectedProject.name,
-        teams: selectedProject.teams.map(({ name, teamMembers, teamLead, ...team }) => ({
+        teams: selectedProject.teams.map(({ name, teamMembers, ...team }) => ({
           ...team,
-          teamLead: users.find((user) => user.value === (teamLead as string)) as SelectObject,
           teamMembers: teamMembers.map(member => {
             const memberName =
               member.firstName && member.lastName
@@ -164,6 +160,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
                 
             return { ...member, name: memberName };
           }),
+          teamLead: { label: 'Dela, Cruz Juan', value: '' }, // TODO: remove line code waiting for BE to fix
           teamName: name ?? '-',
         })),
       });
