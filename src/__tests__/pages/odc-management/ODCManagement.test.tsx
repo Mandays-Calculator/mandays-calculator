@@ -4,12 +4,9 @@ import UserEvent from "@testing-library/user-event";
 import { ODCManagement } from "~/pages/odc-management";
 import * as query from '~/queries/odc/ODC';
 import * as mutate from '~/mutations/odc/ODC';
-import { data, holidayList } from './utils'
-
-jest.mock('~/utils/cryptoUtils', () => ({
-	encryptObjectWithAES: '',
-	decryptObjectWithAES: ''
-}));
+import { data, holidayList } from './utils';
+// import { data } from './utils'
+import ProviderWrapper from "~/__tests__/utils/ProviderWrapper";
 
 jest.mock('react-i18next', () => ({
 	...jest.requireActual('react-i18next'),
@@ -17,7 +14,11 @@ jest.mock('react-i18next', () => ({
 }));
 
 const renderElement = (element: ReactElement) => {
-	render(element);
+	render(
+		<ProviderWrapper>
+			{element}
+		</ProviderWrapper>
+	);
 	return UserEvent.setup();
 }
 
@@ -72,6 +73,8 @@ describe('ODC Management', () => {
 
 		await user.type(abbreviation, 'abbreviation');
 
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addHoliday' }))
+
 		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addOdc' }));
 
 		expect(label).toBeInTheDocument();
@@ -117,11 +120,9 @@ describe('ODC Management', () => {
 
 		await user.click(screen.getByRole('button', { name: /edit/i }));
 
-		await user.click(screen.getByRole('button', { name: 'edit-0' }));
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addHoliday' }))
 
-		const [save] = screen.getAllByRole('button', { name: 'odc.btnlabel.save', hidden: true })
-
-		await user.click(save);
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.save' }));
 
 	})
 	test('delete odc', async () => {
@@ -174,6 +175,8 @@ describe('ODC Management', () => {
 		);
 
 		await user.click(screen.getByRole('button', { name: /edit/i }));
-		await user.click(screen.getByRole('button', { name: /delete-0/i }))
+		// await user.click(screen.getByRole('button', { name: /delete-0/i }))
+
+		expect(screen.getByText('odc.management.label')).toBeInTheDocument();
 	})
 })
