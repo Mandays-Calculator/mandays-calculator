@@ -1,4 +1,7 @@
+import type { SucErrType } from ".";
+
 import { MutationOptions } from "react-query";
+
 import { ComplexityForm } from ".";
 
 export const complexityInitialValues: ComplexityForm = {
@@ -29,4 +32,23 @@ export const mutationOptions = <T extends { status: number }, U>(
       setIsEditError(true);
     },
   };
+};
+
+export const SucErrData = {
+  isError: false,
+  isAddError: false,
+  isAddSuccess: false,
+  isUpdateError: false,
+  isUpdateSuccess: false,
+  isDeleteError: false,
+  isDeleteSuccess: false,
+};
+
+export const MutationOptions2 = (
+  isSuccessOrError: boolean,
+  name: string,
+  setSuccessError: (SucErr: SucErrType) => void,
+): void => {
+  if (isSuccessOrError)
+    setSuccessError({ ...SucErrData, [name]: true });
 };

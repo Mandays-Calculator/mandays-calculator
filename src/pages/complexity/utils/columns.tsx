@@ -1,12 +1,13 @@
 import type { Column, CellProps } from "react-table"
 import type { TFunction } from "i18next";
+import type { SucErrType } from ".";
 
 import { IconButton } from "@mui/material";
 
 import { SvgIcon } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
-import { DataType, FormContext } from ".";
+import { DataType, FormContext, SucErrData } from ".";
 
 const { complexity: { table: { columns } } } = LocalizationKey;
 
@@ -14,6 +15,7 @@ export const complexityColumns = (
 	isDaysChecked: boolean,
 	handleContext: (complexity: FormContext, id: string) => void,
 	t: TFunction<"translation", undefined>,
+	setSuccessError: (sucErr: SucErrType) => void,
 ): Column<DataType>[] => {
 	return [
 		{
@@ -60,14 +62,20 @@ export const complexityColumns = (
 				return (
 					<>
 						<IconButton
-							onClick={() => handleContext('Edit', id)}
+							onClick={() => {
+								setSuccessError(SucErrData);
+								handleContext("Edit", id);
+							}}
 							aria-label={`edit-${index}`}
 							color="primary"
 						>
 							<SvgIcon name="edit" $size={2} />
 						</IconButton>
 						<IconButton
-							onClick={() => handleContext('', id)}
+							onClick={() => {
+								setSuccessError(SucErrData);
+								handleContext("", id);
+							}}
 							aria-label={`delete-${index}`}
 							color="error"
 						>

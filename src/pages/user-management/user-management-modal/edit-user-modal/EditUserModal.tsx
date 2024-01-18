@@ -56,7 +56,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const date = moment(currentUser?.joiningDate).format("YYYY-MM-DD");
   const { t } = useTranslation();
   const { userManagement } = LocalizationKey;
-  const { values, setFieldValue } = useFormikContext<UserManagementForms>();
+  const { values } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
   const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
   const [isEditError, setIsEditError] = useState<boolean>(false);
@@ -81,6 +81,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     projectId: values?.updateProjectId ?? "",
     teamId: values?.updateTeamId ?? "",
     roles: values?.updateRoles ?? [],
+    image: values.updateImage || "",
   };
   const submit = () => {
     callApi(EditUserForm);
@@ -95,6 +96,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateSuffix: currentUser?.suffix ?? "",
       updateGender: currentUser?.gender ?? "",
       updateEmail: currentUser?.email ?? "",
+      updateImage: currentUser?.image ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
       updateOdcId: "",
       updateJoiningDate:
@@ -117,7 +119,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     }
   }, [isEditSuccess, isEditError]);
 
-  // console.log(updateTeamId);
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -125,7 +126,10 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <ImageUpload name="updateImage" setFieldValue={setFieldValue} />
+              <ImageUpload
+                name="updateImage"
+                setFieldValue={form.setFieldValue}
+              />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>
@@ -157,7 +161,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               <StyledTitle mb={0.5}>
                 {t(userManagement.label.gender)}
               </StyledTitle>
-              <ControlledSelect name="updateGender" options={genders} />
+              <ControlledSelect
+                name="updateGender"
+                options={genders}
+                value={form.values.updateGender || ""}
+              />
             </Grid>
           </Grid>
           <Grid item xs={10} mt={1}>
@@ -170,7 +178,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <StyledTitle mb={0.5}>
               {t(userManagement.label.careerStep)}
             </StyledTitle>
-            <ControlledSelect options={CAREER_STEPS} name="updateCareerStep" />
+            <ControlledSelect
+              options={CAREER_STEPS}
+              name="updateCareerStep"
+              value={form.values.updateCareerStep || ""}
+            />
           </Grid>
           <Grid item xs={5}>
             <ControlledTextField
@@ -180,7 +192,11 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
-            <ControlledSelect options={odcOptions} name="updateOdcId" />
+            <ControlledSelect
+              options={odcOptions}
+              name="updateOdcId"
+              value={form.values.updateOdcId || ""}
+            />
           </Grid>
 
           <Grid item xs={2} fontSize={"5px"}>
@@ -199,16 +215,30 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             </StyledTitle>
             <ControlledSelect
               options={projectOptions}
+              value={form.values.updateProjectId || ""}
               name="updateProjectName"
             />
           </Grid>
           <Grid item xs={4.3}>
             <StyledTitle mb={0.5}>{t(userManagement.label.teamId)}</StyledTitle>
-            <ControlledSelect options={teamOptions} name="updateTeamName" />
+            <ControlledSelect
+              options={teamOptions}
+              name="updateTeamName"
+              value={form.values.updateTeamId || ""}
+            />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={1}>{t(userManagement.label.roles)}</StyledTitle>
-            <ControlledSelect multiple options={rolesData} name="updateRoles" />
+            <ControlledSelect
+              multiple
+              options={rolesData}
+              name="updateRoles"
+              value={
+                Array.isArray(form.values.updateRoles)
+                  ? form.values.updateRoles
+                  : []
+              }
+            />
           </Grid>
         </Grid>
         <Box display="flex" justifyContent="flex-end" my={2}>

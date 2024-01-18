@@ -1,25 +1,25 @@
-import type { ReactElement, } from 'react';
-import type { ForGetComplexities } from '~/api/complexity';
-import type { ComplexityForm, ComplexityFormsType } from './types';
+import type { ReactElement, } from "react";
+import type { ForGetComplexities } from "~/api/complexity";
+import type { ComplexityForm, ComplexityFormsType } from "./types";
 
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next";
 
-import { useFormik } from 'formik';
-import { Divider, Typography, Grid } from '@mui/material';
+import { useFormik } from "formik";
+import { Divider, Typography, Grid } from "@mui/material";
 
-import { usePostComplexities, usePutComplexities } from '~/mutations/complexity';
-import { Form } from '~/components';
-import { ControlledTextField, ControlledTextArea } from '~/components/form/controlled';
+import { usePostComplexities, usePutComplexities } from "~/mutations/complexity";
+import { Form } from "~/components";
+import { ControlledTextField, ControlledTextArea } from "~/components/form/controlled";
 import { getFieldError } from "~/components/form/utils";
-import { CustomButton } from '~/components/form/button';
+import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
 import {
 	complexityInitialValues,
 	complexityFormSchema,
-	mutationOptions
-} from '.';
+	MutationOptions2
+} from ".";
 
 const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 	const {
@@ -28,28 +28,36 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 		complexityId,
 		handleCloseAddEdit,
 		data,
-		setIsEditError,
-		setIsEditSuccess,
-		setIsEditLoading,
+		setSuccessError,
 	} = props;
 
 	const { t } = useTranslation();
 	const { complexity: { label, btnLabel } } = LocalizationKey;
 
-	const { mutate: mutateAddComplexities, isLoading: isAddLoading } = usePostComplexities();
-	const { mutate: mutateEditComplexities, isLoading: isEditLoading } = usePutComplexities();
+	const {
+		mutate: addMutation,
+		isSuccess: isAddSuccess,
+		isError: isAddError,
+		isLoading: isAddLoading
+	} = usePostComplexities();
+	const {
+		mutate: updateMutation,
+		isSuccess: isUpdateSuccess,
+		isError: isUpdateError,
+		isLoading: isUpdateLoading
+	} = usePutComplexities();
 
 	const [initialValue, setInitialValue] = useState<ComplexityForm>(complexityInitialValues);
 	const apiData = data.find((value: ForGetComplexities) => value.id === complexityId);
 
 	const {
-		name: complexityName = '',
+		name: complexityName = "",
 		minFeatures,
 		maxFeatures,
 		minHours,
 		maxHours,
-		description = '',
-		sample: samples = ''
+		description = "",
+		sample: samples = ""
 	} = apiData ?? {};
 
 	const addEditComplexityForm = useFormik<ComplexityForm>({
@@ -75,48 +83,48 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 				sample: samples,
 				isActive: true,
 			}
-			console.log('parameter', addFormData)
 
-			if (formContext === 'Add')
-				mutateAddComplexities(
-					{ complexities: [addFormData] },
-					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
-				);
+			if (formContext === "Add") {
+				addMutation({ complexities: [addFormData] });
+			}
 
 			const { isActive, ...editFormData } = addFormData;
-			if (formContext === 'Edit')
-				mutateEditComplexities(
-					{ id: complexityId, isActive: isActive, ...editFormData },
-					mutationOptions(handleClose, setIsEditError, setIsEditSuccess)
-				);
+			if (formContext === "Edit") {
+				updateMutation({ id: complexityId, isActive: isActive, ...editFormData });
+			}
 		},
 	});
 
 	const { errors } = addEditComplexityForm;
 
 	useEffect(() => {
-		if (formContext === 'Add')
+		if (formContext === "Add")
 			setInitialValue(complexityInitialValues);
-		if (formContext === 'Edit')
+		if (formContext === "Edit")
 			setInitialValue({
 				complexityName,
-				numberOfHoursFrom: minHours ?? '',
-				numberOfHoursTo: maxHours ?? '',
-				numberOfFeaturesFrom: minFeatures ?? '',
-				numberOfFeaturesTo: maxFeatures ?? '',
+				numberOfHoursFrom: minHours ?? "",
+				numberOfHoursTo: maxHours ?? "",
+				numberOfFeaturesFrom: minFeatures ?? "",
+				numberOfFeaturesTo: maxFeatures ?? "",
 				description,
 				samples,
 			});
 	}, [apiData, formContext]);
 
 	useEffect(() => {
-		if (isAddLoading || isEditLoading)
-			setIsEditLoading(isAddLoading || isEditLoading);
-	}, [isAddLoading, isEditLoading])
+		MutationOptions2(isAddSuccess, "isAddSuccess", setSuccessError);
+		MutationOptions2(isAddError, "isAddError", setSuccessError);
+		MutationOptions2(isUpdateSuccess, "isUpdateSuccess", setSuccessError);
+		MutationOptions2(isUpdateError, "isUpdateError", setSuccessError);
+
+		if (isAddSuccess || isAddError || isUpdateSuccess || isUpdateError)
+			handleClose();
+	}, [isAddLoading, isUpdateLoading])
 
 	const handleClose = (): void => {
 		addEditComplexityForm.resetForm();
-		setContext('');
+		setContext("");
 		handleCloseAddEdit();
 	};
 
@@ -135,7 +143,7 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 						helperText={getFieldError(errors, "complexityName")}
 					/>
 				</Grid>
-				<Grid container item xs={2} spacing={1} alignItems='center'>
+				<Grid container item xs={2} spacing={1} alignItems="center">
 					<Grid item xs={12}>
 						<Typography>{t(label.noOfHours)}</Typography>
 					</Grid>
@@ -161,7 +169,7 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 						)}
 					</Grid>
 				</Grid>
-				<Grid container item xs={2} spacing={1} alignItems='center'>
+				<Grid container item xs={2} spacing={1} alignItems="center">
 					<Grid item xs={12}>
 						<Typography>{t(label.noOfFeatures)}</Typography>
 					</Grid>
@@ -204,16 +212,16 @@ const ComplexityForms = (props: ComplexityFormsType): ReactElement => {
 					/>
 				</Grid>
 			</Grid>
-			<Grid container justifyContent={'flex-end'} mt={2}>
+			<Grid container justifyContent={"flex-end"} mt={2}>
 				<CustomButton
 					type="button"
-					colorVariant='neutral'
+					colorVariant="neutral"
 					sx={{ mr: 1 }}
 					onClick={handleClose}
 				>
 					{t(btnLabel.cancel)}
 				</CustomButton>
-				<CustomButton type='submit'>
+				<CustomButton type="submit">
 					{t(btnLabel.save)}
 				</CustomButton>
 			</Grid>
