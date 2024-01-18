@@ -2,7 +2,6 @@ import { useState, type ReactElement, useEffect } from "react";
 import type { AddProjectType, Project } from "~/api/projects/types";
 import type {
   AddTeamForm as AddTeamFormType,
-  TeamLead,
   TeamObject,
 } from "./types";
 
@@ -112,7 +111,6 @@ const AddProject = (props: ProjectListProps): ReactElement => {
       active: selectedProject?.active,
       teams: teamForm.map(
         ({
-          projectId,
           teamName,
           teamId,
           teamLead,
@@ -121,10 +119,10 @@ const AddProject = (props: ProjectListProps): ReactElement => {
           lastUpdatedDate,
           ...team
         }) => ({
-          projectId,
+          projectId: selectedProject?.projectId,
+          teamId: teamId ?? null,
+          active: active ?? true,
           teamName,
-          teamId,
-          active,
           teamLead: teamLead.value,
           dateCreated: dateCreated ?? Date.now(),
           lastUpdatedDate: lastUpdatedDate ?? Date.now(),
@@ -185,10 +183,8 @@ const AddProject = (props: ProjectListProps): ReactElement => {
               return { ...member, name: memberName };
             }),
             teamLead: {
-              value: teamLead.value,
-              label: `${(teamLead as TeamLead).firstName}, ${
-                (teamLead as TeamLead).lastName
-              } ${(teamLead as TeamLead).middleName ?? ""}`,
+              value: teamLead.id,
+              label: `${teamLead.firstName}, ${teamLead.lastName} ${teamLead.middleName ?? ""}`,
             },
             teamName: name ?? "-",
           })

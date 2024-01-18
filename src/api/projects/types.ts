@@ -1,4 +1,5 @@
-import { OdcParam } from "../odc";
+import { OdcParam } from '../odc';
+import { User } from '../user';
 
 export interface ProjectListResponse {
   status: number;
@@ -17,7 +18,7 @@ export interface Teams {
   projectId: string;
   name: string;
   teamId: string;
-  teamLead: SelectObject;
+  teamLead: User;
   isActive: number;
   teamMembers: TeamMembers[];
 }

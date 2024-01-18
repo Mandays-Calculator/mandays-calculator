@@ -65,7 +65,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     if (projectName !== "" && teamName !== "" && teamLead.value !== "") {
       let teams = values.teams.map((_val, index) => {
         if (index === teamIndex) {
-          return { teamName, teamLead, teamMembers: tableData };
+          return { ..._val, teamName, teamLead, teamMembers: tableData };
         }
         return _val;
       });
