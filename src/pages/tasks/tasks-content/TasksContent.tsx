@@ -138,7 +138,6 @@ const TasksContent = (): ReactElement => {
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
     const updatedMockData = tasks.map((task) => {
-      if (task.name === updatedTask.name) {
       if (task.taskID === updatedTask.taskID) {
         return updatedTask;
       }
