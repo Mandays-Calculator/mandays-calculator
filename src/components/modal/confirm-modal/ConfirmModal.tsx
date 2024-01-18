@@ -6,6 +6,13 @@ import { CustomButton } from "~/components/form/button";
 import { Modal, SvgIcon } from "~/components";
 import { Box, Stack } from "@mui/material";
 
+const maxWidthSizes = {
+  sm: 200,
+  md: 300,
+  lg: 400,
+  xl: 500,
+};
+
 interface ConfirmModalProps {
   onConfirmWithIndex?: (rowIndex: number) => void;
   onConfirm?: () => void;
@@ -16,6 +23,7 @@ interface ConfirmModalProps {
   selectedRow?: number | null;
   confirmIcon?: SvgIconsType | ReactNode | string;
   closeLabel?: string;
+  maxWidth?: "sm" | "md" | "lg" | "xl";
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -27,6 +35,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   message = "",
   open,
   onClose,
+  maxWidth,
   closeLabel,
 }): ReactElement => {
   return (
@@ -51,7 +60,12 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         </Box>
       </Stack>
 
-      <Box display="flex" justifyContent="center" my={2}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        my={2}
+        width={maxWidth ? maxWidthSizes[maxWidth] : "auto"}
+      >
         <CustomButton
           variant="contained"
           colorVariant="neutral"

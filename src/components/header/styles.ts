@@ -2,7 +2,7 @@ import AppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  maxHeight: 70,
+  minHeight: 70,
   background: theme.palette.background.paper,
   boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
 }));

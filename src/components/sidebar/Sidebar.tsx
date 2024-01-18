@@ -22,13 +22,12 @@ import {
 } from ".";
 
 const Drawer = (): ReactElement => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const {
     state: { permissions, loading },
   } = useUserAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
   const { common } = LocalizationKey;
 
   const handleNavigate = (routeItem: Permission): void => {
@@ -39,7 +38,11 @@ const Drawer = (): ReactElement => {
     return (
       <Box sx={{ display: "flex" }}>
         <StyledDrawer variant="permanent" open={open}>
-          <StyledList open={open} sx={{ mt: 7 }}>
+          <StyledList
+            open={open}
+            permissionsLength={permissions.length}
+            sx={{ mt: 7 }}
+          >
             {permissions.map((routeItem: Permission, index: number) => {
               if (routeItem.icon) {
                 return (
@@ -48,7 +51,7 @@ const Drawer = (): ReactElement => {
                     onClick={() => handleNavigate(routeItem)}
                     open={open}
                   >
-                    <StyledListItemIcon>
+                    <StyledListItemIcon open={open}>
                       {routeItem.icon ? (
                         <SvgIcon
                           name={routeItem.icon as SvgIconsType}
@@ -65,13 +68,13 @@ const Drawer = (): ReactElement => {
               }
             })}
           </StyledList>
-          <StyledCollapsibleItem open={open}>
-            <IconButton onClick={() => setOpen(!open)}>
-              <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
-            </IconButton>
-            {open && <Typography>{t(common.collapse)}</Typography>}
-          </StyledCollapsibleItem>
         </StyledDrawer>
+        <StyledCollapsibleItem open={open}>
+          <IconButton onClick={() => setOpen(!open)}>
+            <SvgIcon name={open ? "collapse_left" : "collapse_right"} />
+          </IconButton>
+          {open && <Typography>{t(common.collapse)}</Typography>}
+        </StyledCollapsibleItem>
       </Box>
     );
 

@@ -73,6 +73,7 @@ const ODCManagement = (): ReactElement => {
             data={apiData?.data || []}
             setFormContext={setFormContext}
             setIdx={setIdx}
+            setSuccessError={setSuccessError}
           />
         )}
         {(formContext === "Add" || formContext === "Edit") && (
