@@ -3,13 +3,21 @@ import { AllTasksResponse } from "~/api/tasks/types";
 import { ReactElement, useEffect, useState } from "react";
 
 import { styled } from "@mui/material/styles";
-import { Divider, Grid, SelectChangeEvent, Stack } from "@mui/material";
+import {
+  Divider,
+  Grid,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+
+import NoTask from "~/assets/img/empty_tasks.png";
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
 import { useTasks } from "~/queries/tasks/Tasks";
@@ -19,7 +27,6 @@ import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import EditTask from "./EditTask";
-// import MockData from "./MockData.json";
 
 const calculateGridSize = (numStatuses: number): number => {
   return 12 / numStatuses;
@@ -270,6 +277,7 @@ const TasksContent = (): ReactElement => {
                         </Grid>
 
                         <Divider />
+
                         {filteredData.map((task, index) => (
                           <Stack key={`${status}_${task.name}_${index}`}>
                             {task.status === Status.Backlog ||
@@ -314,6 +322,29 @@ const TasksContent = (): ReactElement => {
               );
             })}
           </Grid>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "60vh",
+            }}
+          >
+            <img src={NoTask} alt="error" />
+            <Typography variant="h5" fontWeight="bold">
+              No tasks currently visible
+            </Typography>
+            <Typography variant="body2" fontWeight="bold">
+              Get started and{" "}
+              <span
+                style={{ color: "#2C8ED1", cursor: "pointer" }}
+                onClick={handleCreateModalState}
+              >
+                create a task
+              </span>
+            </Typography>
+          </div>
         </PageContainer>
       </DragDropContext>
       <ErrorMessage error={errorMessage} type="alert" />
