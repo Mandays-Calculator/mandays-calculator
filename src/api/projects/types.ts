@@ -1,3 +1,6 @@
+import { OdcParam } from '../odc';
+import { User } from '../user';
+
 export interface ProjectListResponse {
   status: number;
   data: Project[];
@@ -13,9 +16,9 @@ export interface Project {
 
 export interface Teams {
   projectId: string;
-  teamName: string;
+  name: string;
   teamId: string;
-  teamLead: string;
+  teamLead: User;
   isActive: number;
   teamMembers: TeamMembers[];
 }
@@ -42,6 +45,12 @@ export interface TeamMembers {
   keyword: string;
   joiningStartDate: string;
   joiningEndDate: string;
+  keycloakId: string;
+  odc: OdcParam;
+  active: boolean;
+  createdDate: string;
+  lastUpdatedDate: string;
+  teamLead: boolean;
 }
 
 export interface ProjectErrorResponse {
@@ -52,16 +61,29 @@ export interface ProjectErrorResponse {
 
 export interface AddProjectType {
   name: string;
-  isActive: number;
-  dateCreated: string;
-  lastUpdatedDate: string;
-  projectTeam: {
+  active: boolean;
+  dateCreated: number;
+  lastUpdatedDate: number;
+  teams: {
     teamName: string;
-    leadName: string;
-    isActive: number;
-    teamMembers: {
-      name: string;
-      isActive: number;
-    }[];
+    teamLead: SelectObject | string;
+    active: boolean;
+    dateCreated: number;
+    lastUpdatedDate: number;
+    teamMembers: string[];
   }[];
+}
+
+export interface AddProjectErrorType {
+  errorCode: string;
+  message: string;
+}
+
+export interface AddProjectSuccessType {
+  data: {
+    headers: {};
+    body: Project;
+    statusCode: string;
+    statusCodeValue: number | 200;
+  };
 }

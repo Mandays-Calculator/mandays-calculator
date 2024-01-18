@@ -40,11 +40,11 @@ const TeamListCard = (props: TeamListCardProps): ReactElement => {
   return (
     <StyledContainer
       $isDefault={isDefault}
-      sx={{cursor: 'pointer'}}
+      sx={{ cursor: "pointer" }}
       onClick={() => toggleEdit(teamIndex)}
     >
       <Typography fontWeight="bold">{teamObject.teamName}</Typography>
-      <Typography fontWeight="bold">{teamObject.teamLead}</Typography>
+      <Typography fontWeight="bold">{teamObject.teamLead?.label}</Typography>
       <IconButton onClick={($event) => handleDeleteCard($event)}>
         <SvgIcon name="delete" color="error" $size={2} />
       </IconButton>

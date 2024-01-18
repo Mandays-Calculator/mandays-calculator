@@ -8,7 +8,7 @@ describe('Dialog Search User', () => {
   beforeEach(() => {
     render(
       <ProviderWrapper>
-        <DialogSearchUser showMemberDialog={true} toggleDialog={() => mockOnToggleDialog()} />
+        <DialogSearchUser selectedTeamLead={null} showMemberDialog={true} toggleDialog={() => mockOnToggleDialog()} />
       </ProviderWrapper>,
     );
   });

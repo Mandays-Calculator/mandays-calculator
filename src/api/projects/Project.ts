@@ -1,7 +1,7 @@
 import type { AuthAPIResponse } from '../auth';
 import axios, { AxiosResponse } from 'axios';
 import { getEnvConfig } from '~/utils/env-config';
-import { AddProjectType, Project } from '.';
+import { AddProjectType, Project, ProjectListResponse } from '.';
 
 let apiBasePath: string | ApiBasePath;
 
@@ -19,12 +19,9 @@ export const createProject = async (params: AddProjectType): Promise<AuthAPIResp
   return handleResultData(response);
 };
 
-export const updateProject = async (
-  projectId: number | string,
-  params: any, // WIP from BE
-): Promise<AuthAPIResponse> => {
+export const updateProject = async (projectId: number | string, project: Project): Promise<AuthAPIResponse> => {
   const url = `${getApiBasePath()}/projects/${projectId}`;
-  const response = await axios.put<AuthAPIResponse>(url, params);
+  const response = await axios.put<AuthAPIResponse>(url, project);
 
   return handleResultData(response);
 };
@@ -36,9 +33,9 @@ export const deleteProject = async (projectId: number | string): Promise<AuthAPI
   return handleResultData(response);
 };
 
-export const getProjects = async (): Promise<Project> => {
+export const getProjects = async (): Promise<ProjectListResponse> => {
   const url = `${getApiBasePath()}/projects`;
-  const response = await axios.get<Project>(url);
+  const response = await axios.get<ProjectListResponse>(url);
 
   return response.data;
 };

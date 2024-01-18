@@ -1,7 +1,7 @@
 import type { AuthAPIResponse } from '~/api/auth';
 import type { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
-import { createProject, deleteProject, updateProject } from '~/api/projects';
+import { Project, createProject, deleteProject, updateProject } from '~/api/projects';
 
 export const useCreateProjectMutation = () => {
   return useMutation<AuthAPIResponse, AxiosError, any>(
@@ -11,7 +11,7 @@ export const useCreateProjectMutation = () => {
 
 export const useUpdateProjectMutation = () => {
   return useMutation<AuthAPIResponse, AxiosError, any>(
-    (params: {projectId: string; body: any}) => updateProject(params.projectId, params.body)
+    (params: Project) => updateProject(params.projectId, params)
   );
 };
 
