@@ -321,6 +321,11 @@
       "btnLabel": {
         "update": "Update"
       }
+    },
+    "errorMessage": {
+      "error": "No tasks currently visible",
+      "started": "Get started and",
+      "created": "create a task"
     }
   },
   "history": {

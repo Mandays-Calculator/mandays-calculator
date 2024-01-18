@@ -227,6 +227,11 @@ const LocalizationKey = {
         update: "tasks.updateTask.btnLabel.update",
       },
     },
+    errorMessage: {
+      error: "tasks.errorMessage.error",
+      started: "tasks.errorMessage.started",
+      created: "tasks.errorMessage.created",
+    },
   },
   history: {
     detailsBtn: "history.button.details",
@@ -264,19 +269,19 @@ const LocalizationKey = {
       holidays: "odc.label.holidays",
       date: "odc.label.date",
       holiday: "odc.label.holiday",
-      noHolidays: "odc.label.noHolidays"
+      noHolidays: "odc.label.noHolidays",
     },
     modal: {
       deleteLabel: "odc.modal.deleteLabel",
       yesPleaseBtn: "odc.modal.yesPleaseBtn",
-      noThanksBtn: "odc.modal.noThanksBtn"
+      noThanksBtn: "odc.modal.noThanksBtn",
     },
     btnlabel: {
       addOdc: "odc.btnlabel.addOdc",
       addHoliday: "odc.btnlabel.addHoliday",
       save: "odc.btnlabel.save",
       cancel: "odc.btnlabel.cancel",
-      edit: "odc.btnlabel.edit"
+      edit: "odc.btnlabel.edit",
     },
     validationInfo: {
       nameReq: "odc.validationInfo.nameReq",
@@ -286,9 +291,9 @@ const LocalizationKey = {
       submitError: "odc.validationInfo.submitError",
       submitSuccess: "odc.validationInfo.submitSuccess",
       deleteError: "odc.validationInfo.deleteError",
-      deleteSuccess: "odc.validationInfo.deleteSuccess"
+      deleteSuccess: "odc.validationInfo.deleteSuccess",
     },
-    placeholder: "odc.placeholder"
+    placeholder: "odc.placeholder",
   },
   complexity: {
     title: "complexity.title",

@@ -16,6 +16,9 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { useTranslation } from "react-i18next";
+
+import LocalizationKey from "~/i18n/key";
 
 import NoTask from "~/assets/img/empty_tasks.png";
 
@@ -80,6 +83,8 @@ const TasksContent = (): ReactElement => {
   const { data: tasksData } = useTasks("a0f17dfd-aaa8-11ee-a5cd-a0291936d3a2");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (tasksData && tasksData.hasOwnProperty("errorCode")) {
@@ -333,15 +338,19 @@ const TasksContent = (): ReactElement => {
           >
             <img src={NoTask} alt="error" />
             <Typography variant="h5" fontWeight="bold">
-              No tasks currently visible
+              {t(LocalizationKey.tasks.errorMessage.error)}
             </Typography>
             <Typography variant="body2" fontWeight="bold">
-              Get started and{" "}
+              {t(LocalizationKey.tasks.errorMessage.started)}
               <span
-                style={{ color: "#2C8ED1", cursor: "pointer" }}
+                style={{
+                  color: "#2C8ED1",
+                  cursor: "pointer",
+                  paddingLeft: "3px",
+                }}
                 onClick={handleCreateModalState}
               >
-                create a task
+                {t(LocalizationKey.tasks.errorMessage.created)}
               </span>
             </Typography>
           </div>

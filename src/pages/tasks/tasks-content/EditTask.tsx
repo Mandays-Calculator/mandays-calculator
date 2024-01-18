@@ -91,6 +91,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
             label="Description"
             fullWidth
             multiline
+            readOnly
             rows={4}
             maxRows={4}
             onChange={(e) =>
