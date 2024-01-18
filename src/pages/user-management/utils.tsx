@@ -33,6 +33,7 @@ export const UserManagementFormValues: UserManagementForms = {
   joiningDate: "",
   teamId: "",
   roles: [],
+  recentlyJoinedlaterDate: false,
 };
 
 export const UserManagementSchema = (t: TFunction) => {
@@ -55,7 +56,10 @@ export const UserManagementSchema = (t: TFunction) => {
     joiningDate: yup
       .string()
       .when("recentlyJoinedlaterDate", (recentlyJoinedlaterDate, schema) => {
-        return recentlyJoinedlaterDate
+        const shouldValidate = Array.isArray(recentlyJoinedlaterDate)
+          ? recentlyJoinedlaterDate[0]
+          : recentlyJoinedlaterDate;
+        return shouldValidate
           ? schema.required(t(common.errorMessage.required))
           : schema.notRequired();
       }),

@@ -55,7 +55,7 @@ const Header = (props: HeaderProps): ReactElement => {
             onChange={(event) => {
               formik.setFieldValue("filterProperty", event.target.value);
             }}
-            value={formik.values.filterProperty}
+            value={formik.values.filterProperty || ""}
           />
         </Grid>
         <Grid item xs={1.9}></Grid>
