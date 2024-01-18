@@ -23,6 +23,7 @@ export interface UserListData {
   joiningDate: string;
   roles: string[];
   active: boolean;
+  image?: string;
 }
 export interface AddUserResponse {
   status: number;
@@ -43,6 +44,7 @@ export interface AddUserParams {
   projectId: string;
   teamId: string;
   roles: string[];
+  image?: string;
 }
 
 export interface DeleteUserResponse {
