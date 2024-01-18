@@ -30,6 +30,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     (_val, index) => index === teamIndex
   ) as TeamObject;
 
+  console.log(team, "team lead");
   const [projectName, setProjectName] = useState<string>(values.projectName);
   const [teamName, setTeamName] = useState<string>(team.teamName);
   const [teamLead, setTeamLead] = useState<SelectObject>(team.teamLead);
@@ -98,14 +99,14 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     const users = selectedUsers.map((user) => {
       const memberName =
         user.firstName && user.lastName
-          ? `${user.firstName}, ${user.lastName} ${user.middleName ?? ''}`
-          : '-';
+          ? `${user.firstName}, ${user.lastName} ${user.middleName ?? ""}`
+          : "-";
 
       return {
         ...user,
         name: memberName.trim(),
-        careerStep: user.careerStep ?? '-',
-        abbreviation: user.odc?.abbreviation ?? '-',
+        careerStep: user.careerStep ?? "-",
+        abbreviation: user.odc?.abbreviation ?? "-",
       } as TeamMembers;
     });
 
@@ -143,16 +144,24 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
 
   const onChangeTeamLead = (teamLeadObject: SelectObject | null) => {
     if (!teamLeadObject) return;
-    
-    const isTeamMemberExist = originTableData.find(tableData => tableData.id === teamLeadObject.value);
+
+    const isTeamMemberExist = originTableData.find(
+      (tableData) => tableData.id === teamLeadObject.value
+    );
 
     if (isTeamMemberExist) {
-      setTableData(tableData.filter((tableData) => tableData.id !== teamLeadObject.value));
-      setOriginTableData(originTableData.filter((tableData) => tableData.id !== teamLeadObject.value));
+      setTableData(
+        tableData.filter((tableData) => tableData.id !== teamLeadObject.value)
+      );
+      setOriginTableData(
+        originTableData.filter(
+          (tableData) => tableData.id !== teamLeadObject.value
+        )
+      );
     }
 
     setTeamLead(teamLeadObject);
-  }
+  };
 
   const filteredMemberList = (keyword: string): TeamMembers[] => {
     return originTableData.filter((user) => {
