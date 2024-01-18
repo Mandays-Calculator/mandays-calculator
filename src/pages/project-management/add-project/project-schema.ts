@@ -6,7 +6,7 @@ export const appProjectSchema = Yup.object().shape({
     .min(1)
     .of(
       Yup.object().shape({
-        teamLead: Yup.string().required('Field is required'),
+        teamLead: Yup.object().required('Field is required'),
         teamName: Yup.string().required('Field is required'),
         teamMembers: Yup.array()
           .min(1)

@@ -9,6 +9,8 @@ import { CustomButton } from "~/components/form/button";
 import { TextField } from "~/components";
 import { useFormikContext } from "formik";
 
+import UsersSelect from "../components/TeamListCard/users-select/UsersSelect";
+
 interface AddTeamFormProps {
   onCancel: () => void;
 }
@@ -17,38 +19,40 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
   const { onCancel } = props;
   const { values, setValues } = useFormikContext<AddTeamFormType>();
   const [teamName, setTeamName] = useState<string>("");
-  const [teamLead, setTeamLead] = useState<string>("");
+  const [teamLead, setTeamLead] = useState<SelectObject>({
+    label: "",
+    value: "",
+  });
+
   const [teamNameError, setTeamNameError] = useState<boolean>(false);
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
-
   const addTeam = (): void => {
     if (teamName === "") {
       setTeamNameError(true);
     } else {
       setTeamNameError(false);
     }
-    if (teamLead === "") {
+    if (teamLead.value === "") {
       setTeamLeadError(true);
     } else {
       setTeamLeadError(false);
     }
-    if (teamName !== "" && teamLead !== "") {
+    if (teamName !== "" && teamLead.value !== "") {
       setValues({
         ...values,
-        teams: [...values.teams, { teamName: teamName, teamLead: teamLead, teamMembers: [] }],
+        teams: [
+          ...values.teams,
+          { teamName: teamName, teamLead: teamLead, teamMembers: [] },
+        ],
       });
       setTeamName("");
-      setTeamLead("");
+      setTeamLead({ label: "", value: "" });
       onCancel();
     }
   };
 
   const getTeamName = (e: ChangeEvent<HTMLInputElement>): void => {
     setTeamName(e.target.value);
-  };
-
-  const getTeamLead = (e: ChangeEvent<HTMLInputElement>): void => {
-    setTeamLead(e.target.value);
   };
 
   return (
@@ -69,14 +73,15 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField
-            name="teamLead"
-            label="Team Lead"
+          <UsersSelect
             value={teamLead}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => getTeamLead(e)}
-            fullWidth
+            label="Team Lead"
+            onChange={(_, value) => {
+              setTeamLead(value as SelectObject);
+            }}
             error={teamLeadError}
-            helperText={teamLeadError && "Please Input Team Lead."}
+            name="teamLead"
+            helperText={teamLeadError ? "Please Input Team Lead." : ""}
           />
         </Grid>
       </Grid>

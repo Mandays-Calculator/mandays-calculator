@@ -55,3 +55,11 @@ export interface DeleteUserResponse {
 export interface DeleteUserParam {
   id: string;
 }
+
+export interface GetUsersParam {
+  isActive?: boolean;
+  joiningStartDate?: string;
+  joiningEndDate?: string;
+  roles?: string;
+  keyword?: string;
+}

@@ -1,11 +1,22 @@
-import { useState, type ReactElement } from "react";
-import type { AddTeamForm as AddTeamFormType } from "./types";
+import { useState, type ReactElement, useEffect } from "react";
+import type { AddProjectType, Project } from "~/api/projects/types";
+import type {
+  AddTeamForm as AddTeamFormType,
+  TeamObject,
+} from "./types";
 
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
 import { styled, Grid, Typography, IconButton, Stack } from "@mui/material";
-import { useCreateProjectMutation } from "~/mutations/projects";
-import { useRequestHandler } from "~/hooks/request-handler";
+import {
+  useCreateProjectMutation,
+  useUpdateProjectMutation,
+} from "~/mutations/projects";
+import {
+  APIError,
+  APIStatus,
+  useRequestHandler,
+} from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
@@ -19,18 +30,18 @@ import AddTeamForm from "./add-team-form";
 import EditTeamForm from "./edit-team-form/EditTeamForm";
 import TeamList from "./team-list";
 
-
 const StyledTextField = styled(ControlledTextField)(() => ({
   width: "50%",
 }));
 
 interface ProjectListProps {
-  handleAddProject: () => void;
+  selectedProject: Project | null;
+  handleAddEditProject: () => void;
 }
 
 const AddProject = (props: ProjectListProps): ReactElement => {
   const { t } = useTranslation();
-  const { handleAddProject } = props;
+  const { handleAddEditProject, selectedProject } = props;
   const projectForm = useFormik<AddTeamFormType>({
     initialValues: addFormInitValue,
     validationSchema: appProjectSchema,
@@ -46,31 +57,80 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     setTeamIndex(teamId);
     setIsEditMode(!isEditMode);
   };
-
-  const [status, callApi] = useRequestHandler(useCreateProjectMutation().mutate, handleAddProject);
+  const onErrorAddProject = () => {
+    setAddProjectErrorMsg("An error has occured!");
+    triggerTimeout(() => setAddProjectErrorMsg(""));
+  };
+  const [createProjectStatus, callCreateProject] = useRequestHandler(
+    useCreateProjectMutation().mutate,
+    handleAddEditProject,
+    onErrorAddProject
+  );
+  const [updateProjectStatus, callUpdateProject] = useRequestHandler(
+    useUpdateProjectMutation().mutate,
+    handleAddEditProject,
+    onErrorAddProject
+  );
 
   const onSubmit = async (): Promise<void> => {
-    if (status.loading) return;
+    if (createProjectStatus.loading) return;
 
-    const { projectName, teams } = projectForm.values;
+    const { projectName, teams: teamForm } = projectForm.values;
 
-    const createProjectParams = {
+    if (selectedProject) {
+      updateProject(projectName, teamForm);
+    } else {
+      createProject(projectName, teamForm);
+    }
+  };
+
+  const createProject = (projectName: string, teamForm: TeamObject[]) => {
+    const createProjectParams: AddProjectType = {
       name: projectName,
-      isActive: 1,
+      active: true,
       dateCreated: Date.now(),
       lastUpdatedDate: Date.now(),
-      projectTeam: teams.map((team) => ({
+      teams: teamForm.map((team) => ({
         teamName: team.teamName,
-        leadName: team.teamLead,
-        isActive: 0,
-        teamMembers: team.teamMembers.map(({ name }) => ({
-          name,
-          isActive: 0,
-        })),
+        teamLead: team.teamLead.value,
+        active: true,
+        dateCreated: Date.now(),
+        lastUpdatedDate: Date.now(),
+        teamMembers: team.teamMembers.map(({ id }) => id),
       })),
     };
+    callCreateProject(createProjectParams);
+  };
 
-    callApi(createProjectParams);
+  const updateProject = (projectName: string, teamForm: TeamObject[]) => {
+    const updateProjectParams = {
+      name: projectName,
+      projectId: selectedProject?.projectId,
+      dateCreated: selectedProject?.dateCreated,
+      lastUpdatedDate: Date.now(),
+      active: selectedProject?.active,
+      teams: teamForm.map(
+        ({
+          teamName,
+          teamId,
+          teamLead,
+          active,
+          dateCreated,
+          lastUpdatedDate,
+          ...team
+        }) => ({
+          projectId: selectedProject?.projectId,
+          teamId: teamId ?? null,
+          active: active ?? true,
+          teamName,
+          teamLead: teamLead.value,
+          dateCreated: dateCreated ?? Date.now(),
+          lastUpdatedDate: lastUpdatedDate ?? Date.now(),
+          teamMembers: team.teamMembers.map(({ id }) => id),
+        })
+      ),
+    };
+    callUpdateProject(updateProjectParams);
   };
 
   const onValidateForm = async (): Promise<void> => {
@@ -97,9 +157,41 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     });
   };
 
+  const projecAPIStatus = (prop: keyof APIStatus): boolean | APIError => {
+    return createProjectStatus[prop] || updateProjectStatus[prop];
+  };
+
   const isErrorField = (field: string): boolean => {
     return projectForm.errors[field as keyof {}] ? true : false;
   };
+
+  useEffect(() => {
+    if (selectedProject) {
+      projectForm.setValues({
+        projectName: selectedProject.name,
+        teams: selectedProject.teams.map(
+          ({ name, teamMembers, teamLead, ...team }) => ({
+            ...team,
+            teamMembers: teamMembers.map((member) => {
+              const memberName =
+                member.firstName && member.lastName
+                  ? `${member.firstName}, ${member.lastName} ${
+                      member.middleName ?? ""
+                    }`
+                  : "-";
+
+              return { ...member, name: memberName };
+            }),
+            teamLead: {
+              value: teamLead.id,
+              label: `${teamLead.firstName}, ${teamLead.lastName} ${teamLead.middleName ?? ""}`,
+            },
+            teamName: name ?? "-",
+          })
+        ),
+      });
+    }
+  }, [selectedProject]);
 
   return (
     <PageContainer>
@@ -138,22 +230,29 @@ const AddProject = (props: ProjectListProps): ReactElement => {
             <CustomButton
               colorVariant="secondary"
               type="button"
-              onClick={handleAddProject}
+              onClick={handleAddEditProject}
             >
               Cancel
             </CustomButton>
             <CustomButton
               type="submit"
               onClick={onValidateForm}
-              disabled={status.loading}
+              disabled={projecAPIStatus("loading") as boolean}
             >
-              {status.loading ? "Loading..." : "Add Project"}
+              {projecAPIStatus("loading")
+                ? "Loading..."
+                : (selectedProject ? "Update" : "Add") + " Project"}
             </CustomButton>
-            
           </Stack>
-          {!status.loading && (
-              <ErrorMessage error={useErrorHandler(status.error, t) || t(addProjectErrorMsg)} type="alert" />
-            )}
+          {!projecAPIStatus("loading") && (
+            <ErrorMessage
+              error={
+                useErrorHandler(projecAPIStatus("error") as APIError, t) ||
+                t(addProjectErrorMsg)
+              }
+              type="alert"
+            />
+          )}
         </Form>
       ) : (
         <Form instance={projectForm}>

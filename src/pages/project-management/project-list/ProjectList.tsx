@@ -15,6 +15,7 @@ import { useProjectList } from '~/queries/project-management/ProjectManagement';
 
 interface ProjectListProps {
   handleAddProject: () => void;
+  handleEditProject: (project: Project) => void;
 }
 
 type ActionType = {
@@ -43,6 +44,7 @@ const projectListReducer = (state: typeof initialProjectListState, action: Actio
         });
 
         return {
+          ...response,
           projectId: response.projectId,
           prjName: response.name,
           noOfTeams: response.teams.length,
@@ -64,19 +66,24 @@ const projectListReducer = (state: typeof initialProjectListState, action: Actio
 };
 
 const ProjectList = (props: ProjectListProps): ReactElement => {
+  const { handleAddProject, handleEditProject } = props;
   const { t } = useTranslation();
-  const { handleAddProject } = props;
   const { data, refetch } = useProjectList();
   const [projectListState, dispatchProjectList] = useReducer(projectListReducer, initialProjectListState);
   const [confirmDialog, setConfirmDialog] = useState<ProjectListConfirmDialogType>({ open: false, id: '' });
+  const [status, callApi] = useRequestHandler(useDeleteProjectMutation().mutate, () => refetch());
 
   const onChangeFilterText = (e: ChangeEvent<HTMLInputElement>): void => {
     dispatchProjectList({ type: 'SEARCH', payload: e.target.value as string });
   };
+
+  const onEdit = (project: Project): void => {
+    handleEditProject(project);
+  };
+
   const onDelete = (projectId: string): void => {
     setConfirmDialog({ open: !confirmDialog.open, id: projectId });
   };
-  const [status, callApi] = useRequestHandler(useDeleteProjectMutation().mutate, () => refetch());
 
   const deleteProject = (): void => {
     callApi(confirmDialog.id);
@@ -85,17 +92,13 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
 
   useEffect(() => {
     if (!data) return;
-    const fetchData = async () => {
-      try {
-        const result = (Array.isArray(data) ? data : []) as Project[];
+    try {
+      const result = (Array.isArray(data.data) ? data.data : []) as Project[];
 
-        dispatchProjectList({ type: 'SET_VALUE', payload: result });
-      } catch (error) {
-        dispatchProjectList({ type: 'SET_VALUE', payload: [] });
-      }
-    };
-
-    fetchData();
+      dispatchProjectList({ type: 'SET_VALUE', payload: result });
+    } catch (error) {
+      dispatchProjectList({ type: 'SET_VALUE', payload: [] });
+    }
   }, [data]);
 
   return (
@@ -116,7 +119,11 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
         </Grid>
       </Grid>
       <Box marginTop='14px'>
-        <Table name='ODCTable' columns={ProjectListColumns({ t, onDelete })} data={projectListState.filteredResult} />
+        <Table
+          name='ODCTable'
+          columns={ProjectListColumns({ t, onDelete, onEdit })}
+          data={projectListState.filteredResult}
+        />
       </Box>
 
       <ConfirmModal
