@@ -28,7 +28,8 @@ export const getPermittedRoute = (
     const isPermitted = permittedPaths.some(
       (permittedPath) =>
         (privRoute.path && privRoute.path.startsWith(`${permittedPath}/`)) ||
-        privRoute.path === permittedPath
+        privRoute.path === permittedPath ||
+        privRoute.disablePermissionChecking === true
     );
 
     if (!isPermitted) {

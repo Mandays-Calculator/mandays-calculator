@@ -70,6 +70,7 @@ export const routes: RouteType[] = [
   {
     path: "account-info",
     element: <ErrorPage type="development-mode" />,
+    disablePermissionChecking: true,
   },
   {
     path: "history",
