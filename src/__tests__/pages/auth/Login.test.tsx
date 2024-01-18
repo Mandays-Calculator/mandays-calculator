@@ -1,8 +1,8 @@
-import type { RenderResult } from "@testing-library/react";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { I18nextProvider } from "react-i18next";
 
-import { MemoryRouter } from "react-router-dom";
-
-import { render, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Formik } from "formik";
@@ -12,95 +12,161 @@ import { Login } from "~/pages/auth";
 
 import { cleanAllCallback } from "./utils/auth-utils";
 
-// mock setup
-jest.mock("react-oidc-context");
-
-// mock the i18next translation function
+// Mock the i18next translation function
 i18n.init({
   resources: {
-    en: {
-      translation: {
-        changePassword: {
-          label: {
-            createNewPassword: "Create New Password",
-            enterNewPassword: "Enter new password",
-            confirmNewPassword: "Confirm new password",
-          },
-          btnlabel: {
-            changePassword: "Change Password",
-            cancel: "Cancel",
-          },
-          validationInfo: {
-            charCount: "Password must be at least 8 characters long",
-            uppercase: "Password must contain an uppercase letter",
-            lowercase: "Password must contain a lowercase letter",
-            number: "Password must contain a number",
-            symbol:
-              "Password must contain one of the following symbols (#$-_!)",
-            match: "New password and confirm new password must match.",
-          },
-        },
-      },
-    },
+    en: {},
   },
-  lng: "en",
+  lng: 'en',
   interpolation: { escapeValue: false }, // react already safes from xss
 });
 
-// constant var declarations
-// const USERNAME_PLACEHOLDER = 'login.placeholder.userName';
-const PASSWORD_PLACEHOLDER = "login.placeholder.password";
-const BUTTON_NAME = "login.btnlabel.signIn";
-const handleSignin = jest.fn();
+jest.mock("react-redux");
 
-afterEach((done) => {
-  cleanAllCallback(done);
-});
+const mockUseDispatch = useDispatch as jest.MockedFunction<
+  typeof useDispatch
+>;
+const mockUseSelector = useSelector as jest.MockedFunction<
+  typeof useSelector
+>;
+
+const handleSubmit = jest.fn();
+const LOGIN_TEXT = {
+  management: "login.management",
+  label: {
+    signIn: "login.label.signIn",
+    userName: "login.label.userName",
+    password: "login.label.password",
+    forgotPassword: "login.label.forgotPassword",
+  },
+  btnlabel: {
+    signIn: "login.btnlabel.signIn",
+  },
+  placeholder: {
+    userName: "login.placeholder.userName",
+    password: "login.placeholder.password",
+  },
+  error: {
+    usernameRequired: "common.errorMessage.auth.login.usernameRequired",
+    passwordRequired: "common.errorMessage.auth.login.passwordRequired",
+  },
+  authSignInLoading: "common.userManagement.auth.signInLoading",
+};
+const loginData = {
+  username: "sample@gmail.com",
+  password: "@pass1234",
+};
 
 afterAll((done) => {
   cleanAllCallback(done);
 });
 
-describe("GIVEN Login Component", () => {
-  test("WHEN Login is rendered, THEN it should hide the password by default", async () => {
-    const { getByPlaceholderText, getByRole } = renderLogin();
+describe("GIVEN Login Component is called", () => {
+  test("WHEN user wants to access the Login page, THEN it should render correctly", async () => {
+    renderLogin(false);
     const user = userEvent.setup();
 
-    const passwordInput = getByPlaceholderText(PASSWORD_PLACEHOLDER);
-    await user.click(getByRole("button", { name: BUTTON_NAME }));
+    const usernameTextField = screen.getByPlaceholderText(LOGIN_TEXT.placeholder.userName);
+    const passwordTextField = screen.getByPlaceholderText(LOGIN_TEXT.placeholder.password);
+    const goBackLink = screen.getByRole('link', { name: LOGIN_TEXT.label.forgotPassword });
+    const signinButton = screen.getByRole('button', { name: LOGIN_TEXT.btnlabel.signIn });
 
-    expect(passwordInput).toHaveAttribute("type", "password");
+    await waitFor(async () => {
+      await user.type(usernameTextField, loginData.username);
+      await user.type(passwordTextField, loginData.password);
+      await user.click(signinButton);
+
+      await Promise.resolve();
+    }, { timeout: 10000 });
+
+    // Labels
+    expect(screen.getByText(LOGIN_TEXT.label.signIn)).toBeInTheDocument();
+    expect(screen.getByText(LOGIN_TEXT.label.userName)).toBeInTheDocument();
+    expect(screen.getByText(LOGIN_TEXT.label.password)).toBeInTheDocument();
+
+    // Fields
+    expect(usernameTextField).toBeInTheDocument();
+    expect(passwordTextField).toBeInTheDocument();
+
+    // Forgot Password Link
+    expect(goBackLink).toBeInTheDocument();
+    expect(goBackLink).toHaveAttribute('href', '/forgot-password');
+    expect(goBackLink).toHaveTextContent(LOGIN_TEXT.label.forgotPassword);
+
+    // Buttons
+    expect(signinButton).toBeInTheDocument();
   });
 
-  test("WHEN the eye icon is clicked, THEN it should toggle password visibility", async () => {
-    const { getByPlaceholderText, getByTestId } = renderLogin();
+  test("WHEN user tries to login, THEN system should process the authentication", async () => {
+    renderLogin(true);
 
-    const passwordInput = getByPlaceholderText(PASSWORD_PLACEHOLDER);
-    expect(passwordInput).toHaveAttribute("type", "password");
+    const authSigninLoadingButton = screen.getByRole('button', { name: LOGIN_TEXT.authSignInLoading });
 
-    // toggles the eye icon to show password
-    const eyeIcon = getByTestId("icon-button");
-    await userEvent.click(eyeIcon);
-
-    await waitFor(() => {
-      expect(passwordInput).toHaveAttribute("type", "text");
+    waitFor(() => {
+      expect(authSigninLoadingButton).toBeInTheDocument();
     });
+  });
 
-    // toggles the eye icon to hide password
-    await userEvent.click(eyeIcon);
+  test("WHEN user tries to login without giving username and password, THEN system should show an error", async () => {
+    renderLogin(false);
+    const user = userEvent.setup();
+
+    const signinButton = screen.getByRole('button', { name: LOGIN_TEXT.btnlabel.signIn });
+
+    waitFor(() => {
+      user.click(signinButton);
+
+      Promise.resolve();
+    }, { timeout: 10000 });
 
     await waitFor(() => {
-      expect(passwordInput).toHaveAttribute("type", "password");
+      expect(screen.getByText(LOGIN_TEXT.error.usernameRequired)).toBeInTheDocument();
+      expect(screen.getByText(LOGIN_TEXT.error.passwordRequired)).toBeInTheDocument();
+    }, { timeout: 10000 });
+  });
+
+  test("WHEN user clicks the ForgotPassword link, THEN system should redirect user to the ForgotPassword page", async () => {
+    renderLogin(false);
+    const user = userEvent.setup();
+
+    const goBackLink = screen.getByRole('link', { name: LOGIN_TEXT.label.forgotPassword });
+
+    await user.click(goBackLink);
+
+    waitFor(() => {
+      expect(window.location.pathname).toBe('/forgot-password');
     });
   });
 });
 
-const renderLogin = (): RenderResult => {
-  return render(
-    <MemoryRouter>
-      <Formik initialValues={{}} onSubmit={handleSignin}>
-        <Login />
-      </Formik>
-    </MemoryRouter>
+const renderLogin = (loadingLogin: boolean): void => {
+  runLoginMocks(loadingLogin);
+
+  render(
+    <BrowserRouter>
+      <I18nextProvider i18n={i18n}>
+        <Formik initialValues={{}} onSubmit={handleSubmit}>
+          <Login />
+        </Formik>
+      </I18nextProvider>
+    </BrowserRouter>
   );
+};
+
+const runLoginMocks = (loadingLogin: boolean): void => {
+  mockUseDispatch.mockReturnValue(jest.fn() as unknown as ReturnType<
+    typeof useDispatch
+  >);
+
+  const useSelectorData = {
+    loading: loadingLogin,
+    error: {
+      message: LOGIN_TEXT.error.usernameRequired,
+      errorCode: '',
+    }
+  };
+
+  mockUseSelector.mockReturnValue(useSelectorData as unknown as ReturnType<
+    typeof useSelector
+  >);
 };

@@ -12,10 +12,10 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
         class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-8w0tzz-MuiGrid-root"
         >
           <div
-            class="css-p72wz0"
+            class="css-x7y3mw"
           >
             <img
               alt="login"
@@ -26,7 +26,7 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-k59ms1-MuiGrid-root"
         >
           <div>
             Custom Content
@@ -50,10 +50,10 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
         class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-8w0tzz-MuiGrid-root"
         >
           <div
-            class="css-p72wz0"
+            class="css-x7y3mw"
           >
             <img
               alt="login"
@@ -64,7 +64,7 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-k59ms1-MuiGrid-root"
         />
       </div>
     </div>
@@ -84,10 +84,10 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
         class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-8w0tzz-MuiGrid-root"
         >
           <div
-            class="css-p72wz0"
+            class="css-x7y3mw"
           >
             <img
               alt="login"
@@ -98,7 +98,7 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-k59ms1-MuiGrid-root"
         >
           <img
             alt="example"
@@ -125,10 +125,10 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
         class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-8w0tzz-MuiGrid-root"
         >
           <div
-            class="css-p72wz0"
+            class="css-x7y3mw"
           >
             <img
               alt="login"
@@ -139,7 +139,7 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-k59ms1-MuiGrid-root"
         >
           <div>
             <h1>
@@ -168,10 +168,10 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
         class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-8w0tzz-MuiGrid-root"
         >
           <div
-            class="css-p72wz0"
+            class="css-x7y3mw"
           >
             <img
               alt="login"
@@ -182,7 +182,7 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-k59ms1-MuiGrid-root"
         />
       </div>
     </div>
@@ -202,10 +202,10 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
         class="MuiGrid-root MuiGrid-container css-go2vvz-MuiGrid-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-tgy9nc-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-3.75 css-8w0tzz-MuiGrid-root"
         >
           <div
-            class="css-p72wz0"
+            class="css-x7y3mw"
           >
             <img
               alt="login"
@@ -216,7 +216,7 @@ exports[`GIVEN AuthContainer Component WHEN AuthContainer Component is called wi
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-qyuybv-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-k59ms1-MuiGrid-root"
         >
           <div>
             First Child

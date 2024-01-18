@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import type { OdcParam } from "~/api/odc";
+import type { AddTableProps } from "../utils";
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,20 +11,22 @@ import { Table } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
-import { AddHolidayColumn, NewHolidayData } from "../utils";
+import { AddHolidayColumn, NewHolidayData, SucErrData } from "../utils";
 
 const StyledLabel = styled(Typography)(() => ({
   fontWeight: 600,
   fontSize: "16px",
 }));
 
-const AddTable = (): ReactElement => {
+const AddTable = (props: AddTableProps): ReactElement => {
+  const { setSuccessError } = props;
   const { t } = useTranslation();
   const { odc: { label, btnlabel } } = LocalizationKey;
 
   const { values, setFieldValue } = useFormikContext<OdcParam>();
 
   const handleAddHoliday = (): void => {
+    setSuccessError(SucErrData);
     const holidays = [];
     const valueHolidays = values.holidays || [];
 
@@ -46,7 +49,7 @@ const AddTable = (): ReactElement => {
             <Grid container justifyContent="flex-end">
               <CustomButton
                 type="button"
-                onClick={() => handleAddHoliday()}
+                onClick={handleAddHoliday}
               >
                 {t(btnlabel.addHoliday)}
               </CustomButton>

@@ -1,12 +1,13 @@
 import type { Column, CellProps } from "react-table"
 import type { TFunction } from "i18next";
+import type { SucErrType } from ".";
 
 import { IconButton } from "@mui/material";
 
 import { SvgIcon } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
-import { DataType, FormContext } from ".";
+import { DataType, FormContext, SucErrData } from ".";
 
 const { complexity: { table: { columns } } } = LocalizationKey;
 
@@ -14,6 +15,7 @@ export const complexityColumns = (
 	isDaysChecked: boolean,
 	handleContext: (complexity: FormContext, id: string) => void,
 	t: TFunction<"translation", undefined>,
+	setSuccessError: (sucErr: SucErrType) => void,
 ): Column<DataType>[] => {
 	return [
 		{
@@ -22,10 +24,24 @@ export const complexityColumns = (
 		},
 		{
 			Header: t(columns.noOfHours),
-			accessor: "numberOfHours",
-			Cell: ({ row: { original: { numberOfHours } } }: CellProps<DataType>) => {
-				const numberOfDays = numberOfHours.split('-').map((values) => + values / 8).join(' - ');
-				return isDaysChecked ? numberOfDays : numberOfHours
+			accessor: "minHours",
+			Cell: ({ row: { original: { minHours, maxHours } } }: CellProps<DataType>) => {
+				const minimumHours = (minHours !== undefined || minHours !== null)
+					? minHours
+					: "";
+				const maximumHours = (maxHours !== undefined || maxHours !== null)
+					? maxHours
+					: "";
+				const minimumDays = (minimumHours !== "")
+					? (parseInt(minimumHours) / 8).toString()
+					: "";
+				const maximumDays = (maximumHours !== "")
+					? (parseInt(maximumHours) / 8).toString()
+					: "";
+
+				return isDaysChecked
+					? `${minimumDays} - ${maximumDays}`
+					: `${minimumHours} - ${maximumHours}`
 			}
 		},
 		{
@@ -46,14 +62,20 @@ export const complexityColumns = (
 				return (
 					<>
 						<IconButton
-							onClick={() => handleContext('Edit', id)}
+							onClick={() => {
+								setSuccessError(SucErrData);
+								handleContext("Edit", id);
+							}}
 							aria-label={`edit-${index}`}
 							color="primary"
 						>
 							<SvgIcon name="edit" $size={2} />
 						</IconButton>
 						<IconButton
-							onClick={() => handleContext('', id)}
+							onClick={() => {
+								setSuccessError(SucErrData);
+								handleContext("", id);
+							}}
 							aria-label={`delete-${index}`}
 							color="error"
 						>

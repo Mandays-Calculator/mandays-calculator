@@ -1,6 +1,6 @@
 import type { OdcParam, HolidayParam } from "~/api/odc";
 import type { TFunction } from "i18next";
-import type { FormContext } from "../utils";
+import type { FormContext, SucErrType } from "../utils";
 
 import { Column, CellProps } from "react-table";
 import { IconButton } from "@mui/material";
@@ -11,6 +11,8 @@ import { ControlledTextField, ControlledDatePicker } from "~/components/form/con
 import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
+import { SucErrData } from "../utils";
+
 type ODCColumnType = Column<OdcParam> & { id?: string };
 
 const { odc: { label, btnlabel } } = LocalizationKey;
@@ -19,6 +21,7 @@ export const ODCColumns = (
   t: TFunction<"translation", undefined>,
   setFormContext: (context: FormContext) => void,
   setIdx: (idx: string) => void,
+  setSuccessError: (sucErr: SucErrType) => void,
 ): ODCColumnType[] => {
   return [
     {
@@ -47,6 +50,7 @@ export const ODCColumns = (
         <>
           <IconButton
             onClick={() => {
+              setSuccessError(SucErrData);
               setFormContext("Edit");
               setIdx(row.original.id);
             }}
@@ -56,6 +60,7 @@ export const ODCColumns = (
           </IconButton>
           <IconButton
             onClick={() => {
+              setSuccessError(SucErrData);
               setFormContext("Delete");
               setIdx(row.original.id);
             }}
@@ -111,6 +116,7 @@ export const EditHolidayColumn = (
   setHolIdx: (holIdx: number[]) => void,
   handleDeleteHoliday: (id: string, holidayId: number) => void,
   handleUpdateHoliday: (data: HolidayParam) => void,
+  setSuccessError: (sucErr: SucErrType) => void,
 ): Column<HolidayParam>[] => {
   return [
     {
@@ -164,13 +170,19 @@ export const EditHolidayColumn = (
           {(!holIdx.includes(row.original.id) && row.original.id !== 0) && (
             <>
               <IconButton
-                onClick={() => setHolIdx([...holIdx, row.original.id])}
+                onClick={() => {
+                  setSuccessError(SucErrData);
+                  setHolIdx([...holIdx, row.original.id]);
+                }}
                 aria-label={`edit-${row.index}`}
               >
                 <SvgIcon name="edit" $size={2} />
               </IconButton>
               <IconButton
-                onClick={() => handleDeleteHoliday(row.original.odcId, row.original.id)}
+                onClick={() => {
+                  setSuccessError(SucErrData);
+                  handleDeleteHoliday(row.original.odcId, row.original.id);
+                }}
                 aria-label={`delete-${row.index}`}
               >
                 <SvgIcon name="delete" $size={2} />

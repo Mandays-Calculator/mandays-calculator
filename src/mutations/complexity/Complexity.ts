@@ -15,7 +15,7 @@ import {
 } from "~/api/complexity";
 
 export const usePostComplexities = () =>
-  useMutation<PostComplexities, Error, ForPostComplexities[]>(postComplexities);
+  useMutation<PostComplexities, Error, ForPostComplexities>(postComplexities);
 
 export const usePutComplexities = () =>
   useMutation<PutComplexities, Error, ForPutComplexities>(putComplexities);

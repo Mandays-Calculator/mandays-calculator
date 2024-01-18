@@ -50,3 +50,7 @@ export interface MandaysForm {
   legend: LegendColumn[];
   tasks: TaskType[];
 }
+export interface ReviewSummaryType extends MandaysForm {
+  sprintName: string;
+  mode: EstimationDetailsMode;
+}

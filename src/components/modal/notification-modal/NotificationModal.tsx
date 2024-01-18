@@ -144,6 +144,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
         <Box display="flex" justifyContent="center" textAlign={"center"}>
           {onCloseLabel && (
             <Button
+              data-testid="close-button"
               variant="outlined"
               onClick={handleClose}
               sx={{ mr: 3, width: 150, fontSize: 14 }}
@@ -154,6 +155,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
           <CustomButton
             variant="contained"
+            data-testid="confirm-button"
             colorVariant={type !== "success" ? "error" : "primary"}
             sx={{ width: 150, fontSize: 14 }}
             onClick={() => {

@@ -34,11 +34,11 @@ It is particularly useful in industries where projects are planned and executed 
 3. Install the project dependencies:
    `npm install`
 
-4. Update the Secret Key from Keycloak Configuration:
+4. Update your configuration by adding .env file (you can ask your lead for the reference file):
 
-- Access [Mandays Calculator Realm](http://localhost:8080/admin/master/console/#/mandays-calculator)
-- Locate the Clients Tab and select the mc-client.
-- Copy the Secret Key and update `VITE_SECRET_KEY` in your Vite .env file.
+VITE_ENVIRONMENT=""
+VITE_KEY=""
+VITE_IV=""
 
 5. Start the development server:
    `npm run dev`
@@ -77,11 +77,6 @@ Before making any contributions, please read our [coding standards](./CODING_STA
 #### **Routing:**
 
 - [react-router-dom](https://reactrouter.com/web/guides/quick-start)
-
-#### **Authentication:**
-
-- [keycloak-js](https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter)
-- [React-oidc-context](https://github.com/AxaGuilDEv/react-oidc-context)
 
 #### **API Integration:**
 
