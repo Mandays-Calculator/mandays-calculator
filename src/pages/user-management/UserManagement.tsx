@@ -47,7 +47,9 @@ const UserManagement = (): ReactElement => {
         employeeId: values.employeeId,
         odcId: values.odcId || "",
         careerStep: values.careerStep || "",
-        joiningDate: values.joiningDate || moment().format("YYYY-MM-DD"),
+        joiningDate:
+          moment(values.joiningDate).format("YYYY-MM-DD") ||
+          moment().format("YYYY-MM-DD"),
         projectId: values.projectId || "",
         teamId: values.teamId || "",
         roles: values.roles || [],
