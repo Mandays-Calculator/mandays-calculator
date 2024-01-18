@@ -9,7 +9,7 @@ interface AlertProps {
 }
 
 const AlertAction: React.FC<AlertProps> = ({ message, type }) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState<boolean>(true);
 
   return (
     <>
