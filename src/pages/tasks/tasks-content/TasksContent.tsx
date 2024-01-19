@@ -79,6 +79,14 @@ const StyledCreateTaskIconButton = styled(Grid)(
   })
 );
 
+const StyledNodata = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "60vh",
+});
+
 const TasksContent = (): ReactElement => {
   const { data: tasksData } = useTasks("a0f17dfd-aaa8-11ee-a5cd-a0291936d3a2");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
@@ -226,11 +234,11 @@ const TasksContent = (): ReactElement => {
                 options={[
                   {
                     value: "1",
-                    label: "Team 1",
+                    label: "MC",
                   },
                   {
                     value: "2",
-                    label: "Team 2",
+                    label: "BME",
                   },
                 ]}
                 onChange={(e) => handleTeamFilter(e)}
@@ -327,33 +335,27 @@ const TasksContent = (): ReactElement => {
               );
             })}
           </Grid>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "60vh",
-            }}
-          >
-            <img src={NoTask} alt="error" />
-            <Typography variant="h5" fontWeight="bold">
-              {t(LocalizationKey.tasks.errorMessage.error)}
-            </Typography>
-            <Typography variant="body2" fontWeight="bold">
-              {t(LocalizationKey.tasks.errorMessage.started)}
-              <span
-                style={{
-                  color: "#2C8ED1",
-                  cursor: "pointer",
-                  paddingLeft: "3px",
-                }}
-                onClick={handleCreateModalState}
-              >
-                {t(LocalizationKey.tasks.errorMessage.created)}
-              </span>
-            </Typography>
-          </div>
+          {tasks.length === 0 ? (
+            <StyledNodata>
+              <img src={NoTask} alt="error" />
+              <Typography variant="h5" fontWeight="bold">
+                {t(LocalizationKey.tasks.errorMessage.error)}
+              </Typography>
+              <Typography variant="body2" fontWeight="bold">
+                {t(LocalizationKey.tasks.errorMessage.started)}
+                <span
+                  style={{
+                    color: "#2C8ED1",
+                    cursor: "pointer",
+                    paddingLeft: "3px",
+                  }}
+                  onClick={handleCreateModalState}
+                >
+                  {t(LocalizationKey.tasks.errorMessage.created)}
+                </span>
+              </Typography>
+            </StyledNodata>
+          ) : null}
         </PageContainer>
       </DragDropContext>
       <ErrorMessage error={errorMessage} type="alert" />
