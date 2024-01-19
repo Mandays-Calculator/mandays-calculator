@@ -226,11 +226,11 @@ const TasksContent = (): ReactElement => {
                 options={[
                   {
                     value: "1",
-                    label: "Team 1",
+                    label: "MC",
                   },
                   {
                     value: "2",
-                    label: "Team 2",
+                    label: "BME",
                   },
                 ]}
                 onChange={(e) => handleTeamFilter(e)}
