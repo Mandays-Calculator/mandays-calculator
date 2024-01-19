@@ -19,7 +19,7 @@ const ActionButtons = (props: ActionButtonsProps): ReactElement => {
     props;
   const { common } = LocalizationKey;
   const { t } = useTranslation();
-  console.log(mode, "mode", activeTab);
+
   return (
     <Stack
       display="flex"

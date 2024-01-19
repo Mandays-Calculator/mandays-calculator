@@ -40,8 +40,6 @@ const UserList = ({
     setRowId(rowId);
   };
 
-  console.log(isSuccessAddUser, "issuccessadduser");
-
   useEffect(() => {
     userList.refetch();
   }, [isSuccessAddUser]);
