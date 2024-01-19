@@ -163,6 +163,15 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                 <Typography>{newTask ? newTask.completionDate : ""}</Typography>
               </Stack>
             </Grid>
+
+            <Grid item xs={6}>
+              <Stack gap={1}>
+                <Typography style={styles.styledTypographyBold}>
+                  Sprint
+                </Typography>
+                <Typography>Sprint #{newTask ? newTask.sprint : ""}</Typography>
+              </Stack>
+            </Grid>
             <Grid
               item
               xs={6}
@@ -176,15 +185,6 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                 checked={openMarkCompleted}
                 onClick={() => setMarkCompleted(true)}
               />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Stack gap={1}>
-                <Typography style={styles.styledTypographyBold}>
-                  Sprint
-                </Typography>
-                <Typography>Sprint #{newTask ? newTask.sprint : ""}</Typography>
-              </Stack>
             </Grid>
             <Grid item xs={12}>
               <Typography style={styles.styledTypographyBold}>Tags</Typography>

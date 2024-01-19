@@ -166,9 +166,11 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                   }
                   value={newTask.functionality}
                   options={[
-                    { value: "functionality1", label: "Functionality 1" },
-                    { value: "functionality2", label: "Functionality 2" },
-                    { value: "functionality3", label: "Functionality 3" },
+                    { value: "functionality1", label: "DESIGN/UI" },
+                    { value: "functionality2", label: "ADD" },
+                    { value: "functionality3", label: "UPDATE" },
+                    { value: "functionality4", label: "DELETE" },
+                    { value: "functionality4", label: "INTEGRATION" },
                   ]}
                 />
               </Stack>
@@ -201,9 +203,10 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                   value={newTask.complexity}
                   // options={complexityList}
                   options={[
-                    { value: "complexity1", label: "Complexity 1" },
-                    { value: "complexity2", label: "Complexity 2" },
-                    { value: "complexity3", label: "Complexity 3" },
+                    { value: "complexity1", label: "Low" },
+                    { value: "complexity2", label: "Medium" },
+                    { value: "complexity3", label: "High" },
+                    { value: "complexity4", label: "Extreme" },
                   ]}
                 />
               </Stack>
