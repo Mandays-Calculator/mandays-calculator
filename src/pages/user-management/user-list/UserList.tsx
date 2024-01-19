@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from "react";
+import { useState, type ReactElement, useEffect } from "react";
 
 import { PageLoader, Table } from "~/components";
 
@@ -13,9 +13,13 @@ import { useDeleteUser } from "~/mutations/user-management";
 
 interface UserListProps {
   userListData?: UserListData[];
+  isSuccessAddUser?: boolean;
 }
 
-const UserList = ({ userListData }: UserListProps): ReactElement => {
+const UserList = ({
+  userListData,
+  isSuccessAddUser,
+}: UserListProps): ReactElement => {
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
   const userList = useUserList();
@@ -29,6 +33,10 @@ const UserList = ({ userListData }: UserListProps): ReactElement => {
     setEditModalOpen(true);
     setCurrentUserData(currentSelectedUser);
   };
+
+  useEffect(() => {
+    userList.refetch();
+  }, [isSuccessAddUser]);
 
   const handleDeleteUser = (userId: string, rowId: number): void => {
     setDeleteModalOpen(true);
