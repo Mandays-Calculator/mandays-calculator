@@ -74,7 +74,7 @@ const TaskDetailsCard = ({
       </div>
       <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>
-        Complexity Rating: {data?.complexity.name}
+        Complexity Rating: {data?.complexity?.name}
       </div>
 
       <Stack direction={"row"} flexWrap="wrap" gap={0.5}>
