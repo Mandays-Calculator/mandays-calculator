@@ -11,12 +11,15 @@ type ActionButtonsProps = {
   handleSave: () => void;
   activeTab: number;
   length: number;
+  mode: "view" | "edit" | "add";
 };
 
 const ActionButtons = (props: ActionButtonsProps): ReactElement => {
-  const { handleBackEvent, handleNext, handleSave, activeTab, length } = props;
+  const { handleBackEvent, handleNext, handleSave, activeTab, length, mode } =
+    props;
   const { common } = LocalizationKey;
   const { t } = useTranslation();
+  console.log(mode, "mode", activeTab);
   return (
     <Stack
       display="flex"
@@ -32,18 +35,18 @@ const ActionButtons = (props: ActionButtonsProps): ReactElement => {
         {t(common.backBtn)}
       </CustomButton>
       {activeTab < length && (
-        <CustomButton
-          onClick={handleNext}
-          type="button"
-        >
-          {t(common.nextBtn)}
-        </CustomButton>
+        <>
+          {((mode === "view" && activeTab < 3) ||
+            mode === "add" ||
+            mode === "edit") && (
+            <CustomButton onClick={handleNext} type="button">
+              {t(common.nextBtn)}
+            </CustomButton>
+          )}
+        </>
       )}
       {length === activeTab && (
-        <CustomButton
-          onClick={handleSave}
-          type="submit"
-        >
+        <CustomButton onClick={handleSave} type="submit">
           {t(common.saveBtn)}
         </CustomButton>
       )}
