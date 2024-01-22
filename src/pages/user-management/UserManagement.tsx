@@ -124,7 +124,10 @@ const UserManagement = (): ReactElement => {
                 setErrorAddUser(false), setSuccessAddUser(false);
               }}
             />
-            <UserList userListData={filteredData} />
+            <UserList
+              isSuccessAddUser={successAddUser}
+              userListData={filteredData}
+            />
           </Stack>
         </Form>
       </PageContainer>
