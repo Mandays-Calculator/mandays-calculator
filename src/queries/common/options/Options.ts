@@ -1,7 +1,12 @@
 import type { UserListResponse } from "~/api/user-management";
 import type { OdcListResponse } from "~/api/odc";
-import type { RoleTypeResponse } from "~/api/common";
+import type {
+  CareerStepResponse,
+  CountryResponse,
+  RoleTypeResponse,
+} from "~/api/common";
 import type { ForGetComplexities, GetComplexities } from "~/api/complexity";
+import type { ProjectListResponse } from "~/api/projects";
 import type {
   CommonDataResponse,
   CommonType,
@@ -13,11 +18,13 @@ import { useQuery, UseQueryResult } from "react-query";
 
 import { getODC } from "~/api/odc/ODC";
 import { getComplexities } from "~/api/complexity";
-import { getRoles } from "~/api/common/Common";
+import { getCareerSteps, getCountries, getRoles } from "~/api/common/Common";
+import { getProjects } from "~/api/projects";
+
 import { getUserList } from "~/api/user-management/UserManagement";
 
 // Mock options
-import { genders, CAREER_STEPS } from "~/utils/constants";
+import { genders } from "~/utils/constants";
 
 const cacheTime: number = 1000 * 60 * 60 * 24;
 
@@ -42,7 +49,20 @@ const transformDataToOption = (
       case "gender":
         return genders;
       case "career_step":
-        return CAREER_STEPS;
+        return data.map((item: CommonResponseDataObj) => ({
+          label: item.careerStep,
+          value: item.careerStep,
+        }));
+      case "country":
+        return data.map((item: CommonResponseDataObj) => ({
+          label: item.name,
+          value: item.cca2,
+        }));
+      case "project":
+        return data.map((item: CommonResponseDataObj) => ({
+          label: item.name,
+          value: item.projectId,
+        }));
       case "complexity":
       case "odc":
       default:
@@ -88,6 +108,25 @@ const getCommonOption = <T>(
           cacheTime: cacheTime,
         }
       );
+    case "project":
+      return useQuery<ProjectListResponse, Error>("projectList", getProjects, {
+        staleTime: Infinity,
+        cacheTime: cacheTime,
+      });
+    case "country":
+      return useQuery<CountryResponse[], Error>("countries", getCountries, {
+        staleTime: Infinity,
+        cacheTime: cacheTime,
+      });
+    case "career_step":
+      return useQuery<CareerStepResponse[], Error>(
+        "careerSteps",
+        getCareerSteps,
+        {
+          staleTime: Infinity,
+          cacheTime: cacheTime,
+        }
+      );
     default:
       return [{ label: "", value: "" }] as unknown as UseQueryResult<T, Error>;
     // {
@@ -98,7 +137,7 @@ const getCommonOption = <T>(
   }
 };
 
-export const useCommonOption = (type: CommonType, params: any) => {
+export const useCommonOption = (type: CommonType, params?: any) => {
   const queryResult = getCommonOption<CommonDataResponse>(type, params);
   return transformDataToOption(queryResult, type);
 };
