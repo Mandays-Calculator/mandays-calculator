@@ -34,6 +34,10 @@ const UserList = ({
     setCurrentUserData(currentSelectedUser);
   };
 
+  useEffect(() => {
+    userList.refetch();
+  }, [isSuccessAddUser]);
+
   const handleDeleteUser = (userId: string, rowId: number): void => {
     setDeleteModalOpen(true);
     setCurrentUser(userId);

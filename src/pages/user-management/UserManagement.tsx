@@ -125,8 +125,8 @@ const UserManagement = (): ReactElement => {
               }}
             />
             <UserList
-              userListData={filteredData}
               isSuccessAddUser={successAddUser}
+              userListData={filteredData}
             />
           </Stack>
         </Form>
