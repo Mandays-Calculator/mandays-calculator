@@ -24,7 +24,7 @@ interface CreateModalProps {
 }
 
 const initialTaskState: AllTasksResponse = {
-  taskID: "1",
+  taskID: "",
   name: "",
   description: "",
   createdDate: "11/16/2023",

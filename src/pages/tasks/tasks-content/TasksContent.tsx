@@ -123,10 +123,21 @@ const TasksContent = (): ReactElement => {
   const handleCloseCreateModalState = () => {
     setCreateModalOpen(false);
   };
+  const generateUniqueTaskID = () => {
+    const timestamp = new Date().getTime();
+    return `${timestamp}`;
+  };
 
   const handleCreateTask = (task: AllTasksResponse | null) => {
     if (task) {
-      const updatedMockData = [...tasks, task];
+      const newTaskID = generateUniqueTaskID();
+
+      const updatedTask = {
+        ...task,
+        taskID: newTaskID,
+      };
+
+      const updatedMockData = [...tasks, updatedTask];
       setTasks(updatedMockData);
     }
   };
@@ -173,7 +184,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find((task) => task.name === draggableId);
+    const draggedTask = tasks.find((task) => task.taskID === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -182,7 +193,7 @@ const TasksContent = (): ReactElement => {
     ) {
       if (draggedTask) {
         const updatedMockData = tasks.map((task) => {
-          if (task.name === draggableId) {
+          if (task.taskID === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -296,8 +307,8 @@ const TasksContent = (): ReactElement => {
                             {task.status === Status.Backlog ||
                             task.status === Status.OnHold ? (
                               <Draggable
-                                key={task.name}
-                                draggableId={task.name}
+                                key={task.taskID}
+                                draggableId={task.taskID}
                                 index={index}
                               >
                                 {(provided) => (
