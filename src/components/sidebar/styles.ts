@@ -109,12 +109,12 @@ div {
 
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== "open",
-})<{ open: boolean; permissionsLength: number }>(
-  ({ open, theme, permissionsLength }) => ({
+})<{ open: boolean; permissionslength: number }>(
+  ({ open, theme, permissionslength }) => ({
     padding: open ? "0 0.7rem" : 0,
 
     [theme.breakpoints.down("xl")]: {
-      ...(permissionsLength > 9 && {
+      ...(permissionslength > 9 && {
         overflowY: "scroll",
         overflowX: "hidden",
         maxHeight: "80%",
