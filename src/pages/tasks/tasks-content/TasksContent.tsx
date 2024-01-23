@@ -24,6 +24,7 @@ import NoTask from "~/assets/img/empty_tasks.png";
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
 import { ConfirmModal } from "~/components";
+import { useUserAuth } from "~/hooks/user";
 import { useTasks } from "~/queries/tasks/Tasks";
 
 import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
@@ -89,7 +90,11 @@ const StyledNodata = styled("div")({
 });
 
 const TasksContent = (): ReactElement => {
-  const { data: tasksData } = useTasks("a2eb9f01-6e4e-11ee-8624-a0291936d1c2");
+  const {
+    state: { user },
+  } = useUserAuth();
+  const { data: tasksData } = useTasks(user?.id ?? "");
+  const name = `${user?.firstName} ${user?.lastName}`;
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
@@ -254,6 +259,7 @@ const TasksContent = (): ReactElement => {
             open={viewDetailsModalOpen}
             onClose={handleCloseViewDetailsModalState}
             task={selectedTask}
+            name={name}
             onSave={handleUpdateTask}
           />
 

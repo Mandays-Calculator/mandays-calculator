@@ -47,16 +47,23 @@ interface EditTaskProps {
   onClose: () => void;
   task: AllTasksResponse | null;
   onSave: (updatedTask: AllTasksResponse) => void;
+  name: string;
 }
 
-const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
+const EditTask: React.FC<EditTaskProps> = ({
+  open,
+  onClose,
+  task,
+  onSave,
+  name,
+}) => {
   const [newTask, setNewTask] = useState<AllTasksResponse | null>(task);
   const [openMarkCompleted, setMarkCompleted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<{
     name: string;
     comment: string;
   }>({
-    name: "Zad Geron",
+    name: name,
     comment: "",
   });
 
