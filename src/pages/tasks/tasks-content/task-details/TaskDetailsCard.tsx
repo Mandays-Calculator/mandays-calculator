@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 
 import { Box, Stack } from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
@@ -8,6 +8,7 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
+import { ConfirmModal } from "~/components";
 
 import { AllTasksResponse } from "~/api/tasks";
 
@@ -47,7 +48,6 @@ const styles = {
       marginBottom: 5,
     },
   },
-  // Define other styles similarly for different elements
 };
 
 interface TaskDetailsCardProps {
@@ -63,7 +63,20 @@ const TaskDetailsCard = ({
   handleViewDetails,
   onDelete,
 }: TaskDetailsCardProps): ReactElement => {
-  console.log("tasks data", data);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleDeleteClick = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+    e.stopPropagation();
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    onDelete(data);
+    setDeleteModalOpen(false);
+  };
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
   return (
     <PageContainer onClick={() => handleViewDetails(data)}>
       <div style={styles.taskTitle}>{data.name}</div>
@@ -113,10 +126,15 @@ const TaskDetailsCard = ({
                   : "",
               cursor: "pointer",
             }}
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(data);
+            onClick={(e: React.MouseEvent<SVGElement, MouseEvent>) => {
+              handleDeleteClick(e);
             }}
+          />
+          <ConfirmModal
+            open={deleteModalOpen}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            message={`Are you sure you want to delete task: ${data.name}?`}
           />
         </Stack>
       </Stack>

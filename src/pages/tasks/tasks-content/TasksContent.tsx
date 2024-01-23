@@ -146,9 +146,10 @@ const TasksContent = (): ReactElement => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
   };
-  const handleDelete = (name: string) => {
-    const deletedTask = tasks.filter((task) => task.name !== name);
+  const handleDelete = (task: AllTasksResponse) => {
+    const deletedTask = tasks.filter((t) => t.taskID !== task.taskID);
     setTasks(deletedTask);
+    setViewDetailsModalOpen(false);
   };
 
   const handleCloseUpdateModalState = () => {
@@ -323,7 +324,7 @@ const TasksContent = (): ReactElement => {
                                       handleViewDetails={
                                         handleViewDetailsModalState
                                       }
-                                      onDelete={() => handleDelete(task.name)}
+                                      onDelete={handleDelete}
                                     />
                                   </Stack>
                                 )}
@@ -333,7 +334,7 @@ const TasksContent = (): ReactElement => {
                                 data={task}
                                 handleEdit={handleUpdateModalState}
                                 handleViewDetails={handleViewDetailsModalState}
-                                onDelete={() => handleDelete(task.name)}
+                                onDelete={handleDelete}
                               />
                             )}
                           </Stack>
