@@ -97,7 +97,7 @@ const EditTask: React.FC<EditTaskProps> = ({
     if (newTask && newComment.comment.trim() !== "") {
       const updatedComments = [...(newTask.comments || []), newComment];
       setNewTask({ ...newTask, comments: updatedComments });
-      setNewComment({ name: "Zad Geron", comment: "" });
+      setNewComment({ name: name, comment: "" });
     }
   };
 
