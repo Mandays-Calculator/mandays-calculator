@@ -40,7 +40,7 @@ const projectListReducer = (state: typeof initialProjectListState, action: Actio
         let userCount = 0;
 
         response.teams.forEach((team) => {
-          userCount += team.teamMembers.length;
+          userCount += (team.teamMembers ?? []).length;
         });
 
         return {

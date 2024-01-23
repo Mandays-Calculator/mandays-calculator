@@ -172,7 +172,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
         teams: selectedProject.teams.map(
           ({ name, teamMembers, teamLead, ...team }) => ({
             ...team,
-            teamMembers: teamMembers.map((member) => {
+            teamMembers: (teamMembers ?? []).map((member) => {
               const memberName =
                 member.firstName && member.lastName
                   ? `${member.firstName}, ${member.lastName} ${
