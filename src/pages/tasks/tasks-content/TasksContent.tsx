@@ -235,13 +235,6 @@ const TasksContent = (): ReactElement => {
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
         <PageContainer>
-          <ConfirmModal
-            open={deleteModalOpen}
-            onClose={handleDeleteCancel}
-            onConfirm={handleDeleteConfirm}
-            message={`Are you sure you want to delete task: ${selectedTaskForDelete?.name}?`}
-          />
-
           <CreateOrUpdateTask
             open={createModalOpen}
             isCreate={true}
@@ -344,16 +337,14 @@ const TasksContent = (): ReactElement => {
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
-                                    {!deleteModalOpen && (
-                                      <TaskDetailsCard
-                                        data={task}
-                                        handleEdit={handleUpdateModalState}
-                                        handleViewDetails={
-                                          handleViewDetailsModalState
-                                        }
-                                        onDelete={() => handleDelete(task)}
-                                      />
-                                    )}
+                                    <TaskDetailsCard
+                                      data={task}
+                                      handleEdit={handleUpdateModalState}
+                                      handleViewDetails={
+                                        handleViewDetailsModalState
+                                      }
+                                      onDelete={() => handleDelete(task)}
+                                    />
                                   </Stack>
                                 )}
                               </Draggable>
@@ -399,6 +390,12 @@ const TasksContent = (): ReactElement => {
         </PageContainer>
       </DragDropContext>
       <ErrorMessage error={errorMessage} type="alert" />
+      <ConfirmModal
+        open={deleteModalOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        message={`Are you sure you want to delete task: ${selectedTaskForDelete?.name}?`}
+      />
     </>
   );
 };

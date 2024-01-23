@@ -63,7 +63,11 @@ const TaskDetailsCard = ({
   onDelete,
 }: TaskDetailsCardProps): ReactElement => {
   return (
-    <PageContainer onClick={() => handleViewDetails(data)}>
+    <PageContainer
+      onClick={() => {
+        handleViewDetails(data);
+      }}
+    >
       <div style={styles.taskTitle}>{data.name}</div>
       <div style={styles.marginBottom.mbFive}>{data.description}</div>
       <div style={styles.infoSection}>
