@@ -35,6 +35,7 @@ export const UserManagementFormValues: UserManagementForms = {
   roles: [],
   recentlyJoinedlaterDate: false,
 };
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
 export const UserManagementSchema = (t: TFunction) => {
   return yup.object({
@@ -48,7 +49,7 @@ export const UserManagementSchema = (t: TFunction) => {
     suffix: yup.string(),
     email: yup
       .string()
-      .email(t(userManagement.errorMessage.email))
+      .matches(emailRegex, t(userManagement.errorMessage.email))
       .required(t(common.errorMessage.required)),
     projectName: yup.string(),
     teamName: yup.string(),
