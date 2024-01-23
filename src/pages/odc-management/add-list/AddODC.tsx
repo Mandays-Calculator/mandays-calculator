@@ -12,11 +12,19 @@ import { useAddODC, useUpdateODC, useAddHoliday } from "~/mutations/odc";
 import { Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
-import { ControlledTextField, ControlledSelect } from "~/components/form/controlled";
+import {
+  ControlledTextField,
+  ControlledSelect,
+} from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
 import { country } from "~/utils/constants";
 
-import { IntValuesSchema, NewODCData, MutationOptions, MutationOptions2 } from "../utils";
+import {
+  IntValuesSchema,
+  NewODCData,
+  MutationOptions,
+  MutationOptions2,
+} from "../utils";
 import AddTable from "./AddTable";
 import EditTable from "./EditTable";
 import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
@@ -26,11 +34,14 @@ const AddODC = (props: AddProps): ReactElement => {
   const { apiData, data, formContext, setFormContext, setSuccessError } = props;
 
   const { t } = useTranslation();
-  const { odc: { label, btnlabel, validationInfo } } = LocalizationKey;
+  const {
+    odc: { label, btnlabel, validationInfo },
+  } = LocalizationKey;
 
   const ODCForm = useFormik<OdcParam>({
     initialValues: NewODCData,
     validationSchema: IntValuesSchema(t),
+    validateOnChange: false,
     onSubmit: (): void => {},
   });
 
@@ -44,19 +55,19 @@ const AddODC = (props: AddProps): ReactElement => {
     mutate: addMutation,
     isSuccess: isAddOdcSuccess,
     isError: isAddOdcError,
-    isLoading: isAddOdcLoading
+    isLoading: isAddOdcLoading,
   } = useAddODC();
   const {
     mutate: updateMutation,
     isSuccess: isUpdateOdcSuccess,
     isError: isUpdateOdcError,
-    isLoading: isUpdateOdcLoading
+    isLoading: isUpdateOdcLoading,
   } = useUpdateODC();
   const {
     mutate: addHolidayMutation,
     isSuccess: isAddHolidaySuccess,
     isError: isAddHolidayError,
-    isLoading: isAddHolidayLoading
+    isLoading: isAddHolidayLoading,
   } = useAddHoliday();
 
   const [nameUnqError, setNameUnqError] = useState<boolean>(false);
@@ -88,15 +99,25 @@ const AddODC = (props: AddProps): ReactElement => {
     if (isNameError) setNameUnqErrorMsg(t(validationInfo.nameUnq));
     else setNameUnqErrorMsg("");
 
-    const isAbbrError = IsDuplicate(apiData, values.abbreviation, "abbreviation", values.id);
+    const isAbbrError = IsDuplicate(
+      apiData,
+      values.abbreviation,
+      "abbreviation",
+      values.id
+    );
     setAbbrUnqError(isAbbrError);
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
     else setAbbrUnqErrorMsg("");
 
-    if (formContext === "Add" && !isNameError && !isAbbrError) {
+    if (
+      formContext === "Add" &&
+      !isNameError &&
+      !isAbbrError &&
+      values.name &&
+      values.location
+    ) {
       addMutation(AddFormat(values));
     }
-    
     if (formContext === "Edit" && !isNameError && !isAbbrError) {
       updateMutation(EditFormat(values));
       addHolidayMutation(AddHolidayFormat(values));
@@ -106,8 +127,8 @@ const AddODC = (props: AddProps): ReactElement => {
   const handleClose = (): void => setFormContext("");
 
   const handleError = (error: string | undefined): boolean => {
-		return error !== undefined;
-	};
+    return error !== undefined;
+  };
 
   return (
     <Form instance={ODCForm}>
@@ -137,32 +158,22 @@ const AddODC = (props: AddProps): ReactElement => {
             label={t(label.abbreviation)}
             id="abbreviation"
             error={handleError(errors.abbreviation) || abbrUnqError}
-            helperText={getFieldError(errors, "abbreviation") || abbrUnqErrorMsg}
+            helperText={
+              getFieldError(errors, "abbreviation") || abbrUnqErrorMsg
+            }
           />
         </Grid>
       </Grid>
-      {formContext === "Add" && (
-        <AddTable setSuccessError={setSuccessError} />
-      )}
+      {formContext === "Add" && <AddTable setSuccessError={setSuccessError} />}
       {formContext === "Edit" && (
         <EditTable odcId={data.id} setSuccessError={setSuccessError} />
       )}
       <Grid container spacing={2} alignItems="center" mt={1}>
         <Grid item xs={12} container justifyContent="flex-end">
-          <CustomButton
-            type="submit"
-            sx={{ mr: 2 }}
-            onClick={handleAddODC}
-          >
-            {formContext === "Add"
-              ? t(btnlabel.addOdc)
-              : t(btnlabel.save)
-            }
+          <CustomButton type="submit" sx={{ mr: 2 }} onClick={handleAddODC}>
+            {formContext === "Add" ? t(btnlabel.addOdc) : t(btnlabel.save)}
           </CustomButton>
-          <CustomButton
-            type="button"
-            onClick={handleClose}
-          >
+          <CustomButton type="button" onClick={handleClose}>
             {t(btnlabel.cancel)}
           </CustomButton>
         </Grid>
