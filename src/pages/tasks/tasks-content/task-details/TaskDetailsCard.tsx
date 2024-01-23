@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 
 import { Box, Stack } from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
@@ -8,7 +8,6 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 import theme from "~/theme";
 import { PageContainer } from "~/components/page-container";
-import { ConfirmModal } from "~/components";
 
 import { AllTasksResponse } from "~/api/tasks";
 
