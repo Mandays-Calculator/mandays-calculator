@@ -23,6 +23,7 @@ import LocalizationKey from "~/i18n/key";
 import NoTask from "~/assets/img/empty_tasks.png";
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
+import { ConfirmModal } from "~/components";
 import { useTasks } from "~/queries/tasks/Tasks";
 
 import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
@@ -91,6 +92,9 @@ const TasksContent = (): ReactElement => {
   const { data: tasksData } = useTasks("a2eb9f01-6e4e-11ee-8624-a0291936d1c2");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [selectedTaskForDelete, setSelectedTaskForDelete] =
+    useState<AllTasksResponse | null>(null);
 
   const { t } = useTranslation();
 
@@ -115,6 +119,26 @@ const TasksContent = (): ReactElement => {
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
     null
   );
+
+  const handleDeleteConfirm = () => {
+    if (selectedTaskForDelete) {
+      const { name } = selectedTaskForDelete;
+      const updatedTasks = tasks.filter((task) => task.name !== name);
+      setTasks(updatedTasks);
+    }
+    setDeleteModalOpen(false);
+    setSelectedTaskForDelete(null);
+  };
+
+  const handleDelete = (task: AllTasksResponse) => {
+    setSelectedTaskForDelete(task);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setSelectedTaskForDelete(null);
+  };
 
   const handleCreateModalState: () => void = () => {
     setCreateModalOpen(!createModalOpen);
@@ -145,11 +169,6 @@ const TasksContent = (): ReactElement => {
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
-  };
-  const handleDelete = (task: AllTasksResponse) => {
-    const deletedTask = tasks.filter((t) => t.taskID !== task.taskID);
-    setTasks(deletedTask);
-    setViewDetailsModalOpen(false);
   };
 
   const handleCloseUpdateModalState = () => {
@@ -216,6 +235,13 @@ const TasksContent = (): ReactElement => {
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
         <PageContainer>
+          <ConfirmModal
+            open={deleteModalOpen}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            message={`Are you sure you want to delete task: ${selectedTaskForDelete?.name}?`}
+          />
+
           <CreateOrUpdateTask
             open={createModalOpen}
             isCreate={true}
@@ -318,14 +344,16 @@ const TasksContent = (): ReactElement => {
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                   >
-                                    <TaskDetailsCard
-                                      data={task}
-                                      handleEdit={handleUpdateModalState}
-                                      handleViewDetails={
-                                        handleViewDetailsModalState
-                                      }
-                                      onDelete={handleDelete}
-                                    />
+                                    {!deleteModalOpen && (
+                                      <TaskDetailsCard
+                                        data={task}
+                                        handleEdit={handleUpdateModalState}
+                                        handleViewDetails={
+                                          handleViewDetailsModalState
+                                        }
+                                        onDelete={() => handleDelete(task)}
+                                      />
+                                    )}
                                   </Stack>
                                 )}
                               </Draggable>
@@ -334,7 +362,7 @@ const TasksContent = (): ReactElement => {
                                 data={task}
                                 handleEdit={handleUpdateModalState}
                                 handleViewDetails={handleViewDetailsModalState}
-                                onDelete={handleDelete}
+                                onDelete={() => handleDelete(task)}
                               />
                             )}
                           </Stack>

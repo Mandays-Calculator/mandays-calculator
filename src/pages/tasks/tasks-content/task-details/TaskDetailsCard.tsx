@@ -63,20 +63,6 @@ const TaskDetailsCard = ({
   handleViewDetails,
   onDelete,
 }: TaskDetailsCardProps): ReactElement => {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  const handleDeleteClick = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    e.stopPropagation();
-    setDeleteModalOpen(true);
-  };
-
-  const handleDeleteConfirm = () => {
-    onDelete(data);
-    setDeleteModalOpen(false);
-  };
-  const handleDeleteCancel = () => {
-    setDeleteModalOpen(false);
-  };
   return (
     <PageContainer onClick={() => handleViewDetails(data)}>
       <div style={styles.taskTitle}>{data.name}</div>
@@ -126,15 +112,10 @@ const TaskDetailsCard = ({
                   : "",
               cursor: "pointer",
             }}
-            onClick={(e: React.MouseEvent<SVGElement, MouseEvent>) => {
-              handleDeleteClick(e);
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(data);
             }}
-          />
-          <ConfirmModal
-            open={deleteModalOpen}
-            onClose={handleDeleteCancel}
-            onConfirm={handleDeleteConfirm}
-            message={`Are you sure you want to delete task: ${data.name}?`}
           />
         </Stack>
       </Stack>
