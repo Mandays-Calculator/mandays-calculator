@@ -57,7 +57,8 @@ const projectListReducer = (state: typeof initialProjectListState, action: Actio
 
     return { ...state, results: newResult, filteredResult: newResult };
   } else if (action.type === 'SEARCH') {
-    const filteredData = state.results.filter((row) => row.prjName.toLowerCase().includes(action.payload as string));
+    const searchedInput = (action.payload as string).toLowerCase();
+    const filteredData = state.results.filter((row) => row.prjName.toLowerCase().includes(searchedInput));
 
     return { ...state, filteredResult: filteredData, filteredText: action.payload as string };
   } else {
