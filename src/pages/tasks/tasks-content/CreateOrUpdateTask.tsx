@@ -63,7 +63,7 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
   reOpenCreateTask,
 }) => {
   const { t } = useTranslation();
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  // const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [newTask, setNewTask] = useState<AllTasksResponse>(
     task || initialTaskState
   );
@@ -84,7 +84,7 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
     onClose();
   };
 
-  const handleSelectChange = (name: string, value: string) => {
+  const handleSelectChange = (name: string, value: string | string[]) => {
     setNewTask((prevTask) => ({
       ...prevTask,
       [name]: value,
@@ -225,8 +225,13 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                 )}
                 multiple={true}
                 fullWidth
-                onChange={(e) => setSelectedTags(e.target.value as string[])}
-                value={selectedTags}
+                onChange={(e) =>
+                  handleSelectChange(
+                    "tags",
+                    e.target.value as string | string[]
+                  )
+                }
+                value={Array.isArray(newTask.tags) ? newTask.tags : []}
                 options={[
                   { value: "tag1", label: "Tag 1" },
                   { value: "tag2", label: "Tag 2" },
