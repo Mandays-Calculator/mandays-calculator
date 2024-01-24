@@ -84,6 +84,7 @@
   "tasks": {
     "createTask": {
       "modalTitle": "Create New Task",
+      "complexity": "Complexity Details",
       "label": {
         "taskTitle": "Task Title",
         "description": "Description",
@@ -97,7 +98,8 @@
         "tags": "Tags"
       },
       "btnLabel": {
-        "create": "Create"
+        "create": "Create",
+        "close": "Close"
       }
     },
     "updateTask": {
@@ -105,6 +107,11 @@
       "btnLabel": {
         "update": "Update"
       }
+    },
+    "errorMessage": {
+      "error": "No tasks currently visible",
+      "started": "Get started and",
+      "created": "create a task"
     }
   },
   "user": {
