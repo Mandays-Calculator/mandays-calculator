@@ -10,14 +10,13 @@ import LocalizationKey from "~/i18n/key";
 import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
 
-// import { useGetComplexities } from "~/queries/complexity/Complexities";
-
 import ComplexityDetails from "./complexity-details";
 
 interface CreateModalProps {
   open: boolean;
   isCreate: boolean;
   task?: AllTasksResponse | null;
+  complexities: SelectObject[];
   onClose: () => void;
   onCreateTask: (task: AllTasksResponse) => void;
   reOpenCreateTask: () => void;
@@ -58,12 +57,12 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
   open,
   isCreate,
   task,
+  complexities,
   onClose,
   onCreateTask,
   reOpenCreateTask,
 }) => {
   const { t } = useTranslation();
-  // const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [newTask, setNewTask] = useState<AllTasksResponse>(
     task || initialTaskState
   );
@@ -95,18 +94,6 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
     setOpenComplexity(!openComplexity);
     onClose();
   };
-
-  // const complexities = useGetComplexities();
-
-  // const complexityData = complexities.data;
-  // const complexityList = Array.isArray(complexityData)
-  //   ? complexityData?.map((data) => {
-  //       return {
-  //         label: data.name,
-  //         value: data.id,
-  //       };
-  //     })
-  //   : [];
 
   return (
     <>
@@ -201,13 +188,7 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                     handleSelectChange("complexity", e.target.value as string)
                   }
                   value={newTask.complexity}
-                  // options={complexityList}
-                  options={[
-                    { value: "complexity1", label: "Low" },
-                    { value: "complexity2", label: "Medium" },
-                    { value: "complexity3", label: "High" },
-                    { value: "complexity4", label: "Extreme" },
-                  ]}
+                  options={complexities}
                 />
               </Stack>
             </Grid>
