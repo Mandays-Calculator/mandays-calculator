@@ -101,6 +101,7 @@ const EditTask: React.FC<EditTaskProps> = ({
     }
   };
 
+  console.log(newTask);
   return (
     <>
       <Modal
@@ -197,8 +198,18 @@ const EditTask: React.FC<EditTaskProps> = ({
               <Typography style={styles.styledTypographyBold}>Tags</Typography>
 
               <Stack direction="row" gap={0.5} flexWrap="wrap">
-                <Box style={styles.tags.bug}>Bug</Box>
-                <Box style={styles.tags.needWork}>Needs Work</Box>
+                {(newTask?.tags || []).map((tag, index) => (
+                  <Box
+                    style={
+                      typeof tag === "string" && tag === "Bug"
+                        ? styles.tags.bug
+                        : styles.tags.needWork
+                    }
+                    key={index}
+                  >
+                    {String(tag)}
+                  </Box>
+                ))}
               </Stack>
             </Grid>
           </Grid>
