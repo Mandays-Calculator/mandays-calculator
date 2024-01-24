@@ -14,7 +14,7 @@ const ImageUpload = ({
   name,
   setFieldValue,
 }: ImageUploadProps): ReactElement => {
-  const [base64Image, setBase64Image] = useState<string>("");
+  const [base64Image, setBase64Image] = useState<string>(name);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;

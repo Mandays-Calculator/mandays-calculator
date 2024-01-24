@@ -86,7 +86,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const submit = () => {
     callApi(EditUserForm);
   };
-
   const form = useFormikContext<UpdateUserManagementParams>();
   useEffect(() => {
     form.setValues({
@@ -127,7 +126,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           <Grid item xs={3.5}>
             <Stack>
               <ImageUpload
-                name="updateImage"
+                name={currentUser?.image ?? ""}
                 setFieldValue={form.setFieldValue}
               />
             </Stack>
