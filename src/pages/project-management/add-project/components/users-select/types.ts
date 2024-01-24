@@ -18,4 +18,5 @@ export interface UsersSelectProps {
   textFieldProps?: TextFieldProps;
   inputProps?: InputProps;
   dataTestId?: string;
+  type?: "autocomplete" | "modal-select";
 }

@@ -8,13 +8,16 @@ import type {
 
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
-import { Grid, Typography, Stack, /*Box*/ } from "@mui/material";
-import { /*Table,*/ TextField, /*ErrorMessage,*/ ConfirmModal } from "~/components";
+import { Grid, Typography, Stack /*Box*/ } from "@mui/material";
+import {
+  /*Table,*/ TextField,
+  /*ErrorMessage,*/ ConfirmModal,
+} from "~/components";
 import { CustomButton } from "~/components/form/button";
 // import { useTimeout } from "../../utils/functions";
 // import { TeamListColumns } from "../../utils/columns";
 import DialogSearchUser from "./DialogSearchUser";
-import UsersSelect from "../components/users-select/UsersSelect";
+import UsersSelect from "../components/users-select/UsersSelectInput";
 
 interface EditTeamFormProps {
   teamIndex: number;
@@ -83,7 +86,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
 
       //   triggerTimeout(() => setErrorEditTeamMsg(""));
       // } else {
-        onCancel(teamIndex);
+      onCancel(teamIndex);
       // }
     }
   };
