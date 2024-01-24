@@ -59,6 +59,11 @@ const UserManagement = (): ReactElement => {
       callApi(AddUserForm);
     },
   });
+
+  useEffect(() => {
+    UserManagementForm.resetForm();
+  }, [successAddUser]);
+
   const { data } = useUserList();
   const [filteredData, setFilteredData] = useState<UserListData[]>([]);
   useEffect(() => {

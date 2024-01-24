@@ -23,6 +23,8 @@ import LocalizationKey from "~/i18n/key";
 import NoTask from "~/assets/img/empty_tasks.png";
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
+import { ConfirmModal } from "~/components";
+import { useUserAuth } from "~/hooks/user";
 import { useTasks } from "~/queries/tasks/Tasks";
 
 import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
@@ -88,9 +90,16 @@ const StyledNodata = styled("div")({
 });
 
 const TasksContent = (): ReactElement => {
-  const { data: tasksData } = useTasks("a0f17dfd-aaa8-11ee-a5cd-a0291936d3a2");
+  const {
+    state: { user },
+  } = useUserAuth();
+  const { data: tasksData } = useTasks(user?.id ?? "");
+  const name = `${user?.firstName} ${user?.lastName}`;
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [selectedTaskForDelete, setSelectedTaskForDelete] =
+    useState<AllTasksResponse | null>(null);
 
   const { t } = useTranslation();
 
@@ -116,6 +125,26 @@ const TasksContent = (): ReactElement => {
     null
   );
 
+  const handleDeleteConfirm = () => {
+    if (selectedTaskForDelete) {
+      const { name } = selectedTaskForDelete;
+      const updatedTasks = tasks.filter((task) => task.name !== name);
+      setTasks(updatedTasks);
+    }
+    setDeleteModalOpen(false);
+    setSelectedTaskForDelete(null);
+  };
+
+  const handleDelete = (task: AllTasksResponse) => {
+    setSelectedTaskForDelete(task);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setSelectedTaskForDelete(null);
+  };
+
   const handleCreateModalState: () => void = () => {
     setCreateModalOpen(!createModalOpen);
   };
@@ -123,10 +152,21 @@ const TasksContent = (): ReactElement => {
   const handleCloseCreateModalState = () => {
     setCreateModalOpen(false);
   };
+  const generateUniqueTaskID = () => {
+    const timestamp = new Date().getTime();
+    return `${timestamp}`;
+  };
 
   const handleCreateTask = (task: AllTasksResponse | null) => {
     if (task) {
-      const updatedMockData = [...tasks, task];
+      const newTaskID = generateUniqueTaskID();
+
+      const updatedTask = {
+        ...task,
+        taskID: newTaskID,
+      };
+
+      const updatedMockData = [...tasks, updatedTask];
       setTasks(updatedMockData);
     }
   };
@@ -134,10 +174,6 @@ const TasksContent = (): ReactElement => {
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
-  };
-  const handleDelete = (name: string) => {
-    const deletedTask = tasks.filter((task) => task.name !== name);
-    setTasks(deletedTask);
   };
 
   const handleCloseUpdateModalState = () => {
@@ -173,7 +209,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find((task) => task.name === draggableId);
+    const draggedTask = tasks.find((task) => task.taskID === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -182,7 +218,7 @@ const TasksContent = (): ReactElement => {
     ) {
       if (draggedTask) {
         const updatedMockData = tasks.map((task) => {
-          if (task.name === draggableId) {
+          if (task.taskID === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -223,6 +259,7 @@ const TasksContent = (): ReactElement => {
             open={viewDetailsModalOpen}
             onClose={handleCloseViewDetailsModalState}
             task={selectedTask}
+            name={name}
             onSave={handleUpdateTask}
           />
 
@@ -296,8 +333,8 @@ const TasksContent = (): ReactElement => {
                             {task.status === Status.Backlog ||
                             task.status === Status.OnHold ? (
                               <Draggable
-                                key={task.name}
-                                draggableId={task.name}
+                                key={task.taskID}
+                                draggableId={task.taskID}
                                 index={index}
                               >
                                 {(provided) => (
@@ -312,7 +349,7 @@ const TasksContent = (): ReactElement => {
                                       handleViewDetails={
                                         handleViewDetailsModalState
                                       }
-                                      onDelete={() => handleDelete(task.name)}
+                                      onDelete={() => handleDelete(task)}
                                     />
                                   </Stack>
                                 )}
@@ -322,7 +359,7 @@ const TasksContent = (): ReactElement => {
                                 data={task}
                                 handleEdit={handleUpdateModalState}
                                 handleViewDetails={handleViewDetailsModalState}
-                                onDelete={() => handleDelete(task.name)}
+                                onDelete={() => handleDelete(task)}
                               />
                             )}
                           </Stack>
@@ -359,6 +396,12 @@ const TasksContent = (): ReactElement => {
         </PageContainer>
       </DragDropContext>
       <ErrorMessage error={errorMessage} type="alert" />
+      <ConfirmModal
+        open={deleteModalOpen}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        message={`Are you sure you want to delete task: ${selectedTaskForDelete?.name}?`}
+      />
     </>
   );
 };

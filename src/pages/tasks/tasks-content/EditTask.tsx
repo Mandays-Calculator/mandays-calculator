@@ -47,16 +47,23 @@ interface EditTaskProps {
   onClose: () => void;
   task: AllTasksResponse | null;
   onSave: (updatedTask: AllTasksResponse) => void;
+  name: string;
 }
 
-const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
+const EditTask: React.FC<EditTaskProps> = ({
+  open,
+  onClose,
+  task,
+  onSave,
+  name,
+}) => {
   const [newTask, setNewTask] = useState<AllTasksResponse | null>(task);
   const [openMarkCompleted, setMarkCompleted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<{
     name: string;
     comment: string;
   }>({
-    name: "Zad Geron",
+    name: name,
     comment: "",
   });
 
@@ -90,7 +97,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
     if (newTask && newComment.comment.trim() !== "") {
       const updatedComments = [...(newTask.comments || []), newComment];
       setNewTask({ ...newTask, comments: updatedComments });
-      setNewComment({ name: "Zad Geron", comment: "" });
+      setNewComment({ name: name, comment: "" });
     }
   };
 
@@ -136,7 +143,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                   </Typography>
                 </Stack>
                 <Typography>
-                  {newTask ? newTask.complexity.name : ""}
+                  {newTask ? newTask.complexity?.name : ""}
                 </Typography>
               </Stack>
             </Grid>

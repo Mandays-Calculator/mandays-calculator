@@ -40,7 +40,7 @@ const Drawer = (): ReactElement => {
         <StyledDrawer variant="permanent" open={open}>
           <StyledList
             open={open}
-            permissionsLength={permissions.length}
+            permissionslength={permissions.length}
             sx={{ mt: 7 }}
           >
             {permissions.map((routeItem: Permission, index: number) => {
