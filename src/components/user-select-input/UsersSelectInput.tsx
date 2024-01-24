@@ -4,9 +4,9 @@ import { debounce } from "lodash";
 import { TextField } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
 
-import { UsersSelectProps } from "./types";
+import { UserSelectInputProps } from "./types";
 
-const UsersSelect: React.FC<UsersSelectProps> = ({
+const UserSelectInput: React.FC<UserSelectInputProps> = ({
   textValue,
   onInputValueChange,
   error = false,
@@ -67,4 +67,4 @@ const UsersSelect: React.FC<UsersSelectProps> = ({
   );
 };
 
-export default UsersSelect;
+export default UserSelectInput;

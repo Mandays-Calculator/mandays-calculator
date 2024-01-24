@@ -17,7 +17,8 @@ import { CustomButton } from "~/components/form/button";
 // import { useTimeout } from "../../utils/functions";
 // import { TeamListColumns } from "../../utils/columns";
 import DialogSearchUser from "./DialogSearchUser";
-import UsersSelect from "../components/users-select/UsersSelectInput";
+
+import UserSelectModal from "../components/users-select/UserSelectModal";
 
 interface EditTeamFormProps {
   teamIndex: number;
@@ -33,7 +34,6 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     (_val, index) => index === teamIndex
   ) as TeamObject;
 
-  console.log(team, "team lead");
   const [projectName, setProjectName] = useState<string>(values.projectName);
   const [teamName, setTeamName] = useState<string>(team.teamName);
   const [teamLead, setTeamLead] = useState<SelectObject>(team.teamLead);
@@ -126,10 +126,6 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setOriginTableData(newMembers);
   };
 
-  // const onTableRowClick = ($event: any) => {
-  //   console.log($event);
-  // };
-
   const getProjectName = (e: ChangeEvent<HTMLInputElement>): void => {
     setProjectName(e.target.value);
   };
@@ -145,26 +141,26 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   //   setTableData(filteredMemberList(keyword));
   // };
 
-  const onChangeTeamLead = (teamLeadObject: SelectObject | null) => {
-    if (!teamLeadObject) return;
+  // const onChangeTeamLead = (teamLeadObject: SelectObject | null) => {
+  //   if (!teamLeadObject) return;
 
-    const isTeamMemberExist = originTableData.find(
-      (tableData) => tableData.id === teamLeadObject.value
-    );
+  //   const isTeamMemberExist = originTableData.find(
+  //     (tableData) => tableData.id === teamLeadObject.value
+  //   );
 
-    if (isTeamMemberExist) {
-      setTableData(
-        tableData.filter((tableData) => tableData.id !== teamLeadObject.value)
-      );
-      setOriginTableData(
-        originTableData.filter(
-          (tableData) => tableData.id !== teamLeadObject.value
-        )
-      );
-    }
+  //   if (isTeamMemberExist) {
+  //     setTableData(
+  //       tableData.filter((tableData) => tableData.id !== teamLeadObject.value)
+  //     );
+  //     setOriginTableData(
+  //       originTableData.filter(
+  //         (tableData) => tableData.id !== teamLeadObject.value
+  //       )
+  //     );
+  //   }
 
-    setTeamLead(teamLeadObject);
-  };
+  //   setTeamLead(teamLeadObject);
+  // };
 
   // const filteredMemberList = (keyword: string): TeamMembers[] => {
   //   return originTableData.filter((user) => {
@@ -229,15 +225,15 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
             />
           </Grid>
           <Grid item xs={4}>
-            <UsersSelect
+            <UserSelectModal
               name="teamLead"
-              label="Team Lead"
               value={teamLead}
-              onChange={(_, value) => onChangeTeamLead(value)}
-              fullWidth
+              label="Team Lead"
+              onUserSelect={(value) => {
+                setTeamLead(value as SelectObject);
+              }}
               error={teamLeadError}
               helperText={teamLeadError ? "Please Input Team Lead." : ""}
-              dataTestId="test-team-lead"
             />
           </Grid>
         </Grid>

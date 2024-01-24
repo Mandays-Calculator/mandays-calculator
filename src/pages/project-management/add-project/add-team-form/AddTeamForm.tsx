@@ -9,7 +9,6 @@ import { CustomButton } from "~/components/form/button";
 import { TextField } from "~/components";
 import { useFormikContext } from "formik";
 
-import UsersSelect from "../components/users-select/UsersSelectInput";
 import UserSelectModal from "../components/users-select/UserSelectModal";
 
 interface AddTeamFormProps {
@@ -74,17 +73,16 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
           />
         </Grid>
         <Grid item xs={6}>
-          {/* <UsersSelect
+          <UserSelectModal
+            name="teamLead"
             value={teamLead}
             label="Team Lead"
-            onChange={(_, value) => {
+            onUserSelect={(value) => {
               setTeamLead(value as SelectObject);
             }}
             error={teamLeadError}
-            name="teamLead"
             helperText={teamLeadError ? "Please Input Team Lead." : ""}
-          /> */}
-          <UserSelectModal name="" />
+          />
         </Grid>
       </Grid>
       <Stack
