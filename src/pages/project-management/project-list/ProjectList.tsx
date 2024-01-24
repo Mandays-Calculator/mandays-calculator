@@ -16,6 +16,7 @@ import { useProjectList } from '~/queries/project-management/ProjectManagement';
 interface ProjectListProps {
   handleAddProject: () => void;
   handleEditProject: (project: Project) => void;
+  handleViewProject: (project: Project) => void;
 }
 
 type ActionType = {
@@ -67,7 +68,7 @@ const projectListReducer = (state: typeof initialProjectListState, action: Actio
 };
 
 const ProjectList = (props: ProjectListProps): ReactElement => {
-  const { handleAddProject, handleEditProject } = props;
+  const { handleAddProject, handleEditProject, handleViewProject } = props;
   const { t } = useTranslation();
   const { data, refetch } = useProjectList();
   const [projectListState, dispatchProjectList] = useReducer(projectListReducer, initialProjectListState);
@@ -76,6 +77,10 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
 
   const onChangeFilterText = (e: ChangeEvent<HTMLInputElement>): void => {
     dispatchProjectList({ type: 'SEARCH', payload: e.target.value as string });
+  };
+
+  const onView = (project: Project): void => {
+    handleViewProject(project);
   };
 
   const onEdit = (project: Project): void => {
@@ -122,7 +127,7 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
       <Box marginTop='14px'>
         <Table
           name='ODCTable'
-          columns={ProjectListColumns({ t, onDelete, onEdit })}
+          columns={ProjectListColumns({ t, onDelete, onEdit, onView })}
           data={projectListState.filteredResult}
         />
       </Box>

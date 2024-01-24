@@ -24,7 +24,7 @@ import { ErrorMessage, Form, SvgIcon } from "~/components";
 import { useTimeout } from "../utils/functions";
 import { StyledContainer } from "./components/TeamListCard/TeamListCard";
 import { CustomButton } from "~/components/form/button";
-import { addFormInitValue } from "./utils";
+import { SetProjectForm, addFormInitValue } from "./utils";
 import { appProjectSchema } from "./project-schema";
 import AddTeamForm from "./add-team-form";
 import EditTeamForm from "./edit-team-form/EditTeamForm";
@@ -167,29 +167,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 
   useEffect(() => {
     if (selectedProject) {
-      projectForm.setValues({
-        projectName: selectedProject.name,
-        teams: selectedProject.teams.map(
-          ({ name, teamMembers, teamLead, ...team }) => ({
-            ...team,
-            teamMembers: (teamMembers ?? []).map((member) => {
-              const memberName =
-                member.firstName && member.lastName
-                  ? `${member.firstName}, ${member.lastName} ${
-                      member.middleName ?? ""
-                    }`
-                  : "-";
-
-              return { ...member, name: memberName };
-            }),
-            teamLead: {
-              value: teamLead.id,
-              label: `${teamLead.firstName}, ${teamLead.lastName} ${teamLead.middleName ?? ""}`,
-            },
-            teamName: name ?? "-",
-          })
-        ),
-      });
+      projectForm.setValues(SetProjectForm(selectedProject));
     }
   }, [selectedProject]);
 
@@ -267,3 +245,5 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 };
 
 export default AddProject;
+
+
