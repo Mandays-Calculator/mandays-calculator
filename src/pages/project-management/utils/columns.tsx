@@ -8,7 +8,7 @@ import type {
 } from './types';
 import { CellProps } from 'react-table';
 import { IconButton } from '@mui/material';
-import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import { SvgIcon } from '~/components';
 
 export const ProjectListColumns = ({ t, onDelete, onEdit, onView }: ProjectListColumnsProps): ProjectListColumnsType[] => {
@@ -31,7 +31,7 @@ export const ProjectListColumns = ({ t, onDelete, onEdit, onView }: ProjectListC
       Cell: ({ row }: CellProps<ProjectListDataType>) => (
         <>
           <IconButton onClick={() => onView(row.original)} color='primary'>
-            <InfoOutlined color='primary' sx={{ fontSize: "1.4rem" }}/>
+            <RemoveRedEyeIcon color='primary' sx={{ fontSize: "1.4rem" }}/>
           </IconButton>
           <IconButton onClick={() => onEdit(row.original)} color='primary'>
             <SvgIcon name='edit' color='primary' $size={2} />
