@@ -3,6 +3,7 @@ import type { OdcListResponse } from "~/api/odc";
 import type {
   CareerStepResponse,
   CountryResponse,
+  GenderResponse,
   RoleTypeResponse,
 } from "~/api/common";
 import type { ForGetComplexities, GetComplexities } from "~/api/complexity";
@@ -18,13 +19,14 @@ import { useQuery, UseQueryResult } from "react-query";
 
 import { getODC } from "~/api/odc/ODC";
 import { getComplexities } from "~/api/complexity";
-import { getCareerSteps, getCountries, getRoles } from "~/api/common/Common";
+import {
+  getCareerSteps,
+  getCountries,
+  getGenders,
+  getRoles,
+} from "~/api/common/Common";
 import { getProjects } from "~/api/projects";
-
 import { getUserList } from "~/api/user-management/UserManagement";
-
-// Mock options
-import { genders } from "~/utils/constants";
 
 const cacheTime: number = 1000 * 60 * 60 * 24;
 
@@ -47,7 +49,10 @@ const transformDataToOption = (
           value: item.id,
         }));
       case "gender":
-        return genders;
+        return data.map((item: CommonResponseDataObj) => ({
+          label: `${item.name}`,
+          value: item.id,
+        }));
       case "career_step":
         return data.map((item: CommonResponseDataObj) => ({
           label: item.careerStep,
@@ -115,6 +120,11 @@ const getCommonOption = <T>(
       });
     case "country":
       return useQuery<CountryResponse[], Error>("countries", getCountries, {
+        staleTime: Infinity,
+        cacheTime: cacheTime,
+      });
+    case "gender":
+      return useQuery<GenderResponse[], Error>("genders", getGenders, {
         staleTime: Infinity,
         cacheTime: cacheTime,
       });
