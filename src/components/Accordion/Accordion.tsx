@@ -3,7 +3,9 @@ import type { AccordionProps as MuiAccordionProps } from "@mui/material/Accordio
 
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
-import AccordionSummary, { accordionSummaryClasses } from "@mui/material/AccordionSummary";
+import AccordionSummary, {
+  accordionSummaryClasses,
+} from "@mui/material/AccordionSummary";
 import MuiAccordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
@@ -17,7 +19,10 @@ const StyledAccordionSummary = styled(AccordionSummary, {
   },
 }));
 
-type BaseAccordionProps = Omit<MuiAccordionProps, "title" | "expanded" | "onChange">;
+type BaseAccordionProps = Omit<
+  MuiAccordionProps,
+  "title" | "expanded" | "onChange"
+>;
 
 interface AccordionProps extends BaseAccordionProps {
   title: ReactNode;
@@ -42,7 +47,9 @@ export const Accordion = (props: AccordionProps): ReactElement => {
 
   const renderExpandIcon = (): ReactNode => {
     if (expandMoreIcon || expandLessIcon) {
-      return isExpanded ? expandMoreIcon ?? expandLessIcon : expandLessIcon ?? expandMoreIcon;
+      return isExpanded
+        ? expandMoreIcon ?? expandLessIcon
+        : expandLessIcon ?? expandMoreIcon;
     }
     return <ExpandMoreIcon />;
   };
@@ -50,11 +57,7 @@ export const Accordion = (props: AccordionProps): ReactElement => {
   const renderTitle = (): ReactNode => {
     if (typeof title === "string") {
       return (
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          color="primary"
-        >
+        <Typography variant="h6" fontWeight="bold" color="primary">
           {title}
         </Typography>
       );
@@ -76,7 +79,9 @@ export const Accordion = (props: AccordionProps): ReactElement => {
       <StyledAccordionSummary expandIcon={renderExpandIcon()}>
         {renderTitle()}
       </StyledAccordionSummary>
-      <AccordionDetails sx={{ padding: disabledContentPadding ? "0" : "0.5rem 1rem 1rem" }}>
+      <AccordionDetails
+        sx={{ padding: disabledContentPadding ? "0" : "0.5rem 1rem 1rem" }}
+      >
         {children}
       </AccordionDetails>
       {footer ? <AccordionDetails>{footer}</AccordionDetails> : null}

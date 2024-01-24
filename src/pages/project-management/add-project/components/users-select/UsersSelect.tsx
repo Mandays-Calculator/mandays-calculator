@@ -1,11 +1,14 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
+
 import { debounce } from "lodash";
 
 import { TextField } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
 
 import { UsersSelectProps } from "./types";
+import DialogSearchUser from "../../edit-team-form/DialogSearchUser";
 
 const UsersSelect: React.FC<UsersSelectProps> = ({
   textValue,
@@ -21,6 +24,7 @@ const UsersSelect: React.FC<UsersSelectProps> = ({
   ...props
 }) => {
   const [inputValue, setInputValue] = useState<string>(textValue || "");
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const users = useCommonOption("user", { keyword: inputValue });
 
@@ -44,27 +48,46 @@ const UsersSelect: React.FC<UsersSelectProps> = ({
     }
   }, [textValue]);
 
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   return (
-    <Autocomplete
-      disablePortal
-      {...props}
-      options={users}
-      sx={{ width: 300 }}
-      renderInput={(params) => (
-        <TextField
-          name={name}
-          onFocus={() => setInputValue("")}
-          value={inputValue}
-          onChange={handleTeamLeadFilterChange}
-          error={error}
-          helperText={helperText}
-          {...textFieldProps}
-          label={label}
-          {...params}
-          fullWidth={fullWidth}
-        />
-      )}
-    />
+    <>
+      <Autocomplete
+        disablePortal
+        {...props}
+        options={users}
+        sx={{ width: 300 }}
+        renderInput={(params) => (
+          <TextField
+            name={name}
+            onFocus={() => setInputValue("")}
+            value={inputValue}
+            onChange={handleTeamLeadFilterChange}
+            error={error}
+            helperText={helperText}
+            {...textFieldProps}
+            label={label}
+            {...params}
+            fullWidth={fullWidth}
+          />
+        )}
+      />
+      <Button onClick={handleOpenModal} variant="outlined">
+        +
+      </Button>
+
+      <DialogSearchUser
+        showMemberDialog={isModalOpen}
+        selectedTeamLead={null}
+        toggleDialog={handleCloseModal}
+      />
+    </>
   );
 };
 

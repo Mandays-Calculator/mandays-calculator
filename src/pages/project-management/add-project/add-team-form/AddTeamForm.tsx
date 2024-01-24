@@ -9,7 +9,7 @@ import { CustomButton } from "~/components/form/button";
 import { TextField } from "~/components";
 import { useFormikContext } from "formik";
 
-import UsersSelect from "../components/TeamListCard/users-select/UsersSelect";
+import UsersSelect from "../components/users-select/UsersSelect";
 
 interface AddTeamFormProps {
   onCancel: () => void;

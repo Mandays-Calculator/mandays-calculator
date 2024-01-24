@@ -14,7 +14,7 @@ import { CustomButton } from "~/components/form/button";
 import { useTimeout } from "../../utils/functions";
 import { TeamListColumns } from "../../utils/columns";
 import DialogSearchUser from "./DialogSearchUser";
-import UsersSelect from "../components/TeamListCard/users-select/UsersSelect";
+import UsersSelect from "../components/users-select/UsersSelect";
 
 interface EditTeamFormProps {
   teamIndex: number;
