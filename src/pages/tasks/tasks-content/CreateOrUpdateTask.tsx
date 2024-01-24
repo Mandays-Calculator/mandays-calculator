@@ -10,7 +10,7 @@ import LocalizationKey from "~/i18n/key";
 import CustomButton from "~/components/form/button/CustomButton";
 import { Select, TextField, Modal } from "~/components";
 
-import { useGetComplexities } from "~/queries/complexity/Complexities";
+// import { useGetComplexities } from "~/queries/complexity/Complexities";
 
 import ComplexityDetails from "./complexity-details";
 
@@ -96,17 +96,17 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
     onClose();
   };
 
-  const complexities = useGetComplexities();
+  // const complexities = useGetComplexities();
 
-  const complexityData = complexities.data;
-  const complexityList = Array.isArray(complexityData)
-    ? complexityData?.map((data) => {
-        return {
-          label: data.name,
-          value: data.id,
-        };
-      })
-    : [];
+  // const complexityData = complexities.data;
+  // const complexityList = Array.isArray(complexityData)
+  //   ? complexityData?.map((data) => {
+  //       return {
+  //         label: data.name,
+  //         value: data.id,
+  //       };
+  //     })
+  //   : [];
 
   return (
     <>
@@ -166,9 +166,11 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                   }
                   value={newTask.functionality}
                   options={[
-                    { value: "functionality1", label: "Functionality 1" },
-                    { value: "functionality2", label: "Functionality 2" },
-                    { value: "functionality3", label: "Functionality 3" },
+                    { value: "functionality1", label: "DESIGN/UI" },
+                    { value: "functionality2", label: "ADD" },
+                    { value: "functionality3", label: "UPDATE" },
+                    { value: "functionality4", label: "DELETE" },
+                    { value: "functionality4", label: "INTEGRATION" },
                   ]}
                 />
               </Stack>
@@ -199,7 +201,13 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                     handleSelectChange("complexity", e.target.value as string)
                   }
                   value={newTask.complexity}
-                  options={complexityList}
+                  // options={complexityList}
+                  options={[
+                    { value: "complexity1", label: "Low" },
+                    { value: "complexity2", label: "Medium" },
+                    { value: "complexity3", label: "High" },
+                    { value: "complexity4", label: "Extreme" },
+                  ]}
                 />
               </Stack>
             </Grid>

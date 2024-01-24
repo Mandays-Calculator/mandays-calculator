@@ -21,13 +21,14 @@ type Members = UserListData & { isSelected: boolean; fullName: string };
 type OdcDropdown = OdcParam & { value: string; label: string };
 
 type DialogSearchUserProps = {
+  selectedTeamLead: SelectObject | null | undefined;
   showMemberDialog: boolean;
   toggleDialog: ($event?: any) => void;
 };
 
 const DialogSearchUser = (props: DialogSearchUserProps) => {
-  const { showMemberDialog, toggleDialog } = props;
-  const { data } = useUserList();
+  const { selectedTeamLead, showMemberDialog, toggleDialog } = props;
+  const { data: listOfUsers } = useUserList();
   const { data: listOfOdc } = useODCList();
   const [odcList, setOdcList] = useState<OdcDropdown[]>([] as any[]);
   const [userList, setUserList] = useState<Members[]>([]);
@@ -57,7 +58,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
             <Typography>
               {user.lastName}, {user.firstName} {user.middleName ?? ""}
             </Typography>
-            <Typography>{user.odc.abbreviation}</Typography>
+            <Typography>{user.odc?.abbreviation ?? '-'}</Typography>
             <Typography>{user.careerStep}</Typography>
           </div>
         </Grid>
@@ -88,7 +89,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
     const searchedName = e.target.value;
     setSearchName(searchedName);
 
-    setUserList(filteredUserList(searchedName));
+    setUserList(filteredUserList(searchedName, searchOdc));
   };
 
   const filteredUserList = (
@@ -96,10 +97,10 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
     searchedOdc?: string
   ): Members[] => {
     return originUserList.filter((user) => {
-      const name = user.fullName
+      const name = user?.fullName
         .toLowerCase()
         .includes(searchedName.toLowerCase());
-      const odc = user.odc.abbreviation
+      const odc = user?.odc?.abbreviation
         .toLowerCase()
         .includes(searchedOdc?.toLowerCase() ?? "");
 
@@ -121,14 +122,14 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = data && Array.isArray(data?.data) ? data.data : [];
+        const result = listOfUsers && Array.isArray(listOfUsers?.data) ? listOfUsers.data : [];
 
-        const newUsers = result.map((user) => {
-          const fullName = `${user.lastName}, ${user.firstName} ${
-            user.middleName ?? ""
-          }`.trim();
-          return { ...user, fullName, isSelected: false };
-        });
+        const newUsers = result
+          .map((user) => {
+            const fullName = `${user.lastName}, ${user.firstName} ${user.middleName ?? ''}`.trim();
+            return { ...user, fullName, isSelected: false };
+          })
+          .filter((user) => user.id !== selectedTeamLead?.value);
 
         setUserList(newUsers);
         setOriginUserList(newUsers);
@@ -150,17 +151,17 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
     fetchData().catch((e) => {
       console.log(e);
     });
-  }, [data, listOfOdc]);
+  }, [listOfUsers, listOfOdc]);
 
   return (
     <>
       <Modal
         open={showMemberDialog}
         title="Search User"
-        maxWidth={"md"}
+        maxWidth={"lg"}
         onClose={() => toggleDialog()}
       >
-        <Box sx={{ minWidth: "510px" }}>
+        <Box sx={{ minWidth: "550px" }}>
           <Stack direction="column">
             <Grid container spacing={2}>
               <Grid item xs={6}>

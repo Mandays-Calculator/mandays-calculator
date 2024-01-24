@@ -22,7 +22,7 @@ interface CardSliderProps {
 }
 
 const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) =>
@@ -67,35 +67,67 @@ const CardSlider: React.FC<CardSliderProps> = ({ cards }) => {
             key={index}
             sx={{
               color: "FEFEFE",
-              borderRadius: 5.5,
-              padding: 12,
+              borderRadius: 3,
+              padding: 1,
             }}
           >
-            <Stack gap={2} spacing={2}>
+            <Stack gap={1} spacing={2}>
               <Typography
                 fontWeight="bold"
                 align="center"
                 color="primary"
-                variant="h2"
+                sx={{
+                  fontSize: 15,
+                }}
               >
                 {cards[offset].title}
               </Typography>
-              <Typography align="center" variant="subtitle1">
+              <Typography
+                align="center"
+                sx={{
+                  fontSize: 10,
+                }}
+              >
                 {cards[offset].estimated}
               </Typography>
-              <Typography fontWeight="bold" align="center" variant="h2">
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: 30,
+                }}
+                align="center"
+              >
                 {cards[offset].percent1}
               </Typography>
-              <Typography align="center" variant="subtitle1">
+              <Typography
+                align="center"
+                sx={{
+                  fontSize: 10,
+                }}
+              >
                 {cards[offset].remaining}
               </Typography>
-              <Typography fontWeight="bold" align="center" variant="subtitle1">
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: 30,
+                }}
+                align="center"
+                variant="subtitle1"
+              >
                 {cards[offset].percent2}
               </Typography>
-              <Typography align="center" variant="subtitle1">
+              <Typography align="center" sx={{ fontSize: 10 }}>
                 {cards[offset].annual}
               </Typography>
-              <Typography fontWeight="bold" align="center" variant="subtitle1">
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: 30,
+                }}
+                align="center"
+                variant="subtitle1"
+              >
                 {cards[offset].percent3}
               </Typography>
             </Stack>

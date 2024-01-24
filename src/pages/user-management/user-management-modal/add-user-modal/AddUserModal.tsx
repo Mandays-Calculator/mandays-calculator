@@ -82,14 +82,16 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
 }): ReactElement => {
   const { t } = useTranslation();
   const { userManagement } = LocalizationKey;
-  const [value, setValue] = useState("");
+  const [selectedJoinedDate, setSelectedJoinedDate] =
+    useState("recentlyJoined");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-  };
+    setSelectedJoinedDate(event.target.value);
 
-  const submit = () => {
-    OnSubmit();
+    form.setFieldValue(
+      "recentlyJoinedlaterDate",
+      event.target.value === "recentlyJoinedlaterDate" ? true : false
+    );
   };
 
   const renderAlert = (): ReactElement | undefined => {
@@ -131,6 +133,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                   form.errors as FormErrors,
                   "lastName"
                 )}
+                value={form.values.lastName || ""}
               />
             </Grid>
             <Grid item xs={6}>
@@ -142,18 +145,21 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                   form.errors as FormErrors,
                   "firstName"
                 )}
+                value={form.values.firstName || ""}
               />
             </Grid>
             <Grid item xs={6}>
               <ControlledTextField
                 name="middleName"
                 label={t(userManagement.label.middleName)}
+                value={form.values.middleName || ""}
               />
             </Grid>
             <Grid item xs={3}>
               <ControlledTextField
                 name="suffix"
                 label={t(userManagement.label.suffix)}
+                value={form.values.suffix || ""}
               />
             </Grid>
             <Grid item xs={3}>
@@ -164,6 +170,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 name="gender"
                 options={genders}
                 error={!!form.errors.gender}
+                value={form.values.gender || ""}
               />
               <StyledError>
                 {getFieldError(form.errors as FormErrors, "gender")}
@@ -176,6 +183,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               label={t(userManagement.label.email)}
               error={!!form.errors.email}
               helperText={getFieldError(form.errors as FormErrors, "email")}
+              value={form.values.email || ""}
             />
           </Grid>
           <Grid item xs={3} mt={1}>
@@ -190,6 +198,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 form.errors as FormErrors,
                 "careerStep"
               )}
+              value={form.values.careerStep || ""}
             />
             <StyledError>
               {getFieldError(form.errors as FormErrors, "careerStep")}
@@ -199,7 +208,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <FormControl>
               <RadioGroup
                 name="controlled-radio-buttons-group"
-                value={value}
+                value={selectedJoinedDate || ""}
                 onChange={handleChange}
               >
                 <StyledFormControlLabel
@@ -208,13 +217,14 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                   label={t(userManagement.label.joiningDate)}
                 />
                 <StyledFormControlLabel
+                  name="recentlyJoinedlaterDate"
                   value="recentlyJoinedlaterDate"
                   control={<Radio />}
                   label={t(userManagement.label.joiningAtLaterDate)}
                 />
               </RadioGroup>
               <Stack ml={4.3}>
-                {value == "recentlyJoined" ? (
+                {selectedJoinedDate == "recentlyJoined" ? (
                   <ControlledDatePicker
                     name="joiningDate"
                     value={moment().format("YYYY-MM-DD")}
@@ -244,28 +254,46 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 form.errors as FormErrors,
                 "employeeId"
               )}
+              value={form.values.employeeId || ""}
             />
           </Grid>
           <Grid item xs={3.5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
-            <ControlledSelect options={odcOptions} name="odcId" />
+            <ControlledSelect
+              options={odcOptions}
+              name="odcId"
+              value={form.values.odcId || ""}
+            />
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.roles)}</StyledTitle>
-            <ControlledSelect multiple options={rolesData} name="roles" />
+            <ControlledSelect
+              multiple
+              options={rolesData}
+              name="roles"
+              value={form.values.roles || ""}
+            />
           </Grid>
           <Grid item xs={7}>
             <StyledTitle mb={0.5}>
               {t(userManagement.label.projectId)}
             </StyledTitle>
-            <ControlledSelect options={projectOptions} name="projectId" />
+            <ControlledSelect
+              options={projectOptions}
+              name="projectId"
+              value={form.values.projectId || ""}
+            />
           </Grid>
           {form.values.projectId && (
             <Grid item xs={5}>
               <StyledTitle mb={0.5}>
                 {t(userManagement.label.teamId)}
               </StyledTitle>
-              <ControlledSelect options={teamOptions} name="teamId" />
+              <ControlledSelect
+                options={teamOptions}
+                name="teamId"
+                value={form.values.teamId || ""}
+              />
             </Grid>
           )}
         </Grid>
@@ -283,7 +311,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             type="submit"
             variant="contained"
             color="primary"
-            onClick={submit}
+            onClick={() => OnSubmit()}
           >
             Add User
           </CustomButton>

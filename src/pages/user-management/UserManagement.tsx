@@ -19,6 +19,7 @@ import { UserManagementForms } from "./types";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useAddUser } from "~/mutations/user-management";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
@@ -39,25 +40,32 @@ const UserManagement = (): ReactElement => {
       const AddUserForm: UserManagementForms = {
         firstName: values.firstName,
         lastName: values.lastName,
-        middleName: values.middleName,
-        suffix: values.suffix,
+        middleName: values.middleName || "",
+        suffix: values.suffix || "",
         gender: gender(values?.gender) ?? 0,
         email: values.email,
         employeeId: values.employeeId,
-        odcId: values.odcId,
-        careerStep: values.careerStep,
-        joiningDate: values.joiningDate,
-        projectId: values.projectId,
-        teamId: values.teamId,
-        roles: values.roles,
+        odcId: values.odcId || "",
+        careerStep: values.careerStep || "",
+        joiningDate:
+          moment(values.joiningDate).format("YYYY-MM-DD") ||
+          moment().format("YYYY-MM-DD"),
+        projectId: values.projectId || "",
+        teamId: values.teamId || "",
+        roles: values.roles || [],
+        image: values.image || "",
       };
+
       callApi(AddUserForm);
     },
   });
 
+  useEffect(() => {
+    UserManagementForm.resetForm();
+  }, [successAddUser]);
+
   const { data } = useUserList();
   const [filteredData, setFilteredData] = useState<UserListData[]>([]);
-
   useEffect(() => {
     if (!data) {
       setFilteredData([]);
@@ -121,7 +129,10 @@ const UserManagement = (): ReactElement => {
                 setErrorAddUser(false), setSuccessAddUser(false);
               }}
             />
-            <UserList userListData={filteredData} />
+            <UserList
+              isSuccessAddUser={successAddUser}
+              userListData={filteredData}
+            />
           </Stack>
         </Form>
       </PageContainer>

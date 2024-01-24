@@ -1,33 +1,37 @@
-import type { ReactElement } from 'react';
+import type { ReactElement } from "react";
+import type { SucErrType } from "./utils";
 
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
-import { Stack, Switch } from '@mui/material';
+import { Stack, Switch } from "@mui/material";
 
 import LocalizationKey from "~/i18n/key";
-import { useGetComplexities } from '~/queries/complexity/Complexities';
+import { useGetComplexities } from "~/queries/complexity/Complexities";
 import { useDeleteComplexities } from "~/mutations/complexity";
-import { CustomButton } from '~/components/form/button';
-import { Table, Title, Modal, PageContainer, Alert, PageLoader } from '~/components';
+import { CustomButton } from "~/components/form/button";
+import { Table, Title, Modal, PageContainer, Alert, PageLoader } from "~/components";
 
-import { complexityColumns, ComplexityForms, FormContext } from './utils';
+import {
+	complexityColumns,
+	ComplexityForms,
+	FormContext,
+	SucErrData,
+	MutationOptions2
+} from "./utils";
 
 const Complexity = (): ReactElement => {
 	const [isDaysChecked, setIsDaysChecked] = useState<boolean>(false);
-	const [complexityId, setComplexityId] = useState<string>('');
-	const [formContext, setFormContext] = useState<FormContext>('');
+	const [complexityId, setComplexityId] = useState<string>("");
+	const [formContext, setFormContext] = useState<FormContext>("");
 	const [openAddEditModal, setOpenAddEditModal] = useState<boolean>(false);
-	const [isEditError, setIsEditError] = useState<boolean>(false);
-	const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
-	const [isEditLoading, setIsEditLoading] = useState<boolean>(false);
+	const [successError, setSuccessError] = useState<SucErrType>(SucErrData);
 
 	const { data: apiData, isError, isLoading, refetch } = useGetComplexities();
 	const {
 		mutate,
 		isError: isDeleteError,
-		isSuccess: isDeleteSuccess,
-		isLoading: isDeleteLoading,
+		isSuccess: isDeleteSuccess
 	} = useDeleteComplexities();
 	const { t } = useTranslation();
 	const {
@@ -40,21 +44,29 @@ const Complexity = (): ReactElement => {
 	const handleOpenAddEdit = (context: FormContext): void => {
 		setFormContext(context);
 		setOpenAddEditModal(true);
+		setSuccessError(SucErrData);
 	};
 	const handleCloseAddEdit = (): void => setOpenAddEditModal(false);
-
 	const handleContext = (context: FormContext, id: string): void => {
 		setFormContext(context);
 		setComplexityId(id);
-		if (context === 'Edit')
+		if (context === "Edit")
 			setOpenAddEditModal(true);
-		if (context === '')
+		if (context === "")
 			mutate(id);
 	};
 
 	useEffect(() => {
-		if (isDeleteSuccess || isEditSuccess) refetch();
-	}, [isDeleteLoading, isEditSuccess]);
+    MutationOptions2(isError, "isError", setSuccessError);
+    MutationOptions2(isDeleteSuccess, "isDeleteSuccess", setSuccessError);
+    MutationOptions2(isDeleteError, "isDeleteError", setSuccessError);
+
+		if (isDeleteSuccess) refetch();
+  }, [isError, isDeleteSuccess, isDeleteError]);
+
+	useEffect(() => {
+		if (successError.isAddSuccess || successError.isUpdateSuccess) refetch();
+	}, [successError.isAddSuccess, successError.isUpdateSuccess]);
 
 	if (isLoading)
 		return <PageLoader />;
@@ -63,20 +75,20 @@ const Complexity = (): ReactElement => {
 		<>
 			<Title title={t(title)} />
 			<PageContainer sx={{ background: "#FFFFFF" }}>
-				<Stack gap={2} direction='column'>
-					<Stack direction='row' justifyContent='space-between'>
-						<CustomButton onClick={() => handleOpenAddEdit('Add')}>
+				<Stack gap={2} direction="column">
+					<Stack direction="row" justifyContent="space-between">
+						<CustomButton onClick={() => handleOpenAddEdit("Add")}>
 							{t(btnLabel.addComplexity)}
 						</CustomButton>
-						<Stack direction='row' alignItems='center'>
+						<Stack direction="row" alignItems="center">
 							{t(label.hours)}
-							<Switch name='hours-days' checked={isDaysChecked} onClick={handleDaysOrHours} />
+							<Switch name="hours-days" checked={isDaysChecked} onClick={handleDaysOrHours} />
 							{t(label.days)}
 						</Stack>
 					</Stack>
 					<Table
-						name='complexity'
-						columns={complexityColumns(isDaysChecked, handleContext, t)}
+						name="complexity"
+						columns={complexityColumns(isDaysChecked, handleContext, t, setSuccessError)}
 						data={apiData?.data ?? []}
 					/>
 				</Stack>
@@ -95,45 +107,43 @@ const Complexity = (): ReactElement => {
 						complexityId={complexityId}
 						handleCloseAddEdit={handleCloseAddEdit}
 						data={apiData?.data ?? []}
-						setIsEditError={setIsEditError}
-						setIsEditSuccess={setIsEditSuccess}
-						setIsEditLoading={setIsEditLoading}
+						setSuccessError={setSuccessError}
 					/>
 				}
 				actions={<></>}
-				maxWidth={'md'}
+				maxWidth={"md"}
 			/>
-			{(isLoading && isError) && (
+			{successError.isError && (
 				<Alert
-					open={isError}
+					open={successError.isError}
 					message={t(genericError)}
 					type={"error"}
 				/>
 			)}
-			{(isEditLoading && isEditError) && (
+			{(successError.isAddError || successError.isUpdateError) && (
 				<Alert
-					open={isEditError}
+					open={successError.isAddError || successError.isUpdateError}
 					message={t(validationInfo.submitError)}
 					type={"error"}
 				/>
 			)}
-			{(isEditLoading && isEditSuccess) && (
+			{(successError.isAddSuccess || successError.isUpdateSuccess) && (
 				<Alert
-					open={isEditSuccess}
+					open={successError.isAddSuccess || successError.isUpdateSuccess}
 					message={t(validationInfo.submitSuccess)}
 					type={"success"}
 				/>
 			)}
-			{(isDeleteLoading && isDeleteError) && (
+			{successError.isDeleteError && (
 				<Alert
-				open={isDeleteError}
+				open={successError.isDeleteError}
 				message={t(validationInfo.deleteError)}
 				type={"error"}
 			/>
 			)}
-			{(isDeleteLoading && isDeleteSuccess) && (
+			{successError.isDeleteSuccess && (
 				<Alert
-				open={isDeleteSuccess}
+				open={successError.isDeleteSuccess}
 				message={t(validationInfo.deleteSuccess)}
 				type={"success"}
 			/>

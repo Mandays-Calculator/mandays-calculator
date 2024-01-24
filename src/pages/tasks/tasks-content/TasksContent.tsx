@@ -3,13 +3,24 @@ import { AllTasksResponse } from "~/api/tasks/types";
 import { ReactElement, useEffect, useState } from "react";
 
 import { styled } from "@mui/material/styles";
-import { Divider, Grid, SelectChangeEvent, Stack } from "@mui/material";
+import {
+  Divider,
+  Grid,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { useTranslation } from "react-i18next";
+
+import LocalizationKey from "~/i18n/key";
+
+import NoTask from "~/assets/img/empty_tasks.png";
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
 import { useTasks } from "~/queries/tasks/Tasks";
@@ -68,10 +79,20 @@ const StyledCreateTaskIconButton = styled(Grid)(
   })
 );
 
+const StyledNodata = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "60vh",
+});
+
 const TasksContent = (): ReactElement => {
-  const { data: tasksData } = useTasks("a2eb9f01-6e4e-11ee-8624-a0291936d1c2");
+  const { data: tasksData } = useTasks("a0f17dfd-aaa8-11ee-a5cd-a0291936d3a2");
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (tasksData && tasksData.hasOwnProperty("errorCode")) {
@@ -114,6 +135,10 @@ const TasksContent = (): ReactElement => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
   };
+  const handleDelete = (name: string) => {
+    const deletedTask = tasks.filter((task) => task.name !== name);
+    setTasks(deletedTask);
+  };
 
   const handleCloseUpdateModalState = () => {
     setUpdateModalOpen(false);
@@ -121,7 +146,7 @@ const TasksContent = (): ReactElement => {
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
     const updatedMockData = tasks.map((task) => {
-      if (task.name === updatedTask.name) {
+      if (task.taskID === updatedTask.taskID) {
         return updatedTask;
       }
       return task;
@@ -209,11 +234,11 @@ const TasksContent = (): ReactElement => {
                 options={[
                   {
                     value: "1",
-                    label: "Team 1",
+                    label: "MC",
                   },
                   {
                     value: "2",
-                    label: "Team 2",
+                    label: "BME",
                   },
                 ]}
                 onChange={(e) => handleTeamFilter(e)}
@@ -265,6 +290,7 @@ const TasksContent = (): ReactElement => {
                         </Grid>
 
                         <Divider />
+
                         {filteredData.map((task, index) => (
                           <Stack key={`${status}_${task.name}_${index}`}>
                             {task.status === Status.Backlog ||
@@ -286,6 +312,7 @@ const TasksContent = (): ReactElement => {
                                       handleViewDetails={
                                         handleViewDetailsModalState
                                       }
+                                      onDelete={() => handleDelete(task.name)}
                                     />
                                   </Stack>
                                 )}
@@ -295,6 +322,7 @@ const TasksContent = (): ReactElement => {
                                 data={task}
                                 handleEdit={handleUpdateModalState}
                                 handleViewDetails={handleViewDetailsModalState}
+                                onDelete={() => handleDelete(task.name)}
                               />
                             )}
                           </Stack>
@@ -307,6 +335,27 @@ const TasksContent = (): ReactElement => {
               );
             })}
           </Grid>
+          {tasks.length === 0 ? (
+            <StyledNodata>
+              <img src={NoTask} alt="error" />
+              <Typography variant="h5" fontWeight="bold">
+                {t(LocalizationKey.tasks.errorMessage.error)}
+              </Typography>
+              <Typography variant="body2" fontWeight="bold">
+                {t(LocalizationKey.tasks.errorMessage.started)}
+                <span
+                  style={{
+                    color: "#2C8ED1",
+                    cursor: "pointer",
+                    paddingLeft: "3px",
+                  }}
+                  onClick={handleCreateModalState}
+                >
+                  {t(LocalizationKey.tasks.errorMessage.created)}
+                </span>
+              </Typography>
+            </StyledNodata>
+          ) : null}
         </PageContainer>
       </DragDropContext>
       <ErrorMessage error={errorMessage} type="alert" />

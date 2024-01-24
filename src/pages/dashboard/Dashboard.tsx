@@ -1,12 +1,14 @@
 import React from "react";
 
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 
 import { Card } from "~/components";
 import { Charts } from "./components/charts";
 import Slider from "./components/slider/Slider";
 import AlertAction from "./components/alert/AlertAction";
+
+import { StyledContainer, StyledTitle } from "./styles";
 
 const Dashboard: React.FC = () => {
   const cards = [
@@ -83,76 +85,73 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Stack sx={{ width: "100%" }} spacing={2}>
-        <Typography
-          sx={{
-            fontSize: 18,
-            fontStyle: "Montserrat",
-            fontWeight: 600,
-            color: "#414145",
-            fontFamily: "Montserrat",
-          }}
-        >
-          Notifications
-        </Typography>
-        <AlertAction
-          message="Let's celebrate independence day! save the date, June 12, 2023."
-          type="error"
-        />
-        <AlertAction
-          message="Juan Dela Cruz commented on ticket named Task Name"
-          type="error"
-        />
-        <AlertAction
-          message="Juan Dela Cruz updated the status on ticket named Task Name"
-          type="error"
-        />
-        <AlertAction
-          message="Sprint X is coming to an end in X days. Check the details!"
-          type="error"
-        />
-        <AlertAction
-          message="Juan Dela Cruz commented on ticket number XXXX-XXXX"
-          type="error"
-        />
-        <Typography
-          sx={{
-            fontSize: 18,
-            fontStyle: "Montserrat",
-            fontWeight: 600,
-            color: "#414145",
-            fontFamily: "Montserrat",
-          }}
-        >
-          Active Sprints
-        </Typography>
-        <Slider cards={cards} />
-      </Stack>
+      <StyledContainer>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            <Stack spacing={2}>
+              <Card title="Overall Task Status">
+                <Charts type="doughnut" data={overallData} />
+              </Card>
+            </Stack>
+          </Grid>
+          <Grid item xs={8}>
+            <Stack sx={{ width: "100%" }} spacing={2}>
+              <StyledTitle>Notifications</StyledTitle>
+              <AlertAction
+                message="Let's celebrate independence day! save the date, June 12, 2023."
+                type="error"
+              />
+              <AlertAction
+                message="Juan Dela Cruz commented on ticket named Task Name"
+                type="error"
+              />
+              <AlertAction
+                message="Juan Dela Cruz updated the status on ticket named Task Name"
+                type="error"
+              />
+              <AlertAction
+                message="Sprint X is coming to an end in X days. Check the details!"
+                type="error"
+              />
+              <AlertAction
+                message="Juan Dela Cruz commented on ticket number XXXX-XXXX"
+                type="error"
+              />
+            </Stack>
+          </Grid>
 
-      <Stack spacing={3} alignItems="flex-start">
-        <Card title="Overall Task Status">
-          <Charts type="doughnut" data={overallData} />
-        </Card>
-        <Card title="Total Resource Percentage">
-          <Charts
-            type="doughnut"
-            data={totalResourceData}
-            labels={totalResourceLabel}
-            colors={["primary", "info", "primary1"]}
-          />
-        </Card>
-      </Stack>
+          <Grid item xs={4}>
+            <Stack spacing={1}>
+              <Card title="Total Resource Percentage">
+                <Charts
+                  type="doughnut"
+                  data={totalResourceData}
+                  labels={totalResourceLabel}
+                  colors={["primary", "info", "primary1"]}
+                />
+              </Card>
+            </Stack>
+          </Grid>
 
-      <Stack margin="1.5rem 0">
-        <Card title="Sprint Utilization Percentage">
-          <Charts
-            type="bar"
-            data={sprintData}
-            labels={sprintLabel}
-            colors={["primary", "info", "primary1"]}
-          />
-        </Card>
-      </Stack>
+          <Grid item xs={8}>
+            <Stack spacing={1}>
+              <StyledTitle>Active Sprints</StyledTitle>
+              <Slider cards={cards} />
+            </Stack>
+          </Grid>
+        </Grid>
+
+        <Stack margin="1.5rem 0">
+          <Card title="Sprint Utilization Percentage">
+            <Charts
+              type="bar"
+              data={sprintData}
+              labels={sprintLabel}
+              colors={["primary", "info", "primary1"]}
+            />
+          </Card>
+        </Stack>
+      </StyledContainer>
     </>
   );
 };

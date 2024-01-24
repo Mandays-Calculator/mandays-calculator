@@ -38,4 +38,5 @@ export interface AddUserManagementParams {
 export interface UserManagementFilterParams {
   filterProperty?: string;
   filterValue?: string;
+  recentlyJoinedlaterDate?: boolean;
 }

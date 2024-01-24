@@ -6,11 +6,21 @@ import {
   AddUserResponse,
   DeleteUserResponse,
   DeleteUserParam,
+  GetUsersParam,
 } from ".";
 
-export const getUserList = async (): Promise<UserListResponse> => {
+export const getUserList = async (
+  params: GetUsersParam | undefined
+): Promise<UserListResponse> => {
+  const hasParam = params && Object.keys(params).length > 0;
   const { apiBasePath } = getEnvConfig();
-  const res = await axios.get<UserListResponse>(`${apiBasePath}/users`);
+
+  // If params exist, build the URL with query parameters
+  const apiUrl = hasParam
+    ? `${apiBasePath}/users?${new URLSearchParams(params as string).toString()}`
+    : `${apiBasePath}/users`;
+
+  const res = await axios.get<UserListResponse>(apiUrl);
   return res.data;
 };
 

@@ -14,7 +14,8 @@ import {
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
 import CustomButton from "~/components/form/button/CustomButton";
-import { TextField, Modal } from "~/components";
+import { TextField, Modal, ConfirmModal } from "~/components";
+import { CheckBox } from "~/components/form";
 import theme from "~/theme";
 import { AllTasksResponse } from "~/api/tasks";
 
@@ -50,6 +51,7 @@ interface EditTaskProps {
 
 const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
   const [newTask, setNewTask] = useState<AllTasksResponse | null>(task);
+  const [openMarkCompleted, setMarkCompleted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<{
     name: string;
     comment: string;
@@ -67,6 +69,21 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
       onSave(newTask);
       onClose();
     }
+  };
+
+  const handleConfirmMarkCompleted: () => void = () => {
+    if (newTask) {
+      setNewTask({
+        ...newTask,
+        status: "Completed",
+        completionDate: "9/11/2001",
+      });
+      setMarkCompleted(false);
+    }
+  };
+
+  const handleCloseMarkCompleted: () => void = () => {
+    setMarkCompleted(false);
   };
 
   const handleAddComment = (): void => {
@@ -91,6 +108,7 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
             label="Description"
             fullWidth
             multiline
+            readOnly
             rows={4}
             maxRows={4}
             onChange={(e) =>
@@ -145,13 +163,28 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
                 <Typography>{newTask ? newTask.completionDate : ""}</Typography>
               </Stack>
             </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={6}>
               <Stack gap={1}>
                 <Typography style={styles.styledTypographyBold}>
                   Sprint
                 </Typography>
                 <Typography>Sprint #{newTask ? newTask.sprint : ""}</Typography>
               </Stack>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                visibility: newTask?.status !== "In Progress" ? "hidden" : "",
+              }}
+            >
+              <CheckBox
+                name="markAsCompleted"
+                label="Mark as Complete"
+                checked={openMarkCompleted}
+                onClick={() => setMarkCompleted(true)}
+              />
             </Grid>
             <Grid item xs={12}>
               <Typography style={styles.styledTypographyBold}>Tags</Typography>
@@ -240,6 +273,15 @@ const EditTask: React.FC<EditTaskProps> = ({ open, onClose, task, onSave }) => {
           </Stack>
         </Stack>
       </Modal>
+      <ConfirmModal
+        open={openMarkCompleted}
+        maxWidth="md"
+        onConfirm={handleConfirmMarkCompleted}
+        confirmLabel={"Yes, Please"}
+        onClose={handleCloseMarkCompleted}
+        message={"Are you sure you want to tag this task as completed?"}
+        closeLabel={"No, Thanks"}
+      />
     </>
   );
 };

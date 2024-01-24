@@ -28,7 +28,6 @@ const Drawer = (): ReactElement => {
   } = useUserAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
   const { common } = LocalizationKey;
 
   const handleNavigate = (routeItem: Permission): void => {
@@ -39,7 +38,11 @@ const Drawer = (): ReactElement => {
     return (
       <Box sx={{ display: "flex" }}>
         <StyledDrawer variant="permanent" open={open}>
-          <StyledList open={open} sx={{ mt: 7 }}>
+          <StyledList
+            open={open}
+            permissionslength={permissions.length}
+            sx={{ mt: 7 }}
+          >
             {permissions.map((routeItem: Permission, index: number) => {
               if (routeItem.icon) {
                 return (
@@ -48,7 +51,7 @@ const Drawer = (): ReactElement => {
                     onClick={() => handleNavigate(routeItem)}
                     open={open}
                   >
-                    <StyledListItemIcon>
+                    <StyledListItemIcon open={open}>
                       {routeItem.icon ? (
                         <SvgIcon
                           name={routeItem.icon as SvgIconsType}

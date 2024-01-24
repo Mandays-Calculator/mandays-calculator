@@ -70,13 +70,18 @@ const StyledDrawer = styled(Drawer, {
   },
 }));
 
-const StyledListItemIcon = styled(ListItemIcon)``;
+const StyledListItemIcon = styled(ListItemIcon)<{
+  open: boolean;
+}>`
+  min-width: ${({ open }) => (open ? "56px" : "unset")};
+`;
 
 const StyledListItem = styled(ListItem)<{
   open: boolean;
 }>(
   ({ open, theme }) =>
     `
+justify-content: center;
 margin: ${theme.spacing(1.3, 0)};
 min-height: 48px;
 cursor: pointer;
@@ -104,15 +109,20 @@ div {
 
 const StyledList = styled(List, {
   shouldForwardProp: (prop) => prop !== "open",
-})<{ open: boolean }>(({ open, theme }) => ({
-  padding: open ? "0 0.7rem" : 0,
+})<{ open: boolean; permissionslength: number }>(
+  ({ open, theme, permissionslength }) => ({
+    padding: open ? "0 0.7rem" : 0,
 
-  [theme.breakpoints.down("xl")]: {
-    maxHeight: 525,
-    overflowY: "scroll",
-    overflowX: "hidden",
-  },
-}));
+    [theme.breakpoints.down("xl")]: {
+      ...(permissionslength > 9 && {
+        overflowY: "scroll",
+        overflowX: "hidden",
+        maxHeight: "80%",
+        scrollbarWidth: "thin",
+      }),
+    },
+  })
+);
 
 const StyledItemText = styled(ListItemText)(({ theme }) => ({
   "& span": {
@@ -158,7 +168,7 @@ const StyledCollapsibleItem = styled("div", {
   },
   [theme.breakpoints.down("xl")]: {
     ...(!open && {
-      left: "0.5%",
+      left: "7px",
     }),
     "& p": {
       fontSize: "1rem",
