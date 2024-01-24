@@ -212,11 +212,10 @@ const CreateOrUpdateTask: React.FC<CreateModalProps> = ({
                     e.target.value as string | string[]
                   )
                 }
-                value={Array.isArray(newTask.tags) ? newTask.tags : []}
+                value={newTask.tags}
                 options={[
-                  { value: "tag1", label: "Tag 1" },
-                  { value: "tag2", label: "Tag 2" },
-                  { value: "tag3", label: "Tag 3" },
+                  { value: "Bug", label: "Bug" },
+                  { value: "Needs Work", label: "Needs Work" },
                 ]}
               />
             </Stack>
