@@ -187,7 +187,7 @@ const Complexity = (): ReactElement => {
             },
           });
         }}
-        message={t("Are you sure you want to delete this User?")}
+        message={t("Are you sure you want to delete this Complexity?")}
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         selectedRow={rowId}
