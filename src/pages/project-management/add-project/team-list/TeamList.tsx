@@ -8,11 +8,12 @@ import TeamListCard from "../components/TeamListCard";
 import { StyledContainer } from "../components/TeamListCard/TeamListCard";
 
 interface TeamListProps {
+  readonly?: boolean;
   toggleEdit: (teamIndex: number) => any;
 }
 
 const TeamList = (props: TeamListProps): ReactElement => {
-  const { toggleEdit } = props;
+  const { readonly, toggleEdit } = props;
   const { values } = useFormikContext<AddTeamFormType>();
   return (
     <Stack
@@ -30,6 +31,7 @@ const TeamList = (props: TeamListProps): ReactElement => {
         values?.teams?.map((_team, index) => {
           return (
               <TeamListCard
+                isReadOnly={readonly}
                 isDefault={false}
                 key={index}
                 teamIndex={index}

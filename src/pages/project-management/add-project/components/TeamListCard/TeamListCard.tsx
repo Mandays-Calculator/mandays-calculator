@@ -20,6 +20,7 @@ export const StyledContainer = styled(PageContainer, {
 }));
 
 interface TeamListCardProps {
+  isReadOnly?: boolean;
   isDefault: boolean;
   teamIndex: number;
   teamObject: TeamObject;
@@ -27,11 +28,14 @@ interface TeamListCardProps {
 }
 
 const TeamListCard = (props: TeamListCardProps): ReactElement => {
-  const { isDefault, teamIndex, teamObject, toggleEdit } = props;
+  const { isReadOnly, isDefault, teamIndex, teamObject, toggleEdit } = props;
   const { values, setValues } = useFormikContext<AddTeamFormType>();
 
   const handleDeleteCard = (event: any): void => {
     event.stopPropagation();
+
+    if (isReadOnly) return;
+
     setValues({
       ...values,
       teams: values.teams.filter((_val, index) => index !== teamIndex),
@@ -40,12 +44,12 @@ const TeamListCard = (props: TeamListCardProps): ReactElement => {
   return (
     <StyledContainer
       $isDefault={isDefault}
-      sx={{ cursor: "pointer" }}
+      sx={ isReadOnly ? {} : { cursor: "pointer" }}
       onClick={() => toggleEdit(teamIndex)}
     >
       <Typography fontWeight="bold">{teamObject.teamName}</Typography>
       <Typography fontWeight="bold">{teamObject.teamLead?.label}</Typography>
-      <IconButton onClick={($event) => handleDeleteCard($event)}>
+      <IconButton onClick={($event) => handleDeleteCard($event)} sx={{visibility: isReadOnly ? "hidden" : "visible"}}>
         <SvgIcon name="delete" color="error" $size={2} />
       </IconButton>
     </StyledContainer>
