@@ -38,35 +38,64 @@ const taskDetailsCardStyles = {
     padding: '2px 3px'
   },
   tag: {
-    bug: {
-      backgroundColor: theme.palette.error.main,
+    common: {
       borderRadius: '5px',
-      padding: '2px 3px',
+      padding: '3px',
       color: '#FFFFFF'
     },
-    needsWork: {
-      backgroundColor: theme.palette.warning.main,
-      borderRadius: '5px',
-      padding: '2px 3px',
-      color: '#FFFFFF'
+    bug: {
+      backgroundColor: theme.palette.error.main
+    },
+    reviewed: {
+      backgroundColor: theme.palette.success.main
+    },
+    others: {
+      backgroundColor: theme.palette.warning.main
     }
   }
 }
 
 const getTagStyle = (value: string) => {
-  if (typeof value === 'string' && value === 'Bug') {
-    return taskDetailsCardStyles.tag.bug
+  if (value === 'Bug') {
+    return {
+      ...taskDetailsCardStyles.tag.common,
+      ...taskDetailsCardStyles.tag.bug
+    }
+  } else if (value === 'Reviewed') {
+    return {
+      ...taskDetailsCardStyles.tag.common,
+      ...taskDetailsCardStyles.tag.reviewed
+    }
   }
 
-  return taskDetailsCardStyles.tag.needsWork
+  return {
+    ...taskDetailsCardStyles.tag.common,
+    ...taskDetailsCardStyles.tag.others
+  }
 }
 
-const checkIfButtonsAreShown = (status: string) => {
+const showButtons = (status: string) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
     return { display: 'none', cursor: 'pointer' }
   }
 
   return { cursor: 'pointer' }
+}
+
+const setJustifyContent = (tag: number, status: string): string => {
+  if (
+    tagLengthFlag(tag) &&
+    status !== Status.OnHold &&
+    status !== Status.Backlog
+  ) {
+    return 'flex-start'
+  }
+
+  return 'space-between'
+}
+
+const tagLengthFlag = (tag: number): boolean => {
+  return tag <= 2 && tag > 0
 }
 
 const TaskDetailsCard = ({
@@ -108,14 +137,15 @@ const TaskDetailsCard = ({
         <Grid item xs={12}>
           <Typography>
             {t(LocalizationKey.tasks.taskDetails.complexity) +
-              data?.complexity.name}
+              data?.complexity?.name}
           </Typography>
         </Grid>
 
         <Grid
           item
           container
-          justifyContent='space-between'
+          spacing={tagLengthFlag(data?.tags?.length) ? 1 : 0}
+          justifyContent={setJustifyContent(data?.tags?.length, data?.status)}
           alignItems='center'
           xs={12}
         >
@@ -141,7 +171,7 @@ const TaskDetailsCard = ({
           <Grid item>
             <EditOutlinedIcon
               color='action'
-              sx={checkIfButtonsAreShown(data.status)}
+              sx={showButtons(data?.status)}
               onClick={e => {
                 e.stopPropagation()
                 handleEdit(data)
@@ -149,7 +179,7 @@ const TaskDetailsCard = ({
             />
             <DeleteOutlinedIcon
               color='error'
-              sx={checkIfButtonsAreShown(data.status)}
+              sx={showButtons(data?.status)}
               onClick={e => {
                 e.stopPropagation()
                 onDelete(data)

@@ -60,7 +60,12 @@
       "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
       "name": "Simple Function"
     },
-    "tags": [],
+    "tags": [
+      {
+        "label": "Bug",
+        "value": "Bug"
+      }
+    ],
     "comments": [
       {
         "name": "John Doe",
@@ -90,7 +95,12 @@
       "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
       "name": "Simple Function"
     },
-    "tags": [],
+    "tags": [
+      {
+        "label": "Reviewed",
+        "value": "Reviewed"
+      }
+    ],
     "comments": [
       {
         "name": "Jane Smith",
@@ -124,7 +134,12 @@
       "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
       "name": "Simple Function"
     },
-    "tags": [],
+    "tags": [
+      {
+        "label": "Needs Work",
+        "value": "Needs Work"
+      }
+    ],
     "comments": [
       {
         "name": "Bob Johnson",
@@ -162,7 +177,12 @@
       "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
       "name": "Simple Function"
     },
-    "tags": [],
+    "tags": [
+      {
+        "label": "Enhancement",
+        "value": "Enhancement"
+      }
+    ],
     "comments": [
       {
         "name": "Bob Johnson",
@@ -209,6 +229,69 @@
       {
         "name": "Bob Johnson",
         "comment": "Adding another comment"
+      },
+      {
+        "name": "Jane Smith",
+        "comment": "Great work!"
+      },
+      {
+        "name": "John Doe",
+        "comment": "Another comment"
+      },
+      {
+        "name": "John Doe",
+        "comment": "Another comment"
+      }
+    ]
+  },
+  {
+    "taskID": "7",
+    "name": "The Target's Second Son",
+    "description": "Transliteration: \"Tāgetto no Jinan\"\n(Japanese: 標的ターゲットの次男)\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    "createdDate": "11/22/2023",
+    "completionDate": "12/22/2023",
+    "sprint": "2",
+    "complexity": {
+      "id": "49a522fe-9945-11ee-a2d5-244bfee2440b",
+      "name": "Trivial",
+      "numberOfHours": "5",
+      "numberOfFeatures": "50+",
+      "description": "Trivial",
+      "sample": "Trivial",
+      "active": true
+    },
+    "status": "Not Yet Started",
+    "type": "Task",
+    "functionality": {
+      "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
+      "name": "Simple Function"
+    },
+    "tags": [
+      {
+        "label": "Bug",
+        "value": "Bug"
+      },
+      {
+        "label": "Needs Work",
+        "value": "Needs Work"
+      }
+    ],
+    "comments": [
+      {
+        "name": "Bob Johnson",
+        "comment": "Adding another comment"
+      },
+      {
+        "name": "Jane Smith",
+        "comment": "Great work!"
+      },
+      {
+        "name": "John Doe",
+        "comment": "Another comment"
+      },
+      {
+        "name": "John Doe",
+        "comment": "Another comment"
       },
       {
         "name": "Jane Smith",
