@@ -18,7 +18,7 @@ const StyledTextField = styled(TextField)(() => ({
 }));
 
 const ViewODC = (props: ViewProps): ReactElement => {
-  const { data, setFormContext, setIdx, setSuccessError } = props;
+  const { data, setFormContext, setIdx, setSuccessError, country } = props;
 
   const { t } = useTranslation();
   const { odc: { btnlabel, placeholder } } = LocalizationKey;
@@ -52,7 +52,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
     );
   };
 
-  const odcListColumn = useMemo(() => ODCColumns(t, setFormContext, setIdx, setSuccessError), []);
+  const odcListColumn = useMemo(() => ODCColumns(t, setFormContext, setIdx, setSuccessError, country), []);
 
   return (
     <>

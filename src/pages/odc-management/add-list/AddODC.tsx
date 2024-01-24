@@ -9,7 +9,6 @@ import { Grid, Typography } from "@mui/material";
 import { useFormik } from "formik";
 
 import { useAddODC, useUpdateODC, useAddHoliday } from "~/mutations/odc";
-import { useCommonOption } from "~/queries/common/options";
 import { Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
@@ -31,7 +30,7 @@ import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
 import { StyledError } from "./styles";
 
 const AddODC = (props: AddProps): ReactElement => {
-  const { apiData, data, formContext, setFormContext, setSuccessError } = props;
+  const { apiData, data, formContext, setFormContext, setSuccessError, country } = props;
 
   const { t } = useTranslation();
   const {
@@ -69,10 +68,6 @@ const AddODC = (props: AddProps): ReactElement => {
     isError: isAddHolidayError,
     isLoading: isAddHolidayLoading,
   } = useAddHoliday();
-  const countryData = useCommonOption("country");
-  const country = countryData?.sort((a: SelectObject, b: SelectObject) =>
-    a.label.localeCompare(b.label)
-  );
 
   const [nameUnqError, setNameUnqError] = useState<boolean>(false);
   const [nameUnqErrorMsg, setNameUnqErrorMsg] = useState<string>("");
