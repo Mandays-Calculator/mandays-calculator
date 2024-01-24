@@ -324,6 +324,10 @@
         "update": "Update"
       }
     },
+    "taskDetails": {
+      "sprint": "Sprint #",
+      "complexity": "Complexity Rating: "
+    },
     "errorMessage": {
       "error": "No tasks currently visible",
       "started": "Get started and",

@@ -228,6 +228,10 @@ const LocalizationKey = {
         update: 'tasks.updateTask.btnLabel.update'
       }
     },
+    taskDetails: {
+      sprint: "tasks.taskDetails.sprint",
+      complexity: "tasks.taskDetails.complexity"
+    },
     errorMessage: {
       error: 'tasks.errorMessage.error',
       started: 'tasks.errorMessage.started',
