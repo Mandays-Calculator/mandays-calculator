@@ -44,6 +44,10 @@ const UserList = ({
     setRowId(rowId);
   };
 
+  useEffect(() => {
+    userList.refetch();
+  }, [isSuccessAddUser]);
+
   if (userList.isLoading) {
     return <PageLoader />;
   } else {

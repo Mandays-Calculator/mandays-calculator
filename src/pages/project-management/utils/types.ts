@@ -20,6 +20,7 @@ export type ProjectListColumnsProps = {
   t: TFunction<'translation', undefined>;
   onDelete: (projectId: string) => void;
   onEdit: (project: Project) => void;
+  onView: (project: Project) => void;
 };
 
 export type TeamListColumnsProps = {

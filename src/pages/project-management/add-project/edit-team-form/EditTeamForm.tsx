@@ -8,11 +8,11 @@ import type {
 
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
-import { Grid, Typography, Stack, Box } from "@mui/material";
-import { Table, TextField, ErrorMessage, ConfirmModal } from "~/components";
+import { Grid, Typography, Stack, /*Box*/ } from "@mui/material";
+import { /*Table,*/ TextField, /*ErrorMessage,*/ ConfirmModal } from "~/components";
 import { CustomButton } from "~/components/form/button";
-import { useTimeout } from "../../utils/functions";
-import { TeamListColumns } from "../../utils/columns";
+// import { useTimeout } from "../../utils/functions";
+// import { TeamListColumns } from "../../utils/columns";
 import DialogSearchUser from "./DialogSearchUser";
 import UsersSelect from "../components/users-select/UsersSelect";
 
@@ -37,14 +37,14 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const [projectNameError, setProjectNameError] = useState<boolean>(false);
   const [teamNameError, setTeamNameError] = useState<boolean>(false);
   const [teamLeadError, setTeamLeadError] = useState<boolean>(false);
-  const [searchMember, setSearchMember] = useState<string>("");
+  // const [searchMember, setSearchMember] = useState<string>("");
   const [tableData, setTableData] = useState<TeamMembers[]>([]);
   const [originTableData, setOriginTableData] = useState<TeamMembers[]>([]);
   const [showMemberDialog, setMemberDialog] = useState<boolean>(false);
-  const [errorEditTeamMsg, setErrorEditTeamMsg] = useState<string>("");
+  // const [errorEditTeamMsg, setErrorEditTeamMsg] = useState<string>("");
   const [confirmDialog, setConfirmDialog] =
     useState<ProjectListConfirmDialogType>({ open: false, id: "" });
-  const [triggerTimeout] = useTimeout();
+  // const [triggerTimeout] = useTimeout();
 
   const editTeam = (): void => {
     if (projectName === "") {
@@ -75,16 +75,16 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
         teams: teams as TeamObject[],
       });
 
-      const selectedTeam = teams.find((x) => x.teamMembers.length);
-      if (!selectedTeam) {
-        setErrorEditTeamMsg(
-          "Team members are required. Select at least 1(one) of the members"
-        );
+      // const selectedTeam = teams.find((x) => x.teamMembers.length);
+      // if (!selectedTeam) {
+      //   setErrorEditTeamMsg(
+      //     "Team members are required. Select at least 1(one) of the members"
+      //   );
 
-        triggerTimeout(() => setErrorEditTeamMsg(""));
-      } else {
+      //   triggerTimeout(() => setErrorEditTeamMsg(""));
+      // } else {
         onCancel(teamIndex);
-      }
+      // }
     }
   };
 
@@ -123,9 +123,9 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setOriginTableData(newMembers);
   };
 
-  const onTableRowClick = ($event: any) => {
-    console.log($event);
-  };
+  // const onTableRowClick = ($event: any) => {
+  //   console.log($event);
+  // };
 
   const getProjectName = (e: ChangeEvent<HTMLInputElement>): void => {
     setProjectName(e.target.value);
@@ -135,12 +135,12 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setTeamName(e.target.value);
   };
 
-  const onChangeMember = (e: ChangeEvent<HTMLInputElement>) => {
-    const keyword = e.target.value;
-    setSearchMember(keyword);
+  // const onChangeMember = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const keyword = e.target.value;
+  //   setSearchMember(keyword);
 
-    setTableData(filteredMemberList(keyword));
-  };
+  //   setTableData(filteredMemberList(keyword));
+  // };
 
   const onChangeTeamLead = (teamLeadObject: SelectObject | null) => {
     if (!teamLeadObject) return;
@@ -163,24 +163,24 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
     setTeamLead(teamLeadObject);
   };
 
-  const filteredMemberList = (keyword: string): TeamMembers[] => {
-    return originTableData.filter((user) => {
-      function isIncludes(property: string) {
-        property = user[property as keyof TeamMembers] as string;
-        return property.toLowerCase().includes(keyword.toLowerCase());
-      }
+  // const filteredMemberList = (keyword: string): TeamMembers[] => {
+  //   return originTableData.filter((user) => {
+  //     function isIncludes(property: string) {
+  //       property = user[property as keyof TeamMembers] as string;
+  //       return property.toLowerCase().includes(keyword.toLowerCase());
+  //     }
 
-      return (
-        isIncludes("name") ||
-        isIncludes("abbreviation") ||
-        isIncludes("careerStep")
-      );
-    });
-  };
+  //     return (
+  //       isIncludes("name") ||
+  //       isIncludes("abbreviation") ||
+  //       isIncludes("careerStep")
+  //     );
+  //   });
+  // };
 
-  const onDelete = (userId: string): void => {
-    setConfirmDialog({ open: !confirmDialog.open, id: userId });
-  };
+  // const onDelete = (userId: string): void => {
+  //   setConfirmDialog({ open: !confirmDialog.open, id: userId });
+  // };
 
   const deleteMembers = () => {
     const newList = originTableData.filter((row) => row.id != confirmDialog.id);
@@ -239,7 +239,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
           </Grid>
         </Grid>
 
-        <Grid
+        {/* <Grid
           container
           spacing={2}
           alignItems="flex-end"
@@ -263,16 +263,16 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
               Add Members
             </CustomButton>
           </Grid>
-        </Grid>
+        </Grid> */}
 
-        <Box sx={{ padding: "0 1rem 0 1rem" }}>
+        {/* <Box sx={{ padding: "0 1rem 0 1rem" }}>
           <Table
             name="ODCTable"
             columns={TeamListColumns({ t, onDelete })}
             data={tableData}
             onRowClick={onTableRowClick}
           />
-        </Box>
+        </Box> */}
 
         <Stack
           direction="row"
@@ -316,7 +316,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
         }
         selectedRow={null}
       />
-      <ErrorMessage error={errorEditTeamMsg} type={"alert"} />
+      {/* <ErrorMessage error={errorEditTeamMsg} type={"alert"} /> */}
     </>
   );
 };

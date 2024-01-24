@@ -47,7 +47,6 @@ const styles = {
       marginBottom: 5,
     },
   },
-  // Define other styles similarly for different elements
 };
 
 interface TaskDetailsCardProps {
@@ -63,9 +62,12 @@ const TaskDetailsCard = ({
   handleViewDetails,
   onDelete,
 }: TaskDetailsCardProps): ReactElement => {
-  console.log("tasks data", data);
   return (
-    <PageContainer onClick={() => handleViewDetails(data)}>
+    <PageContainer
+      onClick={() => {
+        handleViewDetails(data);
+      }}
+    >
       <div style={styles.taskTitle}>{data.name}</div>
       <div style={styles.marginBottom.mbFive}>{data.description}</div>
       <div style={styles.infoSection}>
@@ -74,7 +76,7 @@ const TaskDetailsCard = ({
       </div>
       <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>
-        Complexity Rating: {data?.complexity.name}
+        Complexity Rating: {data?.complexity?.name}
       </div>
 
       <Stack direction={"row"} flexWrap="wrap" gap={0.5}>

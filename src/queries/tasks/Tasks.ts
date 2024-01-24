@@ -18,7 +18,7 @@ import {
 export const useTasks = (
   id: string
 ): UseQueryResult<QueryResponse<AllTasksResponse[]>, AxiosError> => {
-  return useQuery("getTasks", () => getTasks(id));
+  return useQuery("getTasks", () => getTasks(id, "1"));
 };
 
 export const usePostTasks = (): UseMutationResult<

@@ -25,6 +25,7 @@ import { useProjectList } from "~/queries/project-management/ProjectManagement";
 interface ProjectListProps {
   handleAddProject: () => void;
   handleEditProject: (project: Project) => void;
+  handleViewProject: (project: Project) => void;
 }
 
 type ActionType = {
@@ -51,15 +52,15 @@ const projectListReducer = (
       return data.map((response) => {
         let userCount = 0;
 
-        response.teams.forEach((team) => {
-          userCount += team.teamMembers.length;
+        response.teams?.forEach((team) => {
+          userCount += (team.teamMembers ?? []).length;
         });
 
         return {
           ...response,
           projectId: response.projectId,
           prjName: response.name,
-          noOfTeams: response.teams.length,
+          noOfTeams: response.teams?.length,
           noOfUsers: userCount,
         };
       });
@@ -69,8 +70,9 @@ const projectListReducer = (
 
     return { ...state, results: newResult, filteredResult: newResult };
   } else if (action.type === "SEARCH") {
+    const searchedInput = (action.payload as string).toLowerCase();
     const filteredData = state.results.filter((row) =>
-      row.prjName.toLowerCase().includes(action.payload as string)
+      row.prjName.toLowerCase().includes(searchedInput)
     );
 
     return {
@@ -84,7 +86,7 @@ const projectListReducer = (
 };
 
 const ProjectList = (props: ProjectListProps): ReactElement => {
-  const { handleAddProject, handleEditProject } = props;
+  const { handleAddProject, handleEditProject, handleViewProject } = props;
   const { t } = useTranslation();
   const { data, refetch } = useProjectList();
   const [projectListState, dispatchProjectList] = useReducer(
@@ -100,6 +102,10 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
 
   const onChangeFilterText = (e: ChangeEvent<HTMLInputElement>): void => {
     dispatchProjectList({ type: "SEARCH", payload: e.target.value as string });
+  };
+
+  const onView = (project: Project): void => {
+    handleViewProject(project);
   };
 
   const onEdit = (project: Project): void => {
@@ -146,7 +152,7 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
       <Box marginTop="14px">
         <Table
           name="ODCTable"
-          columns={ProjectListColumns({ t, onDelete, onEdit })}
+          columns={ProjectListColumns({ t, onDelete, onEdit, onView })}
           data={projectListState.filteredResult}
         />
       </Box>
