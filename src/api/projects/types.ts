@@ -20,7 +20,7 @@ export interface Teams {
   teamId: string;
   teamLead: User;
   isActive: number;
-  teamMembers: TeamMembers[];
+  teamMembers: TeamMembers[] | null;
 }
 
 export interface TeamMembers {
