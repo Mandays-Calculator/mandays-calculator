@@ -63,11 +63,7 @@ const TaskDetailsCard = ({
   onDelete,
 }: TaskDetailsCardProps): ReactElement => {
   return (
-    <PageContainer
-      onClick={() => {
-        handleViewDetails(data);
-      }}
-    >
+    <PageContainer onClick={() => handleViewDetails(data)}>
       <div style={styles.taskTitle}>{data.name}</div>
       <div style={styles.marginBottom.mbFive}>{data.description}</div>
       <div style={styles.infoSection}>
@@ -76,7 +72,7 @@ const TaskDetailsCard = ({
       </div>
       <div style={styles.marginBottom.mbTwo}>Sprint #{data?.sprint}</div>
       <div style={styles.marginBottom.mbTwo}>
-        Complexity Rating: {data?.complexity?.name}
+        Complexity Rating: {data?.complexity.name}
       </div>
 
       <Stack direction={"row"} flexWrap="wrap" gap={0.5}>
@@ -88,8 +84,18 @@ const TaskDetailsCard = ({
           <TextsmsOutlinedIcon style={{ padding: "2px" }} />
           <span style={{ marginRight: 3 }}>1</span>
         </Box>
-        <Box style={styles.tags.bug}>Bug</Box>
-        <Box style={styles.tags.needWork}>Needs Work</Box>
+        {data.tags.map((tag, index) => (
+          <Box
+            style={
+              typeof tag === "string" && tag === "Bug"
+                ? styles.tags.bug
+                : styles.tags.needWork
+            }
+            key={index}
+          >
+            {String(tag)}
+          </Box>
+        ))}
 
         <Stack direction={"row"} spacing={0.3} flexWrap="wrap">
           <EditOutlinedIcon

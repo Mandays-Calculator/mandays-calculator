@@ -17,7 +17,6 @@ import {
   ControlledSelect,
 } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
-import { country } from "~/utils/constants";
 
 import {
   IntValuesSchema,
@@ -31,7 +30,7 @@ import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
 import { StyledError } from "./styles";
 
 const AddODC = (props: AddProps): ReactElement => {
-  const { apiData, data, formContext, setFormContext, setSuccessError } = props;
+  const { apiData, data, formContext, setFormContext, setSuccessError, country } = props;
 
   const { t } = useTranslation();
   const {

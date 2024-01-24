@@ -1,4 +1,5 @@
 import type { OdcParam, HolidayParam } from "~/api/odc";
+import type { CommonOption } from "~/queries/common/options";
 
 export interface IntValues {
   odcList: OdcParam[];
@@ -18,6 +19,7 @@ export type ViewProps = {
   setFormContext: (context: FormContext) => void;
   setIdx: (idx: string) => void;
   setSuccessError: (sucErr: SucErrType) => void;
+  country: CommonOption;
 };
 
 export type AddProps = {
@@ -26,6 +28,7 @@ export type AddProps = {
   formContext: FormContext;
   setFormContext: (context: FormContext) => void;
   setSuccessError: (sucErr: SucErrType) => void;
+  country: CommonOption;
 };
 
 export type AddTableProps = {

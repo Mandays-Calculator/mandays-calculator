@@ -5,6 +5,7 @@ import type { FormContext, SucErrType } from "./utils";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useCommonOption } from "~/queries/common/options";
 import { useODCList } from "~/queries/odc/ODC";
 import { useDeleteODC } from "~/mutations/odc";
 import { PageLoader, Title, PageContainer, ConfirmModal, Alert } from "~/components";
@@ -33,6 +34,10 @@ const ODCManagement = (): ReactElement => {
     isError: isDeleteError,
     isSuccess: isDeleteSuccess
   } = useDeleteODC();
+  const countryData = useCommonOption("country");
+  const country = countryData?.sort((a: SelectObject, b: SelectObject) =>
+    a.label.localeCompare(b.label)
+  );
 
   const [initialValues, setInitialValues] = useState<OdcParam>(NewODCData);
   const [formContext, setFormContext] = useState<FormContext>("");
@@ -62,7 +67,7 @@ const ODCManagement = (): ReactElement => {
 
   const delIdx = apiData?.data?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
 
-  if (isLoading) { return <PageLoader /> };
+  if (isLoading || countryData?.length <= 0) { return <PageLoader /> };
 
   return (
     <>
@@ -74,6 +79,7 @@ const ODCManagement = (): ReactElement => {
             setFormContext={setFormContext}
             setIdx={setIdx}
             setSuccessError={setSuccessError}
+            country={country}
           />
         )}
         {(formContext === "Add" || formContext === "Edit") && (
@@ -83,6 +89,7 @@ const ODCManagement = (): ReactElement => {
             formContext={formContext}
             setFormContext={setFormContext}
             setSuccessError={setSuccessError}
+            country={country}
           />
         )}
       </PageContainer>

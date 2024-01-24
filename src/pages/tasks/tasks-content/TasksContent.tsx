@@ -32,6 +32,7 @@ import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import EditTask from "./EditTask";
+import { useCommonOption } from "~/queries/common/options";
 
 const calculateGridSize = (numStatuses: number): number => {
   return 12 / numStatuses;
@@ -93,6 +94,7 @@ const TasksContent = (): ReactElement => {
   const {
     state: { user },
   } = useUserAuth();
+  const complexities = useCommonOption("complexity");
   const { data: tasksData } = useTasks(user?.id ?? "");
   const name = `${user?.firstName} ${user?.lastName}`;
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
@@ -243,6 +245,7 @@ const TasksContent = (): ReactElement => {
           <CreateOrUpdateTask
             open={createModalOpen}
             isCreate={true}
+            complexities={complexities}
             onClose={handleCloseCreateModalState}
             onCreateTask={handleCreateTask}
             reOpenCreateTask={handleCreateModalState}
@@ -251,6 +254,7 @@ const TasksContent = (): ReactElement => {
             open={updateModalOpen}
             isCreate={false}
             task={selectedTask}
+            complexities={complexities}
             onClose={handleCloseUpdateModalState}
             onCreateTask={handleUpdateTask}
             reOpenCreateTask={handleCreateModalState}
