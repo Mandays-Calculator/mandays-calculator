@@ -16,3 +16,8 @@ export interface CountryResponse {
   cca2: string;
   idd: string;
 }
+
+export interface GenderResponse {
+  name: string;
+  id: number;
+}
