@@ -7,15 +7,20 @@ import {
 } from "@mui/material";
 import { CSSObject, Theme, styled } from "@mui/material/styles";
 
-const drawerWidth = 260;
+const smDrawerWidth = 260;
+const mdDrawerWidth = 320;
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
+  width: mdDrawerWidth,
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+
+  [theme.breakpoints.down("xl")]: {
+    width: smDrawerWidth,
+  },
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -37,7 +42,7 @@ const StyledDrawer = styled(Drawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   maxWidth: 390,
-  width: drawerWidth,
+  width: mdDrawerWidth,
   paddingBottom: theme.spacing(6.8),
   flexShrink: 0,
   whiteSpace: "nowrap",
@@ -67,6 +72,10 @@ const StyledDrawer = styled(Drawer, {
   },
   "*::-webkit-scrollbar-thumb:active": {
     background: theme.palette.primary.main,
+  },
+
+  [theme.breakpoints.down("xl")]: {
+    width: smDrawerWidth,
   },
 }));
 
