@@ -122,7 +122,11 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
-              <ImageUpload name="image" setFieldValue={form.setFieldValue} />
+              <ImageUpload
+                name="image"
+                initialValue=""
+                setFieldValue={form.setFieldValue}
+              />
             </Stack>
           </Grid>
           <Grid container item xs={8.5} columnSpacing={1.5} rowGap={0.5}>
