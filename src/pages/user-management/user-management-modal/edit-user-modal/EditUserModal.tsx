@@ -61,6 +61,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const { refetch } = useUserList();
   const projectOptions = useCommonOption("project", { keyword: "" });
   const odcOptions = useCommonOption("odc", { keyword: "" });
+
   const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
   const [isEditError, setIsEditError] = useState<boolean>(false);
   const EditUser = useEditUser(currentUser?.id ?? "");
@@ -100,7 +101,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateEmail: currentUser?.email ?? "",
       updateImage: currentUser?.image ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
-      updateOdcId: currentUser?.odc.id ?? "",
+      updateOdcId: currentUser?.odc?.id ?? "",
       updateJoiningDate:
         moment(currentUser?.joiningDate).format("YYYY-MM-DD") ?? "",
       updateCareerStep: currentUser?.careerStep ?? "",
