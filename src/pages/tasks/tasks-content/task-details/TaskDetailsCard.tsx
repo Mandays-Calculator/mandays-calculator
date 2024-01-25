@@ -10,8 +10,7 @@ import EventIcon from '@mui/icons-material/Event'
 import { useTranslation } from 'react-i18next'
 import LocalizationKey from '~/i18n/key'
 
-import theme from '~/theme'
-
+import { taskDetailsCardStyles, getTagStyle } from '../style'
 import { Status } from '../utils'
 
 interface TaskDetailsCardProps {
@@ -21,66 +20,12 @@ interface TaskDetailsCardProps {
   onDelete: (task: AllTasksResponse) => void
 }
 
-const taskDetailsCardStyles = {
-  title: { fontSize: '1.2em', fontWeight: 'bold', cursor: 'pointer' },
-  description: {
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    WebkitLineClamp: 3
-  },
-  completionDate: { display: 'flex', alignItems: 'center' },
-  completionDateIcon: { marginRight: '5px' },
-  comments: {
-    borderRadius: '5px',
-    backgroundColor: '#dedede',
-    padding: '2px 3px'
-  },
-  commentIcon: { marginRight: '3px' },
-  tag: {
-    common: {
-      borderRadius: '5px',
-      padding: '3px',
-      color: '#FFFFFF'
-    },
-    bug: {
-      backgroundColor: theme.palette.error.main
-    },
-    reviewed: {
-      backgroundColor: theme.palette.success.main
-    },
-    others: {
-      backgroundColor: theme.palette.warning.main
-    }
-  }
-}
-
 const getContainerStyle = (status: string) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
     return { marginTop: 2, padding: 1.5, cursor: 'default' }
   }
 
   return { marginTop: 2, padding: 1.5, cursor: 'grab' }
-}
-
-const getTagStyle = (value: string) => {
-  if (value === 'Bug') {
-    return {
-      ...taskDetailsCardStyles.tag.common,
-      ...taskDetailsCardStyles.tag.bug
-    }
-  } else if (value === 'Reviewed') {
-    return {
-      ...taskDetailsCardStyles.tag.common,
-      ...taskDetailsCardStyles.tag.reviewed
-    }
-  }
-
-  return {
-    ...taskDetailsCardStyles.tag.common,
-    ...taskDetailsCardStyles.tag.others
-  }
 }
 
 const getButtonDisplayStyle = (status: string) => {

@@ -21,34 +21,10 @@ import {
 
 import { TextField, Modal, ConfirmModal } from '~/components'
 import { CheckBox } from '~/components/form'
-import theme from '~/theme'
 import moment from 'moment'
 
 import { Status } from './utils'
-import { style as viewTaskDetailsStyle } from './style.ts'
-
-const styles = {
-  container: {
-    padding: '0px 10px 10px 10px'
-  },
-  styledTypographyBold: {
-    fontWeight: 'bold'
-  },
-  tags: {
-    bug: {
-      borderRadius: '5px',
-      backgroundColor: theme.palette.error.main,
-      padding: '2px 8px',
-      color: '#FFFFFF'
-    },
-    needWork: {
-      borderRadius: '5px',
-      backgroundColor: theme.palette.warning.main,
-      padding: '2px 8px',
-      color: '#FFFFFF'
-    }
-  }
-}
+import { viewTaskDetailsStyle, getTagStyle } from './style.ts'
 
 interface ViewTaskDetailsProps {
   open: boolean
@@ -111,14 +87,19 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
 
   return (
     <>
-      <Modal open={open} title={currentTask?.name} maxWidth='sm' onClose={onClose}>
-        <Box sx={viewTaskDetailsStyle.modalCloseButton}>
+      <Modal
+        open={open}
+        title={currentTask?.name}
+        maxWidth='sm'
+        onClose={onClose}
+      >
+        <Box sx={viewTaskDetailsStyle.modal.close}>
           <IconButton onClick={handleSaveTask}>
             <CloseIcon />
           </IconButton>
         </Box>
 
-        <Grid container sx={viewTaskDetailsStyle.modalContainer}>
+        <Grid container sx={viewTaskDetailsStyle.modal.container}>
           <Grid item xs={12}>
             <TextField
               name='taskDescription'
@@ -137,24 +118,34 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
             />
           </Grid>
 
-          <Grid item container xs={12}>
+          <Grid
+            item
+            container
+            xs={12}
+            sx={viewTaskDetailsStyle.taskViewDetails}
+          >
             <Grid item xs={12} sm={6}>
-              <Typography>
+              <Typography sx={viewTaskDetailsStyle.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.functionality)}
               </Typography>
               <Typography>{currentTask?.functionality?.name}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography>
+              <Typography sx={viewTaskDetailsStyle.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.complexity)}
               </Typography>
               <Typography>{currentTask?.complexity?.name}</Typography>
             </Grid>
           </Grid>
 
-          <Grid item container xs={12}>
+          <Grid
+            item
+            container
+            xs={12}
+            sx={viewTaskDetailsStyle.taskViewDetails}
+          >
             <Grid item xs={12} sm={6}>
-              <Typography>
+              <Typography sx={viewTaskDetailsStyle.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.createdDate)}
               </Typography>
               <Typography>{currentTask?.createdDate}</Typography>
@@ -162,7 +153,7 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
             <Grid item xs={12} sm={6}>
               {currentTask?.status === Status.Completed ? (
                 <>
-                  <Typography>
+                  <Typography sx={viewTaskDetailsStyle.label}>
                     {t(
                       LocalizationKey.tasks.viewTaskDetails.label.completionDate
                     )}
@@ -182,8 +173,8 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
             </Grid>
           </Grid>
 
-          <Grid item xs={12}>
-            <Typography>
+          <Grid item xs={12} sx={viewTaskDetailsStyle.taskViewDetails}>
+            <Typography sx={viewTaskDetailsStyle.label}>
               {t(LocalizationKey.tasks.viewTaskDetails.label.sprint)}
             </Typography>
             <Typography>
@@ -192,29 +183,48 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
             </Typography>
           </Grid>
 
-          <Grid item container xs={12} spacing={1}>
+          <Grid
+            item
+            container
+            xs={12}
+            spacing={1}
+            sx={viewTaskDetailsStyle.taskViewDetails}
+          >
             <Grid item xs={12}>
-              <Typography>
+              <Typography sx={viewTaskDetailsStyle.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.tags)}
               </Typography>
             </Grid>
             {(currentTask?.tags || []).map((tag, index) => (
               <Grid item>
-                <Box key={index}>{tag.value}</Box>
+                <Box sx={getTagStyle(tag?.value)} key={index}>
+                  {tag.value}
+                </Box>
               </Grid>
             ))}
           </Grid>
 
-          <Accordion defaultExpanded sx={{ width: '100%' }}>
+          <Accordion
+            defaultExpanded
+            square
+            sx={viewTaskDetailsStyle.comment.accordion}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls='taskdetails-comment-panel'
               id='taskdetails-comment-panel-header'
+              sx={viewTaskDetailsStyle.label}
             >
               {t(LocalizationKey.tasks.viewTaskDetails.label.comments)}
             </AccordionSummary>
             <AccordionDetails>
-              <Grid item container alignItems='center' xs={12}>
+              <Grid
+                item
+                container
+                alignItems='center'
+                xs={12}
+                sx={viewTaskDetailsStyle.comment.container}
+              >
                 <Grid item xs={2} sm={1}>
                   <Avatar alt='User Avatar' />
                 </Grid>
@@ -228,7 +238,7 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
                     fullWidth
                     multiline
                     maxRows={10}
-                    sx={{ backgroundColor: '#EAF3F4' }}
+                    sx={viewTaskDetailsStyle.comment.textbox}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position='end'>
@@ -250,7 +260,7 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
                 </Grid>
               </Grid>
 
-              <Grid item container alignItems='center' xs={12}>
+              <Grid item container alignItems='center' xs={12} spacing={1.5}>
                 {(currentTask?.comments || []).map((comment, index) => (
                   <>
                     <Grid item xs={2} sm={1}>
@@ -263,9 +273,14 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
                       />
                     </Grid>
 
-                    <Grid item xs={10} sm={11}>
-                      <Box key={index}>
-                        <Typography>{comment?.name}</Typography>
+                    <Grid item container xs={10} sm={11} alignItems='center'>
+                      <Box
+                        key={index}
+                        sx={viewTaskDetailsStyle.comment.comment}
+                      >
+                        <Typography sx={viewTaskDetailsStyle.label}>
+                          {comment?.name}
+                        </Typography>
                         <Typography>{comment?.comment}</Typography>
                       </Box>
                     </Grid>
