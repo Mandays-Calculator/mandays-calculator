@@ -112,6 +112,25 @@
       "sprint": "Sprint #",
       "complexity": "Complexity Rating: "
     },
+    "viewTaskDetails": {
+      "label": {
+        "description": "Description",
+        "functionality": "Functionality",
+        "complexity": "Complexity",
+        "createdDate": "Date Started",
+        "completionDate": "Date Completed",
+        "markComplete": "Mark as Complete",
+        "sprint": "Sprint",
+        "tags": "Tags",
+        "comments": "Comments"
+      },
+      "placeholder": {
+        "description": "Description",
+        "sprint": "Sprint #",
+        "comments": "Write a comment.",
+        "avatar": "A picture of "
+      }
+    },
     "errorMessage": {
       "error": "No tasks currently visible",
       "started": "Get started and",

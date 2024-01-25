@@ -22,7 +22,7 @@ interface TaskDetailsCardProps {
 }
 
 const taskDetailsCardStyles = {
-  title: { fontSize: '1.2em', fontWeight: 'bold' },
+  title: { fontSize: '1.2em', fontWeight: 'bold', cursor: 'pointer' },
   description: {
     display: '-webkit-box',
     WebkitBoxOrient: 'vertical',
@@ -37,6 +37,7 @@ const taskDetailsCardStyles = {
     backgroundColor: '#dedede',
     padding: '2px 3px'
   },
+  commentIcon: { marginRight: '3px' },
   tag: {
     common: {
       borderRadius: '5px',
@@ -53,6 +54,14 @@ const taskDetailsCardStyles = {
       backgroundColor: theme.palette.warning.main
     }
   }
+}
+
+const getContainerStyle = (status: string) => {
+  if (status !== Status.OnHold && status !== Status.Backlog) {
+    return { marginTop: 2, padding: 1.5, cursor: 'default' }
+  }
+
+  return { marginTop: 2, padding: 1.5, cursor: 'grab' }
 }
 
 const getTagStyle = (value: string) => {
@@ -74,7 +83,7 @@ const getTagStyle = (value: string) => {
   }
 }
 
-const showButtons = (status: string) => {
+const getButtonDisplayStyle = (status: string) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
     return { display: 'none', cursor: 'pointer' }
   }
@@ -109,7 +118,7 @@ const TaskDetailsCard = ({
   return (
     <Paper
       elevation={2}
-      sx={{ marginTop: 2, padding: 1.5 }}
+      sx={getContainerStyle(data?.status)}
       onClick={() => handleViewDetails(data)}
     >
       <Grid container spacing={2}>
@@ -155,7 +164,7 @@ const TaskDetailsCard = ({
               display='flex'
               alignItems='center'
             >
-              <TextsmsOutlinedIcon />
+              <TextsmsOutlinedIcon sx={taskDetailsCardStyles.commentIcon} />
               {data?.comments?.length}
             </Box>
           </Grid>
@@ -171,7 +180,7 @@ const TaskDetailsCard = ({
           <Grid item>
             <EditOutlinedIcon
               color='action'
-              sx={showButtons(data?.status)}
+              sx={getButtonDisplayStyle(data?.status)}
               onClick={e => {
                 e.stopPropagation()
                 handleEdit(data)
@@ -179,7 +188,7 @@ const TaskDetailsCard = ({
             />
             <DeleteOutlinedIcon
               color='error'
-              sx={showButtons(data?.status)}
+              sx={getButtonDisplayStyle(data?.status)}
               onClick={e => {
                 e.stopPropagation()
                 onDelete(data)
