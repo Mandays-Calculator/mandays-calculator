@@ -43,6 +43,7 @@ const StyledModalTitle = styled(Typography)({
 const StyledTitle = styled(Typography)({
   color: "#414145",
   fontSize: 14,
+  lineHeight: "1.8",
   fontFamily: "Montserrat",
   fontWeight: "400",
   wordWrap: "break-word",
@@ -150,7 +151,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 value={form.values.firstName || ""}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <ControlledTextField
                 name="middleName"
                 label={t(userManagement.label.middleName)}
@@ -164,8 +165,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 value={form.values.suffix || ""}
               />
             </Grid>
-            <Grid item xs={3}>
-              <StyledTitle mb={0.5}>
+            <Grid item xs={4}>
+              <StyledTitle mb={0.8}>
                 {t(userManagement.label.gender)}
               </StyledTitle>
               <ControlledSelect
