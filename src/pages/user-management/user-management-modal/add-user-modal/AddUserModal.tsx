@@ -20,7 +20,7 @@ import {
 import { FormikContextType } from "formik";
 import { UserManagementForms } from "~/pages/user-management/types";
 
-import { odcOptions, projectOptions, teamOptions } from "../utils";
+import { teamOptions } from "../utils";
 import moment from "moment";
 import { Alert, ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
@@ -29,6 +29,7 @@ import { APIStatus } from "~/hooks/request-handler";
 import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import { genders, rolesData, CAREER_STEPS } from "~/utils/constants";
+import { useCommonOption } from "~/queries/common/options/Options";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -84,7 +85,8 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const [selectedJoinedDate, setSelectedJoinedDate] =
     useState("recentlyJoined");
-
+  const projectOptions = useCommonOption("project", { keyword: "" });
+  const odcOptions = useCommonOption("odc", { keyword: "" });
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedJoinedDate(event.target.value);
 
