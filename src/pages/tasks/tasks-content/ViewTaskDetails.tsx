@@ -23,8 +23,8 @@ import { TextField, Modal, ConfirmModal } from '~/components'
 import { CheckBox } from '~/components/form'
 import moment from 'moment'
 
+import { viewTaskDetailsStyle, getTagStyle, taskStyle } from './style.ts'
 import { Status } from './utils'
-import { viewTaskDetailsStyle, getTagStyle } from './style.ts'
 
 interface ViewTaskDetailsProps {
   open: boolean
@@ -92,6 +92,7 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
         title={currentTask?.name}
         maxWidth='sm'
         onClose={onClose}
+        sx={taskStyle.scrollbar}
       >
         <Box sx={viewTaskDetailsStyle.modal.close}>
           <IconButton onClick={handleSaveTask}>

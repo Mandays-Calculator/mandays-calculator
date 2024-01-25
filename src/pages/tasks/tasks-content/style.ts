@@ -16,6 +16,26 @@ export const taskStyle = {
     others: {
       backgroundColor: theme.palette.warning.main
     }
+  },
+  scrollbar: {
+    '*::-webkit-scrollbar': {
+      width: '6px',
+      height: '6px'
+    },
+    '*::-webkit-scrollbar-track': {
+      borderRadius: '10px',
+      background: 'rgba(0,0,0,0.1)'
+    },
+    '*::-webkit-scrollbar-thumb': {
+      borderRadius: '10px',
+      background: 'rgba(0,0,0,0.2)'
+    },
+    '*::-webkit-scrollbar-thumb:hover': {
+      background: 'rgba(0,0,0,0.4)'
+    },
+    '*::-webkit-scrollbar-thumb:active': {
+      background: 'black'
+    }
   }
 }
 
