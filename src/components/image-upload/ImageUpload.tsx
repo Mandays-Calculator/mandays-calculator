@@ -7,14 +7,16 @@ import { ImageUploadContainer, StyledAvatar } from ".";
 
 type ImageUploadProps = {
   name: string;
+  initialValue: string;
   setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
 };
 
 const ImageUpload = ({
   name,
+  initialValue,
   setFieldValue,
 }: ImageUploadProps): ReactElement => {
-  const [base64Image, setBase64Image] = useState<string>(name);
+  const [base64Image, setBase64Image] = useState<string>(initialValue);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
