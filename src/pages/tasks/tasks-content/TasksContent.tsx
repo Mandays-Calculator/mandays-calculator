@@ -294,7 +294,7 @@ const TasksContent = (): ReactElement => {
             container
             spacing={1}
             justifyContent="space-between"
-            style={{ maxHeight: "960px", minWidth: "1080px", overflow: "auto" }}
+            style={{ maxHeight: "100%", minWidth: "100%", overflow: "auto" }}
           >
             {Object.values(Status).map((status) => {
               const filteredData = tasks.filter(
@@ -376,7 +376,7 @@ const TasksContent = (): ReactElement => {
               );
             })}
           </Grid>
-          {tasks.length === 0 ? (
+          {tasks.length === 0 ?? (
             <StyledNodata>
               <img src={NoTask} alt="error" />
               <Typography variant="h5" fontWeight="bold">
@@ -396,9 +396,10 @@ const TasksContent = (): ReactElement => {
                 </span>
               </Typography>
             </StyledNodata>
-          ) : null}
+          )}
         </PageContainer>
       </DragDropContext>
+
       <ErrorMessage error={errorMessage} type="alert" />
       <ConfirmModal
         open={deleteModalOpen}
