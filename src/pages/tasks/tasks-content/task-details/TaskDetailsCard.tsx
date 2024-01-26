@@ -1,86 +1,86 @@
-import type { AllTasksResponse } from '~/api/tasks/types'
+import type { AllTasksResponse } from "~/api/tasks/types";
 
-import { ReactElement } from 'react'
+import { ReactElement } from "react";
 
-import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-import { Box, Grid, Paper, Typography } from '@mui/material'
-import EventIcon from '@mui/icons-material/Event'
-import { useTranslation } from 'react-i18next'
-import LocalizationKey from '~/i18n/key'
+import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { Box, Grid, Paper, Typography } from "@mui/material";
+import EventIcon from "@mui/icons-material/Event";
+import { useTranslation } from "react-i18next";
+import LocalizationKey from "~/i18n/key";
 
-import theme from '~/theme'
+import theme from "~/theme";
 
-import { Status } from '../utils'
+import { Status } from "../utils";
 
 interface TaskDetailsCardProps {
-  data: AllTasksResponse
-  handleEdit: (task: AllTasksResponse) => void
-  handleViewDetails: (task: AllTasksResponse) => void
-  onDelete: (task: AllTasksResponse) => void
+  data: AllTasksResponse;
+  handleEdit: (task: AllTasksResponse) => void;
+  handleViewDetails: (task: AllTasksResponse) => void;
+  onDelete: (task: AllTasksResponse) => void;
 }
 
 const taskDetailsCardStyles = {
-  title: { fontSize: '1.2em', fontWeight: 'bold' },
+  title: { fontSize: "1.2em", fontWeight: "bold" },
   description: {
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    WebkitLineClamp: 3
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    WebkitLineClamp: 3,
   },
-  completionDate: { display: 'flex', alignItems: 'center' },
-  completionDateIcon: { marginRight: '5px' },
+  completionDate: { display: "flex", alignItems: "center" },
+  completionDateIcon: { marginRight: "5px" },
   comments: {
-    borderRadius: '5px',
-    backgroundColor: '#dedede',
-    padding: '2px 3px'
+    borderRadius: "5px",
+    backgroundColor: "#dedede",
+    padding: "2px 3px",
   },
   tag: {
     common: {
-      borderRadius: '5px',
-      padding: '3px',
-      color: '#FFFFFF'
+      borderRadius: "5px",
+      padding: "3px",
+      color: "#FFFFFF",
     },
     bug: {
-      backgroundColor: theme.palette.error.main
+      backgroundColor: theme.palette.error.main,
     },
     reviewed: {
-      backgroundColor: theme.palette.success.main
+      backgroundColor: theme.palette.success.main,
     },
     others: {
-      backgroundColor: theme.palette.warning.main
-    }
-  }
-}
+      backgroundColor: theme.palette.warning.main,
+    },
+  },
+};
 
 const getTagStyle = (value: string) => {
-  if (value === 'Bug') {
+  if (value === "Bug") {
     return {
       ...taskDetailsCardStyles.tag.common,
-      ...taskDetailsCardStyles.tag.bug
-    }
-  } else if (value === 'Reviewed') {
+      ...taskDetailsCardStyles.tag.bug,
+    };
+  } else if (value === "Reviewed") {
     return {
       ...taskDetailsCardStyles.tag.common,
-      ...taskDetailsCardStyles.tag.reviewed
-    }
+      ...taskDetailsCardStyles.tag.reviewed,
+    };
   }
 
   return {
     ...taskDetailsCardStyles.tag.common,
-    ...taskDetailsCardStyles.tag.others
-  }
-}
+    ...taskDetailsCardStyles.tag.others,
+  };
+};
 
 const showButtons = (status: string) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
-    return { display: 'none', cursor: 'pointer' }
+    return { display: "none", cursor: "pointer" };
   }
 
-  return { cursor: 'pointer' }
-}
+  return { cursor: "pointer" };
+};
 
 const setJustifyContent = (tag: number, status: string): string => {
   if (
@@ -88,23 +88,23 @@ const setJustifyContent = (tag: number, status: string): string => {
     status !== Status.OnHold &&
     status !== Status.Backlog
   ) {
-    return 'flex-start'
+    return "flex-start";
   }
 
-  return 'space-between'
-}
+  return "space-between";
+};
 
 const tagLengthFlag = (tag: number): boolean => {
-  return tag <= 2 && tag > 0
-}
+  return tag <= 2 && tag > 0;
+};
 
 const TaskDetailsCard = ({
   data,
   handleEdit,
   handleViewDetails,
-  onDelete
+  onDelete,
 }: TaskDetailsCardProps): ReactElement => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <Paper
@@ -146,14 +146,14 @@ const TaskDetailsCard = ({
           container
           spacing={tagLengthFlag(data?.tags?.length) ? 1 : 0}
           justifyContent={setJustifyContent(data?.tags?.length, data?.status)}
-          alignItems='center'
+          alignItems="center"
           xs={12}
         >
           <Grid item>
             <Box
               sx={taskDetailsCardStyles.comments}
-              display='flex'
-              alignItems='center'
+              display="flex"
+              alignItems="center"
             >
               <TextsmsOutlinedIcon />
               {data?.comments?.length}
@@ -163,33 +163,33 @@ const TaskDetailsCard = ({
           {data?.tags.map((tag, index) => (
             <Grid item>
               <Box sx={getTagStyle(tag?.value)} key={index}>
-                {tag?.value}
+                {String(tag)}
               </Box>
             </Grid>
           ))}
 
           <Grid item>
             <EditOutlinedIcon
-              color='action'
+              color="action"
               sx={showButtons(data?.status)}
-              onClick={e => {
-                e.stopPropagation()
-                handleEdit(data)
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEdit(data);
               }}
             />
             <DeleteOutlinedIcon
-              color='error'
+              color="error"
               sx={showButtons(data?.status)}
-              onClick={e => {
-                e.stopPropagation()
-                onDelete(data)
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(data);
               }}
             />
           </Grid>
         </Grid>
       </Grid>
     </Paper>
-  )
-}
+  );
+};
 
-export default TaskDetailsCard
+export default TaskDetailsCard;
