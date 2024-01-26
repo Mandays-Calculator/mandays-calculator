@@ -1,12 +1,13 @@
 import type { AllTasksResponse, Comment } from '~/api/tasks'
 
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CloseIcon from '@mui/icons-material/Close'
 import LocalizationKey from '~/i18n/key/index.ts'
-import { useTranslation } from 'react-i18next'
+import moment from 'moment'
 import {
   AccordionDetails,
   AccordionSummary,
@@ -21,7 +22,6 @@ import {
 
 import { TextField, Modal, ConfirmModal } from '~/components'
 import { CheckBox } from '~/components/form'
-import moment from 'moment'
 
 import { viewTaskDetailsStyle, getTagStyle, taskStyle } from './style.ts'
 import { Status } from './utils'

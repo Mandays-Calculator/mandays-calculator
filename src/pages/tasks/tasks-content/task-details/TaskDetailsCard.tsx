@@ -1,5 +1,6 @@
 import type { AllTasksResponse } from '~/api/tasks/types'
 
+import { useTranslation } from 'react-i18next'
 import { ReactElement } from 'react'
 
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined'
@@ -7,7 +8,6 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { Box, Grid, Paper, Typography } from '@mui/material'
 import EventIcon from '@mui/icons-material/Event'
-import { useTranslation } from 'react-i18next'
 import LocalizationKey from '~/i18n/key'
 
 import { taskDetailsCardStyles, getTagStyle } from '../style'
