@@ -1,4 +1,4 @@
-import type { AllTasksResponse } from '~/api/tasks/types'
+import type { AllTasksResponse } from "~/api/tasks/types";
 
 import { useTranslation } from 'react-i18next'
 import { ReactElement } from 'react'
@@ -14,10 +14,10 @@ import { taskDetailsCardStyles, getTagStyle } from '../style'
 import { Status } from '../utils'
 
 interface TaskDetailsCardProps {
-  data: AllTasksResponse
-  handleEdit: (task: AllTasksResponse) => void
-  handleViewDetails: (task: AllTasksResponse) => void
-  onDelete: (task: AllTasksResponse) => void
+  data: AllTasksResponse;
+  handleEdit: (task: AllTasksResponse) => void;
+  handleViewDetails: (task: AllTasksResponse) => void;
+  onDelete: (task: AllTasksResponse) => void;
 }
 
 const getContainerStyle = (status: string) => {
@@ -30,11 +30,11 @@ const getContainerStyle = (status: string) => {
 
 const getButtonDisplayStyle = (status: string) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
-    return { display: 'none', cursor: 'pointer' }
+    return { display: "none", cursor: "pointer" };
   }
 
-  return { cursor: 'pointer' }
-}
+  return { cursor: "pointer" };
+};
 
 const setJustifyContent = (tag: number, status: string): string => {
   if (
@@ -42,23 +42,23 @@ const setJustifyContent = (tag: number, status: string): string => {
     status !== Status.OnHold &&
     status !== Status.Backlog
   ) {
-    return 'flex-start'
+    return "flex-start";
   }
 
-  return 'space-between'
-}
+  return "space-between";
+};
 
 const tagLengthFlag = (tag: number): boolean => {
-  return tag <= 2 && tag > 0
-}
+  return tag <= 2 && tag > 0;
+};
 
 const TaskDetailsCard = ({
   data,
   handleEdit,
   handleViewDetails,
-  onDelete
+  onDelete,
 }: TaskDetailsCardProps): ReactElement => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <Paper
@@ -100,14 +100,14 @@ const TaskDetailsCard = ({
           container
           spacing={tagLengthFlag(data?.tags?.length) ? 1 : 0}
           justifyContent={setJustifyContent(data?.tags?.length, data?.status)}
-          alignItems='center'
+          alignItems="center"
           xs={12}
         >
           <Grid item>
             <Box
               sx={taskDetailsCardStyles.comments}
-              display='flex'
-              alignItems='center'
+              display="flex"
+              alignItems="center"
             >
               <TextsmsOutlinedIcon sx={taskDetailsCardStyles.commentIcon} />
               {data?.comments?.length}
@@ -117,7 +117,7 @@ const TaskDetailsCard = ({
           {data?.tags.map((tag, index) => (
             <Grid item>
               <Box sx={getTagStyle(tag?.value)} key={index}>
-                {tag?.value}
+                {String(tag)}
               </Box>
             </Grid>
           ))}
@@ -143,7 +143,7 @@ const TaskDetailsCard = ({
         </Grid>
       </Grid>
     </Paper>
-  )
-}
+  );
+};
 
-export default TaskDetailsCard
+export default TaskDetailsCard;
