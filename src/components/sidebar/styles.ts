@@ -47,14 +47,11 @@ const StyledDrawer = styled(Drawer, {
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
+  ...(open && openedMixin(theme)),
+  ...(!open && closedMixin(theme)),
+  "& .MuiDrawer-paper": {
+    ...(open ? openedMixin(theme) : closedMixin(theme)),
+  },
   "*::-webkit-scrollbar": {
     width: "6px",
     height: "6px",
@@ -72,10 +69,6 @@ const StyledDrawer = styled(Drawer, {
   },
   "*::-webkit-scrollbar-thumb:active": {
     background: theme.palette.primary.main,
-  },
-
-  [theme.breakpoints.down("xl")]: {
-    width: smDrawerWidth,
   },
 }));
 
@@ -113,7 +106,7 @@ div {
 
   border-radius: ${open ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};
-}`
+}`,
 );
 
 const StyledList = styled(List, {
@@ -130,7 +123,7 @@ const StyledList = styled(List, {
         scrollbarWidth: "thin",
       }),
     },
-  })
+  }),
 );
 
 const StyledItemText = styled(ListItemText)(({ theme }) => ({
