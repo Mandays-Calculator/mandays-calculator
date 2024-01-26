@@ -229,8 +229,27 @@ const LocalizationKey = {
       }
     },
     taskDetails: {
-      sprint: "tasks.taskDetails.sprint",
-      complexity: "tasks.taskDetails.complexity"
+      sprint: 'tasks.taskDetails.sprint',
+      complexity: 'tasks.taskDetails.complexity'
+    },
+    viewTaskDetails: {
+      label: {
+        description: 'tasks.viewTaskDetails.label.description',
+        functionality: 'tasks.viewTaskDetails.label.functionality',
+        complexity: 'tasks.viewTaskDetails.label.complexity',
+        createdDate: 'tasks.viewTaskDetails.label.createdDate',
+        completionDate: 'tasks.viewTaskDetails.label.completionDate',
+        markComplete: 'tasks.viewTaskDetails.label.markComplete',
+        sprint: 'tasks.viewTaskDetails.label.sprint',
+        tags: 'tasks.viewTaskDetails.label.tags',
+        comments: 'tasks.viewTaskDetails.label.comments'
+      },
+      placeholder: {
+        description: 'tasks.viewTaskDetails.placeholder.description',
+        sprint: 'tasks.viewTaskDetails.placeholder.sprint',
+        comments: 'tasks.viewTaskDetails.placeholder.comments',
+        avatar: 'tasks.viewTaskDetails.placeholder.avatar',
+      }
     },
     errorMessage: {
       error: 'tasks.errorMessage.error',

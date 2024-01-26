@@ -1,18 +1,17 @@
 import type { AllTasksResponse } from "~/api/tasks/types";
 
-import { ReactElement } from "react";
+import { useTranslation } from 'react-i18next'
+import { ReactElement } from 'react'
 
-import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Box, Grid, Paper, Typography } from "@mui/material";
-import EventIcon from "@mui/icons-material/Event";
-import { useTranslation } from "react-i18next";
-import LocalizationKey from "~/i18n/key";
+import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
+import { Box, Grid, Paper, Typography } from '@mui/material'
+import EventIcon from '@mui/icons-material/Event'
+import LocalizationKey from '~/i18n/key'
 
-import theme from "~/theme";
-
-import { Status } from "../utils";
+import { taskDetailsCardStyles, getTagStyle } from '../style'
+import { Status } from '../utils'
 
 interface TaskDetailsCardProps {
   data: AllTasksResponse;
@@ -21,60 +20,15 @@ interface TaskDetailsCardProps {
   onDelete: (task: AllTasksResponse) => void;
 }
 
-const taskDetailsCardStyles = {
-  title: { fontSize: "1.2em", fontWeight: "bold" },
-  description: {
-    display: "-webkit-box",
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    WebkitLineClamp: 3,
-  },
-  completionDate: { display: "flex", alignItems: "center" },
-  completionDateIcon: { marginRight: "5px" },
-  comments: {
-    borderRadius: "5px",
-    backgroundColor: "#dedede",
-    padding: "2px 3px",
-  },
-  tag: {
-    common: {
-      borderRadius: "5px",
-      padding: "3px",
-      color: "#FFFFFF",
-    },
-    bug: {
-      backgroundColor: theme.palette.error.main,
-    },
-    reviewed: {
-      backgroundColor: theme.palette.success.main,
-    },
-    others: {
-      backgroundColor: theme.palette.warning.main,
-    },
-  },
-};
-
-const getTagStyle = (value: string) => {
-  if (value === "Bug") {
-    return {
-      ...taskDetailsCardStyles.tag.common,
-      ...taskDetailsCardStyles.tag.bug,
-    };
-  } else if (value === "Reviewed") {
-    return {
-      ...taskDetailsCardStyles.tag.common,
-      ...taskDetailsCardStyles.tag.reviewed,
-    };
+const getContainerStyle = (status: string) => {
+  if (status !== Status.OnHold && status !== Status.Backlog) {
+    return { marginTop: 2, padding: 1.5, cursor: 'default' }
   }
 
-  return {
-    ...taskDetailsCardStyles.tag.common,
-    ...taskDetailsCardStyles.tag.others,
-  };
-};
+  return { marginTop: 2, padding: 1.5, cursor: 'grab' }
+}
 
-const showButtons = (status: string) => {
+const getButtonDisplayStyle = (status: string) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
     return { display: "none", cursor: "pointer" };
   }
@@ -109,7 +63,7 @@ const TaskDetailsCard = ({
   return (
     <Paper
       elevation={2}
-      sx={{ marginTop: 2, padding: 1.5 }}
+      sx={getContainerStyle(data?.status)}
       onClick={() => handleViewDetails(data)}
     >
       <Grid container spacing={2}>
@@ -155,7 +109,7 @@ const TaskDetailsCard = ({
               display="flex"
               alignItems="center"
             >
-              <TextsmsOutlinedIcon />
+              <TextsmsOutlinedIcon sx={taskDetailsCardStyles.commentIcon} />
               {data?.comments?.length}
             </Box>
           </Grid>
@@ -170,19 +124,19 @@ const TaskDetailsCard = ({
 
           <Grid item>
             <EditOutlinedIcon
-              color="action"
-              sx={showButtons(data?.status)}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleEdit(data);
+              color='action'
+              sx={getButtonDisplayStyle(data?.status)}
+              onClick={e => {
+                e.stopPropagation()
+                handleEdit(data)
               }}
             />
             <DeleteOutlinedIcon
-              color="error"
-              sx={showButtons(data?.status)}
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(data);
+              color='error'
+              sx={getButtonDisplayStyle(data?.status)}
+              onClick={e => {
+                e.stopPropagation()
+                onDelete(data)
               }}
             />
           </Grid>

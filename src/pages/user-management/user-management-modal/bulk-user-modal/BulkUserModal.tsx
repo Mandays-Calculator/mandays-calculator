@@ -164,8 +164,7 @@ export const BulkUserModal: React.FC<BulkModalProps> = ({
   const [placeholder, setPlaceholder] = useState("Files to be upload");
   // const [bulkFile, setBulkFile] = useState<File>([]);
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    console.log("event", event);
+  const handleChange = (_: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 

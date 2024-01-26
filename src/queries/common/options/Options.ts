@@ -32,13 +32,21 @@ const cacheTime: number = 1000 * 60 * 60 * 24;
 
 const transformDataToOption = (
   param: UseQueryResult<any, Error>,
-  type: CommonType
+  type: CommonType,
+  withInfo: boolean
 ): CommonOption => {
   const data = param?.data?.data || param?.data || param || [];
   if (data && data.length > 0) {
     switch (type) {
       // return value mapping depends on type
       case "user":
+        if (withInfo) {
+          return data.map((item: CommonResponseDataObj) => ({
+            label: `${item.firstName} ${item.lastName}`,
+            value: item.id,
+            ...item,
+          }));
+        }
         return data.map((item: CommonResponseDataObj) => ({
           label: `${item.firstName} ${item.lastName}`,
           value: item.id,
@@ -71,10 +79,12 @@ const transformDataToOption = (
       case "complexity":
       case "odc":
       default:
-        return data.map((item: CommonResponseDataObj) => ({
-          label: `${item.name}`,
-          value: item.id,
-        }));
+        return data
+          .filter((item: CommonResponseDataObj) => item.active)
+          .map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+          }));
     }
   }
   return [];
@@ -147,7 +157,17 @@ const getCommonOption = <T>(
   }
 };
 
-export const useCommonOption = (type: CommonType, params?: any) => {
+/**
+ * Get common options and convert into Select object
+ * @param {string} type - Type of common option
+ * @param {Object} params - Object to pass a param in API
+ * @param {boolean} withInfo - Returns other info
+ */
+export const useCommonOption = (
+  type: CommonType,
+  params?: any,
+  withInfo: boolean = false
+) => {
   const queryResult = getCommonOption<CommonDataResponse>(type, params);
-  return transformDataToOption(queryResult, type);
+  return transformDataToOption(queryResult, type, withInfo);
 };

@@ -31,7 +31,7 @@ import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
-import EditTask from "./EditTask";
+import ViewTaskDetails from "./ViewTaskDetails";
 import { useCommonOption } from "~/queries/common/options";
 
 const calculateGridSize = (numStatuses: number): number => {
@@ -53,7 +53,7 @@ const StatusContainer = styled("div")(
     borderRadius: 10,
     width: "100%",
     padding: 15,
-  })
+  }),
 );
 
 const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
@@ -79,7 +79,7 @@ const StyledCreateTaskIconButton = styled(Grid)(
     float: "right",
     cursor: "pointer",
     display: display !== Status.Backlog ? "none" : "",
-  })
+  }),
 );
 
 const StyledNodata = styled("div")({
@@ -124,7 +124,7 @@ const TasksContent = (): ReactElement => {
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
 
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
-    null
+    null,
   );
 
   const handleDeleteConfirm = () => {
@@ -259,7 +259,7 @@ const TasksContent = (): ReactElement => {
             onCreateTask={handleUpdateTask}
             reOpenCreateTask={handleCreateModalState}
           />
-          <EditTask
+          <ViewTaskDetails
             open={viewDetailsModalOpen}
             onClose={handleCloseViewDetailsModalState}
             task={selectedTask}
@@ -298,7 +298,7 @@ const TasksContent = (): ReactElement => {
           >
             {Object.values(Status).map((status) => {
               const filteredData = tasks.filter(
-                (task) => task.status === status
+                (task) => task.status === status,
               );
               return (
                 <Grid

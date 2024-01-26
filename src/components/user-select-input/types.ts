@@ -1,7 +1,7 @@
 import { InputProps, TextFieldProps } from "@mui/material";
 import type { SyntheticEvent } from "react";
 
-export interface UsersSelectProps {
+export interface UserSelectInputProps {
   value: SelectObject;
   onChange: (
     e: SyntheticEvent<Element, Event>,

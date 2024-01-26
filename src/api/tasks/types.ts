@@ -3,7 +3,7 @@ export interface QueryResponse<T> {
   data: T;
 }
 
-interface Comment {
+export interface Comment {
   name: string;
   comment: string;
 }
