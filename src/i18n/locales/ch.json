@@ -128,7 +128,8 @@
         "description": "Description",
         "sprint": "Sprint #",
         "comments": "Write a comment.",
-        "avatar": "A picture of "
+        "avatar": "A picture of ",
+        "user": "a user"
       }
     },
     "errorMessage": {

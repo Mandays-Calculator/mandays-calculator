@@ -1,375 +1,377 @@
 const LocalizationKey = {
   login: {
-    management: 'login.management',
+    management: "login.management",
     label: {
-      signIn: 'login.label.signIn',
-      userName: 'login.label.userName',
-      password: 'login.label.password',
-      forgotPassword: 'login.label.forgotPassword'
+      signIn: "login.label.signIn",
+      userName: "login.label.userName",
+      password: "login.label.password",
+      forgotPassword: "login.label.forgotPassword",
     },
     btnlabel: {
-      signIn: 'login.btnlabel.signIn'
+      signIn: "login.btnlabel.signIn",
     },
     placeholder: {
-      userName: 'login.placeholder.userName',
-      password: 'login.placeholder.password'
+      userName: "login.placeholder.userName",
+      password: "login.placeholder.password",
     },
     error: {
-      usernameRequired: 'common.errorMessage.auth.login.usernameRequired',
-      passwordRequired: 'common.errorMessage.auth.login.passwordRequired'
-    }
+      usernameRequired: "common.errorMessage.auth.login.usernameRequired",
+      passwordRequired: "common.errorMessage.auth.login.passwordRequired",
+    },
   },
   changePassword: {
     label: {
-      createNewPassword: 'changePassword.label.createNewPassword',
-      enterNewPassword: 'changePassword.label.enterNewPassword',
-      confirmNewPassword: 'changePassword.label.confirmNewPassword',
-      success: 'changePassword.label.success',
-      title: 'changePassword.label.title'
+      createNewPassword: "changePassword.label.createNewPassword",
+      enterNewPassword: "changePassword.label.enterNewPassword",
+      confirmNewPassword: "changePassword.label.confirmNewPassword",
+      success: "changePassword.label.success",
+      title: "changePassword.label.title",
     },
     btnlabel: {
-      changePassword: 'changePassword.btnlabel.changePassword',
-      cancel: 'changePassword.btnlabel.cancel'
+      changePassword: "changePassword.btnlabel.changePassword",
+      cancel: "changePassword.btnlabel.cancel",
     },
     validationInfo: {
-      charCount: 'changePassword.validationInfo.charCount',
-      uppercase: 'changePassword.validationInfo.uppercase',
-      lowercase: 'changePassword.validationInfo.lowercase',
-      number: 'changePassword.validationInfo.number',
-      symbol: 'changePassword.validationInfo.symbol',
-      match: 'changePassword.validationInfo.match'
+      charCount: "changePassword.validationInfo.charCount",
+      uppercase: "changePassword.validationInfo.uppercase",
+      lowercase: "changePassword.validationInfo.lowercase",
+      number: "changePassword.validationInfo.number",
+      symbol: "changePassword.validationInfo.symbol",
+      match: "changePassword.validationInfo.match",
     },
     placeholder: {
-      password: 'changePassword.placeholder.password',
-      confirmPassword: 'changePassword.placeholder.confirmPassword'
+      password: "changePassword.placeholder.password",
+      confirmPassword: "changePassword.placeholder.confirmPassword",
     },
     error: {
-      minLength: 'common.errorMessage.auth.changePassword.minLength',
+      minLength: "common.errorMessage.auth.changePassword.minLength",
       uppercaseRequired:
-        'common.errorMessage.auth.changePassword.uppercaseRequired',
+        "common.errorMessage.auth.changePassword.uppercaseRequired",
       lowercaseRequired:
-        'common.errorMessage.auth.changePassword.lowercaseRequired',
-      numberRequired: 'common.errorMessage.auth.changePassword.numberRequired',
+        "common.errorMessage.auth.changePassword.lowercaseRequired",
+      numberRequired: "common.errorMessage.auth.changePassword.numberRequired",
       specialCharRequired:
-        'common.errorMessage.auth.changePassword.specialCharRequired',
-      required: 'common.errorMessage.auth.changePassword.required',
-      match: 'common.errorMessage.auth.changePassword.match',
-      confirmRequired: 'common.errorMessage.auth.changePassword.confirmRequired'
-    }
+        "common.errorMessage.auth.changePassword.specialCharRequired",
+      required: "common.errorMessage.auth.changePassword.required",
+      match: "common.errorMessage.auth.changePassword.match",
+      confirmRequired:
+        "common.errorMessage.auth.changePassword.confirmRequired",
+    },
   },
   forgotPassword: {
     label: {
-      enterUsername: 'forgotPassword.label.enterUsername',
-      link: 'forgotPassword.label.link',
-      success: 'forgotPassword.label.success'
+      enterUsername: "forgotPassword.label.enterUsername",
+      link: "forgotPassword.label.link",
+      success: "forgotPassword.label.success",
     },
     btnlabel: {
-      send: 'forgotPassword.btnlabel.send',
-      back: 'forgotPassword.btnlabel.back',
-      process: 'forgotPassword.btnlabel.process'
+      send: "forgotPassword.btnlabel.send",
+      back: "forgotPassword.btnlabel.back",
+      process: "forgotPassword.btnlabel.process",
     },
-    placeholder: 'forgotPassword.placeholder',
-    errorRequired: 'common.errorMessage.auth.forgotPassword.required'
+    placeholder: "forgotPassword.placeholder",
+    errorRequired: "common.errorMessage.auth.forgotPassword.required",
   },
-  footerLabel: 'footer.label',
+  footerLabel: "footer.label",
   common: {
-    noDataLabel: 'common.noData',
-    complexity: 'common.complexity',
-    submit: 'common.submit',
-    somethingWentWrongTitle: 'common.somethingWentWrong.title',
-    configurationErrorDesc: 'common.configurationError.description',
-    somethingWentWrongDesc: 'common.somethingWentWrong.description',
-    pageNotFoundTitle: 'common.notFound.title',
-    pageNotFoundDesc: 'common.notFound.description',
-    permissionDeniedTitle: 'common.permissionDenied.title',
-    permissionDeniedDesc: 'common.permissionDenied.description',
-    permissionErrorTitle: 'common.permissionError.title',
-    permissionErrorDesc: 'common.permissionError.description',
-    pageInProgressTitle: 'common.label.pageInProgressTitle',
-    pageInProgressDesc: 'common.label.pageInProgressDescription',
-    goBackHomeBtnLabel: 'common.button.goBackHome',
-    collapse: 'common.button.collapse',
-    backBtn: 'common.button.back',
-    shareBtn: 'common.button.share',
-    nextBtn: 'common.button.next',
-    exportBtn: 'common.button.export',
-    saveBtn: 'common.button.save',
-    okayBtn: 'common.button.okay',
-    cancelBtn: 'common.button.cancel',
-    createdDateLabel: 'common.label.createdDate',
-    selectedLabel: 'common.label.selected',
-    loadingLabel: 'common.label.loading',
+    noDataLabel: "common.noData",
+    complexity: "common.complexity",
+    submit: "common.submit",
+    somethingWentWrongTitle: "common.somethingWentWrong.title",
+    configurationErrorDesc: "common.configurationError.description",
+    somethingWentWrongDesc: "common.somethingWentWrong.description",
+    pageNotFoundTitle: "common.notFound.title",
+    pageNotFoundDesc: "common.notFound.description",
+    permissionDeniedTitle: "common.permissionDenied.title",
+    permissionDeniedDesc: "common.permissionDenied.description",
+    permissionErrorTitle: "common.permissionError.title",
+    permissionErrorDesc: "common.permissionError.description",
+    pageInProgressTitle: "common.label.pageInProgressTitle",
+    pageInProgressDesc: "common.label.pageInProgressDescription",
+    goBackHomeBtnLabel: "common.button.goBackHome",
+    collapse: "common.button.collapse",
+    backBtn: "common.button.back",
+    shareBtn: "common.button.share",
+    nextBtn: "common.button.next",
+    exportBtn: "common.button.export",
+    saveBtn: "common.button.save",
+    okayBtn: "common.button.okay",
+    cancelBtn: "common.button.cancel",
+    createdDateLabel: "common.label.createdDate",
+    selectedLabel: "common.label.selected",
+    loadingLabel: "common.label.loading",
     userManagement: {
-      authSignInLoading: 'common.userManagement.auth.signInLoading',
-      authSignOutLoading: 'common.userManagement.auth.signOutLoading',
-      authPermissionLoading: 'common.userManagement.auth.permissionLoading'
+      authSignInLoading: "common.userManagement.auth.signInLoading",
+      authSignOutLoading: "common.userManagement.auth.signOutLoading",
+      authPermissionLoading: "common.userManagement.auth.permissionLoading",
     },
     errorMessage: {
-      genericError: 'common.errorMessage.genericError',
-      required: 'common.errorMessage.required',
-      fieldRequired: 'common.errorMessage.fieldRequired',
-      unauthorized: 'common.errorMessage.unauthorized'
+      genericError: "common.errorMessage.genericError",
+      required: "common.errorMessage.required",
+      fieldRequired: "common.errorMessage.fieldRequired",
+      unauthorized: "common.errorMessage.unauthorized",
     },
-    idleTimeOutLabel: 'common.idleTimeOut.label',
-    idleTimeOutTitle: 'common.idleTimeOut.title',
-    idleTimeOutButtonLoggedIn: 'common.idleTimeOut.stayLogged',
-    logout: 'common.idleTimeOut.logout',
-    logoutConfirmLabel: 'common.idleTimeOut.logoutConfirmLabel',
-    unauthorizedTitle: 'common.unauthorized.title',
-    systemErrorTitle: 'common.systemError.title'
+    idleTimeOutLabel: "common.idleTimeOut.label",
+    idleTimeOutTitle: "common.idleTimeOut.title",
+    idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
+    logout: "common.idleTimeOut.logout",
+    logoutConfirmLabel: "common.idleTimeOut.logoutConfirmLabel",
+    unauthorizedTitle: "common.unauthorized.title",
+    systemErrorTitle: "common.systemError.title",
   },
   mandaysCalculator: {
-    generatingPDFLabel: 'mandaysCalculator.generatingPDFLabel',
-    label: 'mandaysCalculator.label',
-    sprintListLabel: 'mandaysCalculator.sprintList.label',
-    addEstimationBtn: 'mandaysCalculator.sprintList.addEstimation',
+    generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
+    label: "mandaysCalculator.label",
+    sprintListLabel: "mandaysCalculator.sprintList.label",
+    addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
     modalConfirmDeleteEstimation:
-      'mandaysCalculator.modalLabels.confirmDeleteEstimation',
-    exportConfirmation: 'mandaysCalculator.modalLabels.exportConfirmation',
+      "mandaysCalculator.modalLabels.confirmDeleteEstimation",
+    exportConfirmation: "mandaysCalculator.modalLabels.exportConfirmation",
     modal: {
-      shareTitle: 'mandaysCalculator.modalLabels.shareTitle',
-      shareSubtitle: 'mandaysCalculator.modalLabels.shareSubtitle',
-      accessExpiry: 'mandaysCalculator.modalLabels.accessExpiry',
-      link: 'mandaysCalculator.modalLabels.link',
-      generate: 'mandaysCalculator.modalLabels.generate',
-      redirect: 'mandaysCalculator.modalLabels.redirect',
-      copyLink: 'mandaysCalculator.modalLabels.copyLink'
+      shareTitle: "mandaysCalculator.modalLabels.shareTitle",
+      shareSubtitle: "mandaysCalculator.modalLabels.shareSubtitle",
+      accessExpiry: "mandaysCalculator.modalLabels.accessExpiry",
+      link: "mandaysCalculator.modalLabels.link",
+      generate: "mandaysCalculator.modalLabels.generate",
+      redirect: "mandaysCalculator.modalLabels.redirect",
+      copyLink: "mandaysCalculator.modalLabels.copyLink",
     },
     sprintListTableColumns: {
-      sprintName: 'mandaysCalculator.sprintList.table.columns.sprintName',
-      team: 'mandaysCalculator.sprintList.table.columns.team',
-      startedDate: 'mandaysCalculator.sprintList.table.columns.startedDate',
-      status: 'mandaysCalculator.sprintList.table.columns.status'
+      sprintName: "mandaysCalculator.sprintList.table.columns.sprintName",
+      team: "mandaysCalculator.sprintList.table.columns.team",
+      startedDate: "mandaysCalculator.sprintList.table.columns.startedDate",
+      status: "mandaysCalculator.sprintList.table.columns.status",
     },
     summaryTableColumns: {
-      functionality: 'mandaysCalculator.summary.table.columns.functionality',
-      totalManHours: 'mandaysCalculator.summary.table.columns.totalManHours',
-      totalManDays: 'mandaysCalculator.summary.table.columns.totalManDays'
+      functionality: "mandaysCalculator.summary.table.columns.functionality",
+      totalManHours: "mandaysCalculator.summary.table.columns.totalManHours",
+      totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
-    summaryTitle: 'mandaysCalculator.summary.title',
-    summarySubtitle: 'mandaysCalculator.summary.subtitle',
-    resourcesTitle: 'mandaysCalculator.resourceList.title',
+    summaryTitle: "mandaysCalculator.summary.title",
+    summarySubtitle: "mandaysCalculator.summary.subtitle",
+    resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceListTableColumns: {
-      odc: 'mandaysCalculator.resourceList.table.columns.odc',
+      odc: "mandaysCalculator.resourceList.table.columns.odc",
       resourceCount:
-        'mandaysCalculator.resourceList.table.columns.resourceCount',
-      annualLeaves: 'mandaysCalculator.resourceList.table.columns.annualLeaves'
+        "mandaysCalculator.resourceList.table.columns.resourceCount",
+      annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
     },
     summaryForm: {
-      name: 'mandaysCalculator.summary.form.name',
-      team: 'mandaysCalculator.summary.form.team',
-      utilization: 'mandaysCalculator.summary.form.utilization',
-      startDate: 'mandaysCalculator.summary.form.startDate',
-      endDate: 'mandaysCalculator.summary.form.endDate'
+      name: "mandaysCalculator.summary.form.name",
+      team: "mandaysCalculator.summary.form.team",
+      utilization: "mandaysCalculator.summary.form.utilization",
+      startDate: "mandaysCalculator.summary.form.startDate",
+      endDate: "mandaysCalculator.summary.form.endDate",
     },
-    tasksTitle: 'mandaysCalculator.tasks.title',
-    noTaskLabel: 'mandaysCalculator.tasks.toTaskLabel',
-    noSelectedTaskLabel: 'mandaysCalculator.tasks.noSelectedTaskLabel',
-    taskDescriptionLabel: 'mandaysCalculator.tasks.taskDescriptionLabel',
-    tasksListLabel: 'mandaysCalculator.tasks.tasksListLabel',
+    tasksTitle: "mandaysCalculator.tasks.title",
+    noTaskLabel: "mandaysCalculator.tasks.toTaskLabel",
+    noSelectedTaskLabel: "mandaysCalculator.tasks.noSelectedTaskLabel",
+    taskDescriptionLabel: "mandaysCalculator.tasks.taskDescriptionLabel",
+    tasksListLabel: "mandaysCalculator.tasks.tasksListLabel",
     tasksTableColumns: {
-      tasks: 'mandaysCalculator.tasks.table.columns.tasks',
-      complexity: 'mandaysCalculator.tasks.table.columns.complexity',
-      i03: 'mandaysCalculator.tasks.table.columns.i03',
-      i04: 'mandaysCalculator.tasks.table.columns.i04',
-      i05: 'mandaysCalculator.tasks.table.columns.i05',
-      i06: 'mandaysCalculator.tasks.table.columns.i06',
-      i07: 'mandaysCalculator.tasks.table.columns.i07'
+      tasks: "mandaysCalculator.tasks.table.columns.tasks",
+      complexity: "mandaysCalculator.tasks.table.columns.complexity",
+      i03: "mandaysCalculator.tasks.table.columns.i03",
+      i04: "mandaysCalculator.tasks.table.columns.i04",
+      i05: "mandaysCalculator.tasks.table.columns.i05",
+      i06: "mandaysCalculator.tasks.table.columns.i06",
+      i07: "mandaysCalculator.tasks.table.columns.i07",
     },
     legend: {
-      title: 'mandaysCalculator.legend.title',
-      tableTitle: 'mandaysCalculator.legend.table.title'
+      title: "mandaysCalculator.legend.title",
+      tableTitle: "mandaysCalculator.legend.table.title",
     },
     options: {
-      excel: 'mandaysCalculator.options.excel',
-      pdf: 'mandaysCalculator.options.pdf'
+      excel: "mandaysCalculator.options.excel",
+      pdf: "mandaysCalculator.options.pdf",
     },
     estimation: {
-      title: 'mandaysCalculator.estimation.title',
+      title: "mandaysCalculator.estimation.title",
       estimationColumns: {
-        taskName: 'mandaysCalculator.estimation.estimationColumns.taskName',
-        complexity: 'mandaysCalculator.estimation.estimationColumns.complexity',
+        taskName: "mandaysCalculator.estimation.estimationColumns.taskName",
+        complexity: "mandaysCalculator.estimation.estimationColumns.complexity",
         noOfResources:
-          'mandaysCalculator.estimation.estimationColumns.noOfResources',
+          "mandaysCalculator.estimation.estimationColumns.noOfResources",
         totalManHours:
-          'mandaysCalculator.estimation.estimationColumns.totalManHours',
+          "mandaysCalculator.estimation.estimationColumns.totalManHours",
         totalManDays:
-          'mandaysCalculator.estimation.estimationColumns.totalManDays'
-      }
-    }
+          "mandaysCalculator.estimation.estimationColumns.totalManDays",
+      },
+    },
   },
   accountInfo: {
-    label: 'account.info.label'
+    label: "account.info.label",
   },
   tasks: {
     createTask: {
-      modalTitle: 'tasks.createTask.modalTitle',
-      complexity: 'tasks.createTask.complexity',
+      modalTitle: "tasks.createTask.modalTitle",
+      complexity: "tasks.createTask.complexity",
       label: {
-        taskTitle: 'tasks.createTask.label.taskTitle',
-        description: 'tasks.createTask.label.description',
-        functionality: 'tasks.createTask.label.functionality',
-        complexity: 'tasks.createTask.label.complexity',
-        tags: 'tasks.createTask.label.tags'
+        taskTitle: "tasks.createTask.label.taskTitle",
+        description: "tasks.createTask.label.description",
+        functionality: "tasks.createTask.label.functionality",
+        complexity: "tasks.createTask.label.complexity",
+        tags: "tasks.createTask.label.tags",
       },
       placeholder: {
-        functionality: 'tasks.createTask.placeholder.functionality',
-        complexity: 'tasks.createTask.placeholder.complexity',
-        tags: 'tasks.createTask.placeholder.tags'
+        functionality: "tasks.createTask.placeholder.functionality",
+        complexity: "tasks.createTask.placeholder.complexity",
+        tags: "tasks.createTask.placeholder.tags",
       },
       btnLabel: {
-        create: 'tasks.createTask.btnLabel.create',
-        close: 'tasks.createTask.btnLabel.close'
-      }
+        create: "tasks.createTask.btnLabel.create",
+        close: "tasks.createTask.btnLabel.close",
+      },
     },
     updateTask: {
-      modalTitle: 'tasks.updateTask.modalTitle',
+      modalTitle: "tasks.updateTask.modalTitle",
       btnLabel: {
-        update: 'tasks.updateTask.btnLabel.update'
-      }
+        update: "tasks.updateTask.btnLabel.update",
+      },
     },
     taskDetails: {
-      sprint: 'tasks.taskDetails.sprint',
-      complexity: 'tasks.taskDetails.complexity'
+      sprint: "tasks.taskDetails.sprint",
+      complexity: "tasks.taskDetails.complexity",
     },
     viewTaskDetails: {
       label: {
-        description: 'tasks.viewTaskDetails.label.description',
-        functionality: 'tasks.viewTaskDetails.label.functionality',
-        complexity: 'tasks.viewTaskDetails.label.complexity',
-        createdDate: 'tasks.viewTaskDetails.label.createdDate',
-        completionDate: 'tasks.viewTaskDetails.label.completionDate',
-        markComplete: 'tasks.viewTaskDetails.label.markComplete',
-        sprint: 'tasks.viewTaskDetails.label.sprint',
-        tags: 'tasks.viewTaskDetails.label.tags',
-        comments: 'tasks.viewTaskDetails.label.comments'
+        description: "tasks.viewTaskDetails.label.description",
+        functionality: "tasks.viewTaskDetails.label.functionality",
+        complexity: "tasks.viewTaskDetails.label.complexity",
+        createdDate: "tasks.viewTaskDetails.label.createdDate",
+        completionDate: "tasks.viewTaskDetails.label.completionDate",
+        markComplete: "tasks.viewTaskDetails.label.markComplete",
+        sprint: "tasks.viewTaskDetails.label.sprint",
+        tags: "tasks.viewTaskDetails.label.tags",
+        comments: "tasks.viewTaskDetails.label.comments",
       },
       placeholder: {
-        description: 'tasks.viewTaskDetails.placeholder.description',
-        sprint: 'tasks.viewTaskDetails.placeholder.sprint',
-        comments: 'tasks.viewTaskDetails.placeholder.comments',
-        avatar: 'tasks.viewTaskDetails.placeholder.avatar',
-      }
+        description: "tasks.viewTaskDetails.placeholder.description",
+        sprint: "tasks.viewTaskDetails.placeholder.sprint",
+        comments: "tasks.viewTaskDetails.placeholder.comments",
+        avatar: "tasks.viewTaskDetails.placeholder.avatar",
+        user: "tasks.viewTaskDetails.placeholder.user",
+      },
     },
     errorMessage: {
-      error: 'tasks.errorMessage.error',
-      started: 'tasks.errorMessage.started',
-      created: 'tasks.errorMessage.created'
-    }
+      error: "tasks.errorMessage.error",
+      started: "tasks.errorMessage.started",
+      created: "tasks.errorMessage.created",
+    },
   },
   history: {
-    detailsBtn: 'history.button.details',
-    filterPlacholder: 'history.filter.placeholder'
+    detailsBtn: "history.button.details",
+    filterPlacholder: "history.filter.placeholder",
   },
   userManagement: {
     label: {
-      firstName: 'userManagement.label.firstName',
-      lastName: 'userManagement.label.lastName',
-      middleName: 'userManagement.label.middleName',
-      suffix: 'userManagement.label.suffix',
-      gender: 'userManagement.label.gender',
-      email: 'userManagement.label.email',
-      careerStep: 'userManagement.label.careerStep',
-      employeeId: 'userManagement.label.employeeId',
-      odcId: 'userManagement.label.odcId',
-      joiningDate: 'userManagement.label.joiningDate',
-      joiningDateEdit: 'userManagement.label.joiningDateEdit',
-      joiningAtLaterDate: 'userManagement.label.joiningAtLaterDate',
-      projectId: 'userManagement.label.projectId',
-      teamId: 'userManagement.label.teamId',
-      roles: 'userManagement.label.roles'
+      firstName: "userManagement.label.firstName",
+      lastName: "userManagement.label.lastName",
+      middleName: "userManagement.label.middleName",
+      suffix: "userManagement.label.suffix",
+      gender: "userManagement.label.gender",
+      email: "userManagement.label.email",
+      careerStep: "userManagement.label.careerStep",
+      employeeId: "userManagement.label.employeeId",
+      odcId: "userManagement.label.odcId",
+      joiningDate: "userManagement.label.joiningDate",
+      joiningDateEdit: "userManagement.label.joiningDateEdit",
+      joiningAtLaterDate: "userManagement.label.joiningAtLaterDate",
+      projectId: "userManagement.label.projectId",
+      teamId: "userManagement.label.teamId",
+      roles: "userManagement.label.roles",
     },
 
     errorMessage: {
-      email: 'userManagement.errorMessage.email'
-    }
+      email: "userManagement.errorMessage.email",
+    },
   },
   odc: {
-    management: 'odc.management.label',
+    management: "odc.management.label",
     label: {
-      name: 'odc.label.name',
-      abbreviation: 'odc.label.abbreviation',
-      location: 'odc.label.location',
-      holidays: 'odc.label.holidays',
-      date: 'odc.label.date',
-      holiday: 'odc.label.holiday',
-      noHolidays: 'odc.label.noHolidays'
+      name: "odc.label.name",
+      abbreviation: "odc.label.abbreviation",
+      location: "odc.label.location",
+      holidays: "odc.label.holidays",
+      date: "odc.label.date",
+      holiday: "odc.label.holiday",
+      noHolidays: "odc.label.noHolidays",
     },
     modal: {
-      deleteLabel: 'odc.modal.deleteLabel',
-      yesPleaseBtn: 'odc.modal.yesPleaseBtn',
-      noThanksBtn: 'odc.modal.noThanksBtn'
+      deleteLabel: "odc.modal.deleteLabel",
+      yesPleaseBtn: "odc.modal.yesPleaseBtn",
+      noThanksBtn: "odc.modal.noThanksBtn",
     },
     btnlabel: {
-      addOdc: 'odc.btnlabel.addOdc',
-      addHoliday: 'odc.btnlabel.addHoliday',
-      save: 'odc.btnlabel.save',
-      cancel: 'odc.btnlabel.cancel',
-      edit: 'odc.btnlabel.edit'
+      addOdc: "odc.btnlabel.addOdc",
+      addHoliday: "odc.btnlabel.addHoliday",
+      save: "odc.btnlabel.save",
+      cancel: "odc.btnlabel.cancel",
+      edit: "odc.btnlabel.edit",
     },
     validationInfo: {
-      nameReq: 'odc.validationInfo.nameReq',
-      nameUnq: 'odc.validationInfo.nameUnq',
-      abbrUnq: 'odc.validationInfo.abbrUnq',
-      locReq: 'odc.validationInfo.locReq',
-      submitError: 'odc.validationInfo.submitError',
-      submitSuccess: 'odc.validationInfo.submitSuccess',
-      deleteError: 'odc.validationInfo.deleteError',
-      deleteSuccess: 'odc.validationInfo.deleteSuccess'
+      nameReq: "odc.validationInfo.nameReq",
+      nameUnq: "odc.validationInfo.nameUnq",
+      abbrUnq: "odc.validationInfo.abbrUnq",
+      locReq: "odc.validationInfo.locReq",
+      submitError: "odc.validationInfo.submitError",
+      submitSuccess: "odc.validationInfo.submitSuccess",
+      deleteError: "odc.validationInfo.deleteError",
+      deleteSuccess: "odc.validationInfo.deleteSuccess",
     },
-    placeholder: 'odc.placeholder'
+    placeholder: "odc.placeholder",
   },
   complexity: {
-    title: 'complexity.title',
+    title: "complexity.title",
     label: {
-      complexity: 'complexity.label.complexity',
-      hours: 'complexity.label.hours',
-      days: 'complexity.label.days',
-      name: 'complexity.label.name',
-      noOfHours: 'complexity.label.noOfHours',
-      noOfDays: 'complexity.label.noOfDays',
-      noOfFeatures: 'complexity.label.noOfFeatures',
-      description: 'complexity.label.description',
-      samples: 'complexity.label.samples',
-      addComplexity: 'complexity.label.addComplexity',
-      editComplexity: 'complexity.label.editComplexity'
+      complexity: "complexity.label.complexity",
+      hours: "complexity.label.hours",
+      days: "complexity.label.days",
+      name: "complexity.label.name",
+      noOfHours: "complexity.label.noOfHours",
+      noOfDays: "complexity.label.noOfDays",
+      noOfFeatures: "complexity.label.noOfFeatures",
+      description: "complexity.label.description",
+      samples: "complexity.label.samples",
+      addComplexity: "complexity.label.addComplexity",
+      editComplexity: "complexity.label.editComplexity",
     },
     table: {
       columns: {
-        complexity: 'complexity.table.columns.complexity',
-        noOfHours: 'complexity.table.columns.noOfHours',
-        noOfDays: 'complexity.table.columns.noOfDays',
-        noOfFeatures: 'complexity.table.columns.noOfFeatures',
-        description: 'complexity.table.columns.description',
-        samples: 'complexity.table.columns.samples'
-      }
+        complexity: "complexity.table.columns.complexity",
+        noOfHours: "complexity.table.columns.noOfHours",
+        noOfDays: "complexity.table.columns.noOfDays",
+        noOfFeatures: "complexity.table.columns.noOfFeatures",
+        description: "complexity.table.columns.description",
+        samples: "complexity.table.columns.samples",
+      },
     },
     btnLabel: {
-      addComplexity: 'complexity.btnLabel.addComplexity',
-      edit: 'complexity.btnLabel.edit',
-      delete: 'complexity.btnLabel.delete',
-      save: 'complexity.btnLabel.save',
-      cancel: 'complexity.btnLabel.cancel'
+      addComplexity: "complexity.btnLabel.addComplexity",
+      edit: "complexity.btnLabel.edit",
+      delete: "complexity.btnLabel.delete",
+      save: "complexity.btnLabel.save",
+      cancel: "complexity.btnLabel.cancel",
     },
     validationInfo: {
-      maxComplexityName: 'complexity.validationInfo.maxComplexityName',
-      maxDescription: 'complexity.validationInfo.maxDescription',
-      maxSamples: 'complexity.validationInfo.maxSamples',
-      noOfHours: 'complexity.validationInfo.noOfHours',
-      minNoOfHours: 'complexity.validationInfo.minNoOfHours',
-      maxNoOfHours: 'complexity.validationInfo.maxNoOfHours',
-      posNoOfHours: 'complexity.validationInfo.posNoOfHours',
-      intNoOfHours: 'complexity.validationInfo.intNoOfHours',
-      minNoOfFeatures: 'complexity.validationInfo.minNoOfFeatures',
-      maxNoOfFeatures: 'complexity.validationInfo.maxNoOfFeatures',
-      posNoOfFeatures: 'complexity.validationInfo.posNoOfFeatures',
-      intNoOfFeatures: 'complexity.validationInfo.intNoOfFeatures',
-      submitError: 'complexity.validationInfo.submitError',
-      submitSuccess: 'complexity.validationInfo.submitSuccess',
-      deleteError: 'complexity.validationInfo.deleteError',
-      deleteSuccess: 'complexity.validationInfo.deleteSuccess'
-    }
-  }
-}
+      maxComplexityName: "complexity.validationInfo.maxComplexityName",
+      maxDescription: "complexity.validationInfo.maxDescription",
+      maxSamples: "complexity.validationInfo.maxSamples",
+      noOfHours: "complexity.validationInfo.noOfHours",
+      minNoOfHours: "complexity.validationInfo.minNoOfHours",
+      maxNoOfHours: "complexity.validationInfo.maxNoOfHours",
+      posNoOfHours: "complexity.validationInfo.posNoOfHours",
+      intNoOfHours: "complexity.validationInfo.intNoOfHours",
+      minNoOfFeatures: "complexity.validationInfo.minNoOfFeatures",
+      maxNoOfFeatures: "complexity.validationInfo.maxNoOfFeatures",
+      posNoOfFeatures: "complexity.validationInfo.posNoOfFeatures",
+      intNoOfFeatures: "complexity.validationInfo.intNoOfFeatures",
+      submitError: "complexity.validationInfo.submitError",
+      submitSuccess: "complexity.validationInfo.submitSuccess",
+      deleteError: "complexity.validationInfo.deleteError",
+      deleteSuccess: "complexity.validationInfo.deleteSuccess",
+    },
+  },
+};
 
-export default LocalizationKey
+export default LocalizationKey;
