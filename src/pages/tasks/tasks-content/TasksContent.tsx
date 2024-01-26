@@ -32,6 +32,7 @@ import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import EditTask from "./EditTask";
+import ViewTaskDetails from "./ViewTaskDetails";
 import { useCommonOption } from "~/queries/common/options";
 
 const calculateGridSize = (numStatuses: number): number => {
@@ -259,7 +260,7 @@ const TasksContent = (): ReactElement => {
             onCreateTask={handleUpdateTask}
             reOpenCreateTask={handleCreateModalState}
           />
-          <EditTask
+          <ViewTaskDetails
             open={viewDetailsModalOpen}
             onClose={handleCloseViewDetailsModalState}
             task={selectedTask}
