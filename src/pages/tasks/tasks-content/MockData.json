@@ -57,8 +57,8 @@
     "status": "In Progress",
     "type": "Feature",
     "functionality": {
-      "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
-      "name": "Simple Function"
+      "id": "5583251e-5169-443f-bb9c-4e9cb8e26e77",
+      "name": "Design/ UI"
     },
     "tags": [
       {
@@ -92,8 +92,8 @@
     "status": "Completed",
     "type": "Bug",
     "functionality": {
-      "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
-      "name": "Simple Function"
+      "id": "eb9bb9fc-5b9d-4ef6-b0aa-77b49a6dc919",
+      "name": "Integration"
     },
     "tags": [
       {
@@ -131,8 +131,8 @@
     "status": "Backlog",
     "type": "Task",
     "functionality": {
-      "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
-      "name": "Simple Function"
+      "id": "d42b21b7-6144-4481-a383-eda3e81a96cc",
+      "name": "CRUD"
     },
     "tags": [
       {
@@ -174,8 +174,8 @@
     "status": "Not Yet Started",
     "type": "Task",
     "functionality": {
-      "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
-      "name": "Simple Function"
+      "id": "98031683-47d8-4338-8720-da964a9c7dcd",
+      "name": "Feature"
     },
     "tags": [
       {
@@ -221,8 +221,8 @@
     "status": "On Hold",
     "type": "Task",
     "functionality": {
-      "id": "2413054d-9945-11ee-a2d5-244bfee2440b",
-      "name": "Simple Function"
+      "id": "98031683-47d8-4338-8720-da964a9c7dcd",
+      "name": "Feature"
     },
     "tags": [],
     "comments": [

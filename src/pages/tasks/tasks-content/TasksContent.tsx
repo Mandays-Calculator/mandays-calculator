@@ -130,7 +130,7 @@ const TasksContent = (): ReactElement => {
   const handleDeleteConfirm = () => {
     if (selectedTaskForDelete) {
       const { name } = selectedTaskForDelete;
-      const updatedTasks = tasks.filter((task) => task.name !== name);
+      const updatedTasks = tasks.filter(task => task.name !== name);
       setTasks(updatedTasks);
     }
     setDeleteModalOpen(false);
@@ -183,7 +183,7 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedMockData = tasks.map((task) => {
+    const updatedMockData = tasks.map(task => {
       if (task.taskID === updatedTask.taskID) {
         return updatedTask;
       }
@@ -211,7 +211,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find((task) => task.taskID === draggableId);
+    const draggedTask = tasks.find(task => task.taskID === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -219,7 +219,7 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedMockData = tasks.map((task) => {
+        const updatedMockData = tasks.map(task => {
           if (task.taskID === draggableId) {
             return {
               ...task,
@@ -244,20 +244,19 @@ const TasksContent = (): ReactElement => {
         <PageContainer>
           <CreateOrUpdateTask
             open={createModalOpen}
-            isCreate={true}
             complexities={complexities}
             onClose={handleCloseCreateModalState}
             onCreateTask={handleCreateTask}
-            reOpenCreateTask={handleCreateModalState}
+            onOpenCreateOrUpdateTask={handleCreateModalState}
           />
           <CreateOrUpdateTask
             open={updateModalOpen}
-            isCreate={false}
-            task={selectedTask}
+            update
+            currentTask={selectedTask}
             complexities={complexities}
             onClose={handleCloseUpdateModalState}
-            onCreateTask={handleUpdateTask}
-            reOpenCreateTask={handleCreateModalState}
+            onUpdateTask={handleUpdateTask}
+            onOpenCreateOrUpdateTask={handleCreateModalState}
           />
           <ViewTaskDetails
             open={viewDetailsModalOpen}
@@ -270,8 +269,8 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name="filter"
-                placeholder="Team Name"
+                name='filter'
+                placeholder='Team Name'
                 options={[
                   {
                     value: "1",
@@ -282,7 +281,7 @@ const TasksContent = (): ReactElement => {
                     label: "BME",
                   },
                 ]}
-                onChange={(e) => handleTeamFilter(e)}
+                onChange={e => handleTeamFilter(e)}
                 value={selectedTeam}
               />
             </Grid>
@@ -293,13 +292,11 @@ const TasksContent = (): ReactElement => {
           <Grid
             container
             spacing={1}
-            justifyContent="space-between"
+            justifyContent='space-between'
             style={{ maxHeight: "100%", minWidth: "100%", overflow: "auto" }}
           >
-            {Object.values(Status).map((status) => {
-              const filteredData = tasks.filter(
-                (task) => task.status === status,
-              );
+            {Object.values(Status).map(status => {
+              const filteredData = tasks.filter(task => task.status === status);
               return (
                 <Grid
                   item
@@ -308,7 +305,7 @@ const TasksContent = (): ReactElement => {
                   key={status}
                 >
                   <Droppable droppableId={status}>
-                    {(provided) => (
+                    {provided => (
                       <StatusContainer
                         backgroundColor={status}
                         ref={provided.innerRef}
@@ -341,7 +338,7 @@ const TasksContent = (): ReactElement => {
                                 draggableId={task.taskID}
                                 index={index}
                               >
-                                {(provided) => (
+                                {provided => (
                                   <Stack
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
@@ -378,11 +375,11 @@ const TasksContent = (): ReactElement => {
           </Grid>
           {tasks.length === 0 ?? (
             <StyledNodata>
-              <img src={NoTask} alt="error" />
-              <Typography variant="h5" fontWeight="bold">
+              <img src={NoTask} alt='error' />
+              <Typography variant='h5' fontWeight='bold'>
                 {t(LocalizationKey.tasks.errorMessage.error)}
               </Typography>
-              <Typography variant="body2" fontWeight="bold">
+              <Typography variant='body2' fontWeight='bold'>
                 {t(LocalizationKey.tasks.errorMessage.started)}
                 <span
                   style={{
@@ -400,7 +397,7 @@ const TasksContent = (): ReactElement => {
         </PageContainer>
       </DragDropContext>
 
-      <ErrorMessage error={errorMessage} type="alert" />
+      <ErrorMessage error={errorMessage} type='alert' />
       <ConfirmModal
         open={deleteModalOpen}
         onClose={handleDeleteCancel}
