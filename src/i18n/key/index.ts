@@ -214,6 +214,8 @@ const LocalizationKey = {
         tags: "tasks.createTask.label.tags",
       },
       placeholder: {
+        taskTitle: "tasks.createTask.placeholder.taskTitle",
+        description: "tasks.createTask.placeholder.description",
         functionality: "tasks.createTask.placeholder.functionality",
         complexity: "tasks.createTask.placeholder.complexity",
         tags: "tasks.createTask.placeholder.tags",

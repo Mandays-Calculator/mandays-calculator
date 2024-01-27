@@ -1,6 +1,6 @@
 import theme from "~/theme";
 
-export const taskStyle = {
+export const taskStyles = {
   tag: {
     common: {
       borderRadius: "5px",
@@ -37,6 +37,16 @@ export const taskStyle = {
       background: "black",
     },
   },
+  modal: {
+    close: {
+      position: "absolute",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      top: "8px",
+      right: "3px",
+    },
+  },
 };
 
 export const taskDetailsCardStyles = {
@@ -67,16 +77,13 @@ export const taskDetailsCardStyles = {
   },
 };
 
-export const viewTaskDetailsStyle = {
+export const createOrUpdatetaskStyles = {
+  label: { marginBottom: "10px" },
+  complexity: { cursor: "pointer", marginBottom: "10px" },
+};
+
+export const viewTaskDetailsStyles = {
   modal: {
-    close: {
-      position: "absolute",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      top: "8px",
-      right: "3px",
-    },
     container: {
       padding: "0px 10px 10px 10px",
       minWidth: { xs: "320px", sm: "520px" },
@@ -107,18 +114,18 @@ export const viewTaskDetailsStyle = {
 export const getTagStyle = (value: string): object => {
   if (value === "Bug") {
     return {
-      ...taskStyle.tag.common,
-      ...taskStyle.tag.bug,
+      ...taskStyles.tag.common,
+      ...taskStyles.tag.bug,
     };
   } else if (value === "Reviewed") {
     return {
-      ...taskStyle.tag.common,
-      ...taskStyle.tag.reviewed,
+      ...taskStyles.tag.common,
+      ...taskStyles.tag.reviewed,
     };
   }
 
   return {
-    ...taskStyle.tag.common,
-    ...taskStyle.tag.others,
+    ...taskStyles.tag.common,
+    ...taskStyles.tag.others,
   };
 };

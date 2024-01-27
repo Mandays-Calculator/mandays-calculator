@@ -15,8 +15,8 @@ import _ from "lodash";
 import { Select, TextField, Modal } from "~/components";
 import { CustomButton } from "~/components/form/button";
 
+import { createOrUpdatetaskStyles, taskStyles } from "./style";
 import ComplexityDetails from "./complexity-details";
-import { viewTaskDetailsStyle } from "./style";
 
 interface CreateOrUpdateTaskProps {
   open: boolean;
@@ -64,6 +64,21 @@ const functionalityOptions = [
   { value: "98031683-47d8-4338-8720-da964a9c7dcd", label: "Feature" },
 ];
 
+const tagsOptions = [
+  { value: "Bug", label: "Bug" },
+  { value: "Needs Work", label: "Needs Work" },
+  { value: "Reviewed", label: "Reviewed" },
+  { value: "Enhancement", label: "Enhancement" },
+];
+
+const complexityOptions = [
+  // should be removed when api is integrated
+  { value: "49a522fe-9945-11ee-a2d5-244bfee2440b", label: "Trivial" },
+  { value: "49a522fe-11ee-9945-a2d5-244bfee2440b", label: "Minor" },
+  { value: "49a522fe-9945-a2d5-9945-244bfee2440b", label: "Major" },
+  { value: "49a522fe-a2d5-11ee-a2d5-244bfee2440b", label: "Blocker" },
+];
+
 const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   const {
     open,
@@ -103,22 +118,32 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   };
 
   const handleChangeFunctionality = (e: SelectChangeEvent<unknown>) => {
+    const selectedFunctionality = _.find(
+      functionalityOptions,
+      _.matchesProperty("value", e.target.value),
+    );
+
     const functionality: Functionality = {
       id: e.target.value as string,
-      name: e.target.name as string,
+      name: selectedFunctionality?.label as string,
     };
     setTask({ ...task, functionality });
   };
 
   const handleChangeComplexity = (e: SelectChangeEvent<unknown>) => {
+    const selectedComplexity = _.find(
+      complexityOptions,
+      _.matchesProperty("value", e.target.value),
+    );
+
     const complexity: Complexity = {
       id: e.target.value as string,
-      name: e.target.name as string,
+      name: selectedComplexity?.label as string,
       active: true,
-      description: e.target.name as string,
+      description: selectedComplexity?.label as string,
       numberOfFeatures: "",
       numberOfHours: "",
-      sample: e.target.name as string,
+      sample: selectedComplexity?.label as string,
     };
     setTask({ ...task, complexity });
   };
@@ -157,7 +182,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
         maxWidth='sm'
         onClose={onClose}
       >
-        <Box sx={viewTaskDetailsStyle.modal.close}>
+        <Box sx={taskStyles.modal.close}>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
@@ -168,6 +193,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             <TextField
               name='name'
               label={t(LocalizationKey.tasks.createTask.label.taskTitle)}
+              placeholder={t(
+                LocalizationKey.tasks.createTask.placeholder.taskTitle,
+              )}
               fullWidth
               onChange={e => setTask({ ...task, name: e.target.value })}
               value={task.name}
@@ -178,6 +206,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             <TextField
               name='description'
               label={t(LocalizationKey.tasks.createTask.label.description)}
+              placeholder={t(
+                LocalizationKey.tasks.createTask.placeholder.description,
+              )}
               fullWidth
               multiline
               rows={4}
@@ -188,7 +219,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
           <Grid item container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <Typography>
+              <Typography sx={createOrUpdatetaskStyles.label}>
                 {t(LocalizationKey.tasks.createTask.label.functionality)}
               </Typography>
               <Select
@@ -208,9 +239,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 direction='row'
                 spacing={1}
                 onClick={() => handleOpenComplexity()}
-                sx={{ cursor: "pointer" }}
+                sx={createOrUpdatetaskStyles.complexity}
               >
-                <Typography>
+                <Typography sx={createOrUpdatetaskStyles.label}>
                   {t(LocalizationKey.tasks.createTask.label.complexity)}
                 </Typography>
                 <InfoOutlinedIcon fontSize='small' />
@@ -223,13 +254,15 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 fullWidth
                 onChange={handleChangeComplexity}
                 value={task.complexity.id}
-                options={complexities}
+                options={
+                  !_.isEmpty(complexities) ? complexities : complexityOptions
+                } // should be updated when api is integrated
               />
             </Grid>
           </Grid>
 
           <Grid item xs={12}>
-            <Typography>
+            <Typography sx={createOrUpdatetaskStyles.label}>
               {t(LocalizationKey.tasks.createTask.label.tags)}
             </Typography>
             <Select
@@ -239,15 +272,12 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
               fullWidth
               onChange={handleChangeTags}
               value={selectedTags}
-              options={[
-                { value: "Bug", label: "Bug" },
-                { value: "Needs Work", label: "Needs Work" },
-              ]}
+              options={tagsOptions}
             />
           </Grid>
         </Grid>
 
-        <Stack direction='row' justifyContent='flex-end'>
+        <Stack direction='row' justifyContent='flex-end' marginTop={"10px"}>
           <CustomButton
             type='button'
             colorVariant='primary'

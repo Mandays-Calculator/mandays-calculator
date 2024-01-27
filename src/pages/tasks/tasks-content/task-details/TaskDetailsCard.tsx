@@ -36,10 +36,6 @@ const getButtonDisplayStyle = (status: string) => {
   return { cursor: "pointer" };
 };
 
-const tagLengthFlag = (tag: number): boolean => {
-  return tag <= 2 && tag > 0;
-};
-
 const TaskDetailsCard = ({
   data,
   handleEdit,
@@ -88,13 +84,7 @@ const TaskDetailsCard = ({
           </Typography>
         </Grid>
 
-        <Grid
-          item
-          container
-          spacing={tagLengthFlag(data?.tags?.length) ? 1 : 0}
-          alignItems='center'
-          xs={10}
-        >
+        <Grid item container spacing={1} alignItems='center' xs={10}>
           <Grid item>
             <Box
               sx={taskDetailsCardStyles.comments}
@@ -113,29 +103,27 @@ const TaskDetailsCard = ({
               </Box>
             </Grid>
           ))}
-
-          <Grid item>
-            <Box sx={taskDetailsCardStyles.buttons}>
-              <EditOutlinedIcon
-                color='action'
-                sx={getButtonDisplayStyle(data?.status)}
-                onClick={e => {
-                  e.stopPropagation();
-                  handleEdit(data);
-                }}
-              />
-
-              <DeleteOutlinedIcon
-                color='error'
-                sx={getButtonDisplayStyle(data?.status)}
-                onClick={e => {
-                  e.stopPropagation();
-                  onDelete(data);
-                }}
-              />
-            </Box>
-          </Grid>
         </Grid>
+
+        <Box sx={taskDetailsCardStyles.buttons}>
+          <EditOutlinedIcon
+            color='action'
+            sx={getButtonDisplayStyle(data?.status)}
+            onClick={e => {
+              e.stopPropagation();
+              handleEdit(data);
+            }}
+          />
+
+          <DeleteOutlinedIcon
+            color='error'
+            sx={getButtonDisplayStyle(data?.status)}
+            onClick={e => {
+              e.stopPropagation();
+              onDelete(data);
+            }}
+          />
+        </Box>
       </Grid>
     </Paper>
   );

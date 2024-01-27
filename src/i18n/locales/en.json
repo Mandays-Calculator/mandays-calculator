@@ -309,9 +309,11 @@
         "tags": "Tags"
       },
       "placeholder": {
-        "functionality": "Functionality",
-        "complexity": "Complexity",
-        "tags": "Tags"
+        "taskTitle": "Enter a title",
+        "description": "Enter a description",
+        "functionality": "Select functionality",
+        "complexity": "Select complexity",
+        "tags": "Select tags"
       },
       "btnLabel": {
         "create": "Create",
