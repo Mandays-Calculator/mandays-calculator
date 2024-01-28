@@ -328,7 +328,8 @@
     },
     "taskDetails": {
       "sprint": "Sprint #",
-      "complexity": "Complexity Rating: "
+      "complexity": "Complexity Rating: ",
+      "deleteConfirm": "Are you sure you want to delete task:"
     },
     "viewTaskDetails": {
       "label": {
@@ -351,9 +352,10 @@
       }
     },
     "errorMessage": {
-      "error": "No tasks currently visible",
-      "started": "Get started and",
-      "created": "create a task"
+      "error": "No tasks currently visible.",
+      "started": "Get started and ",
+      "created": "create a task",
+      "fetch": "Unable to fetch data."
     }
   },
   "history": {

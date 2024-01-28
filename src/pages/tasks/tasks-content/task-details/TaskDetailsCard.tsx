@@ -1,7 +1,7 @@
 import type { AllTasksResponse } from "~/api/tasks/types";
+import type { ReactElement } from "react";
 
 import { useTranslation } from "react-i18next";
-import { ReactElement } from "react";
 
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
@@ -10,13 +10,13 @@ import { Box, Grid, Paper, Typography } from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
 import LocalizationKey from "~/i18n/key";
 
-import { taskDetailsCardStyles, getTagStyle } from "../style";
+import { taskDetailsCardStyles, getTagStyle, taskStyles } from "../style";
 import { Status } from "../utils";
 
 interface TaskDetailsCardProps {
   data: AllTasksResponse;
-  handleEdit: (task: AllTasksResponse) => void;
   handleViewDetails: (task: AllTasksResponse) => void;
+  handleEdit: (task: AllTasksResponse) => void;
   onDelete: (task: AllTasksResponse) => void;
 }
 
@@ -36,12 +36,8 @@ const getButtonDisplayStyle = (status: string) => {
   return { cursor: "pointer" };
 };
 
-const TaskDetailsCard = ({
-  data,
-  handleEdit,
-  handleViewDetails,
-  onDelete,
-}: TaskDetailsCardProps): ReactElement => {
+const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
+  const { data, handleViewDetails, handleEdit, onDelete } = props;
   const { t } = useTranslation();
 
   return (
@@ -54,7 +50,7 @@ const TaskDetailsCard = ({
         container
         spacing={2}
         display={"flex"}
-        sx={taskDetailsCardStyles.gridContainer}
+        sx={taskStyles.gridRelativeContainer}
       >
         <Grid item xs={12}>
           <Typography sx={taskDetailsCardStyles.title}>{data?.name}</Typography>

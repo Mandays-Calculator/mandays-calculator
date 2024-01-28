@@ -234,6 +234,7 @@ const LocalizationKey = {
     taskDetails: {
       sprint: "tasks.taskDetails.sprint",
       complexity: "tasks.taskDetails.complexity",
+      deleteConfirm: "tasks.taskDetails.deleteConfirm",
     },
     viewTaskDetails: {
       label: {
@@ -259,6 +260,7 @@ const LocalizationKey = {
       error: "tasks.errorMessage.error",
       started: "tasks.errorMessage.started",
       created: "tasks.errorMessage.created",
+      fetch: "tasks.errorMessage.fetch",
     },
   },
   history: {

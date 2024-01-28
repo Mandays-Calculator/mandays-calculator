@@ -1,8 +1,8 @@
-import { ReactElement } from "react";
+import type { ReactElement } from "react";
 
 import { Grid, Stack, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
+import { styled } from "@mui/material/styles";
 import LocalizationKey from "~/i18n/key";
 
 import { CustomButton } from "~/components/form/button";

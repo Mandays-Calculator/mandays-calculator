@@ -1,7 +1,8 @@
 import type { AllTasksResponse, Comment } from "~/api/tasks";
+import type { ReactElement } from "react";
 
-import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -28,24 +29,20 @@ import { Status } from "./utils";
 
 interface ViewTaskDetailsProps {
   open: boolean;
-  onClose: () => void;
+  username: string;
   task: AllTasksResponse | null;
   onSave: (updatedTask: AllTasksResponse) => void;
-  name: string;
+  onClose: () => void;
 }
 
-const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
-  open,
-  onClose,
-  task,
-  onSave,
-  name,
-}) => {
+const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
+  const { open, username, task, onSave, onClose } = props;
+  const { t } = useTranslation();
+
   const defaultComment = {
-    name: name,
+    name: username,
     comment: "",
   };
-  const { t } = useTranslation();
 
   const [currentTask, setNewTask] = useState<AllTasksResponse | null>(task);
   const [openMarkCompleted, setMarkCompleted] = useState<boolean>(false);
@@ -239,7 +236,7 @@ const ViewTaskDetails: React.FC<ViewTaskDetailsProps> = ({
                 sx={viewTaskDetailsStyles.comment.container}
               >
                 <Grid item xs={2} sm={1}>
-                  <Avatar alt={getAvatarAlt(name)} />
+                  <Avatar alt={getAvatarAlt(username)} />
                 </Grid>
 
                 <Grid item xs={10} sm={11}>

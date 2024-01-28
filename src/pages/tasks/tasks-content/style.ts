@@ -1,6 +1,7 @@
 import theme from "~/theme";
 
 export const taskStyles = {
+  gridRelativeContainer: { position: "relative" },
   tag: {
     common: {
       borderRadius: "5px",
@@ -49,9 +50,28 @@ export const taskStyles = {
   },
 };
 
+export const taskContentStyles = {
+  divider: { margin: "1rem 0 2rem 0" },
+  taskGridContainer: { maxHeight: "100%", minWidth: "100%", overflow: "auto" },
+  createButton: {
+    position: "absolute",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    top: "0px",
+    right: "0px",
+  },
+  link: { cursor: "pointer" },
+  noData: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "60vh",
+  },
+};
+
 export const taskDetailsCardStyles = {
   title: { fontSize: "1.2em", fontWeight: "bold", cursor: "pointer" },
-  gridContainer: { position: "relative" },
   description: {
     display: "-webkit-box",
     WebkitBoxOrient: "vertical",

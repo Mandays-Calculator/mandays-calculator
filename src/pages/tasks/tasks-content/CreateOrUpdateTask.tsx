@@ -21,12 +21,12 @@ import ComplexityDetails from "./complexity-details";
 interface CreateOrUpdateTaskProps {
   open: boolean;
   update?: boolean;
-  currentTask?: AllTasksResponse | null;
   complexities: SelectObject[];
-  onClose: () => void;
+  currentTask?: AllTasksResponse | null;
   onCreateTask?: (task: AllTasksResponse) => void;
   onUpdateTask?: (task: AllTasksResponse) => void;
   onOpenCreateOrUpdateTask: () => void;
+  onClose: () => void;
 }
 
 const initialTaskState: AllTasksResponse = {
@@ -82,13 +82,13 @@ const complexityOptions = [
 const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   const {
     open,
-    currentTask,
     update = false,
-    onClose,
     complexities,
+    currentTask,
     onCreateTask,
     onUpdateTask,
     onOpenCreateOrUpdateTask,
+    onClose,
   } = props;
 
   const { t } = useTranslation();
