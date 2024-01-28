@@ -55,6 +55,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
   const handleSaveTask = (): void => {
     if (currentTask) {
       onSave(currentTask);
+      setNewComment(defaultComment);
       onClose();
     }
   };
@@ -92,6 +93,87 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
     }
 
     return altText;
+  };
+
+  const renderCommentSection = () => {
+    return (
+      <Accordion
+        defaultExpanded
+        square
+        sx={viewTaskDetailsStyles.comment.accordion}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls='taskdetails-comment-panel'
+          id='taskdetails-comment-panel-header'
+          sx={viewTaskDetailsStyles.label}
+        >
+          {t(LocalizationKey.tasks.viewTaskDetails.label.comments)}
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid
+            item
+            container
+            alignItems='center'
+            xs={12}
+            sx={viewTaskDetailsStyles.comment.container}
+          >
+            <Grid item xs={2} sm={1}>
+              <Avatar alt={getAvatarAlt(username)} />
+            </Grid>
+
+            <Grid item xs={10} sm={11}>
+              <TextField
+                name='comment'
+                placeholder={t(
+                  LocalizationKey.tasks.viewTaskDetails.placeholder.comments,
+                )}
+                fullWidth
+                multiline
+                maxRows={10}
+                sx={viewTaskDetailsStyles.comment.textbox}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        aria-label='Send'
+                        edge='end'
+                        onClick={() => handleAddComment()}
+                      >
+                        <SendOutlinedIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                value={newComment.comment}
+                onChange={e =>
+                  setNewComment({ ...newComment, comment: e.target.value })
+                }
+              />
+            </Grid>
+          </Grid>
+
+          <Grid item container alignItems='center' xs={12} spacing={1.5}>
+            {(currentTask?.comments || []).map((comment, index) => (
+              <>
+                <Grid item xs={2} sm={1}>
+                  <Avatar alt={getAvatarAlt(comment?.name)} />
+                </Grid>
+
+                <Grid item container xs={10} sm={11} alignItems='center'>
+                  <Box key={index} sx={viewTaskDetailsStyles.comment.comment}>
+                    <Typography sx={viewTaskDetailsStyles.label}>
+                      {comment?.name}
+                    </Typography>
+                    <Typography>{comment?.comment}</Typography>
+                  </Box>
+                </Grid>
+              </>
+            ))}
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+    );
   };
 
   return (
@@ -214,96 +296,17 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             ))}
           </Grid>
 
-          <Accordion
-            defaultExpanded
-            square
-            sx={viewTaskDetailsStyles.comment.accordion}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls='taskdetails-comment-panel'
-              id='taskdetails-comment-panel-header'
-              sx={viewTaskDetailsStyles.label}
-            >
-              {t(LocalizationKey.tasks.viewTaskDetails.label.comments)}
-            </AccordionSummary>
-            <AccordionDetails>
-              <Grid
-                item
-                container
-                alignItems='center'
-                xs={12}
-                sx={viewTaskDetailsStyles.comment.container}
-              >
-                <Grid item xs={2} sm={1}>
-                  <Avatar alt={getAvatarAlt(username)} />
-                </Grid>
-
-                <Grid item xs={10} sm={11}>
-                  <TextField
-                    name='comment'
-                    placeholder={t(
-                      LocalizationKey.tasks.viewTaskDetails.placeholder
-                        .comments,
-                    )}
-                    fullWidth
-                    multiline
-                    maxRows={10}
-                    sx={viewTaskDetailsStyles.comment.textbox}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <IconButton
-                            aria-label='Send'
-                            edge='end'
-                            onClick={() => handleAddComment()}
-                          >
-                            <SendOutlinedIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    value={newComment.comment}
-                    onChange={e =>
-                      setNewComment({ ...newComment, comment: e.target.value })
-                    }
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid item container alignItems='center' xs={12} spacing={1.5}>
-                {(currentTask?.comments || []).map((comment, index) => (
-                  <>
-                    <Grid item xs={2} sm={1}>
-                      <Avatar alt={getAvatarAlt(comment?.name)} />
-                    </Grid>
-
-                    <Grid item container xs={10} sm={11} alignItems='center'>
-                      <Box
-                        key={index}
-                        sx={viewTaskDetailsStyles.comment.comment}
-                      >
-                        <Typography sx={viewTaskDetailsStyles.label}>
-                          {comment?.name}
-                        </Typography>
-                        <Typography>{comment?.comment}</Typography>
-                      </Box>
-                    </Grid>
-                  </>
-                ))}
-              </Grid>
-            </AccordionDetails>
-          </Accordion>
+          {renderCommentSection()}
         </Grid>
       </Modal>
 
       <ConfirmModal
         open={openMarkCompleted}
         onConfirm={handleConfirmMarkCompleted}
-        confirmLabel={"Yes, Please"}
+        confirmLabel={t(LocalizationKey.tasks.viewTaskDetails.modal.confirmMarkComplete)}
         onClose={handleCloseMarkCompleted}
-        message={"Are you sure you want to tag this task as completed?"}
-        closeLabel={"No, Thanks"}
+        message={t(LocalizationKey.tasks.viewTaskDetails.modal.markComplete)}
+        closeLabel={t(LocalizationKey.tasks.viewTaskDetails.modal.closeMarkComplete)}
       />
     </>
   );

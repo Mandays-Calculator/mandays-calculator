@@ -133,6 +133,11 @@
         "comments": "Write a comment.",
         "avatar": "A picture of ",
         "user": "a user"
+      },
+      "modal": {
+        "markComplete": "Are you sure you want to tag this task as completed?",
+        "confirmMarkComplete": "Yes, Please",
+        "closeMarkComplete": "No, Thanks"
       }
     },
     "errorMessage": {

@@ -255,6 +255,11 @@ const LocalizationKey = {
         avatar: "tasks.viewTaskDetails.placeholder.avatar",
         user: "tasks.viewTaskDetails.placeholder.user",
       },
+      modal: {
+        markComplete: "tasks.taskDetails.markComplete",
+        confirmMarkComplete: "tasks.taskDetails.confirmMarkComplete",
+        closeMarkComplete: "tasks.taskDetails.closeMarkComplete",
+      },
     },
     errorMessage: {
       error: "tasks.errorMessage.error",
