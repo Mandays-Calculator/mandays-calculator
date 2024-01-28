@@ -11,7 +11,7 @@ import { Modal } from "~/components";
 interface ComplexityDetailsProps {
   open: boolean;
   onClose: () => void;
-  openCreateTask: () => void;
+  openCreateOrUpdateTask: () => void;
 }
 
 const details = {
@@ -37,11 +37,11 @@ const StyledDetails = styled(Typography)({
 });
 
 const ComplexityDetails = (props: ComplexityDetailsProps): ReactElement => {
-  const { open, onClose, openCreateTask } = props;
+  const { open, onClose, openCreateOrUpdateTask } = props;
   const { t } = useTranslation();
 
   const handleCloseComplexity = (): void => {
-    openCreateTask();
+    openCreateOrUpdateTask();
     onClose();
   };
 

@@ -308,7 +308,7 @@ const TasksContent = (): ReactElement => {
           open={createModalOpen}
           complexities={complexities}
           onCreateTask={handleCreateTask}
-          onOpenCreateOrUpdateTask={handleCreateModalState}
+          onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
         />
         <CreateOrUpdateTask
@@ -317,7 +317,7 @@ const TasksContent = (): ReactElement => {
           complexities={complexities}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
-          onOpenCreateOrUpdateTask={handleCreateModalState}
+          onOpenUpdateTask={handleUpdateModalState}
           onClose={handleCloseUpdateModalState}
         />
         <ViewTaskDetails

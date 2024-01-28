@@ -256,9 +256,9 @@ const LocalizationKey = {
         user: "tasks.viewTaskDetails.placeholder.user",
       },
       modal: {
-        markComplete: "tasks.taskDetails.markComplete",
-        confirmMarkComplete: "tasks.taskDetails.confirmMarkComplete",
-        closeMarkComplete: "tasks.taskDetails.closeMarkComplete",
+        markComplete: "tasks.viewTaskDetails.modal.markComplete",
+        confirmMarkComplete: "tasks.viewTaskDetails.modal.confirmMarkComplete",
+        closeMarkComplete: "tasks.viewTaskDetails.modal.closeMarkComplete",
       },
     },
     errorMessage: {

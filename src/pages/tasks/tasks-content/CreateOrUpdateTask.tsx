@@ -25,7 +25,8 @@ interface CreateOrUpdateTaskProps {
   currentTask?: AllTasksResponse | null;
   onCreateTask?: (task: AllTasksResponse) => void;
   onUpdateTask?: (task: AllTasksResponse) => void;
-  onOpenCreateOrUpdateTask: () => void;
+  onOpenCreateTask?: () => void;
+  onOpenUpdateTask?: (task: AllTasksResponse) => void;
   onClose: () => void;
 }
 
@@ -87,7 +88,8 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     currentTask,
     onCreateTask,
     onUpdateTask,
-    onOpenCreateOrUpdateTask,
+    onOpenCreateTask,
+    onOpenUpdateTask,
     onClose,
   } = props;
 
@@ -168,6 +170,18 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   const handleOpenComplexity = (): void => {
     setOpenComplexity(!openComplexity);
     onClose();
+  };
+
+  const handleCloseComplexity = () => {
+    setOpenComplexity(!openComplexity);
+  };
+
+  const handleOpenCreateOrUpdateTask = () => {
+    if (update && onOpenUpdateTask) {
+      onOpenUpdateTask(currentTask || initialTaskState);
+    } else if (onOpenCreateTask) {
+      onOpenCreateTask();
+    }
   };
 
   return (
@@ -292,8 +306,8 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
       <ComplexityDetails
         open={openComplexity}
-        onClose={() => setOpenComplexity(!openComplexity)}
-        openCreateTask={() => onOpenCreateOrUpdateTask()}
+        onClose={handleCloseComplexity}
+        openCreateOrUpdateTask={handleOpenCreateOrUpdateTask}
       />
     </>
   );
