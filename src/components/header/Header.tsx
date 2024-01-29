@@ -3,6 +3,7 @@ import type { ReactElement, MouseEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 
 import {
   Box,
@@ -16,13 +17,13 @@ import {
   Avatar,
   Tooltip,
 } from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 import renderRole from "~/utils/helpers/renderRoleHelper";
 
 import LocalizationKey from "~/i18n/key";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AvatarImg from "~/assets/img/avatar.png";
 
 import {
@@ -33,18 +34,18 @@ import {
   StyledProjectTitle,
 } from ".";
 import { getProjectOptions } from "./utils";
-import { useDispatch } from "react-redux";
+
 import { updateSelectedProject } from "~/redux/reducers/user";
 
 const AppBarHeader = (): ReactElement => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+
   const {
     state: { user, projects, selectedProject },
     logout,
   } = useUserAuth();
-  const { t } = useTranslation();
 
   const name = `${user?.firstName} ${user?.lastName}`;
   const positions = user?.roles;
@@ -75,6 +76,8 @@ const AppBarHeader = (): ReactElement => {
     },
   ];
 
+  const { common } = LocalizationKey;
+
   return (
     <StyledAppBar position="sticky">
       <Container maxWidth={false} disableGutters={true}>
@@ -88,7 +91,7 @@ const AppBarHeader = (): ReactElement => {
                       multiple={false}
                       name="selectedProject"
                       value={selectedProject}
-                      placeholder="Select a project"
+                      placeholder={t(common.header.projectPlaceholder)}
                       popperSX={popperStyle}
                       onChange={(_: React.SyntheticEvent, value: any) => {
                         dispatch(updateSelectedProject(value));
@@ -114,7 +117,7 @@ const AppBarHeader = (): ReactElement => {
               </Grid>
               <Grid item xs={2}>
                 <Box sx={{ flexGrow: 0, alignItems: "right" }}>
-                  <Tooltip title="Open settings">
+                  <Tooltip title={t(common.header.toolTipTitle)}>
                     <Grid
                       container
                       spacing={1}
