@@ -1,10 +1,10 @@
 import type { PropsWithChildren, ReactElement } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Footer } from "~/components/footer";
 import { AuthContainer } from "./components/auth-container";
 import { Alert } from "~/components";
 import { useUserAuth } from "~/hooks/user";
-import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 
 const Auth = (props: PropsWithChildren): ReactElement => {
