@@ -309,9 +309,11 @@
         "tags": "Tags"
       },
       "placeholder": {
-        "functionality": "Functionality",
-        "complexity": "Complexity",
-        "tags": "Tags"
+        "taskTitle": "Enter a title",
+        "description": "Enter a description",
+        "functionality": "Select functionality",
+        "complexity": "Select complexity",
+        "tags": "Select tags"
       },
       "btnLabel": {
         "create": "Create",
@@ -326,7 +328,8 @@
     },
     "taskDetails": {
       "sprint": "Sprint #",
-      "complexity": "Complexity Rating: "
+      "complexity": "Complexity Rating: ",
+      "deleteConfirm": "Are you sure you want to delete task:"
     },
     "viewTaskDetails": {
       "label": {
@@ -344,13 +347,20 @@
         "description": "Description",
         "sprint": "Sprint #",
         "comments": "Write a comment.",
-        "avatar": "A picture of "
+        "avatar": "A picture of ",
+        "user": "a user"
+      },
+      "modal": {
+        "markComplete": "Are you sure you want to tag this task as completed?",
+        "confirmMarkComplete": "Yes, Please",
+        "closeMarkComplete": "No, Thanks"
       }
     },
     "errorMessage": {
-      "error": "No tasks currently visible",
-      "started": "Get started and",
-      "created": "create a task"
+      "error": "No tasks currently visible.",
+      "started": "Get started and ",
+      "created": "create a task",
+      "fetch": "Unable to fetch data."
     }
   },
   "history": {
