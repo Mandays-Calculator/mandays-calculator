@@ -38,7 +38,8 @@
       "label": "You will be automatically logged off in",
       "stayLogged": "Stay Logged on",
       "logout": "Logout",
-      "logoutConfirmLabel": "Are you sure you want to logout?"
+      "logoutConfirmLabel": "Are you sure you want to logout?",
+      "logoutError": "There is an error in performing logout"
     },
     "unauthorized": {
       "title": "Unauthorized"

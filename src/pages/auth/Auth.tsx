@@ -4,12 +4,18 @@ import { Footer } from "~/components/footer";
 import { AuthContainer } from "./components/auth-container";
 import { Alert } from "~/components";
 import { useUserAuth } from "~/hooks/user";
+import { useTranslation } from "react-i18next";
+import LocalizationKey from "~/i18n/key";
 
 const Auth = (props: PropsWithChildren): ReactElement => {
+  const { t } = useTranslation();
   const { children } = props;
+
   const {
     state: { isLogoutError },
   } = useUserAuth();
+
+  const { common } = LocalizationKey;
   return (
     <>
       <AuthContainer>{children}</AuthContainer>
@@ -17,8 +23,8 @@ const Auth = (props: PropsWithChildren): ReactElement => {
       <Alert
         duration={3000}
         open={isLogoutError || false}
-        title="Logout"
-        message="There is an error performing logout"
+        title={t(common.logout)}
+        message={t(common.logoutErrorLabel)}
       />
     </>
   );

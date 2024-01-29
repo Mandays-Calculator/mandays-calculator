@@ -116,6 +116,7 @@ const LocalizationKey = {
     idleTimeOutButtonLoggedIn: "common.idleTimeOut.stayLogged",
     logout: "common.idleTimeOut.logout",
     logoutConfirmLabel: "common.idleTimeOut.logoutConfirmLabel",
+    logoutErrorLabel: "common.idleTimeOut.logoutError",
     unauthorizedTitle: "common.unauthorized.title",
     systemErrorTitle: "common.systemError.title",
   },
