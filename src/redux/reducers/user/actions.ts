@@ -38,16 +38,21 @@ export const login = createAsyncThunk(
           token: response.token,
           permissions: encryptObjectWithAES(
             response.permissions,
-            !config.encryptData
+            !config.encryptData,
           ),
+
           user: encryptObjectWithAES(response.user, !config.encryptData),
+          projects: encryptObjectWithAES(
+            response.projects,
+            !config.encryptData,
+          ),
         },
-        "session"
+        "session",
       );
       return response;
     } catch (error) {
       if (args.callbacks?.onFailure) args.callbacks.onFailure();
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
