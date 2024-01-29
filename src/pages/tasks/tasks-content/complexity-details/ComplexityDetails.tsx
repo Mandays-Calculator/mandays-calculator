@@ -14,6 +14,10 @@ interface ComplexityDetailsProps {
   openCreateOrUpdateTask: () => void;
 }
 
+type StyledComplexityLabelProps = React.ComponentProps<typeof Typography> & {
+  details?: boolean;
+};
+
 const details = {
   complexity: "Simple",
   days: "1 - 2 Days",
@@ -27,12 +31,26 @@ const details = {
   ],
 };
 
-const StyledTypography = styled(Typography)({
-  fontWeight: 600,
-  marginBottom: 10,
+const StyledComplexityModal = styled(Modal)({
+  minWidth: "480px",
 });
 
-const StyledDetails = styled(Typography)({
+const StyledComplexityLabel = styled(Typography)<StyledComplexityLabelProps>(
+  ({ details = false }) => {
+    if (details) {
+      return {
+        fontWeight: 600,
+      };
+    }
+
+    return {
+      fontWeight: 600,
+      marginBottom: 10,
+    };
+  },
+);
+
+const StyledComplexityDetails = styled(Typography)({
   marginBottom: 10,
 });
 
@@ -46,42 +64,43 @@ const ComplexityDetails = (props: ComplexityDetailsProps): ReactElement => {
   };
 
   return (
-    <Modal
+    <StyledComplexityModal
       open={open}
       title={t(LocalizationKey.tasks.createTask.complexity)}
       maxWidth='md'
       onClose={() => onClose()}
-      sx={{ minWidth: "480px" }}
     >
       <Grid container spacing={2}>
         <Grid item xs={4} sm={3} md={2}>
-          <StyledTypography>
+          <StyledComplexityLabel>
             {t(LocalizationKey.complexity.label.complexity)}
-          </StyledTypography>
-          <StyledTypography>
+          </StyledComplexityLabel>
+          <StyledComplexityLabel>
             {t(LocalizationKey.complexity.label.noOfDays)}
-          </StyledTypography>
-          <StyledTypography>
+          </StyledComplexityLabel>
+          <StyledComplexityLabel>
             {t(LocalizationKey.complexity.label.noOfFeatures)}
-          </StyledTypography>
+          </StyledComplexityLabel>
         </Grid>
         <Grid item xs={8} sm={9} md={10}>
-          <StyledDetails>{details.complexity}</StyledDetails>
-          <StyledDetails>{details.days}</StyledDetails>
-          <StyledDetails>{details.features}</StyledDetails>
+          <StyledComplexityDetails>
+            {details.complexity}
+          </StyledComplexityDetails>
+          <StyledComplexityDetails>{details.days}</StyledComplexityDetails>
+          <StyledComplexityDetails>{details.features}</StyledComplexityDetails>
         </Grid>
         <Grid item xs={12}>
-          <Typography fontWeight={600}>
+          <StyledComplexityLabel details>
             {t(LocalizationKey.complexity.label.description)}
-          </Typography>
+          </StyledComplexityLabel>
         </Grid>
         <Grid item xs={12}>
           <Typography>{details.description}</Typography>
         </Grid>
         <Grid item xs={12}>
-          <Typography fontWeight={600}>
+          <StyledComplexityLabel details>
             {t(LocalizationKey.complexity.label.samples)}
-          </Typography>
+          </StyledComplexityLabel>
         </Grid>
         <Grid item xs={12}>
           <ul>
@@ -101,7 +120,7 @@ const ComplexityDetails = (props: ComplexityDetailsProps): ReactElement => {
           {t(LocalizationKey.tasks.createTask.btnLabel.close)}
         </CustomButton>
       </Stack>
-    </Modal>
+    </StyledComplexityModal>
   );
 };
 
