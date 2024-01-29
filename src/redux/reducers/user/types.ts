@@ -8,4 +8,5 @@ export interface UserPermissionState {
   user: User | null;
   permissions: Permission[];
   tokenExpiry: number | null;
+  isLogoutError?: boolean;
 }

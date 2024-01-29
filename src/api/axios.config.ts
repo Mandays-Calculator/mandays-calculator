@@ -1,5 +1,6 @@
 import type { GenericErrorResponse } from "./types";
 import { BroadcastChannel } from "broadcast-channel";
+
 import axios, {
   InternalAxiosRequestConfig,
   AxiosError,
@@ -8,6 +9,7 @@ import axios, {
 
 import { getUser } from "~/utils/helpers";
 import { CHANNELS, ERROR_CODES } from "~/utils/constants";
+import { getUserToken } from "~/hooks/user";
 
 /**
  * Initializes Axios with global interceptors to handle authorization and error management.
@@ -18,16 +20,17 @@ import { CHANNELS, ERROR_CODES } from "~/utils/constants";
  */
 const init = async (): Promise<void> => {
   let isUnauthorizedUser = false;
+
   const { items, events } = CHANNELS;
   const channel = new BroadcastChannel(items.sessionState);
 
   axios.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       const user = getUser();
+      const token = getUserToken();
       if (user) {
-        config.headers.Authorization = `Bearer ${user?.token?.accessToken}`;
+        config.headers.Authorization = `Bearer ${token.accessToken}`;
         if (isUnauthorizedUser) {
-          // Cancel the request if a 401 error was previously received
           const cancel = axios.CancelToken.source();
           config.cancelToken = cancel.token;
           cancel.cancel("Cancelled due to previously received 401 error");
@@ -35,24 +38,30 @@ const init = async (): Promise<void> => {
       }
       return config;
     },
-    (error: AxiosError) => Promise.reject(error)
+    (error: AxiosError) => Promise.reject(error),
   );
 
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
-      const user = getUser();
-      if (user) {
-        if (error.response && error.response.status == 401) {
-          isUnauthorizedUser = true;
-          channel.postMessage(events.unauthorized);
-        }
-        if (
-          error &&
-          (error as unknown as GenericErrorResponse).errorCode ===
-            ERROR_CODES.genericError
-        ) {
-          channel.postMessage(events.systemError);
+      const isLogoutEndpoint = (error as unknown as any).config.url.endsWith(
+        "/logout",
+      );
+
+      if (!isLogoutEndpoint) {
+        const user = getUser();
+        if (user) {
+          if (error.response && error.response.status == 401) {
+            isUnauthorizedUser = true;
+            channel.postMessage(events.unauthorized);
+          }
+          if (
+            error &&
+            (error as unknown as GenericErrorResponse).errorCode ===
+              ERROR_CODES.genericError
+          ) {
+            channel.postMessage(events.systemError);
+          }
         }
       }
 
@@ -60,7 +69,7 @@ const init = async (): Promise<void> => {
       return axiosError && axiosError.response
         ? Promise.reject(axiosError.response.data)
         : Promise.reject(error);
-    }
+    },
   );
 };
 

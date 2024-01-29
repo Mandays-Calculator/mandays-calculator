@@ -57,7 +57,7 @@ const AuthenticatedApp = (): ReactElement => {
     ),
     {
       timeout: config.idleTimeoutConfig.durationUntilPromptSeconds,
-    }
+    },
   );
 
   const renderAuth = (): ReactElement => {
@@ -65,7 +65,7 @@ const AuthenticatedApp = (): ReactElement => {
       return (
         <PageLoader
           labelOnLoad={t(
-            LocalizationKey.common.userManagement.authSignInLoading
+            LocalizationKey.common.userManagement.authSignInLoading,
           )}
         />
       );

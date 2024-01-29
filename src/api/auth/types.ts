@@ -10,7 +10,7 @@ export interface ResetPasswordParams {
   password: string;
 }
 
-interface Token {
+export interface Token {
   accessToken: string;
   expiresInMs: number;
   refreshExpiresInMs: number;

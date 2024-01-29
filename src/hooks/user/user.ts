@@ -1,9 +1,13 @@
+import type { AnyAction } from "@reduxjs/toolkit";
 import type { UserPermissionState } from "~/redux/reducers/user/types";
+import type { LoginResponse, Token } from "~/api/auth";
+
 import { useDispatch, useSelector } from "react-redux";
-import { resetUserState, selectUser } from "~/redux/reducers/user";
-import { getItemStorage, removeStateStorage } from "~/utils/helpers";
-import { SESSION_STORAGE_ITEMS } from "~/utils/constants";
-import { LoginResponse } from "~/api/auth";
+
+import { logout, selectUser } from "~/redux/reducers/user";
+import { getItemStorage } from "~/utils/helpers";
+import { SESSION_STORAGE_ITEMS, cookieAuthKey } from "~/utils/constants";
+import { getCookie } from "~/utils/helpers/cookieHelper";
 
 /**
  * Custom hook to access the user's authentication state.
@@ -19,11 +23,10 @@ export const useUserAuth = (): {
   const dispatch = useDispatch();
 
   const handleLogout = (): void => {
-    window.location.reload();
-    dispatch(resetUserState());
-    removeStateStorage("session");
+    dispatch(
+      logout({ callbacks: { onFailure: () => {} } }) as unknown as AnyAction,
+    );
   };
-
   return { state: userState, logout: handleLogout };
 };
 
@@ -32,9 +35,9 @@ export const checkUserAuthentication = (): {
   mcUser: LoginResponse | null;
 } => {
   const mcUser = getItemStorage(SESSION_STORAGE_ITEMS.mcUser, "session");
-  const storedToken = mcUser.token;
-
+  const storedToken = getUserToken();
   if (
+    Object.keys(mcUser).length > 0 &&
     storedToken &&
     storedToken.accessToken &&
     new Date().getTime() < storedToken.issuedAtInMs + storedToken.expiresInMs
@@ -49,4 +52,8 @@ export const checkUserAuthentication = (): {
       mcUser: null,
     };
   }
+};
+
+export const getUserToken = (): Token => {
+  return getCookie(cookieAuthKey);
 };

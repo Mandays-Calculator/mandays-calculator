@@ -7,7 +7,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { decryptObjectWithAES } from "~/utils/cryptoUtils";
 import { getEnvConfig } from "~/utils/env-config";
 
-import { login } from "./actions";
+import { login, logout } from "./actions";
+import { getUserToken } from "~/hooks/user";
+import { removeCookie } from "~/utils/helpers/cookieHelper";
+import { cookieAuthKey } from "~/utils/constants";
+import { removeStateStorage } from "~/utils/helpers";
 
 /**
  * User state for Authentication and User
@@ -21,6 +25,7 @@ const initialState: UserPermissionState = {
   // User
   user: null,
   permissions: [],
+  isLogoutError: false,
 };
 
 export const userSlice = createSlice({
@@ -28,8 +33,7 @@ export const userSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
-      state.loading = true;
-      return state;
+      return { ...state, loading: true, isLogoutError: false };
     });
     builder.addCase(
       login.fulfilled,
@@ -41,7 +45,7 @@ export const userSlice = createSlice({
         state.tokenExpiry = action.payload.token.expiresInMs;
         state.isAuthenticated = true;
         return state;
-      }
+      },
     );
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
@@ -51,6 +55,19 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
       state.error = action.payload as GenericErrorResponse;
       return state;
+    });
+    builder.addCase(logout.pending, (state) => {
+      state.loading = true;
+      return state;
+    });
+    builder.addCase(logout.fulfilled, () => {
+      return initialState;
+    });
+    builder.addCase(logout.rejected, () => {
+      return {
+        ...initialState,
+        isLogoutError: true,
+      };
     });
     // Adding success and failed callback
     builder.addMatcher(
@@ -62,34 +79,48 @@ export const userSlice = createSlice({
         } else if (action.type.endsWith("rejected")) {
           onFailure?.(action.error);
         }
-      }
+      },
+    );
+    builder.addMatcher(
+      (action) => action.type.startsWith("auth/logout/"),
+      (_, action) => {
+        const { onSuccess, onFailure } = action.meta.arg;
+        if (action.type.endsWith("fulfilled")) {
+          onSuccess?.(action.payload);
+          removeStateStorage("session");
+          removeCookie(cookieAuthKey);
+        } else if (action.type.endsWith("rejected")) {
+          onFailure?.(action.error);
+          removeStateStorage("session");
+          removeCookie(cookieAuthKey);
+        }
+      },
     );
   },
   reducers: {
-    resetUserState: () => {
-      return initialState;
-    },
     updateUserState: (
       state: UserPermissionState,
-      action: PayloadAction<LoginResponse>
+      action: PayloadAction<LoginResponse>,
     ) => {
       const config = getEnvConfig();
       const { user, permissions } = action.payload;
       const decryptedUserData = decryptObjectWithAES(user, !config.encryptData);
       const decryptedPermissionsData = decryptObjectWithAES(
         permissions,
-        !config.encryptData
+        !config.encryptData,
       );
+
+      const cookieItem = getUserToken();
 
       state.loading = false;
       state.user = decryptedUserData;
       state.permissions = decryptedPermissionsData;
-      state.tokenExpiry = action.payload.token.expiresInMs;
+      state.tokenExpiry = cookieItem.expiresInMs;
       state.isAuthenticated = true;
       return state;
     },
   },
 });
 
-export const { resetUserState, updateUserState } = userSlice.actions;
+export const { updateUserState } = userSlice.actions;
 export default userSlice.reducer;
