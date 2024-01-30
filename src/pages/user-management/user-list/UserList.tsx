@@ -1,15 +1,16 @@
-import { useState, type ReactElement, useEffect } from "react";
+import type { ReactElement } from "react";
 
-import { PageLoader, Table } from "~/components";
-
-import { userListColumns } from "./utils";
-import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { PageLoader, Table } from "~/components";
+import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
 import { useUserList } from "~/queries/user-management/UserManagement";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 import { UserListData } from "~/api/user-management/types";
 import { useDeleteUser } from "~/mutations/user-management";
+
+import { userListColumns } from "./utils";
 
 interface UserListProps {
   userListData?: UserListData[];
@@ -82,7 +83,7 @@ const UserList = ({
                 onError: (error) => {
                   console.log(error);
                 },
-              }
+              },
             );
           }}
           message={t("Are you sure you want to delete this User?")}

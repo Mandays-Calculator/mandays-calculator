@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
+
+import { useEffect, useState } from "react";
 
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material";
+import { FormikContextType } from "formik";
 
 import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { AddUserModal } from "~/pages/user-management/user-management-modal/add-user-modal";
 import { APIStatus } from "~/hooks/request-handler";
+
 import { filterOptions } from "./utils";
-import { FormikContextType } from "formik";
 import { UserManagementForms } from "../types";
 
 const StyledButton = styled(CustomButton, {
@@ -18,6 +20,7 @@ const StyledButton = styled(CustomButton, {
   border: noBorder ? "none" : "1px solid #414145",
   height: "100%",
 }));
+
 interface HeaderProps {
   status: APIStatus;
   formik: FormikContextType<UserManagementForms>;
@@ -25,6 +28,7 @@ interface HeaderProps {
   resetIsSuccess: () => void;
   isError: boolean;
 }
+
 const Header = (props: HeaderProps): ReactElement => {
   const { status, formik, isSuccess, isError, resetIsSuccess } = props;
   const [addModal, setAddModal] = useState<boolean>(false);

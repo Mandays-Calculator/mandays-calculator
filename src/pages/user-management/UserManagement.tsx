@@ -1,25 +1,24 @@
-import { useState, type ReactElement, useEffect } from "react";
+import type { ReactElement } from "react";
+
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import Stack from "@mui/system/Stack";
-import UserList from "./user-list";
-import Header from "./header";
+import { useFormik } from "formik";
+import moment from "moment";
+
 import Form from "~/components/form/Form";
 import Title from "~/components/title/Title";
 import { PageContainer } from "~/components/page-container";
 import { useUserList } from "~/queries/user-management/UserManagement";
 import { UserListData } from "~/api/user-management/types";
-import {
-  UserManagementFormValues,
-  UserManagementSchema,
-  gender,
-} from "./utils";
-
-import { useFormik } from "formik";
-import { UserManagementForms } from "./types";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useAddUser } from "~/mutations/user-management";
-import { useTranslation } from "react-i18next";
-import moment from "moment";
+
+import { UserManagementFormValues, UserManagementSchema } from "./utils";
+import { UserManagementForms } from "./types";
+import UserList from "./user-list";
+import Header from "./header";
 
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
@@ -29,7 +28,7 @@ const UserManagement = (): ReactElement => {
   const [status, callApi] = useRequestHandler(
     AddUser.mutate,
     () => setSuccessAddUser(true),
-    () => setErrorAddUser(true)
+    () => setErrorAddUser(true),
   );
   const UserManagementForm = useFormik<UserManagementForms>({
     initialValues: UserManagementFormValues,
@@ -42,7 +41,7 @@ const UserManagement = (): ReactElement => {
         lastName: values.lastName,
         middleName: values.middleName || "",
         suffix: values.suffix || "",
-        gender: gender(values?.gender) ?? 0,
+        gender: Number(values?.gender) ?? 0,
         email: values.email,
         employeeId: values.employeeId,
         odcId: values.odcId || "",
@@ -101,7 +100,7 @@ const UserManagement = (): ReactElement => {
             ? filterValue.toLowerCase() === "active"
             : typeof value === "object"
             ? ["administrator", "admin"].includes(filterValue.toLowerCase())
-            : false
+            : false,
         );
       }
 

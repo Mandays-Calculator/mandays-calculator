@@ -1,22 +1,3 @@
-export const genders = [
-  {
-    label: "FEMALE",
-    value: "FEMALE",
-  },
-  {
-    label: "MALE",
-    value: "MALE",
-  },
-  {
-    label: "NON-BINARY",
-    value: "NON_BINARY",
-  },
-  {
-    label: "PREFER NOT TO SAY",
-    value: "PREFER_NOT_TO_SAY",
-  },
-];
-
 export const rolesData = [
   {
     label: "System Admin",
@@ -29,37 +10,6 @@ export const rolesData = [
   {
     label: "User",
     value: "ROLE_USER",
-  },
-];
-
-export const CAREER_STEPS = [
-  {
-    label: "I03",
-    value: "I03",
-  },
-  {
-    label: "I04",
-    value: "I04",
-  },
-  {
-    label: "I05",
-    value: "I05",
-  },
-  {
-    label: "I06",
-    value: "I06",
-  },
-  {
-    label: "I07",
-    value: "I07",
-  },
-  {
-    label: "I08",
-    value: "I08",
-  },
-  {
-    label: "I09",
-    value: "I09",
   },
 ];
 
