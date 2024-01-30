@@ -25,7 +25,6 @@ import { Alert, ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
 import { FormErrors } from "~/components/form/types";
 import { APIStatus } from "~/hooks/request-handler";
-import { rolesData } from "~/utils/constants";
 import LocalizationKey from "~/i18n/key";
 import { UserManagementForms } from "~/pages/user-management/types";
 import {
@@ -75,8 +74,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
       event.target.value === "recentlyJoinedlaterDate" ? true : false,
     );
   };
-
-  console.log(roleValue());
 
   const renderAlert = (): ReactElement | undefined => {
     if (!isSuccess) {
@@ -256,7 +253,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <StyledTitle mb={0.5}>{t(userManagement.label.roles)}</StyledTitle>
             <ControlledSelect
               multiple
-              options={rolesData}
+              options={roleValue()}
               name="roles"
               value={form.values.roles || ""}
             />

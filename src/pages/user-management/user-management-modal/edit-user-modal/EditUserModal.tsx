@@ -21,12 +21,12 @@ import {
 import { UserListData } from "~/api/user-management/types";
 import { useEditUser } from "~/mutations/user-management";
 import { useRequestHandler } from "~/hooks/request-handler";
-import { rolesData } from "~/utils/constants";
 import { Alert, ImageUpload } from "~/components";
 import LocalizationKey from "~/i18n/key";
 import {
   genderValueNumToStr,
   commonOptionsAPI,
+  roleValue,
 } from "~/pages/user-management/utils";
 
 import { teamOptions } from "../utils";
@@ -237,7 +237,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <StyledTitle mb={1}>{t(userManagement.label.roles)}</StyledTitle>
             <ControlledSelect
               multiple
-              options={rolesData}
+              options={roleValue()}
               name="updateRoles"
               value={
                 Array.isArray(form.values.updateRoles)
