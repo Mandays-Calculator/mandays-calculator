@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "~/redux/reducers/user";
 import { getItemStorage } from "~/utils/helpers";
 import { SESSION_STORAGE_ITEMS, cookieAuthKey } from "~/utils/constants";
-import { getCookie } from "~/utils/helpers/cookieHelper";
+import { getCookie } from "~/utils/cookieUtils";
 
 /**
  * Custom hook to access the user's authentication state.

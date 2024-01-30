@@ -3,12 +3,15 @@ import Cookies from "js-cookie";
 export const getCookie = (name: string) => {
   if (name) {
     const cookieItem = Cookies.get(name);
-    try {
-      return JSON.parse(cookieItem || "");
-    } catch (e) {
-      console.error(`Error parsing cookie "${name}":`, e);
-      return cookieItem;
+    if (cookieItem) {
+      try {
+        return JSON.parse(cookieItem || "");
+      } catch (e) {
+        console.error(`Error parsing cookie "${name}":`, e);
+        return cookieItem;
+      }
     }
+    return null;
   }
   return null;
 };

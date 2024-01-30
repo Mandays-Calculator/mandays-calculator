@@ -5,7 +5,7 @@ import { setItemStorage } from "~/utils/helpers";
 import { encryptObjectWithAES } from "~/utils/cryptoUtils";
 import { getEnvConfig } from "~/utils/env-config";
 import { SESSION_STORAGE_ITEMS, cookieAuthKey } from "~/utils/constants";
-import { setCookie } from "~/utils/helpers/cookieHelper";
+import { setCookie } from "~/utils/cookieUtils";
 import { getUserToken } from "~/hooks/user";
 
 interface LoginParams {

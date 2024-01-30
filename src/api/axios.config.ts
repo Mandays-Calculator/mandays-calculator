@@ -1,4 +1,5 @@
 import type { GenericErrorResponse } from "./types";
+import { refreshTokenApi, type Token } from "./auth";
 import { BroadcastChannel } from "broadcast-channel";
 
 import axios, {
@@ -8,8 +9,27 @@ import axios, {
 } from "axios";
 
 import { getUser } from "~/utils/helpers";
-import { CHANNELS, ERROR_CODES } from "~/utils/constants";
+import { CHANNELS, cookieAuthKey, ERROR_CODES } from "~/utils/constants";
 import { getUserToken } from "~/hooks/user";
+import { setCookie } from "~/utils/cookieUtils";
+
+let isRefreshing = false;
+
+const isTokenExpired = (accessToken: Token): boolean => {
+  if (
+    isRefreshing ||
+    !accessToken ||
+    !accessToken.expiresInMs ||
+    !accessToken.issuedAtInMs
+  ) {
+    return false;
+  }
+
+  const expirationTimestamp =
+    accessToken.issuedAtInMs + accessToken.expiresInMs;
+  const currentTimestamp = Date.now();
+  return currentTimestamp > expirationTimestamp;
+};
 
 /**
  * Initializes Axios with global interceptors to handle authorization and error management.
@@ -25,15 +45,33 @@ const init = async (): Promise<void> => {
   const channel = new BroadcastChannel(items.sessionState);
 
   axios.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
+    async (config: InternalAxiosRequestConfig) => {
       const user = getUser();
       const token = getUserToken();
       if (user) {
-        config.headers.Authorization = `Bearer ${token.accessToken}`;
-        if (isUnauthorizedUser) {
-          const cancel = axios.CancelToken.source();
-          config.cancelToken = cancel.token;
-          cancel.cancel("Cancelled due to previously received 401 error");
+        if (isTokenExpired(token)) {
+          if (!isRefreshing) {
+            isRefreshing = true;
+            try {
+              const { token: newToken } = await refreshTokenApi({
+                refreshToken: token.refreshToken,
+              });
+              console.log("Token refreshed"); // for debugging purposes
+              setCookie(cookieAuthKey, newToken);
+              config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+            } catch (refreshError) {
+              throw refreshError;
+            } finally {
+              isRefreshing = false;
+            }
+          }
+        } else {
+          config.headers.Authorization = `Bearer ${token.accessToken}`;
+          if (isUnauthorizedUser) {
+            const cancel = axios.CancelToken.source();
+            config.cancelToken = cancel.token;
+            cancel.cancel("Cancelled due to previously received 401 error");
+          }
         }
       }
       return config;

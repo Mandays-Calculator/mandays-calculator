@@ -9,7 +9,7 @@ import { getEnvConfig } from "~/utils/env-config";
 
 import { login, logout } from "./actions";
 import { getUserToken } from "~/hooks/user";
-import { removeCookie } from "~/utils/helpers/cookieHelper";
+import { removeCookie } from "~/utils/cookieUtils";
 import { cookieAuthKey } from "~/utils/constants";
 import { removeStateStorage } from "~/utils/helpers";
 

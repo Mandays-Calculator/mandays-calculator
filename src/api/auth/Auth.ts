@@ -2,6 +2,7 @@ import type {
   AuthAPIResponse,
   ResetPasswordParams,
   LoginResponse,
+  Token,
 } from "./types";
 
 import axios from "axios";
@@ -73,6 +74,32 @@ export const logoutApi = async ({
       token: accessToken,
       refreshToken: refreshToken,
     });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const refreshTokenApi = async ({
+  refreshToken,
+}: {
+  refreshToken: string;
+}): Promise<{ token: Token }> => {
+  const { apiBasePath } = getEnvConfig();
+
+  try {
+    const response = await axios.post(
+      `${apiBasePath}/refresh-token`,
+      {
+        refreshToken: refreshToken,
+      },
+      {
+        headers: {
+          Authorization: "No Auth",
+        },
+      },
+    );
 
     return response.data.data;
   } catch (error) {
