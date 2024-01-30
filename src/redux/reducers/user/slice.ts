@@ -26,6 +26,8 @@ const initialState: UserPermissionState = {
   user: null,
   permissions: [],
   isLogoutError: false,
+  projects: [],
+  selectedProject: { label: "", value: "" },
 };
 
 export const userSlice = createSlice({
@@ -38,12 +40,16 @@ export const userSlice = createSlice({
     builder.addCase(
       login.fulfilled,
       (state, action: PayloadAction<LoginResponse>) => {
-        const { user, permissions } = action.payload;
+        const { user, permissions, projects } = action.payload;
         state.loading = false;
         state.user = user;
         state.permissions = permissions;
         state.tokenExpiry = action.payload.token.expiresInMs;
         state.isAuthenticated = true;
+        state.selectedProject =
+          projects.length > 0
+            ? { label: projects[0].name, value: projects[0].projectId }
+            : { label: "", value: "" };
         return state;
       },
     );
@@ -103,10 +109,14 @@ export const userSlice = createSlice({
       action: PayloadAction<LoginResponse>,
     ) => {
       const config = getEnvConfig();
-      const { user, permissions } = action.payload;
+      const { user, permissions, projects } = action.payload;
       const decryptedUserData = decryptObjectWithAES(user, !config.encryptData);
       const decryptedPermissionsData = decryptObjectWithAES(
         permissions,
+        !config.encryptData,
+      );
+      const decryptedProjectsData = decryptObjectWithAES(
+        projects,
         !config.encryptData,
       );
 
@@ -115,12 +125,27 @@ export const userSlice = createSlice({
       state.loading = false;
       state.user = decryptedUserData;
       state.permissions = decryptedPermissionsData;
+      state.projects = decryptedProjectsData;
       state.tokenExpiry = cookieItem.expiresInMs;
       state.isAuthenticated = true;
+      state.selectedProject =
+        decryptedProjectsData.length > 0
+          ? {
+              label: decryptedProjectsData[0].name,
+              value: decryptedProjectsData[0].projectId,
+            }
+          : { label: "", value: "" };
+      return state;
+    },
+    updateSelectedProject: (
+      state: UserPermissionState,
+      action: PayloadAction<SelectObject | null>,
+    ) => {
+      state.selectedProject = action.payload;
       return state;
     },
   },
 });
 
-export const { updateUserState } = userSlice.actions;
+export const { updateUserState, updateSelectedProject } = userSlice.actions;
 export default userSlice.reducer;

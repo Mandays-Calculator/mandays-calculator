@@ -45,7 +45,12 @@ export const login = createAsyncThunk(
             response.permissions,
             !config.encryptData,
           ),
+
           user: encryptObjectWithAES(response.user, !config.encryptData),
+          projects: encryptObjectWithAES(
+            response.projects,
+            !config.encryptData,
+          ),
         },
         "session",
       );

@@ -119,6 +119,10 @@ const LocalizationKey = {
     logoutErrorLabel: "common.idleTimeOut.logoutError",
     unauthorizedTitle: "common.unauthorized.title",
     systemErrorTitle: "common.systemError.title",
+    header: {
+      projectPlaceholder: "common.header.project.placeholder",
+      toolTipTitle: "common.header.tooltip.title",
+    },
   },
   mandaysCalculator: {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",

@@ -41,6 +41,14 @@
       "logoutConfirmLabel": "Are you sure you want to logout?",
       "logoutError": "There is an error in performing logout"
     },
+    "header": {
+      "project": {
+        "placeholder": "Select a project"
+      },
+      "tooltip": {
+        "title": "Open Settings"
+      }
+    },
     "unauthorized": {
       "title": "Unauthorized"
     },
