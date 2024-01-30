@@ -1,49 +1,49 @@
-import { ReactElement } from 'react'
+import type { ReactElement } from "react";
 
-import { Grid, Stack, Typography } from '@mui/material'
-import { styled } from '@mui/material/styles'
-import { useTranslation } from 'react-i18next'
-import LocalizationKey from '~/i18n/key'
+import { Grid, Stack, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { styled } from "@mui/material/styles";
+import LocalizationKey from "~/i18n/key";
 
-import { CustomButton } from '~/components/form/button'
-import { Modal } from '~/components'
+import { CustomButton } from "~/components/form/button";
+import { Modal } from "~/components";
 
 interface ComplexityDetailsProps {
-  open: boolean
-  onClose: () => void
-  openCreateTask: () => void
+  open: boolean;
+  onClose: () => void;
+  openCreateOrUpdateTask: () => void;
 }
 
 const details = {
-  complexity: 'Simple',
-  days: '1 - 2 Days',
-  features: '10 - 20',
+  complexity: "Simple",
+  days: "1 - 2 Days",
+  features: "10 - 20",
   description:
-    'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi, eligendi voluptatum asperiores animi magnam fugiat quae, doloremque quo ipsam velit explicabo dolorum sed! Labore, quisquam voluptatibus eius ex voluptates molestiae?',
+    "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi, eligendi voluptatum asperiores animi magnam fugiat quae, doloremque quo ipsam velit explicabo dolorum sed! Labore, quisquam voluptatibus eius ex voluptates molestiae?",
   sampleList: [
-    'Modal UI',
-    'Styling of less than 10 from fields',
-    'Re-arrange data display'
-  ]
-}
+    "Modal UI",
+    "Styling of less than 10 from fields",
+    "Re-arrange data display",
+  ],
+};
 
 const StyledTypography = styled(Typography)({
   fontWeight: 600,
-  marginBottom: 10
-})
+  marginBottom: 10,
+});
 
 const StyledDetails = styled(Typography)({
-  marginBottom: 10
-})
+  marginBottom: 10,
+});
 
 const ComplexityDetails = (props: ComplexityDetailsProps): ReactElement => {
-  const { open, onClose, openCreateTask } = props
-  const { t } = useTranslation()
+  const { open, onClose, openCreateOrUpdateTask } = props;
+  const { t } = useTranslation();
 
   const handleCloseComplexity = (): void => {
-    openCreateTask()
-    onClose()
-  }
+    openCreateOrUpdateTask();
+    onClose();
+  };
 
   return (
     <Modal
@@ -51,7 +51,7 @@ const ComplexityDetails = (props: ComplexityDetailsProps): ReactElement => {
       title={t(LocalizationKey.tasks.createTask.complexity)}
       maxWidth='md'
       onClose={() => onClose()}
-      sx={{ minWidth: '480px' }}
+      sx={{ minWidth: "480px" }}
     >
       <Grid container spacing={2}>
         <Grid item xs={4} sm={3} md={2}>
@@ -102,7 +102,7 @@ const ComplexityDetails = (props: ComplexityDetailsProps): ReactElement => {
         </CustomButton>
       </Stack>
     </Modal>
-  )
-}
+  );
+};
 
-export default ComplexityDetails
+export default ComplexityDetails;

@@ -218,6 +218,8 @@ const LocalizationKey = {
         tags: "tasks.createTask.label.tags",
       },
       placeholder: {
+        taskTitle: "tasks.createTask.placeholder.taskTitle",
+        description: "tasks.createTask.placeholder.description",
         functionality: "tasks.createTask.placeholder.functionality",
         complexity: "tasks.createTask.placeholder.complexity",
         tags: "tasks.createTask.placeholder.tags",
@@ -236,6 +238,7 @@ const LocalizationKey = {
     taskDetails: {
       sprint: "tasks.taskDetails.sprint",
       complexity: "tasks.taskDetails.complexity",
+      deleteConfirm: "tasks.taskDetails.deleteConfirm",
     },
     viewTaskDetails: {
       label: {
@@ -254,12 +257,19 @@ const LocalizationKey = {
         sprint: "tasks.viewTaskDetails.placeholder.sprint",
         comments: "tasks.viewTaskDetails.placeholder.comments",
         avatar: "tasks.viewTaskDetails.placeholder.avatar",
+        user: "tasks.viewTaskDetails.placeholder.user",
+      },
+      modal: {
+        markComplete: "tasks.viewTaskDetails.modal.markComplete",
+        confirmMarkComplete: "tasks.viewTaskDetails.modal.confirmMarkComplete",
+        closeMarkComplete: "tasks.viewTaskDetails.modal.closeMarkComplete",
       },
     },
     errorMessage: {
       error: "tasks.errorMessage.error",
       started: "tasks.errorMessage.started",
       created: "tasks.errorMessage.created",
+      fetch: "tasks.errorMessage.fetch",
     },
   },
   history: {
