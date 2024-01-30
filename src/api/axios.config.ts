@@ -14,6 +14,7 @@ import { getUserToken } from "~/hooks/user";
 import { setCookie } from "~/utils/cookieUtils";
 
 let isRefreshing = false;
+let isLoggingOut = false;
 
 const isTokenExpired = (accessToken: Token): boolean => {
   if (
@@ -63,6 +64,7 @@ const init = async (): Promise<void> => {
               throw refreshError;
             } finally {
               isRefreshing = false;
+              isLoggingOut = false;
             }
           }
         } else {
@@ -74,6 +76,12 @@ const init = async (): Promise<void> => {
           }
         }
       }
+
+      if (config.url?.endsWith("/logout")) {
+        isLoggingOut = true;
+      } else {
+        isLoggingOut = false;
+      }
       return config;
     },
     (error: AxiosError) => Promise.reject(error),
@@ -82,11 +90,7 @@ const init = async (): Promise<void> => {
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
-      const isLogoutEndpoint = (error as unknown as any).config.url.endsWith(
-        "/logout",
-      );
-
-      if (!isLogoutEndpoint) {
+      if (!isLoggingOut) {
         const user = getUser();
         if (user) {
           if (error.response && error.response.status == 401) {
