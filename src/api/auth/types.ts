@@ -24,5 +24,13 @@ interface Token {
 export interface LoginResponse {
   token: Token;
   user: User;
+  projects: UserProject[];
   permissions: Permission[];
+}
+
+export interface UserProject {
+  projectId: string;
+  name: string;
+  dateCreated: string;
+  active: boolean;
 }

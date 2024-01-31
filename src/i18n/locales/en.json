@@ -40,6 +40,14 @@
       "logout": "Logout",
       "logoutConfirmLabel": "Are you sure you want to logout?"
     },
+    "header": {
+      "project": {
+        "placeholder": "Select a project"
+      },
+      "tooltip": {
+        "title": "Open Settings"
+      }
+    },
     "unauthorized": {
       "title": "Unauthorized"
     },
