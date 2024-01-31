@@ -21,8 +21,6 @@ import { TextField, Modal, ConfirmModal } from "~/components";
 import { CheckBox } from "~/components/form";
 
 import {
-  ViewTaskDetailsInnerContainer,
-  ViewCommentContainerGrid,
   ViewTaskDetailsContainer,
   ViewCommentContainerBox,
   AccordionCommentDetails,
@@ -115,7 +113,13 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
           {t(LocalizationKey.tasks.viewTaskDetails.label.comments)}
         </AccordionCommentTitle>
         <AccordionCommentDetails>
-          <ViewCommentContainerGrid item container alignItems='center' xs={12}>
+          <ViewTaskDetailsContainer
+            item
+            container
+            type='comment'
+            alignItems='center'
+            xs={12}
+          >
             <Grid item xs={2} sm={1}>
               <Avatar alt={getAvatarAlt(username)} />
             </Grid>
@@ -148,7 +152,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                 }
               />
             </Grid>
-          </ViewCommentContainerGrid>
+          </ViewTaskDetailsContainer>
 
           <Grid item container alignItems='center' xs={12} spacing={1.5}>
             {(currentTask?.comments || []).map((comment, index) => (
@@ -186,7 +190,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
           </IconButton>
         </CloseContainer>
 
-        <ViewTaskDetailsContainer container>
+        <ViewTaskDetailsContainer container type='outer'>
           <Grid item xs={12}>
             <TextField
               name='taskDescription'
@@ -204,7 +208,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             />
           </Grid>
 
-          <ViewTaskDetailsInnerContainer item container xs={12}>
+          <ViewTaskDetailsContainer item container type='inner' xs={12}>
             <Grid item xs={12} sm={6}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.functionality)}
@@ -217,9 +221,9 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
               </ViewTaskDetailsLabel>
               <Typography>{currentTask?.complexity?.name}</Typography>
             </Grid>
-          </ViewTaskDetailsInnerContainer>
+          </ViewTaskDetailsContainer>
 
-          <ViewTaskDetailsInnerContainer item container xs={12}>
+          <ViewTaskDetailsContainer item container type='inner' xs={12}>
             <Grid item xs={12} sm={6}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.createdDate)}
@@ -248,9 +252,9 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                 />
               ) : null}
             </Grid>
-          </ViewTaskDetailsInnerContainer>
+          </ViewTaskDetailsContainer>
 
-          <ViewTaskDetailsInnerContainer item xs={12}>
+          <ViewTaskDetailsContainer item type='inner' xs={12}>
             <ViewTaskDetailsLabel>
               {t(LocalizationKey.tasks.viewTaskDetails.label.sprint)}
             </ViewTaskDetailsLabel>
@@ -258,9 +262,15 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
               {t(LocalizationKey.tasks.viewTaskDetails.placeholder.sprint)}
               {currentTask?.sprint}
             </Typography>
-          </ViewTaskDetailsInnerContainer>
+          </ViewTaskDetailsContainer>
 
-          <ViewTaskDetailsInnerContainer item container xs={12} spacing={1}>
+          <ViewTaskDetailsContainer
+            item
+            container
+            type='inner'
+            xs={12}
+            spacing={1}
+          >
             <Grid item xs={12}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.tags)}
@@ -273,7 +283,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                 </TaskTags>
               </Grid>
             ))}
-          </ViewTaskDetailsInnerContainer>
+          </ViewTaskDetailsContainer>
 
           {renderCommentSection()}
         </ViewTaskDetailsContainer>

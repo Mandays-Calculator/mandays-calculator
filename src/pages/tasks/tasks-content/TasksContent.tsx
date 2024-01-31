@@ -10,7 +10,6 @@ import {
   Droppable,
 } from "react-beautiful-dnd";
 
-import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import LocalizationKey from "~/i18n/key";
 import {
@@ -20,7 +19,6 @@ import {
   Divider,
   Stack,
   Grid,
-  Link,
 } from "@mui/material";
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
@@ -29,58 +27,22 @@ import { useTasks } from "~/queries/tasks/Tasks";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
-import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import ViewTaskDetails from "./ViewTaskDetails";
+import { Status } from "./utils";
 
 import NoTask from "~/assets/img/empty_tasks.png";
 
-import { taskContentStyles } from "./style";
-
-const StatusContainer = styled("div")(
-  ({ backgroundColor }: { backgroundColor: string }) => ({
-    backgroundColor:
-      backgroundColor === Status.Backlog
-        ? StatusContainerColor.Backlog
-        : backgroundColor === Status.NotYetStarted
-        ? StatusContainerColor.NotYetStarted
-        : backgroundColor === Status.InProgress
-        ? StatusContainerColor.InProgress
-        : backgroundColor === Status.OnHold
-        ? StatusContainerColor.OnHold
-        : StatusContainerColor.Completed,
-    borderRadius: 10,
-    width: "100%",
-    padding: 15,
-  }),
-);
-
-const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
-  fontSize: 18,
-  margin: color !== Status.Backlog ? "0.3em 0" : 0,
-  fontWeight: "bold",
-  color:
-    color === Status.NotYetStarted
-      ? StatusTitleColor.NotYetStarted
-      : color === Status.InProgress
-      ? StatusTitleColor.InProgress
-      : color === Status.OnHold
-      ? StatusTitleColor.OnHold
-      : color === Status.Completed
-      ? StatusTitleColor.Completed
-      : StatusTitleColor.Backlog,
-}));
-
-const StyledCreateTaskIconButton = styled(Grid)(
-  ({ display }: { display: string }) => ({
-    fontSize: 25,
-    fontWeight: "bolder",
-    float: "right",
-    cursor: "pointer",
-    display: display !== Status.Backlog ? "none" : "",
-  }),
-);
+import {
+  StyledCreateTaskIconButton,
+  StyledStatusTitle,
+  TaskGridContainer,
+  NoDataContainer,
+  StatusContainer,
+  StyledDivider,
+  StyledLink,
+} from "./style";
 
 const teamOptions = [
   { value: "MC", label: "MC" },
@@ -153,7 +115,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find((task) => task.taskID === draggableId);
+    const draggedTask = tasks.find(task => task.taskID === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -161,7 +123,7 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedMockData = tasks.map((task) => {
+        const updatedMockData = tasks.map(task => {
           if (task.taskID === draggableId) {
             return {
               ...task,
@@ -231,7 +193,7 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedData = tasks.map((task) => {
+    const updatedData = tasks.map(task => {
       if (task.taskID === updatedTask.taskID) {
         return updatedTask;
       }
@@ -245,7 +207,7 @@ const TasksContent = (): ReactElement => {
   const handleDeleteTask = () => {
     if (selectedTaskForDelete) {
       const { taskID } = selectedTaskForDelete;
-      const updatedTasks = tasks.filter((task) => task.taskID !== taskID);
+      const updatedTasks = tasks.filter(task => task.taskID !== taskID);
       setTasks(updatedTasks);
     }
 
@@ -263,7 +225,7 @@ const TasksContent = (): ReactElement => {
 
         <Grid item xs={1}>
           <StyledCreateTaskIconButton display={status}>
-            <IconButton onClick={handleCreateModalState}>
+            <IconButton onClick={() => handleCreateModalState()}>
               <AddIcon />
             </IconButton>
           </StyledCreateTaskIconButton>
@@ -276,7 +238,7 @@ const TasksContent = (): ReactElement => {
     if (task.status === Status.Backlog || task.status === Status.OnHold) {
       return (
         <Draggable key={task.taskID} draggableId={task.taskID} index={index}>
-          {(provided) => (
+          {provided => (
             <Stack
               ref={provided.innerRef}
               {...provided.draggableProps}
@@ -337,24 +299,23 @@ const TasksContent = (): ReactElement => {
   const renderNoTask = () => {
     if (tasks.length === 0) {
       return (
-        <Stack sx={taskContentStyles.noData}>
-          <img src={NoTask} alt="error" />
-          <Typography variant="h5" fontWeight="bold">
+        <NoDataContainer>
+          <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
+          <Typography variant='h5' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant='body2' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.started)}
-            <Link
-              underline="hover"
-              variant="body2"
-              fontWeight="bold"
-              onClick={handleCreateModalState}
-              sx={taskContentStyles.link}
+            <StyledLink
+              underline='hover'
+              variant='body2'
+              fontWeight='bold'
+              onClick={() => handleCreateModalState()}
             >
               {t(LocalizationKey.tasks.errorMessage.created)}
-            </Link>
+            </StyledLink>
           </Typography>
-        </Stack>
+        </NoDataContainer>
       );
     }
 
@@ -368,8 +329,8 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name="teamFilter"
-                placeholder="Team Name"
+                name='teamFilter'
+                placeholder='Team Name'
                 options={teamOptions}
                 onChange={handleTeamFilter}
                 value={selectedTeam}
@@ -377,18 +338,15 @@ const TasksContent = (): ReactElement => {
             </Grid>
           </Grid>
 
-          <Divider sx={taskContentStyles.divider} />
+          <StyledDivider />
 
-          <Grid
+          <TaskGridContainer
             container
             spacing={1}
-            justifyContent="space-between"
-            sx={taskContentStyles.taskGridContainer}
+            justifyContent='space-between'
           >
-            {Object.values(Status).map((status) => {
-              const filteredData = tasks.filter(
-                (task) => task.status === status,
-              );
+            {Object.values(Status).map(status => {
+              const filteredData = tasks.filter(task => task.status === status);
 
               return (
                 <Grid
@@ -398,7 +356,7 @@ const TasksContent = (): ReactElement => {
                   key={status}
                 >
                   <Droppable droppableId={status}>
-                    {(provided) => (
+                    {provided => (
                       <StatusContainer
                         backgroundColor={status}
                         ref={provided.innerRef}
@@ -420,7 +378,7 @@ const TasksContent = (): ReactElement => {
                 </Grid>
               );
             })}
-          </Grid>
+          </TaskGridContainer>
 
           {renderNoTask()}
         </PageContainer>
@@ -428,7 +386,7 @@ const TasksContent = (): ReactElement => {
 
       {renderTaskContentModals()}
 
-      <ErrorMessage error={errorMessage} type="alert" />
+      <ErrorMessage error={errorMessage} type='alert' />
 
       <ConfirmModal
         open={deleteModalOpen}

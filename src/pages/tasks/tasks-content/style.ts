@@ -7,38 +7,24 @@ import {
   AccordionDetails,
   Typography,
   Accordion,
+  Divider,
   Paper,
   Stack,
   Grid,
+  Link,
   Box,
 } from "@mui/material";
 
 import { TextField } from "~/components";
 
-import { Status } from "./utils";
-
-interface StyledPaperProps extends React.ComponentProps<typeof Paper> {
-  status: string;
-}
-interface TaskDetailsCardDetailsProps
-  extends React.ComponentProps<typeof Typography> {
-  type: string;
-}
-
-interface TaskActionContainerProps extends React.ComponentProps<typeof Box> {
-  status: string;
-}
-
-interface TaskTagsProps extends React.ComponentProps<typeof Box> {
-  status: string;
-}
+import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 
 // COMMON TASK STYLES
 export const GridRelativeContainer = styled(Grid)({
   position: "relative",
 });
 
-export const TaskTags = styled(Box)<TaskTagsProps>(({ status }) => {
+export const TaskTags = styled(Box)(({ status }: { status: string }) => {
   const tag = {
     common: {
       borderRadius: "5px",
@@ -84,7 +70,7 @@ export const CloseContainer = styled(Box)({
 });
 
 // TASK DETAILS CARD STYLES
-export const StyledPaper = styled(Paper)<StyledPaperProps>(({ status }) => {
+export const StyledPaper = styled(Paper)(({ status }: { status: string }) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
     return { marginTop: "1rem", padding: "1rem", cursor: "default" };
   }
@@ -92,29 +78,29 @@ export const StyledPaper = styled(Paper)<StyledPaperProps>(({ status }) => {
   return { marginTop: "1rem", padding: "1rem", cursor: "grab" };
 });
 
-export const TaskDetailsCardDetails = styled(
-  Typography,
-)<TaskDetailsCardDetailsProps>(({ type }) => {
-  switch (type) {
-    case "title":
-      return { fontSize: "1.2em", fontWeight: "bold", cursor: "pointer" };
-    case "description":
-      return {
-        display: "-webkit-box",
-        WebkitBoxOrient: "vertical",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        WebkitLineClamp: 3,
-      };
-    case "createDate":
-      return {
-        display: "flex",
-        alignItems: "center",
-      };
-    default:
-      return null;
-  }
-});
+export const TaskDetailsCardDetails = styled(Typography)(
+  ({ type }: { type: string }) => {
+    switch (type) {
+      case "title":
+        return { fontSize: "1.2em", fontWeight: "bold", cursor: "pointer" };
+      case "description":
+        return {
+          display: "-webkit-box",
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          WebkitLineClamp: 3,
+        };
+      case "createDate":
+        return {
+          display: "flex",
+          alignItems: "center",
+        };
+      default:
+        return null;
+    }
+  },
+);
 
 export const StyledEventIcon = styled(EventIcon)({
   marginRight: "5px",
@@ -130,8 +116,8 @@ export const StyledTextsmsOutlinedIcon = styled(TextsmsOutlinedIcon)({
   marginRight: "3px",
 });
 
-export const TaskActionContainer = styled(Box)<TaskActionContainerProps>(
-  ({ status }) => {
+export const TaskActionContainer = styled(Box)(
+  ({ status }: { status: string }) => {
     if (status !== Status.OnHold && status !== Status.Backlog) {
       return { display: "none" };
     }
@@ -177,10 +163,6 @@ export const AccordionCommentDetails = styled(AccordionDetails)({
   padding: "0px",
 });
 
-export const ViewCommentContainerGrid = styled(Grid)({
-  marginBottom: "10px",
-});
-
 export const CommentTexbox = styled(TextField)({
   backgroundColor: "#EAF3F4",
   marginLeft: "5px",
@@ -193,21 +175,96 @@ export const ViewCommentContainerBox = styled(Box)({
   marginLeft: "5px",
 });
 
-export const ViewTaskDetailsContainer = styled(Grid)({
-  padding: "0px 10px 10px 10px",
-  minWidth: "320px",
-  [theme.breakpoints.only("sm")]: {
-    minWidth: "520px",
+export const ViewTaskDetailsContainer = styled(Grid)(
+  ({ type }: { type: string }) => {
+    switch (type) {
+      case "outer":
+        return {
+          padding: "0px 10px 10px 10px",
+          minWidth: "320px",
+          [theme.breakpoints.only("sm")]: {
+            minWidth: "520px",
+          },
+        };
+      case "inner":
+        return { marginTop: "10px" };
+      case "comment":
+        return { marginBottom: "10px" };
+      default:
+        return null;
+    }
   },
-});
+);
 
 export const ViewTaskDetailsLabel = styled(Typography)({
   fontWeight: 600,
 });
 
-export const ViewTaskDetailsInnerContainer = styled(Grid)({
-  marginTop: "10px",
+// TASK CONTENT
+export const StatusContainer = styled("div")(
+  ({ backgroundColor }: { backgroundColor: string }) => ({
+    backgroundColor:
+      backgroundColor === Status.Backlog
+        ? StatusContainerColor.Backlog
+        : backgroundColor === Status.NotYetStarted
+        ? StatusContainerColor.NotYetStarted
+        : backgroundColor === Status.InProgress
+        ? StatusContainerColor.InProgress
+        : backgroundColor === Status.OnHold
+        ? StatusContainerColor.OnHold
+        : StatusContainerColor.Completed,
+    borderRadius: 10,
+    width: "100%",
+    padding: 15,
+  }),
+);
+
+export const StyledStatusTitle = styled(Grid)(
+  ({ color }: { color: string }) => ({
+    fontSize: 18,
+    margin: color !== Status.Backlog ? "0.3em 0" : 0,
+    fontWeight: "bold",
+    color:
+      color === Status.NotYetStarted
+        ? StatusTitleColor.NotYetStarted
+        : color === Status.InProgress
+        ? StatusTitleColor.InProgress
+        : color === Status.OnHold
+        ? StatusTitleColor.OnHold
+        : color === Status.Completed
+        ? StatusTitleColor.Completed
+        : StatusTitleColor.Backlog,
+  }),
+);
+
+export const StyledCreateTaskIconButton = styled(Grid)(
+  ({ display }: { display: string }) => ({
+    fontSize: 25,
+    fontWeight: "bolder",
+    float: "right",
+    cursor: "pointer",
+    display: display !== Status.Backlog ? "none" : "",
+  }),
+);
+
+export const StyledDivider = styled(Divider)({
+  margin: "1rem 0 2rem 0",
 });
+
+export const TaskGridContainer = styled(Grid)({
+  maxHeight: "100%",
+  minWidth: "100%",
+  overflow: "auto",
+});
+
+export const NoDataContainer = styled(Stack)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "60vh",
+});
+
+export const StyledLink = styled(Link)({ cursor: "pointer" });
 
 export const styledScrollbar = {
   "*::-webkit-scrollbar": {
@@ -227,25 +284,5 @@ export const styledScrollbar = {
   },
   "*::-webkit-scrollbar-thumb:active": {
     background: "black",
-  },
-};
-
-export const taskContentStyles = {
-  divider: { margin: "1rem 0 2rem 0" },
-  taskGridContainer: { maxHeight: "100%", minWidth: "100%", overflow: "auto" },
-  createButton: {
-    position: "absolute",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    top: "0px",
-    right: "0px",
-  },
-  link: { cursor: "pointer" },
-  noData: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "60vh",
   },
 };
