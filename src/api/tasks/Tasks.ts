@@ -8,7 +8,7 @@ export const getTasks = async (
 ): BaseResponse<AllTasksResponse[]> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
   const response = await axios.get<AllTasksResponse[]>(
-    `${apiBasePath}/tasks/${id}/${status}`
+    `${apiBasePath}/tasks/teams/${id}/${status}`
   );
   return response.data;
 };

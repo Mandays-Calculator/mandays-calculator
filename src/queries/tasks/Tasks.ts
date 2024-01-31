@@ -16,9 +16,10 @@ import {
 } from "~/api/tasks/Tasks";
 
 export const useTasks = (
-  id: string
+  id: string,
+  status: string
 ): UseQueryResult<QueryResponse<AllTasksResponse[]>, AxiosError> => {
-  return useQuery("getTasks", () => getTasks(id, "1"));
+  return useQuery("getTasks", () => getTasks(id, status));
 };
 
 export const usePostTasks = (): UseMutationResult<

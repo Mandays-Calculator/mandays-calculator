@@ -95,7 +95,10 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const complexities = useCommonOption("complexity");
-  const { data: tasksData } = useTasks(user?.id ?? "");
+  const { data: tasksData } = useTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+    "1"
+  );
   const name = `${user?.firstName} ${user?.lastName}`;
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -115,6 +118,8 @@ const TasksContent = (): ReactElement => {
       setTasks(tasksData.data);
     }
   }, [tasksData]);
+
+  console.log(tasksData);
 
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [viewDetailsModalOpen, setViewDetailsModalOpen] =
