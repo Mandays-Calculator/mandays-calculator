@@ -3,6 +3,7 @@ import type { OdcListResponse } from "~/api/odc";
 import type {
   CareerStepResponse,
   CountryResponse,
+  GenderResponse,
   RoleTypeResponse,
 } from "~/api/common";
 import type { ForGetComplexities, GetComplexities } from "~/api/complexity";
@@ -18,25 +19,34 @@ import { useQuery, UseQueryResult } from "react-query";
 
 import { getODC } from "~/api/odc/ODC";
 import { getComplexities } from "~/api/complexity";
-import { getCareerSteps, getCountries, getRoles } from "~/api/common/Common";
+import {
+  getCareerSteps,
+  getCountries,
+  getGenders,
+  getRoles,
+} from "~/api/common/Common";
 import { getProjects } from "~/api/projects";
-
 import { getUserList } from "~/api/user-management/UserManagement";
-
-// Mock options
-import { genders } from "~/utils/constants";
 
 const cacheTime: number = 1000 * 60 * 60 * 24;
 
 const transformDataToOption = (
   param: UseQueryResult<any, Error>,
-  type: CommonType
+  type: CommonType,
+  withInfo: boolean
 ): CommonOption => {
   const data = param?.data?.data || param?.data || param || [];
   if (data && data.length > 0) {
     switch (type) {
       // return value mapping depends on type
       case "user":
+        if (withInfo) {
+          return data.map((item: CommonResponseDataObj) => ({
+            label: `${item.firstName} ${item.lastName}`,
+            value: item.id,
+            ...item,
+          }));
+        }
         return data.map((item: CommonResponseDataObj) => ({
           label: `${item.firstName} ${item.lastName}`,
           value: item.id,
@@ -47,7 +57,10 @@ const transformDataToOption = (
           value: item.id,
         }));
       case "gender":
-        return genders;
+        return data.map((item: CommonResponseDataObj) => ({
+          label: `${item.name}`,
+          value: item.id,
+        }));
       case "career_step":
         return data.map((item: CommonResponseDataObj) => ({
           label: item.careerStep,
@@ -66,10 +79,12 @@ const transformDataToOption = (
       case "complexity":
       case "odc":
       default:
-        return data.map((item: CommonResponseDataObj) => ({
-          label: `${item.name}`,
-          value: item.id,
-        }));
+        return data
+          .filter((item: CommonResponseDataObj) => item.active)
+          .map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+          }));
     }
   }
   return [];
@@ -118,6 +133,11 @@ const getCommonOption = <T>(
         staleTime: Infinity,
         cacheTime: cacheTime,
       });
+    case "gender":
+      return useQuery<GenderResponse[], Error>("genders", getGenders, {
+        staleTime: Infinity,
+        cacheTime: cacheTime,
+      });
     case "career_step":
       return useQuery<CareerStepResponse[], Error>(
         "careerSteps",
@@ -137,7 +157,17 @@ const getCommonOption = <T>(
   }
 };
 
-export const useCommonOption = (type: CommonType, params?: any) => {
+/**
+ * Get common options and convert into Select object
+ * @param {string} type - Type of common option
+ * @param {Object} params - Object to pass a param in API
+ * @param {boolean} withInfo - Returns other info
+ */
+export const useCommonOption = (
+  type: CommonType,
+  params?: any,
+  withInfo: boolean = false
+) => {
   const queryResult = getCommonOption<CommonDataResponse>(type, params);
-  return transformDataToOption(queryResult, type);
+  return transformDataToOption(queryResult, type, withInfo);
 };

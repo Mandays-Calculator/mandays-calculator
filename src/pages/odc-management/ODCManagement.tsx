@@ -5,9 +5,16 @@ import type { FormContext, SucErrType } from "./utils";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useCommonOption } from "~/queries/common/options";
 import { useODCList } from "~/queries/odc/ODC";
 import { useDeleteODC } from "~/mutations/odc";
-import { PageLoader, Title, PageContainer, ConfirmModal, Alert } from "~/components";
+import {
+  PageLoader,
+  Title,
+  PageContainer,
+  ConfirmModal,
+  Alert,
+} from "~/components";
 import LocalizationKey from "~/i18n/key";
 
 import AddODC from "./add-list/AddODC";
@@ -17,22 +24,28 @@ import {
   SucErrData,
   HasError,
   HasSuccess,
-  MutationOptions
+  MutationOptions,
 } from "./utils";
 
 const ODCManagement = (): ReactElement => {
   const { t } = useTranslation();
   const {
     odc: { management, validationInfo },
-    common: { errorMessage: { genericError } }
+    common: {
+      errorMessage: { genericError },
+    },
   } = LocalizationKey;
-  
+
   const { data: apiData, isLoading, isError, refetch } = useODCList();
   const {
     mutate: deleteMutation,
     isError: isDeleteError,
-    isSuccess: isDeleteSuccess
+    isSuccess: isDeleteSuccess,
   } = useDeleteODC();
+  const countryData = useCommonOption("country");
+  const country = countryData?.sort((a: SelectObject, b: SelectObject) =>
+    a.label.localeCompare(b.label)
+  );
 
   const [initialValues, setInitialValues] = useState<OdcParam>(NewODCData);
   const [formContext, setFormContext] = useState<FormContext>("");
@@ -41,9 +54,10 @@ const ODCManagement = (): ReactElement => {
 
   useEffect(() => {
     if (formContext === "Edit" || formContext === "Delete")
-      setInitialValues(apiData?.data?.find((value: OdcParam) => value.id === idx) ?? NewODCData);
-    if (formContext === "Add")
-      setInitialValues(NewODCData);
+      setInitialValues(
+        apiData?.data?.find((value: OdcParam) => value.id === idx) ?? NewODCData
+      );
+    if (formContext === "Add") setInitialValues(NewODCData);
   }, [formContext]);
 
   useEffect(() => {
@@ -57,12 +71,16 @@ const ODCManagement = (): ReactElement => {
   }, [isDeleteSuccess]);
 
   useEffect(() => {
-    if (successError.isAddOdcSuccess || successError.isUpdateOdcSuccess) refetch();
+    if (successError.isAddOdcSuccess || successError.isUpdateOdcSuccess)
+      refetch();
   }, [successError.isAddOdcSuccess, successError.isUpdateOdcSuccess]);
 
-  const delIdx = apiData?.data?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
+  const delIdx =
+    apiData?.data?.findIndex((value: OdcParam) => value.id === idx) ?? 0;
 
-  if (isLoading) { return <PageLoader /> };
+  if (isLoading || countryData?.length <= 0) {
+    return <PageLoader />;
+  }
 
   return (
     <>
@@ -74,6 +92,7 @@ const ODCManagement = (): ReactElement => {
             setFormContext={setFormContext}
             setIdx={setIdx}
             setSuccessError={setSuccessError}
+            country={country}
           />
         )}
         {(formContext === "Add" || formContext === "Edit") && (
@@ -83,6 +102,7 @@ const ODCManagement = (): ReactElement => {
             formContext={formContext}
             setFormContext={setFormContext}
             setSuccessError={setSuccessError}
+            country={country}
           />
         )}
       </PageContainer>
@@ -102,16 +122,22 @@ const ODCManagement = (): ReactElement => {
           type={"error"}
         />
       )}
-      {(successError.isDeleteOdcSuccess || successError.isDeleteHolidaySuccess) && (
+      {(successError.isDeleteOdcSuccess ||
+        successError.isDeleteHolidaySuccess) && (
         <Alert
-          open={successError.isDeleteOdcSuccess || successError.isDeleteHolidaySuccess}
+          open={
+            successError.isDeleteOdcSuccess ||
+            successError.isDeleteHolidaySuccess
+          }
           message={t(validationInfo.deleteSuccess)}
           type={"success"}
         />
       )}
       {(successError.isDeleteOdcError || successError.isDeleteHolidayError) && (
         <Alert
-          open={successError.isDeleteOdcError || successError.isDeleteHolidayError}
+          open={
+            successError.isDeleteOdcError || successError.isDeleteHolidayError
+          }
           message={t(validationInfo.deleteError)}
           type={"error"}
         />

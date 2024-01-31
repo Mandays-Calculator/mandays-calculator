@@ -1,5 +1,6 @@
 import type { OdcParam, HolidayParam } from "~/api/odc";
 import type { TFunction } from "i18next";
+import type { CommonOption } from "~/queries/common/options";
 import type { FormContext, SucErrType } from "../utils";
 
 import { Column, CellProps } from "react-table";
@@ -22,6 +23,7 @@ export const ODCColumns = (
   setFormContext: (context: FormContext) => void,
   setIdx: (idx: string) => void,
   setSuccessError: (sucErr: SucErrType) => void,
+  country: CommonOption,
 ): ODCColumnType[] => {
   return [
     {
@@ -31,6 +33,13 @@ export const ODCColumns = (
     {
       Header: t(label.location),
       accessor: "location",
+      Cell: ({ row }: CellProps<OdcParam>) => {
+        const loc = country?.find((countryValue: SelectObject) =>
+          countryValue.value === row.original.location
+        );
+        return (
+        <>{loc?.label}</>
+      )},
     },
     {
       Header: t(label.abbreviation),

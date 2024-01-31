@@ -205,6 +205,7 @@ const LocalizationKey = {
   tasks: {
     createTask: {
       modalTitle: "tasks.createTask.modalTitle",
+      complexity: "tasks.createTask.complexity",
       label: {
         taskTitle: "tasks.createTask.label.taskTitle",
         description: "tasks.createTask.label.description",
@@ -213,12 +214,15 @@ const LocalizationKey = {
         tags: "tasks.createTask.label.tags",
       },
       placeholder: {
+        taskTitle: "tasks.createTask.placeholder.taskTitle",
+        description: "tasks.createTask.placeholder.description",
         functionality: "tasks.createTask.placeholder.functionality",
         complexity: "tasks.createTask.placeholder.complexity",
         tags: "tasks.createTask.placeholder.tags",
       },
       btnLabel: {
         create: "tasks.createTask.btnLabel.create",
+        close: "tasks.createTask.btnLabel.close",
       },
     },
     updateTask: {
@@ -227,10 +231,41 @@ const LocalizationKey = {
         update: "tasks.updateTask.btnLabel.update",
       },
     },
+    taskDetails: {
+      sprint: "tasks.taskDetails.sprint",
+      complexity: "tasks.taskDetails.complexity",
+      deleteConfirm: "tasks.taskDetails.deleteConfirm",
+    },
+    viewTaskDetails: {
+      label: {
+        description: "tasks.viewTaskDetails.label.description",
+        functionality: "tasks.viewTaskDetails.label.functionality",
+        complexity: "tasks.viewTaskDetails.label.complexity",
+        createdDate: "tasks.viewTaskDetails.label.createdDate",
+        completionDate: "tasks.viewTaskDetails.label.completionDate",
+        markComplete: "tasks.viewTaskDetails.label.markComplete",
+        sprint: "tasks.viewTaskDetails.label.sprint",
+        tags: "tasks.viewTaskDetails.label.tags",
+        comments: "tasks.viewTaskDetails.label.comments",
+      },
+      placeholder: {
+        description: "tasks.viewTaskDetails.placeholder.description",
+        sprint: "tasks.viewTaskDetails.placeholder.sprint",
+        comments: "tasks.viewTaskDetails.placeholder.comments",
+        avatar: "tasks.viewTaskDetails.placeholder.avatar",
+        user: "tasks.viewTaskDetails.placeholder.user",
+      },
+      modal: {
+        markComplete: "tasks.viewTaskDetails.modal.markComplete",
+        confirmMarkComplete: "tasks.viewTaskDetails.modal.confirmMarkComplete",
+        closeMarkComplete: "tasks.viewTaskDetails.modal.closeMarkComplete",
+      },
+    },
     errorMessage: {
       error: "tasks.errorMessage.error",
       started: "tasks.errorMessage.started",
       created: "tasks.errorMessage.created",
+      fetch: "tasks.errorMessage.fetch",
     },
   },
   history: {

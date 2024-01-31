@@ -7,15 +7,20 @@ import {
 } from "@mui/material";
 import { CSSObject, Theme, styled } from "@mui/material/styles";
 
-const drawerWidth = 350;
+const smDrawerWidth = 260;
+const mdDrawerWidth = 320;
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
+  width: mdDrawerWidth,
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+
+  [theme.breakpoints.down("xl")]: {
+    width: smDrawerWidth,
+  },
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -37,19 +42,16 @@ const StyledDrawer = styled(Drawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   maxWidth: 390,
-  width: drawerWidth,
+  width: mdDrawerWidth,
   paddingBottom: theme.spacing(6.8),
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
+  ...(open && openedMixin(theme)),
+  ...(!open && closedMixin(theme)),
+  "& .MuiDrawer-paper": {
+    ...(open ? openedMixin(theme) : closedMixin(theme)),
+  },
   "*::-webkit-scrollbar": {
     width: "6px",
     height: "6px",
@@ -104,7 +106,7 @@ div {
 
   border-radius: ${open ? "10px" : "0"};
   background-color: ${theme.palette.primary.main};
-}`
+}`,
 );
 
 const StyledList = styled(List, {
@@ -121,7 +123,7 @@ const StyledList = styled(List, {
         scrollbarWidth: "thin",
       }),
     },
-  })
+  }),
 );
 
 const StyledItemText = styled(ListItemText)(({ theme }) => ({

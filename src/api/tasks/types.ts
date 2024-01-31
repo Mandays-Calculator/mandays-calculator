@@ -3,17 +3,17 @@ export interface QueryResponse<T> {
   data: T;
 }
 
-interface Comment {
+export interface Comment {
   name: string;
   comment: string;
 }
 
-interface Functionality {
+export interface Functionality {
   id: string;
   name: string;
 }
 
-interface Complexity {
+export interface Complexity {
   active: boolean;
   description: string;
   id: string;

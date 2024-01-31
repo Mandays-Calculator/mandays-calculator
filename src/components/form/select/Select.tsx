@@ -1,5 +1,8 @@
 import type { ReactElement, ReactNode, SetStateAction } from "react";
-import type { SelectProps as MuiSelectProps } from "@mui/material/Select";
+import type {
+  SelectProps as MuiSelectProps,
+  SelectChangeEvent,
+} from "@mui/material/Select";
 import type { BaseInputProps } from "../types";
 
 import { useCallback, useState, useEffect } from "react";
@@ -33,6 +36,7 @@ export const Select = (props: SelectProps): ReactElement => {
     error,
     optionLabelKey = "label",
     optionValueKey = "value",
+    onChange,
     value,
     ...rest
   } = props;
@@ -46,7 +50,18 @@ export const Select = (props: SelectProps): ReactElement => {
     const newSelectedValues = selectedValues.filter(
       (value) => value !== valueToDelete
     );
+
     setSelectedValues(newSelectedValues);
+    if (onChange) {
+      onChange(
+        {
+          target: {
+            value: newSelectedValues,
+          },
+        } as SelectChangeEvent<unknown>,
+        null
+      );
+    }
   };
 
   useEffect(() => {
@@ -132,6 +147,7 @@ export const Select = (props: SelectProps): ReactElement => {
         renderValue={renderSelectedValue}
         displayEmpty
         defaultValue={defaultValue}
+        onChange={onChange}
         MenuProps={{
           autoFocus: false,
         }}

@@ -1,65 +1,182 @@
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
+import { ReactElement } from "react";
 import UserEvent from "@testing-library/user-event";
 import { ODCManagement } from "~/pages/odc-management";
-import { useQuery } from 'react-query';
+import * as query from '~/queries/odc/ODC';
+import * as mutate from '~/mutations/odc/ODC';
+import { data, holidayList } from './utils';
+// import { data } from './utils'
+import ProviderWrapper from "~/__tests__/utils/ProviderWrapper";
 
 jest.mock('react-i18next', () => ({
 	...jest.requireActual('react-i18next'),
 	useTranslation: () => ({ t: (key: any) => key }),
 }));
 
-jest.mock('react-query', () => ({
-	...jest.requireActual('react-query'),
-	useQuery: jest.fn(),
-}))
+const renderElement = (element: ReactElement) => {
+	render(
+		<ProviderWrapper>
+			{element}
+		</ProviderWrapper>
+	);
+	return UserEvent.setup();
+}
+
+afterEach(() => {
+	cleanup();
+})
 
 describe('ODC Management', () => {
-	test('odc management happy path', async () => {
+	test('Page loader', async () => {
+		jest.spyOn(query, 'useODCList').mockImplementation(
+			jest.fn().mockReturnValue({
+				isLoading: true
+			})
+		)
+		renderElement(<ODCManagement />);
 
-		const user = UserEvent.setup();
+		const pageLoader = screen.getByRole('progressbar');
+		expect(pageLoader).toBeInTheDocument();
+	})
 
-		(useQuery as jest.Mock).mockReturnValue({
-			data: [
-				{
-					"id": "7fc01977-6e35-11ee-8624-a0291936d1c2",
-					"name": "Philippines",
-					"abbreviation": "PHODC",
-					"location": "Pasig City, Metro Manila, Philippines",
-					"holidays": null,
-					"active": true
-				}
-			],
-			error: null,
-			isLoading: false,
-		});
+	test('add odc', async () => {
+		jest.spyOn(query, 'useODCList').mockImplementation(
+			jest.fn().mockReturnValue({
+				data: data,
+			})
+		)
+		const user = renderElement(
+			<ODCManagement />
+		)
+		const label = screen.getByText('odc.management.label')
+		expect(label).toBeInTheDocument();
 
-		render(
+		const textField = screen.getByRole('textbox')
+		await user.type(textField, 'Philippines')
+
+		const addButton = screen.getByRole('button', { name: 'odc.btnlabel.addOdc' })
+		await user.click(addButton);
+
+		const [name, location, abbreviation] = screen.getAllByRole('textbox')
+		expect(name).toBeInTheDocument();
+		expect(location).toBeInTheDocument();
+
+		await user.type(name, 'Philippines');
+		await user.type(location, 'location');
+		await user.type(abbreviation, 'PHODC');
+
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addOdc' }));
+
+		await user.type(name, 'name')
+
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addOdc' }));
+
+		await user.type(abbreviation, 'abbreviation');
+
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addHoliday' }))
+
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addOdc' }));
+
+		expect(label).toBeInTheDocument();
+	})
+
+	test('odc edit', async () => {
+		jest.spyOn(query, 'useODCList').mockImplementation(
+			jest.fn().mockReturnValue({
+				data: data,
+			})
+		)
+		jest.spyOn(query, 'useHolidayList').mockImplementation(
+			jest.fn().mockReturnValue({
+				data: holidayList,
+			})
+		)
+		jest.spyOn(mutate, 'useUpdateHoliday').mockImplementation(
+			jest.fn().mockReturnValue({
+				data: {
+					status: 200,
+				},
+				mutate: jest.fn()
+			})
+		)
+		jest.spyOn(mutate, 'useDeleteHoliday').mockImplementation(
+			jest.fn().mockReturnValue({
+				data: {
+					status: 200,
+				},
+				mutate: jest.fn()
+			})
+		)
+
+		const user = renderElement(
 			<ODCManagement />
 		);
-		const addODC1 = screen.getByRole('button', { name: 'odc.button.add' });
-		await user.click(addODC1);
+		expect(screen.getByText('Philippines')).toBeInTheDocument();
 
-		const inputFields = screen.queryAllByRole('textbox');
-		await user.type(inputFields[0], 'Philippines2');
-		await user.type(inputFields[1], 'PHODC');
-		await user.type(inputFields[2], 'Pasig City, Metro Manila, Philippines');
+		await user.click(screen.getByRole('button', { name: /edit/i }));
 
-		const addODC2 = screen.getByRole('button', { name: 'odc.button.add' });
-		await user.click(addODC2)
-
-		const odcNameGridCell = screen.getByRole('cell', { name: 'Philippines2' })
-		expect(odcNameGridCell).toBeInTheDocument();
-
-		const editButton = screen.getByRole('button', { name: 'edit-1' })
-		await user.click(editButton);
-
-		const holidayTable = screen.getByRole('table', { name: 'HolidayTable' })
-		expect(holidayTable).toBeInTheDocument();
-
-		const cancelButton = screen.getByRole('button', { name: 'odc.button.cancel' })
+		const cancelButton = screen.getByRole('button', { name: 'odc.btnlabel.cancel' });
 		await user.click(cancelButton);
 
-		const title = screen.getByText(/odc management/i);
-		expect(title).toBeInTheDocument();
+		await user.click(screen.getByRole('button', { name: /edit/i }));
+
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.addHoliday' }))
+
+		await user.click(screen.getByRole('button', { name: 'odc.btnlabel.save' }));
+
+	})
+	test('delete odc', async () => {
+		jest.spyOn(query, 'useODCList').mockImplementation(
+			jest.fn().mockReturnValue({
+				data: data,
+			})
+		)
+		const user = renderElement(
+			<ODCManagement />
+		);
+
+		await user.click(screen.getByRole('button', { name: 'delete-0' }));
+		const yes = screen.getAllByRole('button');
+		await user.click(yes[1]);
+		expect(yes[1]).not.toBeInTheDocument();
+		expect(screen.getByText('Philippines')).toBeInTheDocument();
+		await user.click(screen.getByRole('button', { name: 'delete-0', hidden: true }));
+		const [no] = screen.getAllByRole('button');
+		await user.click(no),
+			expect(no).not.toBeInTheDocument();
+	})
+
+	test('api errors', async () => {
+		jest.spyOn(mutate, 'useUpdateHoliday').mockImplementation(
+			jest.fn().mockReturnValue({
+				mutate: jest.fn((_variables, options) => {
+					options.onSuccess();
+				})
+			})
+		);
+		jest.spyOn(query, 'useHolidayList').mockImplementation(
+			jest.fn().mockReturnValue({
+				mutate: {
+
+				}
+			})
+		);
+		jest.spyOn(mutate, 'useDeleteHoliday').mockImplementation(
+			jest.fn().mockReturnValue({
+				mutate: (_variables: any, options: { onSuccess: any; }) => {
+					options.onSuccess
+				},
+				isLoading: false,
+				isError: false,
+			})
+		);
+		const user = renderElement(
+			<ODCManagement />
+		);
+
+		await user.click(screen.getByRole('button', { name: /edit/i }));
+		// await user.click(screen.getByRole('button', { name: /delete-0/i }))
+
+		expect(screen.getByText('odc.management.label')).toBeInTheDocument();
 	})
 })

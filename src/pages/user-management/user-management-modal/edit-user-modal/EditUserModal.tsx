@@ -23,7 +23,8 @@ import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
 import moment from "moment";
 import { genders, rolesData, CAREER_STEPS } from "~/utils/constants";
-import { odcOptions, projectOptions, teamOptions } from "../utils";
+import { teamOptions } from "../utils";
+import { useCommonOption } from "~/queries/common/options/Options";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -58,6 +59,9 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const { values } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
+  const projectOptions = useCommonOption("project", { keyword: "" });
+  const odcOptions = useCommonOption("odc", { keyword: "" });
+
   const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
   const [isEditError, setIsEditError] = useState<boolean>(false);
   const EditUser = useEditUser(currentUser?.id ?? "");
@@ -86,7 +90,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const submit = () => {
     callApi(EditUserForm);
   };
-
   const form = useFormikContext<UpdateUserManagementParams>();
   useEffect(() => {
     form.setValues({
@@ -98,7 +101,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateEmail: currentUser?.email ?? "",
       updateImage: currentUser?.image ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
-      updateOdcId: "",
+      updateOdcId: currentUser?.odc?.id ?? "",
       updateJoiningDate:
         moment(currentUser?.joiningDate).format("YYYY-MM-DD") ?? "",
       updateCareerStep: currentUser?.careerStep ?? "",
@@ -107,7 +110,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateRoles: currentUser?.roles ?? [],
     });
   }, [currentUser]);
-
   useEffect(() => {
     if (isEditSuccess) {
       setTimeout(() => {
@@ -128,6 +130,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <Stack>
               <ImageUpload
                 name="updateImage"
+                initialValue={currentUser?.image ?? ""}
                 setFieldValue={form.setFieldValue}
               />
             </Stack>
