@@ -7,7 +7,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { decryptObjectWithAES } from "~/utils/cryptoUtils";
 import { getEnvConfig } from "~/utils/env-config";
 
-import { login } from "./actions";
+import { login, logout } from "./actions";
+import { getUserToken } from "~/hooks/user";
+import { removeCookie } from "~/utils/cookieUtils";
+import { cookieAuthKey } from "~/utils/constants";
+import { removeStateStorage } from "~/utils/helpers";
 
 /**
  * User state for Authentication and User
@@ -21,6 +25,7 @@ const initialState: UserPermissionState = {
   // User
   user: null,
   permissions: [],
+  isLogoutError: false,
   projects: [],
   selectedProject: { label: "", value: "" },
 };
@@ -30,8 +35,7 @@ export const userSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
-      state.loading = true;
-      return state;
+      return { ...state, loading: true, isLogoutError: false };
     });
     builder.addCase(
       login.fulfilled,
@@ -58,6 +62,19 @@ export const userSlice = createSlice({
       state.error = action.payload as GenericErrorResponse;
       return state;
     });
+    builder.addCase(logout.pending, (state) => {
+      state.loading = true;
+      return state;
+    });
+    builder.addCase(logout.fulfilled, () => {
+      return initialState;
+    });
+    builder.addCase(logout.rejected, () => {
+      return {
+        ...initialState,
+        isLogoutError: true,
+      };
+    });
     // Adding success and failed callback
     builder.addMatcher(
       (action) => action.type.startsWith("auth/login/"),
@@ -70,11 +87,23 @@ export const userSlice = createSlice({
         }
       },
     );
+    builder.addMatcher(
+      (action) => action.type.startsWith("auth/logout/"),
+      (_, action) => {
+        const { onSuccess, onFailure } = action.meta.arg;
+        if (action.type.endsWith("fulfilled")) {
+          onSuccess?.(action.payload);
+          removeStateStorage("session");
+          removeCookie(cookieAuthKey);
+        } else if (action.type.endsWith("rejected")) {
+          onFailure?.(action.error);
+          removeStateStorage("session");
+          removeCookie(cookieAuthKey);
+        }
+      },
+    );
   },
   reducers: {
-    resetUserState: () => {
-      return initialState;
-    },
     updateUserState: (
       state: UserPermissionState,
       action: PayloadAction<LoginResponse>,
@@ -91,11 +120,13 @@ export const userSlice = createSlice({
         !config.encryptData,
       );
 
+      const cookieItem = getUserToken();
+
       state.loading = false;
       state.user = decryptedUserData;
       state.permissions = decryptedPermissionsData;
       state.projects = decryptedProjectsData;
-      state.tokenExpiry = action.payload.token.expiresInMs;
+      state.tokenExpiry = cookieItem.expiresInMs;
       state.isAuthenticated = true;
       state.selectedProject =
         decryptedProjectsData.length > 0
@@ -116,6 +147,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { resetUserState, updateUserState, updateSelectedProject } =
-  userSlice.actions;
+export const { updateUserState, updateSelectedProject } = userSlice.actions;
 export default userSlice.reducer;
