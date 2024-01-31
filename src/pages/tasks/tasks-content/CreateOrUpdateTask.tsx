@@ -12,11 +12,17 @@ import LocalizationKey from "~/i18n/key";
 import moment from "moment";
 import _ from "lodash";
 
-import { Select, TextField, Modal } from "~/components";
+import { Modal, Form } from "~/components";
 import { CustomButton } from "~/components/form/button";
 
 import { createOrUpdatetaskStyles, taskStyles } from "./style";
 import ComplexityDetails from "./complexity-details";
+import {
+  ControlledSelect,
+  ControlledTextField,
+} from "~/components/form/controlled";
+import { useFormik } from "formik";
+import { usePostTasks } from "~/queries/tasks/Tasks";
 
 interface CreateOrUpdateTaskProps {
   open: boolean;
@@ -97,27 +103,28 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   const [task, setTask] = useState<AllTasksResponse>(
     currentTask || initialTaskState,
   );
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  // const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
+  const postTasks = usePostTasks();
 
   useEffect(() => {
     setTask(currentTask || initialTaskState);
 
-    if (update) {
-      setSelectedTags(_.map(currentTask?.tags, "value"));
-    }
+    // if (update) {
+    //   setSelectedTags(_.map(currentTask?.tags, "value"));
+    // }
   }, [currentTask]);
 
-  const handleCreateOrUpdateTask = (): void => {
-    if (update && onUpdateTask) {
-      onUpdateTask(task);
-    } else if (onCreateTask) {
-      onCreateTask(task);
-      setTask(initialTaskState);
-    }
+  // const handleCreateOrUpdateTask = (): void => {
+  //   if (update && onUpdateTask) {
+  //     onUpdateTask(task);
+  //   } else if (onCreateTask) {
+  //     onCreateTask(task);
+  //     setTask(initialTaskState);
+  //   }
 
-    onClose();
-  };
+  //   onClose();
+  // };
 
   const handleChangeFunctionality = (e: SelectChangeEvent<unknown>) => {
     const selectedFunctionality = _.find(
@@ -150,22 +157,22 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     setTask({ ...task, complexity });
   };
 
-  const handleChangeTags = (e: SelectChangeEvent<unknown>) => {
-    const _selectedTags = e.target.value as string[];
-    let tags: SelectObject[] = [];
+  // const handleChangeTags = (e: SelectChangeEvent<unknown>) => {
+  //   const _selectedTags = e.target.value as string[];
+  //   let tags: SelectObject[] = [];
 
-    _selectedTags.map(selectedTag => {
-      const tag: SelectObject = {
-        label: selectedTag,
-        value: selectedTag,
-      };
+  //   _selectedTags.map((selectedTag) => {
+  //     const tag: SelectObject = {
+  //       label: selectedTag,
+  //       value: selectedTag,
+  //     };
 
-      tags.push(tag);
-    });
+  //     tags.push(tag);
+  //   });
 
-    setTask({ ...task, tags });
-    setSelectedTags(_selectedTags);
-  };
+  //   setTask({ ...task, tags });
+  //   setSelectedTags(_selectedTags);
+  // };
 
   const handleOpenComplexity = (): void => {
     setOpenComplexity(!openComplexity);
@@ -184,6 +191,44 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     }
   };
 
+  const createOrUpdateForm = useFormik({
+    initialValues: update !== false ? initialTaskState : initialTaskState,
+    onSubmit: (e: AllTasksResponse): void => {
+      const submit = {
+        name: e.name,
+        description: e.description,
+        createdDate: moment(e.createdDate).format("YYYY-MM-DD"),
+        sprint: "1",
+        complexityId: e.complexity,
+        functionality: {
+          id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
+          name: "Test add new task Nov30_004",
+          teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+        },
+        tags: e.tags,
+      };
+
+      if (update === false) {
+        // onCreateTask(task);
+
+        postTasks.mutate(submit);
+        createOrUpdateForm.resetForm();
+        console.log("submit", submit);
+      }
+      //else {
+      //   if (task) {
+      //     const updatedTask = {
+      //       ...task,
+      //       ...submit,
+      //     };
+      //     onUpdateTask(updatedTask);
+      //     console.log("update", updatedTask);
+      //   }
+      // }
+      onClose();
+    },
+  });
+
   return (
     <>
       <Modal
@@ -193,7 +238,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             ? t(LocalizationKey.tasks.updateTask.modalTitle)
             : t(LocalizationKey.tasks.createTask.modalTitle)
         }
-        maxWidth='sm'
+        maxWidth="sm"
         onClose={onClose}
       >
         <Box sx={taskStyles.modal.close}>
@@ -201,107 +246,112 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             <CloseIcon />
           </IconButton>
         </Box>
-
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              name='name'
-              label={t(LocalizationKey.tasks.createTask.label.taskTitle)}
-              placeholder={t(
-                LocalizationKey.tasks.createTask.placeholder.taskTitle,
-              )}
-              fullWidth
-              onChange={e => setTask({ ...task, name: e.target.value })}
-              value={task.name}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              name='description'
-              label={t(LocalizationKey.tasks.createTask.label.description)}
-              placeholder={t(
-                LocalizationKey.tasks.createTask.placeholder.description,
-              )}
-              fullWidth
-              multiline
-              rows={4}
-              onChange={e => setTask({ ...task, description: e.target.value })}
-              value={task.description}
-            />
-          </Grid>
-
-          <Grid item container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <Typography sx={createOrUpdatetaskStyles.label}>
-                {t(LocalizationKey.tasks.createTask.label.functionality)}
-              </Typography>
-              <Select
-                name='functionality'
+        <Form instance={createOrUpdateForm}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <ControlledTextField
+                name="name"
+                label={t(LocalizationKey.tasks.createTask.label.taskTitle)}
                 placeholder={t(
-                  LocalizationKey.tasks.createTask.placeholder.functionality,
+                  LocalizationKey.tasks.createTask.placeholder.taskTitle,
                 )}
                 fullWidth
-                onChange={handleChangeFunctionality}
-                value={task.functionality.id}
-                options={functionalityOptions}
+                // onChange={(e) => setTask({ ...task, name: e.target.value })}
+                // value={task.name}
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <Stack
-                direction='row'
-                spacing={1}
-                onClick={() => handleOpenComplexity()}
-                sx={createOrUpdatetaskStyles.complexity}
-              >
+            <Grid item xs={12}>
+              <ControlledTextField
+                name="description"
+                label={t(LocalizationKey.tasks.createTask.label.description)}
+                placeholder={t(
+                  LocalizationKey.tasks.createTask.placeholder.description,
+                )}
+                fullWidth
+                multiline
+                rows={4}
+                // onChange={(e) =>
+                //   setTask({ ...task, description: e.target.value })
+                // }
+                // value={task.description}
+              />
+            </Grid>
+
+            <Grid item container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <Typography sx={createOrUpdatetaskStyles.label}>
-                  {t(LocalizationKey.tasks.createTask.label.complexity)}
+                  {t(LocalizationKey.tasks.createTask.label.functionality)}
                 </Typography>
-                <InfoOutlinedIcon fontSize='small' />
-              </Stack>
-              <Select
-                name='complexity'
+                <ControlledSelect
+                  name="functionality"
+                  placeholder={t(
+                    LocalizationKey.tasks.createTask.placeholder.functionality,
+                  )}
+                  fullWidth
+                  // onChange={handleChangeFunctionality}
+                  // value={task.functionality.id}
+                  options={functionalityOptions}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  onClick={() => handleOpenComplexity()}
+                  sx={createOrUpdatetaskStyles.complexity}
+                >
+                  <Typography sx={createOrUpdatetaskStyles.label}>
+                    {t(LocalizationKey.tasks.createTask.label.complexity)}
+                  </Typography>
+                  <InfoOutlinedIcon fontSize="small" />
+                </Stack>
+                <ControlledSelect
+                  name="complexity"
+                  placeholder={t(
+                    LocalizationKey.tasks.createTask.placeholder.complexity,
+                  )}
+                  fullWidth
+                  // onChange={handleChangeComplexity}
+                  // value={task.complexity.id}
+                  options={
+                    !_.isEmpty(complexities) ? complexities : complexityOptions
+                  } // should be updated when api is integrated
+                />
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography sx={createOrUpdatetaskStyles.label}>
+                {t(LocalizationKey.tasks.createTask.label.tags)}
+              </Typography>
+              <ControlledSelect
+                name="tags"
                 placeholder={t(
-                  LocalizationKey.tasks.createTask.placeholder.complexity,
+                  LocalizationKey.tasks.createTask.placeholder.tags,
                 )}
+                multiple={true}
                 fullWidth
-                onChange={handleChangeComplexity}
-                value={task.complexity.id}
-                options={
-                  !_.isEmpty(complexities) ? complexities : complexityOptions
-                } // should be updated when api is integrated
+                // onChange={handleChangeTags}
+                // value={selectedTags}
+                options={tagsOptions}
               />
             </Grid>
           </Grid>
 
-          <Grid item xs={12}>
-            <Typography sx={createOrUpdatetaskStyles.label}>
-              {t(LocalizationKey.tasks.createTask.label.tags)}
-            </Typography>
-            <Select
-              name='tags'
-              placeholder={t(LocalizationKey.tasks.createTask.placeholder.tags)}
-              multiple={true}
-              fullWidth
-              onChange={handleChangeTags}
-              value={selectedTags}
-              options={tagsOptions}
-            />
-          </Grid>
-        </Grid>
-
-        <Stack direction='row' justifyContent='flex-end' marginTop={"10px"}>
-          <CustomButton
-            type='button'
-            colorVariant='primary'
-            onClick={handleCreateOrUpdateTask}
-          >
-            {update
-              ? t(LocalizationKey.tasks.updateTask.btnLabel.update)
-              : t(LocalizationKey.tasks.createTask.btnLabel.create)}
-          </CustomButton>
-        </Stack>
+          <Stack direction="row" justifyContent="flex-end" marginTop={"10px"}>
+            <CustomButton
+              type="submit"
+              colorVariant="primary"
+              // onClick={handleCreateOrUpdateTask}
+            >
+              {update
+                ? t(LocalizationKey.tasks.updateTask.btnLabel.update)
+                : t(LocalizationKey.tasks.createTask.btnLabel.create)}
+            </CustomButton>
+          </Stack>
+        </Form>
       </Modal>
 
       <ComplexityDetails

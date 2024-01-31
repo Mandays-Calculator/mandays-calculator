@@ -80,22 +80,22 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           </Typography>
         </Grid>
 
-        <Grid item container spacing={1} alignItems='center' xs={10}>
+        <Grid item container spacing={1} alignItems="center" xs={10}>
           <Grid item>
             <Box
               sx={taskDetailsCardStyles.comments}
-              display='flex'
-              alignItems='center'
+              display="flex"
+              alignItems="center"
             >
               <TextsmsOutlinedIcon sx={taskDetailsCardStyles.commentIcon} />
               {data?.comments?.length}
             </Box>
           </Grid>
 
-          {data?.tags.map((tag, index) => (
+          {data?.tags?.map((tag, index) => (
             <Grid item>
               <Box sx={getTagStyle(tag?.value)} key={index}>
-                {tag.value}
+                {String(tag)}
               </Box>
             </Grid>
           ))}
@@ -103,18 +103,18 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
 
         <Box sx={taskDetailsCardStyles.buttons}>
           <EditOutlinedIcon
-            color='action'
+            color="action"
             sx={getButtonDisplayStyle(data?.status)}
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation();
               handleEdit(data);
             }}
           />
 
           <DeleteOutlinedIcon
-            color='error'
+            color="error"
             sx={getButtonDisplayStyle(data?.status)}
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation();
               onDelete(data);
             }}

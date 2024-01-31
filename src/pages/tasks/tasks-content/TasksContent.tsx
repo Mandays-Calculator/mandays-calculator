@@ -127,8 +127,9 @@ const TasksContent = (): ReactElement => {
       setTimeout(() => {
         setErrorMessage("");
       }, 3000);
-    } else if (tasksData && tasksData.data) {
-      setTasks(tasksData.data);
+    } else if (tasksData) {
+      setTasks(tasksData);
+      console.log(tasksData);
     }
   }, [tasksData]);
 
@@ -275,7 +276,7 @@ const TasksContent = (): ReactElement => {
   const renderTaskDetailsCards = (task: AllTasksResponse, index: number) => {
     if (task.status === Status.Backlog || task.status === Status.OnHold) {
       return (
-        <Draggable key={task.taskID} draggableId={task.taskID} index={index}>
+        <Draggable key={task?.taskID} draggableId={task?.taskID} index={index}>
           {(provided) => (
             <Stack
               ref={provided.innerRef}
@@ -335,7 +336,7 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderNoTask = () => {
-    if (tasks.length === 0) {
+    if (tasks?.length === 0) {
       return (
         <Stack sx={taskContentStyles.noData}>
           <img src={NoTask} alt="error" />
@@ -386,7 +387,7 @@ const TasksContent = (): ReactElement => {
             sx={taskContentStyles.taskGridContainer}
           >
             {Object.values(Status).map((status) => {
-              const filteredData = tasks.filter(
+              const filteredData = tasks?.filter(
                 (task) => task.status === status,
               );
 
