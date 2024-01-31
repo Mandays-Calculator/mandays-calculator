@@ -1,19 +1,19 @@
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-import {
-  Accordion,
-  AccordionSummary,
-  Box,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
 import { styled } from "@mui/material/styles";
-
-import { TextField, Modal } from "~/components";
-
 import theme from "~/theme";
+import {
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Accordion,
+  Paper,
+  Stack,
+  Grid,
+  Box,
+} from "@mui/material";
+
+import { TextField } from "~/components";
 
 import { Status } from "./utils";
 
@@ -81,27 +81,6 @@ export const CloseContainer = styled(Box)({
   justifyContent: "flex-end",
   top: "8px",
   right: "3px",
-});
-
-export const ModalStyledScrollbar = styled(Modal)({
-  "*::-webkit-scrollbar": {
-    width: "6px",
-    height: "6px",
-  },
-  "*::-webkit-scrollbar-track": {
-    borderRadius: "10px",
-    background: "rgba(0,0,0,0.1)",
-  },
-  "*::-webkit-scrollbar-thumb": {
-    borderRadius: "10px",
-    background: "rgba(0,0,0,0.2)",
-  },
-  "*::-webkit-scrollbar-thumb:hover": {
-    background: "rgba(0,0,0,0.4)",
-  },
-  "*::-webkit-scrollbar-thumb:active": {
-    background: theme.palette.primary.main,
-  },
 });
 
 // TASK DETAILS CARD STYLES
@@ -179,6 +158,78 @@ export const ComplexityLabel = styled(Stack)({
   marginBottom: "10px",
 });
 
+// VIEWTASKDETAILS
+export const AccordionComment = styled(Accordion)({
+  width: "100%",
+  marginTop: "10px",
+  boxShadow: "none", // Remove box shadow
+  "&:hover": {
+    boxShadow: "none", // Remove box shadow on hover as well if needed
+  },
+});
+
+export const AccordionCommentTitle = styled(AccordionSummary)({
+  fontWeight: 600,
+  padding: "5px",
+});
+
+export const AccordionCommentDetails = styled(AccordionDetails)({
+  padding: "0px",
+});
+
+export const ViewCommentContainerGrid = styled(Grid)({
+  marginBottom: "10px",
+});
+
+export const CommentTexbox = styled(TextField)({
+  backgroundColor: "#EAF3F4",
+  marginLeft: "5px",
+});
+
+export const ViewCommentContainerBox = styled(Box)({
+  borderRadius: "5px",
+  backgroundColor: "#dedede",
+  padding: "5px",
+  marginLeft: "5px",
+});
+
+export const ViewTaskDetailsContainer = styled(Grid)({
+  padding: "0px 10px 10px 10px",
+  minWidth: "320px",
+  [theme.breakpoints.only("sm")]: {
+    minWidth: "520px",
+  },
+});
+
+export const ViewTaskDetailsLabel = styled(Typography)({
+  fontWeight: 600,
+});
+
+export const ViewTaskDetailsInnerContainer = styled(Grid)({
+  marginTop: "10px",
+});
+
+export const styledScrollbar = {
+  "*::-webkit-scrollbar": {
+    width: "6px",
+    height: "6px",
+  },
+  "*::-webkit-scrollbar-track": {
+    borderRadius: "10px",
+    background: "rgba(0,0,0,0.1)",
+  },
+  "*::-webkit-scrollbar-thumb": {
+    borderRadius: "10px",
+    background: "rgba(0,0,0,0.2)",
+  },
+  "*::-webkit-scrollbar-thumb:hover": {
+    background: "rgba(0,0,0,0.4)",
+  },
+  "*::-webkit-scrollbar-thumb:active": {
+    background: "black",
+  },
+};
+
 export const taskContentStyles = {
   divider: { margin: "1rem 0 2rem 0" },
   taskGridContainer: { maxHeight: "100%", minWidth: "100%", overflow: "auto" },
@@ -198,46 +249,3 @@ export const taskContentStyles = {
     height: "60vh",
   },
 };
-
-// VIEWTASKDETAILS
-export const AccordionComment = styled(Accordion)({
-  width: "100%",
-  marginTop: "10px",
-  boxShadow: "none", // Remove box shadow
-  "&:hover": {
-    boxShadow: "none", // Remove box shadow on hover as well if needed
-  },
-});
-
-export const AccordionCommentTitle = styled(AccordionSummary)({
-  fontWeight: 600,
-});
-
-export const ViewCommentContainerGrid = styled(Grid)({
-  marginBottom: "10px",
-});
-
-export const CommentTexbox = styled(TextField)({
-  backgroundColor: "#EAF3F4",
-  marginLeft: "5px",
-});
-
-export const ViewCommentContainerBox = styled(Box)({
-  borderRadius: "5px",
-  backgroundColor: "#dedede",
-  padding: "5px",
-  marginLeft: "5px",
-});
-
-export const ViewTaskDetailsContainer = styled(Grid)`
-  padding: "0px 10px 10px 10px";
-  minWidth: { xs: "320px", sm: "520px" };
-`;
-
-export const ViewTaskDetailsLabel = styled(Typography)({
-  fontWeight: 600,
-});
-
-export const ViewTaskDetailsInnerContainer = styled(Grid)({
-  marginTop: "10px",
-});
