@@ -3,14 +3,14 @@ import type { ReactElement } from "react";
 
 import { useTranslation } from "react-i18next";
 
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Grid, Typography } from "@mui/material";
 import LocalizationKey from "~/i18n/key";
 
 import {
   StyledTextsmsOutlinedIcon,
-  StyledDeleteOutlinedIcon,
   TaskDetailsCardDetails,
-  StyledEditOutlinedIcon,
   GridRelativeContainer,
   TaskActionContainer,
   CommentContainer,
@@ -86,9 +86,8 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           ))}
         </Grid>
 
-        <TaskActionContainer>
-          <StyledEditOutlinedIcon
-            status={data?.status}
+        <TaskActionContainer status={data?.status}>
+          <EditOutlinedIcon
             color='action'
             onClick={e => {
               e.stopPropagation();
@@ -96,8 +95,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
             }}
           />
 
-          <StyledDeleteOutlinedIcon
-            status={data?.status}
+          <DeleteOutlinedIcon
             color='error'
             onClick={e => {
               e.stopPropagation();

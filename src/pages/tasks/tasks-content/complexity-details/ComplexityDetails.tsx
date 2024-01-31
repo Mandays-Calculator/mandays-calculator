@@ -14,9 +14,10 @@ interface ComplexityDetailsProps {
   openCreateOrUpdateTask: () => void;
 }
 
-type StyledComplexityLabelProps = React.ComponentProps<typeof Typography> & {
+interface StyledComplexityLabelProps
+  extends React.ComponentProps<typeof Typography> {
   details?: boolean;
-};
+}
 
 const details = {
   complexity: "Simple",
