@@ -6,7 +6,7 @@ import { Stack } from "@mui/material";
 import { resourcesDetailData } from "../../utils/tableData";
 import { ResourcesListColumns } from "../../utils/columns";
 import { Table } from "~/components";
-import Accordion from "~/components/accordion/Accordion";
+import Accordion from "~/components/Accordion/Accordion";
 
 interface ResourcesProps {
   mode: EstimationDetailsMode;
@@ -23,11 +23,7 @@ const Resources = (props: ResourcesProps): ReactElement => {
   const columnsMemo = useMemo(() => ResourcesListColumns({ t, isInput }), []);
 
   const renderTable = (title: string) => (
-    <Accordion
-      key={title}
-      title={title}
-      defaultExpanded={isGeneratingPDF}
-    >
+    <Accordion key={title} title={title} defaultExpanded={isGeneratingPDF}>
       <Table
         columns={columnsMemo}
         data={resourcesDetailData}
