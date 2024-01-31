@@ -19,7 +19,7 @@ export const useTasks = (
   id: string,
   status: string
 ): UseQueryResult<QueryResponse<AllTasksResponse[]>, AxiosError> => {
-  return useQuery("getTasks", () => getTasks(id, status));
+  return useQuery(`getTasks-${status}`, () => getTasks(id, status));
 };
 
 export const usePostTasks = (): UseMutationResult<

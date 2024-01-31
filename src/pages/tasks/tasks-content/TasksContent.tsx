@@ -23,7 +23,7 @@ import {
   Link,
 } from "@mui/material";
 
-import { Select, PageContainer, ErrorMessage } from "~/components";
+import { Select, PageContainer } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
 import { useTasks } from "~/queries/tasks/Tasks";
 import { ConfirmModal } from "~/components";
@@ -100,13 +100,29 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-  const { data: tasksData } = useTasks(
+  const { data: backlog, isSuccess: isSuccessBacklog } = useTasks(
     "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
     "1",
   );
+  const { data: notYetStarted, isSuccess: isSuccessNys } = useTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+    "2",
+  );
+  const { data: inProgress, isSuccess: isSuccessIp } = useTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+    "3",
+  );
+  const { data: onHold, isSuccess: isSuccessOnHold } = useTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+    "4",
+  );
+  const { data: completed, isSuccess: isSuccessCompleted } = useTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+    "5",
+  );
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  // const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
@@ -122,15 +138,23 @@ const TasksContent = (): ReactElement => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (tasksData && tasksData.hasOwnProperty("errorCode")) {
-      setErrorMessage(t(LocalizationKey.tasks.errorMessage.fetch));
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 3000);
-    } else if (tasksData && tasksData.data) {
-      setTasks(tasksData.data);
+    if (
+      isSuccessBacklog &&
+      isSuccessNys &&
+      isSuccessIp &&
+      isSuccessOnHold &&
+      isSuccessCompleted
+    ) {
+      const allData = [
+        ...backlog,
+        ...notYetStarted,
+        ...inProgress,
+        ...onHold,
+        ...completed,
+      ];
+      setTasks(allData);
     }
-  }, [tasksData]);
+  }, [backlog, notYetStarted, inProgress, onHold, completed]);
 
   // OTHERS
   const generateUniqueTaskID = () => {
@@ -305,6 +329,7 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderTaskContentModals = () => {
+    console.log("onreturn", tasks);
     return (
       <>
         <CreateOrUpdateTask
@@ -427,8 +452,6 @@ const TasksContent = (): ReactElement => {
       </DragDropContext>
 
       {renderTaskContentModals()}
-
-      <ErrorMessage error={errorMessage} type="alert" />
 
       <ConfirmModal
         open={deleteModalOpen}
