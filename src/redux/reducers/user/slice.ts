@@ -21,6 +21,8 @@ const initialState: UserPermissionState = {
   // User
   user: null,
   permissions: [],
+  projects: [],
+  selectedProject: { label: "", value: "" },
 };
 
 export const userSlice = createSlice({
@@ -34,14 +36,18 @@ export const userSlice = createSlice({
     builder.addCase(
       login.fulfilled,
       (state, action: PayloadAction<LoginResponse>) => {
-        const { user, permissions } = action.payload;
+        const { user, permissions, projects } = action.payload;
         state.loading = false;
         state.user = user;
         state.permissions = permissions;
         state.tokenExpiry = action.payload.token.expiresInMs;
         state.isAuthenticated = true;
+        state.selectedProject =
+          projects.length > 0
+            ? { label: projects[0].name, value: projects[0].projectId }
+            : { label: "", value: "" };
         return state;
-      }
+      },
     );
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
@@ -62,7 +68,7 @@ export const userSlice = createSlice({
         } else if (action.type.endsWith("rejected")) {
           onFailure?.(action.error);
         }
-      }
+      },
     );
   },
   reducers: {
@@ -71,25 +77,45 @@ export const userSlice = createSlice({
     },
     updateUserState: (
       state: UserPermissionState,
-      action: PayloadAction<LoginResponse>
+      action: PayloadAction<LoginResponse>,
     ) => {
       const config = getEnvConfig();
-      const { user, permissions } = action.payload;
+      const { user, permissions, projects } = action.payload;
       const decryptedUserData = decryptObjectWithAES(user, !config.encryptData);
       const decryptedPermissionsData = decryptObjectWithAES(
         permissions,
-        !config.encryptData
+        !config.encryptData,
+      );
+      const decryptedProjectsData = decryptObjectWithAES(
+        projects,
+        !config.encryptData,
       );
 
       state.loading = false;
       state.user = decryptedUserData;
       state.permissions = decryptedPermissionsData;
+      state.projects = decryptedProjectsData;
       state.tokenExpiry = action.payload.token.expiresInMs;
       state.isAuthenticated = true;
+      state.selectedProject =
+        decryptedProjectsData.length > 0
+          ? {
+              label: decryptedProjectsData[0].name,
+              value: decryptedProjectsData[0].projectId,
+            }
+          : { label: "", value: "" };
+      return state;
+    },
+    updateSelectedProject: (
+      state: UserPermissionState,
+      action: PayloadAction<SelectObject | null>,
+    ) => {
+      state.selectedProject = action.payload;
       return state;
     },
   },
 });
 
-export const { resetUserState, updateUserState } = userSlice.actions;
+export const { resetUserState, updateUserState, updateSelectedProject } =
+  userSlice.actions;
 export default userSlice.reducer;

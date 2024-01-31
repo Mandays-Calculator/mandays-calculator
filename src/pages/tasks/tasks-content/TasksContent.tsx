@@ -100,7 +100,10 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-  const { data: tasksData } = useTasks(user?.id ?? "");
+  const { data: tasksData } = useTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+    "1",
+  );
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -150,7 +153,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find(task => task.taskID === draggableId);
+    const draggedTask = tasks.find((task) => task.taskID === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -158,7 +161,7 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedMockData = tasks.map(task => {
+        const updatedMockData = tasks.map((task) => {
           if (task.taskID === draggableId) {
             return {
               ...task,
@@ -228,7 +231,7 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedData = tasks.map(task => {
+    const updatedData = tasks.map((task) => {
       if (task.taskID === updatedTask.taskID) {
         return updatedTask;
       }
@@ -242,7 +245,7 @@ const TasksContent = (): ReactElement => {
   const handleDeleteTask = () => {
     if (selectedTaskForDelete) {
       const { taskID } = selectedTaskForDelete;
-      const updatedTasks = tasks.filter(task => task.taskID !== taskID);
+      const updatedTasks = tasks.filter((task) => task.taskID !== taskID);
       setTasks(updatedTasks);
     }
 
@@ -273,7 +276,7 @@ const TasksContent = (): ReactElement => {
     if (task.status === Status.Backlog || task.status === Status.OnHold) {
       return (
         <Draggable key={task.taskID} draggableId={task.taskID} index={index}>
-          {provided => (
+          {(provided) => (
             <Stack
               ref={provided.innerRef}
               {...provided.draggableProps}
@@ -335,16 +338,16 @@ const TasksContent = (): ReactElement => {
     if (tasks.length === 0) {
       return (
         <Stack sx={taskContentStyles.noData}>
-          <img src={NoTask} alt='error' />
-          <Typography variant='h5' fontWeight='bold'>
+          <img src={NoTask} alt="error" />
+          <Typography variant="h5" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
-          <Typography variant='body2' fontWeight='bold'>
+          <Typography variant="body2" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.started)}
             <Link
-              underline='hover'
-              variant='body2'
-              fontWeight='bold'
+              underline="hover"
+              variant="body2"
+              fontWeight="bold"
               onClick={handleCreateModalState}
               sx={taskContentStyles.link}
             >
@@ -365,8 +368,8 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name='teamFilter'
-                placeholder='Team Name'
+                name="teamFilter"
+                placeholder="Team Name"
                 options={teamOptions}
                 onChange={handleTeamFilter}
                 value={selectedTeam}
@@ -379,11 +382,13 @@ const TasksContent = (): ReactElement => {
           <Grid
             container
             spacing={1}
-            justifyContent='space-between'
+            justifyContent="space-between"
             sx={taskContentStyles.taskGridContainer}
           >
-            {Object.values(Status).map(status => {
-              const filteredData = tasks.filter(task => task.status === status);
+            {Object.values(Status).map((status) => {
+              const filteredData = tasks.filter(
+                (task) => task.status === status,
+              );
 
               return (
                 <Grid
@@ -393,7 +398,7 @@ const TasksContent = (): ReactElement => {
                   key={status}
                 >
                   <Droppable droppableId={status}>
-                    {provided => (
+                    {(provided) => (
                       <StatusContainer
                         backgroundColor={status}
                         ref={provided.innerRef}
@@ -423,7 +428,7 @@ const TasksContent = (): ReactElement => {
 
       {renderTaskContentModals()}
 
-      <ErrorMessage error={errorMessage} type='alert' />
+      <ErrorMessage error={errorMessage} type="alert" />
 
       <ConfirmModal
         open={deleteModalOpen}
