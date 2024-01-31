@@ -37,7 +37,7 @@ const Alert = (props: AlertProps): ReactElement => {
 
   const handleClose = (
     _event: Event | SyntheticEvent<any, Event>,
-    reason: SnackbarCloseReason
+    reason: SnackbarCloseReason,
   ): void => {
     if (reason === "clickaway") {
       return;
