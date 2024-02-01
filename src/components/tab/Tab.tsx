@@ -71,7 +71,7 @@ const CustomTabs = ({
           <Box key={index} py={3} id={`tab-${index}`}>
             {tab.content}
           </Box>
-        ) : null
+        ) : null,
       )}
     </Box>
   );

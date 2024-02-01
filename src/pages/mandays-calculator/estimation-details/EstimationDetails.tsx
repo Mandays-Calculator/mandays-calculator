@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import type {
   MandaysForm,
   TaskType,
@@ -13,6 +13,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { Typography, Grid } from "@mui/material";
 import {
+  CustomTab,
   Form,
   PageContainer,
   PageLoader,
@@ -39,6 +40,8 @@ import { HeaderButtons } from "./components/header-buttons";
 import { ShareModal } from "./components/share-modal";
 import Estimation from "./estimation";
 import { initMandays } from "./utils";
+
+import MandaysEstimationImgIcon from "~/assets/img/mandays_estimation_img_icon.png";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const { isExposed } = props;
@@ -92,7 +95,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
     createExcel(
       generateEstimationData({ t }),
-      `SPRINT_${sprintName}_details_${date}_${time}.xlsx`
+      `SPRINT_${sprintName}_details_${date}_${time}.xlsx`,
     );
   };
 
@@ -148,25 +151,33 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     // run an API for saving the sprint
   };
 
+  const renderIconOrImage = (isGeneratingPDF: boolean): ReactNode => {
+    return isGeneratingPDF ? (
+      <img src={MandaysEstimationImgIcon} alt="mandays-estimation-icon" />
+    ) : (
+      <SvgIcon name="mandays_estimation_tool" />
+    );
+  };
+
   const stepperObject: CustomSteps[] = [
     {
       label: t(mandaysCalculator.summaryTitle),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
+      icon: renderIconOrImage(isGeneratingPDF),
       content: <Summary mode={mode} />,
     },
     {
       label: t(mandaysCalculator.resourcesTitle),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
+      icon: renderIconOrImage(isGeneratingPDF),
       content: <Resources isGeneratingPDF={isGeneratingPDF} mode={mode} />,
     },
     {
       label: t(mandaysCalculator.legend.title),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
+      icon: renderIconOrImage(isGeneratingPDF),
       content: <Legend mode={mode} />,
     },
     {
       label: t(mandaysCalculator.tasksTitle),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
+      icon: renderIconOrImage(isGeneratingPDF),
       content: <Tasks mode={mode} />,
     },
     {
@@ -182,18 +193,31 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
         <PageLoader labelOnLoad={t(mandaysCalculator.generatingPDFLabel)} />
       )}
       <div id="divToPrint">
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
             <Title title={t(mandaysCalculator.label)} />
           </Grid>
           <Grid item>
-            <Select
-              disabled={isExposed}
-              name="team"
-              value={"enrollment"}
-              sx={{ background: "#fff" }}
-              options={[{ label: "Enrollment", value: "enrollment" }]} //will replace via teams options
-            />
+            {isGeneratingPDF ? (
+              <Typography
+                color="primary"
+                sx={{
+                  minWidth: "200px",
+                  textAlign: "center",
+                  fontSize: "1.3rem",
+                }}
+              >
+                Team: <strong>Enrollment</strong>
+              </Typography>
+            ) : (
+              <Select
+                disabled={isExposed}
+                name="team"
+                value={"enrollment"}
+                sx={{ background: "#fff" }}
+                options={[{ label: "Enrollment", value: "enrollment" }]} //will replace via teams options
+              />
+            )}
           </Grid>
         </Grid>
         <PageContainer>
@@ -203,30 +227,42 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                 {sprintName}
               </Typography>
             </Grid>
-            <HeaderButtons
-              setIsExport={setIsExport}
-              setIsShare={setIsShare}
-              mode={mode}
-              isExposed={isExposed}
-              t={t}
-            />
+            {!isGeneratingPDF && (
+              <HeaderButtons
+                setIsExport={setIsExport}
+                setIsShare={setIsShare}
+                mode={mode}
+                isExposed={isExposed}
+                t={t}
+              />
+            )}
           </Grid>
           <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
-            <Stepper
-              steps={
-                mode === "view" ? stepperObject.slice(0, -1) : stepperObject
-              }
-              activeStep={activeTab}
-            />
-            <ActionButtons
-              mode={mode}
-              activeTab={activeTab}
-              handleBackEvent={handleBackEvent}
-              handleNext={handleNext}
-              handleSave={handleSave}
-              length={stepperObject.length - 1}
-            />
+            {mode === "view" ? (
+              <CustomTab
+                defaultActiveTab={activeTab}
+                tabs={
+                  stepperObject.slice(0, -1) as {
+                    label: ReactNode;
+                    content: ReactNode;
+                  }[]
+                }
+              />
+            ) : (
+              <Stepper steps={stepperObject} activeStep={activeTab} />
+            )}
+
+            {!isGeneratingPDF && (
+              <ActionButtons
+                mode={mode}
+                activeTab={activeTab}
+                handleBackEvent={handleBackEvent}
+                handleNext={handleNext}
+                handleSave={handleSave}
+                length={stepperObject.length - 1}
+              />
+            )}
           </Form>
         </PageContainer>
       </div>
