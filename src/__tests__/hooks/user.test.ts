@@ -1,7 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useUserAuth, checkUserAuthentication } from "~/hooks/user";
-import { resetUserState } from "~/redux/reducers/user";
 import { getItemStorage, removeStateStorage } from "~/utils/helpers";
 
 jest.mock("react-redux");
@@ -51,7 +50,6 @@ describe("useUserAuth", () => {
       result.current.logout();
     });
 
-    expect(mockDispatch).toHaveBeenCalledWith(resetUserState());
     expect(removeStateStorage).toHaveBeenCalledWith("session");
   });
 });

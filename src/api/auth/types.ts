@@ -10,7 +10,7 @@ export interface ResetPasswordParams {
   password: string;
 }
 
-interface Token {
+export interface Token {
   accessToken: string;
   expiresInMs: number;
   refreshExpiresInMs: number;
@@ -24,5 +24,13 @@ interface Token {
 export interface LoginResponse {
   token: Token;
   user: User;
+  projects: UserProject[];
   permissions: Permission[];
+}
+
+export interface UserProject {
+  projectId: string;
+  name: string;
+  dateCreated: string;
+  active: boolean;
 }
