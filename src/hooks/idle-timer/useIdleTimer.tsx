@@ -73,6 +73,7 @@ export const useIdleTimer = <P extends object>(
               />
             </>
           }
+          disableCloseHeader={true}
           open={isIdle}
           onClose={logout}
           onCloseLabel={t(common.logout)}

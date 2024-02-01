@@ -40,8 +40,6 @@ const isTokenExpired = (accessToken: Token): boolean => {
  * @param isAuthenticated - Indicates if the user is currently authenticated.
  */
 const init = async (): Promise<void> => {
-  let isUnauthorizedUser = false;
-
   const { items, events } = CHANNELS;
   const channel = new BroadcastChannel(items.sessionState);
 
@@ -69,11 +67,6 @@ const init = async (): Promise<void> => {
           }
         } else {
           config.headers.Authorization = `Bearer ${token.accessToken}`;
-          if (isUnauthorizedUser) {
-            const cancel = axios.CancelToken.source();
-            config.cancelToken = cancel.token;
-            cancel.cancel("Cancelled due to previously received 401 error");
-          }
         }
       }
 
@@ -94,7 +87,6 @@ const init = async (): Promise<void> => {
         const user = getUser();
         if (user) {
           if (error.response && error.response.status == 401) {
-            isUnauthorizedUser = true;
             channel.postMessage(events.unauthorized);
           }
           if (
@@ -108,6 +100,7 @@ const init = async (): Promise<void> => {
       }
 
       const axiosError = error as AxiosError<GenericErrorResponse>;
+
       return axiosError && axiosError.response
         ? Promise.reject(axiosError.response.data)
         : Promise.reject(error);

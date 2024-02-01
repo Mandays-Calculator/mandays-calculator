@@ -15,12 +15,13 @@ import {
 } from "../utils/types";
 import { PageContainer } from "~/components/page-container";
 import { CustomButton } from "~/components/form/button";
-import { ConfirmModal, ErrorMessage, Table } from "~/components";
+import { Alert, ConfirmModal, ErrorMessage, Table } from "~/components";
 import { Project } from "~/api/projects";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
 import { useDeleteProjectMutation } from "~/mutations/projects";
 import { useProjectList } from "~/queries/project-management/ProjectManagement";
+import LocalizationKey from "~/i18n/key";
 
 interface ProjectListProps {
   handleAddProject: () => void;
@@ -45,7 +46,7 @@ const initialProjectListState = {
 
 const projectListReducer = (
   state: typeof initialProjectListState,
-  action: ActionType
+  action: ActionType,
 ) => {
   if (action.type === "SET_VALUE") {
     const mapProjectResult = (data: Project[]): ProjectListDataType[] => {
@@ -72,7 +73,7 @@ const projectListReducer = (
   } else if (action.type === "SEARCH") {
     const searchedInput = (action.payload as string).toLowerCase();
     const filteredData = state.results.filter((row) =>
-      row.prjName.toLowerCase().includes(searchedInput)
+      row.prjName.toLowerCase().includes(searchedInput),
     );
 
     return {
@@ -88,16 +89,22 @@ const projectListReducer = (
 const ProjectList = (props: ProjectListProps): ReactElement => {
   const { handleAddProject, handleEditProject, handleViewProject } = props;
   const { t } = useTranslation();
-  const { data, refetch } = useProjectList();
+  const { data, refetch, isError } = useProjectList();
+  const {
+    common: {
+      errorMessage: { genericError },
+    },
+  } = LocalizationKey;
+
   const [projectListState, dispatchProjectList] = useReducer(
     projectListReducer,
-    initialProjectListState
+    initialProjectListState,
   );
   const [confirmDialog, setConfirmDialog] =
     useState<ProjectListConfirmDialogType>({ open: false, id: "" });
   const [status, callApi] = useRequestHandler(
     useDeleteProjectMutation().mutate,
-    () => refetch()
+    () => refetch(),
   );
 
   const onChangeFilterText = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -171,6 +178,9 @@ const ProjectList = (props: ProjectListProps): ReactElement => {
       />
       {!status.loading && (
         <ErrorMessage error={useErrorHandler(status.error, t)} type="alert" />
+      )}
+      {isError && (
+        <Alert open={isError} type="error" message={t(genericError)} />
       )}
     </PageContainer>
   );
