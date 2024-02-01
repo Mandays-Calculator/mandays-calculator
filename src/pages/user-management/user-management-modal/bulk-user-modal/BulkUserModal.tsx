@@ -1,117 +1,30 @@
-import {
-  useState,
-  type ReactElement,
-  SyntheticEvent,
-  ChangeEvent,
-} from "react";
-import { CustomButton } from "~/components/form/button";
-import Modal from "~/components/modal/Modal";
+import type { ReactElement } from "react";
+
+import { useState, SyntheticEvent, ChangeEvent } from "react";
+
 import {
   Box,
   Checkbox,
-  FormControl,
   FormControlLabel,
   FormGroup,
   Grid,
   OutlinedInput,
   Stack,
-  Tab,
   Tabs,
   Typography,
-  styled,
 } from "@mui/material";
+
+import { CustomButton } from "~/components/form/button";
+import Modal from "~/components/modal/Modal";
 import { SvgIcon } from "~/components";
 
-const RequirementContainer = styled(Grid)(() => ({
-  margin: "16px 0",
-
-  ">div": {
-    "&:first-child ul": {
-      marginBottom: "16px",
-    },
-
-    "& ul": {
-      margin: "0",
-
-      "& li:not(:last-child)": {
-        marginBottom: "10px",
-      },
-    },
-
-    "&:not(:first-child) ul": {
-      listStyle: "none",
-      "& :first-child": {
-        fontWeight: "600",
-      },
-    },
-  },
-}));
-
-const BulkUploadWrapper = styled("div")(() => ({
-  fontSize: "14px",
-  "& span": {
-    fontSize: "14px",
-    "& svg": {
-      width: "20px",
-      height: "20px",
-    },
-  },
-}));
-
-const CustomUploadFile = styled(FormControl)(() => ({
-  "& >div": {
-    padding: 0,
-    "& input": {
-      opacity: 0,
-      height: "auto",
-      padding: "8px",
-    },
-    "& span": {
-      position: "absolute",
-      left: "20px",
-    },
-    "& svg": {
-      position: "absolute",
-      right: "20px",
-    },
-    "& fieldset": {
-      top: "0",
-    },
-  },
-}));
-
-const CustomTab = styled(Tab)(({ theme }) => ({
-  fontSize: "14px",
-  borderBottom: "3px solid #D3D3D3",
-  textTransform: "inherit",
-  opacity: 1,
-  fontWeight: 500,
-
-  "&.Mui-selected": {
-    color: theme.palette.primary.main,
-  },
-}));
-
-const CustomTabPanel = styled(TabPanel)(() => ({
-  "& >div": {
-    padding: 0,
-    "& ul": {
-      paddingLeft: "20px",
-      margin: "10px 0",
-      "& li": {
-        margin: "10px 0 0",
-      },
-    },
-    "& p": {
-      fontSize: "14px",
-      margin: "16px 0",
-      "& span": {
-        margin: "10px 0",
-        display: "block ",
-      },
-    },
-  },
-}));
+import {
+  BulkUploadWrapper,
+  CustomTab,
+  CustomTabPanel,
+  CustomUploadFile,
+  RequirementContainer,
+} from "./styles";
 
 interface BulkModalProps {
   onBulkConfirm: () => void;
@@ -127,7 +40,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
+export function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -139,7 +52,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box p={3}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -162,7 +75,6 @@ export const BulkUserModal: React.FC<BulkModalProps> = ({
   const [status, setStatus] = useState("ready");
   const [value, setValue] = useState(0);
   const [placeholder, setPlaceholder] = useState("Files to be upload");
-  // const [bulkFile, setBulkFile] = useState<File>([]);
 
   const handleChange = (_: SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -176,7 +88,6 @@ export const BulkUserModal: React.FC<BulkModalProps> = ({
     }
 
     const fileName = input.files[0].name;
-    // setBulkFile(input.files[0]);
     console.log("fileName", fileName);
     setPlaceholder(fileName);
   };
@@ -187,13 +98,6 @@ export const BulkUserModal: React.FC<BulkModalProps> = ({
     setPlaceholder("Files to be upload");
     onClose();
   };
-
-  // const handleFileUpload = () => {
-  //   const formData = new FormData();
-  //   formData.append("bulkFile", bulkFile, bulkFile.name);
-
-  //   console.log(bulkFile);
-  // };
 
   return (
     <Modal
