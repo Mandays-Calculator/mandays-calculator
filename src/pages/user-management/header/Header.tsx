@@ -1,10 +1,11 @@
 import type { ReactElement } from "react";
+import type { FormikContextType } from "formik";
+import type { UserManagementForms } from "../types";
 
 import { useEffect, useState } from "react";
 
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material";
-import { FormikContextType } from "formik";
 
 import { TextField, Select } from "~/components";
 import { CustomButton } from "~/components/form/button";
@@ -12,7 +13,6 @@ import { AddUserModal } from "~/pages/user-management/user-management-modal/add-
 import { APIStatus } from "~/hooks/request-handler";
 
 import { filterOptions } from "./utils";
-import { UserManagementForms } from "../types";
 
 const StyledButton = styled(CustomButton, {
   shouldForwardProp: (propsName) => propsName !== "noBorder",

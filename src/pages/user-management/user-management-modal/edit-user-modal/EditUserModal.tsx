@@ -1,4 +1,9 @@
 import type { ReactElement } from "react";
+import type { UserListData } from "~/api/user-management/types";
+import type {
+  UpdateUserManagementParams,
+  UserManagementForms,
+} from "~/pages/user-management/types";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,11 +19,6 @@ import {
 } from "~/components/form/controlled";
 import { CustomButton } from "~/components/form/button";
 import { useUserList } from "~/queries/user-management/UserManagement";
-import {
-  UpdateUserManagementParams,
-  UserManagementForms,
-} from "~/pages/user-management/types";
-import { UserListData } from "~/api/user-management/types";
 import { useEditUser } from "~/mutations/user-management";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { Alert, ImageUpload } from "~/components";

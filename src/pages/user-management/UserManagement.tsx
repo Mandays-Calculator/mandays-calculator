@@ -1,4 +1,6 @@
 import type { ReactElement } from "react";
+import type { UserManagementForms } from "./types";
+import type { UserListData } from "~/api/user-management/types";
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,12 +13,10 @@ import Form from "~/components/form/Form";
 import Title from "~/components/title/Title";
 import { PageContainer } from "~/components/page-container";
 import { useUserList } from "~/queries/user-management/UserManagement";
-import { UserListData } from "~/api/user-management/types";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useAddUser } from "~/mutations/user-management";
 
 import { UserManagementFormValues, UserManagementSchema } from "./utils";
-import { UserManagementForms } from "./types";
 import UserList from "./user-list";
 import Header from "./header";
 

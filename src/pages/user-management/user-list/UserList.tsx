@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import type { UserListData } from "~/api/user-management/types";
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,7 +8,6 @@ import { PageLoader, Table } from "~/components";
 import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
 import { useUserList } from "~/queries/user-management/UserManagement";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
-import { UserListData } from "~/api/user-management/types";
 import { useDeleteUser } from "~/mutations/user-management";
 
 import { userListColumns } from "./utils";

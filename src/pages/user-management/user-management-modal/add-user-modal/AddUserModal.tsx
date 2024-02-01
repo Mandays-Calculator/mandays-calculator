@@ -1,4 +1,6 @@
 import type { ReactElement } from "react";
+import type { FormikContextType } from "formik";
+import type { UserManagementForms } from "~/pages/user-management/types";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,7 +14,6 @@ import {
   RadioGroup,
   Stack,
 } from "@mui/material";
-import { FormikContextType } from "formik";
 import moment from "moment";
 
 import {
@@ -26,7 +27,6 @@ import { getFieldError } from "~/components/form/utils";
 import { FormErrors } from "~/components/form/types";
 import { APIStatus } from "~/hooks/request-handler";
 import LocalizationKey from "~/i18n/key";
-import { UserManagementForms } from "~/pages/user-management/types";
 import {
   genderValueNumToStr,
   commonOptionsAPI,
