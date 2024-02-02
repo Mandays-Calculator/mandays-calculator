@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-
+import type { TFunction } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -9,14 +9,36 @@ import { SvgIcon, PageContainer, Table, PageLoader, Alert } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
-import { mandaysCalculatorData } from "./utils/tableData";
 import { SprintListColumns } from "./utils/columns";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 import { useGetEstimations } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import { useUserAuth } from "~/hooks/user";
 
+interface AlertRendererProps {
+  isErrorLoadingEstimations: boolean;
+  t: TFunction;
+}
+
+const AlertRenderer = ({
+  isErrorLoadingEstimations,
+  t,
+}: AlertRendererProps): ReactElement => {
+  const { common } = LocalizationKey;
+  return (
+    <>
+      {isErrorLoadingEstimations && (
+        <Alert
+          type="error"
+          message={t(common.errorMessage.genericError)}
+          open={isErrorLoadingEstimations}
+        />
+      )}
+    </>
+  );
+};
+
 const MandaysCalculator = (): ReactElement => {
-  const { mandaysCalculator, common } = LocalizationKey;
+  const { mandaysCalculator } = LocalizationKey;
   const user = useUserAuth();
 
   const {
@@ -107,12 +129,14 @@ const MandaysCalculator = (): ReactElement => {
             onViewSprintDetails: handleRowClick,
             onEditSprintDetails: handleEditSprint,
           })}
-          data={isErrorLoadingEstimations ? [] : estimationData}
+          loading={isLoadingEstimations}
+          data={estimationData ? estimationData.data : []}
         />
       </PageContainer>
       <ConfirmModal
         onConfirm={deleteSelectedSprint} // apply delete integration
         open={deleteModalOpen.open}
+        maxWidth="lg"
         message={t(mandaysCalculator.modalConfirmDeleteEstimation)}
         onClose={() =>
           setDeleteModalOpen({
@@ -122,13 +146,10 @@ const MandaysCalculator = (): ReactElement => {
         }
         selectedRow={null}
       />
-      {isErrorLoadingEstimations && (
-        <Alert
-          type="error"
-          message={t(common.errorMessage.genericError)}
-          open={isErrorLoadingEstimations}
-        />
-      )}
+      <AlertRenderer
+        isErrorLoadingEstimations={isErrorLoadingEstimations}
+        t={t}
+      />
     </>
   );
 };

@@ -1,4 +1,5 @@
 import type { Column } from "react-table";
+import type { ReactElement } from "react";
 import type {
   TasksColumnsProps,
   TasksListColumnsType,
@@ -20,9 +21,9 @@ import { CellProps } from "react-table";
 import { IconButton } from "@mui/material";
 import { ControlledNumberInput } from "~/components/form/controlled";
 import { SvgIcon, Table } from "~/components";
+import renderStatus from "~/utils/helpers/renderStatusHelper";
 
 import LocalizationKey from "~/i18n/key";
-import { ReactElement } from "react";
 
 const {
   mandaysCalculator: {
@@ -43,20 +44,28 @@ export const SprintListColumns = ({
   return [
     {
       Header: t(sprintListTableColumns.sprintName),
-      accessor: "sprintName",
+      accessor: "name",
     },
     {
       Header: t(sprintListTableColumns.team),
       accessor: "team",
+      Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
+        console.log(original);
+        return original.team?.name;
+      },
     },
     {
       Header: t(sprintListTableColumns.startedDate),
-      accessor: "startedDate",
+      accessor: "startDate",
     },
     {
       Header: t(sprintListTableColumns.status),
       accessor: "status",
       disableSortBy: true,
+      Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
+        console.log(original);
+        return renderStatus(original.status);
+      },
     },
     {
       Header: "",
@@ -64,25 +73,13 @@ export const SprintListColumns = ({
       Cell: ({ row }: CellProps<SprintListDataType>) => (
         <>
           <IconButton onClick={() => onViewSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="history"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="history" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onEditSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="edit"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="edit" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onDeleteSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="delete"
-              $size={2}
-              color="error"
-            />
+            <SvgIcon name="delete" $size={2} color="error" />
           </IconButton>
         </>
       ),
@@ -90,7 +87,9 @@ export const SprintListColumns = ({
   ];
 };
 
-export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumnsType[] => {
+export const SummaryListColumns = ({
+  t,
+}: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
       Header: t(summaryTableColumns.functionality),
@@ -107,7 +106,9 @@ export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumns
   ];
 };
 
-export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType[] => {
+export const TasksListColumns = ({
+  t,
+}: TasksColumnsProps): TasksListColumnsType[] => {
   return [
     {
       Header: t(tasksTableColumns.tasks),
@@ -144,7 +145,10 @@ export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType
   ];
 };
 
-export const LegendListColumns = ({ t, isInput }: LegendColumnProps): Column<LegendColumn>[] => {
+export const LegendListColumns = ({
+  t,
+  isInput,
+}: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
@@ -253,56 +257,33 @@ const EstimationListSubColum: Column<EstimationSubColumn>[] = [
   {
     Header: "IO3",
     accessor: "iO3",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io3"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io3" />,
   },
   {
     Header: "IO4",
     accessor: "iO4",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io4"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io4" />,
   },
   {
     Header: "IO5",
     accessor: "iO5",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io5"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io5" />,
   },
   {
     Header: "IO6",
     accessor: "iO6",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io6"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io6" />,
   },
   {
     Header: "IO7",
     accessor: "iO7",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io7"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io7" />,
   },
 ];
 
-export const EstimationListColumns = ({ t }: EstimationColumnProps): Column<EstimationColumn>[] => [
+export const EstimationListColumns = ({
+  t,
+}: EstimationColumnProps): Column<EstimationColumn>[] => [
   {
     Header: t(estimationColumns.taskName),
     accessor: "taskName",

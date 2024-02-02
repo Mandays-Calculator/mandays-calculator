@@ -67,6 +67,7 @@ const init = async (): Promise<void> => {
                 replayRequests();
               })
               .catch((refreshError) => {
+                console.error("Failed to refresh token:", refreshError);
                 throw refreshError;
               })
               .finally(() => {
@@ -94,13 +95,19 @@ const init = async (): Promise<void> => {
 
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
-    (error: AxiosError) => {
+    async (error: AxiosError) => {
       if (!isLoggingOut) {
         const user = getUser();
         if (user) {
-          if (error.response && error.response.status == 401) {
-            channel.postMessage(events.unauthorized);
+          if (error.response && error.response.status === 401) {
             enqueueRequest(() => axios.request((error as any).config)); // Enqueue the failed request
+            try {
+              // Attempt to refresh the token again
+              await refreshPromise;
+            } catch (refreshError) {
+              console.error("Failed to refresh token again:", refreshError);
+              channel.postMessage(events.unauthorized);
+            }
           }
           if (
             error &&
@@ -120,11 +127,11 @@ const init = async (): Promise<void> => {
     },
   );
 
-  function replayRequests() {
+  async function replayRequests() {
     while (requestQueue.length > 0) {
       const request = requestQueue.shift();
       if (request) {
-        request();
+        await request();
       }
     }
   }

@@ -22,7 +22,7 @@ export const getEstimations = async ({
   userId: string;
 }): BaseResponse<EstimationResponse[]> => {
   const apiBasePath = getApiBasePath();
-  const response = await axios.get<TasksResponse[]>(
+  const response = await axios.get<EstimationResponse[]>(
     `${apiBasePath}/mandays-estimations`,
     {
       params: {
