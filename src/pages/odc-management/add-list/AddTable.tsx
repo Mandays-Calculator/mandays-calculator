@@ -4,7 +4,7 @@ import type { AddTableProps } from "../utils";
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Grid, Typography, styled } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useFormikContext } from "formik";
 
 import { Table } from "~/components";
@@ -12,11 +12,7 @@ import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
 import { AddHolidayColumn, NewHolidayData, SucErrData } from "../utils";
-
-const StyledLabel = styled(Typography)(() => ({
-  fontWeight: 600,
-  fontSize: "16px",
-}));
+import { StyledLabel } from './styles';
 
 const AddTable = (props: AddTableProps): ReactElement => {
   const { setSuccessError } = props;
@@ -32,11 +28,11 @@ const AddTable = (props: AddTableProps): ReactElement => {
 
     holidays.push(...valueHolidays);
     holidays.push(NewHolidayData);
-  
+
     setFieldValue("holidays", holidays);
   };
 
-  const holidayListColumn = useMemo(() =>  AddHolidayColumn(t), []);
+  const holidayListColumn = useMemo(() => AddHolidayColumn(t), []);
 
   return (
     <>
