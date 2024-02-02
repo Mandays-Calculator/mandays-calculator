@@ -24,7 +24,11 @@ export const useUserAuth = (): {
 
   const handleLogout = (): void => {
     dispatch(
-      logout({ callbacks: { onFailure: () => {} } }) as unknown as AnyAction,
+      logout({
+        callbacks: {
+          onSuccess: () => console.log("Logged out."),
+        },
+      }) as unknown as AnyAction,
     );
   };
   return { state: userState, logout: handleLogout };
