@@ -15,6 +15,8 @@ import { setCookie } from "~/utils/cookieUtils";
 
 let isRefreshing = false;
 let isLoggingOut = false;
+let refreshPromise: Promise<void> | null = null;
+const requestQueue: (() => Promise<any>)[] = [];
 
 const isTokenExpired = (accessToken: Token): boolean => {
   if (
@@ -47,23 +49,33 @@ const init = async (): Promise<void> => {
     async (config: InternalAxiosRequestConfig) => {
       const user = getUser();
       const token = getUserToken();
-      if (user) {
+
+      if (config.url?.includes("/refresh-token")) {
+        config.headers.Authorization = "No Auth";
+      } else if (user) {
         if (isTokenExpired(token)) {
           if (!isRefreshing) {
             isRefreshing = true;
-            try {
-              const { token: newToken } = await refreshTokenApi({
-                refreshToken: token.refreshToken,
+
+            refreshPromise = refreshTokenApi({
+              refreshToken: token.refreshToken,
+            })
+              .then(({ token: newToken }) => {
+                console.log("Token refreshed"); // for debugging purposes
+                setCookie(cookieAuthKey, newToken);
+                config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+                replayRequests();
+              })
+              .catch((refreshError) => {
+                throw refreshError;
+              })
+              .finally(() => {
+                isRefreshing = false;
+                isLoggingOut = false;
+                refreshPromise = null;
               });
-              console.log("Token refreshed"); // for debugging purposes
-              setCookie(cookieAuthKey, newToken);
-              config.headers.Authorization = `Bearer ${newToken.accessToken}`;
-            } catch (refreshError) {
-              throw refreshError;
-            } finally {
-              isRefreshing = false;
-              isLoggingOut = false;
-            }
+
+            await refreshPromise;
           }
         } else {
           config.headers.Authorization = `Bearer ${token.accessToken}`;
@@ -88,6 +100,7 @@ const init = async (): Promise<void> => {
         if (user) {
           if (error.response && error.response.status == 401) {
             channel.postMessage(events.unauthorized);
+            enqueueRequest(() => axios.request((error as any).config)); // Enqueue the failed request
           }
           if (
             error &&
@@ -106,6 +119,19 @@ const init = async (): Promise<void> => {
         : Promise.reject(error);
     },
   );
+
+  function replayRequests() {
+    while (requestQueue.length > 0) {
+      const request = requestQueue.shift();
+      if (request) {
+        request();
+      }
+    }
+  }
+
+  function enqueueRequest(request: () => Promise<any>) {
+    requestQueue.push(request);
+  }
 };
 
 export default init;

@@ -26,9 +26,7 @@ export const useUserAuth = (): {
     dispatch(
       logout({
         callbacks: {
-          onSuccess: () => {
-            window.location.reload();
-          },
+          onSuccess: () => console.log("Logged out."),
         },
       }) as unknown as AnyAction,
     );
