@@ -109,7 +109,7 @@ const MandaysCalculator = (): ReactElement => {
         <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
           <Grid item>
             <Typography
-              sx={{ fontSize: "1.1rem", mb: "25px", fontWeight: "500" }}
+              sx={{ fontSize: "1.1rem", mb: "25px", fontWeight: "700" }}
             >
               {t(mandaysCalculator.sprintListLabel)}
             </Typography>

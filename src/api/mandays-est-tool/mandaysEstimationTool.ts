@@ -10,7 +10,9 @@ const getApiBasePath = (): ApiBasePath | string => {
 
 export const getTasks = async (): BaseResponse<TasksResponse[]> => {
   const apiBasePath = getApiBasePath();
-  const response = await axios.get<TasksResponse[]>(`${apiBasePath}/tasks/DEV`);
+  const response = await axios.get<TasksResponse[]>(
+    `${apiBasePath}/tasks?teamId=a2eb9f01-6e4e-11ee-8624-a0291936d1c2&statusId=1`,
+  );
   return response.data;
 };
 
