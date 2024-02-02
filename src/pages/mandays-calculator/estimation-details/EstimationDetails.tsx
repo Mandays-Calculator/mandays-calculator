@@ -21,7 +21,7 @@ import {
   SvgIcon,
   Title,
 } from "~/components";
-import { Select } from "~/components/form/select";
+
 import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
 
@@ -198,7 +198,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
             <Title title={t(mandaysCalculator.label)} />
           </Grid>
           <Grid item>
-            {isGeneratingPDF ? (
+            {isGeneratingPDF && (
               <Typography
                 color="primary"
                 sx={{
@@ -209,14 +209,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
               >
                 Team: <strong>Enrollment</strong>
               </Typography>
-            ) : (
-              <Select
-                disabled={isExposed}
-                name="team"
-                value={"enrollment"}
-                sx={{ background: "#fff" }}
-                options={[{ label: "Enrollment", value: "enrollment" }]} //will replace via teams options
-              />
             )}
           </Grid>
         </Grid>

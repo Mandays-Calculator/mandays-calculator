@@ -5,12 +5,13 @@ import {
   RoleTypeResponse,
   CountryResponse,
   GenderResponse,
+  Team,
 } from ".";
 
 export const getRoles = async (): Promise<RoleTypeResponse[]> => {
   const { apiBasePath } = getEnvConfig();
   const response = await axios.get<Promise<RoleTypeResponse[]>>(
-    `${apiBasePath}/roles`
+    `${apiBasePath}/roles`,
   );
   return response.data;
 };
@@ -18,7 +19,7 @@ export const getRoles = async (): Promise<RoleTypeResponse[]> => {
 export const getCareerSteps = async (): Promise<CareerStepResponse[]> => {
   const { apiBasePath } = getEnvConfig();
   const response = await axios.get<Promise<CareerStepResponse[]>>(
-    `${apiBasePath}/career-steps`
+    `${apiBasePath}/career-steps`,
   );
   return response.data;
 };
@@ -26,7 +27,7 @@ export const getCareerSteps = async (): Promise<CareerStepResponse[]> => {
 export const getCountries = async (): Promise<CountryResponse[]> => {
   const { apiBasePath } = getEnvConfig();
   const response = await axios.get<Promise<CountryResponse[]>>(
-    `${apiBasePath}/countries`
+    `${apiBasePath}/countries`,
   );
   return response.data;
 };
@@ -34,7 +35,19 @@ export const getCountries = async (): Promise<CountryResponse[]> => {
 export const getGenders = async (): Promise<GenderResponse[]> => {
   const { apiBasePath } = getEnvConfig();
   const response = await axios.get<Promise<GenderResponse[]>>(
-    `${apiBasePath}/genders`
+    `${apiBasePath}/genders`,
+  );
+  return response.data;
+};
+
+export const getTeams = async ({
+  projectId,
+}: {
+  projectId: string;
+}): Promise<Team[]> => {
+  const { apiBasePath } = getEnvConfig();
+  const response = await axios.get<Promise<Team[]>>(
+    `${apiBasePath}/projects/${projectId}/teams`,
   );
   return response.data;
 };

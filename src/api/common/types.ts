@@ -23,3 +23,23 @@ export interface GenderResponse {
   name: string;
   id: number;
 }
+
+export interface TeamLead {
+  id: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  email: string;
+  employeeId: string;
+  active: boolean;
+  fullName: string;
+}
+
+export interface Team {
+  projectId: string;
+  name: string;
+  id: string;
+  teamLead: TeamLead;
+  active: boolean;
+  lastUpdatedDate: string;
+}

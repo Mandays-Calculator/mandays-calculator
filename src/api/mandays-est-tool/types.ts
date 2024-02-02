@@ -1,24 +1,4 @@
-import { Status } from "~/api/common";
-
-interface TeamLead {
-  id: string;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  email: string;
-  employeeId: string;
-  active: boolean;
-  fullName: string;
-}
-
-interface Team {
-  projectId: string;
-  name: string;
-  id: string;
-  teamLead: TeamLead;
-  active: boolean;
-  lastUpdatedDate: string;
-}
+import { Status, Team } from "~/api/common";
 
 export interface EstimationResponse {
   id: string;
