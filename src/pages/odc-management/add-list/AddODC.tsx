@@ -14,7 +14,7 @@ import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
 import {
   ControlledTextField,
-  ControlledSelect,
+  ControlledSearchSelect,
 } from "~/components/form/controlled";
 import LocalizationKey from "~/i18n/key";
 
@@ -41,7 +41,7 @@ const AddODC = (props: AddProps): ReactElement => {
     initialValues: NewODCData,
     validationSchema: IntValuesSchema(t),
     validateOnChange: false,
-    onSubmit: (): void => {},
+    onSubmit: (): void => { },
   });
 
   const { values, setValues, errors } = ODCForm;
@@ -143,12 +143,11 @@ const AddODC = (props: AddProps): ReactElement => {
         </Grid>
         <Grid item xs={4.5}>
           <Typography mb={1}>{t(label.location)}</Typography>
-          <ControlledSelect
+          <ControlledSearchSelect
             name={"location"}
             id="location"
             options={country}
-            error={handleError(errors.location)}
-          />
+            error={handleError(errors.location)} />
           <StyledError>{getFieldError(errors, "location")}</StyledError>
         </Grid>
         <Grid item xs={3}>
