@@ -9,7 +9,7 @@ type CompilePDFParam = {
 
 export const captureTabContent = async (
   tabId: number,
-  switchTabCallback: (value: number) => void
+  switchTabCallback: (value: number) => void,
 ) => {
   switchTabCallback(tabId);
   await new Promise((resolve) => setTimeout(resolve, 1000));

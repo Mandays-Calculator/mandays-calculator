@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { type ReactElement } from "react";
 import type { TFunction } from "i18next";
 
 import Grid from "@mui/material/Grid";
@@ -14,13 +14,7 @@ interface HeaderButtonsProps {
 }
 
 const HeaderButtons = (props: HeaderButtonsProps): ReactElement => {
-  const {
-    mode,
-    isExposed,
-    setIsExport,
-    setIsShare,
-    t,
-  } = props;
+  const { mode, isExposed, setIsExport, setIsShare, t } = props;
 
   const { common } = LocalizationKey;
 
