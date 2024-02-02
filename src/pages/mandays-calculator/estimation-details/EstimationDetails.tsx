@@ -22,7 +22,7 @@ import {
   Title,
 } from "~/components";
 
-import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
 
 import { createExcel, generateEstimationData } from "../utils/excelHelper";
@@ -187,6 +187,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     },
   ];
 
+  console.log(mandaysForm.values, "mandaysform values");
   return (
     <>
       {isGeneratingPDF && (
@@ -213,12 +214,11 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           </Grid>
         </Grid>
         <PageContainer>
-          <Grid container justifyContent="space-between">
-            <Grid item>
-              <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-                {sprintName}
-              </Typography>
-            </Grid>
+          <Grid
+            container
+            justifyContent="space-between"
+            sx={{ marginBottom: "2.3rem" }}
+          >
             {!isGeneratingPDF && (
               <HeaderButtons
                 setIsExport={setIsExport}
@@ -229,7 +229,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
               />
             )}
           </Grid>
-          <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
             {mode === "view" ? (
               <CustomTab

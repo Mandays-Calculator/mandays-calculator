@@ -228,27 +228,50 @@ export const ResourcesListColumns = ({
     },
     {
       Header: t(resourceListTableColumns.resourceCount),
+      width: 250,
       accessor: "resourceCount",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`resource.${index}.resourceCount`} />
-          </>
-        ) : (
-          <> {row.original.resourceCount} </>
-        ),
+      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) => (
+        <div style={{ maxWidth: "200px", textAlign: "center" }}>
+          {isInput ? (
+            <>
+              <ControlledNumberInput name={`resource.${index}.resourceCount`} />
+            </>
+          ) : (
+            <> {row.original.resourceCount} </>
+          )}
+        </div>
+      ),
     },
     {
       Header: t(resourceListTableColumns.annualLeaves),
       accessor: "annualLeaves",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`resource.${index}.annualLeaves`} />
-          </>
-        ) : (
-          <> {row.original.annualLeaves} </>
-        ),
+      width: 250,
+      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) => (
+        <div style={{ maxWidth: "200px", textAlign: "center" }}>
+          {isInput ? (
+            <>
+              <ControlledNumberInput name={`resource.${index}.annualLeaves`} />
+            </>
+          ) : (
+            <> {row.original.annualLeaves} </>
+          )}
+        </div>
+      ),
+    },
+    {
+      Header: "",
+      accessor: "actions",
+      width: 400,
+      Cell: ({ row, row: { id } }: CellProps<ResourcesListDataType>) => (
+        <div style={{ textAlign: "right" }}>
+          <IconButton
+            onClick={() => console.log("delete", id)}
+            aria-label={`delete-${row.index}`}
+          >
+            <SvgIcon name="delete" $size={2} color="error" />
+          </IconButton>
+        </div>
+      ),
     },
   ];
 };

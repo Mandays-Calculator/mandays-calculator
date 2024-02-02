@@ -18,9 +18,9 @@ interface Resource {
   annualLeaves: string;
 }
 interface SummaryForm {
-  name: string;
-  team: string;
-  utilRate: string;
+  estimationName: string;
+  teamId: string;
+  utilizationRate: number;
   startDate: string;
   endDate: string;
 }

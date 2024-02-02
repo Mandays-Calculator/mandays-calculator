@@ -63,6 +63,17 @@ const theme = createTheme({
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          ".MuiChip-deleteIcon": {
+            position: "relative",
+            top: "5px",
+            right: "-5px",
+          },
+        },
+      },
+    },
     MuiTabs: {
       styleOverrides: {
         indicator: {

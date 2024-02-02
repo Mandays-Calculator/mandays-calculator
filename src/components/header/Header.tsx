@@ -78,7 +78,6 @@ const AppBarHeader = (): ReactElement => {
 
   const { common } = LocalizationKey;
 
-  console.log(projects, "projects");
   return (
     <StyledAppBar position="sticky">
       <Container maxWidth={false} disableGutters={true}>

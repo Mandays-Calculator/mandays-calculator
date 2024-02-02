@@ -2,9 +2,9 @@ import { MandaysForm } from ".";
 
 export const initMandays: MandaysForm = {
   summary: {
-    name: "",
-    team: "",
-    utilRate: "",
+    estimationName: "",
+    teamId: "",
+    utilizationRate: 0,
     startDate: "",
     endDate: "",
   },

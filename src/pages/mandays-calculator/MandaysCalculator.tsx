@@ -11,7 +11,7 @@ import LocalizationKey from "~/i18n/key";
 
 import { SprintListColumns } from "./utils/columns";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
-import { useGetEstimations } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+import { useGetEstimations } from "~/queries/mandays-est-tool/MandaysEstimationTool";
 import { useUserAuth } from "~/hooks/user";
 
 interface AlertRendererProps {
