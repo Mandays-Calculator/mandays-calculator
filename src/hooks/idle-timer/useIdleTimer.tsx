@@ -16,7 +16,7 @@ interface WithIdleTimerProps {
 
 export const useIdleTimer = <P extends object>(
   WrappedComponent: ComponentType<P>,
-  { timeout }: WithIdleTimerProps
+  { timeout }: WithIdleTimerProps,
 ): ComponentType<P> => {
   return (props: P): ReactElement => {
     const [isIdle, setIsIdle] = useState<boolean>(false);
@@ -73,6 +73,7 @@ export const useIdleTimer = <P extends object>(
               />
             </>
           }
+          disableCloseHeader={true}
           open={isIdle}
           onClose={logout}
           onCloseLabel={t(common.logout)}

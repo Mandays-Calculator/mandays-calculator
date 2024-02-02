@@ -2,6 +2,7 @@ import type {
   AuthAPIResponse,
   ResetPasswordParams,
   LoginResponse,
+  Token,
 } from "./types";
 
 import axios from "axios";
@@ -13,7 +14,7 @@ const getApiBasePath = () => {
 };
 
 export const forgotPasswordApi = async (
-  usernameOrEmail: string
+  usernameOrEmail: string,
 ): Promise<AuthAPIResponse> => {
   const url = `${getApiBasePath()}/forgot-password?username=${usernameOrEmail}`;
   try {
@@ -25,7 +26,7 @@ export const forgotPasswordApi = async (
 };
 
 export const resetPasswordApi = async (
-  params: ResetPasswordParams
+  params: ResetPasswordParams,
 ): Promise<AuthAPIResponse> => {
   const { apiBasePath } = getEnvConfig();
   try {
@@ -53,6 +54,53 @@ export const loginApi = async ({
     const response = await axios.post(`${apiBasePath}/login`, params, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const logoutApi = async ({
+  accessToken,
+  refreshToken,
+}: {
+  accessToken: string;
+  refreshToken: string;
+}): Promise<LoginResponse> => {
+  const { apiBasePath } = getEnvConfig();
+
+  try {
+    const response = await axios.post(`${apiBasePath}/logout`, {
+      token: accessToken,
+      refreshToken: refreshToken,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const refreshTokenApi = async ({
+  refreshToken,
+}: {
+  refreshToken: string;
+}): Promise<{ token: Token }> => {
+  const { apiBasePath } = getEnvConfig();
+
+  try {
+    const response = await axios.post(
+      `${apiBasePath}/refresh-token`,
+      {
+        refreshToken: refreshToken,
+      },
+      {
+        headers: {
+          Authorization: "No Auth",
+        },
+      },
+    );
+
     return response.data.data;
   } catch (error) {
     throw error;

@@ -1,21 +1,26 @@
 import type { TFunction } from "i18next";
-import { UserManagementForms } from "./types";
+import { CommonType, useCommonOption } from "~/queries/common/options";
 import * as yup from "yup";
 import LocalizationKey from "~/i18n/key";
-import { genders } from "~/utils/constants";
+
+import { UserManagementForms } from "./types";
 
 const { common, userManagement } = LocalizationKey;
 
-export const gender = (values?: string | number) => {
-  if (values == genders[0].value) {
-    return 1;
-  } else if (values == genders[1].value) {
-    return 2;
-  } else if (values == genders[2].value) {
-    return 3;
-  } else if (values == genders[3].value) {
-    return 4;
-  }
+export const commonOptionsAPI = (options: CommonType) => {
+  return useCommonOption(options, { keyword: "" });
+};
+
+export const genderValueNumToStr = (): SelectObject[] => {
+  return commonOptionsAPI("gender").map((e) => {
+    return { label: e.label, value: e.value.toString() };
+  });
+};
+
+export const roleValue = (): SelectObject[] => {
+  return commonOptionsAPI("role").map((e) => {
+    return { label: e.label, value: e.label };
+  });
 };
 
 export const UserManagementFormValues: UserManagementForms = {

@@ -1,26 +1,28 @@
-import { useState, type ReactElement, useEffect } from "react";
+import type { ReactElement } from "react";
+import type { UserManagementForms } from "./types";
+import type { UserListData } from "~/api/user-management/types";
+
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import Stack from "@mui/system/Stack";
-import UserList from "./user-list";
-import Header from "./header";
+import { useFormik } from "formik";
+import moment from "moment";
+import { isUndefined } from "lodash";
+
 import Form from "~/components/form/Form";
 import Title from "~/components/title/Title";
 import { PageContainer } from "~/components/page-container";
 import { useUserList } from "~/queries/user-management/UserManagement";
-import { UserListData } from "~/api/user-management/types";
-import {
-  UserManagementFormValues,
-  UserManagementSchema,
-  gender,
-} from "./utils";
-
-import { useFormik } from "formik";
-import { UserManagementForms } from "./types";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useAddUser } from "~/mutations/user-management";
-import { useTranslation } from "react-i18next";
-import moment from "moment";
+import { Alert } from "~/components";
 
+import LocalizationKey from "~/i18n/key";
+
+import { UserManagementFormValues, UserManagementSchema } from "./utils";
+import UserList from "./user-list";
+import Header from "./header";
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
   const AddUser = useAddUser();
@@ -29,7 +31,7 @@ const UserManagement = (): ReactElement => {
   const [status, callApi] = useRequestHandler(
     AddUser.mutate,
     () => setSuccessAddUser(true),
-    () => setErrorAddUser(true)
+    () => setErrorAddUser(true),
   );
   const UserManagementForm = useFormik<UserManagementForms>({
     initialValues: UserManagementFormValues,
@@ -42,7 +44,7 @@ const UserManagement = (): ReactElement => {
         lastName: values.lastName,
         middleName: values.middleName || "",
         suffix: values.suffix || "",
-        gender: gender(values?.gender) ?? 0,
+        gender: Number(values?.gender) ?? 0,
         email: values.email,
         employeeId: values.employeeId,
         odcId: values.odcId || "",
@@ -64,8 +66,10 @@ const UserManagement = (): ReactElement => {
     UserManagementForm.resetForm();
   }, [successAddUser]);
 
-  const { data } = useUserList();
-  const [filteredData, setFilteredData] = useState<UserListData[]>([]);
+  const { data, refetch: refetchUser, isError } = useUserList();
+  const [filteredData, setFilteredData] = useState<UserListData[] | undefined>(
+    undefined,
+  );
   useEffect(() => {
     if (!data) {
       setFilteredData([]);
@@ -101,7 +105,7 @@ const UserManagement = (): ReactElement => {
             ? filterValue.toLowerCase() === "active"
             : typeof value === "object"
             ? ["administrator", "admin"].includes(filterValue.toLowerCase())
-            : false
+            : false,
         );
       }
 
@@ -126,16 +130,26 @@ const UserManagement = (): ReactElement => {
               isSuccess={successAddUser}
               isError={errorAddUser}
               resetIsSuccess={() => {
-                setErrorAddUser(false), setSuccessAddUser(false);
+                setErrorAddUser(false);
+                setSuccessAddUser(false);
               }}
             />
             <UserList
               isSuccessAddUser={successAddUser}
-              userListData={filteredData}
+              userListData={filteredData || []}
+              isLoading={isUndefined(filteredData)}
+              refetch={refetchUser}
             />
           </Stack>
         </Form>
       </PageContainer>
+      {isError && (
+        <Alert
+          type="error"
+          message={t(LocalizationKey.common.errorMessage.genericError)}
+          open={isError}
+        />
+      )}
     </>
   );
 };

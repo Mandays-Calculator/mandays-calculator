@@ -1,28 +1,31 @@
-import { useState, type ReactElement, useEffect } from "react";
+import type { ReactElement } from "react";
+import type { UserListData } from "~/api/user-management/types";
 
-import { PageLoader, Table } from "~/components";
-
-import { userListColumns } from "./utils";
-import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useUserList } from "~/queries/user-management/UserManagement";
+import { PageLoader, Table } from "~/components";
+import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
-import { UserListData } from "~/api/user-management/types";
 import { useDeleteUser } from "~/mutations/user-management";
+
+import { userListColumns } from "./utils";
 
 interface UserListProps {
   userListData?: UserListData[];
   isSuccessAddUser?: boolean;
+  isLoading?: boolean;
+  refetch: () => void;
 }
 
 const UserList = ({
   userListData,
   isSuccessAddUser,
+  refetch,
+  isLoading,
 }: UserListProps): ReactElement => {
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
-  const userList = useUserList();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [currentUserData, setCurrentUserData] = useState<UserListData>();
@@ -34,10 +37,6 @@ const UserList = ({
     setCurrentUserData(currentSelectedUser);
   };
 
-  useEffect(() => {
-    userList.refetch();
-  }, [isSuccessAddUser]);
-
   const handleDeleteUser = (userId: string, rowId: number): void => {
     setDeleteModalOpen(true);
     setCurrentUser(userId);
@@ -45,10 +44,10 @@ const UserList = ({
   };
 
   useEffect(() => {
-    userList.refetch();
+    refetch();
   }, [isSuccessAddUser]);
 
-  if (userList.isLoading) {
+  if (isLoading) {
     return <PageLoader />;
   } else {
     return (
@@ -77,12 +76,12 @@ const UserList = ({
               {
                 onSuccess: () => {
                   setDeleteModalOpen(false);
-                  userList.refetch();
+                  refetch();
                 },
                 onError: (error) => {
                   console.log(error);
                 },
-              }
+              },
             );
           }}
           message={t("Are you sure you want to delete this User?")}

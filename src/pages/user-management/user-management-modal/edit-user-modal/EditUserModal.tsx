@@ -1,30 +1,35 @@
-import { type ReactElement, useEffect, useState } from "react";
-import { CustomButton } from "~/components/form/button";
+import type { ReactElement } from "react";
+import type { UserListData } from "~/api/user-management/types";
+import type {
+  UpdateUserManagementParams,
+  UserManagementForms,
+} from "~/pages/user-management/types";
+
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
+import { useFormikContext } from "formik";
+import moment from "moment";
+
 import {
   ControlledDatePicker,
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { useFormikContext } from "formik";
-import {
-  UpdateUserManagementParams,
-  UserManagementForms,
-} from "~/pages/user-management/types";
+import { CustomButton } from "~/components/form/button";
 import { useUserList } from "~/queries/user-management/UserManagement";
-
-import { gender } from "~/pages/user-management/utils";
-import { ImageUpload } from "~/components";
-import { UserListData } from "~/api/user-management/types";
 import { useEditUser } from "~/mutations/user-management";
 import { useRequestHandler } from "~/hooks/request-handler";
-import { Alert } from "~/components";
-import { useTranslation } from "react-i18next";
+import { Alert, ImageUpload } from "~/components";
 import LocalizationKey from "~/i18n/key";
-import moment from "moment";
-import { genders, rolesData, CAREER_STEPS } from "~/utils/constants";
+import {
+  genderValueNumToStr,
+  commonOptionsAPI,
+  roleValue,
+} from "~/pages/user-management/utils";
+
 import { teamOptions } from "../utils";
-import { useCommonOption } from "~/queries/common/options/Options";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -59,8 +64,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const { values } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
-  const projectOptions = useCommonOption("project", { keyword: "" });
-  const odcOptions = useCommonOption("odc", { keyword: "" });
 
   const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
   const [isEditError, setIsEditError] = useState<boolean>(false);
@@ -68,7 +71,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const [status, callApi] = useRequestHandler(
     EditUser.mutate,
     () => setIsEditSuccess(true),
-    () => setIsEditError(true)
+    () => setIsEditError(true),
   );
 
   const EditUserForm: UserManagementForms = {
@@ -76,7 +79,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     lastName: values?.updateLastName ?? "",
     middleName: values?.updateMiddleName ?? "",
     suffix: values?.updateSuffix ?? "",
-    gender: gender(values?.updateGender) ?? 0,
+    gender: Number(values?.updateGender) ?? 0,
     email: values?.updateEmail ?? "",
     employeeId: values?.updateEmployeeId ?? "",
     odcId: values?.updateOdcId ?? "",
@@ -166,7 +169,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               </StyledTitle>
               <ControlledSelect
                 name="updateGender"
-                options={genders}
+                options={genderValueNumToStr()}
                 value={form.values.updateGender || ""}
               />
             </Grid>
@@ -182,7 +185,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               {t(userManagement.label.careerStep)}
             </StyledTitle>
             <ControlledSelect
-              options={CAREER_STEPS}
+              options={commonOptionsAPI("career_step")}
               name="updateCareerStep"
               value={form.values.updateCareerStep || ""}
             />
@@ -196,7 +199,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
             <ControlledSelect
-              options={odcOptions}
+              options={commonOptionsAPI("odc")}
               name="updateOdcId"
               value={form.values.updateOdcId || ""}
             />
@@ -217,7 +220,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               {t(userManagement.label.projectId)}
             </StyledTitle>
             <ControlledSelect
-              options={projectOptions}
+              options={commonOptionsAPI("project")}
               value={form.values.updateProjectId || ""}
               name="updateProjectName"
             />
@@ -234,7 +237,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             <StyledTitle mb={1}>{t(userManagement.label.roles)}</StyledTitle>
             <ControlledSelect
               multiple
-              options={rolesData}
+              options={roleValue()}
               name="updateRoles"
               value={
                 Array.isArray(form.values.updateRoles)
