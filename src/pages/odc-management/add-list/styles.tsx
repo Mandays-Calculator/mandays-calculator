@@ -10,5 +10,5 @@ export const StyledError = styled(Typography)({
 
 export const StyledLabel = styled(Typography)(() => ({
   fontWeight: 600,
-  fontSize: "16px",
+  fontSize: "1rem",
 }));
