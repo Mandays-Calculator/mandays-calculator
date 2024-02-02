@@ -1,66 +1,46 @@
-import { useState, type ReactElement } from "react";
-import { CustomButton } from "~/components/form/button";
+import type { ReactElement } from "react";
+import type { FormikContextType } from "formik";
+import type { UserManagementForms } from "~/pages/user-management/types";
+
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import {
   Box,
   Dialog,
   FormControl,
-  FormControlLabel,
   Grid,
   Radio,
   RadioGroup,
   Stack,
-  Typography,
-  styled,
 } from "@mui/material";
+import moment from "moment";
+
 import {
   ControlledDatePicker,
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { FormikContextType } from "formik";
-import { UserManagementForms } from "~/pages/user-management/types";
-
-import { teamOptions } from "../utils";
-import moment from "moment";
+import { CustomButton } from "~/components/form/button";
 import { Alert, ImageUpload } from "~/components";
 import { getFieldError } from "~/components/form/utils";
 import { FormErrors } from "~/components/form/types";
 import { APIStatus } from "~/hooks/request-handler";
-import { useTranslation } from "react-i18next";
 import LocalizationKey from "~/i18n/key";
-import { genders, rolesData, CAREER_STEPS } from "~/utils/constants";
-import { useCommonOption } from "~/queries/common/options/Options";
+import {
+  genderValueNumToStr,
+  commonOptionsAPI,
+  roleValue,
+} from "~/pages/user-management/utils";
 
-const StyledModalTitle = styled(Typography)({
-  fontWeight: 600,
-  fontStyle: "normal",
-  fontFamily: "Montserrat",
-  color: "#414145",
-  fontSize: "1.125rem",
-  paddingBottom: "18px",
-});
+import {
+  StyledModalTitle,
+  StyledError,
+  StyledTitle,
+  StyledFormControlLabel,
+} from "./styles";
 
-const StyledTitle = styled(Typography)({
-  color: "#414145",
-  fontSize: 14,
-  lineHeight: "1.8",
-  fontFamily: "Montserrat",
-  fontWeight: "400",
-  wordWrap: "break-word",
-});
-
-const StyledError = styled(Typography)({
-  color: "#FF4545",
-  fontSize: "0.75rem",
-  fontFamily: "Montserrat",
-  fontWeight: "400",
-  marginTop: "3px",
-  marginBottom: "0",
-  marginLeft: "12px",
-});
-const StyledFormControlLabel = styled(FormControlLabel)({
-  height: "35px",
-});
+import { teamOptions } from "../utils";
 
 interface AddUserModalProps {
   onAddUser: () => void;
@@ -86,14 +66,12 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const [selectedJoinedDate, setSelectedJoinedDate] =
     useState("recentlyJoined");
-  const projectOptions = useCommonOption("project", { keyword: "" });
-  const odcOptions = useCommonOption("odc", { keyword: "" });
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedJoinedDate(event.target.value);
 
     form.setFieldValue(
       "recentlyJoinedlaterDate",
-      event.target.value === "recentlyJoinedlaterDate" ? true : false
+      event.target.value === "recentlyJoinedlaterDate" ? true : false,
     );
   };
 
@@ -115,7 +93,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
       />
     );
   };
-
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
@@ -138,7 +115,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 error={!!form.errors.lastName}
                 helperText={getFieldError(
                   form.errors as FormErrors,
-                  "lastName"
+                  "lastName",
                 )}
                 value={form.values.lastName || ""}
               />
@@ -150,7 +127,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 error={!!form.errors.firstName}
                 helperText={getFieldError(
                   form.errors as FormErrors,
-                  "firstName"
+                  "firstName",
                 )}
                 value={form.values.firstName || ""}
               />
@@ -175,7 +152,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               </StyledTitle>
               <ControlledSelect
                 name="gender"
-                options={genders}
+                options={genderValueNumToStr()}
                 error={!!form.errors.gender}
                 value={form.values.gender || ""}
               />
@@ -198,12 +175,12 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               {t(userManagement.label.careerStep)}
             </StyledTitle>
             <ControlledSelect
-              options={CAREER_STEPS}
+              options={commonOptionsAPI("career_step")}
               name="careerStep"
               error={!!form.errors.careerStep}
               helperText={getFieldError(
                 form.errors as FormErrors,
-                "careerStep"
+                "careerStep",
               )}
               value={form.values.careerStep || ""}
             />
@@ -245,7 +222,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                     error={!!form.errors.joiningDate}
                     helperText={getFieldError(
                       form.errors as FormErrors,
-                      "joiningDate"
+                      "joiningDate",
                     )}
                   />
                 )}
@@ -259,7 +236,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               error={!!form.errors.employeeId}
               helperText={getFieldError(
                 form.errors as FormErrors,
-                "employeeId"
+                "employeeId",
               )}
               value={form.values.employeeId || ""}
             />
@@ -267,7 +244,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           <Grid item xs={3.5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
             <ControlledSelect
-              options={odcOptions}
+              options={commonOptionsAPI("odc")}
               name="odcId"
               value={form.values.odcId || ""}
             />
@@ -276,7 +253,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             <StyledTitle mb={0.5}>{t(userManagement.label.roles)}</StyledTitle>
             <ControlledSelect
               multiple
-              options={rolesData}
+              options={roleValue()}
               name="roles"
               value={form.values.roles || ""}
             />
@@ -286,7 +263,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               {t(userManagement.label.projectId)}
             </StyledTitle>
             <ControlledSelect
-              options={projectOptions}
+              options={commonOptionsAPI("project")}
               name="projectId"
               value={form.values.projectId || ""}
             />

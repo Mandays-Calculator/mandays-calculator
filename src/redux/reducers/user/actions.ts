@@ -1,14 +1,20 @@
 import type { AsyncActionCallbacks } from "~/redux/store";
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginApi } from "~/api/auth";
+import { loginApi, logoutApi } from "~/api/auth";
 import { setItemStorage } from "~/utils/helpers";
 import { encryptObjectWithAES } from "~/utils/cryptoUtils";
 import { getEnvConfig } from "~/utils/env-config";
+import { SESSION_STORAGE_ITEMS, cookieAuthKey } from "~/utils/constants";
+import { setCookie } from "~/utils/cookieUtils";
+import { getUserToken } from "~/hooks/user";
 
 interface LoginParams {
   username: string;
   password: string;
+  callbacks?: AsyncActionCallbacks;
+}
+
+interface LogoutParams {
   callbacks?: AsyncActionCallbacks;
 }
 
@@ -31,23 +37,49 @@ export const login = createAsyncThunk(
       // Invoke onSuccess callback if provided
       if (args.callbacks?.onSuccess) args.callbacks.onSuccess();
 
-      // Save user and token properties to session storage
+      // Save user properties to session storage
       setItemStorage(
-        "mc-user",
+        SESSION_STORAGE_ITEMS.mcUser,
         {
-          token: response.token,
           permissions: encryptObjectWithAES(
             response.permissions,
-            !config.encryptData
+            !config.encryptData,
           ),
+
           user: encryptObjectWithAES(response.user, !config.encryptData),
+          projects: encryptObjectWithAES(
+            response.projects,
+            !config.encryptData,
+          ),
         },
-        "session"
+        "session",
       );
+
+      // Save token properties to cookie storage
+      setCookie(cookieAuthKey, response.token);
       return response;
     } catch (error) {
       if (args.callbacks?.onFailure) args.callbacks.onFailure();
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
+);
+
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (args: LogoutParams, thunkAPI) => {
+    const token = getUserToken();
+    try {
+      const response = await logoutApi({
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+      });
+
+      if (args.callbacks?.onSuccess) args.callbacks.onSuccess();
+      return response;
+    } catch (error) {
+      if (args.callbacks?.onFailure) args.callbacks.onFailure();
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
 );

@@ -28,8 +28,7 @@ const AuthenticatedApp = (): ReactElement => {
     state: { loading, isAuthenticated, permissions },
     logout,
   } = useUserAuth();
-  const { showUnauthorizedModal, systemErrorModal, setSystemErrorModal } =
-    useErrorModals();
+  const { showUnauthorizedModal } = useErrorModals();
 
   useEffect(() => {
     setLoadingAuth(true);
@@ -57,7 +56,7 @@ const AuthenticatedApp = (): ReactElement => {
     ),
     {
       timeout: config.idleTimeoutConfig.durationUntilPromptSeconds,
-    }
+    },
   );
 
   const renderAuth = (): ReactElement => {
@@ -65,7 +64,7 @@ const AuthenticatedApp = (): ReactElement => {
       return (
         <PageLoader
           labelOnLoad={t(
-            LocalizationKey.common.userManagement.authSignInLoading
+            LocalizationKey.common.userManagement.authSignInLoading,
           )}
         />
       );
@@ -83,21 +82,9 @@ const AuthenticatedApp = (): ReactElement => {
         disableCloseHeader={true}
         type="unauthorized"
         message={t(LocalizationKey.common.errorMessage.unauthorized)}
-        open={showUnauthorizedModal}
+        open={isAuthenticated && showUnauthorizedModal}
         onConfirm={logout}
         modalTitle={t(LocalizationKey.common.unauthorizedTitle)}
-      />
-      <NotificationModal
-        disableCloseHeader={true}
-        type="systemError"
-        message={t(LocalizationKey.common.errorMessage.genericError)}
-        open={systemErrorModal}
-        onConfirm={() => {
-          if (setSystemErrorModal) {
-            setSystemErrorModal(false);
-          }
-        }}
-        modalTitle={t(LocalizationKey.common.systemErrorTitle)}
       />
     </>
   );

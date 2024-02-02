@@ -1,5 +1,7 @@
 import type { GenericErrorResponse } from "./types";
+import { refreshTokenApi, type Token } from "./auth";
 import { BroadcastChannel } from "broadcast-channel";
+
 import axios, {
   InternalAxiosRequestConfig,
   AxiosError,
@@ -7,7 +9,30 @@ import axios, {
 } from "axios";
 
 import { getUser } from "~/utils/helpers";
-import { CHANNELS, ERROR_CODES } from "~/utils/constants";
+import { CHANNELS, cookieAuthKey, ERROR_CODES } from "~/utils/constants";
+import { getUserToken } from "~/hooks/user";
+import { setCookie } from "~/utils/cookieUtils";
+
+let isRefreshing = false;
+let isLoggingOut = false;
+let refreshPromise: Promise<void> | null = null;
+const requestQueue: (() => Promise<any>)[] = [];
+
+const isTokenExpired = (accessToken: Token): boolean => {
+  if (
+    isRefreshing ||
+    !accessToken ||
+    !accessToken.expiresInMs ||
+    !accessToken.issuedAtInMs
+  ) {
+    return false;
+  }
+
+  const expirationTimestamp =
+    accessToken.issuedAtInMs + accessToken.expiresInMs;
+  const currentTimestamp = Date.now();
+  return currentTimestamp > expirationTimestamp;
+};
 
 /**
  * Initializes Axios with global interceptors to handle authorization and error management.
@@ -17,51 +42,96 @@ import { CHANNELS, ERROR_CODES } from "~/utils/constants";
  * @param isAuthenticated - Indicates if the user is currently authenticated.
  */
 const init = async (): Promise<void> => {
-  let isUnauthorizedUser = false;
   const { items, events } = CHANNELS;
   const channel = new BroadcastChannel(items.sessionState);
 
   axios.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
+    async (config: InternalAxiosRequestConfig) => {
       const user = getUser();
-      if (user) {
-        config.headers.Authorization = `Bearer ${user?.token?.accessToken}`;
-        if (isUnauthorizedUser) {
-          // Cancel the request if a 401 error was previously received
-          const cancel = axios.CancelToken.source();
-          config.cancelToken = cancel.token;
-          cancel.cancel("Cancelled due to previously received 401 error");
+      const token = getUserToken();
+
+      if (config.url?.includes("/refresh-token")) {
+        config.headers.Authorization = "No Auth";
+      } else if (user) {
+        if (isTokenExpired(token)) {
+          if (!isRefreshing) {
+            isRefreshing = true;
+
+            refreshPromise = refreshTokenApi({
+              refreshToken: token.refreshToken,
+            })
+              .then(({ token: newToken }) => {
+                console.log("Token refreshed"); // for debugging purposes
+                setCookie(cookieAuthKey, newToken);
+                config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+                replayRequests();
+              })
+              .catch((refreshError) => {
+                throw refreshError;
+              })
+              .finally(() => {
+                isRefreshing = false;
+                isLoggingOut = false;
+                refreshPromise = null;
+              });
+
+            await refreshPromise;
+          }
+        } else {
+          config.headers.Authorization = `Bearer ${token.accessToken}`;
         }
+      }
+
+      if (config.url?.endsWith("/logout")) {
+        isLoggingOut = true;
+      } else {
+        isLoggingOut = false;
       }
       return config;
     },
-    (error: AxiosError) => Promise.reject(error)
+    (error: AxiosError) => Promise.reject(error),
   );
 
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
-      const user = getUser();
-      if (user) {
-        if (error.response && error.response.status == 401) {
-          isUnauthorizedUser = true;
-          channel.postMessage(events.unauthorized);
-        }
-        if (
-          error &&
-          (error as unknown as GenericErrorResponse).errorCode ===
-            ERROR_CODES.genericError
-        ) {
-          channel.postMessage(events.systemError);
+      if (!isLoggingOut) {
+        const user = getUser();
+        if (user) {
+          if (error.response && error.response.status == 401) {
+            channel.postMessage(events.unauthorized);
+            enqueueRequest(() => axios.request((error as any).config)); // Enqueue the failed request
+          }
+          if (
+            error &&
+            (error as unknown as GenericErrorResponse).errorCode ===
+              ERROR_CODES.genericError
+          ) {
+            channel.postMessage(events.systemError);
+          }
         }
       }
 
       const axiosError = error as AxiosError<GenericErrorResponse>;
+
       return axiosError && axiosError.response
         ? Promise.reject(axiosError.response.data)
         : Promise.reject(error);
-    }
+    },
   );
+
+  function replayRequests() {
+    while (requestQueue.length > 0) {
+      const request = requestQueue.shift();
+      if (request) {
+        request();
+      }
+    }
+  }
+
+  function enqueueRequest(request: () => Promise<any>) {
+    requestQueue.push(request);
+  }
 };
 
 export default init;
