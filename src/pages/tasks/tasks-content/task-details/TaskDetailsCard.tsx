@@ -17,7 +17,7 @@ interface TaskDetailsCardProps {
   data: AllTasksResponse;
   handleViewDetails: (task: AllTasksResponse) => void;
   handleEdit: (task: AllTasksResponse) => void;
-  onDelete: (task: AllTasksResponse) => void;
+  onDelete: (id: string) => void;
 }
 
 const getContainerStyle = (status: string) => {
@@ -43,7 +43,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
   return (
     <Paper
       elevation={2}
-      sx={getContainerStyle(data?.status)}
+      sx={getContainerStyle(data?.status as string)}
       onClick={() => handleViewDetails(data)}
     >
       <Grid
@@ -103,7 +103,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
         <Box sx={taskDetailsCardStyles.buttons}>
           <EditOutlinedIcon
             color="action"
-            sx={getButtonDisplayStyle(data?.status)}
+            sx={getButtonDisplayStyle(data.status as string)}
             onClick={(e) => {
               e.stopPropagation();
               handleEdit(data);
@@ -112,10 +112,10 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
 
           <DeleteOutlinedIcon
             color="error"
-            sx={getButtonDisplayStyle(data?.status)}
+            sx={getButtonDisplayStyle(data?.status as string)}
             onClick={(e) => {
               e.stopPropagation();
-              onDelete(data);
+              onDelete(data.id as string);
             }}
           />
         </Box>

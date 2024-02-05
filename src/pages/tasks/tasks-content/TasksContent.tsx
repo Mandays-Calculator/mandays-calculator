@@ -27,7 +27,7 @@ import {
 
 import { Select, PageContainer } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
-import { useTasks } from "~/queries/tasks/Tasks";
+import { useDeleteTask, useTasks } from "~/queries/tasks/Tasks";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
@@ -122,16 +122,16 @@ const TasksContent = (): ReactElement => {
     "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
     "5",
   );
+
+  const deleteMutation = useDeleteTask();
+
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
   // const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
-  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
-    null,
-  );
-  const [selectedTaskForDelete, setSelectedTaskForDelete] =
-    useState<AllTasksResponse | null>(null);
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
+  const [selectedTaskForDelete, setSelectedTaskForDelete] = useState<string>();
 
   const [viewDetailsModalOpen, setViewDetailsModalOpen] =
     useState<boolean>(false);
@@ -215,11 +215,13 @@ const TasksContent = (): ReactElement => {
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
+    console.log("viewUpdateData", task);
   };
 
-  const handleDeleteModalState = (task: AllTasksResponse) => {
-    setSelectedTaskForDelete(task);
+  const handleDeleteModalState = (id: string) => {
+    setSelectedTaskForDelete(id);
     setDeleteModalOpen(!deleteModalOpen);
+    console.log("deleted", id);
   };
 
   // CLOSING OF MODALS
@@ -236,7 +238,6 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleCloseDeleteModalState = () => {
-    setSelectedTaskForDelete(null);
     setDeleteModalOpen(false);
   };
 
@@ -270,13 +271,22 @@ const TasksContent = (): ReactElement => {
 
   const handleDeleteTask = () => {
     if (selectedTaskForDelete) {
-      const { taskID } = selectedTaskForDelete;
-      const updatedTasks = tasks.filter((task) => task.taskID !== taskID);
-      setTasks(updatedTasks);
+      deleteMutation.mutate(
+        { id: selectedTaskForDelete },
+        {
+          onSuccess: () => {
+            const updatedTasks = tasks.filter(
+              (task) => task.taskID !== selectedTaskForDelete,
+            );
+            setTasks(updatedTasks);
+            setDeleteModalOpen(false);
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        },
+      );
     }
-
-    setSelectedTaskForDelete(null);
-    setDeleteModalOpen(false);
   };
 
   // RENDER
@@ -301,7 +311,11 @@ const TasksContent = (): ReactElement => {
   const renderTaskDetailsCards = (task: AllTasksResponse, index: number) => {
     if (task.status === Status.Backlog || task.status === Status.OnHold) {
       return (
-        <Draggable key={task?.taskID} draggableId={task?.taskID} index={index}>
+        <Draggable
+          key={task?.taskID}
+          draggableId={`${index}_${task?.taskID}`}
+          index={index}
+        >
           {(provided) => (
             <Stack
               ref={provided.innerRef}
@@ -312,7 +326,10 @@ const TasksContent = (): ReactElement => {
                 data={task}
                 handleViewDetails={handleViewDetailsModalState}
                 handleEdit={handleUpdateModalState}
-                onDelete={() => handleDeleteModalState(task)}
+                onDelete={() => {
+                  console.log("delete", task);
+                  handleDeleteModalState(task.id as string);
+                }}
               />
             </Stack>
           )}
@@ -324,14 +341,13 @@ const TasksContent = (): ReactElement => {
           data={task}
           handleViewDetails={handleViewDetailsModalState}
           handleEdit={handleUpdateModalState}
-          onDelete={() => handleDeleteModalState(task)}
+          onDelete={() => handleDeleteModalState(task.id as string)}
         />
       );
     }
   };
 
   const renderTaskContentModals = () => {
-    console.log("onreturn", tasks);
     return (
       <>
         <CreateOrUpdateTask
@@ -353,7 +369,7 @@ const TasksContent = (): ReactElement => {
         <ViewTaskDetails
           open={viewDetailsModalOpen}
           username={username}
-          task={selectedTask}
+          task={selectedTask as AllTasksResponse}
           onSave={handleUpdateTask}
           onClose={handleCloseViewDetailsModalState}
         />
@@ -460,11 +476,11 @@ const TasksContent = (): ReactElement => {
 
       <ConfirmModal
         open={deleteModalOpen}
-        onConfirm={handleDeleteTask}
+        onConfirm={() => handleDeleteTask()}
         onClose={handleCloseDeleteModalState}
-        message={`${t(LocalizationKey.tasks.taskDetails.deleteConfirm)} ${
-          selectedTaskForDelete?.name
-        }?`}
+        message={`${t(LocalizationKey.tasks.taskDetails.deleteConfirm)}
+         ${selectedTask?.name}
+        ?`}
       />
     </>
   );

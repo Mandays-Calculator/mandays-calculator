@@ -104,8 +104,8 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls='taskdetails-comment-panel'
-          id='taskdetails-comment-panel-header'
+          aria-controls="taskdetails-comment-panel"
+          id="taskdetails-comment-panel-header"
           sx={viewTaskDetailsStyles.label}
         >
           {t(LocalizationKey.tasks.viewTaskDetails.label.comments)}
@@ -114,7 +114,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
           <Grid
             item
             container
-            alignItems='center'
+            alignItems="center"
             xs={12}
             sx={viewTaskDetailsStyles.comment.container}
           >
@@ -124,7 +124,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
             <Grid item xs={10} sm={11}>
               <TextField
-                name='comment'
+                name="comment"
                 placeholder={t(
                   LocalizationKey.tasks.viewTaskDetails.placeholder.comments,
                 )}
@@ -134,10 +134,10 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                 sx={viewTaskDetailsStyles.comment.textbox}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position='end'>
+                    <InputAdornment position="end">
                       <IconButton
-                        aria-label='Send'
-                        edge='end'
+                        aria-label="Send"
+                        edge="end"
                         onClick={() => handleAddComment()}
                       >
                         <SendOutlinedIcon />
@@ -146,21 +146,21 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                   ),
                 }}
                 value={newComment.comment}
-                onChange={e =>
+                onChange={(e) =>
                   setNewComment({ ...newComment, comment: e.target.value })
                 }
               />
             </Grid>
           </Grid>
 
-          <Grid item container alignItems='center' xs={12} spacing={1.5}>
+          <Grid item container alignItems="center" xs={12} spacing={1.5}>
             {(currentTask?.comments || []).map((comment, index) => (
               <>
                 <Grid item xs={2} sm={1}>
                   <Avatar alt={getAvatarAlt(comment?.name)} />
                 </Grid>
 
-                <Grid item container xs={10} sm={11} alignItems='center'>
+                <Grid item container xs={10} sm={11} alignItems="center">
                   <Box key={index} sx={viewTaskDetailsStyles.comment.comment}>
                     <Typography sx={viewTaskDetailsStyles.label}>
                       {comment?.name}
@@ -181,7 +181,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
       <Modal
         open={open}
         title={currentTask?.name}
-        maxWidth='sm'
+        maxWidth="sm"
         onClose={onClose}
         sx={taskStyles.scrollbar}
       >
@@ -194,14 +194,14 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
         <Grid container sx={viewTaskDetailsStyles.modal.container}>
           <Grid item xs={12}>
             <TextField
-              name='taskDescription'
+              name="taskDescription"
               label={t(LocalizationKey.tasks.viewTaskDetails.label.description)}
               placeholder={t(
                 LocalizationKey.tasks.viewTaskDetails.placeholder.description,
               )}
               fullWidth
               multiline
-              onChange={e =>
+              onChange={(e) =>
                 currentTask &&
                 setNewTask({ ...currentTask, description: e.target.value })
               }
@@ -303,10 +303,14 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
       <ConfirmModal
         open={openMarkCompleted}
         onConfirm={handleConfirmMarkCompleted}
-        confirmLabel={t(LocalizationKey.tasks.viewTaskDetails.modal.confirmMarkComplete)}
+        confirmLabel={t(
+          LocalizationKey.tasks.viewTaskDetails.modal.confirmMarkComplete,
+        )}
         onClose={handleCloseMarkCompleted}
         message={t(LocalizationKey.tasks.viewTaskDetails.modal.markComplete)}
-        closeLabel={t(LocalizationKey.tasks.viewTaskDetails.modal.closeMarkComplete)}
+        closeLabel={t(
+          LocalizationKey.tasks.viewTaskDetails.modal.closeMarkComplete,
+        )}
       />
     </>
   );

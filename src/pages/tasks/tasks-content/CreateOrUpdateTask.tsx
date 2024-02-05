@@ -1,5 +1,5 @@
-import type { AllTasksResponse, Complexity, Functionality } from "~/api/tasks";
-import type { SelectChangeEvent } from "@mui/material";
+import type { AllTasksResponse } from "~/api/tasks";
+// import type { SelectChangeEvent } from "@mui/material";
 import type { ReactElement } from "react";
 
 import { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ const initialTaskState: AllTasksResponse = {
   taskID: "", // should be empty when api is integrated
   name: "",
   description: "",
-  createdDate: moment().format("L"), // should be empty when api is integrated
+  createdDate: "", // should be empty when api is integrated
   completionDate: "",
   sprint: "1", // should be empty when api is integrated
   complexity: {
@@ -92,87 +92,21 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     update = false,
     complexities,
     currentTask,
-    onCreateTask,
-    onUpdateTask,
     onOpenCreateTask,
     onOpenUpdateTask,
+    // onUpdateTask,
     onClose,
   } = props;
 
   const { t } = useTranslation();
-  const [task, setTask] = useState<AllTasksResponse>(
-    currentTask || initialTaskState,
-  );
-  // const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [task, setTask] = useState<AllTasksResponse>(initialTaskState);
+
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
   const postTasks = usePostTasks();
 
   useEffect(() => {
     setTask(currentTask || initialTaskState);
-
-    // if (update) {
-    //   setSelectedTags(_.map(currentTask?.tags, "value"));
-    // }
   }, [currentTask]);
-
-  // const handleCreateOrUpdateTask = (): void => {
-  //   if (update && onUpdateTask) {
-  //     onUpdateTask(task);
-  //   } else if (onCreateTask) {
-  //     onCreateTask(task);
-  //     setTask(initialTaskState);
-  //   }
-
-  //   onClose();
-  // };
-
-  const handleChangeFunctionality = (e: SelectChangeEvent<unknown>) => {
-    const selectedFunctionality = _.find(
-      functionalityOptions,
-      _.matchesProperty("value", e.target.value),
-    );
-
-    const functionality: Functionality = {
-      id: e.target.value as string,
-      name: selectedFunctionality?.label as string,
-    };
-    setTask({ ...task, functionality });
-  };
-
-  const handleChangeComplexity = (e: SelectChangeEvent<unknown>) => {
-    const selectedComplexity = _.find(
-      complexityOptions,
-      _.matchesProperty("value", e.target.value),
-    );
-
-    const complexity: Complexity = {
-      id: e.target.value as string,
-      name: selectedComplexity?.label as string,
-      active: true,
-      description: selectedComplexity?.label as string,
-      numberOfFeatures: "",
-      numberOfHours: "",
-      sample: selectedComplexity?.label as string,
-    };
-    setTask({ ...task, complexity });
-  };
-
-  // const handleChangeTags = (e: SelectChangeEvent<unknown>) => {
-  //   const _selectedTags = e.target.value as string[];
-  //   let tags: SelectObject[] = [];
-
-  //   _selectedTags.map((selectedTag) => {
-  //     const tag: SelectObject = {
-  //       label: selectedTag,
-  //       value: selectedTag,
-  //     };
-
-  //     tags.push(tag);
-  //   });
-
-  //   setTask({ ...task, tags });
-  //   setSelectedTags(_selectedTags);
-  // };
 
   const handleOpenComplexity = (): void => {
     setOpenComplexity(!openComplexity);
@@ -191,13 +125,41 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     }
   };
 
+  // const updateTaskState: AllTasksResponse = {
+  //   taskID: task.taskID, // should be empty when api is integrated
+  //   name: task.name,
+  //   description: task.description,
+  //   createdDate: task.createdDate, // should be empty when api is integrated
+  //   completionDate: task.completionDate,
+  //   sprint: "1", // should be empty when api is integrated
+  //   complexity: {
+  //     // should be empty when api is integrated
+  //     id: task.complexity.id,
+  //     name: task.complexity.name,
+  //     numberOfHours: "5",
+  //     numberOfFeatures: "50+",
+  //     description: task.complexity.description,
+  //     sample: task.complexity.sample,
+  //     active: true,
+  //   },
+  //   status: "Backlog", // should be empty when api is integrated
+  //   type: task.type,
+  //   functionality: {
+  //     id: task.functionality.id,
+  //     name: task.functionality.name,
+  //   },
+  //   tags: [],
+  //   comments: [],
+  // };
+
   const createOrUpdateForm = useFormik({
     initialValues: update !== false ? initialTaskState : initialTaskState,
     onSubmit: (e: AllTasksResponse): void => {
+      console.log("e", e);
       const submit = {
         name: e.name,
         description: e.description,
-        createdDate: moment(e.createdDate).format("YYYY-MM-DD"),
+        createdDate: moment(e.createdDate).format("yyyy-MM-dd HH:mm:SS"),
         sprint: "1",
         complexityId: e.complexity,
         functionality: {
@@ -209,25 +171,26 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       };
 
       if (update === false) {
-        // onCreateTask(task);
-
         postTasks.mutate(submit);
         createOrUpdateForm.resetForm();
         console.log("submit", submit);
       }
-      //else {
-      //   if (task) {
-      //     const updatedTask = {
-      //       ...task,
-      //       ...submit,
-      //     };
-      //     onUpdateTask(updatedTask);
-      //     console.log("update", updatedTask);
-      //   }
+
+      // if (update === true && onUpdateTask) {
+      //   const updatedTask = {
+      //     ...task,
+      //     ...submit,
+      //   };
+
+      //   onUpdateTask(updatedTask);
+      //   console.log("update", updatedTask);
       // }
+
       onClose();
     },
   });
+
+  console.log("test", task);
 
   return (
     <>
@@ -256,8 +219,12 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   LocalizationKey.tasks.createTask.placeholder.taskTitle,
                 )}
                 fullWidth
-                // onChange={(e) => setTask({ ...task, name: e.target.value })}
-                // value={task.name}
+                onChange={(e) => {
+                  console.log("name", e.target.value);
+                  setTask({ ...task, name: e.target.value });
+                  console.log(task);
+                }}
+                value={task.name}
               />
             </Grid>
 
@@ -271,10 +238,12 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 fullWidth
                 multiline
                 rows={4}
-                // onChange={(e) =>
-                //   setTask({ ...task, description: e.target.value })
-                // }
-                // value={task.description}
+                onChange={(e) => {
+                  console.log("desc", e.target.value);
+                  setTask({ ...task, description: e.target.value });
+                  console.log(task);
+                }}
+                value={task.description}
               />
             </Grid>
 
@@ -289,9 +258,8 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                     LocalizationKey.tasks.createTask.placeholder.functionality,
                   )}
                   fullWidth
-                  // onChange={handleChangeFunctionality}
-                  // value={task.functionality.id}
                   options={functionalityOptions}
+                  // value={task.functionality.id}
                 />
               </Grid>
 
@@ -313,11 +281,11 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                     LocalizationKey.tasks.createTask.placeholder.complexity,
                   )}
                   fullWidth
-                  // onChange={handleChangeComplexity}
-                  // value={task.complexity.id}
                   options={
                     !_.isEmpty(complexities) ? complexities : complexityOptions
-                  } // should be updated when api is integrated
+                  }
+                  // value={task.complexity.id}
+                  // onChange={handleChangeComplexity}
                 />
               </Grid>
             </Grid>
@@ -333,19 +301,14 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 )}
                 multiple={true}
                 fullWidth
-                // onChange={handleChangeTags}
-                // value={selectedTags}
                 options={tagsOptions}
+                // value={task.tags}
               />
             </Grid>
           </Grid>
 
           <Stack direction="row" justifyContent="flex-end" marginTop={"10px"}>
-            <CustomButton
-              type="submit"
-              colorVariant="primary"
-              // onClick={handleCreateOrUpdateTask}
-            >
+            <CustomButton type="submit" colorVariant="primary">
               {update
                 ? t(LocalizationKey.tasks.updateTask.btnLabel.update)
                 : t(LocalizationKey.tasks.createTask.btnLabel.create)}

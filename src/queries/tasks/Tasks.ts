@@ -1,4 +1,10 @@
-import type { AllTasksResponse, CreateTask, QueryResponse } from "~/api/tasks";
+import type {
+  AllTasksResponse,
+  CreateTask,
+  DeleteId,
+  QueryResponse,
+  TaskResponse,
+} from "~/api/tasks";
 import { AxiosError } from "axios";
 
 import {
@@ -17,7 +23,7 @@ import {
 
 export const useTasks = (
   id: string,
-  status: string
+  status: string,
 ): UseQueryResult<QueryResponse<AllTasksResponse[]>, AxiosError> => {
   return useQuery(`getTasks-${status}`, () => getTasks(id, status));
 };
@@ -28,13 +34,13 @@ export const usePostTasks = (): UseMutationResult<
   CreateTask
 > => {
   return useMutation<QueryResponse<CreateTask>, AxiosError, CreateTask>(
-    postTask
+    postTask,
   );
 };
 
 export const useUpdateTask = (
   id: string,
-  updatedData: AllTasksResponse
+  updatedData: AllTasksResponse,
 ): UseMutationResult<
   QueryResponse<AllTasksResponse[]>,
   AxiosError,
@@ -47,16 +53,13 @@ export const useUpdateTask = (
   >(() => putUpdateTask(id, updatedData));
 };
 
-export const useDeleteTask = (
-  id: string
-): UseMutationResult<
-  QueryResponse<AllTasksResponse>,
+export const useDeleteTask = (): UseMutationResult<
+  TaskResponse,
   AxiosError,
-  AllTasksResponse
+  DeleteId
 > => {
-  return useMutation<
-    QueryResponse<AllTasksResponse>,
-    AxiosError,
-    AllTasksResponse
-  >(() => deleteTask(id));
+  return useMutation<TaskResponse, AxiosError, DeleteId>(
+    "deleteTask",
+    (params) => deleteTask(params.id),
+  );
 };
