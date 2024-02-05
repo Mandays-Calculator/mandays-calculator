@@ -70,6 +70,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     refetchOnMount: false,
   });
 
+  const complexities = useCommonOption("complexity");
   const careerSteps = useCommonOption("career_step");
   const odcList = useCommonOption("odc");
 
@@ -185,7 +186,15 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     {
       label: t(mandaysCalculator.legend.title),
       icon: renderIconOrImage(isGeneratingPDF),
-      content: <Legend mode={mode} />,
+      content: (
+        <Legend
+          mode={mode}
+          apiCommonOptions={{
+            complexities: complexities,
+            careerSteps: careerSteps,
+          }}
+        />
+      ),
     },
     {
       label: t(mandaysCalculator.tasksTitle),
