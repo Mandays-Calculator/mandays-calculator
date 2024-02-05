@@ -145,7 +145,8 @@
       "started": "Get started and ",
       "created": "create a task",
       "fetch": "Unable to fetch data."
-    }
+    },
+    "noTask": "A default picture showing that there are no tasks displayed."
   },
   "user": {
     "management": {
