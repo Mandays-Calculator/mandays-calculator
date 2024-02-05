@@ -1,12 +1,33 @@
 import type { TFunction } from "i18next";
 import type { Column } from "react-table";
+import { Status } from "~/api/common";
+
+interface TeamLead {
+  id: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  email: string;
+  employeeId: string;
+  active: boolean;
+  fullName: string;
+}
+
+interface Team {
+  projectId: string;
+  name: string;
+  id: string;
+  teamLead: TeamLead;
+  active: boolean;
+  lastUpdatedDate: string;
+}
 
 export interface SprintListDataType {
   id: string;
-  sprintName: string;
-  team: string;
-  startedDate: string;
-  status: string;
+  name: string;
+  team: Team;
+  startDate: string;
+  status: Status;
 }
 
 export interface SummaryListDataType {

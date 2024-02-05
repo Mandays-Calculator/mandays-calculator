@@ -35,7 +35,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   message = "",
   open,
   onClose,
-  maxWidth,
+  maxWidth = "lg",
   closeLabel,
 }): ReactElement => {
   return (

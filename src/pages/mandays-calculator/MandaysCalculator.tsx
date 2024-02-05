@@ -1,20 +1,54 @@
 import type { ReactElement } from "react";
-
+import type { TFunction } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Typography, Grid } from "@mui/material";
 
-import { SvgIcon, PageContainer, Table } from "~/components";
+import { SvgIcon, PageContainer, Table, PageLoader, Alert } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
-import { mandaysCalculatorData } from "./utils/tableData";
 import { SprintListColumns } from "./utils/columns";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
+import { useGetEstimations } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+import { useUserAuth } from "~/hooks/user";
+
+interface AlertRendererProps {
+  isErrorLoadingEstimations: boolean;
+  t: TFunction;
+}
+
+const AlertRenderer = ({
+  isErrorLoadingEstimations,
+  t,
+}: AlertRendererProps): ReactElement => {
+  const { common } = LocalizationKey;
+  return (
+    <>
+      {isErrorLoadingEstimations && (
+        <Alert
+          type="error"
+          message={t(common.errorMessage.genericError)}
+          open={isErrorLoadingEstimations}
+        />
+      )}
+    </>
+  );
+};
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
+  const user = useUserAuth();
+
+  const {
+    data: estimationData,
+    isLoading: isLoadingEstimations,
+    isError: isErrorLoadingEstimations,
+  } = useGetEstimations({
+    projectId: "69e85049-bbf2-11ee-a0aa-00090faa0001",
+    userId: user.state.user?.id || "",
+  });
 
   const [deleteModalOpen, setDeleteModalOpen] = useState<{
     open: boolean;
@@ -66,12 +100,17 @@ const MandaysCalculator = (): ReactElement => {
     });
   };
 
+  if (isLoadingEstimations) {
+    return <PageLoader labelOnLoad="loading estimations ..." />;
+  }
   return (
     <>
       <PageContainer>
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
           <Grid item>
-            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
+            <Typography
+              sx={{ fontSize: "1.1rem", mb: "25px", fontWeight: "700" }}
+            >
               {t(mandaysCalculator.sprintListLabel)}
             </Typography>
           </Grid>
@@ -90,12 +129,14 @@ const MandaysCalculator = (): ReactElement => {
             onViewSprintDetails: handleRowClick,
             onEditSprintDetails: handleEditSprint,
           })}
-          data={mandaysCalculatorData}
+          loading={isLoadingEstimations}
+          data={estimationData ? estimationData.data : []}
         />
       </PageContainer>
       <ConfirmModal
         onConfirm={deleteSelectedSprint} // apply delete integration
         open={deleteModalOpen.open}
+        maxWidth="lg"
         message={t(mandaysCalculator.modalConfirmDeleteEstimation)}
         onClose={() =>
           setDeleteModalOpen({
@@ -104,6 +145,10 @@ const MandaysCalculator = (): ReactElement => {
           })
         }
         selectedRow={null}
+      />
+      <AlertRenderer
+        isErrorLoadingEstimations={isErrorLoadingEstimations}
+        t={t}
       />
     </>
   );
