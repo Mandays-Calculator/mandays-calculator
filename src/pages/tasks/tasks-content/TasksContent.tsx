@@ -313,7 +313,7 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderNoTask = () => {
-    if (tasks.length === 0) {
+    if (tasks?.length === 0) {
       return (
         <NoDataContainer>
           <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
