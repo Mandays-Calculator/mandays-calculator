@@ -346,7 +346,7 @@ const TasksContent = (): ReactElement => {
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
                 name='teamFilter'
-                placeholder='Team Name'
+                placeholder={t(LocalizationKey.tasks.teamFilter)}
                 options={teamOptions}
                 onChange={handleTeamFilter}
                 value={selectedTeam}
