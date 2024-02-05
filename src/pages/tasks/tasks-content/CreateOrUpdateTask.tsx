@@ -159,7 +159,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       const submit = {
         name: e.name,
         description: e.description,
-        createdDate: moment(e.createdDate).format("yyyy-MM-dd HH:mm:SS"),
+        createdDate: moment().format("yyyy-MM-dd HH:mm:SS"),
         sprint: "1",
         complexityId: e.complexity,
         functionality: {
@@ -219,12 +219,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   LocalizationKey.tasks.createTask.placeholder.taskTitle,
                 )}
                 fullWidth
-                onChange={(e) => {
-                  console.log("name", e.target.value);
-                  setTask({ ...task, name: e.target.value });
-                  console.log(task);
-                }}
-                value={task.name}
               />
             </Grid>
 
@@ -238,12 +232,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 fullWidth
                 multiline
                 rows={4}
-                onChange={(e) => {
-                  console.log("desc", e.target.value);
-                  setTask({ ...task, description: e.target.value });
-                  console.log(task);
-                }}
-                value={task.description}
               />
             </Grid>
 
