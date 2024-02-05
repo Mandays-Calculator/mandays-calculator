@@ -155,7 +155,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   const createOrUpdateForm = useFormik({
     initialValues: update !== false ? initialTaskState : initialTaskState,
     onSubmit: (e: AllTasksResponse): void => {
-      console.log("e", e);
       const submit = {
         name: e.name,
         description: e.description,
@@ -163,8 +162,8 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
         sprint: "1",
         complexityId: e.complexity,
         functionality: {
-          id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
-          name: "Test add new task Nov30_004",
+          id: "63db8e2f-8916-11ee-bba8-08920407c29b",
+          name: "Test add new task Nov16_009",
           teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
         },
         tags: e.tags,
@@ -173,7 +172,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       if (update === false) {
         postTasks.mutate(submit);
         createOrUpdateForm.resetForm();
-        console.log("submit", submit);
       }
 
       // if (update === true && onUpdateTask) {
@@ -189,8 +187,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       onClose();
     },
   });
-
-  console.log("test", task);
 
   return (
     <>
