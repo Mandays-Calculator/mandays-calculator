@@ -128,6 +128,7 @@ const LocalizationKey = {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
+    sprintListLoader: "mandaysCalculator.sprintList.loader",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
     modalConfirmDeleteEstimation:
       "mandaysCalculator.modalLabels.confirmDeleteEstimation",
@@ -155,11 +156,20 @@ const LocalizationKey = {
     summaryTitle: "mandaysCalculator.summary.title",
     summarySubtitle: "mandaysCalculator.summary.subtitle",
     resourcesTitle: "mandaysCalculator.resourceList.title",
+    resourceList: {
+      errorMessage: {
+        duplicateODC:
+          "mandaysCalculator.resourceList.errorMessage.duplicateODC",
+      },
+    },
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
       resourceCount:
         "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
+      addResourceLabel:
+        "mandaysCalculator.resourceList.table.addResourceButton",
+      noResourceLabel: "mandaysCalculator.resourceList.table.noResourceLabel",
     },
     summaryForm: {
       name: "mandaysCalculator.summary.form.name",

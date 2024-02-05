@@ -40,7 +40,7 @@ export const checkUserAuthentication = (): {
 } => {
   const mcUser = getItemStorage(SESSION_STORAGE_ITEMS.mcUser, "session");
   const storedToken = getUserToken();
-  console.log(storedToken, "stored token");
+
   if (
     Object.keys(mcUser).length > 0 &&
     storedToken &&

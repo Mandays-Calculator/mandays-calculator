@@ -1,3 +1,5 @@
+import { CommonOption } from "~/queries/common/options";
+
 export type EstimationDetailsMode = "edit" | "add" | "view";
 
 export interface EstimationDetailsProps {
@@ -12,15 +14,19 @@ export type ShareFormValues = {
   expiredIn: string;
   timeType: string;
 };
+
 interface Resource {
-  odc: string;
-  resourceCount: string;
-  annualLeaves: string;
+  [key: string]: {
+    odcId: string;
+    numberOfResources: number;
+    annualLeaves: number;
+  }[];
 }
+
 interface SummaryForm {
   estimationName: string;
   teamId: string;
-  utilizationRate: number;
+  utilizationRate: number | string;
   startDate: string;
   endDate: string;
 }
@@ -46,11 +52,16 @@ export type TaskType = {
 
 export interface MandaysForm {
   summary: SummaryForm;
-  resource: Resource[];
+  resource: Resource;
   legend: LegendColumn[];
   tasks: TaskType[];
 }
 export interface ReviewSummaryType extends MandaysForm {
   sprintName: string;
   mode: EstimationDetailsMode;
+}
+
+export interface ApiCommonOptions {
+  careerSteps?: CommonOption;
+  odc?: CommonOption;
 }

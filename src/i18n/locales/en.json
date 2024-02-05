@@ -228,6 +228,7 @@
       "copyLink": "Copy to clipboard"
     },
     "sprintList": {
+      "loader": "Loading estimations ...",
       "label": "Mandays Estimations",
       "addEstimation": "Add Estimation",
       "table": {
@@ -264,7 +265,12 @@
           "odc": "ODC",
           "resourceCount": "RESOURCE COUNT",
           "annualLeaves": "ANNUAL LEAVES"
-        }
+        },
+        "noResourceLabel": "No Resources.",
+        "addResourceButton": "No Resources. Click add ODC to add"
+      },
+      "errorMessage": {
+        "duplicateODC": "Make sure there are no duplicate ODCs in the selected entries."
       }
     },
     "tasks": {
