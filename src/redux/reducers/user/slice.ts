@@ -43,6 +43,7 @@ export const userSlice = createSlice({
         const { user, permissions, projects } = action.payload;
         state.loading = false;
         state.user = user;
+        state.projects = projects;
         state.permissions = permissions;
         state.tokenExpiry = action.payload.token.expiresInMs;
         state.isAuthenticated = true;

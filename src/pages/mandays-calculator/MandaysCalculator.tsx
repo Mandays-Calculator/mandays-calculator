@@ -9,8 +9,12 @@ import { SvgIcon, PageContainer, Table, PageLoader, Alert } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 
-import { useGetEstimations } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+import { useTimeout } from "~/hooks/timeout";
 import { useUserAuth } from "~/hooks/user";
+import { useRequestHandler } from "~/hooks/request-handler";
+
+import { useDeleteEstimation } from "~/mutations/mandays-est-tool";
+import { useGetEstimations } from "~/queries/mandays-est-tool/MandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
 
 import { SprintListColumns } from "./utils/columns";
@@ -18,12 +22,14 @@ import { StyledSprintLabel } from "./styles";
 
 interface AlertRendererProps {
   isErrorLoadingEstimations: boolean;
+  successMessage: string;
   t: TFunction;
 }
 
 const AlertRenderer = ({
   isErrorLoadingEstimations,
   t,
+  successMessage,
 }: AlertRendererProps): ReactElement => {
   const { common } = LocalizationKey;
   return (
@@ -35,6 +41,13 @@ const AlertRenderer = ({
           open={isErrorLoadingEstimations}
         />
       )}
+      {successMessage && (
+        <Alert
+          type="success"
+          message={successMessage}
+          open={successMessage !== ""}
+        />
+      )}
     </>
   );
 };
@@ -43,66 +56,74 @@ const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [triggerTimeout] = useTimeout();
 
   const user = useUserAuth();
-
+  const deleteSprintMutation = useDeleteEstimation();
   // get estimations based on project
   const {
     data: estimationData,
     isLoading: isLoadingEstimations,
     isError: isErrorLoadingEstimations,
+    refetch: refetchEstimations,
   } = useGetEstimations({
     projectId: user.state.selectedProject?.value || "",
     userId: user.state.user?.id || "",
   });
 
+  const [deleteStatus, callDeleteSprintAPI] = useRequestHandler(
+    deleteSprintMutation.mutate,
+    () => {
+      // success callback
+      setSuccessMessage("Estimation deleted successfully.");
+      refetchEstimations();
+      triggerTimeout(() => setSuccessMessage(""));
+    },
+  );
+
+  const [successMessage, setSuccessMessage] = useState<string>("");
   const [deleteModalOpen, setDeleteModalOpen] = useState<{
     open: boolean;
-    sprintId: string | null;
+    estimationId: string | null;
   }>({
     open: false,
-    sprintId: null,
+    estimationId: null,
   });
 
-  const handleRowClick = (sprintId: string): void => {
-    navigate(`${sprintId}`, {
-      state: {
-        mode: "view",
-      },
-    });
+  const handleNavigate = (mode: string, estimationId: string): void => {
+    if (mode === "add") {
+      navigate("./add-sprint", {
+        state: {
+          mode: mode,
+        },
+      });
+    } else {
+      navigate(`${estimationId}`, {
+        state: {
+          mode: mode,
+        },
+      });
+    }
   };
 
-  const handleDeleteSprint = (sprintId: string): void => {
+  const handleDeleteSprint = (estimationId: string): void => {
     setDeleteModalOpen({
       open: true,
-      sprintId: sprintId,
-    });
-  };
-
-  const handleEditSprint = (sprintId: string): void => {
-    navigate(`./${sprintId}`, {
-      state: {
-        mode: "edit",
-      },
+      estimationId: estimationId,
     });
   };
 
   const deleteSelectedSprint = (): void => {
+    if (deleteModalOpen.estimationId) {
+      callDeleteSprintAPI(deleteModalOpen.estimationId);
+    }
     setDeleteModalOpen({
       open: false,
-      sprintId: null,
+      estimationId: null,
     });
   };
 
-  const handleAddSprint = (): void => {
-    navigate("./add-sprint", {
-      state: {
-        mode: "add",
-      },
-    });
-  };
-
-  if (isLoadingEstimations) {
+  if (isLoadingEstimations || deleteStatus.loading) {
     return <PageLoader labelOnLoad={t(mandaysCalculator.sprintListLoader)} />;
   }
   return (
@@ -115,7 +136,7 @@ const MandaysCalculator = (): ReactElement => {
             </StyledSprintLabel>
           </Grid>
           <Grid>
-            <CustomButton onClick={handleAddSprint}>
+            <CustomButton onClick={() => handleNavigate("add", "")}>
               <SvgIcon name="add_v2" $size={2} sx={{ mr: 1 }} />
               {t(mandaysCalculator.addEstimationBtn)}
             </CustomButton>
@@ -126,28 +147,33 @@ const MandaysCalculator = (): ReactElement => {
           columns={SprintListColumns({
             t,
             onDeleteSprintDetails: handleDeleteSprint,
-            onViewSprintDetails: handleRowClick,
-            onEditSprintDetails: handleEditSprint,
+            onViewSprintDetails: (estimationId: string) =>
+              handleNavigate("view", estimationId),
+            onEditSprintDetails: (estimationId: string) =>
+              handleNavigate("edit", estimationId),
           })}
           loading={isLoadingEstimations}
           data={estimationData ? estimationData.data : []}
         />
       </PageContainer>
       <ConfirmModal
-        onConfirm={deleteSelectedSprint} // apply delete integration
+        onConfirm={deleteSelectedSprint}
         open={deleteModalOpen.open}
         maxWidth="lg"
         message={t(mandaysCalculator.modalConfirmDeleteEstimation)}
         onClose={() =>
           setDeleteModalOpen({
             open: false,
-            sprintId: null,
+            estimationId: null,
           })
         }
         selectedRow={null}
       />
       <AlertRenderer
-        isErrorLoadingEstimations={isErrorLoadingEstimations}
+        isErrorLoadingEstimations={
+          isErrorLoadingEstimations || deleteStatus.error.message !== ""
+        }
+        successMessage={successMessage}
         t={t}
       />
     </>
