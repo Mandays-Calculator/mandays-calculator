@@ -9,6 +9,8 @@ import {
   Draggable,
   Droppable,
 } from "react-beautiful-dnd";
+import SimpleBarReact from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 
 import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
@@ -433,11 +435,14 @@ const TasksContent = (): ReactElement => {
 
                         <Divider />
 
-                        {filteredData.map((task, index) => (
-                          <Stack key={`${status}_${task.name}_${index}`}>
-                            {renderTaskDetailsCards(task, index)}
-                          </Stack>
-                        ))}
+                        <SimpleBarReact style={{ maxHeight: "600px" }}>
+                          {filteredData.map((task, index) => (
+                            <div key={`${status}_${task.name}_${index}`}>
+                              {renderTaskDetailsCards(task, index)}
+                            </div>
+                          ))}
+                        </SimpleBarReact>
+
                         {provided.placeholder}
                       </StatusContainer>
                     )}
