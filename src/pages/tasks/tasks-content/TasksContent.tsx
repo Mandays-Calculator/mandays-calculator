@@ -23,7 +23,7 @@ import {
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
-import { useTasks } from "~/queries/tasks/Tasks";
+import { useTasks, useDeleteTask } from "~/queries/tasks/Tasks";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
@@ -82,6 +82,8 @@ const TasksContent = (): ReactElement => {
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+
+  const deleteMutation = useDeleteTask();
 
   useEffect(() => {
     if (tasksData && tasksData.hasOwnProperty("errorCode")) {
@@ -172,7 +174,6 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleCloseDeleteModalState = () => {
-    setSelectedTaskForDelete(null);
     setDeleteModalOpen(false);
   };
 
@@ -205,14 +206,25 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleDeleteTask = () => {
-    if (selectedTaskForDelete) {
+    if (selectedTaskForDelete?.taskID) {
       const { taskID } = selectedTaskForDelete;
-      const updatedTasks = tasks.filter(task => task.taskID !== taskID);
-      setTasks(updatedTasks);
+
+      deleteMutation.mutate(
+        { id: taskID },
+        {
+          onSuccess: () => {
+            const updatedTasks = tasks.filter(task => task.taskID !== taskID);
+            setTasks(updatedTasks);
+            setSelectedTaskForDelete(null);
+          },
+          onError: error => {
+            console.log(error);
+          },
+        },
+      );
     }
 
-    setSelectedTaskForDelete(null);
-    setDeleteModalOpen(false);
+    handleCloseDeleteModalState();
   };
 
   // RENDER
@@ -235,34 +247,38 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderTaskDetailsCards = (task: AllTasksResponse, index: number) => {
-    if (task.status === Status.Backlog || task.status === Status.OnHold) {
-      return (
-        <Draggable key={task.taskID} draggableId={task.taskID} index={index}>
-          {provided => (
-            <Stack
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-            >
-              <TaskDetailsCard
-                data={task}
-                handleViewDetails={handleViewDetailsModalState}
-                handleEdit={handleUpdateModalState}
-                onDelete={() => handleDeleteModalState(task)}
-              />
-            </Stack>
-          )}
-        </Draggable>
-      );
+    if (task?.taskID) {
+      if (task.status === Status.Backlog || task.status === Status.OnHold) {
+        return (
+          <Draggable key={task.taskID} draggableId={task?.taskID} index={index}>
+            {provided => (
+              <Stack
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <TaskDetailsCard
+                  data={task}
+                  handleViewDetails={handleViewDetailsModalState}
+                  handleEdit={handleUpdateModalState}
+                  onDelete={() => handleDeleteModalState(task)}
+                />
+              </Stack>
+            )}
+          </Draggable>
+        );
+      } else {
+        return (
+          <TaskDetailsCard
+            data={task}
+            handleViewDetails={handleViewDetailsModalState}
+            handleEdit={handleUpdateModalState}
+            onDelete={() => handleDeleteModalState(task)}
+          />
+        );
+      }
     } else {
-      return (
-        <TaskDetailsCard
-          data={task}
-          handleViewDetails={handleViewDetailsModalState}
-          handleEdit={handleUpdateModalState}
-          onDelete={() => handleDeleteModalState(task)}
-        />
-      );
+      return null;
     }
   };
 

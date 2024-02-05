@@ -1,3 +1,5 @@
+import { GenericErrorResponse } from "../types";
+
 export interface QueryResponse<T> {
   status: number;
   data: T;
@@ -11,6 +13,7 @@ export interface Comment {
 export interface Functionality {
   id: string;
   name: string;
+  teamId?: string;
 }
 
 export interface Complexity {
@@ -24,24 +27,34 @@ export interface Complexity {
 }
 
 export interface AllTasksResponse {
-  taskID: string;
+  taskID?: string | null;
+  id?: string;
   name: string;
   description: string;
   createdDate: string;
-  completionDate: string;
+  completionDate?: string;
   sprint: string;
   complexity: Complexity;
-  status: string;
-  type: string;
+  status?: string;
+  type?: string;
   tags: SelectObject[];
   functionality: Functionality;
-  comments: Comment[];
+  comments?: Comment[];
 }
 
 export interface CreateTask {
   name: string;
   description: string;
-  functionality: string;
+  functionality: Functionality;
   tags: SelectObject[];
-  complexity: string;
+  complexityId: Complexity;
+}
+
+export interface TaskResponse extends GenericErrorResponse {
+  status: number;
+  data: boolean;
+}
+
+export interface DeleteId {
+  id: string;
 }

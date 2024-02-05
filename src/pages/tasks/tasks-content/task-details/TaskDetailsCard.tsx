@@ -18,6 +18,7 @@ import {
   StyledPaper,
   TaskTags,
 } from "../style";
+import { Status } from "../utils";
 
 interface TaskDetailsCardProps {
   data: AllTasksResponse;
@@ -32,7 +33,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
 
   return (
     <StyledPaper
-      status={data?.status}
+      status={data?.status ?? Status.Backlog}
       elevation={2}
       onClick={() => handleViewDetails(data)}
     >
@@ -86,7 +87,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           ))}
         </Grid>
 
-        <TaskActionContainer status={data?.status}>
+        <TaskActionContainer status={data?.status ?? Status.Backlog}>
           <EditOutlinedIcon
             color='action'
             onClick={e => {
