@@ -95,10 +95,12 @@ export const userSlice = createSlice({
           onSuccess?.(action.payload);
           removeStateStorage("session");
           removeCookie(cookieAuthKey);
+          window.location.reload();
         } else if (action.type.endsWith("rejected")) {
           onFailure?.(action.error);
           removeStateStorage("session");
           removeCookie(cookieAuthKey);
+          window.location.reload();
         }
       },
     );

@@ -5,24 +5,19 @@ import type { ShareFormValues } from "../../types";
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { Grid, Typography, Button } from "@mui/material";
+import { Grid, Typography, Stack } from "@mui/material";
 
 import { Form, Modal, ErrorMessage } from "~/components";
 import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
-import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
 import LocalizationKey from "~/i18n/key";
 
 import GeneratedLink from "./generated-link";
-
-import { 
-  timeTypeOptions,
-  expiryOptions,
-  hrsNo,
-} from "./utils";
+import { timeTypeOptions, expiryOptions, hrsNo } from "./utils";
+import { StyledBackButton, StyledGenerateButton } from "./styles";
 
 type ShareModalProps = {
   isShare: boolean;
@@ -37,10 +32,13 @@ const ShareModal = ({
   t,
   handleSubmit,
 }: ShareModalProps): ReactElement => {
-  const { common, mandaysCalculator: { modal } } = LocalizationKey;
+  const {
+    common,
+    mandaysCalculator: { modal },
+  } = LocalizationKey;
   const [isLinkGeneratedSuccess, setIsLinkGeneratedSuccess] =
     useState<boolean>(false);
-    
+
   const shareForm = useFormik<ShareFormValues>({
     initialValues: {
       shareBy: "",
@@ -61,7 +59,7 @@ const ShareModal = ({
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values: ShareFormValues) => {
-      console.log('total hours', hrsNo(values))
+      console.log("total hours", hrsNo(values));
       handleSubmit(values);
       setIsLinkGeneratedSuccess(true);
     },
@@ -70,13 +68,16 @@ const ShareModal = ({
   const handleClick = (): void => {
     setIsShare(false);
     shareForm.resetForm();
-  }
+  };
 
-  useEffect(() => setIsLinkGeneratedSuccess(false), [shareForm?.values?.shareBy])
+  useEffect(
+    () => setIsLinkGeneratedSuccess(false),
+    [shareForm?.values?.shareBy],
+  );
 
   const renderExpirationSelection = (): ReactElement => {
     return (
-      <Grid container sx={{ p: 1, mt: 3 }} spacing={2}>
+      <Grid container>
         <Grid item xs={6}>
           <ControlledTextField
             name="expiredIn"
@@ -97,58 +98,72 @@ const ShareModal = ({
   return (
     <Modal
       title={
-        <Typography variant="h5" sx={{ p: 3 }} fontWeight="bold">
-          {t(modal.shareTitle)}
-          <Typography variant="body1" sx={{ mt: 1 }}>
-            {t(modal.shareSubtitle)}: Registration team
+        <Stack width={isLinkGeneratedSuccess ? "485px" : "343px"}>
+          <Typography
+            variant="h5"
+            textAlign={"center"}
+            px={4}
+            pt={1}
+            fontWeight="bold"
+          >
+            {t(modal.shareTitle)}
+            <Typography variant="body1" color={"#2C8ED1"}>
+              {t(modal.shareSubtitle)}: Registration team
+            </Typography>
           </Typography>
-        </Typography>
+        </Stack>
       }
       open={isShare}
-      maxWidth="xs"
+      maxWidth="md"
       onClose={handleClick}
     >
-      <Form instance={shareForm}>
-        <Typography variant="subtitle1" sx={{ mb: 1 }}>
-          {t(modal.accessExpiry)}
-        </Typography>
-        <ControlledSelect
-          name="shareBy"
-          helperText={getFieldError(shareForm.errors, "shareBy")}
-          options={expiryOptions}
-        />
-        {shareForm.values.shareBy === "custom" &&
-          !isLinkGeneratedSuccess &&
-          renderExpirationSelection()}
-        {isLinkGeneratedSuccess && 
-          <GeneratedLink 
-            link={`${window.location.origin}/mandays-estimation-details?isShared=true`}
-            setIsShare={setIsShare} 
-            t={t}
+      <Stack mx={3}>
+        <Form instance={shareForm}>
+          <Typography variant="subtitle1" mb={1}>
+            {t(modal.accessExpiry)}
+          </Typography>
+          <ControlledSelect
+            name="shareBy"
+            helperText={getFieldError(shareForm.errors, "shareBy")}
+            options={expiryOptions}
           />
-        }
-        <Grid container mt={1}>
-          <ErrorMessage error={getFieldError(shareForm.errors, "ShareBy")} />
-        </Grid>
-        {!isLinkGeneratedSuccess && (
-          <Grid container justifyContent="space-between" sx={{ mt: 1 }}>
-            <Grid item xs={6} sx={{ p: 1 }}>
-              <Button
-                fullWidth
-                onClick={handleClick}
-                variant="outlined"
-              >
-                {t(common.backBtn)}
-              </Button>
-            </Grid>
-            <Grid item xs={6} sx={{ p: 1 }}>
-              <CustomButton fullWidth type="submit">
-                {t(modal.generate)}
-              </CustomButton>
-            </Grid>
+          {shareForm.values.shareBy === "custom" &&
+            !isLinkGeneratedSuccess &&
+            renderExpirationSelection()}
+          {isLinkGeneratedSuccess && (
+            <GeneratedLink
+              link={`${window.location.origin}/mandays-estimation-details?isShared=true`}
+              setIsShare={setIsShare}
+              t={t}
+            />
+          )}
+          <Grid container mt={1}>
+            <ErrorMessage error={getFieldError(shareForm.errors, "ShareBy")} />
           </Grid>
-        )}
-      </Form>
+          {!isLinkGeneratedSuccess && (
+            <Grid container my={2} px={5}>
+              <Grid item xs={4} pl={2}>
+                <StyledBackButton
+                  variant="text"
+                  color="inherit"
+                  onClick={handleClick}
+                >
+                  {t(common.backBtn)}
+                </StyledBackButton>
+              </Grid>
+              <Grid item xs={8} pl={3}>
+                <StyledGenerateButton
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                >
+                  {t(modal.generate)}
+                </StyledGenerateButton>
+              </Grid>
+            </Grid>
+          )}
+        </Form>
+      </Stack>
     </Modal>
   );
 };

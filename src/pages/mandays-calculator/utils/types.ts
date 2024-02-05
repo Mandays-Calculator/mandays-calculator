@@ -1,12 +1,36 @@
+import { FormikContextType } from "formik";
 import type { TFunction } from "i18next";
 import type { Column } from "react-table";
+import { Status } from "~/api/common";
+import { CommonOption } from "~/queries/common/options";
+import { MandaysForm } from "../estimation-details";
+
+interface TeamLead {
+  id: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  email: string;
+  employeeId: string;
+  active: boolean;
+  fullName: string;
+}
+
+interface Team {
+  projectId: string;
+  name: string;
+  id: string;
+  teamLead: TeamLead;
+  active: boolean;
+  lastUpdatedDate: string;
+}
 
 export interface SprintListDataType {
   id: string;
-  sprintName: string;
-  team: string;
-  startedDate: string;
-  status: string;
+  name: string;
+  team: Team;
+  startDate: string;
+  status: Status;
 }
 
 export interface SummaryListDataType {
@@ -27,9 +51,10 @@ export interface TasksListDataType {
 }
 
 export interface ResourcesListDataType {
-  odc: string;
-  resourceCount: string;
-  annualLeaves: string;
+  odcId: string;
+  numberOfResources: number;
+  annualLeaves: number;
+  actions?: any;
 }
 
 export type SprintListColumnsType = Column<SprintListDataType> & {
@@ -81,6 +106,11 @@ export type LegendColumn = {
 export type ResourcesColumnsProps = {
   t: TFunction<"translation", undefined>;
   isInput?: boolean;
+  title: string;
+  handleDeleteResources: (index: number) => void;
+  odc: CommonOption | undefined;
+  selectedODC: string[];
+  form: FormikContextType<MandaysForm>;
 };
 
 export interface EstimationColumn {

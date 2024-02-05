@@ -1,4 +1,5 @@
 import type { Column } from "react-table";
+import type { ReactElement } from "react";
 import type {
   TasksColumnsProps,
   TasksListColumnsType,
@@ -18,11 +19,17 @@ import type {
 
 import { CellProps } from "react-table";
 import { IconButton } from "@mui/material";
-import { ControlledNumberInput } from "~/components/form/controlled";
+import {
+  ControlledNumberInput,
+  ControlledSelect,
+} from "~/components/form/controlled";
 import { SvgIcon, Table } from "~/components";
 
+import renderStatus from "~/utils/helpers/renderStatusHelper";
 import LocalizationKey from "~/i18n/key";
-import { ReactElement } from "react";
+import { getFieldError } from "~/components/form/utils";
+import { FormErrors } from "~/components/form/types";
+import { ErrorMessage } from "~/components";
 
 const {
   mandaysCalculator: {
@@ -43,20 +50,26 @@ export const SprintListColumns = ({
   return [
     {
       Header: t(sprintListTableColumns.sprintName),
-      accessor: "sprintName",
+      accessor: "name",
     },
     {
       Header: t(sprintListTableColumns.team),
       accessor: "team",
+      Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
+        return original.team?.name;
+      },
     },
     {
       Header: t(sprintListTableColumns.startedDate),
-      accessor: "startedDate",
+      accessor: "startDate",
     },
     {
       Header: t(sprintListTableColumns.status),
       accessor: "status",
       disableSortBy: true,
+      Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
+        return renderStatus(original.status);
+      },
     },
     {
       Header: "",
@@ -64,25 +77,13 @@ export const SprintListColumns = ({
       Cell: ({ row }: CellProps<SprintListDataType>) => (
         <>
           <IconButton onClick={() => onViewSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="history"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="history" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onEditSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="edit"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="edit" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onDeleteSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="delete"
-              $size={2}
-              color="error"
-            />
+            <SvgIcon name="delete" $size={2} color="error" />
           </IconButton>
         </>
       ),
@@ -90,7 +91,9 @@ export const SprintListColumns = ({
   ];
 };
 
-export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumnsType[] => {
+export const SummaryListColumns = ({
+  t,
+}: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
       Header: t(summaryTableColumns.functionality),
@@ -107,7 +110,9 @@ export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumns
   ];
 };
 
-export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType[] => {
+export const TasksListColumns = ({
+  t,
+}: TasksColumnsProps): TasksListColumnsType[] => {
   return [
     {
       Header: t(tasksTableColumns.tasks),
@@ -144,7 +149,10 @@ export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType
   ];
 };
 
-export const LegendListColumns = ({ t, isInput }: LegendColumnProps): Column<LegendColumn>[] => {
+export const LegendListColumns = ({
+  t,
+  isInput,
+}: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
@@ -215,36 +223,88 @@ export const LegendListColumns = ({ t, isInput }: LegendColumnProps): Column<Leg
 
 export const ResourcesListColumns = ({
   t,
-  isInput,
+  isInput = false,
+  title,
+  handleDeleteResources,
+  odc,
+  form,
 }: ResourcesColumnsProps): ResourcesListColumnsType[] => {
   return [
     {
       Header: t(resourceListTableColumns.odc),
-      accessor: "odc",
+      accessor: "odcId",
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resource.${title}.${row.index}.odcId`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+
+        return (
+          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+            <ControlledSelect
+              name={fieldName}
+              options={odc}
+              error={!!fieldError}
+            />
+            <ErrorMessage type="field" error={fieldError} />
+          </div>
+        );
+      },
     },
     {
       Header: t(resourceListTableColumns.resourceCount),
-      accessor: "resourceCount",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`resource.${index}.resourceCount`} />
-          </>
-        ) : (
-          <> {row.original.resourceCount} </>
-        ),
+      width: 250,
+      accessor: "numberOfResources",
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resource.${title}.${row.index}.numberOfResources`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+        return (
+          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+            {isInput ? (
+              <>
+                <ControlledNumberInput name={fieldName} />
+                <ErrorMessage type="field" error={fieldError} />
+              </>
+            ) : (
+              <> {row.original.numberOfResources} </>
+            )}
+          </div>
+        );
+      },
     },
     {
       Header: t(resourceListTableColumns.annualLeaves),
       accessor: "annualLeaves",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`resource.${index}.annualLeaves`} />
-          </>
-        ) : (
-          <> {row.original.annualLeaves} </>
-        ),
+      width: 250,
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resource.${title}.${row.index}.annualLeaves`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+        return (
+          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+            {isInput ? (
+              <>
+                <ControlledNumberInput name={fieldName} />
+                <ErrorMessage type="field" error={fieldError} />
+              </>
+            ) : (
+              <> {row.original.annualLeaves} </>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      Header: "",
+      accessor: "actions",
+      width: 400,
+      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) => (
+        <div style={{ textAlign: "right" }}>
+          <IconButton
+            onClick={() => handleDeleteResources(index)}
+            aria-label={`delete-${row.index}`}
+          >
+            <SvgIcon name="delete" $size={2} color="error" />
+          </IconButton>
+        </div>
+      ),
     },
   ];
 };
@@ -253,56 +313,33 @@ const EstimationListSubColum: Column<EstimationSubColumn>[] = [
   {
     Header: "IO3",
     accessor: "iO3",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io3"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io3" />,
   },
   {
     Header: "IO4",
     accessor: "iO4",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io4"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io4" />,
   },
   {
     Header: "IO5",
     accessor: "iO5",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io5"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io5" />,
   },
   {
     Header: "IO6",
     accessor: "iO6",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io6"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io6" />,
   },
   {
     Header: "IO7",
     accessor: "iO7",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io7"
-      />
-    ),
+    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io7" />,
   },
 ];
 
-export const EstimationListColumns = ({ t }: EstimationColumnProps): Column<EstimationColumn>[] => [
+export const EstimationListColumns = ({
+  t,
+}: EstimationColumnProps): Column<EstimationColumn>[] => [
   {
     Header: t(estimationColumns.taskName),
     accessor: "taskName",

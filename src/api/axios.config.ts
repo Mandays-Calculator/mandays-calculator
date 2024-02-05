@@ -15,6 +15,8 @@ import { setCookie } from "~/utils/cookieUtils";
 
 let isRefreshing = false;
 let isLoggingOut = false;
+let refreshPromise: Promise<void> | null = null;
+const requestQueue: (() => Promise<any>)[] = [];
 
 const isTokenExpired = (accessToken: Token): boolean => {
   if (
@@ -40,8 +42,6 @@ const isTokenExpired = (accessToken: Token): boolean => {
  * @param isAuthenticated - Indicates if the user is currently authenticated.
  */
 const init = async (): Promise<void> => {
-  let isUnauthorizedUser = false;
-
   const { items, events } = CHANNELS;
   const channel = new BroadcastChannel(items.sessionState);
 
@@ -49,31 +49,37 @@ const init = async (): Promise<void> => {
     async (config: InternalAxiosRequestConfig) => {
       const user = getUser();
       const token = getUserToken();
-      if (user) {
+
+      if (config.url?.includes("/refresh-token")) {
+        config.headers.Authorization = "No Auth";
+      } else if (user) {
         if (isTokenExpired(token)) {
           if (!isRefreshing) {
             isRefreshing = true;
-            try {
-              const { token: newToken } = await refreshTokenApi({
-                refreshToken: token.refreshToken,
+
+            refreshPromise = refreshTokenApi({
+              refreshToken: token.refreshToken,
+            })
+              .then(({ token: newToken }) => {
+                console.log("Token refreshed"); // for debugging purposes
+                setCookie(cookieAuthKey, newToken);
+                config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+                replayRequests();
+              })
+              .catch((refreshError) => {
+                channel.postMessage(events.unauthorized);
+                throw refreshError;
+              })
+              .finally(() => {
+                isRefreshing = false;
+                isLoggingOut = false;
+                refreshPromise = null;
               });
-              console.log("Token refreshed"); // for debugging purposes
-              setCookie(cookieAuthKey, newToken);
-              config.headers.Authorization = `Bearer ${newToken.accessToken}`;
-            } catch (refreshError) {
-              throw refreshError;
-            } finally {
-              isRefreshing = false;
-              isLoggingOut = false;
-            }
+
+            await refreshPromise;
           }
         } else {
           config.headers.Authorization = `Bearer ${token.accessToken}`;
-          if (isUnauthorizedUser) {
-            const cancel = axios.CancelToken.source();
-            config.cancelToken = cancel.token;
-            cancel.cancel("Cancelled due to previously received 401 error");
-          }
         }
       }
 
@@ -89,13 +95,17 @@ const init = async (): Promise<void> => {
 
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
-    (error: AxiosError) => {
+    async (error: AxiosError) => {
       if (!isLoggingOut) {
         const user = getUser();
         if (user) {
-          if (error.response && error.response.status == 401) {
-            isUnauthorizedUser = true;
-            channel.postMessage(events.unauthorized);
+          if (error.response && error.response.status === 401) {
+            enqueueRequest(() => axios.request((error as any).config));
+            try {
+              await refreshPromise;
+            } catch (refreshError) {
+              channel.postMessage(events.unauthorized);
+            }
           }
           if (
             error &&
@@ -108,11 +118,25 @@ const init = async (): Promise<void> => {
       }
 
       const axiosError = error as AxiosError<GenericErrorResponse>;
+
       return axiosError && axiosError.response
         ? Promise.reject(axiosError.response.data)
         : Promise.reject(error);
     },
   );
+
+  async function replayRequests() {
+    while (requestQueue.length > 0) {
+      const request = requestQueue.shift();
+      if (request) {
+        await request();
+      }
+    }
+  }
+
+  function enqueueRequest(request: () => Promise<any>) {
+    requestQueue.push(request);
+  }
 };
 
 export default init;

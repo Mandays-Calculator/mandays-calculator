@@ -11,11 +11,13 @@ interface SampleDataType {
   endDate: string;
   utilization: number;
 }
+
 const sampleData1 = {
   startDate: "09/11/2023",
   endDate: "09/11/2023",
   utilization: 90,
 };
+
 const Details = (): ReactElement => {
   return (
     <Grid container spacing={2}>

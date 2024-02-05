@@ -228,7 +228,8 @@
       "copyLink": "Copy to clipboard"
     },
     "sprintList": {
-      "label": "List of Sprints",
+      "loader": "Loading estimations ...",
+      "label": "Mandays Estimations",
       "addEstimation": "Add Estimation",
       "table": {
         "columns": {
@@ -264,7 +265,12 @@
           "odc": "ODC",
           "resourceCount": "RESOURCE COUNT",
           "annualLeaves": "ANNUAL LEAVES"
-        }
+        },
+        "noResourceLabel": "No Resources.",
+        "addResourceButton": "No Resources. Click add ODC to add"
+      },
+      "errorMessage": {
+        "duplicateODC": "Make sure there are no duplicate ODCs in the selected entries."
       }
     },
     "tasks": {
@@ -370,7 +376,8 @@
       "started": "Get started and ",
       "created": "create a task",
       "fetch": "Unable to fetch data."
-    }
+    },
+    "noTask": "A default picture showing that there are no tasks displayed."
   },
   "history": {
     "button": {

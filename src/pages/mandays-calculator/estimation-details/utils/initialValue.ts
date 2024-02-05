@@ -1,14 +1,14 @@
-import { MandaysForm } from ".";
+import { MandaysForm } from "..";
 
 export const initMandays: MandaysForm = {
   summary: {
-    name: "",
-    team: "",
-    utilRate: "",
+    estimationName: "",
+    teamId: "",
+    utilizationRate: "",
     startDate: "",
     endDate: "",
   },
-  resource: [],
+  resource: {},
   legend: [
     {
       complexity: "Simple",

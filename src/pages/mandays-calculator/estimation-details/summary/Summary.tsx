@@ -9,14 +9,9 @@ interface SummaryProps {
 
 const Summary = (props: SummaryProps): ReactElement => {
   const { mode } = props;
-
   const inputView = ["add", "edit"];
   const isInput = inputView.includes(mode);
-  return isInput ? (
-    <AddEstimation />
-  ) : (
-    <SummaryContent />
-  );
+  return isInput ? <AddEstimation /> : <SummaryContent />;
 };
 
 export default Summary;

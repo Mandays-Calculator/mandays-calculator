@@ -48,7 +48,7 @@ export const Select = (props: SelectProps): ReactElement => {
 
   const handleDelete = (valueToDelete: SelectObject) => {
     const newSelectedValues = selectedValues.filter(
-      (value) => value !== valueToDelete
+      (value) => value !== valueToDelete,
     );
 
     setSelectedValues(newSelectedValues);
@@ -59,7 +59,7 @@ export const Select = (props: SelectProps): ReactElement => {
             value: newSelectedValues,
           },
         } as SelectChangeEvent<unknown>,
-        null
+        null,
       );
     }
   };
@@ -110,7 +110,7 @@ export const Select = (props: SelectProps): ReactElement => {
 
   const renderOptions = (
     valueOption: string,
-    labelOption: string
+    labelOption: string,
   ): ReactNode => {
     const filteredProps = {
       key: valueOption,

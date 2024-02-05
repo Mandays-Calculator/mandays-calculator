@@ -16,10 +16,7 @@ const SummaryContent = (): ReactElement => {
 
   const summaryColumn = useMemo(() => SummaryListColumns({ t }), []);
   return (
-    <Stack
-      direction="column"
-      gap={2}
-    >
+    <Stack direction="column" gap={2}>
       <Details />
       <Table
         columns={summaryColumn}
@@ -27,36 +24,18 @@ const SummaryContent = (): ReactElement => {
         name="mandays-calculator"
       />
       <Grid container>
-        <Grid
-          item
-          xs={8.1}
-        ></Grid>
-        <Grid
-          item
-          xs={3.9}
-        >
-          <Stack
-            direction={"row"}
-            gap={2}
-          >
+        <Grid item xs={8.1}></Grid>
+        <Grid item xs={3.9}>
+          <Stack direction={"row"} gap={2}>
             <Typography>Grand Total:</Typography>
             <Typography fontWeight={"bold"}>50</Typography>
           </Stack>
         </Grid>
       </Grid>
       <Grid container>
-        <Grid
-          item
-          xs={8.1}
-        ></Grid>
-        <Grid
-          item
-          xs={3.9}
-        >
-          <Stack
-            direction={"row"}
-            gap={2}
-          >
+        <Grid item xs={8.1}></Grid>
+        <Grid item xs={3.9}>
+          <Stack direction={"row"} gap={2}>
             <Typography># of days to do OT</Typography>
             <Typography fontWeight={"bold"}>50</Typography>
           </Stack>

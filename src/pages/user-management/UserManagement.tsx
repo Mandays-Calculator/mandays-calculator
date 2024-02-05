@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import Stack from "@mui/system/Stack";
 import { useFormik } from "formik";
 import moment from "moment";
+import { isUndefined } from "lodash";
 
 import Form from "~/components/form/Form";
 import Title from "~/components/title/Title";
@@ -15,11 +16,13 @@ import { PageContainer } from "~/components/page-container";
 import { useUserList } from "~/queries/user-management/UserManagement";
 import { useRequestHandler } from "~/hooks/request-handler";
 import { useAddUser } from "~/mutations/user-management";
+import { Alert } from "~/components";
+
+import LocalizationKey from "~/i18n/key";
 
 import { UserManagementFormValues, UserManagementSchema } from "./utils";
 import UserList from "./user-list";
 import Header from "./header";
-
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
   const AddUser = useAddUser();
@@ -63,8 +66,10 @@ const UserManagement = (): ReactElement => {
     UserManagementForm.resetForm();
   }, [successAddUser]);
 
-  const { data } = useUserList();
-  const [filteredData, setFilteredData] = useState<UserListData[]>([]);
+  const { data, refetch: refetchUser, isError } = useUserList();
+  const [filteredData, setFilteredData] = useState<UserListData[] | undefined>(
+    undefined,
+  );
   useEffect(() => {
     if (!data) {
       setFilteredData([]);
@@ -125,16 +130,26 @@ const UserManagement = (): ReactElement => {
               isSuccess={successAddUser}
               isError={errorAddUser}
               resetIsSuccess={() => {
-                setErrorAddUser(false), setSuccessAddUser(false);
+                setErrorAddUser(false);
+                setSuccessAddUser(false);
               }}
             />
             <UserList
               isSuccessAddUser={successAddUser}
-              userListData={filteredData}
+              userListData={filteredData || []}
+              isLoading={isUndefined(filteredData)}
+              refetch={refetchUser}
             />
           </Stack>
         </Form>
       </PageContainer>
+      {isError && (
+        <Alert
+          type="error"
+          message={t(LocalizationKey.common.errorMessage.genericError)}
+          open={isError}
+        />
+      )}
     </>
   );
 };

@@ -1,20 +1,60 @@
 import type { ReactElement } from "react";
-
+import type { TFunction } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Typography, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
-import { SvgIcon, PageContainer, Table } from "~/components";
+import { SvgIcon, PageContainer, Table, PageLoader, Alert } from "~/components";
 import { CustomButton } from "~/components/form/button";
+import { ConfirmModal } from "~/components/modal/confirm-modal";
+
+import { useGetEstimations } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+import { useUserAuth } from "~/hooks/user";
 import LocalizationKey from "~/i18n/key";
 
-import { mandaysCalculatorData } from "./utils/tableData";
 import { SprintListColumns } from "./utils/columns";
-import { ConfirmModal } from "~/components/modal/confirm-modal";
+import { StyledSprintLabel } from "./styles";
+
+interface AlertRendererProps {
+  isErrorLoadingEstimations: boolean;
+  t: TFunction;
+}
+
+const AlertRenderer = ({
+  isErrorLoadingEstimations,
+  t,
+}: AlertRendererProps): ReactElement => {
+  const { common } = LocalizationKey;
+  return (
+    <>
+      {isErrorLoadingEstimations && (
+        <Alert
+          type="error"
+          message={t(common.errorMessage.genericError)}
+          open={isErrorLoadingEstimations}
+        />
+      )}
+    </>
+  );
+};
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const user = useUserAuth();
+
+  // get estimations based on project
+  const {
+    data: estimationData,
+    isLoading: isLoadingEstimations,
+    isError: isErrorLoadingEstimations,
+  } = useGetEstimations({
+    projectId: user.state.selectedProject?.value || "",
+    userId: user.state.user?.id || "",
+  });
 
   const [deleteModalOpen, setDeleteModalOpen] = useState<{
     open: boolean;
@@ -23,9 +63,6 @@ const MandaysCalculator = (): ReactElement => {
     open: false,
     sprintId: null,
   });
-
-  const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const handleRowClick = (sprintId: string): void => {
     navigate(`${sprintId}`, {
@@ -51,7 +88,6 @@ const MandaysCalculator = (): ReactElement => {
   };
 
   const deleteSelectedSprint = (): void => {
-    console.log("deleting sprint");
     setDeleteModalOpen({
       open: false,
       sprintId: null,
@@ -66,14 +102,17 @@ const MandaysCalculator = (): ReactElement => {
     });
   };
 
+  if (isLoadingEstimations) {
+    return <PageLoader labelOnLoad={t(mandaysCalculator.sprintListLoader)} />;
+  }
   return (
     <>
       <PageContainer>
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
           <Grid item>
-            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
+            <StyledSprintLabel>
               {t(mandaysCalculator.sprintListLabel)}
-            </Typography>
+            </StyledSprintLabel>
           </Grid>
           <Grid>
             <CustomButton onClick={handleAddSprint}>
@@ -90,12 +129,14 @@ const MandaysCalculator = (): ReactElement => {
             onViewSprintDetails: handleRowClick,
             onEditSprintDetails: handleEditSprint,
           })}
-          data={mandaysCalculatorData}
+          loading={isLoadingEstimations}
+          data={estimationData ? estimationData.data : []}
         />
       </PageContainer>
       <ConfirmModal
         onConfirm={deleteSelectedSprint} // apply delete integration
         open={deleteModalOpen.open}
+        maxWidth="lg"
         message={t(mandaysCalculator.modalConfirmDeleteEstimation)}
         onClose={() =>
           setDeleteModalOpen({
@@ -104,6 +145,10 @@ const MandaysCalculator = (): ReactElement => {
           })
         }
         selectedRow={null}
+      />
+      <AlertRenderer
+        isErrorLoadingEstimations={isErrorLoadingEstimations}
+        t={t}
       />
     </>
   );

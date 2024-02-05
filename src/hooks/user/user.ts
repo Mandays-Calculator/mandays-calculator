@@ -24,7 +24,11 @@ export const useUserAuth = (): {
 
   const handleLogout = (): void => {
     dispatch(
-      logout({ callbacks: { onFailure: () => {} } }) as unknown as AnyAction,
+      logout({
+        callbacks: {
+          onSuccess: () => console.log("Logged out."),
+        },
+      }) as unknown as AnyAction,
     );
   };
   return { state: userState, logout: handleLogout };
@@ -36,6 +40,7 @@ export const checkUserAuthentication = (): {
 } => {
   const mcUser = getItemStorage(SESSION_STORAGE_ITEMS.mcUser, "session");
   const storedToken = getUserToken();
+
   if (
     Object.keys(mcUser).length > 0 &&
     storedToken &&

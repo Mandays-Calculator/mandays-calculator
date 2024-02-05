@@ -12,7 +12,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import "virtual:svg-icons-register";
 import "./app.css";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const rootElement = document.getElementById("root");
 const renderApp = () => {
@@ -26,7 +33,7 @@ const renderApp = () => {
           </BrowserRouter>
         </QueryClientProvider>
       </ThemeProvider>
-    </Provider>
+    </Provider>,
   );
 };
 

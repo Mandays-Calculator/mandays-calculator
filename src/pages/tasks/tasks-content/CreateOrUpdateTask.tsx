@@ -5,7 +5,7 @@ import type { ReactElement } from "react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Box, Grid, IconButton, Stack, Typography } from "@mui/material";
+import { Grid, IconButton, Stack } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalizationKey from "~/i18n/key";
@@ -15,7 +15,7 @@ import _ from "lodash";
 import { Select, TextField, Modal } from "~/components";
 import { CustomButton } from "~/components/form/button";
 
-import { createOrUpdatetaskStyles, taskStyles } from "./style";
+import { CreateOrUpdateLabel, ComplexityLabel, CloseContainer } from "./style";
 import ComplexityDetails from "./complexity-details";
 
 interface CreateOrUpdateTaskProps {
@@ -114,6 +114,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     } else if (onCreateTask) {
       onCreateTask(task);
       setTask(initialTaskState);
+      resetCreation();
     }
 
     onClose();
@@ -184,6 +185,16 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     }
   };
 
+  const resetCreation = () => {
+    setTask(initialTaskState);
+    setSelectedTags([]);
+  };
+
+  const onCloseCreateOrUpdateTask = () => {
+    resetCreation();
+    onClose();
+  };
+
   return (
     <>
       <Modal
@@ -194,13 +205,13 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             : t(LocalizationKey.tasks.createTask.modalTitle)
         }
         maxWidth='sm'
-        onClose={onClose}
+        onClose={onCloseCreateOrUpdateTask}
       >
-        <Box sx={taskStyles.modal.close}>
-          <IconButton onClick={onClose}>
+        <CloseContainer>
+          <IconButton onClick={() => onCloseCreateOrUpdateTask()}>
             <CloseIcon />
           </IconButton>
-        </Box>
+        </CloseContainer>
 
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -233,9 +244,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
           <Grid item container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <Typography sx={createOrUpdatetaskStyles.label}>
+              <CreateOrUpdateLabel>
                 {t(LocalizationKey.tasks.createTask.label.functionality)}
-              </Typography>
+              </CreateOrUpdateLabel>
               <Select
                 name='functionality'
                 placeholder={t(
@@ -249,17 +260,16 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <Stack
+              <ComplexityLabel
                 direction='row'
                 spacing={1}
                 onClick={() => handleOpenComplexity()}
-                sx={createOrUpdatetaskStyles.complexity}
               >
-                <Typography sx={createOrUpdatetaskStyles.label}>
+                <CreateOrUpdateLabel>
                   {t(LocalizationKey.tasks.createTask.label.complexity)}
-                </Typography>
+                </CreateOrUpdateLabel>
                 <InfoOutlinedIcon fontSize='small' />
-              </Stack>
+              </ComplexityLabel>
               <Select
                 name='complexity'
                 placeholder={t(
@@ -276,9 +286,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography sx={createOrUpdatetaskStyles.label}>
+            <CreateOrUpdateLabel>
               {t(LocalizationKey.tasks.createTask.label.tags)}
-            </Typography>
+            </CreateOrUpdateLabel>
             <Select
               name='tags'
               placeholder={t(LocalizationKey.tasks.createTask.placeholder.tags)}
@@ -295,7 +305,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
           <CustomButton
             type='button'
             colorVariant='primary'
-            onClick={handleCreateOrUpdateTask}
+            onClick={() => handleCreateOrUpdateTask()}
           >
             {update
               ? t(LocalizationKey.tasks.updateTask.btnLabel.update)
