@@ -282,6 +282,7 @@ const LocalizationKey = {
       created: "tasks.errorMessage.created",
       fetch: "tasks.errorMessage.fetch",
     },
+    noTask: "tasks.noTask",
   },
   history: {
     detailsBtn: "history.button.details",

@@ -10,7 +10,6 @@ import {
   Droppable,
 } from "react-beautiful-dnd";
 
-import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import LocalizationKey from "~/i18n/key";
 import {
@@ -20,7 +19,6 @@ import {
   Divider,
   Stack,
   Grid,
-  Link,
 } from "@mui/material";
 
 import { Select, PageContainer, ErrorMessage } from "~/components";
@@ -29,58 +27,22 @@ import { useTasks } from "~/queries/tasks/Tasks";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
-import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import ViewTaskDetails from "./ViewTaskDetails";
+import { Status } from "./utils";
 
 import NoTask from "~/assets/img/empty_tasks.png";
 
-import { taskContentStyles } from "./style";
-
-const StatusContainer = styled("div")(
-  ({ backgroundColor }: { backgroundColor: string }) => ({
-    backgroundColor:
-      backgroundColor === Status.Backlog
-        ? StatusContainerColor.Backlog
-        : backgroundColor === Status.NotYetStarted
-        ? StatusContainerColor.NotYetStarted
-        : backgroundColor === Status.InProgress
-        ? StatusContainerColor.InProgress
-        : backgroundColor === Status.OnHold
-        ? StatusContainerColor.OnHold
-        : StatusContainerColor.Completed,
-    borderRadius: 10,
-    width: "100%",
-    padding: 15,
-  }),
-);
-
-const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
-  fontSize: 18,
-  margin: color !== Status.Backlog ? "0.3em 0" : 0,
-  fontWeight: "bold",
-  color:
-    color === Status.NotYetStarted
-      ? StatusTitleColor.NotYetStarted
-      : color === Status.InProgress
-      ? StatusTitleColor.InProgress
-      : color === Status.OnHold
-      ? StatusTitleColor.OnHold
-      : color === Status.Completed
-      ? StatusTitleColor.Completed
-      : StatusTitleColor.Backlog,
-}));
-
-const StyledCreateTaskIconButton = styled(Grid)(
-  ({ display }: { display: string }) => ({
-    fontSize: 25,
-    fontWeight: "bolder",
-    float: "right",
-    cursor: "pointer",
-    display: display !== Status.Backlog ? "none" : "",
-  }),
-);
+import {
+  StyledCreateTaskIconButton,
+  StyledStatusTitle,
+  TaskGridContainer,
+  NoDataContainer,
+  StatusContainer,
+  StyledDivider,
+  StyledLink,
+} from "./style";
 
 const teamOptions = [
   { value: "MC", label: "MC" },
@@ -100,7 +62,10 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-  const { data: tasksData } = useTasks(user?.id ?? "");
+  const { data: tasksData } = useTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+    "1",
+  );
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -260,7 +225,7 @@ const TasksContent = (): ReactElement => {
 
         <Grid item xs={1}>
           <StyledCreateTaskIconButton display={status}>
-            <IconButton onClick={handleCreateModalState}>
+            <IconButton onClick={() => handleCreateModalState()}>
               <AddIcon />
             </IconButton>
           </StyledCreateTaskIconButton>
@@ -334,24 +299,23 @@ const TasksContent = (): ReactElement => {
   const renderNoTask = () => {
     if (tasks.length === 0) {
       return (
-        <Stack sx={taskContentStyles.noData}>
-          <img src={NoTask} alt='error' />
+        <NoDataContainer>
+          <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
           <Typography variant='h5' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
           <Typography variant='body2' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.started)}
-            <Link
+            <StyledLink
               underline='hover'
               variant='body2'
               fontWeight='bold'
-              onClick={handleCreateModalState}
-              sx={taskContentStyles.link}
+              onClick={() => handleCreateModalState()}
             >
               {t(LocalizationKey.tasks.errorMessage.created)}
-            </Link>
+            </StyledLink>
           </Typography>
-        </Stack>
+        </NoDataContainer>
       );
     }
 
@@ -374,13 +338,12 @@ const TasksContent = (): ReactElement => {
             </Grid>
           </Grid>
 
-          <Divider sx={taskContentStyles.divider} />
+          <StyledDivider />
 
-          <Grid
+          <TaskGridContainer
             container
             spacing={1}
             justifyContent='space-between'
-            sx={taskContentStyles.taskGridContainer}
           >
             {Object.values(Status).map(status => {
               const filteredData = tasks.filter(task => task.status === status);
@@ -415,7 +378,7 @@ const TasksContent = (): ReactElement => {
                 </Grid>
               );
             })}
-          </Grid>
+          </TaskGridContainer>
 
           {renderNoTask()}
         </PageContainer>
