@@ -110,7 +110,7 @@ const AppBarHeader = (): ReactElement => {
                           <Grid item>
                             <ArrowDropDownIcon
                               fontSize="large"
-                              sx={{ color: "#414145" }}
+                              sx={{ color: "#414145", cursor: "pointer" }}
                             />
                           </Grid>
                         </Grid>

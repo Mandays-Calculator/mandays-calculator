@@ -152,72 +152,43 @@ export const TasksListColumns = ({
 export const LegendListColumns = ({
   t,
   isInput,
+  careerSteps,
+  form,
+  complexities,
 }: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
       accessor: "complexity",
+      Cell: ({ cell }: CellProps<LegendColumn>) => {
+        const findComplexity = complexities.find(
+          (cl) => cl.value === cell.value,
+        );
+        return <>{findComplexity?.label}</>;
+      },
     },
-    {
-      Header: t(tasksTableColumns.i03),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
+    ...careerSteps.map((item, careerIndex) => ({
+      Header: item.label,
+      Cell: ({ row }: CellProps<LegendColumn>) => {
+        const complexityId = row.original.complexity;
+        const legendData: {
+          careerStep: string;
+          manHours: number;
+        }[] = form.values.legends[complexityId.toString()] || [];
+        const careerStepData = legendData.find(
+          (data) => data.careerStep === item.label,
+        );
+        const fieldValue = `legends.${complexityId}.[${careerIndex}].manHours`;
+        return isInput ? (
           <>
-            <ControlledNumberInput name={`legend.${index}.i03`} />
+            <ControlledNumberInput name={fieldValue} />
           </>
         ) : (
-          <> {row.original.i03} </>
-        ),
-      accessor: "i03",
-    },
-    {
-      Header: t(tasksTableColumns.i04),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i04`} />
-          </>
-        ) : (
-          <> {row.original.i04} </>
-        ),
-      accessor: "i04",
-    },
-    {
-      Header: t(tasksTableColumns.i05),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i05`} />
-          </>
-        ) : (
-          <> {row.original.i05} </>
-        ),
-      accessor: "i05",
-    },
-    {
-      Header: t(tasksTableColumns.i06),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i06`} />
-          </>
-        ) : (
-          <> {row.original.i06} </>
-        ),
-      accessor: "i06",
-    },
-    {
-      Header: t(tasksTableColumns.i07),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i07`} />
-          </>
-        ) : (
-          <> {row.original.i07} </>
-        ),
-      accessor: "i07",
-    },
+          <> {careerStepData ? careerStepData.manHours : 0} </>
+        );
+      },
+      accessor: item.label,
+    })),
   ];
 };
 
