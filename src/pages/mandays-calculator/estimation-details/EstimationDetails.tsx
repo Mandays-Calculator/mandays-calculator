@@ -1,17 +1,14 @@
 import type { ReactElement, ReactNode } from "react";
-import type {
-  MandaysForm,
-  TaskType,
-  EstimationDetailsProps,
-  ReviewSummaryType,
-} from ".";
+import type { MandaysForm, EstimationDetailsProps, ReviewSummaryType } from ".";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
+
 import { Grid } from "@mui/material";
+
 import {
   CustomTab,
   Form,
@@ -22,9 +19,7 @@ import {
   Title,
 } from "~/components";
 
-import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
 import { useCommonOption } from "~/queries/common/options";
-
 import LocalizationKey from "~/i18n/key";
 import MandaysEstimationImgIcon from "~/assets/img/mandays_estimation_img_icon.png";
 
@@ -64,26 +59,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const mode = state?.mode || "view";
   const sprintName = "Sprint 1"; // Note: will come from API
 
-  const { data } = useGetTasks({
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
-
   const complexities = useCommonOption("complexity");
   const careerSteps = useCommonOption("career_step");
   const odcList = useCommonOption("odc");
-
-  const tasksData: TaskType[] =
-    data?.data?.map((task) => {
-      return {
-        id: task.id,
-        title: task.name,
-        description: task.description,
-        createdDate: task.createdDate,
-        status: "unselected",
-      };
-    }) || [];
 
   const switchTab = (tabId: number): void => {
     setActiveTab(tabId);
@@ -110,7 +88,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   };
 
   const mandaysForm = useFormik<MandaysForm>({
-    initialValues: { ...initMandays, tasks: tasksData },
+    initialValues: { ...initMandays },
     validationSchema: estimationDetailsSchema(t),
     validateOnChange: true, // true for now to check every validation
     onSubmit: (val) => {

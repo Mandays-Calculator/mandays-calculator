@@ -1,4 +1,5 @@
 import { CareerSteps } from "~/api/common";
+import { TasksResponse } from "~/api/mandays-est-tool";
 import { CommonOption } from "~/queries/common/options";
 
 export type EstimationDetailsMode = "edit" | "add" | "view";
@@ -41,13 +42,9 @@ type LegendColumn = {
 
 export type Status = "selected" | "unselected";
 
-export type TaskType = {
-  id: string;
-  title: string;
-  description: string;
-  createdDate: string;
-  status?: Status;
-};
+export interface TaskType extends TasksResponse {
+  dndStatus: Status;
+}
 
 export interface MandaysForm {
   summary: SummaryForm;

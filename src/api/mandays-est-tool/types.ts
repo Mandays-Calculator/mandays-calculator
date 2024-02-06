@@ -1,4 +1,5 @@
-import { Status, Team } from "~/api/common";
+import type { Status, Team } from "~/api/common";
+import type { Complexity } from "~/api/tasks";
 
 export interface EstimationResponse {
   id: string;
@@ -8,17 +9,23 @@ export interface EstimationResponse {
   endDate: string;
   status: Status;
 }
+
+export interface Tags {
+  id: string;
+  name: string;
+}
 export interface TasksResponse {
   id: string;
   name: string;
   description: string;
   status: string;
   functionality: Functionality;
-  tags: string;
+  tags: Tags[];
   comments: Comments[];
   sprint: string;
   completionDate: string;
   createdDate: string;
+  complexity: Complexity;
 }
 
 interface Functionality {

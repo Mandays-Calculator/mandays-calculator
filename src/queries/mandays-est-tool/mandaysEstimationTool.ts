@@ -14,12 +14,18 @@ interface QueryResponse<T> {
 }
 
 export const useGetTasks = (
+  teamId: string,
+  status: string,
   config?: Omit<
     UseQueryOptions<QueryResponse<TasksResponse[]>, AxiosError>,
     "queryKey"
   >,
 ): UseQueryResult<QueryResponse<TasksResponse[]>, AxiosError> => {
-  return useQuery("getTasks", getTasks, config);
+  return useQuery(
+    "getTasks",
+    () => getTasks({ teamId: teamId, status: status }),
+    config,
+  );
 };
 
 export const useGetEstimations = (params: {

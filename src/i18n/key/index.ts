@@ -181,7 +181,7 @@ const LocalizationKey = {
     tasksTitle: "mandaysCalculator.tasks.title",
     noTaskLabel: "mandaysCalculator.tasks.toTaskLabel",
     noSelectedTaskLabel: "mandaysCalculator.tasks.noSelectedTaskLabel",
-    taskDescriptionLabel: "mandaysCalculator.tasks.taskDescriptionLabel",
+    taskDescriptionLabel: "mandaysCalculator.tasks.descriptionLabel",
     tasksListLabel: "mandaysCalculator.tasks.tasksListLabel",
     tasksTableColumns: {
       tasks: "mandaysCalculator.tasks.table.columns.tasks",

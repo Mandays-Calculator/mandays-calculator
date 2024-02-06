@@ -2,35 +2,62 @@ import type { ChangeEvent, ReactElement } from "react";
 import type { DropResult } from "react-beautiful-dnd";
 import type { MandaysForm, Status, TaskType } from "../..";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
 
 import { getIn, useFormikContext } from "formik";
 
-import { StyledCardContainer, StyledGridItem, StyledNoDataContainer } from ".";
+import {
+  StyledCardContainer,
+  StyledGridItem,
+  StyledNoDataContainer,
+  StyledTitle,
+} from ".";
 
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
 import { SvgIcon, TextField } from "~/components";
 import { dateFormat } from "~/utils/date";
 import LocalizationKey from "~/i18n/key";
 import { usePagination } from "~/hooks/pagination";
+import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+
+import { initializeTasksListData } from "../utils/initializeTasks";
 
 const AddTasks = (): ReactElement => {
   const droppableList: Status[] = ["unselected", "selected"];
+  const taskStatus: string = "1";
+  const { t } = useTranslation();
+  const { mandaysCalculator, common } = LocalizationKey;
+
   const { values, setValues } = useFormikContext<MandaysForm>();
+
   const [notSelected, setNotSelected] = useState<string>("");
   const [selected, setSelected] = useState<string>("");
-  const tasks: TaskType[] = getIn(values, "tasks");
-  const { mandaysCalculator, common } = LocalizationKey;
-  const { t } = useTranslation();
 
-  const handleDragEnd = (result: DropResult) => {
+  const tasksData = useGetTasks(
+    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2", // hard coded for now since getTask is not fully working
+    taskStatus,
+  );
+
+  const tasks: TaskType[] = getIn(values, "tasks");
+
+  useEffect(() => {
+    const toBeTask = initializeTasksListData(
+      tasksData.data as unknown as TaskType[],
+      values.tasks,
+    );
+    if (toBeTask) {
+      setValues({ ...values, tasks: toBeTask });
+    }
+  }, [tasksData.data]);
+
+  const handleDragEnd = (result: DropResult): void => {
     const { destination, draggableId } = result;
     if (!destination) return;
-
     const destinationStatus = destination.droppableId as Status;
     const draggedTask = tasks.find((task) => task.id === draggableId);
     if (draggedTask) {
@@ -38,7 +65,7 @@ const AddTasks = (): ReactElement => {
         if (task.id === draggableId) {
           return {
             ...task,
-            status: destinationStatus,
+            dndStatus: destinationStatus,
           };
         }
         return task;
@@ -50,7 +77,7 @@ const AddTasks = (): ReactElement => {
 
   const handleSearch = (
     e: ChangeEvent<HTMLInputElement>,
-    status: Status
+    status: Status,
   ): void => {
     if (status === "selected") {
       setSelected(e.target.value);
@@ -58,6 +85,7 @@ const AddTasks = (): ReactElement => {
       setNotSelected(e.target.value);
     }
   };
+
   return (
     <Fragment>
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -67,27 +95,21 @@ const AddTasks = (): ReactElement => {
               <Droppable droppableId={droppable}>
                 {(provided) => {
                   const filteredData = tasks.filter(
-                    (filtered) => filtered.status === droppable
+                    (filtered) => filtered.dndStatus === droppable,
                   );
 
                   const { paginatedItems, Pagination } = usePagination({
                     items: filteredData,
-                    itemsPerPage: 2,
+                    itemsPerPage: 5,
                   });
 
                   return (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
-                      <Typography
-                        variant="h5"
-                        color={"primary"}
-                        fontWeight={"bold"}
-                        display={"flex"}
-                        justifyContent={"center"}
-                        marginBottom={"1rem"}
-                      >
-                        {droppable === "selected" ? "Selected" : "Task List"}
-                      </Typography>
-
+                      <StyledTitle variant="h5" color="primary">
+                        {droppable === "selected"
+                          ? "Selected Task"
+                          : "Task List"}
+                      </StyledTitle>
                       <TextField
                         name={`mandays-${droppable}`}
                         value={
@@ -96,9 +118,9 @@ const AddTasks = (): ReactElement => {
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                           handleSearch(e, droppable)
                         }
-                        margin="normal"
+                        endAdornment={<SearchOutlinedIcon />}
+                        sx={{ marginBottom: "1.5rem", background: "#fff" }}
                       />
-
                       {paginatedItems().length !== 0 ? (
                         paginatedItems().map((task, index) => (
                           <Draggable
@@ -115,25 +137,18 @@ const AddTasks = (): ReactElement => {
                                 >
                                   <StyledCardContainer
                                     key={index}
-                                    headerTitle={task.title}
-                                    actionHeader={
-                                      <SvgIcon
-                                        name="edit"
-                                        sx={{
-                                          color: "#7AC0EF",
-                                          cursor: "pointer",
-                                        }}
-                                      />
-                                    }
+                                    headerTitle={task.name}
                                     subHeader={`${t(
-                                      common.createdDateLabel
-                                    )}: ${dateFormat(task.createdDate)}`}
+                                      common.createdDateLabel,
+                                    )}: ${dateFormat(
+                                      task.createdDate,
+                                      "DD/MM/YYYY",
+                                    )}`}
                                   >
                                     <Typography>
                                       {t(
-                                        mandaysCalculator.taskDescriptionLabel
+                                        mandaysCalculator.taskDescriptionLabel,
                                       )}
-                                      :
                                     </Typography>
                                     <Typography>{task.description}</Typography>
                                   </StyledCardContainer>
