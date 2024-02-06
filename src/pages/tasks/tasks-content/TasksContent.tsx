@@ -102,26 +102,45 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-  const { data: backlog, isSuccess: isSuccessBacklog } = useTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-    "1",
-  );
-  const { data: notYetStarted, isSuccess: isSuccessNys } = useTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-    "2",
-  );
-  const { data: inProgress, isSuccess: isSuccessIp } = useTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-    "3",
-  );
-  const { data: onHold, isSuccess: isSuccessOnHold } = useTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-    "4",
-  );
-  const { data: completed, isSuccess: isSuccessCompleted } = useTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-    "5",
-  );
+  // const { data: backlog, isSuccess: isSuccessBacklog } = useTasks(
+  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+  //   "1",
+  // );
+  // const { data: notYetStarted, isSuccess: isSuccessNys } = useTasks(
+  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+  //   "2",
+  // );
+  // const { data: inProgress, isSuccess: isSuccessIp } = useTasks(
+  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+  //   "3",
+  // );
+  // const { data: onHold, isSuccess: isSuccessOnHold } = useTasks(
+  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+  //   "4",
+  // );
+  // const { data: completed, isSuccess: isSuccessCompleted } = useTasks(
+  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+  //   "5",
+  // );
+
+  const statuses = ["1", "2", "3", "4", "5"];
+
+  const statusData = statuses.map((status) => {
+    const { data, isSuccess } = useTasks(
+      "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+      status,
+    );
+
+    return { data, isSuccess };
+  });
+
+  const [
+    { data: backlog, isSuccess: isSuccessBacklog },
+    { data: notYetStarted, isSuccess: isSuccessNys },
+    { data: inProgress, isSuccess: isSuccessIp },
+    { data: onHold, isSuccess: isSuccessOnHold },
+    { data: completed, isSuccess: isSuccessCompleted },
+  ] = statusData;
 
   const deleteMutation = useDeleteTask();
 
@@ -140,22 +159,24 @@ const TasksContent = (): ReactElement => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (
-      isSuccessBacklog &&
-      isSuccessNys &&
-      isSuccessIp &&
-      isSuccessOnHold &&
-      isSuccessCompleted
-    ) {
-      const allData = [
-        ...backlog,
-        ...notYetStarted,
-        ...inProgress,
-        ...onHold,
-        ...completed,
-      ];
-      setTasks(allData);
-    }
+    setTimeout(() => {
+      if (
+        isSuccessBacklog &&
+        isSuccessNys &&
+        isSuccessIp &&
+        isSuccessOnHold &&
+        isSuccessCompleted
+      ) {
+        const allData = [
+          ...backlog,
+          ...notYetStarted,
+          ...inProgress,
+          ...onHold,
+          ...completed,
+        ];
+        setTasks(allData);
+      }
+    }, 1000);
   }, [backlog, notYetStarted, inProgress, onHold, completed]);
 
   // OTHERS
@@ -215,13 +236,11 @@ const TasksContent = (): ReactElement => {
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
-    console.log("viewUpdateData", task);
   };
 
   const handleDeleteModalState = (id: string) => {
     setSelectedTaskForDelete(id);
     setDeleteModalOpen(!deleteModalOpen);
-    console.log("deleted", id);
   };
 
   // CLOSING OF MODALS
@@ -242,17 +261,14 @@ const TasksContent = (): ReactElement => {
   };
 
   // CRUD
-  const handleCreateTask = (newTask: AllTasksResponse | null) => {
+  const handleCreateTask = (newTask: AllTasksResponse) => {
     if (newTask) {
       const newTaskID = generateUniqueTaskID();
-
       const createdTask = {
         ...newTask,
         taskID: newTaskID,
       };
-
       const createdData = [...tasks, createdTask];
-
       setTasks(createdData);
     }
   };
@@ -271,21 +287,27 @@ const TasksContent = (): ReactElement => {
 
   const handleDeleteTask = () => {
     if (selectedTaskForDelete) {
+      const updatedTasks = tasks.filter(
+        (task) => task.taskID !== selectedTaskForDelete,
+      );
+      setTasks(updatedTasks);
+
       deleteMutation.mutate(
         { id: selectedTaskForDelete },
         {
           onSuccess: () => {
-            const updatedTasks = tasks.filter(
-              (task) => task.taskID !== selectedTaskForDelete,
-            );
-            setTasks(updatedTasks);
-            setDeleteModalOpen(false);
+            console.log("Item deleted successfully!");
           },
           onError: (error) => {
             console.log(error);
+
+            setTasks(tasks);
           },
         },
       );
+
+      setDeleteModalOpen(false);
+      setTasks(tasks);
     }
   };
 
