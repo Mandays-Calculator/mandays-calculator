@@ -98,9 +98,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   } = props;
 
   const { t } = useTranslation();
-  const [task, setTask] = useState<AllTasksResponse>(
-    update ? currentTask || initialTaskState : initialTaskState,
-  );
+  const [task, setTask] = useState<AllTasksResponse>(initialTaskState);
 
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
   const postTasks = usePostTasks();
