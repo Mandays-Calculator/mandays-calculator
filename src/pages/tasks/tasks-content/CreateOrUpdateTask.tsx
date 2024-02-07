@@ -44,11 +44,10 @@ const initialTaskState: AllTasksResponse = {
   completionDate: "",
   sprint: "1", // should be empty when api is integrated
   complexity: {
-    // should be empty when api is integrated
     id: "",
     name: "",
-    numberOfHours: "5",
-    numberOfFeatures: "50+",
+    numberOfHours: "",
+    numberOfFeatures: "",
     description: "",
     sample: "",
     active: true,
@@ -99,7 +98,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   } = props;
 
   const { t } = useTranslation();
-  const [task, setTask] = useState<AllTasksResponse>(initialTaskState);
+  const [task, setTask] = useState<AllTasksResponse>(
+    update ? currentTask || initialTaskState : initialTaskState,
+  );
 
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
   const postTasks = usePostTasks();
@@ -107,6 +108,10 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   useEffect(() => {
     setTask(currentTask || initialTaskState);
   }, [currentTask]);
+
+  useEffect(() => {
+    createOrUpdateForm.setValues(task);
+  }, [task]);
 
   const handleOpenComplexity = (): void => {
     setOpenComplexity(!openComplexity);
@@ -125,40 +130,13 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     }
   };
 
-  const updateTaskState: AllTasksResponse = {
-    taskID: currentTask?.taskID, // should be empty when api is integrated
-    name: currentTask?.name,
-    description: currentTask?.description,
-    createdDate: currentTask?.createdDate, // should be empty when api is integrated
-    completionDate: currentTask?.completionDate,
-    sprint: "1", // should be empty when api is integrated
-    complexity: {
-      // should be empty when api is integrated
-      id: currentTask?.complexity.id,
-      name: currentTask?.complexity.name,
-      numberOfHours: "5",
-      numberOfFeatures: "50+",
-      description: currentTask?.complexity.description,
-      sample: currentTask?.complexity.sample,
-      active: true,
-    },
-    status: "Backlog", // should be empty when api is integrated
-    type: currentTask?.type,
-    functionality: {
-      id: currentTask?.functionality?.id,
-      name: currentTask?.functionality?.name,
-    },
-    tags: [],
-    comments: [],
-  };
-
   const createOrUpdateForm = useFormik({
-    initialValues: update === false ? initialTaskState : updateTaskState,
+    initialValues: initialTaskState,
     onSubmit: (e: AllTasksResponse): void => {
       const submit: CreateTask = {
         name: e.name,
         description: e.description,
-        createdDate: moment(e.createdDate).format("yyyy-MM-dd HH:mm:SS"),
+        createdDate: moment().format("yyyy-MM-dd HH:mm:SS"),
         sprint: "1",
         complexityId: e.complexity,
         functionality: {
@@ -172,6 +150,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       if (update === false) {
         postTasks.mutate(submit);
         createOrUpdateForm.resetForm();
+        console.log("submit", submit);
       }
 
       if (update === true && onUpdateTask) {
@@ -215,7 +194,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   LocalizationKey.tasks.createTask.placeholder.taskTitle,
                 )}
                 fullWidth
-                value={currentTask?.name}
               />
             </Grid>
 
@@ -229,7 +207,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 fullWidth
                 multiline
                 rows={4}
-                value={currentTask?.description}
               />
             </Grid>
 
@@ -245,7 +222,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   )}
                   fullWidth
                   options={functionalityOptions}
-                  value={currentTask?.functionality?.id}
                 />
               </Grid>
 
@@ -270,7 +246,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   options={
                     !_.isEmpty(complexities) ? complexities : complexityOptions
                   }
-                  value={currentTask?.complexity.id}
+                  // value={update ? task?.complexity.id : ""}
                 />
               </Grid>
             </Grid>
@@ -287,7 +263,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 multiple={true}
                 fullWidth
                 options={tagsOptions}
-                value={currentTask?.tags}
               />
             </Grid>
           </Grid>

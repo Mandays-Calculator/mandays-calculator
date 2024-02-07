@@ -236,6 +236,7 @@ const TasksContent = (): ReactElement => {
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
+    console.log("getEditValue", task);
   };
 
   const handleDeleteModalState = (id: string) => {
