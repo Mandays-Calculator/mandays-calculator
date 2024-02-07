@@ -24,8 +24,11 @@ import {
 export const useTasks = (
   id: string,
   status: string,
+  pageSize: string,
+  maxItems: string,
+  pageNum: string,
 ): UseQueryResult<QueryResponse<AllTasksResponse[]>, AxiosError> => {
-  return useQuery(`getTasks-${status}`, () => getTasks(id, status));
+  return useQuery(`getTasks-${status}`, () => getTasks(id, status, pageSize, maxItems, pageNum));
 };
 
 export const usePostTasks = (): UseMutationResult<

@@ -63,13 +63,24 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
         <Grid item xs={12}>
           <Typography sx={taskDetailsCardStyles.completionDate}>
             <EventIcon sx={taskDetailsCardStyles.completionDateIcon} />
-            {data?.completionDate}
+            Date Created: {data?.createdDate}
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          style={{ display: data.status !== "Completed" ? "none" : "" }}
+        >
+          <Typography sx={taskDetailsCardStyles.completionDate}>
+            <EventIcon sx={taskDetailsCardStyles.completionDateIcon} />
+            Date Completed: {data?.completionDate}
           </Typography>
         </Grid>
 
         <Grid item xs={12}>
           <Typography>
-            {t(LocalizationKey.tasks.taskDetails.sprint) + data?.sprint}
+            {t(LocalizationKey.tasks.taskDetails.sprint) +
+              (data?.sprint !== undefined ? data.sprint : "1")}
           </Typography>
         </Grid>
 

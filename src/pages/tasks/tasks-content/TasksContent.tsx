@@ -102,26 +102,6 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-  // const { data: backlog, isSuccess: isSuccessBacklog } = useTasks(
-  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-  //   "1",
-  // );
-  // const { data: notYetStarted, isSuccess: isSuccessNys } = useTasks(
-  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-  //   "2",
-  // );
-  // const { data: inProgress, isSuccess: isSuccessIp } = useTasks(
-  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-  //   "3",
-  // );
-  // const { data: onHold, isSuccess: isSuccessOnHold } = useTasks(
-  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-  //   "4",
-  // );
-  // const { data: completed, isSuccess: isSuccessCompleted } = useTasks(
-  //   "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-  //   "5",
-  // );
 
   const statuses = ["1", "2", "3", "4", "5"];
 
@@ -129,6 +109,9 @@ const TasksContent = (): ReactElement => {
     const { data, isSuccess } = useTasks(
       "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
       status,
+      "10",
+      "100",
+      "1",
     );
 
     return { data, isSuccess };
@@ -200,7 +183,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find((task) => task.taskID === draggableId);
+    const draggedTask = tasks.find((task) => task.id === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -209,7 +192,7 @@ const TasksContent = (): ReactElement => {
     ) {
       if (draggedTask) {
         const updatedMockData = tasks.map((task) => {
-          if (task.taskID === draggableId) {
+          if (task.id === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -334,11 +317,7 @@ const TasksContent = (): ReactElement => {
   const renderTaskDetailsCards = (task: AllTasksResponse, index: number) => {
     if (task.status === Status.Backlog || task.status === Status.OnHold) {
       return (
-        <Draggable
-          key={task?.taskID}
-          draggableId={`${index}_${task?.taskID}`}
-          index={index}
-        >
+        <Draggable key={task?.id} draggableId={`${task?.id}`} index={index}>
           {(provided) => (
             <Stack
               ref={provided.innerRef}
@@ -452,9 +431,45 @@ const TasksContent = (): ReactElement => {
             sx={taskContentStyles.taskGridContainer}
           >
             {Object.values(Status).map((status) => {
-              const filteredData = tasks?.filter(
-                (task) => task.status === status,
-              );
+              const filteredData = tasks
+                ?.filter((task) => task.status === status)
+                .map((task) => {
+                  if (
+                    task.createdDate &&
+                    !isNaN(new Date(task.createdDate).getTime())
+                  ) {
+                    const createdDate = new Date(task.createdDate);
+                    const formattedCreatedDate = `${createdDate
+                      .getFullYear()
+                      .toString()
+                      .padStart(4, "0")}-${(createdDate.getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}-${createdDate
+                      .getDate()
+                      .toString()
+                      .padStart(2, "0")}`;
+                    task.createdDate = formattedCreatedDate;
+                  }
+
+                  if (
+                    task.completionDate &&
+                    !isNaN(new Date(task.completionDate).getTime())
+                  ) {
+                    const completionDate = new Date(task.completionDate);
+                    const formattedCompletionDate = `${completionDate
+                      .getFullYear()
+                      .toString()
+                      .padStart(4, "0")}-${(completionDate.getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}-${completionDate
+                      .getDate()
+                      .toString()
+                      .padStart(2, "0")}`;
+                    task.completionDate = formattedCompletionDate;
+                  }
+
+                  return task;
+                });
 
               return (
                 <Grid
@@ -474,9 +489,9 @@ const TasksContent = (): ReactElement => {
 
                         <Divider />
 
-                        <SimpleBarReact style={{ maxHeight: "600px" }}>
+                        <SimpleBarReact style={{ maxHeight: "410px" }}>
                           {filteredData.map((task, index) => (
-                            <div key={`${status}_${task.name}_${index}`}>
+                            <div key={`${status}_${task.id}_${index}`}>
                               {renderTaskDetailsCards(task, index)}
                             </div>
                           ))}
