@@ -36,7 +36,7 @@ interface ViewTaskDetailsProps {
 }
 
 const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
-  const { open, username, task, onSave, onClose } = props;
+  const { open, username, task, onClose } = props;
   const { t } = useTranslation();
 
   const defaultComment = {
@@ -51,14 +51,6 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
   useEffect(() => {
     setNewTask(task);
   }, [task]);
-
-  const handleSaveTask = (): void => {
-    if (currentTask) {
-      onSave(currentTask);
-      setNewComment(defaultComment);
-      onClose();
-    }
-  };
 
   const handleConfirmMarkCompleted: () => void = () => {
     if (currentTask) {
@@ -186,27 +178,17 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
         sx={taskStyles.scrollbar}
       >
         <Box sx={taskStyles.modal.close}>
-          <IconButton onClick={handleSaveTask}>
+          <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
 
         <Grid container sx={viewTaskDetailsStyles.modal.container}>
           <Grid item xs={12}>
-            <TextField
-              name="taskDescription"
-              label={t(LocalizationKey.tasks.viewTaskDetails.label.description)}
-              placeholder={t(
-                LocalizationKey.tasks.viewTaskDetails.placeholder.description,
-              )}
-              fullWidth
-              multiline
-              onChange={(e) =>
-                currentTask &&
-                setNewTask({ ...currentTask, description: e.target.value })
-              }
-              value={currentTask?.description || ""}
-            />
+            <Typography sx={viewTaskDetailsStyles.label}>
+              {t(LocalizationKey.tasks.viewTaskDetails.label.description)}
+            </Typography>
+            <Typography>{currentTask?.description}</Typography>
           </Grid>
 
           <Grid
