@@ -7,7 +7,9 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Grid, Typography } from "@mui/material";
 import LocalizationKey from "~/i18n/key";
+import moment from "moment";
 
+import { Status } from "../utils";
 import {
   StyledTextsmsOutlinedIcon,
   TaskDetailsCardDetails,
@@ -18,7 +20,6 @@ import {
   StyledPaper,
   TaskTags,
 } from "../style";
-import { Status } from "../utils";
 
 interface TaskDetailsCardProps {
   data: AllTasksResponse;
@@ -53,7 +54,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
         <Grid item xs={12}>
           <TaskDetailsCardDetails type='createDate'>
             <StyledEventIcon />
-            {data?.createdDate}
+            {data?.createdDate ? moment(data.createdDate).format("L") : ""}
           </TaskDetailsCardDetails>
         </Grid>
 
@@ -80,8 +81,8 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
 
           {data?.tags.map((tag, index) => (
             <Grid item>
-              <TaskTags status={tag?.value} key={index}>
-                {tag?.value}
+              <TaskTags status={tag?.name} key={index}>
+                {tag?.name}
               </TaskTags>
             </Grid>
           ))}

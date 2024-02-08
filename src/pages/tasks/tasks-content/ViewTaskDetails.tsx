@@ -1,4 +1,5 @@
 import type { AllTasksResponse, Comment } from "~/api/tasks";
+import type { User } from "~/api/user/types.ts";
 import type { ReactElement } from "react";
 
 import { useTranslation } from "react-i18next";
@@ -36,19 +37,20 @@ import { Status } from "./utils";
 
 interface ViewTaskDetailsProps {
   open: boolean;
-  username: string;
+  userDetails: User | null;
   task: AllTasksResponse | null;
   onSave: (updatedTask: AllTasksResponse) => void;
   onClose: () => void;
 }
 
 const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
-  const { open, username, task, onSave, onClose } = props;
+  const { open, userDetails, task, onSave, onClose } = props;
   const { t } = useTranslation();
 
-  const defaultComment = {
-    name: username,
-    comment: "",
+  const defaultComment: Comment = {
+    task: task,
+    user: userDetails,
+    description: "",
   };
 
   const [currentTask, setNewTask] = useState<AllTasksResponse | null>(task);
@@ -83,18 +85,18 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
   };
 
   const handleAddComment = (): void => {
-    if (currentTask && newComment.comment.trim() !== "") {
+    if (currentTask && newComment.description.trim() !== "") {
       const updatedComments = [...(currentTask?.comments || []), newComment];
       setNewTask({ ...currentTask, comments: updatedComments });
       setNewComment(defaultComment);
     }
   };
 
-  const getAvatarAlt = (username: string): string => {
+  const getAvatarAlt = (username: User | null): string => {
     let altText = t(LocalizationKey.tasks.viewTaskDetails.placeholder.avatar);
 
     if (username) {
-      altText += username;
+      altText += `${username?.firstName} ${username?.lastName}`;
     } else {
       altText += t(LocalizationKey.tasks.viewTaskDetails.placeholder.user);
     }
@@ -121,7 +123,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             xs={12}
           >
             <Grid item xs={2} sm={1}>
-              <Avatar alt={getAvatarAlt(username)} />
+              <Avatar alt={getAvatarAlt(userDetails)} />
             </Grid>
 
             <Grid item xs={10} sm={11}>
@@ -146,9 +148,9 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                     </InputAdornment>
                   ),
                 }}
-                value={newComment.comment}
+                value={newComment.description}
                 onChange={e =>
-                  setNewComment({ ...newComment, comment: e.target.value })
+                  setNewComment({ ...newComment, description: e.target.value })
                 }
               />
             </Grid>
@@ -158,13 +160,13 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             {(currentTask?.comments || []).map((comment, index) => (
               <>
                 <Grid item xs={2} sm={1}>
-                  <Avatar alt={getAvatarAlt(comment?.name)} />
+                  <Avatar alt={getAvatarAlt(comment?.user)} />
                 </Grid>
 
                 <Grid item container xs={10} sm={11} alignItems='center'>
                   <ViewCommentContainerBox key={index}>
-                    <ViewTaskDetailsLabel>{comment?.name}</ViewTaskDetailsLabel>
-                    <Typography>{comment?.comment}</Typography>
+                    <ViewTaskDetailsLabel>{`${comment?.user?.firstName} ${comment?.user?.lastName}`}</ViewTaskDetailsLabel>
+                    <Typography>{comment?.description}</Typography>
                   </ViewCommentContainerBox>
                 </Grid>
               </>
@@ -228,7 +230,11 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.createdDate)}
               </ViewTaskDetailsLabel>
-              <Typography>{currentTask?.createdDate}</Typography>
+              <Typography>
+                {currentTask?.createdDate
+                  ? moment(currentTask.createdDate).format("L")
+                  : ""}
+              </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               {currentTask?.status === Status.Completed ? (
@@ -278,8 +284,8 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             </Grid>
             {(currentTask?.tags ?? []).map((tag, index) => (
               <Grid item>
-                <TaskTags status={tag?.value} key={index}>
-                  {tag?.value}
+                <TaskTags status={tag?.name} key={index}>
+                  {tag?.name}
                 </TaskTags>
               </Grid>
             ))}

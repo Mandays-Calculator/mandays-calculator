@@ -1,14 +1,27 @@
-import type { AllTasksResponse, Complexity, Functionality } from "~/api/tasks";
+import type {
+  AllTasksResponse,
+  Complexity,
+  Functionality,
+  CreateTask,
+  Tag,
+} from "~/api/tasks";
 import type { SelectChangeEvent } from "@mui/material";
 import type { ReactElement } from "react";
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Grid, IconButton, Stack } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+
+import { Grid, IconButton, Stack } from "@mui/material";
+import { usePostTasks } from "~/queries/tasks/Tasks";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalizationKey from "~/i18n/key";
+import {
+  ControlledTextField,
+  ControlledSelect,
+} from "~/components/form/controlled";
+import { useFormik } from "formik";
 import moment from "moment";
 import _ from "lodash";
 
@@ -17,6 +30,7 @@ import { CustomButton } from "~/components/form/button";
 
 import { CreateOrUpdateLabel, ComplexityLabel, CloseContainer } from "./style";
 import ComplexityDetails from "./complexity-details";
+import { Status } from "./utils";
 
 interface CreateOrUpdateTaskProps {
   open: boolean;
@@ -31,30 +45,21 @@ interface CreateOrUpdateTaskProps {
 }
 
 const initialTaskState: AllTasksResponse = {
-  taskID: "", // should be empty when api is integrated
   name: "",
   description: "",
-  createdDate: moment().format("L"), // should be empty when api is integrated
   completionDate: "",
-  sprint: "1", // should be empty when api is integrated
-  complexity: {
-    // should be empty when api is integrated
-    id: "",
-    name: "",
-    numberOfHours: "5",
-    numberOfFeatures: "50+",
-    description: "",
-    sample: "",
-    active: true,
-  },
-  status: "Backlog", // should be empty when api is integrated
-  type: "",
   functionality: {
     id: "",
     name: "",
+    team: {
+      id: "",
+    },
   },
   tags: [],
-  comments: [],
+  complexity: {
+    id: "",
+  },
+  sprint: "1",
 };
 
 const functionalityOptions = [
@@ -104,7 +109,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     setTask(currentTask || initialTaskState);
 
     if (update) {
-      setSelectedTags(_.map(currentTask?.tags, "value"));
+      setSelectedTags(_.map(currentTask?.tags, "name"));
     }
   }, [currentTask]);
 
@@ -129,36 +134,28 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     const functionality: Functionality = {
       id: e.target.value as string,
       name: selectedFunctionality?.label as string,
+      team: {
+        id: "",
+      },
     };
     setTask({ ...task, functionality });
   };
 
   const handleChangeComplexity = (e: SelectChangeEvent<unknown>) => {
-    const selectedComplexity = _.find(
-      complexityOptions,
-      _.matchesProperty("value", e.target.value),
-    );
-
     const complexity: Complexity = {
       id: e.target.value as string,
-      name: selectedComplexity?.label as string,
-      active: true,
-      description: selectedComplexity?.label as string,
-      numberOfFeatures: "",
-      numberOfHours: "",
-      sample: selectedComplexity?.label as string,
     };
     setTask({ ...task, complexity });
   };
 
   const handleChangeTags = (e: SelectChangeEvent<unknown>) => {
     const _selectedTags = e.target.value as string[];
-    let tags: SelectObject[] = [];
+    let tags: Tag[] = [];
 
     _selectedTags.map(selectedTag => {
-      const tag: SelectObject = {
-        label: selectedTag,
-        value: selectedTag,
+      const tag: Tag = {
+        id: selectedTag,
+        name: selectedTag,
       };
 
       tags.push(tag);

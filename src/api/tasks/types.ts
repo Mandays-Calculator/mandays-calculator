@@ -1,3 +1,4 @@
+import type { User } from "../user/types";
 import { GenericErrorResponse } from "../types";
 
 export interface QueryResponse<T> {
@@ -5,48 +6,90 @@ export interface QueryResponse<T> {
   data: T;
 }
 
-export interface Comment {
-  name: string;
-  comment: string;
-}
-
 export interface Functionality {
   id: string;
   name: string;
-  teamId?: string;
+  description?: string;
+  team: Team;
+  createdDate?: Date;
+  lastUpdatedDate?: Date;
+}
+
+export interface Team {
+  id: string;
+  name?: string;
+  projectId?: string;
+  isActive?: boolean;
+  createdDate?: Date;
+  lastUpdatedDate?: Date;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  createdDate?: Date;
+  lastUpdatedDate?: Date;
+}
+
+export interface Comment {
+  id?: string;
+  mandaysEstimation?: MandaysEstimation;
+  task: AllTasksResponse | null;
+  user: User | null;
+  description: string;
+  createdDate?: Date;
+  lastUpdatedDate?: Date;
+}
+export interface MandaysEstimation {
+  id: string;
+  name: string;
+  projectId: string;
+  teamId: string;
+  createdBy: string;
+  status: number;
+  startDate: string;
+  endDate: string;
+  estUtilizationRate: number;
+  createdDate: Date;
+  lastUpdatedDate: Date;
 }
 
 export interface Complexity {
-  active: boolean;
-  description: string;
   id: string;
-  name: string;
-  numberOfFeatures: string;
-  numberOfHours: string;
-  sample: string;
+  name?: string;
+  minHours?: string;
+  maxHours?: string;
+  minFeatures?: string;
+  maxFeatures?: string;
+  description?: string;
+  sample?: string;
+  isActive?: boolean;
+  createdDate?: Date;
+  createdBy?: string;
+  lastUpdatedDate?: Date;
 }
 
 export interface AllTasksResponse {
-  taskID?: string | null;
   id?: string;
   name: string;
   description: string;
-  createdDate: string;
-  completionDate?: string;
-  sprint: string;
-  complexity: Complexity;
   status?: string;
-  type?: string;
-  tags: SelectObject[];
   functionality: Functionality;
+  tags: Tag[];
   comments?: Comment[];
+  mandaysEstimation?: MandaysEstimation;
+  complexity: Complexity;
+  completionDate?: string;
+  createdDate?: Date;
+  lastUpdatedDate?: Date;
+  sprint: string;
 }
 
 export interface CreateTask {
   name: string;
   description: string;
   functionality: Functionality;
-  tags: SelectObject[];
+  tags: Tag[];
   complexityId: Complexity;
 }
 
@@ -55,6 +98,6 @@ export interface TaskResponse extends GenericErrorResponse {
   data: boolean;
 }
 
-export interface DeleteId {
+export interface DeleteTaskId {
   id: string;
 }

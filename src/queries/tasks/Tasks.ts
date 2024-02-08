@@ -1,7 +1,7 @@
 import type {
   AllTasksResponse,
   CreateTask,
-  DeleteId,
+  DeleteTaskId,
   QueryResponse,
   TaskResponse,
 } from "~/api/tasks";
@@ -56,9 +56,10 @@ export const useUpdateTask = (
 export const useDeleteTask = (): UseMutationResult<
   TaskResponse,
   AxiosError,
-  DeleteId
+  DeleteTaskId
 > => {
-  return useMutation<TaskResponse, AxiosError, DeleteId>("deleteTask", params =>
-    deleteTask(params.id),
+  return useMutation<TaskResponse, AxiosError, DeleteTaskId>(
+    "deleteTask",
+    params => deleteTask(params.id),
   );
 };

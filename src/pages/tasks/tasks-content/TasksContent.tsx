@@ -66,7 +66,7 @@ const TasksContent = (): ReactElement => {
     "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
     "1",
   );
-  const username = `${user?.firstName} ${user?.lastName}`;
+  const userDetails = user;
   const complexities = useCommonOption("complexity");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -117,7 +117,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find(task => task.taskID === draggableId);
+    const draggedTask = tasks.find(task => task.id === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -125,8 +125,8 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedMockData = tasks.map(task => {
-          if (task.taskID === draggableId) {
+        const updatedTaskData = tasks.map(task => {
+          if (task.id === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -135,7 +135,7 @@ const TasksContent = (): ReactElement => {
           return task;
         });
 
-        setTasks(updatedMockData);
+        setTasks(updatedTaskData);
       }
     }
   };
@@ -195,7 +195,7 @@ const TasksContent = (): ReactElement => {
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
     const updatedData = tasks.map(task => {
-      if (task.taskID === updatedTask.taskID) {
+      if (task.id === updatedTask.id) {
         return updatedTask;
       }
 
@@ -206,14 +206,14 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleDeleteTask = () => {
-    if (selectedTaskForDelete?.taskID) {
-      const { taskID } = selectedTaskForDelete;
+    if (selectedTaskForDelete?.id) {
+      const { id: taskID } = selectedTaskForDelete;
 
       deleteMutation.mutate(
         { id: taskID },
         {
           onSuccess: () => {
-            const updatedTasks = tasks.filter(task => task.taskID !== taskID);
+            const updatedTasks = tasks.filter(task => task.id !== taskID);
             setTasks(updatedTasks);
             setSelectedTaskForDelete(null);
           },
@@ -247,10 +247,10 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderTaskDetailsCards = (task: AllTasksResponse, index: number) => {
-    if (task?.taskID) {
+    if (task?.id) {
       if (task.status === Status.Backlog || task.status === Status.OnHold) {
         return (
-          <Draggable key={task.taskID} draggableId={task?.taskID} index={index}>
+          <Draggable key={task.id} draggableId={task?.id} index={index}>
             {provided => (
               <Stack
                 ref={provided.innerRef}
@@ -303,7 +303,7 @@ const TasksContent = (): ReactElement => {
         />
         <ViewTaskDetails
           open={viewDetailsModalOpen}
-          username={username}
+          userDetails={userDetails}
           task={selectedTask}
           onSave={handleUpdateTask}
           onClose={handleCloseViewDetailsModalState}
@@ -368,7 +368,7 @@ const TasksContent = (): ReactElement => {
                 <Grid
                   item
                   container
-                  xs={calculateGridSize(Object.values(Status).length)}
+                  xs={calculateGridSize(Object.values(Status).length - 1)}
                   key={status}
                 >
                   <Droppable droppableId={status}>
