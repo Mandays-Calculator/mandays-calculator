@@ -11,4 +11,5 @@ export const initMandays: MandaysForm = {
   resource: {},
   legends: {},
   tasks: [],
+  phases: [],
 };

@@ -1,19 +1,19 @@
 import type { ReactElement, ReactNode } from "react";
 import type { ApiCommonOptions, MandaysForm } from "..";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Stack, Typography } from "@mui/material";
 import { FormikErrors, useFormikContext } from "formik";
+import { Grid, Stack, Typography } from "@mui/material";
 
-import { Accordion, Table } from "~/components";
-import { ErrorMessage } from "~/components";
+import { Accordion, Table, ErrorMessage } from "~/components";
 import { getFieldError } from "~/components/form/utils";
 import { FormErrors } from "~/components/form/types";
 import LocalizationKey from "~/i18n/key";
 
 import { ResourcesListColumns } from "../../utils/columns";
 import AddOdcButton from "../components/add-odc-button/AddOdcButton";
+import { calculateTotalResources } from "../legend/utils/computeResourceCount";
 import { StyledTableContainer } from "./styles";
 
 interface ResourcesProps {
@@ -132,8 +132,20 @@ const Resources = (props: ResourcesProps): ReactElement => {
     );
   };
 
+  const totalResource = useMemo(
+    () => calculateTotalResources(form.values),
+    [form.values],
+  );
+
   return (
     <Stack spacing={2}>
+      <Grid container>
+        <Grid textAlign={"left"}>
+          <Typography variant="subtitle1" fontWeight="bold" color="primary">
+            Total Resources: {<strong>{totalResource}</strong>}
+          </Typography>
+        </Grid>
+      </Grid>
       {Object.keys(form.values.resource).map((title: string) =>
         renderTable(title),
       )}

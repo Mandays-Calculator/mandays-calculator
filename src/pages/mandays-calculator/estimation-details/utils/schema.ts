@@ -45,9 +45,27 @@ export const estimationDetailsSchema = (t: TFunction) => {
     summary: yup.object({
       teamId: yup.string().required(t(errorMessage.required)),
       estimationName: yup.string(),
-      utilizationRate: yup.number().required(t(errorMessage.required)),
+      utilizationRate: yup
+        .number()
+        .required(t(errorMessage.required))
+        .min(
+          1,
+          "Utilization rate should not be zero. Please provide a valid value.",
+        ),
       startDate: yup.string().required(t(errorMessage.required)),
-      endDate: yup.string().required(t(errorMessage.required)),
+      endDate: yup
+        .string()
+        .required(t(errorMessage.required))
+        .test(
+          "is-later",
+          "End date must be later than start date",
+          function (endDate) {
+            const { startDate } = this.parent;
+            return (
+              !startDate || !endDate || new Date(startDate) < new Date(endDate)
+            );
+          },
+        ),
     }),
     resource: resourceSchema(t),
   });

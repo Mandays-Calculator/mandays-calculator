@@ -19,16 +19,19 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 
-import { SvgIcon, TextField } from "~/components";
+import { TextField } from "~/components";
 import { dateFormat } from "~/utils/date";
 import LocalizationKey from "~/i18n/key";
 import { usePagination } from "~/hooks/pagination";
 import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
 
 import { initializeTasksListData } from "../utils/initializeTasks";
+import { filterDataByValue } from "~/utils/helpers";
 
 const AddTasks = (): ReactElement => {
   const droppableList: Status[] = ["unselected", "selected"];
+  const filteredValues: string[] = ["name", "description"];
+
   const taskStatus: string = "1";
   const { t } = useTranslation();
   const { mandaysCalculator, common } = LocalizationKey;
@@ -103,6 +106,12 @@ const AddTasks = (): ReactElement => {
                     itemsPerPage: 5,
                   });
 
+                  const searchedFilteredData = filterDataByValue(
+                    paginatedItems(),
+                    droppable === "selected" ? selected : notSelected,
+                    filteredValues,
+                  );
+
                   return (
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       <StyledTitle variant="h5" color="primary">
@@ -121,8 +130,8 @@ const AddTasks = (): ReactElement => {
                         endAdornment={<SearchOutlinedIcon />}
                         sx={{ marginBottom: "1.5rem", background: "#fff" }}
                       />
-                      {paginatedItems().length !== 0 ? (
-                        paginatedItems().map((task, index) => (
+                      {searchedFilteredData.length !== 0 ? (
+                        searchedFilteredData.map((task, index) => (
                           <Draggable
                             draggableId={task.id}
                             key={task.id}

@@ -182,7 +182,12 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     {
       label: t(mandaysCalculator.estimation.title),
       icon: <SvgIcon name="mandays_estimation_tool" />,
-      content: <Estimation mode={mode} />,
+      content: (
+        <Estimation
+          mode={mode}
+          apiCommonOptions={{ careerSteps: careerSteps }}
+        />
+      ),
     },
   ];
 

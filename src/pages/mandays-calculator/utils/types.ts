@@ -1,9 +1,9 @@
-import { FormikContextType } from "formik";
-import type { TFunction } from "i18next";
+import type { FormikContextType } from "formik";
 import type { Column } from "react-table";
-import { CareerSteps, Status } from "~/api/common";
-import { CommonOption } from "~/queries/common/options";
-import { MandaysForm } from "../estimation-details";
+import type { TFunction } from "i18next";
+import type { CommonOption } from "~/queries/common/options";
+import type { CareerSteps, Status } from "~/api/common";
+import type { Estimations, MandaysForm } from "../estimation-details";
 
 interface TeamLead {
   id: string;
@@ -115,22 +115,35 @@ export type ResourcesColumnsProps = {
 };
 
 export interface EstimationColumn {
-  taskName: string;
+  task: string;
   complexity: string;
   resourcesNo: string;
   totalManHours: number;
   totalManDays: number;
+  taskId: string;
+  complexityId: string;
+  resourceCountByTasks: {
+    I03: number;
+    I04: number;
+    I05: number;
+    I06: number;
+    I07: number;
+  };
 }
 
 export interface EstimationSubColumn {
-  iO3: number;
-  iO4: number;
-  iO5: number;
-  iO6: number;
-  iO7: number;
+  I03: number;
+  I04: number;
+  I05: number;
+  I06: number;
+  I07: number;
 }
 
 export type EstimationColumnProps = {
   t: TFunction<"translation", undefined>;
   isInput?: boolean;
+  careerSteps: CommonOption;
+  estimations: Estimations[];
+  funcIndex: number;
+  phaseIndex: number;
 };

@@ -1,5 +1,6 @@
 import type { Column } from "react-table";
 import type { ReactElement } from "react";
+import type { CommonOption } from "~/queries/common/options";
 import type {
   TasksColumnsProps,
   TasksListColumnsType,
@@ -280,74 +281,85 @@ export const ResourcesListColumns = ({
   ];
 };
 
-const EstimationListSubColum: Column<EstimationSubColumn>[] = [
-  {
-    Header: "IO3",
-    accessor: "iO3",
-    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io3" />,
-  },
-  {
-    Header: "IO4",
-    accessor: "iO4",
-    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io4" />,
-  },
-  {
-    Header: "IO5",
-    accessor: "iO5",
-    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io5" />,
-  },
-  {
-    Header: "IO6",
-    accessor: "iO6",
-    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io6" />,
-  },
-  {
-    Header: "IO7",
-    accessor: "iO7",
-    Cell: (): ReactElement => <ControlledNumberInput width={7.5} name="io7" />,
-  },
-];
+const EstimationListSubColumn = (
+  careerSteps: CommonOption,
+  phaseIndex: number,
+  funcIndex: number,
+  estimationIndex: number,
+): Column<any>[] => {
+  return careerSteps.map((item) => ({
+    Header: `${item.label}`,
+    Cell: (): ReactElement => {
+      const fieldName = `phases[${phaseIndex}].functionalities[${funcIndex}].estimations[${estimationIndex}].resourceCountByTasks.${item.label}`;
+      return (
+        <>
+          <ControlledNumberInput width={7.5} name={fieldName} />
+        </>
+      );
+    },
+    accessor: `${item.label}`,
+  }));
+};
 
 export const EstimationListColumns = ({
   t,
-}: EstimationColumnProps): Column<EstimationColumn>[] => [
-  {
-    Header: t(estimationColumns.taskName),
-    accessor: "taskName",
-  },
-  {
-    Header: t(estimationColumns.complexity),
-    accessor: "complexity",
-  },
-  {
-    Header: t(estimationColumns.noOfResources),
-    accessor: "resourcesNo",
-    Cell: (): ReactElement => {
-      return (
-        <Table<EstimationSubColumn>
-          name="sub-table"
-          noColor
-          width="50px"
-          data={[
-            {
-              iO3: 10,
-              iO4: 10,
-              iO5: 10,
-              iO6: 10,
-              iO7: 10,
-            },
-          ]}
-          columns={EstimationListSubColum}
-        />
-      );
+  careerSteps,
+  estimations,
+  phaseIndex,
+  funcIndex,
+}: EstimationColumnProps): Column<EstimationColumn>[] => {
+  return [
+    {
+      Header: t(estimationColumns.taskName),
+      accessor: "task",
     },
-  },
-  {
-    Header: t(estimationColumns.totalManHours),
-    accessor: "totalManHours",
-  },
-  {
-    Header: t(estimationColumns.totalManDays),
-    accessor: "totalManDays",
-  },
-];
+    {
+      Header: t(estimationColumns.complexity),
+      accessor: "complexity",
+    },
+    {
+      Header: t(estimationColumns.noOfResources),
+      accessor: "resourcesNo",
+      Cell: ({ row }): ReactElement => {
+        const resource = Object.keys(
+          estimations[row.index].resourceCountByTasks,
+        );
+
+        const estimationResource =
+          resource.length > 0
+            ? [estimations[row.index].resourceCountByTasks]
+            : ([
+                {
+                  I03: 0,
+                  IO4: 0,
+                  IO5: 0,
+                  IO6: 0,
+                  IO7: 0,
+                },
+              ] as any);
+        return (
+          <Table<EstimationSubColumn>
+            name="sub-table"
+            noColor
+            width="50px"
+            data={estimationResource}
+            columns={EstimationListSubColumn(
+              careerSteps,
+              phaseIndex,
+              funcIndex,
+              row.index,
+            )}
+          />
+        );
+      },
+    },
+    {
+      Header: t(estimationColumns.totalManHours),
+      accessor: "totalManHours",
+    },
+    {
+      Header: t(estimationColumns.totalManDays),
+      accessor: "totalManDays",
+    },
+  ];
+};
