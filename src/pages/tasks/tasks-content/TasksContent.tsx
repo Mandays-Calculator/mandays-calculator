@@ -106,7 +106,7 @@ const TasksContent = (): ReactElement => {
   const statuses = ["1", "2", "3", "4", "5"];
 
   const statusData = statuses.map((status) => {
-    const { data, isSuccess } = useTasks(
+    const { data, isSuccess, refetch } = useTasks(
       "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
       status,
       "10",
@@ -114,7 +114,7 @@ const TasksContent = (): ReactElement => {
       "1",
     );
 
-    return { data, isSuccess };
+    return { data, isSuccess, refetch };
   });
 
   const [
@@ -281,7 +281,9 @@ const TasksContent = (): ReactElement => {
         { id: selectedTaskForDelete },
         {
           onSuccess: () => {
-            console.log("Item deleted successfully!");
+            statusData.forEach((statusItem) => {
+              statusItem.refetch();
+            });
           },
           onError: (error) => {
             console.log(error);

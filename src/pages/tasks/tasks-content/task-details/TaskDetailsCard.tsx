@@ -106,7 +106,11 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           {data?.tags &&
             data.tags.map((tag, index) => (
               <Grid item key={index}>
-                <Box sx={getTagStyle(tag?.value)}>{tag.value}</Box>
+                <Box
+                  sx={getTagStyle((tag as unknown as { name: string }).name)}
+                >
+                  {(tag as unknown as { name: string }).name}
+                </Box>
               </Grid>
             ))}
         </Grid>
