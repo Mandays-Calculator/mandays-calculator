@@ -30,69 +30,200 @@ export const estimationDetailsData = [
   },
 ];
 
-export const taskDetailData = [
-  {
-    label: "Function 1 - Setup and Configuration",
-    data: [
-      {
-        tasks: "Create repository for client and server",
-        complexity: "Hard",
-        i03: "4",
-        i04: "3",
-        i05: "2",
-        i06: "1",
-        i07: "0",
-        totalManHours: "24",
-      },
-      {
-        tasks: "Keycloak configuration and auth integration",
-        complexity: "Complex",
-        i03: "4",
-        i04: "3",
-        i05: "2",
-        i06: "1",
-        i07: "0",
-        totalManHours: "24",
-      },
-    ],
-  },
-  {
-    label: "Function 2 - Screen Creations",
-    data: [
-      {
-        tasks: "Login screens",
-        complexity: "simple",
-        i03: "2",
-        i04: "2",
-        i05: "1",
-        i06: "0",
-        i07: "0",
-        totalManHours: "24",
-      },
-      {
-        tasks: "Change password screens",
-        complexity: "Simple",
-        i03: "2",
-        i04: "2",
-        i05: "1",
-        i06: "0",
-        i07: "0",
-        totalManHours: "24",
-      },
-      {
-        tasks: "Task 3",
-        complexity: "Simple",
-        i03: "4",
-        i04: "1",
-        i05: "1",
-        i06: "1",
-        i07: "1",
-        totalManHours: "24",
-      },
-    ],
-  },
-];
+export const phaseData = {
+  phases: [
+    {
+      id: "49855c3a-c0df-11ee-8772-a0291936d285",
+      name: "DEV",
+      functionalities: [
+        {
+          id: "ea9a65a9-c023-11ee-8772-a0291936d285",
+          name: "Function 1",
+          estimations: [
+            {
+              taskId: "1d8e8078-c024-11ee-8772-a0291936d285",
+              task: "Task 1",
+              complexityId: "c7971ae7-f0a9-4cf5-8f5e-dee611d272f3",
+              complexity: "Softy",
+              resourceCountByTasks: {
+                I05: 2,
+                I03: 2,
+                I04: 1,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+        {
+          id: "84bcb2fd-97cb-11ee-b17f-00090faa0002",
+          name: "Function 2",
+          estimations: [
+            {
+              taskId: "93049585-c023-11ee-8772-a0291936d285",
+              task: "Task 2",
+              complexityId: "cb9d9b52-6a9b-41da-bd80-e1421cd30c4c",
+              complexity: "Hardy",
+              resourceCountByTasks: {
+                I05: 1,
+                I03: 1,
+                I04: 2,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+        {
+          id: "84bcb2fd-97cb-11ee-b17f-00090faa0002",
+          name: "Function 3",
+          estimations: [
+            {
+              taskId: "93049585-c023-11ee-8772-a0291936d285",
+              task: "Task 2",
+              complexityId: "cb9d9b52-6a9b-41da-bd80-e1421cd30c4c",
+              complexity: "Hardy",
+              resourceCountByTasks: {
+                I05: 1,
+                I03: 1,
+                I04: 2,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+      ],
+    },
 
+    {
+      id: "49855c3a-c0df-11ee-8772-a0291936d285",
+      name: "DEV2",
+      functionalities: [
+        {
+          id: "ea9a65a9-c023-11ee-8772-a0291936d285",
+          name: "Function 4",
+          estimations: [
+            {
+              taskId: "1d8e8078-c024-11ee-8772-a0291936d285",
+              task: "Task 1",
+              complexityId: "c7971ae7-f0a9-4cf5-8f5e-dee611d272f3",
+              complexity: "Softy",
+              resourceCountByTasks: {
+                I05: 2,
+                I03: 2,
+                I04: 1,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+        {
+          id: "84bcb2fd-97cb-11ee-b17f-00090faa0002",
+          name: "Function 5",
+          estimations: [
+            {
+              taskId: "93049585-c023-11ee-8772-a0291936d285",
+              task: "Task 2",
+              complexityId: "cb9d9b52-6a9b-41da-bd80-e1421cd30c4c",
+              complexity: "Hardy",
+              resourceCountByTasks: {
+                I05: 1,
+                I03: 1,
+                I04: 2,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+        {
+          id: "84bcb2fd-97cb-11ee-b17f-00090faa0002",
+          name: "Function 6",
+          estimations: [
+            {
+              taskId: "93049585-c023-11ee-8772-a0291936d285",
+              task: "Task 2",
+              complexityId: "cb9d9b52-6a9b-41da-bd80-e1421cd30c4c",
+              complexity: "Hardy",
+              resourceCountByTasks: {
+                I05: 1,
+                I03: 1,
+                I04: 2,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "49855c3a-c0df-11ee-8772-a0291936d285",
+      name: "DEV3",
+      functionalities: [
+        {
+          id: "ea9a65a9-c023-11ee-8772-a0291936d285",
+          name: "Function 2",
+          estimations: [
+            {
+              taskId: "1d8e8078-c024-11ee-8772-a0291936d285",
+              task: "Task 1",
+              complexityId: "c7971ae7-f0a9-4cf5-8f5e-dee611d272f3",
+              complexity: "Softy",
+              resourceCountByTasks: {
+                I05: 2,
+                I03: 2,
+                I04: 1,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+        {
+          id: "84bcb2fd-97cb-11ee-b17f-00090faa0002",
+          name: "Function 1",
+          estimations: [
+            {
+              taskId: "93049585-c023-11ee-8772-a0291936d285",
+              task: "Task 2",
+              complexityId: "cb9d9b52-6a9b-41da-bd80-e1421cd30c4c",
+              complexity: "Hardy",
+              resourceCountByTasks: {
+                I05: 1,
+                I03: 1,
+                I04: 2,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+        {
+          id: "84bcb2fd-97cb-11ee-b17f-00090faa0002",
+          name: "Function 1",
+          estimations: [
+            {
+              taskId: "93049585-c023-11ee-8772-a0291936d285",
+              task: "Task 2",
+              complexityId: "cb9d9b52-6a9b-41da-bd80-e1421cd30c4c",
+              complexity: "Hardy",
+              resourceCountByTasks: {
+                I05: 1,
+                I03: 1,
+                I04: 2,
+                I06: 1,
+                I07: 1,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 export const legendData: LegendColumn[] = [
   {
     complexity: "Simple",

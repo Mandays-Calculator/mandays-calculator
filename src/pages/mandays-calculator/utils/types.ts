@@ -40,14 +40,17 @@ export interface SummaryListDataType {
 }
 
 export interface TasksListDataType {
-  tasks: string;
+  task: string;
   complexity: string;
-  i03: string;
-  i04: string;
-  i05: string;
-  i06: string;
-  i07: string;
-  totalManHours: string;
+  resourceCountByTasks?: {
+    I03?: number;
+    I04?: number;
+    I05?: number;
+    I06?: number;
+    I07?: number;
+  };
+  totalManHours?: string;
+  totalManDays?: string;
 }
 
 export interface ResourcesListDataType {
