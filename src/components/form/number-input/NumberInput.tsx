@@ -16,6 +16,7 @@ interface CustomNumberInputProps extends BaseInputProps<NumberInputProps> {
   name?: string;
   width?: number;
   field?: FieldAttributes<any>;
+  value?: Number;
 }
 
 const StyledNumberInput = styled(BaseNumberInput, {
@@ -74,10 +75,11 @@ const CustomNumberInput = React.forwardRef<
 });
 
 export default function NumberInputIntroduction(props: CustomNumberInputProps) {
-  const { name, placeholder, onChange, width, error, field } = props;
+  const { name, placeholder, onChange, width, error, field, value } = props;
   return (
     <CustomNumberInput
       {...field}
+      value={value}
       aria-label={name}
       onChange={onChange}
       name={name}

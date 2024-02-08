@@ -83,7 +83,7 @@ const ForgotPassword = (): ReactElement => {
                 name="usernameOrEmail"
                 helperText={getFieldError(
                   forgotPasswordForm.errors,
-                  "usernameOrEmail"
+                  "usernameOrEmail",
                 )}
               />
             </Grid>

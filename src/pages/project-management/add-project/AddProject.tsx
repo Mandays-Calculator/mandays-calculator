@@ -1,9 +1,6 @@
 import { useState, type ReactElement, useEffect } from "react";
 import type { AddProjectType, Project } from "~/api/projects/types";
-import type {
-  AddTeamForm as AddTeamFormType,
-  TeamObject,
-} from "./types";
+import type { AddTeamForm as AddTeamFormType, TeamObject } from "./types";
 
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
@@ -21,7 +18,7 @@ import { useErrorHandler } from "~/hooks/error-handler";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
 import { ErrorMessage, Form, SvgIcon } from "~/components";
-import { useTimeout } from "../utils/functions";
+import { useTimeout } from "~/hooks/timeout";
 import { StyledContainer } from "./components/TeamListCard/TeamListCard";
 import { CustomButton } from "~/components/form/button";
 import { SetProjectForm, addFormInitValue } from "./utils";
@@ -64,12 +61,12 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   const [createProjectStatus, callCreateProject] = useRequestHandler(
     useCreateProjectMutation().mutate,
     handleAddEditProject,
-    onErrorAddProject
+    onErrorAddProject,
   );
   const [updateProjectStatus, callUpdateProject] = useRequestHandler(
     useUpdateProjectMutation().mutate,
     handleAddEditProject,
-    onErrorAddProject
+    onErrorAddProject,
   );
 
   const onSubmit = async (): Promise<void> => {
@@ -127,7 +124,7 @@ const AddProject = (props: ProjectListProps): ReactElement => {
           dateCreated: dateCreated ?? Date.now(),
           lastUpdatedDate: lastUpdatedDate ?? Date.now(),
           teamMembers: team.teamMembers.map(({ id }) => id),
-        })
+        }),
       ),
     };
     callUpdateProject(updateProjectParams);
@@ -245,5 +242,3 @@ const AddProject = (props: ProjectListProps): ReactElement => {
 };
 
 export default AddProject;
-
-
