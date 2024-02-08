@@ -32,6 +32,8 @@ import { CreateOrUpdateLabel, ComplexityLabel, CloseContainer } from "./style";
 import ComplexityDetails from "./complexity-details";
 import { Status } from "./utils";
 
+import { FUNCTIONALITY_OPTIONS } from "~/__tests__/pages/tasks/utils/utils";
+
 interface CreateOrUpdateTaskProps {
   open: boolean;
   update?: boolean;
@@ -62,27 +64,26 @@ const initialTaskState: AllTasksResponse = {
   sprint: "1",
 };
 
-const functionalityOptions = [
-  { value: "2413054d-9945-11ee-a2d5-244bfee2440b", label: "Simple Function" },
-  { value: "5583251e-5169-443f-bb9c-4e9cb8e26e77", label: "Design/ UI" },
-  { value: "eb9bb9fc-5b9d-4ef6-b0aa-77b49a6dc919", label: "Integration" },
-  { value: "d42b21b7-6144-4481-a383-eda3e81a96cc", label: "CRUD" },
-  { value: "98031683-47d8-4338-8720-da964a9c7dcd", label: "Feature" },
-];
+const setFunctionalityOptions = (functionalityData: Functionality[]) => {
+  let functionalityOptions: SelectObject[] = [];
+
+  functionalityData.map(_functionality => {
+    const functionality: SelectObject = {
+      label: _functionality.name,
+      value: _functionality.id,
+    };
+
+    functionalityOptions.push(functionality);
+  });
+
+  return functionalityOptions;
+};
 
 const tagsOptions = [
   { value: "Bug", label: "Bug" },
   { value: "Needs Work", label: "Needs Work" },
   { value: "Reviewed", label: "Reviewed" },
   { value: "Enhancement", label: "Enhancement" },
-];
-
-const complexityOptions = [
-  // should be removed when api is integrated
-  { value: "49a522fe-9945-11ee-a2d5-244bfee2440b", label: "Trivial" },
-  { value: "49a522fe-11ee-9945-a2d5-244bfee2440b", label: "Minor" },
-  { value: "49a522fe-9945-a2d5-9945-244bfee2440b", label: "Major" },
-  { value: "49a522fe-a2d5-11ee-a2d5-244bfee2440b", label: "Blocker" },
 ];
 
 const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
@@ -127,15 +128,15 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
   const handleChangeFunctionality = (e: SelectChangeEvent<unknown>) => {
     const selectedFunctionality = _.find(
-      functionalityOptions,
-      _.matchesProperty("value", e.target.value),
+      FUNCTIONALITY_OPTIONS,
+      _.matchesProperty("id", e.target.value),
     );
 
     const functionality: Functionality = {
       id: e.target.value as string,
-      name: selectedFunctionality?.label as string,
+      name: selectedFunctionality?.name as string,
       team: {
-        id: "",
+        id: selectedFunctionality?.team.id as string,
       },
     };
     setTask({ ...task, functionality });
@@ -252,7 +253,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 fullWidth
                 onChange={handleChangeFunctionality}
                 value={task.functionality.id}
-                options={functionalityOptions}
+                options={setFunctionalityOptions(FUNCTIONALITY_OPTIONS)}
               />
             </Grid>
 
@@ -275,9 +276,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 fullWidth
                 onChange={handleChangeComplexity}
                 value={task.complexity.id}
-                options={
-                  !_.isEmpty(complexities) ? complexities : complexityOptions
-                } // should be updated when api is integrated
+                options={complexities}
               />
             </Grid>
           </Grid>

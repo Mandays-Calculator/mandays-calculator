@@ -362,37 +362,41 @@ const TasksContent = (): ReactElement => {
             justifyContent='space-between'
           >
             {Object.values(Status).map(status => {
-              const filteredData = tasks.filter(task => task.status === status);
+              if (status !== Status.Invalid) {
+                const filteredData = tasks.filter(
+                  task => task.status === status,
+                );
 
-              return (
-                <Grid
-                  item
-                  container
-                  xs={calculateGridSize(Object.values(Status).length - 1)}
-                  key={status}
-                >
-                  <Droppable droppableId={status}>
-                    {provided => (
-                      <StatusContainer
-                        backgroundColor={status}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        {renderStatusContainerHeader(status)}
+                return (
+                  <Grid
+                    item
+                    container
+                    xs={calculateGridSize(Object.values(Status).length - 1)}
+                    key={status}
+                  >
+                    <Droppable droppableId={status}>
+                      {provided => (
+                        <StatusContainer
+                          backgroundColor={status}
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {renderStatusContainerHeader(status)}
 
-                        <Divider />
+                          <Divider />
 
-                        {filteredData.map((task, index) => (
-                          <Stack key={`${status}_${task.name}_${index}`}>
-                            {renderTaskDetailsCards(task, index)}
-                          </Stack>
-                        ))}
-                        {provided.placeholder}
-                      </StatusContainer>
-                    )}
-                  </Droppable>
-                </Grid>
-              );
+                          {filteredData.map((task, index) => (
+                            <Stack key={`${status}_${task.name}_${index}`}>
+                              {renderTaskDetailsCards(task, index)}
+                            </Stack>
+                          ))}
+                          {provided.placeholder}
+                        </StatusContainer>
+                      )}
+                    </Droppable>
+                  </Grid>
+                );
+              }
             })}
           </TaskGridContainer>
 

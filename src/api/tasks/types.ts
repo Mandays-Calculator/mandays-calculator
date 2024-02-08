@@ -11,8 +11,8 @@ export interface Functionality {
   name: string;
   description?: string;
   team: Team;
-  createdDate?: Date;
-  lastUpdatedDate?: Date;
+  createdDate?: string | null;
+  lastUpdatedDate?: string | null;
 }
 
 export interface Team {
@@ -20,15 +20,15 @@ export interface Team {
   name?: string;
   projectId?: string;
   isActive?: boolean;
-  createdDate?: Date;
-  lastUpdatedDate?: Date;
+  createdDate?: string | null;
+  lastUpdatedDate?: string | null;
 }
 
 export interface Tag {
   id: string;
   name: string;
-  createdDate?: Date;
-  lastUpdatedDate?: Date;
+  createdDate?: string;
+  lastUpdatedDate?: string;
 }
 
 export interface Comment {
@@ -37,8 +37,8 @@ export interface Comment {
   task: AllTasksResponse | null;
   user: User | null;
   description: string;
-  createdDate?: Date;
-  lastUpdatedDate?: Date;
+  createdDate?: string;
+  lastUpdatedDate?: string;
 }
 export interface MandaysEstimation {
   id: string;
@@ -50,8 +50,8 @@ export interface MandaysEstimation {
   startDate: string;
   endDate: string;
   estUtilizationRate: number;
-  createdDate: Date;
-  lastUpdatedDate: Date;
+  createdDate: string;
+  lastUpdatedDate: string;
 }
 
 export interface Complexity {
@@ -64,9 +64,9 @@ export interface Complexity {
   description?: string;
   sample?: string;
   isActive?: boolean;
-  createdDate?: Date;
+  createdDate?: string;
   createdBy?: string;
-  lastUpdatedDate?: Date;
+  lastUpdatedDate?: string;
 }
 
 export interface AllTasksResponse {
@@ -80,8 +80,8 @@ export interface AllTasksResponse {
   mandaysEstimation?: MandaysEstimation;
   complexity: Complexity;
   completionDate?: string;
-  createdDate?: Date;
-  lastUpdatedDate?: Date;
+  createdDate?: string;
+  lastUpdatedDate?: string;
   sprint: string;
 }
 
