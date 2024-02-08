@@ -42,14 +42,39 @@ export interface AllTasksResponse {
   comments?: Comment[];
 }
 
+export interface UpdateTags {
+  id: string;
+  name: string;
+}
+
+export interface UpdateComments {
+  id: string;
+  description: string;
+}
+
 export interface CreateTask {
   name?: string;
   description?: string;
   functionality?: Functionality;
   tags?: SelectObject[];
-  complexityId?: Complexity;
+  complexityId?: string;
   createdDate?: string;
   sprint?: string;
+  comment?: Comment[];
+  status?: string;
+}
+
+export interface UpdateTask {
+  id?: string;
+  name?: string;
+  description?: string;
+  functionality?: Functionality;
+  tags?: UpdateTags[];
+  complexityId?: string;
+  createdDate?: string;
+  sprint?: string;
+  comment?: UpdateComments;
+  status?: number;
 }
 
 export interface TaskResponse extends GenericErrorResponse {

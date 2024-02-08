@@ -129,6 +129,7 @@ const TasksContent = (): ReactElement => {
 
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
+
   // const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");

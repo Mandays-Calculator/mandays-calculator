@@ -1,5 +1,5 @@
-import type { AllTasksResponse, CreateTask } from "~/api/tasks";
-// import type { SelectChangeEvent } from "@mui/material";
+import type { AllTasksResponse, CreateTask, UpdateTask } from "~/api/tasks";
+
 import type { ReactElement } from "react";
 
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ import {
   ControlledTextField,
 } from "~/components/form/controlled";
 import { useFormik } from "formik";
-import { usePostTasks } from "~/queries/tasks/Tasks";
+import { usePostTasks, useUpdateTask } from "~/queries/tasks/Tasks";
 
 interface CreateOrUpdateTaskProps {
   open: boolean;
@@ -93,7 +93,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     currentTask,
     onOpenCreateTask,
     onOpenUpdateTask,
-    onUpdateTask,
+    // onUpdateTask,
     onClose,
   } = props;
 
@@ -102,6 +102,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
   const [openComplexity, setOpenComplexity] = useState<boolean>(false);
   const postTasks = usePostTasks();
+  const putTasks = useUpdateTask();
 
   useEffect(() => {
     setTask(currentTask || initialTaskState);
@@ -136,7 +137,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
         description: e.description,
         createdDate: moment().format("yyyy-MM-dd HH:mm:SS"),
         sprint: "1",
-        complexityId: e.complexity,
+        complexityId: e.complexity.id,
         functionality: {
           id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
           name: "Test add new task Nov16_009",
@@ -145,20 +146,42 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
         tags: e.tags,
       };
 
+      const putSubmit: UpdateTask = {
+        id: e.id,
+        name: e.name,
+        description: e.description,
+        status: 1,
+        functionality: {
+          id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
+          name: "Test add new task Nov16_009",
+          teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+        },
+        tags: [
+          {
+            id: "6fcb4dbd-c618-11ee-ae82-00090faa0001",
+            name: "Bug",
+          },
+          {
+            id: "882c2b91-c618-11ee-ae82-00090faa0001",
+            name: "Need Work",
+          },
+        ],
+        comment: {
+          id: "274dc3fe-88e5-11ee-898a-a0291936cc52",
+          description: "Test Update Task 003",
+        },
+        complexityId: e.complexity.id,
+      };
+
       if (update === false) {
         postTasks.mutate(submit);
         createOrUpdateForm.resetForm();
         console.log("submit", submit);
       }
 
-      if (update === true && onUpdateTask) {
-        const updatedTask = {
-          ...task,
-          ...submit,
-        };
-
-        onUpdateTask(updatedTask);
-        console.log("update", updatedTask);
+      if (update === true) {
+        putTasks.mutate(putSubmit);
+        console.log("update", putSubmit);
       }
 
       onClose();
@@ -236,7 +259,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   <InfoOutlinedIcon fontSize="small" />
                 </Stack>
                 <ControlledSelect
-                  name="complexity"
+                  name="complexity.id"
                   placeholder={t(
                     LocalizationKey.tasks.createTask.placeholder.complexity,
                   )}
@@ -244,7 +267,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   options={
                     !_.isEmpty(complexities) ? complexities : complexityOptions
                   }
-                  // value={update ? task?.complexity.id : ""}
                 />
               </Grid>
             </Grid>
