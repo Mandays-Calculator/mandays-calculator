@@ -79,7 +79,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
             </CommentContainer>
           </Grid>
 
-          {data?.tags.map((tag, index) => (
+          {data?.tags?.map((tag, index) => (
             <Grid item>
               <TaskTags status={tag?.name} key={index}>
                 {tag?.name}

@@ -7,7 +7,7 @@ export interface QueryResponse<T> {
 }
 
 export interface Functionality {
-  id: string;
+  id?: string;
   name: string;
   description?: string;
   team: Team;
@@ -25,7 +25,7 @@ export interface Team {
 }
 
 export interface Tag {
-  id: string;
+  id?: string;
   name: string;
   createdDate?: string;
   lastUpdatedDate?: string;
@@ -75,22 +75,42 @@ export interface AllTasksResponse {
   description: string;
   status?: string;
   functionality: Functionality;
+  _functionality?: string;
   tags: Tag[];
+  _tags?: string[];
   comments?: Comment[];
   mandaysEstimation?: MandaysEstimation;
   complexity: Complexity;
+  _complexity?: string;
   completionDate?: string;
   createdDate?: string;
   lastUpdatedDate?: string;
   sprint: string;
 }
 
+export interface CreateOrUpdateFunctionality {
+  id: string;
+  name: string;
+  teamId: string;
+}
+
 export interface CreateTask {
   name: string;
   description: string;
-  functionality: Functionality;
+  functionality: CreateOrUpdateFunctionality;
   tags: Tag[];
-  complexityId: Complexity;
+  complexityId: string;
+}
+
+export interface UpdateTask {
+  id: string;
+  name: string;
+  description: string;
+  status: number;
+  functionality: CreateOrUpdateFunctionality;
+  tags: Tag[];
+  comment?: Comment | null;
+  complexityId: string;
 }
 
 export interface TaskResponse extends GenericErrorResponse {

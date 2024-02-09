@@ -1,9 +1,10 @@
 import type {
   AllTasksResponse,
-  CreateTask,
-  DeleteTaskId,
   QueryResponse,
+  DeleteTaskId,
   TaskResponse,
+  CreateTask,
+  UpdateTask,
 } from "~/api/tasks";
 import { AxiosError } from "axios";
 
@@ -24,7 +25,7 @@ import {
 export const useTasks = (
   id: string,
   status: string,
-): UseQueryResult<QueryResponse<AllTasksResponse[]>, AxiosError> => {
+): UseQueryResult<AllTasksResponse[], AxiosError> => {
   return useQuery(`getTasks-${status}`, () => getTasks(id, status));
 };
 
@@ -38,19 +39,15 @@ export const usePostTasks = (): UseMutationResult<
   );
 };
 
-export const useUpdateTask = (
-  id: string,
-  updatedData: AllTasksResponse,
-): UseMutationResult<
-  QueryResponse<AllTasksResponse[]>,
+export const useUpdateTask = (): UseMutationResult<
+  QueryResponse<AllTasksResponse>,
   AxiosError,
-  AllTasksResponse
+  UpdateTask
 > => {
-  return useMutation<
-    QueryResponse<AllTasksResponse[]>,
-    AxiosError,
-    AllTasksResponse
-  >(() => putUpdateTask(id, updatedData));
+  return useMutation<QueryResponse<AllTasksResponse>, AxiosError, UpdateTask>(
+    "putUpdateTask",
+    putUpdateTask,
+  );
 };
 
 export const useDeleteTask = (): UseMutationResult<

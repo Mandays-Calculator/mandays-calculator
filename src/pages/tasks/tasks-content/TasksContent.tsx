@@ -51,6 +51,8 @@ const teamOptions = [
   { value: "CMT", label: "CMT" },
 ];
 
+const TEAM_ID = "a2eb9f01-6e4e-11ee-8624-a0291936d1c2";
+
 const calculateGridSize = (numStatuses: number): number => {
   return 12 / numStatuses;
 };
@@ -62,10 +64,7 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-  const { data: tasksData } = useTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-    "1",
-  );
+  const { data: tasksData } = useTasks(TEAM_ID, "1");
   const userDetails = user;
   const complexities = useCommonOption("complexity");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -91,17 +90,12 @@ const TasksContent = (): ReactElement => {
       setTimeout(() => {
         setErrorMessage("");
       }, 3000);
-    } else if (tasksData && tasksData.data) {
-      setTasks(tasksData.data);
+    } else if (tasksData) {
+      setTasks(tasksData);
     }
   }, [tasksData]);
 
   // OTHERS
-  const generateUniqueTaskID = () => {
-    const timestamp = new Date().getTime();
-    return timestamp.toString();
-  };
-
   const handleTeamFilter = (e: SelectChangeEvent<unknown>) => {
     setSelectedTeam(e.target.value as string);
   };
@@ -180,14 +174,7 @@ const TasksContent = (): ReactElement => {
   // CRUD
   const handleCreateTask = (newTask: AllTasksResponse | null) => {
     if (newTask) {
-      const newTaskID = generateUniqueTaskID();
-
-      const createdTask = {
-        ...newTask,
-        taskID: newTaskID,
-      };
-
-      const createdData = [...tasks, createdTask];
+      const createdData = [...tasks, newTask];
 
       setTasks(createdData);
     }
@@ -287,6 +274,7 @@ const TasksContent = (): ReactElement => {
       <>
         <CreateOrUpdateTask
           open={createModalOpen}
+          teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
@@ -295,6 +283,7 @@ const TasksContent = (): ReactElement => {
         <CreateOrUpdateTask
           open={updateModalOpen}
           update
+          teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}

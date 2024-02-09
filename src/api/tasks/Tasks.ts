@@ -1,4 +1,10 @@
-import { AllTasksResponse, CreateTask, QueryResponse, TaskResponse } from ".";
+import {
+  AllTasksResponse,
+  QueryResponse,
+  TaskResponse,
+  CreateTask,
+  UpdateTask,
+} from ".";
 import axios from "axios";
 import { getEnvConfig } from "~/utils/env-config";
 
@@ -27,13 +33,12 @@ export const postTask = async (
 };
 
 export const putUpdateTask = async (
-  id: string,
-  param: AllTasksResponse,
-): BaseResponse<AllTasksResponse> => {
+  param: UpdateTask,
+): BaseResponse<QueryResponse<AllTasksResponse>> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
 
-  const response = await axios.put<AllTasksResponse>(
-    `${apiBasePath}/tasks/${id}`,
+  const response = await axios.put<QueryResponse<AllTasksResponse>>(
+    `${apiBasePath}/tasks/${param.id}`,
     param,
   );
   return response.data;

@@ -16,6 +16,15 @@ export const StatusByValue: { [key: number]: Status } = {
   5: Status.Completed,
 };
 
+export const StatusValues: { [key in Status]: number } = {
+  [Status.Invalid]: 0,
+  [Status.Backlog]: 1,
+  [Status.NotYetStarted]: 2,
+  [Status.InProgress]: 3,
+  [Status.OnHold]: 4,
+  [Status.Completed]: 5,
+};
+
 export enum MandaysEstimationStatus {
   NotYetStarted = "Not Yet Started",
   OnGoing = "On Going",

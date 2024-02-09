@@ -1,84 +1,29 @@
 export const FUNCTIONALITY_OPTIONS = [
   {
-    id: "fe45bd29-c635-11ee-94d4-a0291978916e",
+    id: "8a45ecec-c67f-11ee-94d4-a0291978916e",
     name: "Simple Function",
-    description: "Simple Function",
-    team: {
-      id: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-      name: "DEV",
-      projectId: "3587cd2f-6e4e-11ee-8624-a0291936d1c2",
-      isActive: true,
-      createdDate: "2023-10-18T23:10:51.000+00:00",
-      lastUpdatedDate: null,
-    },
-    createdDate: null,
-    lastUpdatedDate: null,
   },
   {
-    id: "fe46132e-c635-11ee-94d4-a0291978916e",
+    id: "8a466f09-c67f-11ee-94d4-a0291978916e",
     name: "Design/ UI",
-    description: "Design/ UI",
-    team: {
-      id: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-      name: "DEV",
-      projectId: "3587cd2f-6e4e-11ee-8624-a0291936d1c2",
-      isActive: true,
-      createdDate: "2023-10-18T23:10:51.000+00:00",
-      lastUpdatedDate: null,
-    },
-    createdDate: null,
-    lastUpdatedDate: null,
   },
   {
-    id: "fe461f8a-c635-11ee-94d4-a0291978916e",
+    id: "8a46ea6c-c67f-11ee-94d4-a0291978916e",
     name: "Integration",
-    description: "Integration",
-    team: {
-      id: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-      name: "DEV",
-      projectId: "3587cd2f-6e4e-11ee-8624-a0291936d1c2",
-      isActive: true,
-      createdDate: "2023-10-18T23:10:51.000+00:00",
-      lastUpdatedDate: null,
-    },
-    createdDate: null,
-    lastUpdatedDate: null,
   },
   {
-    id: "fe4629af-c635-11ee-94d4-a0291978916e",
+    id: "8a476736-c67f-11ee-94d4-a0291978916e",
     name: "CRUD",
-    description: "CRUD",
-    team: {
-      id: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-      name: "DEV",
-      projectId: "3587cd2f-6e4e-11ee-8624-a0291936d1c2",
-      isActive: true,
-      createdDate: "2023-10-18T23:10:51.000+00:00",
-      lastUpdatedDate: null,
-    },
-    createdDate: null,
-    lastUpdatedDate: null,
   },
   {
-    id: "fe4633bd-c635-11ee-94d4-a0291978916e",
+    id: "8a47edd4-c67f-11ee-94d4-a0291978916e",
     name: "Feature",
-    description: "Feature",
-    team: {
-      id: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-      name: "DEV",
-      projectId: "3587cd2f-6e4e-11ee-8624-a0291936d1c2",
-      isActive: true,
-      createdDate: "2023-10-18T23:10:51.000+00:00",
-      lastUpdatedDate: null,
-    },
-    createdDate: null,
-    lastUpdatedDate: null,
   },
 ];
 
 export const COMPLEXITY_OPTIONS = [
   {
-    id: "af407581-c651-11ee-94d4-a0291978916e",
+    id: "8a486b8b-c67f-11ee-94d4-a0291978916e",
     name: "Trivial",
     minFeatures: "1",
     maxFeatures: "1",
@@ -89,7 +34,7 @@ export const COMPLEXITY_OPTIONS = [
     active: true,
   },
   {
-    id: "af40c48c-c651-11ee-94d4-a0291978916e",
+    id: "8a490ff5-c67f-11ee-94d4-a0291978916e",
     name: "Minor",
     minFeatures: "1",
     maxFeatures: "2",
@@ -100,7 +45,7 @@ export const COMPLEXITY_OPTIONS = [
     active: true,
   },
   {
-    id: "af40d869-c651-11ee-94d4-a0291978916e",
+    id: "8a4998f2-c67f-11ee-94d4-a0291978916e",
     name: "Major",
     minFeatures: "2",
     maxFeatures: "3",
@@ -111,7 +56,7 @@ export const COMPLEXITY_OPTIONS = [
     active: true,
   },
   {
-    id: "af40f051-c651-11ee-94d4-a0291978916e",
+    id: "8a4a3bf2-c67f-11ee-94d4-a0291978916e",
     name: "Blocker",
     minFeatures: "3",
     maxFeatures: "4",
@@ -120,5 +65,28 @@ export const COMPLEXITY_OPTIONS = [
     description: "Blocker",
     sample: "Blocker",
     active: true,
+  },
+];
+
+export const TAG_OPTIONS = [
+  {
+    label: "Bug",
+    value: "dce376c2-c68d-11ee-94d4-a0291978916e",
+  },
+  {
+    label: "API",
+    value: "acc8bdc5-c68e-11ee-94d4-a0291978916e",
+  },
+  {
+    label: "Design",
+    value: "acc898bc-c68e-11ee-94d4-a0291978916e",
+  },
+  {
+    label: "Needs Work",
+    value: "22194599-c74f-11ee-94d4-a0291978916e",
+  },
+  {
+    label: "Enhancement",
+    value: "762f5c51-c68f-11ee-94d4-a0291978916e",
   },
 ];
