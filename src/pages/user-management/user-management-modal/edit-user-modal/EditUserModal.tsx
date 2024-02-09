@@ -29,8 +29,6 @@ import {
   roleValue,
 } from "~/pages/user-management/utils";
 
-import { teamOptions } from "../utils";
-
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
   fontStyle: "normal",
@@ -73,6 +71,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     () => setIsEditSuccess(true),
     () => setIsEditError(true),
   );
+  const projectOptions = commonOptionsAPI("project");
+  const teamOptions = commonOptionsAPI("team");
 
   const EditUserForm: UserManagementForms = {
     firstName: values?.updateFirstName ?? "",
@@ -220,7 +220,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               {t(userManagement.label.projectId)}
             </StyledTitle>
             <ControlledSelect
-              options={commonOptionsAPI("project")}
+              options={projectOptions}
               value={form.values.updateProjectId || ""}
               name="updateProjectName"
             />
