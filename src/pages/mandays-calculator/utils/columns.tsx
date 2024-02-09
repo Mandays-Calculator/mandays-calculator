@@ -15,10 +15,11 @@ import type {
   EstimationColumn,
   EstimationSubColumn,
   EstimationColumnProps,
+  TasksListDataType,
 } from "./types";
 
 import { CellProps } from "react-table";
-import { IconButton } from "@mui/material";
+import { IconButton, Grid, Typography, Stack } from "@mui/material";
 import {
   ControlledNumberInput,
   ControlledSelect,
@@ -116,35 +117,54 @@ export const TasksListColumns = ({
   return [
     {
       Header: t(tasksTableColumns.tasks),
-      accessor: "tasks",
+      accessor: "task",
     },
     {
       Header: t(tasksTableColumns.complexity),
       accessor: "complexity",
     },
     {
-      Header: t(tasksTableColumns.i03),
-      accessor: "i03",
+      Header: () => (
+        <Stack width="315px">
+          <Typography variant="body1" color="initial" textAlign="center">
+            {t(estimationColumns.noOfResources)}
+          </Typography>
+        </Stack>
+      ),
+
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const carrerLvlData = {
+          data: [
+            { carrerLvl: "IO3", value: row.original.resourceCountByTasks?.I03 },
+            { carrerLvl: "IO4", value: row.original.resourceCountByTasks?.I04 },
+            { carrerLvl: "IO5", value: row.original.resourceCountByTasks?.I05 },
+            { carrerLvl: "IO6", value: row.original.resourceCountByTasks?.I06 },
+            { carrerLvl: "IO7", value: row.original.resourceCountByTasks?.I07 },
+          ],
+        };
+        return (
+          <Grid container>
+            {carrerLvlData.data.map((data) => {
+              return (
+                <Grid item xs={2.4}>
+                  {data.carrerLvl}
+                  <Typography mt={3}>{data.value}</Typography>
+                </Grid>
+              );
+            })}
+          </Grid>
+        );
+      },
+      accessor: "resourceCountByTasks",
     },
-    {
-      Header: t(tasksTableColumns.i04),
-      accessor: "i04",
-    },
-    {
-      Header: t(tasksTableColumns.i05),
-      accessor: "i05",
-    },
-    {
-      Header: t(tasksTableColumns.i06),
-      accessor: "i06",
-    },
-    {
-      Header: t(tasksTableColumns.i07),
-      accessor: "i07",
-    },
+
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
+    },
+    {
+      Header: t(summaryTableColumns.totalManDays),
+      accessor: "totalManDays",
     },
   ];
 };

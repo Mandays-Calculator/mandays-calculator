@@ -14,7 +14,7 @@ import { useUserAuth } from "~/hooks/user";
 import { useRequestHandler } from "~/hooks/request-handler";
 
 import { useDeleteEstimation } from "~/mutations/mandays-est-tool";
-import { useGetEstimations } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+import { useGetEstimations } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
 
 import { SprintListColumns } from "./utils/columns";

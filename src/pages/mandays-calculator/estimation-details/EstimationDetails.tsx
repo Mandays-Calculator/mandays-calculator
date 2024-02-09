@@ -22,7 +22,7 @@ import {
   Title,
 } from "~/components";
 
-import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import { useCommonOption } from "~/queries/common/options";
 
 import LocalizationKey from "~/i18n/key";
@@ -227,11 +227,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           </Grid>
         </Grid>
         <PageContainer>
-          <Grid
-            container
-            justifyContent="space-between"
-            sx={{ marginBottom: "2.3rem" }}
-          >
+          <Grid container justifyContent="end" mb={2}>
             {!isGeneratingPDF && (
               <HeaderButtons
                 setIsExport={setIsExport}
@@ -270,6 +266,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           </Form>
         </PageContainer>
       </div>
+
       {isExport && (
         <ExportModal
           isExport={isExport}
