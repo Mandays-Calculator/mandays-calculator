@@ -52,6 +52,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const { t } = useTranslation();
 
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [validateCount, setValidateCount] = useState<number>(0);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [isExport, setIsExport] = useState<boolean>(false);
   const [isShare, setIsShare] = useState<boolean>(false);
@@ -62,6 +63,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const complexities = useCommonOption("complexity");
   const careerSteps = useCommonOption("career_step");
   const odcList = useCommonOption("odc");
+  const getCareerStepSingleVal: string[] = careerSteps.map(
+    (item) => item.label,
+  );
 
   const switchTab = (tabId: number): void => {
     setActiveTab(tabId);
@@ -89,8 +93,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const mandaysForm = useFormik<MandaysForm>({
     initialValues: { ...initMandays },
-    validationSchema: estimationDetailsSchema(t),
-    validateOnChange: true, // true for now to check every validation
+    validationSchema: estimationDetailsSchema(t, getCareerStepSingleVal),
+    validateOnChange: true,
+    validateOnBlur: true,
     onSubmit: (val) => {
       console.log(val, "Submitting values");
     },
@@ -104,7 +109,8 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     validationSchema: yup.object({
       exportBy: yup.string().required(t(common.errorMessage.required)),
     }),
-    validateOnChange: true,
+    validateOnChange: false,
+    validateOnBlur: true,
     onSubmit: (values) => {
       const { exportBy } = values;
       if (exportBy === "pdf") {
@@ -129,7 +135,17 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const handleNext = (): void => {
     mandaysForm.validateForm();
-    setActiveTab(activeTab + 1);
+    const formError = mandaysForm.errors;
+    const currentTab = Object.keys(mandaysForm.values)[activeTab];
+    if (validateCount > 0) {
+      if (Object.keys(formError).includes(currentTab)) {
+        return;
+      }
+      setValidateCount(0);
+      setActiveTab(activeTab + 1);
+    }
+    setValidateCount(validateCount + 1);
+    console.log(formError);
   };
 
   const handleSave = (): void => {

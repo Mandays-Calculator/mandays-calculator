@@ -2,11 +2,24 @@ import type { ChangeEvent, ReactElement } from "react";
 import type { DropResult } from "react-beautiful-dnd";
 import type { MandaysForm, Status, TaskType } from "../..";
 
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
-
 import { getIn, useFormikContext } from "formik";
+
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+
+import { TextField } from "~/components";
+
+import { usePagination } from "~/hooks/pagination";
+import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+import { dateFormat } from "~/utils/date";
+import LocalizationKey from "~/i18n/key";
+
+import { initializeTasksListData } from "../utils/initializeTasks";
+import { filterDataByValue } from "~/utils/helpers";
 
 import {
   StyledCardContainer,
@@ -15,19 +28,6 @@ import {
   StyledTitle,
 } from ".";
 
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-
-import { TextField } from "~/components";
-import { dateFormat } from "~/utils/date";
-import LocalizationKey from "~/i18n/key";
-import { usePagination } from "~/hooks/pagination";
-import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
-
-import { initializeTasksListData } from "../utils/initializeTasks";
-import { filterDataByValue } from "~/utils/helpers";
-
 const AddTasks = (): ReactElement => {
   const droppableList: Status[] = ["unselected", "selected"];
   const filteredValues: string[] = ["name", "description"];
@@ -35,16 +35,12 @@ const AddTasks = (): ReactElement => {
   const taskStatus: string = "1";
   const { t } = useTranslation();
   const { mandaysCalculator, common } = LocalizationKey;
-
   const { values, setValues } = useFormikContext<MandaysForm>();
 
   const [notSelected, setNotSelected] = useState<string>("");
   const [selected, setSelected] = useState<string>("");
 
-  const tasksData = useGetTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2", // hard coded for now since getTask is not fully working
-    taskStatus,
-  );
+  const tasksData = useGetTasks(values.summary.teamId, taskStatus);
 
   const tasks: TaskType[] = getIn(values, "tasks");
 
@@ -90,7 +86,7 @@ const AddTasks = (): ReactElement => {
   };
 
   return (
-    <Fragment>
+    <>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Grid container spacing={2} justifyContent={"space-between"}>
           {droppableList.map((droppable, index) => (
@@ -124,6 +120,7 @@ const AddTasks = (): ReactElement => {
                         value={
                           droppable === "selected" ? selected : notSelected
                         }
+                        disabled={paginatedItems().length === 0}
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                           handleSearch(e, droppable)
                         }
@@ -173,7 +170,7 @@ const AddTasks = (): ReactElement => {
                           </Typography>
                         </StyledNoDataContainer>
                       )}
-                      <Pagination />
+                      {searchedFilteredData.length > 0 && <Pagination />}
                       {provided.placeholder}
                     </div>
                   );
@@ -183,7 +180,7 @@ const AddTasks = (): ReactElement => {
           ))}
         </Grid>
       </DragDropContext>
-    </Fragment>
+    </>
   );
 };
 

@@ -1,17 +1,14 @@
 import type { TFunction } from "i18next";
-
 import * as yup from "yup";
-
 import LocalizationKey from "~/i18n/key";
 
 const {
   common: { errorMessage },
 } = LocalizationKey;
 
-const resourceKeys = ["I03", "I04", "I05", "I06", "I07", "I08", "I09"]; // will replace from API
-const resourceSchema = (t: TFunction) => {
+const resourceSchema = (t: TFunction, careerSteps: string[]) => {
   return yup.object().shape(
-    resourceKeys.reduce((acc: Record<string, any>, key: string) => {
+    careerSteps.reduce((acc: Record<string, any>, key: string) => {
       acc[key] = yup
         .array()
         .of(
@@ -29,10 +26,12 @@ const resourceSchema = (t: TFunction) => {
               .duplicateODC,
           ),
           function (values) {
-            if (values) {
+            if (values && values.length > 1) {
+              // Only check for duplicates if there are more than one entry
               const odcIds = values.map((item: any) => item.odcId);
               return new Set(odcIds).size === odcIds.length;
             }
+            return true; // No error if there's only one entry or no entries
           },
         );
       return acc;
@@ -40,7 +39,10 @@ const resourceSchema = (t: TFunction) => {
   );
 };
 
-export const estimationDetailsSchema = (t: TFunction) => {
+export const estimationDetailsSchema = (
+  t: TFunction,
+  careerSteps: string[],
+) => {
   return yup.object().shape({
     summary: yup.object({
       teamId: yup.string().required(t(errorMessage.required)),
@@ -67,6 +69,16 @@ export const estimationDetailsSchema = (t: TFunction) => {
           },
         ),
     }),
-    resource: resourceSchema(t),
+    resource: resourceSchema(t, careerSteps),
+    tasks: yup
+      .array()
+      .min(1, "Please select at least 1 task")
+      .test(
+        "at-least-one-selected",
+        "At least one task should have dndStatus as selected",
+        function (tasks) {
+          if (tasks) return tasks.some((task) => task.dndStatus === "selected");
+        },
+      ),
   });
 };
