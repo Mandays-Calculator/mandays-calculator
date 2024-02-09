@@ -6,7 +6,7 @@ import { CustomButton } from "~/components/form/button";
 import { useState } from "react";
 import { useCommonOption } from "~/queries/common/options";
 import { UserListData } from "~/api/user-management/types";
-import { useTimeout } from "~/pages/project-management/utils/functions";
+import { useTimeout } from "~/hooks/timeout";
 import {
   CardContainer,
   CardInfoContainer,
@@ -54,13 +54,13 @@ const UserModal = (props: UserModal) => {
     filterValues: {
       odc: string;
       careerStep: string;
-    }
+    },
   ): UserListData[] => {
     if (filterValues.careerStep || filterValues.odc) {
       return users.filter(
         (user) =>
           (user.careerStep === filterValues.careerStep && user) ||
-          (user.odc?.id === filterValues.odc && user)
+          (user.odc?.id === filterValues.odc && user),
       );
     }
     return users;
@@ -123,7 +123,7 @@ const UserModal = (props: UserModal) => {
                 .length > 0 ? (
                 filterUsers(
                   users as unknown as UserListData[],
-                  filterValues
+                  filterValues,
                 ).map((user, index) => (
                   <Grid item xs={6} key={index}>
                     <CardContainer

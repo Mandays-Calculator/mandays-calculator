@@ -14,10 +14,19 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 const StyledAccordionSummary = styled(AccordionSummary, {
   shouldForwardProp: (prop) => prop !== "hasCustomExpandIcon",
 })<{ hasCustomExpandIcon?: boolean }>(({ hasCustomExpandIcon }) => ({
+  background: "#D7EFFF",
+  borderTopLeftRadius: "10px",
+  borderTopRightRadius: "10px",
+
   [`& .${accordionSummaryClasses.expandIconWrapper}`]: {
     transform: hasCustomExpandIcon ? "none !important" : undefined,
   },
 }));
+
+const StyledAccordion = styled(MuiAccordion)`
+  border-radius: 10px;
+  box-shadow: none;
+`;
 
 type BaseAccordionProps = Omit<
   MuiAccordionProps,
@@ -57,7 +66,7 @@ export const Accordion = (props: AccordionProps): ReactElement => {
   const renderTitle = (): ReactNode => {
     if (typeof title === "string") {
       return (
-        <Typography variant="h6" fontWeight="bold" color="primary">
+        <Typography variant="h6" fontWeight="bold" sx={{ color: "#414145" }}>
           {title}
         </Typography>
       );
@@ -70,7 +79,7 @@ export const Accordion = (props: AccordionProps): ReactElement => {
   };
 
   return (
-    <MuiAccordion
+    <StyledAccordion
       defaultExpanded={defaultExpanded}
       expanded={isExpanded}
       onChange={handleToggleAccordion}
@@ -80,12 +89,15 @@ export const Accordion = (props: AccordionProps): ReactElement => {
         {renderTitle()}
       </StyledAccordionSummary>
       <AccordionDetails
-        sx={{ padding: disabledContentPadding ? "0" : "0.5rem 1rem 1rem" }}
+        sx={{
+          padding: disabledContentPadding ? "0" : "0.5rem 1rem 1rem",
+          border: "2px solid #e1e0e0",
+        }}
       >
         {children}
       </AccordionDetails>
       {footer ? <AccordionDetails>{footer}</AccordionDetails> : null}
-    </MuiAccordion>
+    </StyledAccordion>
   );
 };
 

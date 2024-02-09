@@ -1,3 +1,6 @@
+import { CareerSteps } from "~/api/common";
+import { CommonOption } from "~/queries/common/options";
+
 export type EstimationDetailsMode = "edit" | "add" | "view";
 
 export interface EstimationDetailsProps {
@@ -12,26 +15,28 @@ export type ShareFormValues = {
   expiredIn: string;
   timeType: string;
 };
+
 interface Resource {
-  odc: string;
-  resourceCount: string;
-  annualLeaves: string;
+  [key: string]: {
+    odcId: string;
+    numberOfResources: number;
+    annualLeaves: number;
+  }[];
 }
+
 interface SummaryForm {
-  name: string;
-  team: string;
-  utilRate: string;
+  estimationName: string;
+  teamId: string;
+  utilizationRate: number | string;
   startDate: string;
   endDate: string;
 }
 
 type LegendColumn = {
-  complexity: string;
-  i03: string;
-  i04: string;
-  i05: string;
-  i06: string;
-  i07: string;
+  [key: string]: {
+    careerStep: CareerSteps;
+    manHours: number;
+  }[];
 };
 
 export type Status = "selected" | "unselected";
@@ -46,11 +51,17 @@ export type TaskType = {
 
 export interface MandaysForm {
   summary: SummaryForm;
-  resource: Resource[];
-  legend: LegendColumn[];
+  resource: Resource;
+  legends: LegendColumn;
   tasks: TaskType[];
 }
 export interface ReviewSummaryType extends MandaysForm {
   sprintName: string;
   mode: EstimationDetailsMode;
+}
+
+export interface ApiCommonOptions {
+  careerSteps?: CommonOption;
+  odc?: CommonOption;
+  complexities?: CommonOption;
 }

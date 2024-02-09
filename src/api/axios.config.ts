@@ -67,6 +67,7 @@ const init = async (): Promise<void> => {
                 replayRequests();
               })
               .catch((refreshError) => {
+                channel.postMessage(events.unauthorized);
                 throw refreshError;
               })
               .finally(() => {

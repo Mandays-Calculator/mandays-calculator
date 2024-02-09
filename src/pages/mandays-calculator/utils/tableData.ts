@@ -1,5 +1,3 @@
-import type { LegendColumn } from "./types";
-
 export const mandaysCalculatorData = [
   {
     id: "sprint1",
@@ -90,33 +88,6 @@ export const taskDetailData = [
         totalManHours: "24",
       },
     ],
-  },
-];
-
-export const legendData: LegendColumn[] = [
-  {
-    complexity: "Simple",
-    i03: "5",
-    i04: "2",
-    i05: "1",
-    i06: "1",
-    i07: "1",
-  },
-  {
-    complexity: "Medium",
-    i03: "2",
-    i04: "2",
-    i05: "1",
-    i06: "1",
-    i07: "1",
-  },
-  {
-    complexity: "Complex",
-    i03: "3",
-    i04: "2",
-    i05: "1",
-    i06: "1",
-    i07: "1",
   },
 ];
 

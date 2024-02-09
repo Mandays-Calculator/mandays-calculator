@@ -1,7 +1,10 @@
-import { UserProject } from "~/api/auth";
+import type { UserProject } from "~/api/auth";
+import uniqBy from "lodash/uniqBy";
 
 export const getProjectOptions = (projects: UserProject[]): SelectObject[] => {
-  return projects
+  const uniqueProjects = uniqBy(projects, "projectId");
+
+  return uniqueProjects
     .filter((project: UserProject) => project.active)
     .map((project) => ({
       label: project.name,
