@@ -4,7 +4,7 @@ import html2canvas from "html2canvas";
 type CompilePDFParam = {
   callback1: (value: boolean) => void;
   switchTabCallback: (value: number) => void;
-  sprintName: string;
+  estimationName: string;
 };
 
 export const captureTabContent = async (
@@ -56,7 +56,7 @@ export const captureTabContent = async (
 export const compilePDF = async ({
   callback1,
   switchTabCallback,
-  sprintName,
+  estimationName,
 }: CompilePDFParam) => {
   callback1(true);
   const pdf = new jsPDF({
@@ -78,7 +78,7 @@ export const compilePDF = async ({
   const now = new Date();
   const date = (now.toLocaleDateString("en-CA") as any).replaceAll("/", "-");
   const time = (now.toLocaleTimeString("en-GB") as any).replaceAll(":", "-");
-  const filename = `SPRINT_${sprintName}_details_${date}_${time}.pdf`;
+  const filename = `SPRINT_${estimationName}_details_${date}_${time}.pdf`;
   pdf.save(filename);
   callback1(false);
 };

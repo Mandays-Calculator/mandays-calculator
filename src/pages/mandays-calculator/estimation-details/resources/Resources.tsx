@@ -40,7 +40,7 @@ const Resources = (props: ResourcesProps): ReactElement => {
     if (
       careerLevels.length > 0 &&
       !isInitialized &&
-      Object.keys(form.values.resource).length === 0
+      Object.keys(form.values.resources).length === 0
     ) {
       const titles = careerLevels.map((cl) => cl.value);
 
@@ -55,13 +55,13 @@ const Resources = (props: ResourcesProps): ReactElement => {
 
   const handleDeleteResources = (index: number, title: string): void => {
     const formValues = { ...form.values };
-    const getResourceByCareerStep = formValues.resource[title];
+    const getResourceByCareerStep = formValues.resources[title];
     const updatedResources = Array.isArray(getResourceByCareerStep)
       ? getResourceByCareerStep.filter((_, idx) => index !== idx)
       : [];
 
-    formValues.resource[title] = updatedResources;
-    form.setFieldValue("resource", formValues.resource);
+    formValues.resources[title] = updatedResources;
+    form.setFieldValue("resource", formValues.resources);
   };
 
   const memoizedColumn = useCallback(
@@ -79,7 +79,7 @@ const Resources = (props: ResourcesProps): ReactElement => {
   );
 
   const handleAddResource = (title: string): void => {
-    const updatedResources: any = { ...form.values.resource };
+    const updatedResources: any = { ...form.values.resources };
     const newResource = {
       odcId: "",
       numberOfResources: "",
@@ -96,27 +96,27 @@ const Resources = (props: ResourcesProps): ReactElement => {
   };
 
   const renderTable = (title: string): ReactNode => {
-    const selectedCareer = form.values.resource[title];
+    const selectedCareer = form.values.resources[title];
     const odcValues = selectedCareer
       .filter((item) => item.odcId !== "")
       .map((item) => item.odcId);
     return (
       <Accordion key={title} title={title} defaultExpanded={isGeneratingPDF}>
         <StyledTableContainer>
-          {form.values.resource[title]?.length > 0 ? (
+          {form.values.resources[title]?.length > 0 ? (
             <>
               <Table
                 columns={memoizedColumn({
                   title: title,
                   selectedODC: odcValues,
                 })}
-                data={form.values.resource[title] || []}
+                data={form.values.resources[title] || []}
                 name="mandays-calculator"
                 noDataLabel={t(resourceListTableColumns.noResourceLabel)}
               />
               {renderErrorResource(
                 getFieldError(
-                  form.errors.resource as unknown as FormikErrors<FormErrors>,
+                  form.errors.resources as unknown as FormikErrors<FormErrors>,
                   title,
                 ),
               )}
@@ -146,7 +146,7 @@ const Resources = (props: ResourcesProps): ReactElement => {
           </Typography>
         </Grid>
       </Grid>
-      {Object.keys(form.values.resource).map((title: string) =>
+      {Object.keys(form.values.resources).map((title: string) =>
         renderTable(title),
       )}
     </Stack>

@@ -91,7 +91,7 @@ export interface CreatePhase {
 
 export interface MandaysForm {
   summary: SummaryForm;
-  resource: Resource;
+  resources: Resource;
   legends: LegendColumn;
   tasks: TaskType[];
   phases: Phase[];

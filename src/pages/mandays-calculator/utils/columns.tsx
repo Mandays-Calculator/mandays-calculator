@@ -1,5 +1,5 @@
-import type { Column } from "react-table";
 import type { ReactElement } from "react";
+import type { Column } from "react-table";
 import type { CommonOption } from "~/queries/common/options";
 import type {
   TasksColumnsProps,
@@ -16,21 +16,21 @@ import type {
   EstimationColumn,
   EstimationSubColumn,
   EstimationColumnProps,
+  TasksListDataType,
 } from "./types";
 
 import { CellProps } from "react-table";
-import { IconButton } from "@mui/material";
+import { IconButton, Grid, Typography, Stack } from "@mui/material";
+import { SvgIcon, Table, ErrorMessage } from "~/components";
 import {
   ControlledNumberInput,
   ControlledSelect,
 } from "~/components/form/controlled";
-import { SvgIcon, Table } from "~/components";
-
-import renderStatus from "~/utils/helpers/renderStatusHelper";
-import LocalizationKey from "~/i18n/key";
-import { getFieldError } from "~/components/form/utils";
 import { FormErrors } from "~/components/form/types";
-import { ErrorMessage } from "~/components";
+import { getFieldError } from "~/components/form/utils";
+
+import LocalizationKey from "~/i18n/key";
+import renderStatus from "~/utils/helpers/renderStatusHelper";
 
 const {
   mandaysCalculator: {
@@ -117,35 +117,54 @@ export const TasksListColumns = ({
   return [
     {
       Header: t(tasksTableColumns.tasks),
-      accessor: "tasks",
+      accessor: "task",
     },
     {
       Header: t(tasksTableColumns.complexity),
       accessor: "complexity",
     },
     {
-      Header: t(tasksTableColumns.i03),
-      accessor: "i03",
+      Header: () => (
+        <Stack width="315px">
+          <Typography variant="body1" color="initial" textAlign="center">
+            {t(estimationColumns.noOfResources)}
+          </Typography>
+        </Stack>
+      ),
+
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const carrerLvlData = {
+          data: [
+            { carrerLvl: "IO3", value: row.original.resourceCountByTasks?.I03 },
+            { carrerLvl: "IO4", value: row.original.resourceCountByTasks?.I04 },
+            { carrerLvl: "IO5", value: row.original.resourceCountByTasks?.I05 },
+            { carrerLvl: "IO6", value: row.original.resourceCountByTasks?.I06 },
+            { carrerLvl: "IO7", value: row.original.resourceCountByTasks?.I07 },
+          ],
+        };
+        return (
+          <Grid container>
+            {carrerLvlData.data.map((data) => {
+              return (
+                <Grid item xs={2.4}>
+                  {data.carrerLvl}
+                  <Typography mt={3}>{data.value}</Typography>
+                </Grid>
+              );
+            })}
+          </Grid>
+        );
+      },
+      accessor: "resourceCountByTasks",
     },
-    {
-      Header: t(tasksTableColumns.i04),
-      accessor: "i04",
-    },
-    {
-      Header: t(tasksTableColumns.i05),
-      accessor: "i05",
-    },
-    {
-      Header: t(tasksTableColumns.i06),
-      accessor: "i06",
-    },
-    {
-      Header: t(tasksTableColumns.i07),
-      accessor: "i07",
-    },
+
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
+    },
+    {
+      Header: t(summaryTableColumns.totalManDays),
+      accessor: "totalManDays",
     },
   ];
 };
@@ -206,7 +225,7 @@ export const ResourcesListColumns = ({
       Header: t(resourceListTableColumns.odc),
       accessor: "odcId",
       Cell: ({ row }: CellProps<ResourcesListDataType>) => {
-        const fieldName = `resource.${title}.${row.index}.odcId`;
+        const fieldName = `resources.${title}.${row.index}.odcId`;
         const fieldError = getFieldError(form.errors as FormErrors, fieldName);
 
         return (
@@ -226,7 +245,7 @@ export const ResourcesListColumns = ({
       width: 250,
       accessor: "numberOfResources",
       Cell: ({ row }: CellProps<ResourcesListDataType>) => {
-        const fieldName = `resource.${title}.${row.index}.numberOfResources`;
+        const fieldName = `resources.${title}.${row.index}.numberOfResources`;
         const fieldError = getFieldError(form.errors as FormErrors, fieldName);
         return (
           <div style={{ maxWidth: "200px", textAlign: "center" }}>
@@ -247,7 +266,7 @@ export const ResourcesListColumns = ({
       accessor: "annualLeaves",
       width: 250,
       Cell: ({ row }: CellProps<ResourcesListDataType>) => {
-        const fieldName = `resource.${title}.${row.index}.annualLeaves`;
+        const fieldName = `resources.${title}.${row.index}.annualLeaves`;
         const fieldError = getFieldError(form.errors as FormErrors, fieldName);
         return (
           <div style={{ maxWidth: "200px", textAlign: "center" }}>

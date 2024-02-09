@@ -1,11 +1,11 @@
 import type { ReactElement } from "react";
-import type { TFunction } from "i18next";
-import { useState } from "react";
+
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
-import { SvgIcon, PageContainer, Table, PageLoader, Alert } from "~/components";
+import { SvgIcon, PageContainer, Table, PageLoader } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 
@@ -14,52 +14,24 @@ import { useUserAuth } from "~/hooks/user";
 import { useRequestHandler } from "~/hooks/request-handler";
 
 import { useDeleteEstimation } from "~/mutations/mandays-est-tool";
-import { useGetEstimations } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+import { useGetEstimations } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
 
+import { AlertRenderer } from "./components/alert-renderer";
 import { SprintListColumns } from "./utils/columns";
 import { StyledSprintLabel } from "./styles";
-
-interface AlertRendererProps {
-  isErrorLoadingEstimations: boolean;
-  successMessage: string;
-  t: TFunction;
-}
-
-const AlertRenderer = ({
-  isErrorLoadingEstimations,
-  t,
-  successMessage,
-}: AlertRendererProps): ReactElement => {
-  const { common } = LocalizationKey;
-  return (
-    <>
-      {isErrorLoadingEstimations && (
-        <Alert
-          type="error"
-          message={t(common.errorMessage.genericError)}
-          open={isErrorLoadingEstimations}
-        />
-      )}
-      {successMessage && (
-        <Alert
-          type="success"
-          message={successMessage}
-          open={successMessage !== ""}
-        />
-      )}
-    </>
-  );
-};
+import { isArray } from "lodash";
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [triggerTimeout] = useTimeout();
 
   const user = useUserAuth();
   const deleteSprintMutation = useDeleteEstimation();
+
   // get estimations based on project
   const {
     data: estimationData,
@@ -123,6 +95,19 @@ const MandaysCalculator = (): ReactElement => {
     });
   };
 
+  const memoizedColumn = useMemo(
+    () =>
+      SprintListColumns({
+        t,
+        onDeleteSprintDetails: handleDeleteSprint,
+        onViewSprintDetails: (estimationId: string) =>
+          handleNavigate("view", estimationId),
+        onEditSprintDetails: (estimationId: string) =>
+          handleNavigate("edit", estimationId),
+      }),
+    [estimationData?.data],
+  );
+
   if (isLoadingEstimations || deleteStatus.loading) {
     return <PageLoader labelOnLoad={t(mandaysCalculator.sprintListLoader)} />;
   }
@@ -144,16 +129,13 @@ const MandaysCalculator = (): ReactElement => {
         </Grid>
         <Table
           name="mandays-calculator"
-          columns={SprintListColumns({
-            t,
-            onDeleteSprintDetails: handleDeleteSprint,
-            onViewSprintDetails: (estimationId: string) =>
-              handleNavigate("view", estimationId),
-            onEditSprintDetails: (estimationId: string) =>
-              handleNavigate("edit", estimationId),
-          })}
+          columns={memoizedColumn}
           loading={isLoadingEstimations}
-          data={estimationData ? estimationData.data : []}
+          data={
+            estimationData && isArray(estimationData.data)
+              ? estimationData.data
+              : []
+          }
         />
       </PageContainer>
       <ConfirmModal

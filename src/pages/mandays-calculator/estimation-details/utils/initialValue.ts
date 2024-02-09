@@ -8,7 +8,7 @@ export const initMandays: MandaysForm = {
     startDate: "",
     endDate: "",
   },
-  resource: {},
+  resources: {},
   legends: {},
   tasks: [],
   phases: [],

@@ -2,8 +2,13 @@ import { AxiosError } from "axios";
 import type { UseQueryOptions, UseQueryResult } from "react-query";
 import { useQuery } from "react-query";
 
-import { getEstimations, getTasks } from "~/api/mandays-est-tool/";
 import {
+  getEstimationDetails,
+  getEstimations,
+  getTasks,
+} from "~/api/mandays-est-tool/";
+import {
+  EstimationDetailResponse,
   EstimationResponse,
   TasksResponse,
 } from "~/api/mandays-est-tool/types";
@@ -33,4 +38,10 @@ export const useGetEstimations = (params: {
   userId: string;
 }): UseQueryResult<QueryResponse<EstimationResponse[]>, AxiosError> => {
   return useQuery("getEstimations", () => getEstimations(params));
+};
+
+export const useGetEstimationDetails = (
+  estimationId: string,
+): UseQueryResult<QueryResponse<EstimationDetailResponse>, AxiosError> => {
+  return useQuery("getEstimations", () => getEstimationDetails(estimationId));
 };

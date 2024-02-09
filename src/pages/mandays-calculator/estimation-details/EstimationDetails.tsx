@@ -1,15 +1,13 @@
 import type { ReactElement, ReactNode } from "react";
-import type { MandaysForm, EstimationDetailsProps, ReviewSummaryType } from ".";
+import type { EstimationDetailsProps, MandaysForm, ReviewSummaryType } from ".";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Location, useLocation, useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
-import * as yup from "yup";
-
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import {
+  Alert,
   CustomTab,
   Form,
   PageContainer,
@@ -20,6 +18,8 @@ import {
 } from "~/components";
 
 import { useCommonOption } from "~/queries/common/options";
+import { useGetEstimationDetails } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+
 import LocalizationKey from "~/i18n/key";
 import MandaysEstimationImgIcon from "~/assets/img/mandays_estimation_img_icon.png";
 
@@ -39,13 +39,14 @@ import { ActionButtons } from "./components/action-buttons";
 import { HeaderButtons } from "./components/header-buttons";
 import { ShareModal } from "./components/share-modal";
 
-import { initMandays } from "./utils/initialValue";
-import { estimationDetailsSchema } from "./utils/schema";
 import { StyledTeamLabel } from "../styles";
+import { initMandays } from "./utils/initialValue";
+import { useExportMandaysForm, useMandaysForm } from "./utils/estimationForms";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const { isExposed } = props;
-  const { mandaysCalculator, common } = LocalizationKey;
+  const { mandaysCalculator } = LocalizationKey;
+  const location = useLocation();
 
   const navigate = useNavigate();
   const { state }: Location<ReviewSummaryType> = useLocation();
@@ -57,12 +58,26 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const [isExport, setIsExport] = useState<boolean>(false);
   const [isShare, setIsShare] = useState<boolean>(false);
 
+  const estimationId = location.pathname.split("/")[2];
   const mode = state?.mode || "view";
-  const sprintName = "Sprint 1"; // Note: will come from API
+
+  useEffect(() => {
+    if (!estimationId) {
+      navigate("./mandays-estimation-tool");
+    }
+  }, [location.pathname]);
 
   const complexities = useCommonOption("complexity");
   const careerSteps = useCommonOption("career_step");
   const odcList = useCommonOption("odc");
+  const {
+    data: estimationData,
+    isError: estimationError,
+    isLoading: estimationLoading,
+  } = useGetEstimationDetails(estimationId);
+
+  const estimationName = "Sprint 1";
+
   const getCareerStepSingleVal: string[] = careerSteps.map(
     (item) => item.label,
   );
@@ -76,47 +91,35 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     compilePDF({
       callback1: setIsGeneratingPDF,
       switchTabCallback: switchTab,
-      sprintName: sprintName,
+      estimationName: estimationName,
     });
   };
 
-  const handleExcelExport = (): void => {
-    const now = new Date();
-    const date = now.toLocaleDateString("en-CA").replaceAll("/", "-");
-    const time = now.toLocaleTimeString("en-GB").replaceAll(":", "-");
+  const contructInitialValue = useCallback((): MandaysForm => {
+    if (mode === "edit" || mode === "view") {
+      return estimationData
+        ? (estimationData.data as unknown as MandaysForm)
+        : { ...initMandays };
+    }
+    return { ...initMandays };
+  }, [estimationData?.data, mode]);
 
-    createExcel(
-      generateEstimationData({ t }),
-      `SPRINT_${sprintName}_details_${date}_${time}.xlsx`,
-    );
-  };
+  const mandaysForm = useMandaysForm({
+    getCareerStepSingleVal: getCareerStepSingleVal,
+    initialValue: contructInitialValue(),
 
-  const mandaysForm = useFormik<MandaysForm>({
-    initialValues: { ...initMandays },
-    validationSchema: estimationDetailsSchema(t, getCareerStepSingleVal),
-    validateOnChange: true,
-    validateOnBlur: true,
     onSubmit: (val) => {
       console.log(val, "Submitting values");
     },
-    enableReinitialize: true,
   });
 
-  const exportForm = useFormik<{ exportBy: string }>({
-    initialValues: {
-      exportBy: "",
-    },
-    validationSchema: yup.object({
-      exportBy: yup.string().required(t(common.errorMessage.required)),
-    }),
-    validateOnChange: false,
-    validateOnBlur: true,
+  const exportForm = useExportMandaysForm({
     onSubmit: (values) => {
       const { exportBy } = values;
       if (exportBy === "pdf") {
         handlePDFExport();
       } else {
-        handleExcelExport();
+        createExcel(generateEstimationData({ t }), estimationName);
       }
     },
   });
@@ -134,18 +137,21 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   };
 
   const handleNext = (): void => {
-    mandaysForm.validateForm();
-    const formError = mandaysForm.errors;
-    const currentTab = Object.keys(mandaysForm.values)[activeTab];
-    if (validateCount > 0) {
-      if (Object.keys(formError).includes(currentTab)) {
-        return;
+    if (mode === "add" || mode === "edit") {
+      mandaysForm.validateForm();
+      const formError = mandaysForm.errors;
+      const currentTab = Object.keys(mandaysForm.values)[activeTab];
+      if (validateCount > 0) {
+        if (Object.keys(formError).includes(currentTab)) {
+          return;
+        }
+        setValidateCount(0);
+        setActiveTab(activeTab + 1);
       }
-      setValidateCount(0);
+      setValidateCount(validateCount + 1);
+    } else {
       setActiveTab(activeTab + 1);
     }
-    setValidateCount(validateCount + 1);
-    console.log(formError);
   };
 
   const handleSave = (): void => {
@@ -207,6 +213,11 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     },
   ];
 
+  console.log(mandaysForm.values);
+
+  if (estimationLoading) {
+    return <PageLoader labelOnLoad="Loading estimation .. " />;
+  }
   return (
     <>
       {isGeneratingPDF && (
@@ -226,11 +237,12 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           </Grid>
         </Grid>
         <PageContainer>
-          <Grid
-            container
-            justifyContent="space-between"
-            sx={{ marginBottom: "2.3rem" }}
-          >
+          <Grid container justifyContent="space-between" mb={2}>
+            <Grid item xs={6}>
+              <Typography variant="body1" fontWeight="bold">
+                {estimationName}
+              </Typography>
+            </Grid>
             {!isGeneratingPDF && (
               <HeaderButtons
                 setIsExport={setIsExport}
@@ -255,7 +267,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
             ) : (
               <Stepper steps={stepperObject} activeStep={activeTab} />
             )}
-
             {!isGeneratingPDF && (
               <ActionButtons
                 mode={mode}
@@ -283,6 +294,14 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           setIsShare={setIsShare}
           t={t}
           handleSubmit={() => console.log("submit share modal")}
+        />
+      )}
+      {estimationError && (
+        <Alert
+          type="error"
+          duration={3000}
+          open={estimationError}
+          message={t(LocalizationKey.common.errorMessage.genericError)}
         />
       )}
     </>

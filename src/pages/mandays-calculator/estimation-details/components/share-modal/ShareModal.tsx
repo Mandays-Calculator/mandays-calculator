@@ -3,17 +3,17 @@ import type { TFunction } from "i18next";
 import type { ShareFormValues } from "../../types";
 
 import { useState, useEffect } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
 import { Grid, Typography, Stack } from "@mui/material";
 
+import LocalizationKey from "~/i18n/key";
 import { Form, Modal, ErrorMessage } from "~/components";
 import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
 import { getFieldError } from "~/components/form/utils";
-import LocalizationKey from "~/i18n/key";
+
+import { useShareMandaysForm } from "../../utils/estimationForms";
 
 import GeneratedLink from "./generated-link";
 import { timeTypeOptions, expiryOptions, hrsNo } from "./utils";
@@ -39,25 +39,7 @@ const ShareModal = ({
   const [isLinkGeneratedSuccess, setIsLinkGeneratedSuccess] =
     useState<boolean>(false);
 
-  const shareForm = useFormik<ShareFormValues>({
-    initialValues: {
-      shareBy: "",
-      expiredIn: "",
-      timeType: "",
-    },
-    validationSchema: yup.object({
-      shareBy: yup.string().required(t(common.errorMessage.required)),
-      expiredIn: yup
-        .string()
-        .nullable()
-        .when("shareBy", (shareBy, schema) => {
-          return shareBy.includes("custom")
-            ? schema.required("Please select the expiration date")
-            : schema.nullable().notRequired();
-        }),
-    }),
-    validateOnChange: true,
-    validateOnBlur: true,
+  const shareForm = useShareMandaysForm({
     onSubmit: (values: ShareFormValues) => {
       console.log("total hours", hrsNo(values));
       handleSubmit(values);
@@ -77,7 +59,7 @@ const ShareModal = ({
 
   const renderExpirationSelection = (): ReactElement => {
     return (
-      <Grid container>
+      <Grid container sx={{ mt: 1 }}>
         <Grid item xs={6}>
           <ControlledTextField
             name="expiredIn"
@@ -107,7 +89,7 @@ const ShareModal = ({
             fontWeight="bold"
           >
             {t(modal.shareTitle)}
-            <Typography variant="body1" color={"#2C8ED1"}>
+            <Typography variant="body1" color={"primary"}>
               {t(modal.shareSubtitle)}: Registration team
             </Typography>
           </Typography>
@@ -122,10 +104,10 @@ const ShareModal = ({
           <Typography variant="subtitle1" mb={1}>
             {t(modal.accessExpiry)}
           </Typography>
-          <ControlledSelect
-            name="shareBy"
-            helperText={getFieldError(shareForm.errors, "shareBy")}
-            options={expiryOptions}
+          <ControlledSelect name="shareBy" options={expiryOptions} />
+          <ErrorMessage
+            type="field"
+            error={getFieldError(shareForm.errors, "shareBy")}
           />
           {shareForm.values.shareBy === "custom" &&
             !isLinkGeneratedSuccess &&

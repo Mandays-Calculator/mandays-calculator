@@ -1,4 +1,8 @@
-import type { TasksResponse, EstimationResponse } from "./types";
+import type {
+  TasksResponse,
+  EstimationResponse,
+  EstimationDetailResponse,
+} from "./types";
 
 import axios from "axios";
 import { getEnvConfig } from "~/utils/env-config";
@@ -49,6 +53,16 @@ export const deleteEstimation = async ({
 }): BaseResponse<EstimationResponse[]> => {
   const apiBasePath = getApiBasePath();
   const response = await axios.delete<EstimationResponse[]>(
+    `${apiBasePath}/mandays-estimations/${estimationId}`,
+  );
+  return response.data;
+};
+
+export const getEstimationDetails = async (
+  estimationId: string,
+): BaseResponse<EstimationDetailResponse> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.get<EstimationDetailResponse>(
     `${apiBasePath}/mandays-estimations/${estimationId}`,
   );
   return response.data;

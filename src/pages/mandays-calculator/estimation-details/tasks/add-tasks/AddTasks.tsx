@@ -14,7 +14,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { TextField } from "~/components";
 
 import { usePagination } from "~/hooks/pagination";
-import { useGetTasks } from "~/queries/mandays-est-tool/MandaysEstimationTool";
+import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import { dateFormat } from "~/utils/date";
 import LocalizationKey from "~/i18n/key";
 
