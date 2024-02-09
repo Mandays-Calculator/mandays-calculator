@@ -1,7 +1,7 @@
 import { FormikContextType } from "formik";
 import type { TFunction } from "i18next";
 import type { Column } from "react-table";
-import { Status } from "~/api/common";
+import { CareerSteps, Status } from "~/api/common";
 import { CommonOption } from "~/queries/common/options";
 import { MandaysForm } from "../estimation-details";
 
@@ -95,15 +95,16 @@ export type TasksColumnsProps = {
 export type LegendColumnProps = {
   t: TFunction<"translation", undefined>;
   isInput?: boolean;
+  complexities: CommonOption;
+  careerSteps: CommonOption;
+  form: FormikContextType<MandaysForm>;
 };
 
 export type LegendColumn = {
-  complexity: string;
-  i03: string;
-  i04: string;
-  i05: string;
-  i06: string;
-  i07: string;
+  [key: string]: {
+    careerStep: CareerSteps | string;
+    manHours: number;
+  }[];
 };
 
 export type ResourcesColumnsProps = {

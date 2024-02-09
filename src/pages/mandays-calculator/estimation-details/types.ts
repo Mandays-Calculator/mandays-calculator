@@ -1,3 +1,4 @@
+import { CareerSteps } from "~/api/common";
 import { CommonOption } from "~/queries/common/options";
 
 export type EstimationDetailsMode = "edit" | "add" | "view";
@@ -32,12 +33,10 @@ interface SummaryForm {
 }
 
 type LegendColumn = {
-  complexity: string;
-  i03: string;
-  i04: string;
-  i05: string;
-  i06: string;
-  i07: string;
+  [key: string]: {
+    careerStep: CareerSteps;
+    manHours: number;
+  }[];
 };
 
 export type Status = "selected" | "unselected";
@@ -53,7 +52,7 @@ export type TaskType = {
 export interface MandaysForm {
   summary: SummaryForm;
   resource: Resource;
-  legend: LegendColumn[];
+  legends: LegendColumn;
   tasks: TaskType[];
 }
 export interface ReviewSummaryType extends MandaysForm {
@@ -64,4 +63,5 @@ export interface ReviewSummaryType extends MandaysForm {
 export interface ApiCommonOptions {
   careerSteps?: CommonOption;
   odc?: CommonOption;
+  complexities?: CommonOption;
 }

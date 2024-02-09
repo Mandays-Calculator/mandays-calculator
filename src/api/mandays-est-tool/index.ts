@@ -1,2 +1,2 @@
-export * from "./MandaysEstimationTool";
+export * from "./mandaysEstimationTool";
 export * from "./types";
