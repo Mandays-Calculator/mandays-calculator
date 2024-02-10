@@ -35,3 +35,15 @@ export const getEstimations = async ({
   );
   return response.data;
 };
+
+export const deleteEstimation = async ({
+  estimationId,
+}: {
+  estimationId: string;
+}): BaseResponse<EstimationResponse[]> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.delete<EstimationResponse[]>(
+    `${apiBasePath}/mandays-estimations/${estimationId}`,
+  );
+  return response.data;
+};

@@ -77,7 +77,7 @@ const ShareModal = ({
 
   const renderExpirationSelection = (): ReactElement => {
     return (
-      <Grid container>
+      <Grid container sx={{ mt: 1 }}>
         <Grid item xs={6}>
           <ControlledTextField
             name="expiredIn"
@@ -107,7 +107,7 @@ const ShareModal = ({
             fontWeight="bold"
           >
             {t(modal.shareTitle)}
-            <Typography variant="body1" color={"#2C8ED1"}>
+            <Typography variant="body1" color={"primary"}>
               {t(modal.shareSubtitle)}: Registration team
             </Typography>
           </Typography>
@@ -122,10 +122,10 @@ const ShareModal = ({
           <Typography variant="subtitle1" mb={1}>
             {t(modal.accessExpiry)}
           </Typography>
-          <ControlledSelect
-            name="shareBy"
-            helperText={getFieldError(shareForm.errors, "shareBy")}
-            options={expiryOptions}
+          <ControlledSelect name="shareBy" options={expiryOptions} />
+          <ErrorMessage
+            type="field"
+            error={getFieldError(shareForm.errors, "shareBy")}
           />
           {shareForm.values.shareBy === "custom" &&
             !isLinkGeneratedSuccess &&

@@ -22,8 +22,8 @@ const HeaderButtons = (props: HeaderButtonsProps): ReactElement => {
     <>
       {mode === "view" && !isExposed && (
         <Grid item xs={2}>
-          <Grid container justifyContent={"right"}>
-            <Grid item xs={5}>
+          <Grid container justifyContent={"end"}>
+            <Grid item xs={5} mr={2}>
               <CustomButton onClick={() => setIsExport(true)}>
                 {t(common.exportBtn)}
               </CustomButton>

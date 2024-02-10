@@ -15,7 +15,7 @@ export const StyledGenerateButton = styled(Button)({
 });
 export const StyledLinkButton = styled(Button)({
   height: "37px",
-  width: "100px",
+  width: "105px",
   borderRadius: "10px",
   textTransform: "capitalize",
 });

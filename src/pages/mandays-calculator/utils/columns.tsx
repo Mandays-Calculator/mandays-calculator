@@ -15,15 +15,22 @@ import type {
   EstimationColumn,
   EstimationSubColumn,
   EstimationColumnProps,
+  TasksListDataType,
 } from "./types";
 
 import { CellProps } from "react-table";
-import { IconButton } from "@mui/material";
-import { ControlledNumberInput } from "~/components/form/controlled";
+import { IconButton, Grid, Typography, Stack } from "@mui/material";
+import {
+  ControlledNumberInput,
+  ControlledSelect,
+} from "~/components/form/controlled";
 import { SvgIcon, Table } from "~/components";
-import renderStatus from "~/utils/helpers/renderStatusHelper";
 
+import renderStatus from "~/utils/helpers/renderStatusHelper";
 import LocalizationKey from "~/i18n/key";
+import { getFieldError } from "~/components/form/utils";
+import { FormErrors } from "~/components/form/types";
+import { ErrorMessage } from "~/components";
 
 const {
   mandaysCalculator: {
@@ -50,7 +57,6 @@ export const SprintListColumns = ({
       Header: t(sprintListTableColumns.team),
       accessor: "team",
       Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
-        console.log(original);
         return original.team?.name;
       },
     },
@@ -63,7 +69,6 @@ export const SprintListColumns = ({
       accessor: "status",
       disableSortBy: true,
       Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
-        console.log(original);
         return renderStatus(original.status);
       },
     },
@@ -112,35 +117,54 @@ export const TasksListColumns = ({
   return [
     {
       Header: t(tasksTableColumns.tasks),
-      accessor: "tasks",
+      accessor: "task",
     },
     {
       Header: t(tasksTableColumns.complexity),
       accessor: "complexity",
     },
     {
-      Header: t(tasksTableColumns.i03),
-      accessor: "i03",
+      Header: () => (
+        <Stack width="315px">
+          <Typography variant="body1" color="initial" textAlign="center">
+            {t(estimationColumns.noOfResources)}
+          </Typography>
+        </Stack>
+      ),
+
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const carrerLvlData = {
+          data: [
+            { carrerLvl: "IO3", value: row.original.resourceCountByTasks?.I03 },
+            { carrerLvl: "IO4", value: row.original.resourceCountByTasks?.I04 },
+            { carrerLvl: "IO5", value: row.original.resourceCountByTasks?.I05 },
+            { carrerLvl: "IO6", value: row.original.resourceCountByTasks?.I06 },
+            { carrerLvl: "IO7", value: row.original.resourceCountByTasks?.I07 },
+          ],
+        };
+        return (
+          <Grid container>
+            {carrerLvlData.data.map((data) => {
+              return (
+                <Grid item xs={2.4}>
+                  {data.carrerLvl}
+                  <Typography mt={3}>{data.value}</Typography>
+                </Grid>
+              );
+            })}
+          </Grid>
+        );
+      },
+      accessor: "resourceCountByTasks",
     },
-    {
-      Header: t(tasksTableColumns.i04),
-      accessor: "i04",
-    },
-    {
-      Header: t(tasksTableColumns.i05),
-      accessor: "i05",
-    },
-    {
-      Header: t(tasksTableColumns.i06),
-      accessor: "i06",
-    },
-    {
-      Header: t(tasksTableColumns.i07),
-      accessor: "i07",
-    },
+
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
+    },
+    {
+      Header: t(summaryTableColumns.totalManDays),
+      accessor: "totalManDays",
     },
   ];
 };
@@ -148,107 +172,130 @@ export const TasksListColumns = ({
 export const LegendListColumns = ({
   t,
   isInput,
+  careerSteps,
+  form,
+  complexities,
 }: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
       accessor: "complexity",
+      Cell: ({ cell }: CellProps<LegendColumn>) => {
+        const findComplexity = complexities.find(
+          (cl) => cl.value === cell.value,
+        );
+        return <>{findComplexity?.label}</>;
+      },
     },
-    {
-      Header: t(tasksTableColumns.i03),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
+    ...careerSteps.map((item, careerIndex) => ({
+      Header: item.label,
+      Cell: ({ row }: CellProps<LegendColumn>) => {
+        const complexityId = row.original.complexity;
+        const legendData: {
+          careerStep: string;
+          manHours: number;
+        }[] = form.values.legends[complexityId.toString()] || [];
+        const careerStepData = legendData.find(
+          (data) => data.careerStep === item.label,
+        );
+        const fieldValue = `legends.${complexityId}.[${careerIndex}].manHours`;
+        return isInput ? (
           <>
-            <ControlledNumberInput name={`legend.${index}.i03`} />
+            <ControlledNumberInput name={fieldValue} />
           </>
         ) : (
-          <> {row.original.i03} </>
-        ),
-      accessor: "i03",
-    },
-    {
-      Header: t(tasksTableColumns.i04),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i04`} />
-          </>
-        ) : (
-          <> {row.original.i04} </>
-        ),
-      accessor: "i04",
-    },
-    {
-      Header: t(tasksTableColumns.i05),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i05`} />
-          </>
-        ) : (
-          <> {row.original.i05} </>
-        ),
-      accessor: "i05",
-    },
-    {
-      Header: t(tasksTableColumns.i06),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i06`} />
-          </>
-        ) : (
-          <> {row.original.i06} </>
-        ),
-      accessor: "i06",
-    },
-    {
-      Header: t(tasksTableColumns.i07),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i07`} />
-          </>
-        ) : (
-          <> {row.original.i07} </>
-        ),
-      accessor: "i07",
-    },
+          <> {careerStepData ? careerStepData.manHours : 0} </>
+        );
+      },
+      accessor: item.label,
+    })),
   ];
 };
 
 export const ResourcesListColumns = ({
   t,
-  isInput,
+  isInput = false,
+  title,
+  handleDeleteResources,
+  odc,
+  form,
 }: ResourcesColumnsProps): ResourcesListColumnsType[] => {
   return [
     {
       Header: t(resourceListTableColumns.odc),
-      accessor: "odc",
+      accessor: "odcId",
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resource.${title}.${row.index}.odcId`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+
+        return (
+          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+            <ControlledSelect
+              name={fieldName}
+              options={odc}
+              error={!!fieldError}
+            />
+            <ErrorMessage type="field" error={fieldError} />
+          </div>
+        );
+      },
     },
     {
       Header: t(resourceListTableColumns.resourceCount),
-      accessor: "resourceCount",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`resource.${index}.resourceCount`} />
-          </>
-        ) : (
-          <> {row.original.resourceCount} </>
-        ),
+      width: 250,
+      accessor: "numberOfResources",
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resource.${title}.${row.index}.numberOfResources`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+        return (
+          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+            {isInput ? (
+              <>
+                <ControlledNumberInput name={fieldName} />
+                <ErrorMessage type="field" error={fieldError} />
+              </>
+            ) : (
+              <> {row.original.numberOfResources} </>
+            )}
+          </div>
+        );
+      },
     },
     {
       Header: t(resourceListTableColumns.annualLeaves),
       accessor: "annualLeaves",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`resource.${index}.annualLeaves`} />
-          </>
-        ) : (
-          <> {row.original.annualLeaves} </>
-        ),
+      width: 250,
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resource.${title}.${row.index}.annualLeaves`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+        return (
+          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+            {isInput ? (
+              <>
+                <ControlledNumberInput name={fieldName} />
+                <ErrorMessage type="field" error={fieldError} />
+              </>
+            ) : (
+              <> {row.original.annualLeaves} </>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      Header: "",
+      accessor: "actions",
+      width: 400,
+      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) => (
+        <div style={{ textAlign: "right" }}>
+          <IconButton
+            onClick={() => handleDeleteResources(index)}
+            aria-label={`delete-${row.index}`}
+          >
+            <SvgIcon name="delete" $size={2} color="error" />
+          </IconButton>
+        </div>
+      ),
     },
   ];
 };

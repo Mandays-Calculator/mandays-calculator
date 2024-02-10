@@ -2,10 +2,7 @@ import { AxiosError } from "axios";
 import type { UseQueryOptions, UseQueryResult } from "react-query";
 import { useQuery } from "react-query";
 
-import {
-  getEstimations,
-  getTasks,
-} from "~/api/mandays-est-tool/mandaysEstimationTool";
+import { getEstimations, getTasks } from "~/api/mandays-est-tool/";
 import {
   EstimationResponse,
   TasksResponse,

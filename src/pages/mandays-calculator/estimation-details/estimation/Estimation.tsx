@@ -35,10 +35,7 @@ const Estimation = (props: EstimationProps): ReactElement => {
   const { t } = useTranslation();
   const estimationListColumn = useMemo(() => EstimationListColumns({ t }), []);
   return (
-    <Stack
-      direction={"column"}
-      gap={2}
-    >
+    <Stack direction={"column"} gap={2}>
       <Stack
         justifyContent={"space-between"}
         direction={"row"}
@@ -70,14 +67,14 @@ const Estimation = (props: EstimationProps): ReactElement => {
           columns={estimationListColumn}
         />
       </StyledAccordion>
-      <Stack
-        direction={"row"}
-        display={"flex"}
-        justifyContent={"flex-end"}
-      >
+      <Stack direction={"row"} display={"flex"} justifyContent={"flex-end"}>
         <StyledFooter>
-          <Typography fontWeight={"bold"}>Grand Total Man Hours: 100 Hours</Typography>
-          <Typography fontWeight={"bold"}>Grand Total Man Days: 100 Hours</Typography>
+          <Typography fontWeight={"bold"}>
+            Grand Total Man Hours: 100 Hours
+          </Typography>
+          <Typography fontWeight={"bold"}>
+            Grand Total Man Days: 100 Hours
+          </Typography>
         </StyledFooter>
       </Stack>
     </Stack>

@@ -12,7 +12,7 @@ import { OdcParam } from "~/api/odc/types";
 import { UserListData } from "~/api/user-management/types";
 import { useODCList } from "~/queries/odc/ODC";
 import { useUserList } from "~/queries/user-management/UserManagement";
-import { useTimeout } from "../../utils/functions";
+import { useTimeout } from "~/hooks/timeout";
 import { ErrorMessage, Select, TextField } from "~/components";
 import { Modal } from "~/components/modal";
 import { CustomButton } from "~/components/form/button";
@@ -58,7 +58,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
             <Typography>
               {user.lastName}, {user.firstName} {user.middleName ?? ""}
             </Typography>
-            <Typography>{user.odc?.abbreviation ?? '-'}</Typography>
+            <Typography>{user.odc?.abbreviation ?? "-"}</Typography>
             <Typography>{user.careerStep}</Typography>
           </div>
         </Grid>
@@ -74,7 +74,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
           newUser.isSelected = !newUser.isSelected;
         }
         return newUser;
-      })
+      }),
     );
   };
 
@@ -94,7 +94,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
 
   const filteredUserList = (
     searchedName: string,
-    searchedOdc?: string
+    searchedOdc?: string,
   ): Members[] => {
     return originUserList.filter((user) => {
       const name = user?.fullName
@@ -122,11 +122,16 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = listOfUsers && Array.isArray(listOfUsers?.data) ? listOfUsers.data : [];
+        const result =
+          listOfUsers && Array.isArray(listOfUsers?.data)
+            ? listOfUsers.data
+            : [];
 
         const newUsers = result
           .map((user) => {
-            const fullName = `${user.lastName}, ${user.firstName} ${user.middleName ?? ''}`.trim();
+            const fullName = `${user.lastName}, ${user.firstName} ${
+              user.middleName ?? ""
+            }`.trim();
             return { ...user, fullName, isSelected: false };
           })
           .filter((user) => user.id !== selectedTeamLead?.value);
@@ -140,7 +145,7 @@ const DialogSearchUser = (props: DialogSearchUserProps) => {
               ...odc,
               value: odc.abbreviation,
               label: odc.abbreviation,
-            }))
+            })),
           );
         }
       } catch (error) {

@@ -27,6 +27,7 @@ export const StyledInputRoot = styled("div")`
 `;
 
 export const StyledInputElement = styled("input")`
+  max-width: 55px;
   font-size: 0.875rem;
   font-family: inherit;
   font-weight: 400;
