@@ -18,7 +18,6 @@ import type {
   EstimationColumnProps,
   TasksListDataType,
 } from "./types";
-
 import { CellProps } from "react-table";
 import { IconButton, Grid, Typography, Stack } from "@mui/material";
 import { SvgIcon, Table, ErrorMessage } from "~/components";
@@ -28,9 +27,13 @@ import {
 } from "~/components/form/controlled";
 import { FormErrors } from "~/components/form/types";
 import { getFieldError } from "~/components/form/utils";
-
 import LocalizationKey from "~/i18n/key";
 import renderStatus from "~/utils/helpers/renderStatusHelper";
+import {
+  StyledResourceCellContainer,
+  StyledEstimationResourceTableContainer,
+} from "../styles";
+import { calculateTotalManHoursEstimation } from "../estimation-details/utils/calculate";
 
 const {
   mandaysCalculator: {
@@ -42,6 +45,11 @@ const {
   },
 } = LocalizationKey;
 
+/**
+ * Module providing column configurations for tables in the Mandays Estimation Tool.
+ * Defines columns for Sprint List, Summary, Tasks, Legend, Resources, and Estimation tables.
+ * Configurations are modular and cover actions, input handling, and sub-tables.
+ */
 export const SprintListColumns = ({
   t,
   onViewSprintDetails,
@@ -219,8 +227,9 @@ export const ResourcesListColumns = ({
   handleDeleteResources,
   odc,
   form,
+  mode,
 }: ResourcesColumnsProps): ResourcesListColumnsType[] => {
-  return [
+  const columns = [
     {
       Header: t(resourceListTableColumns.odc),
       accessor: "odcId",
@@ -229,14 +238,15 @@ export const ResourcesListColumns = ({
         const fieldError = getFieldError(form.errors as FormErrors, fieldName);
 
         return (
-          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+          <StyledResourceCellContainer isInput={isInput}>
             <ControlledSelect
               name={fieldName}
               options={odc}
               error={!!fieldError}
+              labelOnly={!isInput}
             />
             <ErrorMessage type="field" error={fieldError} />
-          </div>
+          </StyledResourceCellContainer>
         );
       },
     },
@@ -247,17 +257,18 @@ export const ResourcesListColumns = ({
       Cell: ({ row }: CellProps<ResourcesListDataType>) => {
         const fieldName = `resources.${title}.${row.index}.numberOfResources`;
         const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+
         return (
-          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+          <StyledResourceCellContainer isInput={isInput}>
             {isInput ? (
               <>
-                <ControlledNumberInput name={fieldName} />
+                <ControlledNumberInput name={fieldName} error={!!fieldError} />
                 <ErrorMessage type="field" error={fieldError} />
               </>
             ) : (
               <> {row.original.numberOfResources} </>
             )}
-          </div>
+          </StyledResourceCellContainer>
         );
       },
     },
@@ -269,7 +280,7 @@ export const ResourcesListColumns = ({
         const fieldName = `resources.${title}.${row.index}.annualLeaves`;
         const fieldError = getFieldError(form.errors as FormErrors, fieldName);
         return (
-          <div style={{ maxWidth: "200px", textAlign: "center" }}>
+          <StyledResourceCellContainer isInput={isInput}>
             {isInput ? (
               <>
                 <ControlledNumberInput name={fieldName} />
@@ -278,11 +289,14 @@ export const ResourcesListColumns = ({
             ) : (
               <> {row.original.annualLeaves} </>
             )}
-          </div>
+          </StyledResourceCellContainer>
         );
       },
     },
-    {
+  ];
+
+  if (mode !== "view") {
+    columns.push({
       Header: "",
       accessor: "actions",
       width: 400,
@@ -296,8 +310,9 @@ export const ResourcesListColumns = ({
           </IconButton>
         </div>
       ),
-    },
-  ];
+    });
+  }
+  return columns as ResourcesListColumnsType[];
 };
 
 const EstimationListSubColumn = (
@@ -312,7 +327,7 @@ const EstimationListSubColumn = (
       const fieldName = `phases[${phaseIndex}].functionalities[${funcIndex}].estimations[${estimationIndex}].resourceCountByTasks.${item.label}`;
       return (
         <>
-          <ControlledNumberInput width={7.5} name={fieldName} />
+          <ControlledNumberInput width={7} name={fieldName} />
         </>
       );
     },
@@ -326,7 +341,9 @@ export const EstimationListColumns = ({
   estimations,
   phaseIndex,
   funcIndex,
+  formValues,
 }: EstimationColumnProps): Column<EstimationColumn>[] => {
+  console.log(formValues);
   return [
     {
       Header: t(estimationColumns.taskName),
@@ -357,28 +374,50 @@ export const EstimationListColumns = ({
                 },
               ] as any);
         return (
-          <Table<EstimationSubColumn>
-            name="sub-table"
-            noColor
-            width="50px"
-            data={estimationResource}
-            columns={EstimationListSubColumn(
-              careerSteps,
-              phaseIndex,
-              funcIndex,
-              row.index,
-            )}
-          />
+          <StyledEstimationResourceTableContainer>
+            <Table<EstimationSubColumn>
+              name="sub-table"
+              noColor
+              data={estimationResource}
+              columns={EstimationListSubColumn(
+                careerSteps as SelectObject[],
+                phaseIndex,
+                funcIndex,
+                row.index,
+              )}
+            />
+          </StyledEstimationResourceTableContainer>
         );
       },
     },
     {
       Header: t(estimationColumns.totalManHours),
       accessor: "totalManHours",
+      Cell: (cell: CellProps<EstimationColumn>): ReactElement => {
+        const resources = Object.entries(
+          cell.row.original.resourceCountByTasks,
+        );
+        return (
+          <>
+            {calculateTotalManHoursEstimation({ resources, cell, formValues })}
+          </>
+        );
+      },
     },
     {
       Header: t(estimationColumns.totalManDays),
       accessor: "totalManDays",
+      Cell: (cell: CellProps<EstimationColumn>): ReactElement => {
+        const resources = Object.entries(
+          cell.row.original.resourceCountByTasks,
+        );
+        return (
+          <>
+            {calculateTotalManHoursEstimation({ resources, cell, formValues }) /
+              8}
+          </>
+        );
+      },
     },
   ];
 };

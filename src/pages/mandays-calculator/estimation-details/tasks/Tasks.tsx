@@ -5,13 +5,14 @@ import { useTranslation } from "react-i18next";
 import { Box, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
+import LocalizationKey from "~/i18n/key";
 import { Accordion, CustomTab, Table } from "~/components";
 
-import { AddTasks } from "./add-tasks";
 import { TasksListColumns } from "../../utils/columns";
 import { StyledTableContainer } from "../resources/styles";
 import { phaseData } from "../../utils/tableData";
-import LocalizationKey from "~/i18n/key";
+import { AddTasks } from "./add-tasks";
+
 interface TaskProps {
   mode: EstimationDetailsMode;
 }
@@ -68,7 +69,6 @@ const Tasks = (props: TaskProps): ReactElement => {
             }
           />
         </Stack>
-
         <Stack alignItems="end" mt={5} mr={1}>
           <Box width="215px">
             <Stack justifyContent="space-between" flexDirection="row">

@@ -40,7 +40,7 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
 
   const { common } = LocalizationKey;
   const { t } = useTranslation();
-  console.log(data, "data");
+
   const [collapsedRows, setCollapsedRows] = useState<Record<string, boolean>>(
     {},
   );

@@ -115,6 +115,7 @@ export type ResourcesColumnsProps = {
   odc: CommonOption | undefined;
   selectedODC: string[];
   form: FormikContextType<MandaysForm>;
+  mode: string;
 };
 
 export interface EstimationColumn {
@@ -145,8 +146,9 @@ export interface EstimationSubColumn {
 export type EstimationColumnProps = {
   t: TFunction<"translation", undefined>;
   isInput?: boolean;
-  careerSteps: CommonOption;
+  careerSteps: (false | SelectObject)[];
   estimations: Estimations[];
   funcIndex: number;
   phaseIndex: number;
+  formValues: MandaysForm;
 };

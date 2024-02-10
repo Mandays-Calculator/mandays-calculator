@@ -65,6 +65,10 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     if (!estimationId) {
       navigate("./mandays-estimation-tool");
     }
+
+    return () => {
+      setValidateCount(0);
+    };
   }, [location.pathname]);
 
   const complexities = useCommonOption("complexity");
@@ -95,7 +99,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     });
   };
 
-  const contructInitialValue = useCallback((): MandaysForm => {
+  const constructInitialValue = useCallback((): MandaysForm => {
     if (mode === "edit" || mode === "view") {
       return estimationData
         ? (estimationData.data as unknown as MandaysForm)
@@ -106,8 +110,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const mandaysForm = useMandaysForm({
     getCareerStepSingleVal: getCareerStepSingleVal,
-    initialValue: contructInitialValue(),
-
+    initialValue: constructInitialValue(),
     onSubmit: (val) => {
       console.log(val, "Submitting values");
     },
@@ -136,7 +139,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     }
   };
 
-  const handleNext = (): void => {
+  const handleNext = useCallback((): void => {
     if (mode === "add" || mode === "edit") {
       mandaysForm.validateForm();
       const formError = mandaysForm.errors;
@@ -152,7 +155,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     } else {
       setActiveTab(activeTab + 1);
     }
-  };
+  }, [mode, mandaysForm.values, mandaysForm.errors, validateCount, activeTab]);
 
   const handleSave = (): void => {
     console.log("Saving sprint");
@@ -213,11 +216,10 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     },
   ];
 
-  console.log(mandaysForm.values);
-
   if (estimationLoading) {
     return <PageLoader labelOnLoad="Loading estimation .. " />;
   }
+
   return (
     <>
       {isGeneratingPDF && (
@@ -263,6 +265,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                     content: ReactNode;
                   }[]
                 }
+                onTabChange={(_, tabValue) => setActiveTab(tabValue)}
               />
             ) : (
               <Stepper steps={stepperObject} activeStep={activeTab} />
