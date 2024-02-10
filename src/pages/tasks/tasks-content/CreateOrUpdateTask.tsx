@@ -129,8 +129,8 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       handleUpdateTask(taskData);
     } else if (onCreateTask) {
       handleCreateTask(taskData);
-      setTask(initialTaskState);
       resetCreation();
+      createOrUpdateForm.resetForm();
     }
 
     onClose();
@@ -234,7 +234,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
   const resetCreation = () => {
     setTask(initialTaskState);
-    createOrUpdateForm.resetForm();
   };
 
   const onCloseCreateOrUpdateTask = () => {
