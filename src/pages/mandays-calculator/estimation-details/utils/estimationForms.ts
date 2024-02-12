@@ -1,11 +1,8 @@
 import type { MandaysForm } from "..";
-
 import { useFormik } from "formik";
 import { t } from "i18next";
 import * as yup from "yup";
-
 import LocalizationKey from "~/i18n/key";
-
 import { estimationDetailsSchema } from "./schema";
 
 interface MandaysFormParams {
@@ -29,6 +26,10 @@ interface ShareFormValues {
 }
 
 const { common } = LocalizationKey;
+/**
+ * Custom hooks for handling the Mandays form using Formik.
+ * Provides a useFormik instance with initial values, validation schema, and submission callback.
+ */
 
 export const useMandaysForm = ({
   getCareerStepSingleVal,

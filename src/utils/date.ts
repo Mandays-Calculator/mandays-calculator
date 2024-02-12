@@ -67,5 +67,8 @@ export const checkDateFormat = (date: string): boolean => {
 };
 
 export const dateFormat = (date: string, format?: string): string => {
-  return moment(new Date(date)).format(format || "yyyy-MM-dd");
+  const formattedDate = moment(new Date(date));
+  return formattedDate.isValid()
+    ? formattedDate.format(format || "yyyy-MM-dd")
+    : "-";
 };

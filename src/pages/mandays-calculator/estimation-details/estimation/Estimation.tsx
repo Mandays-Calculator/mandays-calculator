@@ -2,16 +2,21 @@ import type { ReactElement } from "react";
 import type { EstimationColumn } from "../../utils/types";
 import type { ApiCommonOptions, Estimations, MandaysForm } from "..";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
 import { Typography, styled } from "@mui/material";
 import Stack from "@mui/material/Stack";
 
-import { Accordion, Table, CustomTab } from "~/components";
-import { EstimationListColumns } from "../../utils/columns";
-import { transformPhaseValue } from "./utils.ts/transformTaskToPhase";
 import { ControlledTextField } from "~/components/form/controlled";
+import { Accordion, Table, CustomTab } from "~/components";
+
+import { EstimationListColumns } from "../../utils/columns";
+import { initializeformPhaseValue } from "../utils/initialValue";
+import { getFieldError } from "~/components/form/utils";
+import { FormErrors } from "~/components/form/types";
+import { StyledTabContainer } from "./styles";
+import { calculateTotalManHours } from "../utils/calculate";
 
 interface EstimationProps {
   mode: EstimationDetailsMode;
@@ -32,28 +37,39 @@ const StyledFooter = styled("div")(() => ({
 }));
 
 const Estimation = (props: EstimationProps): ReactElement => {
-  const { mode, apiCommonOptions } = props;
-  const { careerSteps } = apiCommonOptions;
+  const { mode } = props;
   const form = useFormikContext<MandaysForm>();
   const { t } = useTranslation();
+  const mappedCareerSteps = Object.entries(form.values.resources)
+    .map(
+      (resource) =>
+        resource[1].length > 0 && { label: resource[0], value: resource[0] },
+    )
+    .filter(Boolean);
 
   const estimationListColumn = useCallback(
     (estimations: Estimations[], phaseIndex: number, funcIndex: number) =>
       EstimationListColumns({
         t,
-        careerSteps: careerSteps || [],
+        careerSteps: mappedCareerSteps || [],
         estimations,
         phaseIndex,
         funcIndex,
+        form: form,
       }),
-    [form.values.phases],
+    [form.values, form.errors],
+  );
+
+  const totalManHours = useMemo(
+    () => calculateTotalManHours(form.values),
+    [form.values],
   );
 
   useEffect(() => {
     if (mode === "add") {
-      const formValuePhase = transformPhaseValue(
+      const formValuePhase = initializeformPhaseValue(
         form.values,
-        careerSteps || [],
+        (mappedCareerSteps as SelectObject[]) || [],
       );
       form.setFieldValue("phases", formValuePhase);
     }
@@ -63,7 +79,21 @@ const Estimation = (props: EstimationProps): ReactElement => {
     (phase, phaseIndex: number) => ({
       label:
         mode === "edit" || "add" ? (
-          <ControlledTextField name={`phases[${phaseIndex}].name`} />
+          <>
+            <ControlledTextField
+              name={`phases[${phaseIndex}].name`}
+              error={
+                !!getFieldError(
+                  form.errors as FormErrors,
+                  `phases[${phaseIndex}].name`,
+                )
+              }
+              helperText={getFieldError(
+                form.errors as FormErrors,
+                `phases[${phaseIndex}].name`,
+              )}
+            />
+          </>
         ) : (
           phase.name
         ),
@@ -87,10 +117,10 @@ const Estimation = (props: EstimationProps): ReactElement => {
           <Stack direction={"row"} display={"flex"} justifyContent={"flex-end"}>
             <StyledFooter>
               <Typography fontWeight={"bold"}>
-                Grand Total Man Hours: 100 Hours
+                Grand Total Man Hours: {totalManHours} hours.
               </Typography>
               <Typography fontWeight={"bold"}>
-                Grand Total Man Days: 100 Hours
+                Grand Total Man Days: {totalManHours / 8} days.
               </Typography>
             </StyledFooter>
           </Stack>
@@ -111,7 +141,9 @@ const Estimation = (props: EstimationProps): ReactElement => {
         alignItems={"center"}
       >
         {mode === "add" && hasSelectedTask ? (
-          <CustomTab tabs={estimationTabs} />
+          <StyledTabContainer>
+            <CustomTab tabs={estimationTabs} />
+          </StyledTabContainer>
         ) : (
           <Typography
             sx={{ textAlign: "center", padding: "5rem", margin: "0 auto" }}

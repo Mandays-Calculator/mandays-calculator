@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import type { Location } from "react-router-dom";
 import type { ReviewSummaryType } from "..";
 
@@ -23,10 +23,14 @@ const ReviewSummary = (): ReactElement => {
   const handleApiSubmit = (): void => console.log(state);
 
   const handleBack = (): void => {
-    navigate(`./../add-sprint`, {
-      state: state,
-    });
+    navigate(-1);
   };
+
+  useEffect(() => {
+    if (Object.keys(state).length === 0) {
+      navigate(`mandays-estimation-tool`);
+    }
+  }, []);
 
   return (
     <PageContainer>
@@ -41,7 +45,7 @@ const ReviewSummary = (): ReactElement => {
             </Typography>
           </Grid>
         </Grid>
-        <SummaryContent />
+        <SummaryContent type="review" />
       </Stack>
       <Grid container textAlign="center">
         <Grid item xs={12}>

@@ -10,23 +10,18 @@ import { getIn, useFormikContext } from "formik";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-
+import LocalizationKey from "~/i18n/key";
 import { TextField } from "~/components";
 
 import { usePagination } from "~/hooks/pagination";
 import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
-import { dateFormat } from "~/utils/date";
-import LocalizationKey from "~/i18n/key";
-
-import { initializeTasksListData } from "../utils/initializeTasks";
 import { filterDataByValue } from "~/utils/helpers";
 
-import {
-  StyledCardContainer,
-  StyledGridItem,
-  StyledNoDataContainer,
-  StyledTitle,
-} from ".";
+import { initializeTasksListData } from "../../utils/initialValue";
+import { useResourceErrorAlert } from "../../utils/useHandleErrorAlert";
+
+import DraggableContent from "./DraggableContent";
+import { StyledGridItem, StyledNoDataContainer, StyledTitle } from ".";
 
 const AddTasks = (): ReactElement => {
   const droppableList: Status[] = ["unselected", "selected"];
@@ -34,7 +29,7 @@ const AddTasks = (): ReactElement => {
 
   const taskStatus: string = "1";
   const { t } = useTranslation();
-  const { mandaysCalculator, common } = LocalizationKey;
+  const { mandaysCalculator } = LocalizationKey;
   const { values, setValues } = useFormikContext<MandaysForm>();
 
   const [notSelected, setNotSelected] = useState<string>("");
@@ -136,29 +131,11 @@ const AddTasks = (): ReactElement => {
                           >
                             {(provided) => {
                               return (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <StyledCardContainer
-                                    key={index}
-                                    headerTitle={task.name}
-                                    subHeader={`${t(
-                                      common.createdDateLabel,
-                                    )}: ${dateFormat(
-                                      task.createdDate,
-                                      "DD/MM/YYYY",
-                                    )}`}
-                                  >
-                                    <Typography>
-                                      {t(
-                                        mandaysCalculator.taskDescriptionLabel,
-                                      )}
-                                    </Typography>
-                                    <Typography>{task.description}</Typography>
-                                  </StyledCardContainer>
-                                </div>
+                                <DraggableContent
+                                  provided={provided}
+                                  index={index}
+                                  task={task}
+                                />
                               );
                             }}
                           </Draggable>
@@ -180,6 +157,7 @@ const AddTasks = (): ReactElement => {
           ))}
         </Grid>
       </DragDropContext>
+      {useResourceErrorAlert("tasks")}
     </>
   );
 };

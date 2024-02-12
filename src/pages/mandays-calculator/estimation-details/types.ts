@@ -17,7 +17,7 @@ export type ShareFormValues = {
   timeType: string;
 };
 
-interface Resource {
+export interface Resource {
   [key: string]: {
     odcId: string;
     numberOfResources: number;

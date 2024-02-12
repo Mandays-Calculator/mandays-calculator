@@ -42,6 +42,7 @@ import { ShareModal } from "./components/share-modal";
 import { StyledTeamLabel } from "../styles";
 import { initMandays } from "./utils/initialValue";
 import { useExportMandaysForm, useMandaysForm } from "./utils/estimationForms";
+import { useScrollToError } from "~/hooks/scroll-to-error";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const { isExposed } = props;
@@ -51,6 +52,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const navigate = useNavigate();
   const { state }: Location<ReviewSummaryType> = useLocation();
   const { t } = useTranslation();
+  const scrollToMuiError = useScrollToError();
 
   const [activeTab, setActiveTab] = useState<number>(0);
   const [validateCount, setValidateCount] = useState<number>(0);
@@ -65,6 +67,10 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     if (!estimationId) {
       navigate("./mandays-estimation-tool");
     }
+
+    return () => {
+      setValidateCount(0);
+    };
   }, [location.pathname]);
 
   const complexities = useCommonOption("complexity");
@@ -75,8 +81,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     isError: estimationError,
     isLoading: estimationLoading,
   } = useGetEstimationDetails(estimationId);
-
-  const estimationName = "Sprint 1";
 
   const getCareerStepSingleVal: string[] = careerSteps.map(
     (item) => item.label,
@@ -95,7 +99,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     });
   };
 
-  const contructInitialValue = useCallback((): MandaysForm => {
+  const constructInitialValue = useCallback((): MandaysForm => {
     if (mode === "edit" || mode === "view") {
       return estimationData
         ? (estimationData.data as unknown as MandaysForm)
@@ -106,13 +110,15 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const mandaysForm = useMandaysForm({
     getCareerStepSingleVal: getCareerStepSingleVal,
-    initialValue: contructInitialValue(),
-
+    initialValue: constructInitialValue(),
     onSubmit: (val) => {
-      console.log(val, "Submitting values");
+      navigate("../mandays-estimation-tool/summary", {
+        state: { ...val, mode: mode },
+      });
     },
   });
 
+  const estimationName = mandaysForm.values.summary.estimationName || "-";
   const exportForm = useExportMandaysForm({
     onSubmit: (values) => {
       const { exportBy } = values;
@@ -136,13 +142,14 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     }
   };
 
-  const handleNext = (): void => {
+  const handleNext = useCallback((): void => {
     if (mode === "add" || mode === "edit") {
       mandaysForm.validateForm();
       const formError = mandaysForm.errors;
       const currentTab = Object.keys(mandaysForm.values)[activeTab];
       if (validateCount > 0) {
         if (Object.keys(formError).includes(currentTab)) {
+          scrollToMuiError();
           return;
         }
         setValidateCount(0);
@@ -152,11 +159,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     } else {
       setActiveTab(activeTab + 1);
     }
-  };
-
-  const handleSave = (): void => {
-    console.log("Saving sprint");
-  };
+  }, [mode, mandaysForm.values, mandaysForm.errors, validateCount, activeTab]);
 
   const renderIconOrImage = (isGeneratingPDF: boolean): ReactNode => {
     return isGeneratingPDF ? (
@@ -213,11 +216,11 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     },
   ];
 
-  console.log(mandaysForm.values);
-
   if (estimationLoading) {
     return <PageLoader labelOnLoad="Loading estimation .. " />;
   }
+
+  console.log(mandaysForm.values, "VALUES");
   return (
     <>
       {isGeneratingPDF && (
@@ -238,11 +241,13 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
         </Grid>
         <PageContainer>
           <Grid container justifyContent="space-between" mb={2}>
-            <Grid item xs={6}>
-              <Typography variant="body1" fontWeight="bold">
-                {estimationName}
-              </Typography>
-            </Grid>
+            {mode === "view" && (
+              <Grid item xs={6}>
+                <Typography variant="body1" fontWeight="bold">
+                  {estimationName}
+                </Typography>
+              </Grid>
+            )}
             {!isGeneratingPDF && (
               <HeaderButtons
                 setIsExport={setIsExport}
@@ -263,6 +268,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                     content: ReactNode;
                   }[]
                 }
+                onTabChange={(_, tabValue) => setActiveTab(tabValue)}
               />
             ) : (
               <Stepper steps={stepperObject} activeStep={activeTab} />
@@ -273,7 +279,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                 activeTab={activeTab}
                 handleBackEvent={handleBackEvent}
                 handleNext={handleNext}
-                handleSave={handleSave}
+                handleSave={() => mandaysForm.submitForm()}
                 length={stepperObject.length - 1}
               />
             )}
