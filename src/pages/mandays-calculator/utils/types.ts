@@ -34,7 +34,7 @@ export interface SprintListDataType {
 }
 
 export interface SummaryListDataType {
-  functionality: string;
+  name: string;
   totalManHours: string;
   totalManDays: string;
 }
@@ -90,6 +90,7 @@ export type withTFunctionProps = {
 
 export type TasksColumnsProps = {
   t: TFunction<"translation", undefined>;
+  formValues?: MandaysForm;
 };
 
 export type LegendColumnProps = {
@@ -150,5 +151,5 @@ export type EstimationColumnProps = {
   estimations: Estimations[];
   funcIndex: number;
   phaseIndex: number;
-  formValues: MandaysForm;
+  form: FormikContextType<MandaysForm>;
 };

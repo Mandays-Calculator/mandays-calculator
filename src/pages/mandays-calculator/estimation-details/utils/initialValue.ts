@@ -54,7 +54,7 @@ export const initializeformPhaseValue = (
   formValues: MandaysForm,
   careerSteps: SelectObject[],
 ): Phase[] => {
-  const phases: { [key: number]: any } = {};
+  const phase: any = { name: "", functionalities: [] };
 
   formValues.tasks.forEach((task: TaskType) => {
     if (task.dndStatus === "selected") {
@@ -66,34 +66,36 @@ export const initializeformPhaseValue = (
       Object.entries(formValues.legends).forEach(
         ([legendId, resourceCountList]) => {
           resourceCountByTasks[legendId] = resourceCountList
-            .filter((rc) => rc.careerStep === complexityId)
+            .filter((rc) => rc.careerStep === task.complexity.name)
             .reduce((sum, rc) => sum + rc.manHours, 0);
         },
       );
 
-      if (!phases[0]) {
-        phases[0] = { name: "", functionalities: [] };
+      let functionality = phase.functionalities.find(
+        (f: any) => f.id === functionalityId,
+      );
+      if (!functionality) {
+        functionality = {
+          id: functionalityId,
+          name: task.functionality.name,
+          estimations: [],
+        };
+        phase.functionalities.push(functionality);
       }
 
-      phases[0].functionalities.push({
-        id: functionalityId,
-        name: task.functionality.name,
-        estimations: [
-          {
-            taskId,
-            task: task.name,
-            complexityId,
-            complexity: task.complexity.name,
-            resourceCountByTasks: careerSteps.reduce((carreer: any, step) => {
-              carreer[step.value.toString()] =
-                resourceCountByTasks[step.value.toString()] || 0;
-              return carreer;
-            }, {}),
-          },
-        ],
+      functionality.estimations.push({
+        taskId,
+        task: task.name,
+        complexityId,
+        complexity: task.complexity.name,
+        resourceCountByTasks: careerSteps.reduce((career: any, step) => {
+          career[step.value.toString()] =
+            resourceCountByTasks[step.value.toString()] || 0;
+          return career;
+        }, {}),
       });
     }
   });
 
-  return Object.values(phases);
+  return [phase];
 };

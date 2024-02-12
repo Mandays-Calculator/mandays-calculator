@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import type { EstimationColumn } from "../../utils/types";
 import type { ApiCommonOptions, Estimations, MandaysForm } from "..";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
 import { Typography, styled } from "@mui/material";
@@ -16,6 +16,7 @@ import { initializeformPhaseValue } from "../utils/initialValue";
 import { getFieldError } from "~/components/form/utils";
 import { FormErrors } from "~/components/form/types";
 import { StyledTabContainer } from "./styles";
+import { calculateTotalManHours } from "../utils/calculate";
 
 interface EstimationProps {
   mode: EstimationDetailsMode;
@@ -54,9 +55,14 @@ const Estimation = (props: EstimationProps): ReactElement => {
         estimations,
         phaseIndex,
         funcIndex,
-        formValues: form.values,
+        form: form,
       }),
-    [form.values.phases, form.values.legends],
+    [form.values, form.errors],
+  );
+
+  const totalManHours = useMemo(
+    () => calculateTotalManHours(form.values),
+    [form.values],
   );
 
   useEffect(() => {
@@ -111,10 +117,10 @@ const Estimation = (props: EstimationProps): ReactElement => {
           <Stack direction={"row"} display={"flex"} justifyContent={"flex-end"}>
             <StyledFooter>
               <Typography fontWeight={"bold"}>
-                Grand Total Man Hours: 100 Hours
+                Grand Total Man Hours: {totalManHours} hours.
               </Typography>
               <Typography fontWeight={"bold"}>
-                Grand Total Man Days: 100 Hours
+                Grand Total Man Days: {totalManHours / 8} days.
               </Typography>
             </StyledFooter>
           </Stack>

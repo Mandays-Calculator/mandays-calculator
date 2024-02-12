@@ -26,3 +26,12 @@ export const StyledEstimationResourceTableContainer = styled("div", {
     width: "350px",
   },
 }));
+
+export const SubColumnNumInputContainer = styled("div")`
+  width: 120px;
+
+  & .MuiTypography-root {
+    font-size: 0.8rem;
+    margin: 0;
+  }
+`;

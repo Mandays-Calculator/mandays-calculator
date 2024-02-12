@@ -14,6 +14,6 @@ export const getFieldError = (
   name: string,
 ): string | undefined => {
   if (errors) {
-    return get(errors, name);
+    return typeof get(errors, name) === "string" ? get(errors, name) : "";
   }
 };

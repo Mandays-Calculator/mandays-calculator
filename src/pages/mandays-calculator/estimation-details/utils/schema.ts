@@ -1,6 +1,8 @@
 import type { TFunction } from "i18next";
 import * as yup from "yup";
 import LocalizationKey from "~/i18n/key";
+import { calculateTotalResourcesByCareerStep } from "./calculate";
+import { MandaysForm } from "..";
 
 const {
   common: { errorMessage },
@@ -42,7 +44,7 @@ const resourceSchema = (t: TFunction, careerSteps: string[]) => {
           );
         return acc;
       }, {}),
-    ) // Test that must have atleast 1 resouce filled
+    ) // Test that must have atleast 1 resource filled
     .test(
       "at-least-one-odcId",
       "Please select at least 1 resource.",
@@ -55,26 +57,72 @@ const resourceSchema = (t: TFunction, careerSteps: string[]) => {
     );
 };
 
-const phaseSchema = yup.array().of(
-  yup.object().shape({
-    name: yup.string().required("Phase name is required"),
-    functionalities: yup.array().of(
-      yup.object().shape({
-        id: yup.string(),
-        name: yup.string(),
-        estimations: yup.array().of(
-          yup.object().shape({
-            taskId: yup.string(),
-            task: yup.string(),
-            complexityId: yup.string(),
-            complexity: yup.string(),
-            resourceCountByTasks: yup.object(),
-          }),
-        ),
-      }),
-    ),
-  }),
-);
+const phaseSchema = (careerSteps: string[]) => {
+  return yup.array().of(
+    yup.object().shape({
+      name: yup.string().required("Phase name is required"),
+      functionalities: yup.array().of(
+        yup.object().shape({
+          id: yup.string(),
+          name: yup.string(),
+          estimations: yup.array().of(
+            yup
+              .object()
+              .shape({
+                taskId: yup.string(),
+                task: yup.string(),
+                complexityId: yup.string(),
+                complexity: yup.string(),
+                resourceCountByTasks: yup.object().shape(
+                  careerSteps.reduce(
+                    (acc: Record<string, any>, key: string) => {
+                      acc[key] = yup
+                        .number()
+                        .test(
+                          "resource-count-validation",
+                          `${key} must not exceed available resources`,
+                          function () {
+                            const valueContext = this.options
+                              .context as MandaysForm;
+                            const availableResources =
+                              calculateTotalResourcesByCareerStep(
+                                valueContext,
+                                "resource",
+                              );
+                            const valueResource =
+                              calculateTotalResourcesByCareerStep(
+                                valueContext,
+                                "phase",
+                              );
+                            if (valueResource.hasOwnProperty(key)) {
+                              return (
+                                valueResource[key] <= availableResources[key]
+                              );
+                            }
+                            return true;
+                          },
+                        );
+                      return acc;
+                    },
+                    {},
+                  ),
+                ),
+              })
+              .test(
+                "resource-must-have-value",
+                "Must have atleast assigned resource",
+                function (value) {
+                  return Object.values(value.resourceCountByTasks).some(
+                    (resource) => resource !== 0,
+                  );
+                },
+              ),
+          ),
+        }),
+      ),
+    }),
+  );
+};
 
 const taskSchema = yup
   .array()
@@ -122,6 +170,6 @@ export const estimationDetailsSchema = (
     summary: summarySchema(t),
     resources: resourceSchema(t, careerSteps),
     tasks: taskSchema,
-    phases: phaseSchema,
+    phases: phaseSchema(careerSteps),
   });
 };

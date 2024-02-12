@@ -19,7 +19,7 @@ import {
 } from "../utils/useHandleErrorAlert";
 
 import AddOdcButton from "../components/add-odc-button/AddOdcButton";
-import { calculateTotalResources } from "../utils/calculate";
+import { calculateTotalResourcesOrLeaves } from "../utils/calculate";
 
 import { StyledTableContainer } from "./styles";
 
@@ -133,7 +133,7 @@ const Resources = (props: ResourcesProps): ReactElement => {
   };
 
   const totalResource = useMemo(
-    () => calculateTotalResources(values),
+    () => calculateTotalResourcesOrLeaves(values),
     [values.resources, handleDeleteResources, handleAddResource],
   );
 

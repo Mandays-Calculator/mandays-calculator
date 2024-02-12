@@ -32,8 +32,11 @@ import renderStatus from "~/utils/helpers/renderStatusHelper";
 import {
   StyledResourceCellContainer,
   StyledEstimationResourceTableContainer,
+  SubColumnNumInputContainer,
 } from "../styles";
-import { calculateTotalManHoursEstimation } from "../estimation-details/utils/calculate";
+import { calculateTotalManHoursPerTask } from "../estimation-details/utils/calculate";
+import { MandaysForm } from "../estimation-details";
+import { FormikErrors } from "formik";
 
 const {
   mandaysCalculator: {
@@ -102,19 +105,46 @@ export const SprintListColumns = ({
 
 export const SummaryListColumns = ({
   t,
+  formValues,
 }: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
       Header: t(summaryTableColumns.functionality),
-      accessor: "functionality",
+      accessor: "name",
     },
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
+      Cell: ({ row }: CellProps<any>) => {
+        const taskListHours = row.original.estimations.map((item: any) => {
+          const resources = Object.entries(item.resourceCountByTasks);
+
+          return calculateTotalManHoursPerTask({
+            resources: resources as [string, number][],
+            complexityIdParam: item.complexityId,
+            formValues: formValues as MandaysForm,
+          });
+        });
+        return taskListHours.reduce((sum: number, num: number) => sum + num, 0);
+      },
     },
     {
       Header: t(summaryTableColumns.totalManDays),
       accessor: "totalManDays",
+      Cell: ({ row }: CellProps<any>) => {
+        const taskListHours = row.original.estimations.map((item: any) => {
+          const resources = Object.entries(item.resourceCountByTasks);
+
+          return calculateTotalManHoursPerTask({
+            resources: resources as [string, number][],
+            complexityIdParam: item.complexityId,
+            formValues: formValues as MandaysForm,
+          });
+        });
+        return (
+          taskListHours.reduce((sum: number, num: number) => sum + num, 0) / 8
+        );
+      },
     },
   ];
 };
@@ -320,15 +350,22 @@ const EstimationListSubColumn = (
   phaseIndex: number,
   funcIndex: number,
   estimationIndex: number,
+  errors: FormikErrors<MandaysForm>,
 ): Column<any>[] => {
   return careerSteps.map((item) => ({
     Header: `${item.label}`,
     Cell: (): ReactElement => {
       const fieldName = `phases[${phaseIndex}].functionalities[${funcIndex}].estimations[${estimationIndex}].resourceCountByTasks.${item.label}`;
+      const fieldError = getFieldError(errors as FormErrors, fieldName);
       return (
-        <>
-          <ControlledNumberInput width={7} name={fieldName} />
-        </>
+        <SubColumnNumInputContainer>
+          <ControlledNumberInput
+            width={7}
+            name={fieldName}
+            error={!!fieldError}
+          />
+          <ErrorMessage type="field" error={fieldError} />
+        </SubColumnNumInputContainer>
       );
     },
     accessor: `${item.label}`,
@@ -341,9 +378,8 @@ export const EstimationListColumns = ({
   estimations,
   phaseIndex,
   funcIndex,
-  formValues,
+  form,
 }: EstimationColumnProps): Column<EstimationColumn>[] => {
-  console.log(formValues);
   return [
     {
       Header: t(estimationColumns.taskName),
@@ -373,20 +409,29 @@ export const EstimationListColumns = ({
                   IO7: 0,
                 },
               ] as any);
+
+        const fieldName = `phases[${phaseIndex}].functionalities[${funcIndex}].estimations[${row.index}]`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
         return (
-          <StyledEstimationResourceTableContainer>
-            <Table<EstimationSubColumn>
-              name="sub-table"
-              noColor
-              data={estimationResource}
-              columns={EstimationListSubColumn(
-                careerSteps as SelectObject[],
-                phaseIndex,
-                funcIndex,
-                row.index,
-              )}
-            />
-          </StyledEstimationResourceTableContainer>
+          <>
+            <StyledEstimationResourceTableContainer>
+              <Table<EstimationSubColumn>
+                name="sub-table"
+                noColor
+                data={estimationResource}
+                columns={EstimationListSubColumn(
+                  careerSteps as SelectObject[],
+                  phaseIndex,
+                  funcIndex,
+                  row.index,
+                  form.errors,
+                )}
+              />
+            </StyledEstimationResourceTableContainer>
+            <div style={{ textAlign: "center", marginTop: 15 }}>
+              <ErrorMessage type="field" error={fieldError} />
+            </div>
+          </>
         );
       },
     },
@@ -399,7 +444,11 @@ export const EstimationListColumns = ({
         );
         return (
           <>
-            {calculateTotalManHoursEstimation({ resources, cell, formValues })}
+            {calculateTotalManHoursPerTask({
+              resources,
+              complexityIdParam: cell.row.original.complexityId,
+              formValues: form.values,
+            })}
           </>
         );
       },
@@ -413,8 +462,11 @@ export const EstimationListColumns = ({
         );
         return (
           <>
-            {calculateTotalManHoursEstimation({ resources, cell, formValues }) /
-              8}
+            {calculateTotalManHoursPerTask({
+              resources,
+              complexityIdParam: cell.row.original.complexityId,
+              formValues: form.values,
+            }) / 8}
           </>
         );
       },
