@@ -25,7 +25,7 @@ const SummaryContent = ({
   const formState = type === "review" ? location.state : form.values;
   const summaryColumn = useMemo(
     () => SummaryListColumns({ t, formValues: formState }),
-    [],
+    [formState],
   );
 
   return (
@@ -33,7 +33,7 @@ const SummaryContent = ({
       <Details type={type} />
       <Table
         columns={summaryColumn}
-        data={formState.phases[0].functionalities}
+        data={formState.phases[0]?.functionalities || []}
         name="mandays-calculator"
       />
       <Grid container>

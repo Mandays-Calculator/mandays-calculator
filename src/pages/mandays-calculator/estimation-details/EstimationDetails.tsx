@@ -220,6 +220,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     return <PageLoader labelOnLoad="Loading estimation .. " />;
   }
 
+  console.log(mandaysForm.values, "VALUES");
   return (
     <>
       {isGeneratingPDF && (
