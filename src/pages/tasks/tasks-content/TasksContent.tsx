@@ -129,6 +129,7 @@ const TasksContent = (): ReactElement => {
 
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
+  const functionality = useCommonOption("function", "adrian");
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
@@ -352,6 +353,7 @@ const TasksContent = (): ReactElement => {
         <CreateOrUpdateTask
           open={createModalOpen}
           complexities={complexities}
+          funcionalities={functionality}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
@@ -361,6 +363,7 @@ const TasksContent = (): ReactElement => {
           open={updateModalOpen}
           update
           complexities={complexities}
+          funcionalities={functionality}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}

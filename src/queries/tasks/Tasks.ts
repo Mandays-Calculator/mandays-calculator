@@ -2,6 +2,7 @@ import type {
   AllTasksResponse,
   CreateTask,
   DeleteId,
+  ForGetFunctionality,
   QueryResponse,
   TaskResponse,
   UpdateTask,
@@ -17,6 +18,7 @@ import {
 
 import {
   deleteTask,
+  getFunctionality,
   getTasks,
   postTask,
   putUpdateTask,
@@ -64,4 +66,11 @@ export const useDeleteTask = (): UseMutationResult<
     "deleteTask",
     (params) => deleteTask(params.id),
   );
+};
+
+export const useGetFunctionality = (): UseQueryResult<
+  QueryResponse<ForGetFunctionality>,
+  AxiosError
+> => {
+  return useQuery("getFunctionality", () => getFunctionality);
 };

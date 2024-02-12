@@ -85,3 +85,29 @@ export interface TaskResponse extends GenericErrorResponse {
 export interface DeleteId {
   id: string;
 }
+
+export interface GetFunctionality<T> {
+  data: T;
+  status: number;
+}
+
+export interface ForGetFunctionality
+  extends Omit<CommonFunctionality, "isActive"> {
+  id: string;
+  active: boolean;
+}
+export interface CommonFunctionality {
+  id: string;
+  name: string;
+  description: string;
+  team: {
+    id: string;
+    name: string;
+    projectId: string;
+    isActive: boolean;
+    createdDate: string;
+    lastUpdatedDate: string;
+  };
+  createdDate: string;
+  lastUpdatedDate: string;
+}
