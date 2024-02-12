@@ -1,6 +1,7 @@
 import {
   AllTasksResponse,
   CreateTask,
+  ForGetFunctionality,
   QueryResponse,
   TaskResponse,
   UpdateTask,
@@ -54,5 +55,15 @@ export const deleteTask = async (id: string): BaseResponse<TaskResponse> => {
     `${apiBasePath}/tasks/${id}`,
   );
 
+  return response.data;
+};
+
+export const getFunctionality = async (
+  name: string,
+): BaseResponse<ForGetFunctionality> => {
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+  const response = await axios.get<ForGetFunctionality[]>(
+    `${apiBasePath}/functionalities?name=${name}`,
+  );
   return response.data;
 };

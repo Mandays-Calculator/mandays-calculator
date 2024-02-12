@@ -28,12 +28,14 @@ interface CreateOrUpdateTaskProps {
   open: boolean;
   update?: boolean;
   complexities: SelectObject[];
+  funcionalities: SelectObject[];
   currentTask?: AllTasksResponse | null;
   onCreateTask?: (task: AllTasksResponse) => void;
   onUpdateTask?: (task: AllTasksResponse) => void;
   onOpenCreateTask?: () => void;
   onOpenUpdateTask?: (task: AllTasksResponse) => void;
   onClose: () => void;
+  refetchTasks: () => void;
 }
 
 const initialTaskState: AllTasksResponse = {
@@ -90,11 +92,13 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     open,
     update = false,
     complexities,
+    funcionalities,
     currentTask,
     onOpenCreateTask,
     onOpenUpdateTask,
     // onUpdateTask,
     onClose,
+    refetchTasks,
   } = props;
 
   const { t } = useTranslation();
@@ -132,17 +136,19 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   const createOrUpdateForm = useFormik({
     initialValues: initialTaskState,
     onSubmit: (e: AllTasksResponse): void => {
-      const submit: CreateTask = {
+      const postSubmit: CreateTask = {
         name: e.name,
         description: e.description,
         createdDate: moment().format("yyyy-MM-dd HH:mm:SS"),
         sprint: "1",
         complexityId: e.complexity.id,
-        functionality: {
-          id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
-          name: "Test add new task Nov16_009",
-          teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-        },
+        functionality:
+          // e.functionality,
+          {
+            id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
+            name: "Test add new task Nov16_009",
+            teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+          },
         tags: e.tags,
       };
 
@@ -151,11 +157,13 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
         name: e.name,
         description: e.description,
         status: 1,
-        functionality: {
-          id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
-          name: "Test add new task Nov16_009",
-          teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-        },
+        functionality:
+          //  e.functionality,
+          {
+            id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
+            name: "Test add new task Nov16_009",
+            teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+          },
         tags: [
           {
             id: "6fcb4dbd-c618-11ee-ae82-00090faa0001",
@@ -174,13 +182,21 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       };
 
       if (update === false) {
-        postTasks.mutate(submit);
+        postTasks.mutate(postSubmit, {
+          onSuccess: () => {
+            refetchTasks();
+          },
+        });
         createOrUpdateForm.resetForm();
-        console.log("submit", submit);
+        console.log("submit", postSubmit);
       }
 
       if (update === true) {
-        putTasks.mutate(putSubmit);
+        putTasks.mutate(putSubmit, {
+          onSuccess: () => {
+            refetchTasks();
+          },
+        });
         console.log("update", putSubmit);
       }
 
@@ -242,7 +258,11 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                     LocalizationKey.tasks.createTask.placeholder.functionality,
                   )}
                   fullWidth
-                  options={functionalityOptions}
+                  options={
+                    !_.isEmpty(funcionalities)
+                      ? funcionalities
+                      : functionalityOptions
+                  }
                 />
               </Grid>
 

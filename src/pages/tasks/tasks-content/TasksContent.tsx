@@ -129,9 +129,9 @@ const TasksContent = (): ReactElement => {
 
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
+  const functionality = useCommonOption("function", "adrian");
 
   // const [errorMessage, setErrorMessage] = useState<string>("");
-
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
   const [selectedTaskForDelete, setSelectedTaskForDelete] = useState<string>();
@@ -162,6 +162,12 @@ const TasksContent = (): ReactElement => {
       }
     }, 1000);
   }, [backlog, notYetStarted, inProgress, onHold, completed]);
+
+  const refetchTasks = () => {
+    statusData.forEach((statusItem) => {
+      statusItem.refetch();
+    });
+  };
 
   // OTHERS
   const generateUniqueTaskID = () => {
@@ -358,18 +364,22 @@ const TasksContent = (): ReactElement => {
         <CreateOrUpdateTask
           open={createModalOpen}
           complexities={complexities}
+          funcionalities={functionality}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
+          refetchTasks={refetchTasks}
         />
         <CreateOrUpdateTask
           open={updateModalOpen}
           update
           complexities={complexities}
+          funcionalities={functionality}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}
           onClose={handleCloseUpdateModalState}
+          refetchTasks={refetchTasks}
         />
         <ViewTaskDetails
           open={viewDetailsModalOpen}

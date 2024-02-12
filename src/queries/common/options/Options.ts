@@ -27,13 +27,14 @@ import {
 } from "~/api/common/Common";
 import { getProjects } from "~/api/projects";
 import { getUserList } from "~/api/user-management/UserManagement";
+import { getFunctionality } from "~/api/tasks/Tasks";
 
 const cacheTime: number = 1000 * 60 * 60 * 24;
 
 const transformDataToOption = (
   param: UseQueryResult<any, Error>,
   type: CommonType,
-  withInfo: boolean
+  withInfo: boolean,
 ): CommonOption => {
   const data = param?.data?.data || param?.data || param || [];
   if (data && data.length > 0) {
@@ -76,6 +77,11 @@ const transformDataToOption = (
           label: item.name,
           value: item.projectId,
         }));
+      case "function":
+        return data.map((item: CommonResponseDataObj) => ({
+          label: item.name,
+          value: item.id,
+        }));
       case "complexity":
       case "odc":
       default:
@@ -92,7 +98,7 @@ const transformDataToOption = (
 
 const getCommonOption = <T>(
   type: CommonType,
-  params: any
+  params: any,
 ): UseQueryResult<any, Error> => {
   switch (type) {
     case "user":
@@ -102,7 +108,7 @@ const getCommonOption = <T>(
         {
           staleTime: Infinity,
           cacheTime: cacheTime,
-        }
+        },
       );
     case "odc":
       return useQuery<OdcListResponse, Error>("odcList", getODC, {
@@ -121,7 +127,7 @@ const getCommonOption = <T>(
         {
           staleTime: Infinity,
           cacheTime: cacheTime,
-        }
+        },
       );
     case "project":
       return useQuery<ProjectListResponse, Error>("projectList", getProjects, {
@@ -145,7 +151,16 @@ const getCommonOption = <T>(
         {
           staleTime: Infinity,
           cacheTime: cacheTime,
-        }
+        },
+      );
+    case "function":
+      return useQuery(
+        ["getFunctionality", params],
+        () => getFunctionality(params),
+        {
+          staleTime: Infinity,
+          cacheTime: cacheTime,
+        },
       );
     default:
       return [{ label: "", value: "" }] as unknown as UseQueryResult<T, Error>;
@@ -166,7 +181,7 @@ const getCommonOption = <T>(
 export const useCommonOption = (
   type: CommonType,
   params?: any,
-  withInfo: boolean = false
+  withInfo: boolean = false,
 ) => {
   const queryResult = getCommonOption<CommonDataResponse>(type, params);
   return transformDataToOption(queryResult, type, withInfo);
