@@ -33,6 +33,7 @@ interface CreateOrUpdateTaskProps {
   onUpdateTask?: (task: AllTasksResponse) => void;
   onOpenCreateTask?: () => void;
   onOpenUpdateTask?: (task: AllTasksResponse) => void;
+  refetchTasks: () => void;
   onClose: () => void;
 }
 
@@ -94,6 +95,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     onOpenCreateTask,
     onOpenUpdateTask,
     // onUpdateTask,
+    refetchTasks,
     onClose,
   } = props;
 
@@ -174,14 +176,20 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       };
 
       if (update === false) {
-        postTasks.mutate(submit);
-        createOrUpdateForm.resetForm();
-        console.log("submit", submit);
+        postTasks.mutate(submit, {
+          onSuccess: () => {
+            refetchTasks();
+            createOrUpdateForm.resetForm();
+          },
+        });
       }
 
       if (update === true) {
-        putTasks.mutate(putSubmit);
-        console.log("update", putSubmit);
+        putTasks.mutate(putSubmit, {
+          onSuccess: () => {
+            refetchTasks();
+          },
+        });
       }
 
       onClose();

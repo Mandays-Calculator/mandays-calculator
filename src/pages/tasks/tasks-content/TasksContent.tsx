@@ -130,8 +130,6 @@ const TasksContent = (): ReactElement => {
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
 
-  // const [errorMessage, setErrorMessage] = useState<string>("");
-
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
   const [selectedTaskForDelete, setSelectedTaskForDelete] = useState<string>();
@@ -163,7 +161,11 @@ const TasksContent = (): ReactElement => {
     }, 1000);
   }, [backlog, notYetStarted, inProgress, onHold, completed]);
 
-  // OTHERS
+  const refetchTasks = () => {
+    statusData.forEach((statusItem) => {
+      statusItem.refetch();
+    });
+  };
   const generateUniqueTaskID = () => {
     const timestamp = new Date().getTime();
     return timestamp.toString();
@@ -173,7 +175,6 @@ const TasksContent = (): ReactElement => {
     setSelectedTeam(e.target.value as string);
   };
 
-  // DRAG N DROP
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
 
@@ -207,7 +208,6 @@ const TasksContent = (): ReactElement => {
     }
   };
 
-  // OPENING OF MODALS
   const handleViewDetailsModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setViewDetailsModalOpen(!viewDetailsModalOpen);
@@ -220,7 +220,6 @@ const TasksContent = (): ReactElement => {
   const handleUpdateModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setUpdateModalOpen(!updateModalOpen);
-    console.log("getEditValue", task);
   };
 
   const handleDeleteModalState = (id: string) => {
@@ -228,7 +227,6 @@ const TasksContent = (): ReactElement => {
     setDeleteModalOpen(!deleteModalOpen);
   };
 
-  // CLOSING OF MODALS
   const handleCloseViewDetailsModalState = () => {
     setViewDetailsModalOpen(false);
   };
@@ -245,7 +243,6 @@ const TasksContent = (): ReactElement => {
     setDeleteModalOpen(false);
   };
 
-  // CRUD
   const handleCreateTask = (newTask: AllTasksResponse) => {
     if (newTask) {
       const newTaskID = generateUniqueTaskID();
@@ -287,7 +284,6 @@ const TasksContent = (): ReactElement => {
           },
           onError: (error) => {
             console.log(error);
-
             setTasks(tasks);
           },
         },
@@ -298,7 +294,6 @@ const TasksContent = (): ReactElement => {
     }
   };
 
-  // RENDER
   const renderStatusContainerHeader = (status: Status) => {
     return (
       <Grid item container alignItems={"center"}>
@@ -332,7 +327,6 @@ const TasksContent = (): ReactElement => {
                 handleViewDetails={handleViewDetailsModalState}
                 handleEdit={handleUpdateModalState}
                 onDelete={() => {
-                  console.log("delete", task);
                   handleDeleteModalState(task.id as string);
                 }}
               />
@@ -361,6 +355,7 @@ const TasksContent = (): ReactElement => {
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
+          refetchTasks={refetchTasks}
         />
         <CreateOrUpdateTask
           open={updateModalOpen}
@@ -370,6 +365,7 @@ const TasksContent = (): ReactElement => {
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}
           onClose={handleCloseUpdateModalState}
+          refetchTasks={refetchTasks}
         />
         <ViewTaskDetails
           open={viewDetailsModalOpen}
