@@ -33,7 +33,7 @@ interface SummaryForm {
   endDate: string;
 }
 
-type LegendColumn = {
+export type LegendColumn = {
   [key: string]: {
     careerStep: CareerSteps;
     manHours: number;

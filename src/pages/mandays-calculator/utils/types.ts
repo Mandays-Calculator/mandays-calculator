@@ -41,6 +41,7 @@ export interface SummaryListDataType {
 
 export interface TasksListDataType {
   task: string;
+  complexityId: string;
   complexity: string;
   resourceCountByTasks?: {
     I03?: number;
