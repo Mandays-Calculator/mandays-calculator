@@ -1,46 +1,36 @@
 import type { ReactElement } from "react";
+import type { CommonOption } from "~/queries/common/options";
+import type { MandaysForm } from "../..";
 
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import { Card, Select } from "~/components";
-import { Location, useLocation } from "react-router-dom";
-import { MandaysForm } from "../..";
 import { dateFormat } from "~/utils/date";
-import { useCommonOption } from "~/queries/common/options";
-import { useUserAuth } from "~/hooks/user";
+
 import {
-  calculateTotalManHours,
+  calculateTotalManHoursPerPhase,
   calculateTotalResourcesOrLeaves,
 } from "../../utils/calculate";
-import { getExistingODC, ResourceData } from "../utils/mapper";
-import { useFormikContext } from "formik";
 
-const Details = ({ type }: { type: "review" | "view" }): ReactElement => {
-  const { state }: Location<MandaysForm> = useLocation();
-  const user = useUserAuth();
+interface Details {
+  teamOptions: CommonOption;
+  existingODC: string[];
+  formState: MandaysForm;
+}
 
-  const teamOptions = useCommonOption("team", {
-    projectId: user.state.selectedProject?.value,
-  });
-
-  const form = useFormikContext<MandaysForm>();
-  const odcList = useCommonOption("odc", {}, true);
-  const formState: MandaysForm = type === "review" ? state : form.values;
-  const formData = formState.summary;
+const Details = ({
+  formState,
+  existingODC,
+  teamOptions,
+}: Details): ReactElement => {
   const summaryData = {
-    startDate: formData?.startDate,
-    endDate: formData?.endDate,
-    utilization: formData?.utilizationRate || "-",
-    teamId: formData?.teamId || "-",
+    startDate: formState?.summary?.startDate,
+    endDate: formState?.summary?.endDate,
+    utilization: formState?.summary?.utilizationRate || "-",
+    teamId: formState?.summary?.teamId || "-",
   };
-
-  const existingODC = getExistingODC(
-    odcList || [],
-    formState.resources as unknown as ResourceData,
-  );
-
   return (
     <Grid container spacing={2} justifyContent="">
       <Grid xs={6} item>
@@ -136,7 +126,7 @@ const Details = ({ type }: { type: "review" | "view" }): ReactElement => {
               {existingODC.map((_: any, index: number) => (
                 <Grid item xs={2} key={index}>
                   <Typography>
-                    {calculateTotalManHours(formState) / 8}
+                    {calculateTotalManHoursPerPhase(formState) / 8}
                   </Typography>
                 </Grid>
               ))}

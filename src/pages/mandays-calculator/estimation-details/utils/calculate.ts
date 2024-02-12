@@ -33,7 +33,6 @@ export const calculateTotalResourcesOrLeaves = (
       }
     });
   });
-  console.log(totalResources, "ttaol resource");
   return totalResources;
 };
 
@@ -124,7 +123,9 @@ export const calculateTotalManHoursPerTask = ({
 /**
  * Calculate total man hours in phase
  */
-export const calculateTotalManHours = (formValues: MandaysForm): number => {
+export const calculateTotalManHoursPerPhase = (
+  formValues: MandaysForm,
+): number => {
   let totalManHours = 0;
 
   formValues.phases.forEach((phase) => {

@@ -8,15 +8,15 @@ import { useFormikContext } from "formik";
 import { Typography, styled } from "@mui/material";
 import Stack from "@mui/material/Stack";
 
-import { ControlledTextField } from "~/components/form/controlled";
 import { Accordion, Table, CustomTab } from "~/components";
+import { ControlledTextField } from "~/components/form/controlled";
+import { getFieldError } from "~/components/form/utils";
+import { FormErrors } from "~/components/form/types";
 
 import { EstimationListColumns } from "../../utils/columns";
 import { initializeformPhaseValue } from "../utils/initialValue";
-import { getFieldError } from "~/components/form/utils";
-import { FormErrors } from "~/components/form/types";
+import { calculateTotalManHoursPerPhase } from "../utils/calculate";
 import { StyledTabContainer } from "./styles";
-import { calculateTotalManHours } from "../utils/calculate";
 
 interface EstimationProps {
   mode: EstimationDetailsMode;
@@ -61,7 +61,7 @@ const Estimation = (props: EstimationProps): ReactElement => {
   );
 
   const totalManHours = useMemo(
-    () => calculateTotalManHours(form.values),
+    () => calculateTotalManHoursPerPhase(form.values),
     [form.values],
   );
 

@@ -19,6 +19,7 @@ import {
 
 import { useCommonOption } from "~/queries/common/options";
 import { useGetEstimationDetails } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+import { useScrollToError } from "~/hooks/scroll-to-error";
 
 import LocalizationKey from "~/i18n/key";
 import MandaysEstimationImgIcon from "~/assets/img/mandays_estimation_img_icon.png";
@@ -42,7 +43,6 @@ import { ShareModal } from "./components/share-modal";
 import { StyledTeamLabel } from "../styles";
 import { initMandays } from "./utils/initialValue";
 import { useExportMandaysForm, useMandaysForm } from "./utils/estimationForms";
-import { useScrollToError } from "~/hooks/scroll-to-error";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const { isExposed } = props;
@@ -64,10 +64,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const mode = state?.mode || "view";
 
   useEffect(() => {
-    if (!estimationId) {
-      navigate("./mandays-estimation-tool");
-    }
-
     return () => {
       setValidateCount(0);
     };
@@ -220,7 +216,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     return <PageLoader labelOnLoad="Loading estimation .. " />;
   }
 
-  console.log(mandaysForm.values, "VALUES");
   return (
     <>
       {isGeneratingPDF && (
