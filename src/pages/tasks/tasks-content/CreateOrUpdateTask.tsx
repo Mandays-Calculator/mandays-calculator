@@ -30,10 +30,7 @@ import {
 import { CreateOrUpdateLabel, ComplexityLabel, CloseContainer } from "./style";
 import ComplexityDetails from "./complexity-details";
 
-import {
-  FUNCTIONALITY_OPTIONS,
-  TAG_OPTIONS,
-} from "~/__tests__/pages/tasks/utils/utils";
+import { TAG_OPTIONS } from "~/__tests__/pages/tasks/utils/utils";
 import { Status, StatusValues } from "./utils";
 
 interface CreateOrUpdateTaskProps {
@@ -41,6 +38,7 @@ interface CreateOrUpdateTaskProps {
   update?: boolean;
   teamId: string;
   complexities: SelectObject[];
+  functionalities: SelectObject[];
   currentTask?: AllTasksResponse | null;
   onCreateTask?: (task: AllTasksResponse) => void;
   onUpdateTask?: (task: AllTasksResponse) => void;
@@ -67,29 +65,13 @@ const initialTaskState: AllTasksResponse = {
   sprint: "1",
 };
 
-const setFunctionalityOptions = (
-  functionalityData: { id: string; name: string }[],
-) => {
-  let functionalityOptions: SelectObject[] = [];
-
-  functionalityData.map(_functionality => {
-    const functionality: SelectObject = {
-      label: _functionality?.name,
-      value: _functionality?.id as string,
-    };
-
-    functionalityOptions.push(functionality);
-  });
-
-  return functionalityOptions;
-};
-
 const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   const {
     open,
     update = false,
     teamId,
     complexities,
+    functionalities,
     currentTask,
     onCreateTask,
     onUpdateTask,
@@ -166,13 +148,13 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
   // EVENT CHANGES
   const getFunctionalityDetails = (e: string): CreateOrUpdateFunctionality => {
     const selectedFunctionality = _.find(
-      FUNCTIONALITY_OPTIONS,
-      _.matchesProperty("id", e),
+      functionalities,
+      _.matchesProperty("value", e),
     );
 
     const functionality: CreateOrUpdateFunctionality = {
       id: e as string,
-      name: selectedFunctionality?.name as string,
+      name: selectedFunctionality?.label as string,
       teamId: teamId,
     };
 
@@ -296,7 +278,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                     LocalizationKey.tasks.createTask.placeholder.functionality,
                   )}
                   fullWidth
-                  options={setFunctionalityOptions(FUNCTIONALITY_OPTIONS)}
+                  options={functionalities}
                 />
               </Grid>
 

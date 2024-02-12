@@ -67,6 +67,7 @@ const TasksContent = (): ReactElement => {
   const { data: tasksData } = useTasks(TEAM_ID, "1");
   const userDetails = user;
   const complexities = useCommonOption("complexity");
+  const functionalities = useCommonOption("function", "");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
@@ -276,6 +277,7 @@ const TasksContent = (): ReactElement => {
           open={createModalOpen}
           teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
+          functionalities={functionalities}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
@@ -285,6 +287,7 @@ const TasksContent = (): ReactElement => {
           update
           teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
+          functionalities={functionalities}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}
