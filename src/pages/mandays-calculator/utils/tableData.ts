@@ -95,6 +95,7 @@ export const phaseData = {
     },
   ],
 };
+
 export const resourcesDetailData = [
   {
     odc: "PH",
