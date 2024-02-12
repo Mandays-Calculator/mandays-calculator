@@ -44,10 +44,10 @@ export const createSubmitValue = (
         data.summary.estimationName ||
         `${data.summary.teamId}(${dateFormat(
           data.summary.endDate,
-          "yyyy-DD-DD",
-        )}-${dateFormat(data.summary.startDate, "yyyy-DD-DD")})`,
-      endDate: dateFormat(data.summary.endDate, "yyyy-DD-DD"),
-      startDate: dateFormat(data.summary.startDate, "yyyy-DD-DD"),
+          "yyyy-MM-DD",
+        )}-${dateFormat(data.summary.startDate, "yyyy-MM-DD")})`,
+      endDate: dateFormat(data.summary.endDate, "yyyy-MM-DD"),
+      startDate: dateFormat(data.summary.startDate, "yyyy-MM-DD"),
       projectId: projectId,
     },
     resources: data.resources as unknown as ResourceParam,

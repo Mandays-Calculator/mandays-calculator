@@ -67,12 +67,12 @@ const SummaryContent = ({
   const summaryColumn = useMemo(
     () =>
       SummaryListColumns({ t, formValues: formState, odcList: existingODC }),
-    [formState, existingODC, odcList],
+    [formState, existingODC, odcList, type],
   );
 
   const totalManHours = useMemo(
     () => calculateTotalManHours(formState, existingODC, resources),
-    [formState],
+    [formState, location, teamOptions, type],
   );
   return (
     <Stack direction="column" gap={2}>
