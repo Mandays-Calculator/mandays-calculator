@@ -37,6 +37,7 @@ import {
 import { calculateTotalManHoursPerTask } from "../estimation-details/utils/calculate";
 import { MandaysForm } from "../estimation-details";
 import { FormikErrors } from "formik";
+import { mockData } from "./tableData";
 
 const {
   mandaysCalculator: {
@@ -48,6 +49,30 @@ const {
   },
 } = LocalizationKey;
 
+const calculateTableTotalManHours = (
+  row: TasksListDataType,
+  data: LegendColumn,
+) => {
+  let totalManHours = 0;
+
+  const resourceCountByTasks = row.resourceCountByTasks || {};
+  Object.entries(resourceCountByTasks).forEach(
+    ([careerStep, numberOfResources]) => {
+      const complexityId = row.complexityId;
+      const legends = data as LegendColumn;
+      const complexityInfo = legends[complexityId].find(
+        (item) => item.careerStep === careerStep,
+      );
+
+      if (complexityInfo) {
+        const manHours = complexityInfo.manHours || 0;
+        totalManHours += manHours * numberOfResources;
+      }
+    },
+  );
+
+  return totalManHours;
+};
 /**
  * Module providing column configurations for tables in the Mandays Estimation Tool.
  * Defines columns for Sprint List, Summary, Tasks, Legend, Resources, and Estimation tables.
@@ -198,10 +223,34 @@ export const TasksListColumns = ({
 
     {
       Header: t(summaryTableColumns.totalManHours),
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        return (
+          <>
+            <Typography mt={3}>
+              {calculateTableTotalManHours(
+                row.original,
+                mockData.legends as LegendColumn,
+              )}
+            </Typography>
+          </>
+        );
+      },
       accessor: "totalManHours",
     },
     {
       Header: t(summaryTableColumns.totalManDays),
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        return (
+          <>
+            <Typography mt={3}>
+              {calculateTableTotalManHours(
+                row.original,
+                mockData.legends as LegendColumn,
+              ) / 8}
+            </Typography>
+          </>
+        );
+      },
       accessor: "totalManDays",
     },
   ];

@@ -202,7 +202,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     {
       label: t(mandaysCalculator.tasksTitle),
       icon: renderIconOrImage(isGeneratingPDF),
-      content: <Tasks mode={mode} />,
+      content: <Tasks mode={mode} isGeneratingPDF={isGeneratingPDF} />,
     },
     {
       label: t(mandaysCalculator.estimation.title),

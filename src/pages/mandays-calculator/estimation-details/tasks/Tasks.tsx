@@ -10,30 +10,32 @@ import { Accordion, CustomTab, Table } from "~/components";
 
 import { TasksListColumns } from "../../utils/columns";
 import { StyledTableContainer } from "../resources/styles";
-import { phaseData } from "../../utils/tableData";
+import { mockData } from "../../utils/tableData";
 import { AddTasks } from "./add-tasks";
+import { StyledTabs } from "./styles";
 
 interface TaskProps {
   mode: EstimationDetailsMode;
+  isGeneratingPDF: boolean;
 }
 
 const Tasks = (props: TaskProps): ReactElement => {
-  const { mode } = props;
+  const { mode, isGeneratingPDF } = props;
   const { t } = useTranslation();
   const {
     mandaysCalculator: { summaryTableColumns },
   } = LocalizationKey;
 
-  const tabsData: CustomSteps[] = phaseData.phases.map((data) => {
+  const tabsData: CustomSteps[] = mockData.phases.map((data) => {
     return {
       label: data.name,
       content: data.functionalities.map((functionalities) => {
         return (
-          <Stack mt={1} width={phaseData.phases.length <= 2 ? "327%" : "197%"}>
+          <Stack mt={1} width={mockData.phases.length <= 2 ? "327%" : "197%"}>
             <Accordion
               key={functionalities.name}
               title={functionalities.name}
-              defaultExpanded={false}
+              defaultExpanded={isGeneratingPDF}
             >
               <StyledTableContainer>
                 <Table
@@ -55,19 +57,21 @@ const Tasks = (props: TaskProps): ReactElement => {
     return (
       <>
         <Stack
-          width={phaseData.phases.length <= 2 ? "30%" : "50%"}
+          width={mockData.phases.length <= 2 ? "30%" : "50%"}
           ml={3}
           mt={2}
         >
-          <CustomTab
-            defaultActiveTab={0}
-            tabs={
-              tabsData as {
-                label: ReactNode;
-                content: ReactNode;
-              }[]
-            }
-          />
+          <StyledTabs>
+            <CustomTab
+              defaultActiveTab={0}
+              tabs={
+                tabsData as {
+                  label: ReactNode;
+                  content: ReactNode;
+                }[]
+              }
+            />
+          </StyledTabs>
         </Stack>
         <Stack alignItems="end" mt={5} mr={1}>
           <Box width="215px">
