@@ -36,7 +36,6 @@ interface CreateOrUpdateTaskProps {
   onOpenUpdateTask?: (task: AllTasksResponse) => void;
   refetchTasks: () => void;
   onClose: () => void;
-  refetchTasks: () => void;
 }
 
 const initialTaskState: AllTasksResponse = {
@@ -100,7 +99,6 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     // onUpdateTask,
     refetchTasks,
     onClose,
-    refetchTasks,
   } = props;
 
   const { t } = useTranslation();
