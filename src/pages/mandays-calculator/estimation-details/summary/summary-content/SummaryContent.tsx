@@ -28,12 +28,17 @@ const SummaryContent = ({
     [formState],
   );
 
+  const functions =
+    formState?.phases && formState?.phases[0]?.functionalities
+      ? formState?.phases[0]?.functionalities
+      : [];
+
   return (
     <Stack direction="column" gap={2}>
       <Details type={type} />
       <Table
         columns={summaryColumn}
-        data={formState.phases[0]?.functionalities || []}
+        data={functions}
         name="mandays-calculator"
       />
       <Grid container>

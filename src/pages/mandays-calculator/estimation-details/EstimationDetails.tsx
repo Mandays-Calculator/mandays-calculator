@@ -118,7 +118,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     },
   });
 
-  const estimationName = mandaysForm.values.summary.estimationName || "-";
+  const estimationName = mandaysForm.values?.summary?.estimationName || "-";
   const exportForm = useExportMandaysForm({
     onSubmit: (values) => {
       const { exportBy } = values;
