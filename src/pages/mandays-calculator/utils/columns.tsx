@@ -181,7 +181,7 @@ export const TasksListColumns = ({
           ],
         };
         return (
-          <Grid container>
+          <Grid container key={row.index}>
             {carrerLvlData.data.map((data) => {
               return (
                 <Grid item xs={2.4}>

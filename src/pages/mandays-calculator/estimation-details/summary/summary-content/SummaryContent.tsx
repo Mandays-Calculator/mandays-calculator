@@ -96,6 +96,7 @@ const SummaryContent = ({
     return 0;
   };
 
+  const roundOffValue = (number: number) => number.toFixed(2);
   const totalManHours = useMemo(() => calculateTotalManHours(), [formState]);
 
   return (
@@ -115,7 +116,9 @@ const SummaryContent = ({
         <Grid item xs={3.9}>
           <Stack direction={"row"} gap={2}>
             <Typography>Grand Total:</Typography>
-            <Typography fontWeight={"bold"}>{totalManHours} hrs</Typography>
+            <Typography fontWeight={"bold"}>
+              {roundOffValue(totalManHours)} hrs
+            </Typography>
           </Stack>
         </Grid>
       </Grid>
@@ -124,7 +127,9 @@ const SummaryContent = ({
         <Grid item xs={3.9}>
           <Stack direction={"row"} gap={2}>
             <Typography># of days</Typography>
-            <Typography fontWeight={"bold"}>{totalManHours / 8}</Typography>
+            <Typography fontWeight={"bold"}>
+              {roundOffValue(totalManHours / 8)}
+            </Typography>
           </Stack>
         </Grid>
       </Grid>
