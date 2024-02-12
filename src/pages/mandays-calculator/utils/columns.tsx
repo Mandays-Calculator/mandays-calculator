@@ -34,7 +34,11 @@ import {
   StyledEstimationResourceTableContainer,
   SubColumnNumInputContainer,
 } from "../styles";
-import { calculateTotalManHoursPerTask } from "../estimation-details/utils/calculate";
+import {
+  calculateTotalManHours,
+  calculateTotalManHoursPerTask,
+  roundOffValue,
+} from "../estimation-details/utils/calculate";
 import { MandaysForm } from "../estimation-details";
 import { FormikErrors } from "formik";
 
@@ -106,6 +110,7 @@ export const SprintListColumns = ({
 export const SummaryListColumns = ({
   t,
   formValues,
+  odcList,
 }: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
@@ -117,15 +122,17 @@ export const SummaryListColumns = ({
       accessor: "totalManHours",
       Cell: ({ row }: CellProps<any>) => {
         const taskListHours = row.original.estimations.map((item: any) => {
-          const resources = Object.entries(item.resourceCountByTasks);
-
-          return calculateTotalManHoursPerTask({
-            resources: resources as [string, number][],
-            complexityIdParam: item.complexityId,
-            formValues: formValues as MandaysForm,
-          });
+          return calculateTotalManHours(
+            formValues as MandaysForm,
+            odcList as CommonOption,
+            item.resourceCountByTasks,
+          );
         });
-        return taskListHours.reduce((sum: number, num: number) => sum + num, 0);
+
+        return roundOffValue(
+          taskListHours.reduce((sum: number, num: number) => sum + num, 0),
+          "hours",
+        );
       },
     },
     {
@@ -133,16 +140,16 @@ export const SummaryListColumns = ({
       accessor: "totalManDays",
       Cell: ({ row }: CellProps<any>) => {
         const taskListHours = row.original.estimations.map((item: any) => {
-          const resources = Object.entries(item.resourceCountByTasks);
-
-          return calculateTotalManHoursPerTask({
-            resources: resources as [string, number][],
-            complexityIdParam: item.complexityId,
-            formValues: formValues as MandaysForm,
-          });
+          return calculateTotalManHours(
+            formValues as MandaysForm,
+            odcList as CommonOption,
+            item.resourceCountByTasks,
+          );
         });
-        return (
-          taskListHours.reduce((sum: number, num: number) => sum + num, 0) / 8
+
+        return roundOffValue(
+          taskListHours.reduce((sum: number, num: number) => sum + num, 0) / 8,
+          "days",
         );
       },
     },
@@ -462,11 +469,14 @@ export const EstimationListColumns = ({
         );
         return (
           <>
-            {calculateTotalManHoursPerTask({
-              resources,
-              complexityIdParam: cell.row.original.complexityId,
-              formValues: form.values,
-            }) / 8}
+            {roundOffValue(
+              calculateTotalManHoursPerTask({
+                resources,
+                complexityIdParam: cell.row.original.complexityId,
+                formValues: form.values,
+              }) / 8,
+              "days",
+            )}
           </>
         );
       },

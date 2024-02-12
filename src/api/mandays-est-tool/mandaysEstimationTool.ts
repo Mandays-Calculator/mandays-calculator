@@ -2,6 +2,7 @@ import type {
   TasksResponse,
   EstimationResponse,
   EstimationDetailResponse,
+  CreateEstimationParam,
 } from "./types";
 
 import axios from "axios";
@@ -64,6 +65,17 @@ export const getEstimationDetails = async (
   const apiBasePath = getApiBasePath();
   const response = await axios.get<EstimationDetailResponse>(
     `${apiBasePath}/mandays-estimations/${estimationId}`,
+  );
+  return response.data;
+};
+
+export const createEstimation = async (
+  params: CreateEstimationParam,
+): BaseResponse<{ id: string }> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.post<EstimationDetailResponse>(
+    `${apiBasePath}/mandays-estimations`,
+    params,
   );
   return response.data;
 };

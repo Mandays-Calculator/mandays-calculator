@@ -44,12 +44,12 @@ interface Summary {
   projectId: string;
   teamId: string;
   estimationName: string;
-  utilizationRate: number;
+  utilizationRate: number | string;
   startDate: string;
   endDate: string;
 }
 
-interface ResourceDetails {
+export interface ResourceDetails {
   id: number;
   odcId: string;
   numberOfResources: number;
@@ -105,4 +105,19 @@ export interface EstimationDetailResponse {
     active: boolean;
     fullName: string;
   };
+}
+
+export interface CreateEstimationParam {
+  createdBy: string;
+  basicInfo: Summary;
+  resources: {
+    [key: number]: ResourceDetails[];
+  };
+  legends: {
+    [key: string]: {
+      careerStep: string;
+      manHours: number;
+    }[];
+  };
+  phases: Phase[];
 }

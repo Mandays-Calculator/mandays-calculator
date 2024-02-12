@@ -12,6 +12,7 @@ import { dateFormat } from "~/utils/date";
 import {
   calculateTotalManHoursPerPhase,
   calculateTotalResourcesOrLeaves,
+  roundOffValue,
 } from "../../utils/calculate";
 
 interface Details {
@@ -126,7 +127,10 @@ const Details = ({
               {existingODC.map((_: any, index: number) => (
                 <Grid item xs={2} key={index}>
                   <Typography>
-                    {calculateTotalManHoursPerPhase(formState) / 8}
+                    {roundOffValue(
+                      calculateTotalManHoursPerPhase(formState) / 8,
+                      "days",
+                    )}
                   </Typography>
                 </Grid>
               ))}

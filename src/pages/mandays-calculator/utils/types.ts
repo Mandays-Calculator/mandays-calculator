@@ -91,6 +91,7 @@ export type withTFunctionProps = {
 export type TasksColumnsProps = {
   t: TFunction<"translation", undefined>;
   formValues?: MandaysForm;
+  odcList?: CommonOption;
 };
 
 export type LegendColumnProps = {

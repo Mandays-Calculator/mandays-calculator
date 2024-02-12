@@ -1,9 +1,16 @@
+import { CommonOption } from "~/queries/common/options";
+import {
+  getAllHolidays,
+  getTotalResourcesCount,
+  networkDays,
+} from "../summary/utils/mapper";
 import type { MandaysForm } from "../types";
 
 interface CalculateTotalManHrsEstParams {
   resources: [string, number][];
   formValues: MandaysForm;
   complexityIdParam: string;
+  withComplexityValue?: boolean; // if set to false will only compute the exact total man hours
 }
 
 /**
@@ -101,12 +108,16 @@ export const calculateTotalManHoursPerTask = ({
   resources,
   formValues,
   complexityIdParam,
+  withComplexityValue = true,
 }: CalculateTotalManHrsEstParams): number => {
   const totalManHours = resources.reduce(
     (total, [careerStep, numberOfResources]) => {
       const complexityInfo = formValues.legends[complexityIdParam].find(
         (item) => item.careerStep === careerStep,
       );
+      if (!withComplexityValue) {
+        return total + numberOfResources;
+      }
 
       if (complexityInfo) {
         const manHours = complexityInfo.manHours;
@@ -150,4 +161,55 @@ export const calculateTotalManHoursPerPhase = (
   });
 
   return totalManHours;
+};
+
+export const roundOffValue = (
+  value: Number,
+  type: "days" | "hours" = "days",
+): number | string => {
+  if (type === "days") {
+    const roundedDays = Math.ceil(Number(value));
+    return roundedDays;
+  }
+  if (type === "hours") {
+    return value.toFixed(2);
+  }
+  return 0;
+};
+
+export const calculateTotalManHours = (
+  formState: MandaysForm,
+  existingODC: CommonOption,
+  resources: any,
+): number => {
+  const checkKeys = ["summary", "resources", "legends", "phases"];
+  if (checkKeys.every((item) => formState.hasOwnProperty(item))) {
+    const resourcesLeaves = getTotalResourcesCount(
+      formState.resources,
+      "annualLeaves",
+    );
+
+    const workingDays = networkDays(
+      formState.summary.startDate,
+      formState.summary.endDate,
+      getAllHolidays(existingODC),
+    );
+
+    const calculatedValues = Object.entries(resources).map((item: any) => {
+      const utilizationValue =
+        (workingDays *
+          item[1] *
+          8 *
+          (Number(formState.summary.utilizationRate) / 100)) /
+          8 -
+        resourcesLeaves[item[0]];
+      return isFinite(utilizationValue) ? utilizationValue : 0;
+    });
+
+    return calculatedValues && calculatedValues.length > 0
+      ? calculatedValues.reduce((a: number, b: number) => a + b)
+      : 0;
+  }
+
+  return 0;
 };

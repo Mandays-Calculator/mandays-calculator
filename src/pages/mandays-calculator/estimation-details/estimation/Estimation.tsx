@@ -15,7 +15,10 @@ import { FormErrors } from "~/components/form/types";
 
 import { EstimationListColumns } from "../../utils/columns";
 import { initializeformPhaseValue } from "../utils/initialValue";
-import { calculateTotalManHoursPerPhase } from "../utils/calculate";
+import {
+  calculateTotalManHoursPerPhase,
+  roundOffValue,
+} from "../utils/calculate";
 import { StyledTabContainer } from "./styles";
 
 interface EstimationProps {
@@ -57,7 +60,7 @@ const Estimation = (props: EstimationProps): ReactElement => {
         funcIndex,
         form: form,
       }),
-    [form.values, form.errors],
+    [form.values, form.errors, form.values.legends, form.values.resources],
   );
 
   const totalManHours = useMemo(
@@ -120,7 +123,8 @@ const Estimation = (props: EstimationProps): ReactElement => {
                 Grand Total Man Hours: {totalManHours} hours.
               </Typography>
               <Typography fontWeight={"bold"}>
-                Grand Total Man Days: {totalManHours / 8} days.
+                Grand Total Man Days: {roundOffValue(totalManHours / 8, "days")}{" "}
+                days.
               </Typography>
             </StyledFooter>
           </Stack>

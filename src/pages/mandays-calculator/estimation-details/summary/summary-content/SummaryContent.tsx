@@ -16,15 +16,16 @@ import { Table } from "~/components";
 
 import { SummaryListColumns } from "~/pages/mandays-calculator/utils/columns";
 
+import { calculateTotalManHours, roundOffValue } from "../../utils/calculate";
+
 import Details from "../details";
 import {
   ResourceData,
   getExistingODC,
-  networkDays,
-  getAllHolidays,
   getTotalResourcesCount,
-  getMultipliedEstimations,
 } from "../utils/mapper";
+
+roundOffValue;
 
 const SummaryContent = ({
   type,
@@ -36,10 +37,6 @@ const SummaryContent = ({
   const form = useFormikContext<MandaysForm>();
   const formState = type === "review" ? location.state : form.values;
   const user = useUserAuth();
-  const summaryColumn = useMemo(
-    () => SummaryListColumns({ t, formValues: formState }),
-    [formState],
-  );
 
   const functions =
     formState?.phases && formState?.phases[0]?.functionalities
@@ -57,48 +54,26 @@ const SummaryContent = ({
     formState.resources as unknown as ResourceData,
   );
 
-  const calculateTotalManHours = (): number => {
-    const checkKeys = ["summary", "resources", "legends", "phases"];
-    if (checkKeys.every((item) => formState.hasOwnProperty(item))) {
-      const resources = getTotalResourcesCount(
-        formState.resources,
-        "numberOfResources",
-      );
+  const resources = getTotalResourcesCount(
+    formState.resources,
+    "numberOfResources",
+  );
 
-      const resourcesLeaves = getTotalResourcesCount(
-        formState.resources,
-        "annualLeaves",
-      );
+  // const resourcesLeaves = getTotalResourcesCount(
+  //   formState.resources,
+  //   "annualLeaves",
+  // );
 
-      const workingDays = networkDays(
-        formState.summary.startDate,
-        formState.summary.endDate,
-        getAllHolidays(existingODC),
-      );
+  const summaryColumn = useMemo(
+    () =>
+      SummaryListColumns({ t, formValues: formState, odcList: existingODC }),
+    [formState, existingODC, odcList],
+  );
 
-      const calculatedValues = getMultipliedEstimations(formState).map(
-        (item: { manHours: number; careerStep: number }) => {
-          const utilizationValue =
-            item.manHours *
-              workingDays *
-              (formState.summary.utilizationRate / 100) -
-            resourcesLeaves[item.careerStep];
-          return isFinite(utilizationValue) ? utilizationValue : 0;
-        },
-      );
-
-      console.log(resources, "RESOURCES");
-      return calculatedValues
-        ? calculatedValues.reduce((a: number, b: number) => a + b)
-        : 0;
-    }
-
-    return 0;
-  };
-
-  const roundOffValue = (number: number) => number.toFixed(2);
-  const totalManHours = useMemo(() => calculateTotalManHours(), [formState]);
-
+  const totalManHours = useMemo(
+    () => calculateTotalManHours(formState, existingODC, resources),
+    [formState],
+  );
   return (
     <Stack direction="column" gap={2}>
       <Details
@@ -126,9 +101,9 @@ const SummaryContent = ({
         <Grid item xs={8.1}></Grid>
         <Grid item xs={3.9}>
           <Stack direction={"row"} gap={2}>
-            <Typography># of days</Typography>
+            <Typography># of days:</Typography>
             <Typography fontWeight={"bold"}>
-              {roundOffValue(totalManHours / 8)}
+              {roundOffValue(totalManHours / 8, "days")}
             </Typography>
           </Stack>
         </Grid>

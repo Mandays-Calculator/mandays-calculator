@@ -167,7 +167,10 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const stepperObject: CustomSteps[] = [
     {
-      label: t(mandaysCalculator.summaryTitle),
+      label:
+        mode === "add"
+          ? t(mandaysCalculator.summaryTitle)
+          : t(mandaysCalculator.summaryTitle2),
       icon: renderIconOrImage(isGeneratingPDF),
       content: <Summary mode={mode} />,
     },
