@@ -2,12 +2,22 @@ import type { FormikInstance } from "formik";
 import type { ReactElement } from "react";
 import LocalizationKey from "~/i18n/key";
 
-import { Grid } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 
 import { Form, Modal, ErrorMessage } from "~/components";
 import { ControlledSelect } from "~/components/form/controlled";
 import { CustomButton } from "~/components/form/button";
 import { getFieldError } from "~/components/form/utils";
+
+const modalSx = {
+  "& .MuiDialog-container": {
+    "& .MuiPaper-root": {
+      padding: '1.5rem',
+      borderRadius: '1rem',
+      boxShadow: '1rem',
+    },
+  },
+}
 
 type ExportModalProps = {
   isExport: boolean;
@@ -27,7 +37,8 @@ const ExportModal = ({
     <Modal
       open={isExport}
       title={t(mandaysCalculator.exportConfirmation)}
-      maxWidth="xs"
+      maxWidth="md"
+      sx={modalSx}
       onClose={() => {
         setIsExport(false);
         exportForm.resetForm();
@@ -51,25 +62,20 @@ const ExportModal = ({
         <Grid container mt={1}>
           <ErrorMessage error={getFieldError(exportForm.errors, "exportBy")} />
         </Grid>
-        <Grid container justifyContent="space-between" sx={{ mt: 1 }}>
-          <Grid item xs={6} sx={{ p: 1 }}>
-            <CustomButton
-              fullWidth
-              onClick={() => {
-                setIsExport(false);
-                exportForm.resetForm();
-              }}
-              colorVariant="error"
-            >
-              {t(common.backBtn)}
-            </CustomButton>
-          </Grid>
-          <Grid item xs={6} sx={{ p: 1 }}>
-            <CustomButton fullWidth type="submit">
-              {t(common.exportBtn)}
-            </CustomButton>
-          </Grid>
-        </Grid>
+        <Stack mt={2} direction='row' gap={2} justifyContent='center'>
+          <CustomButton
+            onClick={() => {
+              setIsExport(false);
+              exportForm.resetForm();
+            }}
+            colorVariant="neutral"
+          >
+            {t(common.backBtn)}
+          </CustomButton>
+          <CustomButton type="submit">
+            {t(common.exportBtn)}
+          </CustomButton>
+        </Stack>
       </Form>
     </Modal>
   );
