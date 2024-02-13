@@ -10,7 +10,7 @@ import { Card, Select } from "~/components";
 import { dateFormat } from "~/utils/date";
 
 import {
-  calculateTotalManHoursPerPhase,
+  calculateTotalManHoursByOdc,
   calculateTotalResourcesOrLeaves,
   roundOffValue,
 } from "../../utils/calculate";
@@ -32,6 +32,7 @@ const Details = ({
     utilization: formState?.summary?.utilizationRate || "-",
     teamId: formState?.summary?.teamId || "-",
   };
+
   return (
     <Grid container spacing={2} justifyContent="">
       <Grid xs={6} item>
@@ -124,11 +125,22 @@ const Details = ({
               <Grid item xs={6}>
                 <Typography fontWeight={"bold"}>Total man-days:</Typography>
               </Grid>
-              {existingODC.map((_: any, index: number) => (
+              {existingODC.map((exOdc: any, index: number) => (
                 <Grid item xs={2} key={index}>
                   <Typography>
                     {roundOffValue(
-                      calculateTotalManHoursPerPhase(formState) / 8,
+                      calculateTotalManHoursByOdc(
+                        formState,
+                        calculateTotalResourcesOrLeaves(formState, exOdc.value),
+                        calculateTotalResourcesOrLeaves(
+                          formState,
+                          exOdc.value,
+                          "annualLeaves",
+                        ),
+                        exOdc.holidays.map(
+                          (item: { date: string }) => item.date,
+                        ),
+                      ) / 8,
                       "days",
                     )}
                   </Typography>

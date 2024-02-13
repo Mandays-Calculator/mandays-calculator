@@ -35,13 +35,12 @@ import {
   SubColumnNumInputContainer,
 } from "../styles";
 import {
-  calculateTotalManHours,
   calculateTotalManHoursPerTask,
   roundOffValue,
 } from "../estimation-details/utils/calculate";
 import { MandaysForm } from "../estimation-details";
 import { FormikErrors } from "formik";
-import { mockData } from "./tableData";
+import { getMultipliedEstimations } from "../estimation-details/summary/utils/mapper";
 
 const {
   mandaysCalculator: {
@@ -53,30 +52,6 @@ const {
   },
 } = LocalizationKey;
 
-const calculateTableTotalManHours = (
-  row: TasksListDataType,
-  data: LegendColumn,
-) => {
-  let totalManHours = 0;
-
-  const resourceCountByTasks = row.resourceCountByTasks || {};
-  Object.entries(resourceCountByTasks).forEach(
-    ([careerStep, numberOfResources]) => {
-      const complexityId = row.complexityId;
-      const legends = data as LegendColumn;
-      const complexityInfo = legends[complexityId].find(
-        (item) => item.careerStep === careerStep,
-      );
-
-      if (complexityInfo) {
-        const manHours = complexityInfo.manHours || 0;
-        totalManHours += manHours * numberOfResources;
-      }
-    },
-  );
-
-  return totalManHours;
-};
 /**
  * Module providing column configurations for tables in the Mandays Estimation Tool.
  * Defines columns for Sprint List, Summary, Tasks, Legend, Resources, and Estimation tables.
@@ -135,7 +110,6 @@ export const SprintListColumns = ({
 export const SummaryListColumns = ({
   t,
   formValues,
-  odcList,
 }: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
@@ -145,15 +119,14 @@ export const SummaryListColumns = ({
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
-      Cell: ({ row }: CellProps<any>) => {
-        const taskListHours = row.original.estimations.map((item: any) => {
-          return calculateTotalManHours(
-            formValues as MandaysForm,
-            odcList as CommonOption,
-            item.resourceCountByTasks,
-          );
-        });
+      Cell: () => {
+        const multipliedEstimations = getMultipliedEstimations(
+          formValues as MandaysForm,
+        );
 
+        const taskListHours = Object.values(multipliedEstimations).map(
+          (item) => item.manHours,
+        );
         return roundOffValue(
           taskListHours.reduce((sum: number, num: number) => sum + num, 0),
           "hours",
@@ -163,15 +136,14 @@ export const SummaryListColumns = ({
     {
       Header: t(summaryTableColumns.totalManDays),
       accessor: "totalManDays",
-      Cell: ({ row }: CellProps<any>) => {
-        const taskListHours = row.original.estimations.map((item: any) => {
-          return calculateTotalManHours(
-            formValues as MandaysForm,
-            odcList as CommonOption,
-            item.resourceCountByTasks,
-          );
-        });
+      Cell: () => {
+        const multipliedEstimations = getMultipliedEstimations(
+          formValues as MandaysForm,
+        );
 
+        const taskListHours = Object.values(multipliedEstimations).map(
+          (item) => item.manHours,
+        );
         return roundOffValue(
           taskListHours.reduce((sum: number, num: number) => sum + num, 0) / 8,
           "days",
@@ -183,6 +155,7 @@ export const SummaryListColumns = ({
 
 export const TasksListColumns = ({
   t,
+  formValues,
 }: TasksColumnsProps): TasksListColumnsType[] => {
   return [
     {
@@ -231,12 +204,20 @@ export const TasksListColumns = ({
     {
       Header: t(summaryTableColumns.totalManHours),
       Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const resources = Object.entries(
+          row.original.resourceCountByTasks || {},
+        );
+
         return (
           <>
             <Typography mt={3}>
-              {calculateTableTotalManHours(
-                row.original,
-                mockData.legends as LegendColumn,
+              {roundOffValue(
+                calculateTotalManHoursPerTask({
+                  resources,
+                  complexityIdParam: row.original.complexityId,
+                  formValues: formValues as MandaysForm,
+                }),
+                "hours",
               )}
             </Typography>
           </>
@@ -247,13 +228,21 @@ export const TasksListColumns = ({
     {
       Header: t(summaryTableColumns.totalManDays),
       Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const resources = Object.entries(
+          row.original.resourceCountByTasks || {},
+        );
+
         return (
           <>
             <Typography mt={3}>
-              {calculateTableTotalManHours(
-                row.original,
-                mockData.legends as LegendColumn,
-              ) / 8}
+              {roundOffValue(
+                calculateTotalManHoursPerTask({
+                  resources,
+                  complexityIdParam: row.original.complexityId,
+                  formValues: formValues as MandaysForm,
+                }) / 8,
+                "days",
+              )}
             </Typography>
           </>
         );

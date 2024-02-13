@@ -143,6 +143,7 @@ export const calculateTotalManHoursPerPhase = (
     phase.functionalities.forEach((functionality) => {
       functionality.estimations.forEach((estimation) => {
         const resourceCountByTasks = estimation.resourceCountByTasks || {};
+
         Object.entries(resourceCountByTasks).forEach(
           ([careerStep, numberOfResources]) => {
             const complexityId = estimation.complexityId;
@@ -209,6 +210,46 @@ export const calculateTotalManHours = (
     return calculatedValues && calculatedValues.length > 0
       ? calculatedValues.reduce((a: number, b: number) => a + b)
       : 0;
+  }
+
+  return 0;
+};
+
+export const calculateTotalManHoursByOdc = (
+  formState: MandaysForm,
+  numberOfResources: number,
+  numberOfLeaves: number,
+  holidays: string[],
+): number => {
+  const checkKeys = ["summary", "resources", "legends", "phases"];
+  if (checkKeys.every((item) => formState.hasOwnProperty(item))) {
+    const workingDays = networkDays(
+      formState.summary.startDate,
+      formState.summary.endDate,
+      holidays,
+    );
+
+    /**
+     * Calculation:
+     * - working days * number of resources * 8
+     *      multiplied by
+     * - utilization rate / 100
+     *      multiplied by
+     * - 8
+     *      subtracted by
+     * - annual leaves
+     *
+     */
+
+    const calculatedValue =
+      (workingDays *
+        numberOfResources *
+        8 *
+        (Number(formState.summary.utilizationRate) / 100)) /
+        8 -
+      numberOfLeaves;
+
+    return calculatedValue;
   }
 
   return 0;

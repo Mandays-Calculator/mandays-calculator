@@ -16,14 +16,15 @@ import { Table } from "~/components";
 
 import { SummaryListColumns } from "~/pages/mandays-calculator/utils/columns";
 
-import { calculateTotalManHours, roundOffValue } from "../../utils/calculate";
+import {
+  calculateTotalManHoursByOdc,
+  calculateTotalManHoursPerPhase,
+  calculateTotalResourcesOrLeaves,
+  roundOffValue,
+} from "../../utils/calculate";
 
 import Details from "../details";
-import {
-  ResourceData,
-  getExistingODC,
-  getTotalResourcesCount,
-} from "../utils/mapper";
+import { ResourceData, getExistingODC } from "../utils/mapper";
 
 roundOffValue;
 
@@ -54,25 +55,43 @@ const SummaryContent = ({
     formState.resources as unknown as ResourceData,
   );
 
-  const resources = getTotalResourcesCount(
-    formState.resources,
-    "numberOfResources",
-  );
-
-  // const resourcesLeaves = getTotalResourcesCount(
-  //   formState.resources,
-  //   "annualLeaves",
-  // );
-
   const summaryColumn = useMemo(
-    () =>
-      SummaryListColumns({ t, formValues: formState, odcList: existingODC }),
+    () => SummaryListColumns({ t, formValues: formState }),
     [formState, existingODC, odcList, type],
   );
 
-  const totalManHours = useMemo(
-    () => calculateTotalManHours(formState, existingODC, resources),
-    [formState, location, teamOptions, type],
+  const totalManHours = useMemo((): number => {
+    const checkKeys = ["summary", "resources", "legends", "phases"];
+    if (checkKeys.every((item) => formState.hasOwnProperty(item))) {
+      const value = calculateTotalManHoursPerPhase(formState);
+      return value;
+    }
+    return 0;
+  }, [formState, location, teamOptions, type]);
+
+  const totalMandaysUtilization = useMemo(
+    () =>
+      existingODC.map((exODC: any) =>
+        roundOffValue(
+          calculateTotalManHoursByOdc(
+            formState,
+            calculateTotalResourcesOrLeaves(formState, exODC.value),
+            calculateTotalResourcesOrLeaves(
+              formState,
+              exODC.value,
+              "annualLeaves",
+            ),
+            exODC.holidays.map((item: { date: string }) => item.date),
+          ) / 8,
+          "days",
+        ),
+      ),
+    [existingODC, formState],
+  );
+
+  const OTDays = roundOffValue(
+    totalManHours / 8 - totalMandaysUtilization,
+    "days",
   );
   return (
     <Stack direction="column" gap={2}>
@@ -104,6 +123,17 @@ const SummaryContent = ({
             <Typography># of days:</Typography>
             <Typography fontWeight={"bold"}>
               {roundOffValue(totalManHours / 8, "days")}
+            </Typography>
+          </Stack>
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={8.1}></Grid>
+        <Grid item xs={3.9}>
+          <Stack direction={"row"} gap={2}>
+            <Typography># of OT days:</Typography>
+            <Typography fontWeight={"bold"}>
+              {Number(OTDays) > 0 ? Number(OTDays) : 0}
             </Typography>
           </Stack>
         </Grid>
