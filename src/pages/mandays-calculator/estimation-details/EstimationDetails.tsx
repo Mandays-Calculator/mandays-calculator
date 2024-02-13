@@ -40,7 +40,6 @@ import { ActionButtons } from "./components/action-buttons";
 import { HeaderButtons } from "./components/header-buttons";
 import { ShareModal } from "./components/share-modal";
 
-import { StyledTeamLabel } from "../styles";
 import { initMandays } from "./utils/initialValue";
 import { useExportMandaysForm, useMandaysForm } from "./utils/estimationForms";
 
@@ -228,13 +227,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
             <Title title={t(mandaysCalculator.label)} />
-          </Grid>
-          <Grid item>
-            {isGeneratingPDF && (
-              <StyledTeamLabel color="primary">
-                Team: <strong>Enrollment</strong>
-              </StyledTeamLabel>
-            )}
           </Grid>
         </Grid>
         <PageContainer>
