@@ -9,11 +9,18 @@ import { StyledPreviousIcon, StyledNextIcon, StyledPaginationItem } from ".";
 interface PaginationPropType extends PaginationProps {
   totalItems?: number;
   itemsPerPage?: number;
+  page?: number;
   handleChange?: (page: number) => void;
 }
 
 export const Pagination = (props: PaginationPropType): ReactElement => {
-  const { totalItems = 0, itemsPerPage = 5, handleChange, ...rest } = props;
+  const {
+    totalItems = 0,
+    itemsPerPage = 5,
+    handleChange,
+    page,
+    ...rest
+  } = props;
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -26,6 +33,7 @@ export const Pagination = (props: PaginationPropType): ReactElement => {
       <Stack spacing={2} sx={{ alignItems: "center" }}>
         <MuiPagination
           count={totalPages}
+          page={page}
           onChange={handleChangeEvent}
           renderItem={(item) => (
             <StyledPaginationItem

@@ -47,7 +47,7 @@ const ActionButtons = (props: ActionButtonsProps): ReactElement => {
       )}
       {length === activeTab && (
         <CustomButton onClick={handleSave} type="submit">
-          {t(common.saveBtn)}
+          Finish
         </CustomButton>
       )}
     </Stack>

@@ -80,6 +80,19 @@ const transformDataToOption = (
         }));
       case "complexity":
       case "odc":
+        if (withInfo) {
+          return data.map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+            ...item,
+          }));
+        }
+        return data
+          .filter((item: CommonResponseDataObj) => item.active)
+          .map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+          }));
       default:
         return data
           .filter((item: CommonResponseDataObj) => item.active)

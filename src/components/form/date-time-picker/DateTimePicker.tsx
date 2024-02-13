@@ -18,7 +18,7 @@ interface DateTimePickerProps
   timeFormat?: string;
   onChange?: (
     date: Date | null,
-    event: SyntheticEvent<any> | undefined
+    event: SyntheticEvent<any> | undefined,
   ) => void;
   sx?: SxProps;
 }
@@ -54,7 +54,7 @@ const DateTimePicker = ({
 
   const handleChange = (
     date: Date | null,
-    event: SyntheticEvent<any> | undefined
+    event: SyntheticEvent<any> | undefined,
   ) => {
     setSelectedDate(date);
     if (onChange) {

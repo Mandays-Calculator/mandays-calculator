@@ -27,6 +27,7 @@ export const usePagination = ({
   const Pagination = (): ReactElement => {
     return (
       <CustomPagination
+        page={currentPage}
         handleChange={handlePageChange}
         totalItems={items.length}
         itemsPerPage={itemsPerPage}

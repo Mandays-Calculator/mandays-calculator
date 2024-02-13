@@ -33,10 +33,9 @@ const GeneratedLink = (props: RenderLinkProps): ReactElement => {
     mandaysCalculator: { modal },
   } = LocalizationKey;
 
-  const [copyLink, setCopyLink] = useState<boolean>(false);
   const [timeout] = useTimeout();
+  const [copyLink, setCopyLink] = useState<boolean>(false);
 
-  console.log(copyLink, "copyied linbk");
   return (
     <Grid mt={3}>
       <Grid item xs={12}>
