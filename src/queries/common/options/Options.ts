@@ -155,8 +155,8 @@ const getCommonOption = <T>(
       );
     case "function":
       return useQuery(
-        ["getFunctionality", params],
-        () => getFunctionality(params),
+        ["getFunctionality"],
+        () => getFunctionality(),
         {
           staleTime: Infinity,
           cacheTime: cacheTime,

@@ -12,13 +12,12 @@ import { getEnvConfig } from "~/utils/env-config";
 export const getTasks = async (
   id: string,
   status: string,
-  pageSize: string,
   maxItems: string,
   pageNum: string,
 ): BaseResponse<AllTasksResponse[]> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
   const response = await axios.get<AllTasksResponse[]>(
-    `${apiBasePath}/tasks?teamId=${id}&statusId=${status}&pageSize=${pageSize}&maxItems=${maxItems}&pageNumber=${pageNum}`,
+    `${apiBasePath}/tasks?teamId=${id}&statusId=${status}&maxResults=${maxItems}&currentPage=${pageNum}`,
   );
   return response.data;
 };
@@ -59,11 +58,10 @@ export const deleteTask = async (id: string): BaseResponse<TaskResponse> => {
 };
 
 export const getFunctionality = async (
-  name: string,
 ): BaseResponse<ForGetFunctionality> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
   const response = await axios.get<ForGetFunctionality[]>(
-    `${apiBasePath}/functionalities?name=${name}`,
+    `${apiBasePath}/functionalities`,
   );
   return response.data;
 };
