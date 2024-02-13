@@ -110,22 +110,20 @@ const TasksContent = (): ReactElement => {
     const { data, isSuccess, refetch } = useTasks(
       "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
       status,
-      "10",
+      "100",
       "1",
     );
 
-    return { taskData: data?.data, page: data?.page, isSuccess, refetch };
+    return { taskData: data?.data, isSuccess, refetch };
   });
 
   const [
-    { taskData: backlog, page: pageBacklog, isSuccess: isSuccessBacklog },
-    { taskData: notYetStarted, page: pageNys, isSuccess: isSuccessNys },
-    { taskData: inProgress, page: pageIp, isSuccess: isSuccessIp },
-    { taskData: onHold, page: pageOnHold, isSuccess: isSuccessOnHold },
-    { taskData: completed, page: pageCompleted, isSuccess: isSuccessCompleted },
+    { taskData: backlog, isSuccess: isSuccessBacklog },
+    { taskData: notYetStarted, isSuccess: isSuccessNys },
+    { taskData: inProgress, isSuccess: isSuccessIp },
+    { taskData: onHold, isSuccess: isSuccessOnHold },
+    { taskData: completed, isSuccess: isSuccessCompleted },
   ] = statusData;
-
-  console.log(statusData);
 
   const deleteMutation = useDeleteTask();
 
@@ -140,8 +138,6 @@ const TasksContent = (): ReactElement => {
     label: item.name,
     value: item.id,
   }));
-
-  console.log("teamOPtions", teamOptionsApi);
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
@@ -163,13 +159,12 @@ const TasksContent = (): ReactElement => {
         isSuccessCompleted
       ) {
         const allData = [
-          ...backlog,
-          ...notYetStarted,
-          ...inProgress,
-          ...onHold,
-          ...completed,
+          ...(backlog || []),
+          ...(notYetStarted || []),
+          ...(inProgress || []),
+          ...(onHold || []),
+          ...(completed || []),
         ];
-        console.log("all data", allData);
         setTasks(allData);
       }
     }, 1000);

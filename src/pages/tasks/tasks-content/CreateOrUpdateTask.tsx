@@ -39,12 +39,12 @@ interface CreateOrUpdateTaskProps {
 }
 
 const initialTaskState: AllTasksResponse = {
-  taskID: "", // should be empty when api is integrated
+  taskID: "",
   name: "",
   description: "",
-  createdDate: "", // should be empty when api is integrated
+  createdDate: "",
   completionDate: "",
-  sprint: "1", // should be empty when api is integrated
+  sprint: "1",
   complexity: {
     id: "",
     name: "",
@@ -54,7 +54,7 @@ const initialTaskState: AllTasksResponse = {
     sample: "",
     active: true,
   },
-  status: "Backlog", // should be empty when api is integrated
+  status: "Backlog",
   type: "",
   functionality: {
     id: "",
@@ -142,12 +142,13 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
         createdDate: moment().format("yyyy-MM-dd HH:mm:SS"),
         sprint: "1",
         complexityId: e.complexity.id,
-        functionality: e.functionality,
-        // {
-        //   id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
-        //   name: "Test add new task Nov16_009",
-        //   teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-        // },
+        functionality:
+          // e.functionality,
+          {
+            id: "b4dddbcc-bf4b-11ee-993e-00090faa0001",
+            name: "Test add new task Nov16_009",
+            teamId: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+          },
         tags: e.tags,
       };
 
