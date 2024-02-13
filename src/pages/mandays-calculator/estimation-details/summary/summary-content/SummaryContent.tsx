@@ -69,8 +69,8 @@ const SummaryContent = ({
     return 0;
   }, [formState, location, teamOptions, type]);
 
-  const totalMandaysUtilization = useMemo(
-    () =>
+  const totalMandaysUtilization = useMemo(() => {
+    const calculatedValues =
       existingODC.map((exODC: any) =>
         roundOffValue(
           calculateTotalManHoursByOdc(
@@ -85,14 +85,17 @@ const SummaryContent = ({
           ) / 8,
           "days",
         ),
-      ),
-    [existingODC, formState],
-  );
+      ) || [];
+    return calculatedValues.length > 0
+      ? calculatedValues.reduce((a: number, b: number) => a + b)
+      : 0;
+  }, [existingODC, formState, totalManHours]);
 
   const OTDays = roundOffValue(
     totalManHours / 8 - totalMandaysUtilization,
     "days",
   );
+
   return (
     <Stack direction="column" gap={2}>
       <Details
@@ -122,7 +125,7 @@ const SummaryContent = ({
           <Stack direction={"row"} gap={2}>
             <Typography># of days:</Typography>
             <Typography fontWeight={"bold"}>
-              {roundOffValue(totalManHours / 8, "days")}
+              {roundOffValue(totalManHours / 8, "days")} days
             </Typography>
           </Stack>
         </Grid>
@@ -133,7 +136,7 @@ const SummaryContent = ({
           <Stack direction={"row"} gap={2}>
             <Typography># of OT days:</Typography>
             <Typography fontWeight={"bold"}>
-              {Number(OTDays) > 0 ? Number(OTDays) : 0}
+              {Number(OTDays) > 0 ? Number(OTDays) : 0} days
             </Typography>
           </Stack>
         </Grid>

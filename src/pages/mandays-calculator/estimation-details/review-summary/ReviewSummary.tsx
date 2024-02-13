@@ -72,13 +72,12 @@ const ReviewSummary = (): ReactElement => {
     }
   }, []);
 
-  console.log(isSuccessAdd, "status");
   return (
     <PageContainer>
       <Stack gap={2} mb={3}>
         <Grid container spacing={2} textAlign="center">
           <Grid item xs={12}>
-            <Title title={t(mandaysCalculator.summaryTitle)} color="#414145" />
+            <Title title={t(mandaysCalculator.summaryTitle2)} color="#414145" />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h6">

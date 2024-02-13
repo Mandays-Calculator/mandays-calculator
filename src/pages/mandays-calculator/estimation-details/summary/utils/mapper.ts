@@ -128,14 +128,12 @@ interface MultipliedEstimation {
 
 export const getMultipliedEstimations = (
   formState: MandaysForm,
+  funcIndex: number,
 ): MultipliedEstimation[] => {
   const estimations = formState.phases.flatMap((phase: Phase) =>
-    phase.functionalities.flatMap((func) =>
-      func.estimations.map((estimation) => ({
-        ...estimation,
-        functionalityName: func.name,
-      })),
-    ),
+    phase.functionalities[funcIndex].estimations.map((estimation) => ({
+      ...estimation,
+    })),
   );
 
   const multipliedEstimationResources = estimations

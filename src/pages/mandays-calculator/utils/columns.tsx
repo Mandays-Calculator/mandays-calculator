@@ -119,9 +119,10 @@ export const SummaryListColumns = ({
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
-      Cell: () => {
+      Cell: ({ row }) => {
         const multipliedEstimations = getMultipliedEstimations(
           formValues as MandaysForm,
+          row.index,
         );
 
         const taskListHours = Object.values(multipliedEstimations).map(
@@ -136,9 +137,10 @@ export const SummaryListColumns = ({
     {
       Header: t(summaryTableColumns.totalManDays),
       accessor: "totalManDays",
-      Cell: () => {
+      Cell: ({ row }) => {
         const multipliedEstimations = getMultipliedEstimations(
           formValues as MandaysForm,
+          row.index,
         );
 
         const taskListHours = Object.values(multipliedEstimations).map(
