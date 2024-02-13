@@ -111,3 +111,12 @@ export interface CommonFunctionality {
   createdDate: string;
   lastUpdatedDate: string;
 }
+
+export interface Team {
+  id: string;
+  name: string;
+  projectId: string;
+  active: boolean;
+  createdDate: string;
+  lastUpdatedDate: string;
+}
