@@ -154,14 +154,10 @@ const getCommonOption = <T>(
         },
       );
     case "function":
-      return useQuery(
-        ["getFunctionality"],
-        () => getFunctionality(),
-        {
-          staleTime: Infinity,
-          cacheTime: cacheTime,
-        },
-      );
+      return useQuery("getFunctionality", getFunctionality, {
+        staleTime: Infinity,
+        cacheTime: cacheTime,
+      });
     default:
       return [{ label: "", value: "" }] as unknown as UseQueryResult<T, Error>;
     // {

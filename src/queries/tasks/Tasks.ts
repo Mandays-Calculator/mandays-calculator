@@ -2,9 +2,9 @@ import type {
   AllTasksResponse,
   CreateTask,
   DeleteId,
-  ForGetFunctionality,
   QueryResponse,
   TaskResponse,
+  Team,
   UpdateTask,
 } from "~/api/tasks";
 import { AxiosError } from "axios";
@@ -18,8 +18,8 @@ import {
 
 import {
   deleteTask,
-  getFunctionality,
   getTasks,
+  getTeam,
   postTask,
   putUpdateTask,
 } from "~/api/tasks/Tasks";
@@ -67,9 +67,10 @@ export const useDeleteTask = (): UseMutationResult<
   );
 };
 
-export const useGetFunctionality = (): UseQueryResult<
-  QueryResponse<ForGetFunctionality>,
-  AxiosError
-> => {
-  return useQuery("getFunctionality", () => getFunctionality);
+export const useGetTeam = (
+  userId: string,
+): UseQueryResult<QueryResponse<Team[]>, AxiosError> => {
+  return useQuery<QueryResponse<Team[]>, AxiosError>(["getTeam", userId], () =>
+    getTeam(userId),
+  );
 };

@@ -27,7 +27,7 @@ import {
 
 import { Select, PageContainer } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
-import { useDeleteTask, useTasks } from "~/queries/tasks/Tasks";
+import { useDeleteTask, useGetTeam, useTasks } from "~/queries/tasks/Tasks";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
@@ -39,6 +39,7 @@ import ViewTaskDetails from "./ViewTaskDetails";
 import NoTask from "~/assets/img/empty_tasks.png";
 
 import { taskContentStyles } from "./style";
+import _ from "lodash";
 
 const StatusContainer = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
@@ -131,6 +132,16 @@ const TasksContent = (): ReactElement => {
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
   const functionality = useCommonOption("function");
+
+  const teamOptionsQuery = useGetTeam("f7eaf281-6e4e-11ee-8624-a0291936d1c2");
+  const api = teamOptionsQuery.data?.data;
+
+  const teamOptionsApi = api?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
+
+  console.log("teamOPtions", teamOptionsApi);
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
@@ -419,7 +430,9 @@ const TasksContent = (): ReactElement => {
               <Select
                 name="teamFilter"
                 placeholder="Team Name"
-                options={teamOptions}
+                options={
+                  !_.isEmpty(teamOptionsApi) ? teamOptionsApi : teamOptions
+                }
                 onChange={handleTeamFilter}
                 value={selectedTeam}
               />
