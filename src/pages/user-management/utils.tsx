@@ -3,12 +3,28 @@ import { CommonType, useCommonOption } from "~/queries/common/options";
 import * as yup from "yup";
 import LocalizationKey from "~/i18n/key";
 
-import { UserManagementForms } from "./types";
+import { Gender, UserManagementForms } from "./types";
+import renderRole from "~/utils/helpers/renderRoleHelper";
 
 const { common, userManagement } = LocalizationKey;
 
 export const commonOptionsAPI = (options: CommonType) => {
   return useCommonOption(options, { keyword: "" });
+};
+
+export const renderGender = (gender: Gender): string => {
+  switch (gender) {
+    case "FEMALE":
+      return "1";
+    case "MALE":
+      return "2";
+    case "NON_BINARY":
+      return "3";
+    case "PREFER_NOT_TO_SAY":
+      return "4";
+    default:
+      return "";
+  }
 };
 
 export const genderValueNumToStr = (): SelectObject[] => {
@@ -19,7 +35,7 @@ export const genderValueNumToStr = (): SelectObject[] => {
 
 export const roleValue = (): SelectObject[] => {
   return commonOptionsAPI("role").map((e) => {
-    return { label: e.label, value: e.label };
+    return { label: renderRole(e.label), value: e.label };
   });
 };
 

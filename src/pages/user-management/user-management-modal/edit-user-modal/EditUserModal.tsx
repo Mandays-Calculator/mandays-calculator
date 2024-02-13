@@ -27,6 +27,7 @@ import {
   genderValueNumToStr,
   commonOptionsAPI,
   roleValue,
+  renderGender,
 } from "~/pages/user-management/utils";
 
 const StyledModalTitle = styled(Typography)({
@@ -51,7 +52,6 @@ interface EditUserModalProps {
   onClose: () => void;
   currentUser?: UserListData;
 }
-
 export const EditUserModal: React.FC<EditUserModalProps> = ({
   open,
   onClose,
@@ -170,7 +170,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               <ControlledSelect
                 name="updateGender"
                 options={genderValueNumToStr()}
-                value={form.values.updateGender || ""}
+                value={renderGender(form.values.updateGender) || ""}
               />
             </Grid>
           </Grid>
