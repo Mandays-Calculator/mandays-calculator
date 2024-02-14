@@ -21,7 +21,6 @@ export const formatTime = (milliseconds: number): string => {
   }
 };
 
-
 export const getMonths = (): string[] => {
   return [
     "January",
@@ -67,6 +66,9 @@ export const checkDateFormat = (date: string): boolean => {
   return regExDate.test(date);
 };
 
-export const dateFormat = (date: string): string => {
-  return moment(new Date(date)).format("yyyy-MM-dd");
+export const dateFormat = (date: string, format?: string): string => {
+  const formattedDate = moment(new Date(date));
+  return formattedDate.isValid()
+    ? formattedDate.format(format || "yyyy-MM-dd")
+    : "-";
 };

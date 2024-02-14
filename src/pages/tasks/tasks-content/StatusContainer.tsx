@@ -6,16 +6,16 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
 import { Divider, Grid, IconButton, Stack } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import LocalizationKey from "~/i18n/key";
 import "simplebar-react/dist/simplebar.min.css";
+import AddIcon from "@mui/icons-material/Add";
 import SimpleBarReact from "simplebar-react";
+import LocalizationKey from "~/i18n/key";
 
 import { useTasks } from "~/queries/tasks/Tasks";
 import { ErrorMessage } from "~/components";
 
-import TaskDetailsCard from "./task-details";
 import { Status, StatusValues } from "./utils";
+import TaskDetailsCard from "./task-details";
 import {
   StyledCreateTaskIconButton,
   StyledStatusContainer,

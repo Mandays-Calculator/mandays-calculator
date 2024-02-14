@@ -28,7 +28,7 @@ const ErrorMessage = (props: ErrorMessageProps): ReactElement | null => {
       );
     }
     if (type === "field") {
-      return <StyledError>{error}</StyledError>;
+      return <StyledError className="Mui-error">{error}</StyledError>;
     }
     return <CustomAlert type="error" open={error !== ""} message={error} />;
   }

@@ -11,7 +11,7 @@ const Summary = (props: SummaryProps): ReactElement => {
   const { mode } = props;
   const inputView = ["add", "edit"];
   const isInput = inputView.includes(mode);
-  return isInput ? <AddEstimation /> : <SummaryContent />;
+  return isInput ? <AddEstimation /> : <SummaryContent type="view" />;
 };
 
 export default Summary;

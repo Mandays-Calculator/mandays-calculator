@@ -1,18 +1,29 @@
 import type { ReactElement } from "react";
+import type { EstimationColumn } from "../../utils/types";
+import type { ApiCommonOptions, Estimations, MandaysForm } from "..";
 
-import { useMemo, useState } from "react";
-
+import React, { useCallback, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useFormikContext } from "formik";
+import { Typography, styled } from "@mui/material";
 import Stack from "@mui/material/Stack";
 
-import { Accordion, Select, Table } from "~/components";
-import { CustomButton } from "~/components/form/button";
-import { Typography, styled } from "@mui/material";
+import { Accordion, Table, CustomTab } from "~/components";
+import { ControlledTextField } from "~/components/form/controlled";
+import { getFieldError } from "~/components/form/utils";
+import { FormErrors } from "~/components/form/types";
+
 import { EstimationListColumns } from "../../utils/columns";
-import { EstimationColumn } from "../../utils/types";
-import { useTranslation } from "react-i18next";
+import { initializeformPhaseValue } from "../utils/initialValue";
+import {
+  calculateTotalManHoursPerPhase,
+  roundOffValue,
+} from "../utils/calculate";
+import { StyledTabContainer } from "./styles";
 
 interface EstimationProps {
   mode: EstimationDetailsMode;
+  apiCommonOptions: ApiCommonOptions;
 }
 
 const StyledAccordion = styled(Accordion)(() => ({
@@ -30,52 +41,120 @@ const StyledFooter = styled("div")(() => ({
 
 const Estimation = (props: EstimationProps): ReactElement => {
   const { mode } = props;
-  const [estimation, setEstimation] = useState<string>("");
-  console.log(mode);
+  const form = useFormikContext<MandaysForm>();
   const { t } = useTranslation();
-  const estimationListColumn = useMemo(() => EstimationListColumns({ t }), []);
+  const mappedCareerSteps = Object.entries(form.values.resources)
+    .map(
+      (resource) =>
+        resource[1].length > 0 && { label: resource[0], value: resource[0] },
+    )
+    .filter(Boolean);
+
+  const estimationListColumn = useCallback(
+    (estimations: Estimations[], phaseIndex: number, funcIndex: number) =>
+      EstimationListColumns({
+        t,
+        careerSteps: mappedCareerSteps || [],
+        estimations,
+        phaseIndex,
+        funcIndex,
+        form: form,
+      }),
+    [form.values, form.errors, form.values.legends, form.values.resources],
+  );
+
+  const totalManHours = useMemo(
+    () => calculateTotalManHoursPerPhase(form.values),
+    [form.values],
+  );
+
+  useEffect(() => {
+    if (mode === "add") {
+      const formValuePhase = initializeformPhaseValue(
+        form.values,
+        (mappedCareerSteps as SelectObject[]) || [],
+      );
+      form.setFieldValue("phases", formValuePhase);
+    }
+  }, [mode, form.values.tasks]);
+
+  const estimationTabs = form.values.phases.map(
+    (phase, phaseIndex: number) => ({
+      label:
+        mode === "edit" || "add" ? (
+          <>
+            <ControlledTextField
+              name={`phases[${phaseIndex}].name`}
+              error={
+                !!getFieldError(
+                  form.errors as FormErrors,
+                  `phases[${phaseIndex}].name`,
+                )
+              }
+              helperText={getFieldError(
+                form.errors as FormErrors,
+                `phases[${phaseIndex}].name`,
+              )}
+            />
+          </>
+        ) : (
+          phase.name
+        ),
+      content: (
+        <>
+          {phase.functionalities.map((func, funcIndex: number) => (
+            <React.Fragment key={func.id}>
+              <StyledAccordion title={func.name} sx={{ mb: 2 }}>
+                <Table<EstimationColumn>
+                  name="parent-table-estimation"
+                  data={(func.estimations as EstimationColumn[]) || []}
+                  columns={estimationListColumn(
+                    func.estimations,
+                    phaseIndex,
+                    funcIndex,
+                  )}
+                />
+              </StyledAccordion>
+            </React.Fragment>
+          ))}
+          <Stack direction={"row"} display={"flex"} justifyContent={"flex-end"}>
+            <StyledFooter>
+              <Typography fontWeight={"bold"}>
+                Grand Total Man Hours: {totalManHours} hours.
+              </Typography>
+              <Typography fontWeight={"bold"}>
+                Grand Total Man Days: {roundOffValue(totalManHours / 8, "days")}{" "}
+                days.
+              </Typography>
+            </StyledFooter>
+          </Stack>
+        </>
+      ),
+    }),
+  );
+
+  const hasSelectedTask = form.values.tasks.find(
+    (item) => item.dndStatus === "selected",
+  );
+
   return (
-    <Stack direction={"column"} gap={2}>
+    <Stack gap={2}>
       <Stack
         justifyContent={"space-between"}
         direction={"row"}
         alignItems={"center"}
       >
-        <div>
-          <Select
-            name="select-estimation"
-            options={[{ label: "DEV", value: "dev" }]}
-            value={estimation}
-            onChange={(val) => setEstimation(val.target.value as string)}
-          />
-        </div>
-        <CustomButton colorVariant="primary">Add Phase</CustomButton>
-      </Stack>
-
-      <StyledAccordion title="Function 1">
-        <Table<EstimationColumn>
-          name="parent-table-estimation"
-          data={[
-            {
-              complexity: "test",
-              resourcesNo: "test",
-              taskName: "test",
-              totalManDays: 10,
-              totalManHours: 10,
-            },
-          ]}
-          columns={estimationListColumn}
-        />
-      </StyledAccordion>
-      <Stack direction={"row"} display={"flex"} justifyContent={"flex-end"}>
-        <StyledFooter>
-          <Typography fontWeight={"bold"}>
-            Grand Total Man Hours: 100 Hours
+        {mode === "add" && hasSelectedTask ? (
+          <StyledTabContainer>
+            <CustomTab tabs={estimationTabs} />
+          </StyledTabContainer>
+        ) : (
+          <Typography
+            sx={{ textAlign: "center", padding: "5rem", margin: "0 auto" }}
+          >
+            No Task selected. Please select a task in Task tab.
           </Typography>
-          <Typography fontWeight={"bold"}>
-            Grand Total Man Days: 100 Hours
-          </Typography>
-        </StyledFooter>
+        )}
       </Stack>
     </Stack>
   );

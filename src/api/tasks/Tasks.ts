@@ -1,4 +1,4 @@
-import {
+import type {
   ForGetFunctionality,
   AllTasksResponse,
   QueryResponse,
@@ -7,8 +7,9 @@ import {
   UpdateTask,
   Team,
 } from ".";
-import axios from "axios";
+
 import { getEnvConfig } from "~/utils/env-config";
+import axios from "axios";
 
 export const getTasks = async (
   id: string,

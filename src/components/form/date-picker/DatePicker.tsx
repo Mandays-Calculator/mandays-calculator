@@ -20,10 +20,15 @@ const StyledCalendarMonthIcon = styled(CalendarMonthIcon)(({ theme }) => ({
 }));
 
 interface DatePickerProps
-  extends BaseInputProps<Omit<ReactDatePickerProps, "selectChange" | "onChange">> {
+  extends BaseInputProps<
+    Omit<ReactDatePickerProps, "selectChange" | "onChange">
+  > {
   type?: "default" | "range";
   dateFormat?: ReactDatePickerFormat;
-  onChange?: (date: ReactDatePickerFunctionParams, event: SyntheticEvent<any> | undefined) => void;
+  onChange?: (
+    date: ReactDatePickerFunctionParams,
+    event: SyntheticEvent<any> | undefined,
+  ) => void;
   sx?: SxProps;
 }
 export const DatePicker = (props: DatePickerProps): ReactElement => {
@@ -47,7 +52,10 @@ export const DatePicker = (props: DatePickerProps): ReactElement => {
     return;
   };
 
-  const handleChange = (date: Date | null, event: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (
+    date: Date | null,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     if (date) {
       date.setHours((-1 * date.getTimezoneOffset()) / 60);
     }
@@ -68,7 +76,9 @@ export const DatePicker = (props: DatePickerProps): ReactElement => {
       selectsRange={type === "range"}
       placeholderText={placeholderText}
       showPopperArrow={showPopperArrow}
-      renderCustomHeader={(customeHeaderProps) => <Header {...customeHeaderProps} />}
+      renderCustomHeader={(customeHeaderProps) => (
+        <Header {...customeHeaderProps} />
+      )}
       data-testid="date-picker-component"
       customInput={
         <TextField
@@ -91,7 +101,9 @@ export const DatePicker = (props: DatePickerProps): ReactElement => {
           },
         },
       ]}
-      onChange={type === "default" ? handleChange : onChange ?? handleDefaultOnChange}
+      onChange={
+        type === "default" ? handleChange : onChange ?? handleDefaultOnChange
+      }
       {...rest}
     />
   );

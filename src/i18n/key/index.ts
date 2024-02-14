@@ -154,6 +154,7 @@ const LocalizationKey = {
       totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
     summaryTitle: "mandaysCalculator.summary.title",
+    summaryTitle2: "mandaysCalculator.summary.title2",
     summarySubtitle: "mandaysCalculator.summary.subtitle",
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceList: {
@@ -181,7 +182,7 @@ const LocalizationKey = {
     tasksTitle: "mandaysCalculator.tasks.title",
     noTaskLabel: "mandaysCalculator.tasks.toTaskLabel",
     noSelectedTaskLabel: "mandaysCalculator.tasks.noSelectedTaskLabel",
-    taskDescriptionLabel: "mandaysCalculator.tasks.taskDescriptionLabel",
+    taskDescriptionLabel: "mandaysCalculator.tasks.descriptionLabel",
     tasksListLabel: "mandaysCalculator.tasks.tasksListLabel",
     tasksTableColumns: {
       tasks: "mandaysCalculator.tasks.table.columns.tasks",

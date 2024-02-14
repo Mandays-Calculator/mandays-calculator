@@ -241,7 +241,8 @@
       }
     },
     "summary": {
-      "title": "Summary",
+      "title": "Basic Information",
+      "title2": "Summary",
       "subtitle": "Please check the details below before adding the estimation.",
       "table": {
         "columns": {

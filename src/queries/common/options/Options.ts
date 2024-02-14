@@ -1,25 +1,28 @@
-import type { UserListResponse } from "~/api/user-management";
+import type { ForGetComplexities, GetComplexities } from "~/api/complexity";
+import type { ProjectListResponse } from "~/api/projects";
 import type { OdcListResponse } from "~/api/odc";
 import type {
   CareerStepResponse,
+  RoleTypeResponse,
   CountryResponse,
   GenderResponse,
-  RoleTypeResponse,
   Team,
 } from "~/api/common";
-import type { ForGetComplexities, GetComplexities } from "~/api/complexity";
-import type { ProjectListResponse } from "~/api/projects";
 import type {
-  CommonDataResponse,
-  CommonType,
-  CommonOption,
   CommonResponseDataObj,
+  CommonDataResponse,
+  CommonOption,
+  CommonType,
 } from ".";
 
 import { useQuery, UseQueryResult } from "react-query";
 
-import { getODC } from "~/api/odc/ODC";
+import { getUserList } from "~/api/user-management/UserManagement";
+import type { UserListResponse } from "~/api/user-management";
+import { getFunctionality } from "~/api/tasks/Tasks";
 import { getComplexities } from "~/api/complexity";
+import { getProjects } from "~/api/projects";
+import { getODC } from "~/api/odc/ODC";
 import {
   getCareerSteps,
   getCountries,
@@ -27,9 +30,6 @@ import {
   getRoles,
   getTeams,
 } from "~/api/common/Common";
-import { getProjects } from "~/api/projects";
-import { getUserList } from "~/api/user-management/UserManagement";
-import { getFunctionality } from "~/api/tasks/Tasks";
 
 const cacheTime: number = 1000 * 60 * 60 * 24;
 
@@ -86,6 +86,19 @@ const transformDataToOption = (
         }));
       case "complexity":
       case "odc":
+        if (withInfo) {
+          return data.map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+            ...item,
+          }));
+        }
+        return data
+          .filter((item: CommonResponseDataObj) => item.active)
+          .map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+          }));
       default:
         return data
           .filter((item: CommonResponseDataObj) => item.active)

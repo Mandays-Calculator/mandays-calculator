@@ -1,3 +1,4 @@
+import type { AxiosError } from "axios";
 import type {
   AllTasksResponse,
   QueryResponse,
@@ -5,8 +6,8 @@ import type {
   TaskResponse,
   CreateTask,
   UpdateTask,
+  Team,
 } from "~/api/tasks";
-import { AxiosError } from "axios";
 
 import {
   UseMutationResult,
@@ -16,10 +17,11 @@ import {
 } from "react-query";
 
 import {
-  deleteTask,
-  getTasks,
-  postTask,
   putUpdateTask,
+  deleteTask,
+  postTask,
+  getTasks,
+  getTeam,
 } from "~/api/tasks/Tasks";
 
 export const useTasks = (
@@ -62,5 +64,13 @@ export const useDeleteTask = (): UseMutationResult<
   return useMutation<TaskResponse, AxiosError, DeleteTaskId>(
     "deleteTask",
     params => deleteTask(params.id),
+  );
+};
+
+export const useGetTeam = (
+  userId: string,
+): UseQueryResult<QueryResponse<Team[]>, AxiosError> => {
+  return useQuery<QueryResponse<Team[]>, AxiosError>(["getTeam", userId], () =>
+    getTeam(userId),
   );
 };

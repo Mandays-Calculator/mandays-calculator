@@ -7,6 +7,7 @@ import { useFormikContext } from "formik";
 
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { Grid } from "@mui/material";
 
 import LocalizationKey from "~/i18n/key";
 import { Table } from "~/components";
@@ -65,13 +66,15 @@ const Legend = (props: LegendProps): ReactElement => {
     [complexities, careerSteps], // Include the dependencies
   );
 
-  console.log(values, "values");
-
   return (
     <Stack gap={3}>
-      <Typography variant="subtitle1" fontWeight="bold" color="primary">
-        {t(mandaysCalculator.legend.tableTitle)}
-      </Typography>
+      <Grid container justifyContent={"left"}>
+        <Grid item xs={6}>
+          <Typography variant="subtitle1" fontWeight="bold" color="primary">
+            {t(mandaysCalculator.legend.tableTitle)}
+          </Typography>
+        </Grid>
+      </Grid>
       <Table
         name="legend-table"
         columns={columnsMemo}

@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { type ReactElement } from "react";
 import type { MandaysForm } from "../..";
 
 import { useTranslation } from "react-i18next";
@@ -42,14 +42,15 @@ const Wrapper = (props: WrapperProps): ReactElement => {
 };
 
 const AddEstimation = (): ReactElement => {
-  const { t } = useTranslation();
   const {
     mandaysCalculator: { summaryForm },
   } = LocalizationKey;
 
-  const form = useFormikContext<MandaysForm>();
+  const { t } = useTranslation();
+  const { errors } = useFormikContext<MandaysForm>();
 
   const user = useUserAuth();
+
   const teams = useCommonOption("team", {
     projectId: user.state.selectedProject?.value,
   });
@@ -77,11 +78,11 @@ const AddEstimation = (): ReactElement => {
             <ControlledSelect
               options={teams}
               name="summary.teamId"
-              error={!!getFieldError(form.errors.summary, "teamId")}
+              error={!!getFieldError(errors.summary, "teamId")}
             />
             <ErrorMessage
               type="field"
-              error={getFieldError(form.errors.summary, "teamId")}
+              error={getFieldError(errors.summary, "teamId")}
             />
           </>
         }
@@ -99,7 +100,7 @@ const AddEstimation = (): ReactElement => {
                 <ControlledNumberInput
                   placeholder=""
                   name="summary.utilizationRate"
-                  error={!!form.errors.summary?.utilizationRate}
+                  error={!!errors.summary?.utilizationRate}
                 />
               </Grid>
               <Grid item>
@@ -110,7 +111,7 @@ const AddEstimation = (): ReactElement => {
             </Grid>
             <ErrorMessage
               type="field"
-              error={getFieldError(form.errors.summary, "utilizationRate")}
+              error={getFieldError(errors.summary, "utilizationRate")}
             />
           </>
         }
@@ -127,8 +128,8 @@ const AddEstimation = (): ReactElement => {
         field={
           <ControlledDatePicker
             name="summary.startDate"
-            helperText={getFieldError(form.errors.summary, "startDate")}
-            error={!!getFieldError(form.errors.summary, "startDate")}
+            helperText={getFieldError(errors.summary, "startDate")}
+            error={!!getFieldError(errors.summary, "startDate")}
           />
         }
       />
@@ -142,8 +143,8 @@ const AddEstimation = (): ReactElement => {
         field={
           <ControlledDatePicker
             name="summary.endDate"
-            error={!!getFieldError(form.errors.summary, "endDate")}
-            helperText={getFieldError(form.errors.summary, "endDate")}
+            error={!!getFieldError(errors.summary, "endDate")}
+            helperText={getFieldError(errors.summary, "endDate")}
           />
         }
       />
