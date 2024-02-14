@@ -1,10 +1,11 @@
 import {
+  ForGetFunctionality,
   AllTasksResponse,
   QueryResponse,
   TaskResponse,
   CreateTask,
   UpdateTask,
-  ForGetFunctionality,
+  Team,
 } from ".";
 import axios from "axios";
 import { getEnvConfig } from "~/utils/env-config";
@@ -63,6 +64,15 @@ export const getFunctionality = async (
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
   const response = await axios.get<ForGetFunctionality[]>(
     `${apiBasePath}/functionalities?name=${name}`,
+  );
+  return response.data;
+};
+
+export const getTeam = async (userId: string): BaseResponse<Team[]> => {
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+
+  const response = await axios.get<Team[]>(
+    `${apiBasePath}/users/${userId}/teams`,
   );
   return response.data;
 };
