@@ -86,32 +86,36 @@ const AppBarHeader = (): ReactElement => {
             <Grid container justifyContent="space-between" alignItems="center">
               <Grid item>
                 <Box sx={{ flexGrow: 0, alignItems: "left" }}>
-                  {getProjectOptions(projects).length > 1 ? (
-                    <StyledSearchSelect
-                      multiple={false}
-                      name="selectedProject"
-                      value={selectedProject}
-                      placeholder={t(common.header.projectPlaceholder)}
-                      popperSX={popperStyle}
-                      onChange={(_: React.SyntheticEvent, value: any) => {
-                        dispatch(updateSelectedProject(value));
-                      }}
-                      options={getProjectOptions(projects)}
-                    />
-                  ) : (
-                    <Grid container>
-                      <Grid item>
-                        <StyledProjectTitle>
-                          {selectedProject?.label}
-                        </StyledProjectTitle>
-                      </Grid>
-                      <Grid item>
-                        <ArrowDropDownIcon
-                          fontSize="large"
-                          sx={{ color: "#414145" }}
+                  {projects.length > 0 && (
+                    <>
+                      {getProjectOptions(projects).length > 1 ? (
+                        <StyledSearchSelect
+                          multiple={false}
+                          name="selectedProject"
+                          value={selectedProject}
+                          placeholder={t(common.header.projectPlaceholder)}
+                          popperSX={popperStyle}
+                          onChange={(_: React.SyntheticEvent, value: any) => {
+                            dispatch(updateSelectedProject(value));
+                          }}
+                          options={getProjectOptions(projects)}
                         />
-                      </Grid>
-                    </Grid>
+                      ) : (
+                        <Grid container>
+                          <Grid item>
+                            <StyledProjectTitle>
+                              {selectedProject?.label}
+                            </StyledProjectTitle>
+                          </Grid>
+                          <Grid item>
+                            <ArrowDropDownIcon
+                              fontSize="large"
+                              sx={{ color: "#414145", cursor: "pointer" }}
+                            />
+                          </Grid>
+                        </Grid>
+                      )}
+                    </>
                   )}
                 </Box>
               </Grid>

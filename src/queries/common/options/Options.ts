@@ -5,6 +5,7 @@ import type {
   CountryResponse,
   GenderResponse,
   RoleTypeResponse,
+  Team,
 } from "~/api/common";
 import type { ForGetComplexities, GetComplexities } from "~/api/complexity";
 import type { ProjectListResponse } from "~/api/projects";
@@ -24,6 +25,7 @@ import {
   getCountries,
   getGenders,
   getRoles,
+  getTeams,
 } from "~/api/common/Common";
 import { getProjects } from "~/api/projects";
 import { getUserList } from "~/api/user-management/UserManagement";
@@ -84,6 +86,19 @@ const transformDataToOption = (
         }));
       case "complexity":
       case "odc":
+        if (withInfo) {
+          return data.map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+            ...item,
+          }));
+        }
+        return data
+          .filter((item: CommonResponseDataObj) => item.active)
+          .map((item: CommonResponseDataObj) => ({
+            label: `${item.name}`,
+            value: item.id,
+          }));
       default:
         return data
           .filter((item: CommonResponseDataObj) => item.active)
@@ -148,6 +163,15 @@ const getCommonOption = <T>(
       return useQuery<CareerStepResponse[], Error>(
         "careerSteps",
         getCareerSteps,
+        {
+          staleTime: Infinity,
+          cacheTime: cacheTime,
+        },
+      );
+    case "team":
+      return useQuery<Team[], Error>(
+        ["teams", params],
+        () => getTeams(params),
         {
           staleTime: Infinity,
           cacheTime: cacheTime,

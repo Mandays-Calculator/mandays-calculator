@@ -1,10 +1,81 @@
-import type { TasksResponse } from "./type";
+import type {
+  TasksResponse,
+  EstimationResponse,
+  EstimationDetailResponse,
+  CreateEstimationParam,
+} from "./types";
 
-import { getEnvConfig } from "~/utils/env-config";
 import axios from "axios";
+import { getEnvConfig } from "~/utils/env-config";
 
-export const getTasks = async (): BaseResponse<TasksResponse[]> => {
+const getApiBasePath = (): ApiBasePath | string => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
-  const response = await axios.get<TasksResponse[]>(`${apiBasePath}/tasks/DEV`);
+  return apiBasePath;
+};
+
+export const getTasks = async ({
+  teamId,
+  status,
+}: {
+  teamId: string;
+  status: string;
+}): BaseResponse<TasksResponse[]> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.get<TasksResponse[]>(
+    `${apiBasePath}/tasks?teamId=${teamId}&statusId=${status}`,
+  );
+  return response.data;
+};
+
+export const getEstimations = async ({
+  projectId,
+  userId,
+}: {
+  projectId: string;
+  userId: string;
+}): BaseResponse<EstimationResponse[]> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.get<EstimationResponse[]>(
+    `${apiBasePath}/mandays-estimations`,
+    {
+      params: {
+        projectId: projectId,
+        userId: userId,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const deleteEstimation = async ({
+  estimationId,
+}: {
+  estimationId: string;
+}): BaseResponse<EstimationResponse[]> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.delete<EstimationResponse[]>(
+    `${apiBasePath}/mandays-estimations/${estimationId}`,
+  );
+  return response.data;
+};
+
+export const getEstimationDetails = async (
+  estimationId: string,
+): BaseResponse<EstimationDetailResponse> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.get<EstimationDetailResponse>(
+    `${apiBasePath}/mandays-estimations/${estimationId}`,
+  );
+  return response.data;
+};
+
+export const createEstimation = async (
+  params: CreateEstimationParam,
+): BaseResponse<{ id: string }> => {
+  const apiBasePath = getApiBasePath();
+  const response = await axios.post<EstimationDetailResponse>(
+    `${apiBasePath}/mandays-estimations`,
+    params,
+  );
   return response.data;
 };

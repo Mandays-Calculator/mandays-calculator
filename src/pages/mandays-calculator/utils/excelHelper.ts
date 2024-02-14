@@ -13,14 +13,18 @@ interface SheetData {
 /**
  * Creates an Excel file with specified sheets, columns, and data.
  * @param sheets Array of sheets with their respective columns and data.
- * @param fileName The name of the file to be saved.
  */
 export async function createExcel(
   sheets: SheetData[],
-  fileName: string
+  sprintName: string,
 ): Promise<void> {
-  const workbook = new ExcelJS.Workbook();
+  const now = new Date();
+  const date = now.toLocaleDateString("en-CA").replaceAll("/", "-");
+  const time = now.toLocaleTimeString("en-GB").replaceAll(":", "-");
 
+  const fileName = `SPRINT_${sprintName}_details_${date}_${time}.xlsx`;
+
+  const workbook = new ExcelJS.Workbook();
   sheets.forEach((sheet) => {
     const worksheet = workbook.addWorksheet(sheet.name);
     worksheet.columns = sheet.columns;
@@ -44,12 +48,12 @@ export const generateEstimationData = ({ t }: withTFunctionProps): any => {
   const sheets = [
     {
       name: "Summary",
-      columns: SummaryListColumns({ t }).map(
+      columns: SummaryListColumns({ t, formValues: {} as any }).map(
         (column: SummaryListColumnsType) => ({
           header: column.Header,
           key: column.accessor,
           width: smWidth,
-        })
+        }),
       ),
       data: estimationDetailsData,
     },

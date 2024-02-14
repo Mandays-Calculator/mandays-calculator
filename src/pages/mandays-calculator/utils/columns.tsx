@@ -1,4 +1,6 @@
+import type { ReactElement } from "react";
 import type { Column } from "react-table";
+import type { CommonOption } from "~/queries/common/options";
 import type {
   TasksColumnsProps,
   TasksListColumnsType,
@@ -14,15 +16,31 @@ import type {
   EstimationColumn,
   EstimationSubColumn,
   EstimationColumnProps,
+  TasksListDataType,
 } from "./types";
-
 import { CellProps } from "react-table";
-import { IconButton } from "@mui/material";
-import { ControlledNumberInput } from "~/components/form/controlled";
-import { SvgIcon, Table } from "~/components";
-
+import { IconButton, Grid, Typography, Stack } from "@mui/material";
+import { SvgIcon, Table, ErrorMessage } from "~/components";
+import {
+  ControlledNumberInput,
+  ControlledSelect,
+} from "~/components/form/controlled";
+import { FormErrors } from "~/components/form/types";
+import { getFieldError } from "~/components/form/utils";
 import LocalizationKey from "~/i18n/key";
-import { ReactElement } from "react";
+import renderStatus from "~/utils/helpers/renderStatusHelper";
+import {
+  StyledResourceCellContainer,
+  StyledEstimationResourceTableContainer,
+  SubColumnNumInputContainer,
+} from "../styles";
+import {
+  calculateTotalManHoursPerTask,
+  roundOffValue,
+} from "../estimation-details/utils/calculate";
+import { MandaysForm } from "../estimation-details";
+import { FormikErrors } from "formik";
+import { getMultipliedEstimations } from "../estimation-details/summary/utils/mapper";
 
 const {
   mandaysCalculator: {
@@ -34,6 +52,11 @@ const {
   },
 } = LocalizationKey;
 
+/**
+ * Module providing column configurations for tables in the Mandays Estimation Tool.
+ * Defines columns for Sprint List, Summary, Tasks, Legend, Resources, and Estimation tables.
+ * Configurations are modular and cover actions, input handling, and sub-tables.
+ */
 export const SprintListColumns = ({
   t,
   onViewSprintDetails,
@@ -43,20 +66,26 @@ export const SprintListColumns = ({
   return [
     {
       Header: t(sprintListTableColumns.sprintName),
-      accessor: "sprintName",
+      accessor: "name",
     },
     {
       Header: t(sprintListTableColumns.team),
       accessor: "team",
+      Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
+        return original.team?.name;
+      },
     },
     {
       Header: t(sprintListTableColumns.startedDate),
-      accessor: "startedDate",
+      accessor: "startDate",
     },
     {
       Header: t(sprintListTableColumns.status),
       accessor: "status",
       disableSortBy: true,
+      Cell: ({ row: { original } }: CellProps<SprintListDataType>) => {
+        return renderStatus(original.status);
+      },
     },
     {
       Header: "",
@@ -64,25 +93,13 @@ export const SprintListColumns = ({
       Cell: ({ row }: CellProps<SprintListDataType>) => (
         <>
           <IconButton onClick={() => onViewSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="history"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="history" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onEditSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="edit"
-              $size={2}
-              color="primary"
-            />
+            <SvgIcon name="edit" $size={2} color="primary" />
           </IconButton>
           <IconButton onClick={() => onDeleteSprintDetails(row.original.id)}>
-            <SvgIcon
-              name="delete"
-              $size={2}
-              color="error"
-            />
+            <SvgIcon name="delete" $size={2} color="error" />
           </IconButton>
         </>
       ),
@@ -90,256 +107,419 @@ export const SprintListColumns = ({
   ];
 };
 
-export const SummaryListColumns = ({ t }: TasksColumnsProps): SummaryListColumnsType[] => {
+export const SummaryListColumns = ({
+  t,
+  formValues,
+}: TasksColumnsProps): SummaryListColumnsType[] => {
   return [
     {
       Header: t(summaryTableColumns.functionality),
-      accessor: "functionality",
+      accessor: "name",
     },
     {
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
+      Cell: ({ row }) => {
+        const multipliedEstimations = getMultipliedEstimations(
+          formValues as MandaysForm,
+          row.index,
+        );
+
+        const taskListHours = Object.values(multipliedEstimations).map(
+          (item) => item.manHours,
+        );
+        return roundOffValue(
+          taskListHours.reduce((sum: number, num: number) => sum + num, 0),
+          "hours",
+        );
+      },
     },
     {
       Header: t(summaryTableColumns.totalManDays),
+      accessor: "totalManDays",
+      Cell: ({ row }) => {
+        const multipliedEstimations = getMultipliedEstimations(
+          formValues as MandaysForm,
+          row.index,
+        );
+
+        const taskListHours = Object.values(multipliedEstimations).map(
+          (item) => item.manHours,
+        );
+        return roundOffValue(
+          taskListHours.reduce((sum: number, num: number) => sum + num, 0) / 8,
+          "days",
+        );
+      },
+    },
+  ];
+};
+
+export const TasksListColumns = ({
+  t,
+  formValues,
+}: TasksColumnsProps): TasksListColumnsType[] => {
+  return [
+    {
+      Header: t(tasksTableColumns.tasks),
+      accessor: "task",
+    },
+    {
+      Header: t(tasksTableColumns.complexity),
+      accessor: "complexity",
+    },
+    {
+      Header: () => (
+        <Stack width="315px">
+          <Typography variant="body1" color="initial" textAlign="center">
+            {t(estimationColumns.noOfResources)}
+          </Typography>
+        </Stack>
+      ),
+
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const carrerLvlData = {
+          data: [
+            { carrerLvl: "IO3", value: row.original.resourceCountByTasks?.I03 },
+            { carrerLvl: "IO4", value: row.original.resourceCountByTasks?.I04 },
+            { carrerLvl: "IO5", value: row.original.resourceCountByTasks?.I05 },
+            { carrerLvl: "IO6", value: row.original.resourceCountByTasks?.I06 },
+            { carrerLvl: "IO7", value: row.original.resourceCountByTasks?.I07 },
+          ],
+        };
+        return (
+          <Grid container key={row.index}>
+            {carrerLvlData.data.map((data) => {
+              return (
+                <Grid item xs={2.4}>
+                  {data.carrerLvl}
+                  <Typography mt={3}>{data.value}</Typography>
+                </Grid>
+              );
+            })}
+          </Grid>
+        );
+      },
+      accessor: "resourceCountByTasks",
+    },
+
+    {
+      Header: t(summaryTableColumns.totalManHours),
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const resources = Object.entries(
+          row.original.resourceCountByTasks || {},
+        );
+
+        return (
+          <>
+            <Typography mt={3}>
+              {roundOffValue(
+                calculateTotalManHoursPerTask({
+                  resources,
+                  complexityIdParam: row.original.complexityId,
+                  formValues: formValues as MandaysForm,
+                }),
+                "hours",
+              )}
+            </Typography>
+          </>
+        );
+      },
+      accessor: "totalManHours",
+    },
+    {
+      Header: t(summaryTableColumns.totalManDays),
+      Cell: ({ row }: CellProps<TasksListDataType>) => {
+        const resources = Object.entries(
+          row.original.resourceCountByTasks || {},
+        );
+
+        return (
+          <>
+            <Typography mt={3}>
+              {roundOffValue(
+                calculateTotalManHoursPerTask({
+                  resources,
+                  complexityIdParam: row.original.complexityId,
+                  formValues: formValues as MandaysForm,
+                }) / 8,
+                "days",
+              )}
+            </Typography>
+          </>
+        );
+      },
       accessor: "totalManDays",
     },
   ];
 };
 
-export const TasksListColumns = ({ t }: TasksColumnsProps): TasksListColumnsType[] => {
-  return [
-    {
-      Header: t(tasksTableColumns.tasks),
-      accessor: "tasks",
-    },
-    {
-      Header: t(tasksTableColumns.complexity),
-      accessor: "complexity",
-    },
-    {
-      Header: t(tasksTableColumns.i03),
-      accessor: "i03",
-    },
-    {
-      Header: t(tasksTableColumns.i04),
-      accessor: "i04",
-    },
-    {
-      Header: t(tasksTableColumns.i05),
-      accessor: "i05",
-    },
-    {
-      Header: t(tasksTableColumns.i06),
-      accessor: "i06",
-    },
-    {
-      Header: t(tasksTableColumns.i07),
-      accessor: "i07",
-    },
-    {
-      Header: t(summaryTableColumns.totalManHours),
-      accessor: "totalManHours",
-    },
-  ];
-};
-
-export const LegendListColumns = ({ t, isInput }: LegendColumnProps): Column<LegendColumn>[] => {
+export const LegendListColumns = ({
+  t,
+  isInput,
+  careerSteps,
+  form,
+  complexities,
+}: LegendColumnProps): Column<LegendColumn>[] => {
   return [
     {
       Header: t(tasksTableColumns.complexity),
       accessor: "complexity",
+      Cell: ({ cell }: CellProps<LegendColumn>) => {
+        const findComplexity = complexities.find(
+          (cl) => cl.value === cell.value,
+        );
+        return <>{findComplexity?.label}</>;
+      },
     },
-    {
-      Header: t(tasksTableColumns.i03),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
+    ...careerSteps.map((item, careerIndex) => ({
+      Header: item.label,
+      Cell: ({ row }: CellProps<LegendColumn>) => {
+        const complexityId = row.original.complexity;
+        const legendData: {
+          careerStep: string;
+          manHours: number;
+        }[] = form.values.legends[complexityId.toString()] || [];
+        const careerStepData = legendData.find(
+          (data) => data.careerStep === item.label,
+        );
+        const fieldValue = `legends.${complexityId}.[${careerIndex}].manHours`;
+        return isInput ? (
           <>
-            <ControlledNumberInput name={`legend.${index}.i03`} />
+            <ControlledNumberInput name={fieldValue} />
           </>
         ) : (
-          <> {row.original.i03} </>
-        ),
-      accessor: "i03",
-    },
-    {
-      Header: t(tasksTableColumns.i04),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i04`} />
-          </>
-        ) : (
-          <> {row.original.i04} </>
-        ),
-      accessor: "i04",
-    },
-    {
-      Header: t(tasksTableColumns.i05),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i05`} />
-          </>
-        ) : (
-          <> {row.original.i05} </>
-        ),
-      accessor: "i05",
-    },
-    {
-      Header: t(tasksTableColumns.i06),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i06`} />
-          </>
-        ) : (
-          <> {row.original.i06} </>
-        ),
-      accessor: "i06",
-    },
-    {
-      Header: t(tasksTableColumns.i07),
-      Cell: ({ row, row: { index } }: CellProps<LegendColumn>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`legend.${index}.i07`} />
-          </>
-        ) : (
-          <> {row.original.i07} </>
-        ),
-      accessor: "i07",
-    },
+          <> {careerStepData ? careerStepData.manHours : 0} </>
+        );
+      },
+      accessor: item.label,
+    })),
   ];
 };
 
 export const ResourcesListColumns = ({
   t,
-  isInput,
+  isInput = false,
+  title,
+  handleDeleteResources,
+  odc,
+  form,
+  mode,
 }: ResourcesColumnsProps): ResourcesListColumnsType[] => {
-  return [
+  const columns = [
     {
       Header: t(resourceListTableColumns.odc),
-      accessor: "odc",
+      accessor: "odcId",
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resources.${title}.${row.index}.odcId`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+
+        return (
+          <StyledResourceCellContainer isInput={isInput}>
+            <ControlledSelect
+              name={fieldName}
+              options={odc}
+              error={!!fieldError}
+              labelOnly={!isInput}
+            />
+            <ErrorMessage type="field" error={fieldError} />
+          </StyledResourceCellContainer>
+        );
+      },
     },
     {
       Header: t(resourceListTableColumns.resourceCount),
-      accessor: "resourceCount",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
-          <>
-            <ControlledNumberInput name={`resource.${index}.resourceCount`} />
-          </>
-        ) : (
-          <> {row.original.resourceCount} </>
-        ),
+      width: 250,
+      accessor: "numberOfResources",
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resources.${title}.${row.index}.numberOfResources`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+
+        return (
+          <StyledResourceCellContainer isInput={isInput}>
+            {isInput ? (
+              <>
+                <ControlledNumberInput name={fieldName} error={!!fieldError} />
+                <ErrorMessage type="field" error={fieldError} />
+              </>
+            ) : (
+              <> {row.original.numberOfResources} </>
+            )}
+          </StyledResourceCellContainer>
+        );
+      },
     },
     {
       Header: t(resourceListTableColumns.annualLeaves),
       accessor: "annualLeaves",
-      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) =>
-        isInput ? (
+      width: 250,
+      Cell: ({ row }: CellProps<ResourcesListDataType>) => {
+        const fieldName = `resources.${title}.${row.index}.annualLeaves`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+        return (
+          <StyledResourceCellContainer isInput={isInput}>
+            {isInput ? (
+              <>
+                <ControlledNumberInput name={fieldName} />
+                <ErrorMessage type="field" error={fieldError} />
+              </>
+            ) : (
+              <> {row.original.annualLeaves} </>
+            )}
+          </StyledResourceCellContainer>
+        );
+      },
+    },
+  ];
+
+  if (mode !== "view") {
+    columns.push({
+      Header: "",
+      accessor: "actions",
+      width: 400,
+      Cell: ({ row, row: { index } }: CellProps<ResourcesListDataType>) => (
+        <div style={{ textAlign: "right" }}>
+          <IconButton
+            onClick={() => handleDeleteResources(index)}
+            aria-label={`delete-${row.index}`}
+          >
+            <SvgIcon name="delete" $size={2} color="error" />
+          </IconButton>
+        </div>
+      ),
+    });
+  }
+  return columns as ResourcesListColumnsType[];
+};
+
+const EstimationListSubColumn = (
+  careerSteps: CommonOption,
+  phaseIndex: number,
+  funcIndex: number,
+  estimationIndex: number,
+  errors: FormikErrors<MandaysForm>,
+): Column<any>[] => {
+  return careerSteps.map((item) => ({
+    Header: `${item.label}`,
+    Cell: (): ReactElement => {
+      const fieldName = `phases[${phaseIndex}].functionalities[${funcIndex}].estimations[${estimationIndex}].resourceCountByTasks.${item.label}`;
+      const fieldError = getFieldError(errors as FormErrors, fieldName);
+      return (
+        <SubColumnNumInputContainer>
+          <ControlledNumberInput
+            width={7}
+            name={fieldName}
+            error={!!fieldError}
+          />
+          <ErrorMessage type="field" error={fieldError} />
+        </SubColumnNumInputContainer>
+      );
+    },
+    accessor: `${item.label}`,
+  }));
+};
+
+export const EstimationListColumns = ({
+  t,
+  careerSteps,
+  estimations,
+  phaseIndex,
+  funcIndex,
+  form,
+}: EstimationColumnProps): Column<EstimationColumn>[] => {
+  return [
+    {
+      Header: t(estimationColumns.taskName),
+      accessor: "task",
+    },
+    {
+      Header: t(estimationColumns.complexity),
+      accessor: "complexity",
+    },
+    {
+      Header: t(estimationColumns.noOfResources),
+      accessor: "resourcesNo",
+      Cell: ({ row }): ReactElement => {
+        const resource = Object.keys(
+          estimations[row.index].resourceCountByTasks,
+        );
+
+        const estimationResource =
+          resource.length > 0
+            ? [estimations[row.index].resourceCountByTasks]
+            : ([
+                {
+                  I03: 0,
+                  IO4: 0,
+                  IO5: 0,
+                  IO6: 0,
+                  IO7: 0,
+                },
+              ] as any);
+
+        const fieldName = `phases[${phaseIndex}].functionalities[${funcIndex}].estimations[${row.index}]`;
+        const fieldError = getFieldError(form.errors as FormErrors, fieldName);
+        return (
           <>
-            <ControlledNumberInput name={`resource.${index}.annualLeaves`} />
+            <StyledEstimationResourceTableContainer>
+              <Table<EstimationSubColumn>
+                name="sub-table"
+                noColor
+                data={estimationResource}
+                columns={EstimationListSubColumn(
+                  careerSteps as SelectObject[],
+                  phaseIndex,
+                  funcIndex,
+                  row.index,
+                  form.errors,
+                )}
+              />
+            </StyledEstimationResourceTableContainer>
+            <div style={{ textAlign: "center", marginTop: 15 }}>
+              <ErrorMessage type="field" error={fieldError} />
+            </div>
           </>
-        ) : (
-          <> {row.original.annualLeaves} </>
-        ),
+        );
+      },
+    },
+    {
+      Header: t(estimationColumns.totalManHours),
+      accessor: "totalManHours",
+      Cell: (cell: CellProps<EstimationColumn>): ReactElement => {
+        const resources = Object.entries(
+          cell.row.original.resourceCountByTasks,
+        );
+        return (
+          <>
+            {calculateTotalManHoursPerTask({
+              resources,
+              complexityIdParam: cell.row.original.complexityId,
+              formValues: form.values,
+            })}
+          </>
+        );
+      },
+    },
+    {
+      Header: t(estimationColumns.totalManDays),
+      accessor: "totalManDays",
+      Cell: (cell: CellProps<EstimationColumn>): ReactElement => {
+        const resources = Object.entries(
+          cell.row.original.resourceCountByTasks,
+        );
+        return (
+          <>
+            {roundOffValue(
+              calculateTotalManHoursPerTask({
+                resources,
+                complexityIdParam: cell.row.original.complexityId,
+                formValues: form.values,
+              }) / 8,
+              "days",
+            )}
+          </>
+        );
+      },
     },
   ];
 };
-
-const EstimationListSubColum: Column<EstimationSubColumn>[] = [
-  {
-    Header: "IO3",
-    accessor: "iO3",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io3"
-      />
-    ),
-  },
-  {
-    Header: "IO4",
-    accessor: "iO4",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io4"
-      />
-    ),
-  },
-  {
-    Header: "IO5",
-    accessor: "iO5",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io5"
-      />
-    ),
-  },
-  {
-    Header: "IO6",
-    accessor: "iO6",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io6"
-      />
-    ),
-  },
-  {
-    Header: "IO7",
-    accessor: "iO7",
-    Cell: (): ReactElement => (
-      <ControlledNumberInput
-        width={7.5}
-        name="io7"
-      />
-    ),
-  },
-];
-
-export const EstimationListColumns = ({ t }: EstimationColumnProps): Column<EstimationColumn>[] => [
-  {
-    Header: t(estimationColumns.taskName),
-    accessor: "taskName",
-  },
-  {
-    Header: t(estimationColumns.complexity),
-    accessor: "complexity",
-  },
-  {
-    Header: t(estimationColumns.noOfResources),
-    accessor: "resourcesNo",
-    Cell: (): ReactElement => {
-      return (
-        <Table<EstimationSubColumn>
-          name="sub-table"
-          noColor
-          width="50px"
-          data={[
-            {
-              iO3: 10,
-              iO4: 10,
-              iO5: 10,
-              iO6: 10,
-              iO7: 10,
-            },
-          ]}
-          columns={EstimationListSubColum}
-        />
-      );
-    },
-  },
-  {
-    Header: t(estimationColumns.totalManHours),
-    accessor: "totalManHours",
-  },
-  {
-    Header: t(estimationColumns.totalManDays),
-    accessor: "totalManDays",
-  },
-];

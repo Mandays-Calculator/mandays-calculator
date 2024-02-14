@@ -67,6 +67,7 @@ const init = async (): Promise<void> => {
                 replayRequests();
               })
               .catch((refreshError) => {
+                channel.postMessage(events.unauthorized);
                 throw refreshError;
               })
               .finally(() => {
@@ -94,13 +95,17 @@ const init = async (): Promise<void> => {
 
   axios.interceptors.response.use(
     (response: AxiosResponse) => response,
-    (error: AxiosError) => {
+    async (error: AxiosError) => {
       if (!isLoggingOut) {
         const user = getUser();
         if (user) {
-          if (error.response && error.response.status == 401) {
-            channel.postMessage(events.unauthorized);
-            enqueueRequest(() => axios.request((error as any).config)); // Enqueue the failed request
+          if (error.response && error.response.status === 401) {
+            enqueueRequest(() => axios.request((error as any).config));
+            try {
+              await refreshPromise;
+            } catch (refreshError) {
+              channel.postMessage(events.unauthorized);
+            }
           }
           if (
             error &&
@@ -120,11 +125,11 @@ const init = async (): Promise<void> => {
     },
   );
 
-  function replayRequests() {
+  async function replayRequests() {
     while (requestQueue.length > 0) {
       const request = requestQueue.shift();
       if (request) {
-        request();
+        await request();
       }
     }
   }

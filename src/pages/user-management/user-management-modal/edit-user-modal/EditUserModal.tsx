@@ -27,9 +27,8 @@ import {
   genderValueNumToStr,
   commonOptionsAPI,
   roleValue,
+  renderGender,
 } from "~/pages/user-management/utils";
-
-import { teamOptions } from "../utils";
 
 const StyledModalTitle = styled(Typography)({
   fontWeight: 600,
@@ -53,7 +52,6 @@ interface EditUserModalProps {
   onClose: () => void;
   currentUser?: UserListData;
 }
-
 export const EditUserModal: React.FC<EditUserModalProps> = ({
   open,
   onClose,
@@ -73,6 +71,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     () => setIsEditSuccess(true),
     () => setIsEditError(true),
   );
+  const projectOptions = commonOptionsAPI("project");
+  const teamOptions = commonOptionsAPI("team");
 
   const EditUserForm: UserManagementForms = {
     firstName: values?.updateFirstName ?? "",
@@ -170,7 +170,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               <ControlledSelect
                 name="updateGender"
                 options={genderValueNumToStr()}
-                value={form.values.updateGender || ""}
+                value={renderGender(form.values.updateGender) || ""}
               />
             </Grid>
           </Grid>
@@ -220,7 +220,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               {t(userManagement.label.projectId)}
             </StyledTitle>
             <ControlledSelect
-              options={commonOptionsAPI("project")}
+              options={projectOptions}
               value={form.values.updateProjectId || ""}
               name="updateProjectName"
             />

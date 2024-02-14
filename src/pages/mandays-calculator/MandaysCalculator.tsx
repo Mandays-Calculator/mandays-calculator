@@ -1,82 +1,127 @@
 import type { ReactElement } from "react";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Typography, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
-import { SvgIcon, PageContainer, Table } from "~/components";
+import { SvgIcon, PageContainer, Table, PageLoader } from "~/components";
 import { CustomButton } from "~/components/form/button";
+import { ConfirmModal } from "~/components/modal/confirm-modal";
+
+import { useTimeout } from "~/hooks/timeout";
+import { useUserAuth } from "~/hooks/user";
+import { useRequestHandler } from "~/hooks/request-handler";
+
+import { useDeleteEstimation } from "~/mutations/mandays-est-tool";
+import { useGetEstimations } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 import LocalizationKey from "~/i18n/key";
 
-import { mandaysCalculatorData } from "./utils/tableData";
+import { AlertRenderer } from "./components/alert-renderer";
 import { SprintListColumns } from "./utils/columns";
-import { ConfirmModal } from "~/components/modal/confirm-modal";
+import { StyledSprintLabel } from "./styles";
+import { isArray } from "lodash";
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;
 
-  const [deleteModalOpen, setDeleteModalOpen] = useState<{
-    open: boolean;
-    sprintId: string | null;
-  }>({
-    open: false,
-    sprintId: null,
-  });
-
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [triggerTimeout] = useTimeout();
 
-  const handleRowClick = (sprintId: string): void => {
-    navigate(`${sprintId}`, {
-      state: {
-        mode: "view",
-      },
-    });
+  const user = useUserAuth();
+  const deleteSprintMutation = useDeleteEstimation();
+
+  // get estimations based on project
+  const {
+    data: estimationData,
+    isLoading: isLoadingEstimations,
+    isError: isErrorLoadingEstimations,
+    refetch: refetchEstimations,
+  } = useGetEstimations({
+    projectId: user.state.selectedProject?.value || "",
+    userId: user.state.user?.id || "",
+  });
+
+  const [deleteStatus, callDeleteSprintAPI] = useRequestHandler(
+    deleteSprintMutation.mutate,
+    () => {
+      // success callback
+      setSuccessMessage("Estimation deleted successfully.");
+      refetchEstimations();
+      triggerTimeout(() => setSuccessMessage(""));
+    },
+  );
+
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState<{
+    open: boolean;
+    estimationId: string | null;
+  }>({
+    open: false,
+    estimationId: null,
+  });
+
+  const handleNavigate = (mode: string, estimationId: string): void => {
+    if (mode === "add") {
+      navigate("./add-sprint", {
+        state: {
+          mode: mode,
+        },
+      });
+    } else {
+      navigate(`${estimationId}`, {
+        state: {
+          mode: mode,
+        },
+      });
+    }
   };
 
-  const handleDeleteSprint = (sprintId: string): void => {
+  const handleDeleteSprint = (estimationId: string): void => {
     setDeleteModalOpen({
       open: true,
-      sprintId: sprintId,
-    });
-  };
-
-  const handleEditSprint = (sprintId: string): void => {
-    navigate(`./${sprintId}`, {
-      state: {
-        mode: "edit",
-      },
+      estimationId: estimationId,
     });
   };
 
   const deleteSelectedSprint = (): void => {
-    console.log("deleting sprint");
+    if (deleteModalOpen.estimationId) {
+      callDeleteSprintAPI(deleteModalOpen.estimationId);
+    }
     setDeleteModalOpen({
       open: false,
-      sprintId: null,
+      estimationId: null,
     });
   };
 
-  const handleAddSprint = (): void => {
-    navigate("./add-sprint", {
-      state: {
-        mode: "add",
-      },
-    });
-  };
+  const memoizedColumn = useMemo(
+    () =>
+      SprintListColumns({
+        t,
+        onDeleteSprintDetails: handleDeleteSprint,
+        onViewSprintDetails: (estimationId: string) =>
+          handleNavigate("view", estimationId),
+        onEditSprintDetails: (estimationId: string) =>
+          handleNavigate("edit", estimationId),
+      }),
+    [estimationData?.data],
+  );
 
+  if (isLoadingEstimations || deleteStatus.loading) {
+    return <PageLoader labelOnLoad={t(mandaysCalculator.sprintListLoader)} />;
+  }
   return (
     <>
       <PageContainer>
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
           <Grid item>
-            <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
+            <StyledSprintLabel>
               {t(mandaysCalculator.sprintListLabel)}
-            </Typography>
+            </StyledSprintLabel>
           </Grid>
           <Grid>
-            <CustomButton onClick={handleAddSprint}>
+            <CustomButton onClick={() => handleNavigate("add", "")}>
               <SvgIcon name="add_v2" $size={2} sx={{ mr: 1 }} />
               {t(mandaysCalculator.addEstimationBtn)}
             </CustomButton>
@@ -84,26 +129,34 @@ const MandaysCalculator = (): ReactElement => {
         </Grid>
         <Table
           name="mandays-calculator"
-          columns={SprintListColumns({
-            t,
-            onDeleteSprintDetails: handleDeleteSprint,
-            onViewSprintDetails: handleRowClick,
-            onEditSprintDetails: handleEditSprint,
-          })}
-          data={mandaysCalculatorData}
+          columns={memoizedColumn}
+          loading={isLoadingEstimations}
+          data={
+            estimationData && isArray(estimationData.data)
+              ? estimationData.data
+              : []
+          }
         />
       </PageContainer>
       <ConfirmModal
-        onConfirm={deleteSelectedSprint} // apply delete integration
+        onConfirm={deleteSelectedSprint}
         open={deleteModalOpen.open}
+        maxWidth="lg"
         message={t(mandaysCalculator.modalConfirmDeleteEstimation)}
         onClose={() =>
           setDeleteModalOpen({
             open: false,
-            sprintId: null,
+            estimationId: null,
           })
         }
         selectedRow={null}
+      />
+      <AlertRenderer
+        isErrorLoadingEstimations={
+          isErrorLoadingEstimations || deleteStatus.error.message !== ""
+        }
+        successMessage={successMessage}
+        t={t}
       />
     </>
   );

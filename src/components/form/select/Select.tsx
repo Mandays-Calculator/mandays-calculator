@@ -9,7 +9,7 @@ import { useCallback, useState, useEffect } from "react";
 
 import { keyBy } from "lodash";
 
-import { SxProps } from "@mui/material";
+import { InputLabel, SxProps } from "@mui/material";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
@@ -25,6 +25,7 @@ interface SelectProps extends BaseInputProps<MuiSelectProps> {
   optionLabelKey?: keyof SelectObject | "label";
   name: string;
   sx?: SxProps;
+  labelOnly?: boolean; // Added prop to display as label only
 }
 
 export const Select = (props: SelectProps): ReactElement => {
@@ -38,6 +39,7 @@ export const Select = (props: SelectProps): ReactElement => {
     optionValueKey = "value",
     onChange,
     value,
+    labelOnly,
     ...rest
   } = props;
 
@@ -48,7 +50,7 @@ export const Select = (props: SelectProps): ReactElement => {
 
   const handleDelete = (valueToDelete: SelectObject) => {
     const newSelectedValues = selectedValues.filter(
-      (value) => value !== valueToDelete
+      (value) => value !== valueToDelete,
     );
 
     setSelectedValues(newSelectedValues);
@@ -59,7 +61,7 @@ export const Select = (props: SelectProps): ReactElement => {
             value: newSelectedValues,
           },
         } as SelectChangeEvent<unknown>,
-        null
+        null,
       );
     }
   };
@@ -110,7 +112,7 @@ export const Select = (props: SelectProps): ReactElement => {
 
   const renderOptions = (
     valueOption: string,
-    labelOption: string
+    labelOption: string,
   ): ReactNode => {
     const filteredProps = {
       key: valueOption,
@@ -136,6 +138,16 @@ export const Select = (props: SelectProps): ReactElement => {
       </MenuItem>
     );
   };
+
+  if (labelOnly) {
+    return (
+      <Box>
+        <InputLabel sx={{ textAlign: "left" }}>
+          {getOptionLabel(keyBy(options, getOptionValue)[value as number])}
+        </InputLabel>
+      </Box>
+    );
+  }
 
   return (
     <FormControl component="fieldset" error={error} fullWidth>

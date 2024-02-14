@@ -4,7 +4,7 @@ import type { EditTableProps } from "../utils";
 
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Grid, Typography, styled } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useFormikContext } from "formik";
 
 import { useHolidayList } from "~/queries/odc/ODC";
@@ -15,11 +15,7 @@ import LocalizationKey from "~/i18n/key";
 
 import { EditHolidayColumn, MutationOptions} from "../utils";
 import { AddHoliday, removeItem } from ".";
-
-const StyledLabel = styled(Typography)(() => ({
-  fontWeight: 600,
-  fontSize: "16px",
-}));
+import { StyledLabel } from './styles';
 
 const EditTable = (props: EditTableProps): ReactElement => {
   const { odcId, setSuccessError } = props;

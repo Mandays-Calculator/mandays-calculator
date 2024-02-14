@@ -40,3 +40,12 @@ export interface UserManagementFilterParams {
   filterValue?: string;
   recentlyJoinedlaterDate?: boolean;
 }
+
+interface GenderOptions {
+  FEMALE: "1";
+  MALE: "2";
+  NON_BINARY: "3";
+  PREFER_NOT_TO_SAY: "4";
+}
+
+export type Gender = keyof GenderOptions | string | undefined;

@@ -43,6 +43,7 @@ export const userSlice = createSlice({
         const { user, permissions, projects } = action.payload;
         state.loading = false;
         state.user = user;
+        state.projects = projects;
         state.permissions = permissions;
         state.tokenExpiry = action.payload.token.expiresInMs;
         state.isAuthenticated = true;
@@ -93,12 +94,15 @@ export const userSlice = createSlice({
         const { onSuccess, onFailure } = action.meta.arg;
         if (action.type.endsWith("fulfilled")) {
           onSuccess?.(action.payload);
+          removeStateStorage("session");
+          removeCookie(cookieAuthKey);
+          window.location.reload();
         } else if (action.type.endsWith("rejected")) {
           onFailure?.(action.error);
+          removeStateStorage("session");
+          removeCookie(cookieAuthKey);
+          window.location.reload();
         }
-        removeStateStorage("session");
-        removeCookie(cookieAuthKey);
-        window.location.reload();
       },
     );
   },

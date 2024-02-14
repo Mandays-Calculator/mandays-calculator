@@ -7,3 +7,8 @@ export const StyledError = styled(Typography)({
   textAlign: "left",
   margin: "3px 14px 0",
 });
+
+export const StyledLabel = styled(Typography)(() => ({
+  fontWeight: 600,
+  fontSize: "1rem",
+}));

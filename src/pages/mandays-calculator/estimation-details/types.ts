@@ -1,3 +1,7 @@
+import { CareerSteps } from "~/api/common";
+import { TasksResponse } from "~/api/mandays-est-tool";
+import { CommonOption } from "~/queries/common/options";
+
 export type EstimationDetailsMode = "edit" | "add" | "view";
 
 export interface EstimationDetailsProps {
@@ -12,45 +16,93 @@ export type ShareFormValues = {
   expiredIn: string;
   timeType: string;
 };
-interface Resource {
-  odc: string;
-  resourceCount: string;
-  annualLeaves: string;
+
+export interface Resource {
+  [key: string]: {
+    odcId: string;
+    numberOfResources: number;
+    annualLeaves: number;
+  }[];
 }
+
 interface SummaryForm {
-  name: string;
-  team: string;
-  utilRate: string;
+  estimationName: string;
+  teamId: string;
+  utilizationRate: number | string;
   startDate: string;
   endDate: string;
 }
 
-type LegendColumn = {
-  complexity: string;
-  i03: string;
-  i04: string;
-  i05: string;
-  i06: string;
-  i07: string;
+export type LegendColumn = {
+  [key: string]: {
+    careerStep: CareerSteps;
+    manHours: number;
+  }[];
 };
 
 export type Status = "selected" | "unselected";
 
-export type TaskType = {
+export interface TaskType extends TasksResponse {
+  dndStatus: Status;
+}
+
+interface ResourceCountByTasks {
+  taskId: string;
+  complexityId: string;
+  resourceCountByTasks: {
+    I03: number;
+    I04: number;
+    I05: number;
+    I06: number;
+    I07: number;
+  };
+}
+
+export interface Estimations {
+  task: string;
+  taskId: string;
+  complexityId: string;
+  complexity: string;
+  resourceCountByTasks: {
+    I03: number;
+    I04: number;
+    I05: number;
+    I06: number;
+    I07: number;
+  };
+}
+
+export interface Functionalites {
   id: string;
-  title: string;
-  description: string;
-  createdDate: string;
-  status?: Status;
-};
+  name: string;
+  estimations: Estimations[];
+}
+
+export interface Phase {
+  id: string;
+  name: string;
+  functionalities: Functionalites[];
+}
+
+export interface CreatePhase {
+  name: string;
+  resourceCountByTasks: ResourceCountByTasks[];
+}
 
 export interface MandaysForm {
   summary: SummaryForm;
-  resource: Resource[];
-  legend: LegendColumn[];
+  resources: Resource;
+  legends: LegendColumn;
   tasks: TaskType[];
+  phases: Phase[];
 }
 export interface ReviewSummaryType extends MandaysForm {
   sprintName: string;
   mode: EstimationDetailsMode;
+}
+
+export interface ApiCommonOptions {
+  careerSteps?: CommonOption;
+  odc?: CommonOption;
+  complexities?: CommonOption;
 }

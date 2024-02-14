@@ -32,6 +32,7 @@ import {
   commonOptionsAPI,
   roleValue,
 } from "~/pages/user-management/utils";
+import { useCommonOption } from "~/queries/common/options";
 
 import {
   StyledModalTitle,
@@ -39,8 +40,6 @@ import {
   StyledTitle,
   StyledFormControlLabel,
 } from "./styles";
-
-import { teamOptions } from "../utils";
 
 interface AddUserModalProps {
   onAddUser: () => void;
@@ -66,6 +65,13 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   const { userManagement } = LocalizationKey;
   const [selectedJoinedDate, setSelectedJoinedDate] =
     useState("recentlyJoined");
+
+  const careerStepOptions = commonOptionsAPI("career_step");
+  const odcOptions = commonOptionsAPI("odc");
+  const projectOptions = commonOptionsAPI("project");
+  const projectId = form.values.projectId;
+  const teamOptions = useCommonOption("team", { projectId });
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedJoinedDate(event.target.value);
 
@@ -175,7 +181,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               {t(userManagement.label.careerStep)}
             </StyledTitle>
             <ControlledSelect
-              options={commonOptionsAPI("career_step")}
+              options={careerStepOptions}
               name="careerStep"
               error={!!form.errors.careerStep}
               helperText={getFieldError(
@@ -244,7 +250,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
           <Grid item xs={3.5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.odcId)}</StyledTitle>
             <ControlledSelect
-              options={commonOptionsAPI("odc")}
+              options={odcOptions}
               name="odcId"
               value={form.values.odcId || ""}
             />
@@ -263,7 +269,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               {t(userManagement.label.projectId)}
             </StyledTitle>
             <ControlledSelect
-              options={commonOptionsAPI("project")}
+              options={projectOptions}
               name="projectId"
               value={form.values.projectId || ""}
             />

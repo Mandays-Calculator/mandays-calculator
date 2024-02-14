@@ -1,13 +1,17 @@
-import type { ReactElement } from "react"
+import { useState, type ReactElement } from "react";
 import type { TFunction } from "i18next";
 
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { Box, Button, Stack, styled } from "@mui/material";
+
+import LocalizationKey from "~/i18n/key";
 
 import { ControlledTextField } from "~/components/form/controlled";
-import { CustomButton } from "~/components/form/button";
-import LocalizationKey from "~/i18n/key";
+import { Alert, SvgIcon } from "~/components";
+import { useTimeout } from "~/hooks/timeout";
+
+import { StyledBackButton, StyledLinkButton } from "../styles";
+import { copyToClipboard } from "~/pages/mandays-calculator/utils/copyToClipboard";
 
 type RenderLinkProps = {
   link: string;
@@ -15,40 +19,81 @@ type RenderLinkProps = {
   t: TFunction<"translation", undefined>;
 };
 
+const StyledCopyLinkButton = styled(Button)`
+  background: #e4f7f9;
+  color: inherit;
+  border: 1px solid #979292;
+  width: 100%;
+  height: 100%;
+`;
+
 const GeneratedLink = (props: RenderLinkProps): ReactElement => {
   const { link, setIsShare, t } = props;
-  const { mandaysCalculator: { modal } } = LocalizationKey;
+  const {
+    mandaysCalculator: { modal },
+  } = LocalizationKey;
+
+  const [timeout] = useTimeout();
+  const [copyLink, setCopyLink] = useState<boolean>(false);
 
   return (
-    <Grid container sx={{ mt: 4 }}>
+    <Grid mt={3}>
       <Grid item xs={12}>
-        <Typography variant="body1" fontWeight="bold">
-          {t(modal.link)}:
-        </Typography>
-        <ControlledTextField name="link" disabled value={link} />
-      </Grid>
-      <Grid container justifyContent="s" sx={{ mt: 1 }} rowGap={1}>
-        <Grid item xs={3}>
-          <Button variant="outlined" onClick={() => setIsShare(false)}>Back</Button>
-        </Grid>
-        <Grid item xs={9}>
-          <Grid container justifyContent={"end"} rowGap={2} columnGap={2}>
-            <Grid item>
-              <Button 
-                variant="outlined" 
-                onClick={() => window.open(`${window.location.origin}/mandays-estimation-detail`, '_blank', 'noreferrer')}
-              >
-                {t(modal.redirect)}
-              </Button>
-            </Grid>
-            <Grid item>
-              <CustomButton>{t(modal.copyLink)}</CustomButton>
-            </Grid>
+        <Grid container>
+          <Grid item xs={9}>
+            <ControlledTextField name="link" disabled value={link} />
+          </Grid>
+          <Grid item xs={3}>
+            <StyledCopyLinkButton
+              onClick={() => {
+                setCopyLink(true);
+                copyToClipboard(link);
+                timeout(() => setCopyLink(false));
+              }}
+            >
+              <SvgIcon name="copy" $size={3} sx={{ mr: 1 }} />
+              Copy
+            </StyledCopyLinkButton>
           </Grid>
         </Grid>
       </Grid>
+      <Grid item xs={12} my={5}>
+        <Stack flexDirection="row" justifyContent="flex-end">
+          <Box pr={2}>
+            <StyledBackButton
+              variant="text"
+              color="inherit"
+              onClick={() => setIsShare(false)}
+            >
+              Back
+            </StyledBackButton>
+          </Box>
+          <StyledLinkButton
+            variant="contained"
+            color="primary"
+            onClick={() =>
+              window.open(
+                `${window.location.origin}/mandays-estimation-detail`,
+                "_blank",
+                "noreferrer",
+              )
+            }
+          >
+            {t(modal.redirect)}
+          </StyledLinkButton>
+        </Stack>
+      </Grid>
+
+      {copyLink && (
+        <Alert
+          open={copyLink}
+          type="success"
+          message="The link has been copied to your clipboard."
+          title="Copied link."
+        />
+      )}
     </Grid>
   );
 };
 
-export default GeneratedLink; 
+export default GeneratedLink;

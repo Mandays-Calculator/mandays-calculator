@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { type ReactElement } from "react";
 import type { TFunction } from "i18next";
 
 import Grid from "@mui/material/Grid";
@@ -14,13 +14,7 @@ interface HeaderButtonsProps {
 }
 
 const HeaderButtons = (props: HeaderButtonsProps): ReactElement => {
-  const {
-    mode,
-    isExposed,
-    setIsExport,
-    setIsShare,
-    t,
-  } = props;
+  const { mode, isExposed, setIsExport, setIsShare, t } = props;
 
   const { common } = LocalizationKey;
 
@@ -28,8 +22,8 @@ const HeaderButtons = (props: HeaderButtonsProps): ReactElement => {
     <>
       {mode === "view" && !isExposed && (
         <Grid item xs={2}>
-          <Grid container justifyContent={"right"}>
-            <Grid item xs={5}>
+          <Grid container justifyContent={"end"}>
+            <Grid item xs={5} mr={2}>
               <CustomButton onClick={() => setIsExport(true)}>
                 {t(common.exportBtn)}
               </CustomButton>

@@ -128,6 +128,7 @@ const LocalizationKey = {
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
+    sprintListLoader: "mandaysCalculator.sprintList.loader",
     addEstimationBtn: "mandaysCalculator.sprintList.addEstimation",
     modalConfirmDeleteEstimation:
       "mandaysCalculator.modalLabels.confirmDeleteEstimation",
@@ -153,13 +154,23 @@ const LocalizationKey = {
       totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
     summaryTitle: "mandaysCalculator.summary.title",
+    summaryTitle2: "mandaysCalculator.summary.title2",
     summarySubtitle: "mandaysCalculator.summary.subtitle",
     resourcesTitle: "mandaysCalculator.resourceList.title",
+    resourceList: {
+      errorMessage: {
+        duplicateODC:
+          "mandaysCalculator.resourceList.errorMessage.duplicateODC",
+      },
+    },
     resourceListTableColumns: {
       odc: "mandaysCalculator.resourceList.table.columns.odc",
       resourceCount:
         "mandaysCalculator.resourceList.table.columns.resourceCount",
       annualLeaves: "mandaysCalculator.resourceList.table.columns.annualLeaves",
+      addResourceLabel:
+        "mandaysCalculator.resourceList.table.addResourceButton",
+      noResourceLabel: "mandaysCalculator.resourceList.table.noResourceLabel",
     },
     summaryForm: {
       name: "mandaysCalculator.summary.form.name",
@@ -171,7 +182,7 @@ const LocalizationKey = {
     tasksTitle: "mandaysCalculator.tasks.title",
     noTaskLabel: "mandaysCalculator.tasks.toTaskLabel",
     noSelectedTaskLabel: "mandaysCalculator.tasks.noSelectedTaskLabel",
-    taskDescriptionLabel: "mandaysCalculator.tasks.taskDescriptionLabel",
+    taskDescriptionLabel: "mandaysCalculator.tasks.descriptionLabel",
     tasksListLabel: "mandaysCalculator.tasks.tasksListLabel",
     tasksTableColumns: {
       tasks: "mandaysCalculator.tasks.table.columns.tasks",
@@ -272,6 +283,7 @@ const LocalizationKey = {
       created: "tasks.errorMessage.created",
       fetch: "tasks.errorMessage.fetch",
     },
+    noTask: "tasks.noTask",
   },
   history: {
     detailsBtn: "history.button.details",

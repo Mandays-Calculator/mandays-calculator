@@ -17,12 +17,12 @@ type WrappedInputProps<Type> = Type &
     name: string;
   };
 type WithInputController<Type extends object> = (
-  props: WrappedInputProps<Type>
+  props: WrappedInputProps<Type>,
 ) => ReactElement;
 
 export const withInputController = <Type extends FormikValues>(
   WrappedInput: ComponentType<Type>,
-  inputType: WithInputControllerType = "text"
+  inputType: WithInputControllerType = "text",
 ): WithInputController<Type> => {
   return (props: WrappedInputProps<Type>): ReactElement => {
     const { name, isFastField, ...rest } = props;
@@ -51,7 +51,7 @@ export const withInputController = <Type extends FormikValues>(
 
     const handleCheckBoxChanges = (
       checkBoxName: string,
-      checked: boolean
+      checked: boolean,
     ): void => {
       if (checked) {
         form.setFieldValue(name, [checkBoxName, ...(form.values[name] ?? [])]);
@@ -120,7 +120,7 @@ export const withInputController = <Type extends FormikValues>(
 
     const MemoriedField = useMemo(
       () => (isFastField ? FastField : Field),
-      [isFastField]
+      [isFastField],
     );
     return (
       <MemoriedField

@@ -1,18 +1,14 @@
-import type { ReactElement } from "react";
-import type {
-  MandaysForm,
-  TaskType,
-  EstimationDetailsProps,
-  ReviewSummaryType,
-} from ".";
+import type { ReactElement, ReactNode } from "react";
+import type { EstimationDetailsProps, MandaysForm, ReviewSummaryType } from ".";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Location, useLocation, useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { Typography, Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+
 import {
+  Alert,
+  CustomTab,
   Form,
   PageContainer,
   PageLoader,
@@ -20,9 +16,13 @@ import {
   SvgIcon,
   Title,
 } from "~/components";
-import { Select } from "~/components/form/select";
-import { useGetTasks } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+
+import { useCommonOption } from "~/queries/common/options";
+import { useGetEstimationDetails } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+import { useScrollToError } from "~/hooks/scroll-to-error";
+
 import LocalizationKey from "~/i18n/key";
+import MandaysEstimationImgIcon from "~/assets/img/mandays_estimation_img_icon.png";
 
 import { createExcel, generateEstimationData } from "../utils/excelHelper";
 import { compilePDF } from "../utils/PDFhelper";
@@ -32,45 +32,54 @@ import Tasks from "./tasks";
 import Summary from "./summary";
 import Legend from "./legend";
 import Resources from "./resources";
+import Estimation from "./estimation";
 
+// custom components
 import { ExportModal } from "./components/export-modal";
 import { ActionButtons } from "./components/action-buttons";
 import { HeaderButtons } from "./components/header-buttons";
 import { ShareModal } from "./components/share-modal";
-import Estimation from "./estimation";
-import { initMandays } from "./utils";
+
+import { initMandays } from "./utils/initialValue";
+import { useExportMandaysForm, useMandaysForm } from "./utils/estimationForms";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const { isExposed } = props;
-  const { mandaysCalculator, common } = LocalizationKey;
+  const { mandaysCalculator } = LocalizationKey;
+  const location = useLocation();
 
   const navigate = useNavigate();
   const { state }: Location<ReviewSummaryType> = useLocation();
   const { t } = useTranslation();
+  const scrollToMuiError = useScrollToError();
 
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [validateCount, setValidateCount] = useState<number>(0);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [isExport, setIsExport] = useState<boolean>(false);
   const [isShare, setIsShare] = useState<boolean>(false);
 
+  const estimationId = location.pathname.split("/")[2];
   const mode = state?.mode || "view";
-  const sprintName = "Sprint 1"; // Note: will come from API
 
-  const { data } = useGetTasks({
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
-  const tasksData: TaskType[] =
-    data?.data?.map((task) => {
-      return {
-        id: task.id,
-        title: task.name,
-        description: task.description,
-        createdDate: task.createdDate,
-        status: "unselected",
-      };
-    }) || [];
+  useEffect(() => {
+    return () => {
+      setValidateCount(0);
+    };
+  }, [location.pathname]);
+
+  const complexities = useCommonOption("complexity");
+  const careerSteps = useCommonOption("career_step");
+  const odcList = useCommonOption("odc");
+  const {
+    data: estimationData,
+    isError: estimationError,
+    isLoading: estimationLoading,
+  } = useGetEstimationDetails(estimationId);
+
+  const getCareerStepSingleVal: string[] = careerSteps.map(
+    (item) => item.label,
+  );
 
   const switchTab = (tabId: number): void => {
     setActiveTab(tabId);
@@ -81,48 +90,37 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     compilePDF({
       callback1: setIsGeneratingPDF,
       switchTabCallback: switchTab,
-      sprintName: sprintName,
+      estimationName: estimationName,
     });
   };
 
-  const handleExcelExport = (): void => {
-    const now = new Date();
-    const date = now.toLocaleDateString("en-CA").replaceAll("/", "-");
-    const time = now.toLocaleTimeString("en-GB").replaceAll(":", "-");
+  const constructInitialValue = useCallback((): MandaysForm => {
+    if (mode === "edit" || mode === "view") {
+      return estimationData
+        ? (estimationData.data as unknown as MandaysForm)
+        : { ...initMandays };
+    }
+    return { ...initMandays };
+  }, [estimationData?.data, mode]);
 
-    createExcel(
-      generateEstimationData({ t }),
-      `SPRINT_${sprintName}_details_${date}_${time}.xlsx`
-    );
-  };
-
-  const mandaysForm = useFormik<MandaysForm>({
-    initialValues: { ...initMandays, tasks: tasksData },
-    onSubmit: (val) =>
-      navigate("./../summary", {
-        state: {
-          ...val,
-          sprintName: sprintName,
-          mode: mode,
-        },
-      }),
-    enableReinitialize: true,
+  const mandaysForm = useMandaysForm({
+    getCareerStepSingleVal: getCareerStepSingleVal,
+    initialValue: constructInitialValue(),
+    onSubmit: (val) => {
+      navigate("../mandays-estimation-tool/summary", {
+        state: { ...val, mode: mode },
+      });
+    },
   });
 
-  const exportForm = useFormik<{ exportBy: string }>({
-    initialValues: {
-      exportBy: "",
-    },
-    validationSchema: yup.object({
-      exportBy: yup.string().required(t(common.errorMessage.required)),
-    }),
-    validateOnChange: true,
+  const estimationName = mandaysForm.values?.summary?.estimationName || "-";
+  const exportForm = useExportMandaysForm({
     onSubmit: (values) => {
       const { exportBy } = values;
       if (exportBy === "pdf") {
         handlePDFExport();
       } else {
-        handleExcelExport();
+        createExcel(generateEstimationData({ t }), estimationName);
       }
     },
   });
@@ -139,42 +137,86 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     }
   };
 
-  const handleNext = (): void => {
-    setActiveTab(activeTab + 1);
-  };
+  const handleNext = useCallback((): void => {
+    if (mode === "add" || mode === "edit") {
+      mandaysForm.validateForm();
+      const formError = mandaysForm.errors;
+      const currentTab = Object.keys(mandaysForm.values)[activeTab];
+      if (validateCount > 0) {
+        if (Object.keys(formError).includes(currentTab)) {
+          scrollToMuiError();
+          return;
+        }
+        setValidateCount(0);
+        setActiveTab(activeTab + 1);
+      }
+      setValidateCount(validateCount + 1);
+    } else {
+      setActiveTab(activeTab + 1);
+    }
+  }, [mode, mandaysForm.values, mandaysForm.errors, validateCount, activeTab]);
 
-  const handleSave = (): void => {
-    console.log("Saving sprint");
-    // run an API for saving the sprint
+  const renderIconOrImage = (isGeneratingPDF: boolean): ReactNode => {
+    return isGeneratingPDF ? (
+      <img src={MandaysEstimationImgIcon} alt="mandays-estimation-icon" />
+    ) : (
+      <SvgIcon name="mandays_estimation_tool" />
+    );
   };
 
   const stepperObject: CustomSteps[] = [
     {
-      label: t(mandaysCalculator.summaryTitle),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
+      label:
+        mode === "add"
+          ? t(mandaysCalculator.summaryTitle)
+          : t(mandaysCalculator.summaryTitle2),
+      icon: renderIconOrImage(isGeneratingPDF),
       content: <Summary mode={mode} />,
     },
     {
       label: t(mandaysCalculator.resourcesTitle),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
-      content: <Resources isGeneratingPDF={isGeneratingPDF} mode={mode} />,
+      icon: renderIconOrImage(isGeneratingPDF),
+      content: (
+        <Resources
+          isGeneratingPDF={isGeneratingPDF}
+          mode={mode}
+          apiCommonOptions={{ careerSteps: careerSteps, odc: odcList }}
+        />
+      ),
     },
     {
       label: t(mandaysCalculator.legend.title),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
-      content: <Legend mode={mode} />,
+      icon: renderIconOrImage(isGeneratingPDF),
+      content: (
+        <Legend
+          mode={mode}
+          apiCommonOptions={{
+            complexities: complexities,
+            careerSteps: careerSteps,
+          }}
+        />
+      ),
     },
     {
       label: t(mandaysCalculator.tasksTitle),
-      icon: <SvgIcon name="mandays_estimation_tool" />,
-      content: <Tasks mode={mode} />,
+      icon: renderIconOrImage(isGeneratingPDF),
+      content: <Tasks mode={mode} isGeneratingPDF={isGeneratingPDF} />,
     },
     {
       label: t(mandaysCalculator.estimation.title),
       icon: <SvgIcon name="mandays_estimation_tool" />,
-      content: <Estimation mode={mode} />,
+      content: (
+        <Estimation
+          mode={mode}
+          apiCommonOptions={{ careerSteps: careerSteps }}
+        />
+      ),
     },
   ];
+
+  if (estimationLoading) {
+    return <PageLoader labelOnLoad="Loading estimation .. " />;
+  }
 
   return (
     <>
@@ -182,51 +224,55 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
         <PageLoader labelOnLoad={t(mandaysCalculator.generatingPDFLabel)} />
       )}
       <div id="divToPrint">
-        <Grid container justifyContent="space-between">
+        <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
             <Title title={t(mandaysCalculator.label)} />
           </Grid>
-          <Grid item>
-            <Select
-              disabled={isExposed}
-              name="team"
-              value={"enrollment"}
-              sx={{ background: "#fff" }}
-              options={[{ label: "Enrollment", value: "enrollment" }]} //will replace via teams options
-            />
-          </Grid>
         </Grid>
         <PageContainer>
-          <Grid container justifyContent="space-between">
-            <Grid item>
-              <Typography sx={{ fontSize: "1.1rem", mb: "25px" }}>
-                {sprintName}
-              </Typography>
-            </Grid>
-            <HeaderButtons
-              setIsExport={setIsExport}
-              setIsShare={setIsShare}
-              mode={mode}
-              isExposed={isExposed}
-              t={t}
-            />
+          <Grid container justifyContent="space-between" mb={2}>
+            {mode === "view" && (
+              <Grid item xs={6}>
+                <Typography variant="body1" fontWeight="bold">
+                  {estimationName}
+                </Typography>
+              </Grid>
+            )}
+            {!isGeneratingPDF && (
+              <HeaderButtons
+                setIsExport={setIsExport}
+                setIsShare={setIsShare}
+                mode={mode}
+                isExposed={isExposed}
+                t={t}
+              />
+            )}
           </Grid>
-          <Grid py={5}></Grid>
           <Form instance={mandaysForm}>
-            <Stepper
-              steps={
-                mode === "view" ? stepperObject.slice(0, -1) : stepperObject
-              }
-              activeStep={activeTab}
-            />
-            <ActionButtons
-              mode={mode}
-              activeTab={activeTab}
-              handleBackEvent={handleBackEvent}
-              handleNext={handleNext}
-              handleSave={handleSave}
-              length={stepperObject.length - 1}
-            />
+            {mode === "view" ? (
+              <CustomTab
+                defaultActiveTab={activeTab}
+                tabs={
+                  stepperObject.slice(0, -1) as {
+                    label: ReactNode;
+                    content: ReactNode;
+                  }[]
+                }
+                onTabChange={(_, tabValue) => setActiveTab(tabValue)}
+              />
+            ) : (
+              <Stepper steps={stepperObject} activeStep={activeTab} />
+            )}
+            {!isGeneratingPDF && (
+              <ActionButtons
+                mode={mode}
+                activeTab={activeTab}
+                handleBackEvent={handleBackEvent}
+                handleNext={handleNext}
+                handleSave={() => mandaysForm.submitForm()}
+                length={stepperObject.length - 1}
+              />
+            )}
           </Form>
         </PageContainer>
       </div>
@@ -243,7 +289,15 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           isShare={isShare}
           setIsShare={setIsShare}
           t={t}
-          handleSubmit={() => console.log("submit")}
+          handleSubmit={() => console.log("submit share modal")}
+        />
+      )}
+      {estimationError && (
+        <Alert
+          type="error"
+          duration={3000}
+          open={estimationError}
+          message={t(LocalizationKey.common.errorMessage.genericError)}
         />
       )}
     </>
