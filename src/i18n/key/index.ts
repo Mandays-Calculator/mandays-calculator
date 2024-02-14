@@ -284,6 +284,7 @@ const LocalizationKey = {
       fetch: "tasks.errorMessage.fetch",
     },
     noTask: "tasks.noTask",
+    teamFilter: "tasks.teamFilter",
   },
   history: {
     detailsBtn: "history.button.details",

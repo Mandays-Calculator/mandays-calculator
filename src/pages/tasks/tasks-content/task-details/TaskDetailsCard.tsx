@@ -3,84 +3,64 @@ import type { ReactElement } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Box, Grid, Paper, Typography } from "@mui/material";
-import EventIcon from "@mui/icons-material/Event";
+import { Grid, Typography } from "@mui/material";
 import LocalizationKey from "~/i18n/key";
+import moment from "moment";
 
-import { taskDetailsCardStyles, getTagStyle, taskStyles } from "../style";
 import { Status } from "../utils";
+import {
+  StyledTextsmsOutlinedIcon,
+  TaskDetailsCardDetails,
+  GridRelativeContainer,
+  TaskActionContainer,
+  CommentContainer,
+  StyledEventIcon,
+  StyledPaper,
+  TaskTags,
+} from "../style";
 
 interface TaskDetailsCardProps {
   data: AllTasksResponse;
   handleViewDetails: (task: AllTasksResponse) => void;
   handleEdit: (task: AllTasksResponse) => void;
-  onDelete: (id: string) => void;
+  onDelete: (task: AllTasksResponse) => void;
 }
-
-const getContainerStyle = (status: string) => {
-  if (status !== Status.OnHold && status !== Status.Backlog) {
-    return { marginTop: 2, padding: 1.5, cursor: "default" };
-  }
-
-  return { marginTop: 2, padding: 1.5, cursor: "grab" };
-};
-
-const getButtonDisplayStyle = (status: string) => {
-  if (status !== Status.OnHold && status !== Status.Backlog) {
-    return { display: "none", cursor: "pointer" };
-  }
-
-  return { cursor: "pointer" };
-};
 
 const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
   const { data, handleViewDetails, handleEdit, onDelete } = props;
   const { t } = useTranslation();
 
   return (
-    <Paper
+    <StyledPaper
+      status={data?.status ?? Status.Backlog}
       elevation={2}
-      sx={getContainerStyle(data?.status as string)}
       onClick={() => handleViewDetails(data)}
     >
-      <Grid
-        container
-        spacing={2}
-        display={"flex"}
-        sx={taskStyles.gridRelativeContainer}
-      >
+      <GridRelativeContainer container spacing={2} display={"flex"}>
         <Grid item xs={12}>
-          <Typography sx={taskDetailsCardStyles.title}>{data?.name}</Typography>
-        </Grid>
-
-        <Grid item xs={12} sx={taskDetailsCardStyles.description}>
-          <Typography>{data?.description}</Typography>
+          <TaskDetailsCardDetails type='title'>
+            {data?.name}
+          </TaskDetailsCardDetails>
         </Grid>
 
         <Grid item xs={12}>
-          <Typography sx={taskDetailsCardStyles.completionDate}>
-            <EventIcon sx={taskDetailsCardStyles.completionDateIcon} />
-            Date Created: {data?.createdDate}
-          </Typography>
+          <TaskDetailsCardDetails type='description'>
+            {data?.description}
+          </TaskDetailsCardDetails>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          style={{ display: data.status !== "Completed" ? "none" : "" }}
-        >
-          <Typography sx={taskDetailsCardStyles.completionDate}>
-            <EventIcon sx={taskDetailsCardStyles.completionDateIcon} />
-            Date Completed: {data?.completionDate}
-          </Typography>
+
+        <Grid item xs={12}>
+          <TaskDetailsCardDetails type='createDate'>
+            <StyledEventIcon />
+            {data?.createdDate ? moment(data.createdDate).format("L") : ""}
+          </TaskDetailsCardDetails>
         </Grid>
 
         <Grid item xs={12}>
           <Typography>
-            {t(LocalizationKey.tasks.taskDetails.sprint) +
-              (data?.sprint !== undefined ? data.sprint : "1")}
+            {t(LocalizationKey.tasks.taskDetails.sprint) + data?.sprint}
           </Typography>
         </Grid>
 
@@ -91,51 +71,42 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           </Typography>
         </Grid>
 
-        <Grid item container spacing={1} alignItems="center" xs={10}>
+        <Grid item container spacing={1} alignItems='center' xs={10}>
           <Grid item>
-            <Box
-              sx={taskDetailsCardStyles.comments}
-              display="flex"
-              alignItems="center"
-            >
-              <TextsmsOutlinedIcon sx={taskDetailsCardStyles.commentIcon} />
+            <CommentContainer display='flex' alignItems='center'>
+              <StyledTextsmsOutlinedIcon />
               {data?.comments?.length}
-            </Box>
+            </CommentContainer>
           </Grid>
 
-          {data?.tags &&
-            data.tags.map((tag, index) => (
-              <Grid item key={index}>
-                <Box
-                  sx={getTagStyle((tag as unknown as { name: string }).name)}
-                >
-                  {(tag as unknown as { name: string }).name}
-                </Box>
-              </Grid>
-            ))}
+          {data?.tags?.map((tag, index) => (
+            <Grid item>
+              <TaskTags status={tag?.name} key={index}>
+                {tag?.name}
+              </TaskTags>
+            </Grid>
+          ))}
         </Grid>
 
-        <Box sx={taskDetailsCardStyles.buttons}>
+        <TaskActionContainer status={data?.status ?? Status.Backlog}>
           <EditOutlinedIcon
-            color="action"
-            sx={getButtonDisplayStyle(data.status as string)}
-            onClick={(e) => {
+            color='action'
+            onClick={e => {
               e.stopPropagation();
               handleEdit(data);
             }}
           />
 
           <DeleteOutlinedIcon
-            color="error"
-            sx={getButtonDisplayStyle(data?.status as string)}
-            onClick={(e) => {
+            color='error'
+            onClick={e => {
               e.stopPropagation();
-              onDelete(data.id as string);
+              onDelete(data);
             }}
           />
-        </Box>
-      </Grid>
-    </Paper>
+        </TaskActionContainer>
+      </GridRelativeContainer>
+    </StyledPaper>
   );
 };
 

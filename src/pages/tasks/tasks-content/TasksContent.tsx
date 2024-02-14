@@ -1,89 +1,33 @@
 import type { AllTasksResponse } from "~/api/tasks/types";
 import type { ReactElement } from "react";
 
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import {
-  DragDropContext,
-  DropResult,
-  Draggable,
-  Droppable,
-} from "react-beautiful-dnd";
-import SimpleBarReact from "simplebar-react";
-import "simplebar-react/dist/simplebar.min.css";
+import { useState } from "react";
 
-import { styled } from "@mui/material/styles";
-import AddIcon from "@mui/icons-material/Add";
+import { SelectChangeEvent, Typography, Grid } from "@mui/material";
 import LocalizationKey from "~/i18n/key";
-import {
-  SelectChangeEvent,
-  Typography,
-  IconButton,
-  Divider,
-  Stack,
-  Grid,
-  Link,
-} from "@mui/material";
 
-import { Select, PageContainer } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
-import { useDeleteTask, useGetTeam, useTasks } from "~/queries/tasks/Tasks";
+import { useDeleteTask } from "~/queries/tasks/Tasks";
+import { Select, PageContainer } from "~/components";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
-import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
-import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import ViewTaskDetails from "./ViewTaskDetails";
+import { Status } from "./utils";
 
 import NoTask from "~/assets/img/empty_tasks.png";
 
-import { taskContentStyles } from "./style";
-import _ from "lodash";
-
-const StatusContainer = styled("div")(
-  ({ backgroundColor }: { backgroundColor: string }) => ({
-    backgroundColor:
-      backgroundColor === Status.Backlog
-        ? StatusContainerColor.Backlog
-        : backgroundColor === Status.NotYetStarted
-        ? StatusContainerColor.NotYetStarted
-        : backgroundColor === Status.InProgress
-        ? StatusContainerColor.InProgress
-        : backgroundColor === Status.OnHold
-        ? StatusContainerColor.OnHold
-        : StatusContainerColor.Completed,
-    borderRadius: 10,
-    width: "100%",
-    padding: 15,
-  }),
-);
-
-const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
-  fontSize: 18,
-  margin: color !== Status.Backlog ? "0.3em 0" : 0,
-  fontWeight: "bold",
-  color:
-    color === Status.NotYetStarted
-      ? StatusTitleColor.NotYetStarted
-      : color === Status.InProgress
-      ? StatusTitleColor.InProgress
-      : color === Status.OnHold
-      ? StatusTitleColor.OnHold
-      : color === Status.Completed
-      ? StatusTitleColor.Completed
-      : StatusTitleColor.Backlog,
-}));
-
-const StyledCreateTaskIconButton = styled(Grid)(
-  ({ display }: { display: string }) => ({
-    fontSize: 25,
-    fontWeight: "bolder",
-    float: "right",
-    cursor: "pointer",
-    display: display !== Status.Backlog ? "none" : "",
-  }),
-);
+import {
+  calculateGridSize,
+  TaskGridContainer,
+  NoDataContainer,
+  StyledDivider,
+  StyledLink,
+} from "./style";
+import StatusContainer from "./StatusContainer";
 
 const teamOptions = [
   { value: "MC", label: "MC" },
@@ -92,9 +36,7 @@ const teamOptions = [
   { value: "CMT", label: "CMT" },
 ];
 
-const calculateGridSize = (numStatuses: number): number => {
-  return 12 / numStatuses;
-};
+const TEAM_ID = "a2eb9f01-6e4e-11ee-8624-a0291936d1c2";
 
 const TasksContent = (): ReactElement => {
   const { t } = useTranslation();
@@ -103,45 +45,16 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-
-  const statuses = ["1", "2", "3", "4", "5"];
-
-  const statusData = statuses.map((status) => {
-    const { data, isSuccess, refetch } = useTasks(
-      "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-      status,
-      "100",
-      "1",
-    );
-
-    return { taskData: data?.data, isSuccess, refetch };
-  });
-
-  const [
-    { taskData: backlog, isSuccess: isSuccessBacklog },
-    { taskData: notYetStarted, isSuccess: isSuccessNys },
-    { taskData: inProgress, isSuccess: isSuccessIp },
-    { taskData: onHold, isSuccess: isSuccessOnHold },
-    { taskData: completed, isSuccess: isSuccessCompleted },
-  ] = statusData;
-
-  const deleteMutation = useDeleteTask();
-
-  const username = `${user?.firstName} ${user?.lastName}`;
+  const userDetails = user;
   const complexities = useCommonOption("complexity");
-  const functionality = useCommonOption("function");
-
-  const teamOptionsQuery = useGetTeam("f7eaf281-6e4e-11ee-8624-a0291936d1c2");
-  const api = teamOptionsQuery.data?.data;
-
-  const teamOptionsApi = api?.map((item) => ({
-    label: item.name,
-    value: item.id,
-  }));
+  const functionalities = useCommonOption("function", "");
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
-  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
-  const [selectedTaskForDelete, setSelectedTaskForDelete] = useState<string>();
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
+    null,
+  );
+  const [selectedTaskForDelete, setSelectedTaskForDelete] =
+    useState<AllTasksResponse | null>(null);
 
   const [viewDetailsModalOpen, setViewDetailsModalOpen] =
     useState<boolean>(false);
@@ -149,41 +62,14 @@ const TasksContent = (): ReactElement => {
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (
-        isSuccessBacklog &&
-        isSuccessNys &&
-        isSuccessIp &&
-        isSuccessOnHold &&
-        isSuccessCompleted
-      ) {
-        const allData = [
-          ...(backlog || []),
-          ...(notYetStarted || []),
-          ...(inProgress || []),
-          ...(onHold || []),
-          ...(completed || []),
-        ];
-        setTasks(allData);
-      }
-    }, 1000);
-  }, [backlog, notYetStarted, inProgress, onHold, completed]);
+  const deleteMutation = useDeleteTask();
 
-  const refetchTasks = () => {
-    statusData.forEach((statusItem) => {
-      statusItem.refetch();
-    });
-  };
-  const generateUniqueTaskID = () => {
-    const timestamp = new Date().getTime();
-    return timestamp.toString();
-  };
-
+  // OTHERS
   const handleTeamFilter = (e: SelectChangeEvent<unknown>) => {
     setSelectedTeam(e.target.value as string);
   };
 
+  // DRAG N DROP
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
 
@@ -194,7 +80,8 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find((task) => task.id === draggableId);
+    // wait for a API change status only and update this
+    const draggedTask = tasks.find(task => task.id === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -202,7 +89,7 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedMockData = tasks.map((task) => {
+        const updatedTaskData = tasks.map(task => {
           if (task.id === draggableId) {
             return {
               ...task,
@@ -212,11 +99,12 @@ const TasksContent = (): ReactElement => {
           return task;
         });
 
-        setTasks(updatedMockData);
+        setTasks(updatedTaskData);
       }
     }
   };
 
+  // OPENING OF MODALS
   const handleViewDetailsModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setViewDetailsModalOpen(!viewDetailsModalOpen);
@@ -231,11 +119,12 @@ const TasksContent = (): ReactElement => {
     setUpdateModalOpen(!updateModalOpen);
   };
 
-  const handleDeleteModalState = (id: string) => {
-    setSelectedTaskForDelete(id);
+  const handleDeleteModalState = (task: AllTasksResponse) => {
+    setSelectedTaskForDelete(task);
     setDeleteModalOpen(!deleteModalOpen);
   };
 
+  // CLOSING OF MODALS
   const handleCloseViewDetailsModalState = () => {
     setViewDetailsModalOpen(false);
   };
@@ -252,21 +141,18 @@ const TasksContent = (): ReactElement => {
     setDeleteModalOpen(false);
   };
 
-  const handleCreateTask = (newTask: AllTasksResponse) => {
+  // CRUD
+  const handleCreateTask = (newTask: AllTasksResponse | null) => {
     if (newTask) {
-      const newTaskID = generateUniqueTaskID();
-      const createdTask = {
-        ...newTask,
-        taskID: newTaskID,
-      };
-      const createdData = [...tasks, createdTask];
+      const createdData = [...tasks, newTask];
+
       setTasks(createdData);
     }
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedData = tasks.map((task) => {
-      if (task.taskID === updatedTask.taskID) {
+    const updatedData = tasks.map(task => {
+      if (task.id === updatedTask.id) {
         return updatedTask;
       }
 
@@ -277,111 +163,55 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleDeleteTask = () => {
-    if (selectedTaskForDelete) {
-      const updatedTasks = tasks.filter(
-        (task) => task.taskID !== selectedTaskForDelete,
-      );
-      setTasks(updatedTasks);
+    if (selectedTaskForDelete?.id) {
+      const { id: taskID } = selectedTaskForDelete;
 
       deleteMutation.mutate(
-        { id: selectedTaskForDelete },
+        { id: taskID },
         {
           onSuccess: () => {
-            statusData.forEach((statusItem) => {
-              statusItem.refetch();
-            });
+            const updatedTasks = tasks.filter(task => task.id !== taskID);
+            setTasks(updatedTasks);
+            setSelectedTaskForDelete(null);
           },
-          onError: (error) => {
+          onError: error => {
             console.log(error);
-            setTasks(tasks);
           },
         },
       );
-
-      setDeleteModalOpen(false);
-      setTasks(tasks);
     }
+
+    handleCloseDeleteModalState();
   };
 
-  const renderStatusContainerHeader = (status: Status) => {
-    return (
-      <Grid item container alignItems={"center"}>
-        <Grid item xs={11}>
-          <StyledStatusTitle color={status}>{status}</StyledStatusTitle>
-        </Grid>
-
-        <Grid item xs={1}>
-          <StyledCreateTaskIconButton display={status}>
-            <IconButton onClick={handleCreateModalState}>
-              <AddIcon />
-            </IconButton>
-          </StyledCreateTaskIconButton>
-        </Grid>
-      </Grid>
-    );
-  };
-
-  const renderTaskDetailsCards = (task: AllTasksResponse, index: number) => {
-    if (task.status === Status.Backlog || task.status === Status.OnHold) {
-      return (
-        <Draggable key={task?.id} draggableId={`${task?.id}`} index={index}>
-          {(provided) => (
-            <Stack
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-            >
-              <TaskDetailsCard
-                data={task}
-                handleViewDetails={handleViewDetailsModalState}
-                handleEdit={handleUpdateModalState}
-                onDelete={() => {
-                  handleDeleteModalState(task.id as string);
-                }}
-              />
-            </Stack>
-          )}
-        </Draggable>
-      );
-    } else {
-      return (
-        <TaskDetailsCard
-          data={task}
-          handleViewDetails={handleViewDetailsModalState}
-          handleEdit={handleUpdateModalState}
-          onDelete={() => handleDeleteModalState(task.id as string)}
-        />
-      );
-    }
-  };
-
+  // RENDER
   const renderTaskContentModals = () => {
     return (
       <>
         <CreateOrUpdateTask
           open={createModalOpen}
+          teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
-          funcionalities={functionality}
+          functionalities={functionalities}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
-          refetchTasks={refetchTasks}
         />
         <CreateOrUpdateTask
           open={updateModalOpen}
           update
+          teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
-          funcionalities={functionality}
+          functionalities={functionalities}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}
           onClose={handleCloseUpdateModalState}
-          refetchTasks={refetchTasks}
         />
         <ViewTaskDetails
           open={viewDetailsModalOpen}
-          username={username}
-          task={selectedTask as AllTasksResponse}
+          userDetails={userDetails}
+          task={selectedTask}
           onSave={handleUpdateTask}
           onClose={handleCloseViewDetailsModalState}
         />
@@ -392,24 +222,23 @@ const TasksContent = (): ReactElement => {
   const renderNoTask = () => {
     if (tasks?.length === 0) {
       return (
-        <Stack sx={taskContentStyles.noData}>
-          <img src={NoTask} alt="error" />
-          <Typography variant="h5" fontWeight="bold">
+        <NoDataContainer>
+          <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
+          <Typography variant='h5' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant='body2' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.started)}
-            <Link
-              underline="hover"
-              variant="body2"
-              fontWeight="bold"
-              onClick={handleCreateModalState}
-              sx={taskContentStyles.link}
+            <StyledLink
+              underline='hover'
+              variant='body2'
+              fontWeight='bold'
+              onClick={() => handleCreateModalState()}
             >
               {t(LocalizationKey.tasks.errorMessage.created)}
-            </Link>
+            </StyledLink>
           </Typography>
-        </Stack>
+        </NoDataContainer>
       );
     }
 
@@ -423,100 +252,37 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name="teamFilter"
-                placeholder="Team Name"
-                options={
-                  !_.isEmpty(teamOptionsApi) ? teamOptionsApi : teamOptions
-                }
+                name='teamFilter'
+                placeholder={t(LocalizationKey.tasks.teamFilter)}
+                options={teamOptions}
                 onChange={handleTeamFilter}
                 value={selectedTeam}
               />
             </Grid>
           </Grid>
 
-          <Divider sx={taskContentStyles.divider} />
+          <StyledDivider />
 
-          <Grid
+          <TaskGridContainer
             container
             spacing={1}
-            justifyContent="space-between"
-            sx={taskContentStyles.taskGridContainer}
+            justifyContent='space-between'
           >
-            {Object.values(Status).map((status) => {
-              const filteredData = tasks
-                ?.filter((task) => task.status === status)
-                .map((task) => {
-                  if (
-                    task.createdDate &&
-                    !isNaN(new Date(task.createdDate).getTime())
-                  ) {
-                    const createdDate = new Date(task.createdDate);
-                    const formattedCreatedDate = `${createdDate
-                      .getFullYear()
-                      .toString()
-                      .padStart(4, "0")}-${(createdDate.getMonth() + 1)
-                      .toString()
-                      .padStart(2, "0")}-${createdDate
-                      .getDate()
-                      .toString()
-                      .padStart(2, "0")}`;
-                    task.createdDate = formattedCreatedDate;
-                  }
-
-                  if (
-                    task.completionDate &&
-                    !isNaN(new Date(task.completionDate).getTime())
-                  ) {
-                    const completionDate = new Date(task.completionDate);
-                    const formattedCompletionDate = `${completionDate
-                      .getFullYear()
-                      .toString()
-                      .padStart(4, "0")}-${(completionDate.getMonth() + 1)
-                      .toString()
-                      .padStart(2, "0")}-${completionDate
-                      .getDate()
-                      .toString()
-                      .padStart(2, "0")}`;
-                    task.completionDate = formattedCompletionDate;
-                  }
-
-                  return task;
-                });
-
-              return (
-                <Grid
-                  item
-                  container
-                  xs={calculateGridSize(Object.values(Status).length)}
-                  key={status}
-                >
-                  <Droppable droppableId={status}>
-                    {(provided) => (
-                      <StatusContainer
-                        backgroundColor={status}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        {renderStatusContainerHeader(status)}
-
-                        <Divider />
-
-                        <SimpleBarReact style={{ maxHeight: "410px" }}>
-                          {filteredData.map((task, index) => (
-                            <div key={`${status}_${task.id}_${index}`}>
-                              {renderTaskDetailsCards(task, index)}
-                            </div>
-                          ))}
-                        </SimpleBarReact>
-
-                        {provided.placeholder}
-                      </StatusContainer>
-                    )}
-                  </Droppable>
-                </Grid>
-              );
+            {Object.values(Status).map(status => {
+              if (status !== Status.Invalid) {
+                return (
+                  <StatusContainer
+                    status={status}
+                    teamId={TEAM_ID}
+                    handleViewDetailsModalState={handleViewDetailsModalState}
+                    handleCreateModalState={handleCreateModalState}
+                    handleUpdateModalState={handleUpdateModalState}
+                    handleDeleteModalState={handleDeleteModalState}
+                  />
+                );
+              }
             })}
-          </Grid>
+          </TaskGridContainer>
 
           {renderNoTask()}
         </PageContainer>
@@ -526,11 +292,11 @@ const TasksContent = (): ReactElement => {
 
       <ConfirmModal
         open={deleteModalOpen}
-        onConfirm={() => handleDeleteTask()}
+        onConfirm={handleDeleteTask}
         onClose={handleCloseDeleteModalState}
-        message={`${t(LocalizationKey.tasks.taskDetails.deleteConfirm)}
-         ${selectedTask?.name}
-        ?`}
+        message={`${t(LocalizationKey.tasks.taskDetails.deleteConfirm)} ${
+          selectedTaskForDelete?.name
+        }?`}
       />
     </>
   );
