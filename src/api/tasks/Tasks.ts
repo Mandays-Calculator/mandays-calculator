@@ -12,10 +12,12 @@ import { getEnvConfig } from "~/utils/env-config";
 export const getTasks = async (
   id: string,
   status: string,
+  maxItems: string,
+  pageNum: string,
 ): BaseResponse<AllTasksResponse[]> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
   const response = await axios.get<AllTasksResponse[]>(
-    `${apiBasePath}/tasks?teamId=${id}&statusId=${status}`,
+    `${apiBasePath}/tasks?teamId=${id}&statusId=${status}&maxResults=${maxItems}&currentPage=${pageNum}`,
   );
   return response.data;
 };

@@ -69,6 +69,10 @@ export const CloseContainer = styled(Box)({
   right: "3px",
 });
 
+export const calculateGridSize = (numStatuses: number): number => {
+  return 12 / numStatuses;
+};
+
 // TASK DETAILS CARD STYLES
 export const StyledPaper = styled(Paper)(({ status }: { status: string }) => {
   if (status !== Status.OnHold && status !== Status.Backlog) {
@@ -201,7 +205,7 @@ export const ViewTaskDetailsLabel = styled(Typography)({
 });
 
 // TASK CONTENT
-export const StatusContainer = styled("div")(
+export const StyledStatusContainer = styled("div")(
   ({ backgroundColor }: { backgroundColor: string }) => ({
     backgroundColor:
       backgroundColor === Status.Backlog
