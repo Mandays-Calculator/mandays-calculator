@@ -29,6 +29,7 @@ import {
 } from "~/api/common/Common";
 import { getProjects } from "~/api/projects";
 import { getUserList } from "~/api/user-management/UserManagement";
+import { getFunctionality } from "~/api/tasks/Tasks";
 
 const cacheTime: number = 1000 * 60 * 60 * 24;
 
@@ -77,6 +78,11 @@ const transformDataToOption = (
         return data.map((item: CommonResponseDataObj) => ({
           label: item.name,
           value: item.projectId,
+        }));
+      case "function":
+        return data.map((item: CommonResponseDataObj) => ({
+          label: item.name,
+          value: item.id,
         }));
       case "complexity":
       case "odc":
@@ -171,6 +177,11 @@ const getCommonOption = <T>(
           cacheTime: cacheTime,
         },
       );
+    case "function":
+      return useQuery("getFunctionality", getFunctionality, {
+        staleTime: Infinity,
+        cacheTime: cacheTime,
+      });
     default:
       return [{ label: "", value: "" }] as unknown as UseQueryResult<T, Error>;
     // {

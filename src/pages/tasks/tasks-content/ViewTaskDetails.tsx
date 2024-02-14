@@ -10,28 +10,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import LocalizationKey from "~/i18n/key/index.ts";
 import moment from "moment";
 import {
+  AccordionDetails,
+  AccordionSummary,
   InputAdornment,
   IconButton,
   Typography,
+  Accordion,
   Avatar,
   Grid,
+  Box,
 } from "@mui/material";
 
 import { TextField, Modal, ConfirmModal } from "~/components";
 import { CheckBox } from "~/components/form";
 
-import {
-  ViewTaskDetailsContainer,
-  ViewCommentContainerBox,
-  AccordionCommentDetails,
-  AccordionCommentTitle,
-  ViewTaskDetailsLabel,
-  AccordionComment,
-  styledScrollbar,
-  CloseContainer,
-  CommentTexbox,
-  TaskTags,
-} from "./style.ts";
+import { viewTaskDetailsStyles, getTagStyle, taskStyles } from "./style.ts";
 import { Status } from "./utils";
 
 interface ViewTaskDetailsProps {
@@ -43,7 +36,7 @@ interface ViewTaskDetailsProps {
 }
 
 const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
-  const { open, username, task, onSave, onClose } = props;
+  const { open, username, task, onClose } = props;
   const { t } = useTranslation();
 
   const defaultComment = {
@@ -58,14 +51,6 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
   useEffect(() => {
     setNewTask(task);
   }, [task]);
-
-  const handleSaveTask = (): void => {
-    if (currentTask) {
-      onSave(currentTask);
-      setNewComment(defaultComment);
-      onClose();
-    }
-  };
 
   const handleConfirmMarkCompleted: () => void = () => {
     if (currentTask) {
@@ -104,41 +89,47 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
   const renderCommentSection = () => {
     return (
-      <AccordionComment defaultExpanded square>
-        <AccordionCommentTitle
+      <Accordion
+        defaultExpanded
+        square
+        sx={viewTaskDetailsStyles.comment.accordion}
+      >
+        <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls='taskdetails-comment-panel'
-          id='taskdetails-comment-panel-header'
+          aria-controls="taskdetails-comment-panel"
+          id="taskdetails-comment-panel-header"
+          sx={viewTaskDetailsStyles.label}
         >
           {t(LocalizationKey.tasks.viewTaskDetails.label.comments)}
-        </AccordionCommentTitle>
-        <AccordionCommentDetails>
-          <ViewTaskDetailsContainer
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid
             item
             container
-            type='comment'
-            alignItems='center'
+            alignItems="center"
             xs={12}
+            sx={viewTaskDetailsStyles.comment.container}
           >
             <Grid item xs={2} sm={1}>
               <Avatar alt={getAvatarAlt(username)} />
             </Grid>
 
             <Grid item xs={10} sm={11}>
-              <CommentTexbox
-                name='comment'
+              <TextField
+                name="comment"
                 placeholder={t(
                   LocalizationKey.tasks.viewTaskDetails.placeholder.comments,
                 )}
                 fullWidth
                 multiline
                 maxRows={10}
+                sx={viewTaskDetailsStyles.comment.textbox}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position='end'>
+                    <InputAdornment position="end">
                       <IconButton
-                        aria-label='Send'
-                        edge='end'
+                        aria-label="Send"
+                        edge="end"
                         onClick={() => handleAddComment()}
                       >
                         <SendOutlinedIcon />
@@ -147,31 +138,33 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                   ),
                 }}
                 value={newComment.comment}
-                onChange={e =>
+                onChange={(e) =>
                   setNewComment({ ...newComment, comment: e.target.value })
                 }
               />
             </Grid>
-          </ViewTaskDetailsContainer>
+          </Grid>
 
-          <Grid item container alignItems='center' xs={12} spacing={1.5}>
+          <Grid item container alignItems="center" xs={12} spacing={1.5}>
             {(currentTask?.comments || []).map((comment, index) => (
               <>
                 <Grid item xs={2} sm={1}>
                   <Avatar alt={getAvatarAlt(comment?.name)} />
                 </Grid>
 
-                <Grid item container xs={10} sm={11} alignItems='center'>
-                  <ViewCommentContainerBox key={index}>
-                    <ViewTaskDetailsLabel>{comment?.name}</ViewTaskDetailsLabel>
+                <Grid item container xs={10} sm={11} alignItems="center">
+                  <Box key={index} sx={viewTaskDetailsStyles.comment.comment}>
+                    <Typography sx={viewTaskDetailsStyles.label}>
+                      {comment?.name}
+                    </Typography>
                     <Typography>{comment?.comment}</Typography>
-                  </ViewCommentContainerBox>
+                  </Box>
                 </Grid>
               </>
             ))}
           </Grid>
-        </AccordionCommentDetails>
-      </AccordionComment>
+        </AccordionDetails>
+      </Accordion>
     );
   };
 
@@ -180,65 +173,65 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
       <Modal
         open={open}
         title={currentTask?.name}
-        maxWidth='sm'
+        maxWidth="sm"
         onClose={onClose}
-        sx={styledScrollbar}
+        sx={taskStyles.scrollbar}
       >
-        <CloseContainer>
-          <IconButton onClick={handleSaveTask}>
+        <Box sx={taskStyles.modal.close}>
+          <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
-        </CloseContainer>
+        </Box>
 
-        <ViewTaskDetailsContainer container type='outer'>
+        <Grid container sx={viewTaskDetailsStyles.modal.container}>
           <Grid item xs={12}>
-            <TextField
-              name='taskDescription'
-              label={t(LocalizationKey.tasks.viewTaskDetails.label.description)}
-              placeholder={t(
-                LocalizationKey.tasks.viewTaskDetails.placeholder.description,
-              )}
-              fullWidth
-              multiline
-              onChange={e =>
-                currentTask &&
-                setNewTask({ ...currentTask, description: e.target.value })
-              }
-              value={currentTask?.description || ""}
-            />
+            <Typography sx={viewTaskDetailsStyles.label}>
+              {t(LocalizationKey.tasks.viewTaskDetails.label.description)}
+            </Typography>
+            <Typography>{currentTask?.description}</Typography>
           </Grid>
 
-          <ViewTaskDetailsContainer item container type='inner' xs={12}>
+          <Grid
+            item
+            container
+            xs={12}
+            sx={viewTaskDetailsStyles.taskViewDetails}
+          >
             <Grid item xs={12} sm={6}>
-              <ViewTaskDetailsLabel>
+              <Typography sx={viewTaskDetailsStyles.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.functionality)}
-              </ViewTaskDetailsLabel>
+              </Typography>
               <Typography>{currentTask?.functionality?.name}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <ViewTaskDetailsLabel>
+              <Typography sx={viewTaskDetailsStyles.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.complexity)}
-              </ViewTaskDetailsLabel>
+              </Typography>
               <Typography>{currentTask?.complexity?.name}</Typography>
             </Grid>
-          </ViewTaskDetailsContainer>
+          </Grid>
 
-          <ViewTaskDetailsContainer item container type='inner' xs={12}>
+          <Grid
+            item
+            container
+            xs={12}
+            sx={viewTaskDetailsStyles.taskViewDetails}
+          >
             <Grid item xs={12} sm={6}>
-              <ViewTaskDetailsLabel>
+              <Typography sx={viewTaskDetailsStyles.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.createdDate)}
-              </ViewTaskDetailsLabel>
+              </Typography>
               <Typography>{currentTask?.createdDate}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               {currentTask?.status === Status.Completed ? (
                 <>
-                  <ViewTaskDetailsLabel>
+                  <Typography sx={viewTaskDetailsStyles.label}>
                     {t(
                       LocalizationKey.tasks.viewTaskDetails.label
                         .completionDate,
                     )}
-                  </ViewTaskDetailsLabel>
+                  </Typography>
                   <Typography>{currentTask?.completionDate}</Typography>
                 </>
               ) : null}
@@ -252,41 +245,41 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                 />
               ) : null}
             </Grid>
-          </ViewTaskDetailsContainer>
+          </Grid>
 
-          <ViewTaskDetailsContainer item type='inner' xs={12}>
-            <ViewTaskDetailsLabel>
+          <Grid item xs={12} sx={viewTaskDetailsStyles.taskViewDetails}>
+            <Typography sx={viewTaskDetailsStyles.label}>
               {t(LocalizationKey.tasks.viewTaskDetails.label.sprint)}
-            </ViewTaskDetailsLabel>
+            </Typography>
             <Typography>
               {t(LocalizationKey.tasks.viewTaskDetails.placeholder.sprint)}
               {currentTask?.sprint}
             </Typography>
-          </ViewTaskDetailsContainer>
+          </Grid>
 
-          <ViewTaskDetailsContainer
+          <Grid
             item
             container
-            type='inner'
             xs={12}
             spacing={1}
+            sx={viewTaskDetailsStyles.taskViewDetails}
           >
             <Grid item xs={12}>
-              <ViewTaskDetailsLabel>
+              <Typography sx={viewTaskDetailsStyles.label}>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.tags)}
-              </ViewTaskDetailsLabel>
+              </Typography>
             </Grid>
             {(currentTask?.tags ?? []).map((tag, index) => (
               <Grid item>
-                <TaskTags status={tag?.value} key={index}>
+                <Box sx={getTagStyle(tag?.value)} key={index}>
                   {tag?.value}
-                </TaskTags>
+                </Box>
               </Grid>
             ))}
-          </ViewTaskDetailsContainer>
+          </Grid>
 
           {renderCommentSection()}
-        </ViewTaskDetailsContainer>
+        </Grid>
       </Modal>
 
       <ConfirmModal

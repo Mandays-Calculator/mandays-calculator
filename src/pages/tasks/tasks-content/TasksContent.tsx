@@ -9,7 +9,10 @@ import {
   Draggable,
   Droppable,
 } from "react-beautiful-dnd";
+import SimpleBarReact from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 
+import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import LocalizationKey from "~/i18n/key";
 import {
@@ -19,30 +22,68 @@ import {
   Divider,
   Stack,
   Grid,
+  Link,
 } from "@mui/material";
 
-import { Select, PageContainer, ErrorMessage } from "~/components";
+import { Select, PageContainer } from "~/components";
 import { useCommonOption } from "~/queries/common/options";
-import { useTasks } from "~/queries/tasks/Tasks";
+import { useDeleteTask, useGetTeam, useTasks } from "~/queries/tasks/Tasks";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
+import { Status, StatusContainerColor, StatusTitleColor } from "./utils";
 import TaskDetailsCard from "./task-details/TaskDetailsCard";
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import ViewTaskDetails from "./ViewTaskDetails";
-import { Status } from "./utils";
 
 import NoTask from "~/assets/img/empty_tasks.png";
 
-import {
-  StyledCreateTaskIconButton,
-  StyledStatusTitle,
-  TaskGridContainer,
-  NoDataContainer,
-  StatusContainer,
-  StyledDivider,
-  StyledLink,
-} from "./style";
+import { taskContentStyles } from "./style";
+import _ from "lodash";
+
+const StatusContainer = styled("div")(
+  ({ backgroundColor }: { backgroundColor: string }) => ({
+    backgroundColor:
+      backgroundColor === Status.Backlog
+        ? StatusContainerColor.Backlog
+        : backgroundColor === Status.NotYetStarted
+        ? StatusContainerColor.NotYetStarted
+        : backgroundColor === Status.InProgress
+        ? StatusContainerColor.InProgress
+        : backgroundColor === Status.OnHold
+        ? StatusContainerColor.OnHold
+        : StatusContainerColor.Completed,
+    borderRadius: 10,
+    width: "100%",
+    padding: 15,
+  }),
+);
+
+const StyledStatusTitle = styled(Grid)(({ color }: { color: string }) => ({
+  fontSize: 18,
+  margin: color !== Status.Backlog ? "0.3em 0" : 0,
+  fontWeight: "bold",
+  color:
+    color === Status.NotYetStarted
+      ? StatusTitleColor.NotYetStarted
+      : color === Status.InProgress
+      ? StatusTitleColor.InProgress
+      : color === Status.OnHold
+      ? StatusTitleColor.OnHold
+      : color === Status.Completed
+      ? StatusTitleColor.Completed
+      : StatusTitleColor.Backlog,
+}));
+
+const StyledCreateTaskIconButton = styled(Grid)(
+  ({ display }: { display: string }) => ({
+    fontSize: 25,
+    fontWeight: "bolder",
+    float: "right",
+    cursor: "pointer",
+    display: display !== Status.Backlog ? "none" : "",
+  }),
+);
 
 const teamOptions = [
   { value: "MC", label: "MC" },
@@ -62,20 +103,45 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
-  const { data: tasksData } = useTasks(
-    "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
-    "1",
-  );
+
+  const statuses = ["1", "2", "3", "4", "5"];
+
+  const statusData = statuses.map((status) => {
+    const { data, isSuccess, refetch } = useTasks(
+      "a2eb9f01-6e4e-11ee-8624-a0291936d1c2",
+      status,
+      "100",
+      "1",
+    );
+
+    return { taskData: data?.data, isSuccess, refetch };
+  });
+
+  const [
+    { taskData: backlog, isSuccess: isSuccessBacklog },
+    { taskData: notYetStarted, isSuccess: isSuccessNys },
+    { taskData: inProgress, isSuccess: isSuccessIp },
+    { taskData: onHold, isSuccess: isSuccessOnHold },
+    { taskData: completed, isSuccess: isSuccessCompleted },
+  ] = statusData;
+
+  const deleteMutation = useDeleteTask();
+
   const username = `${user?.firstName} ${user?.lastName}`;
   const complexities = useCommonOption("complexity");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const functionality = useCommonOption("function");
+
+  const teamOptionsQuery = useGetTeam("f7eaf281-6e4e-11ee-8624-a0291936d1c2");
+  const api = teamOptionsQuery.data?.data;
+
+  const teamOptionsApi = api?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
-  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
-    null,
-  );
-  const [selectedTaskForDelete, setSelectedTaskForDelete] =
-    useState<AllTasksResponse | null>(null);
+  const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>();
+  const [selectedTaskForDelete, setSelectedTaskForDelete] = useState<string>();
 
   const [viewDetailsModalOpen, setViewDetailsModalOpen] =
     useState<boolean>(false);
@@ -84,17 +150,31 @@ const TasksContent = (): ReactElement => {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (tasksData && tasksData.hasOwnProperty("errorCode")) {
-      setErrorMessage(t(LocalizationKey.tasks.errorMessage.fetch));
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 3000);
-    } else if (tasksData && tasksData.data) {
-      setTasks(tasksData.data);
-    }
-  }, [tasksData]);
+    setTimeout(() => {
+      if (
+        isSuccessBacklog &&
+        isSuccessNys &&
+        isSuccessIp &&
+        isSuccessOnHold &&
+        isSuccessCompleted
+      ) {
+        const allData = [
+          ...(backlog || []),
+          ...(notYetStarted || []),
+          ...(inProgress || []),
+          ...(onHold || []),
+          ...(completed || []),
+        ];
+        setTasks(allData);
+      }
+    }, 1000);
+  }, [backlog, notYetStarted, inProgress, onHold, completed]);
 
-  // OTHERS
+  const refetchTasks = () => {
+    statusData.forEach((statusItem) => {
+      statusItem.refetch();
+    });
+  };
   const generateUniqueTaskID = () => {
     const timestamp = new Date().getTime();
     return timestamp.toString();
@@ -104,7 +184,6 @@ const TasksContent = (): ReactElement => {
     setSelectedTeam(e.target.value as string);
   };
 
-  // DRAG N DROP
   const handleDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
 
@@ -115,7 +194,7 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    const draggedTask = tasks.find(task => task.taskID === draggableId);
+    const draggedTask = tasks.find((task) => task.id === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -123,8 +202,8 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedMockData = tasks.map(task => {
-          if (task.taskID === draggableId) {
+        const updatedMockData = tasks.map((task) => {
+          if (task.id === draggableId) {
             return {
               ...task,
               status: destinationStatus,
@@ -138,7 +217,6 @@ const TasksContent = (): ReactElement => {
     }
   };
 
-  // OPENING OF MODALS
   const handleViewDetailsModalState = (task: AllTasksResponse) => {
     setSelectedTask(task);
     setViewDetailsModalOpen(!viewDetailsModalOpen);
@@ -153,12 +231,11 @@ const TasksContent = (): ReactElement => {
     setUpdateModalOpen(!updateModalOpen);
   };
 
-  const handleDeleteModalState = (task: AllTasksResponse) => {
-    setSelectedTaskForDelete(task);
+  const handleDeleteModalState = (id: string) => {
+    setSelectedTaskForDelete(id);
     setDeleteModalOpen(!deleteModalOpen);
   };
 
-  // CLOSING OF MODALS
   const handleCloseViewDetailsModalState = () => {
     setViewDetailsModalOpen(false);
   };
@@ -172,28 +249,23 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleCloseDeleteModalState = () => {
-    setSelectedTaskForDelete(null);
     setDeleteModalOpen(false);
   };
 
-  // CRUD
-  const handleCreateTask = (newTask: AllTasksResponse | null) => {
+  const handleCreateTask = (newTask: AllTasksResponse) => {
     if (newTask) {
       const newTaskID = generateUniqueTaskID();
-
       const createdTask = {
         ...newTask,
         taskID: newTaskID,
       };
-
       const createdData = [...tasks, createdTask];
-
       setTasks(createdData);
     }
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedData = tasks.map(task => {
+    const updatedData = tasks.map((task) => {
       if (task.taskID === updatedTask.taskID) {
         return updatedTask;
       }
@@ -206,16 +278,31 @@ const TasksContent = (): ReactElement => {
 
   const handleDeleteTask = () => {
     if (selectedTaskForDelete) {
-      const { taskID } = selectedTaskForDelete;
-      const updatedTasks = tasks.filter(task => task.taskID !== taskID);
+      const updatedTasks = tasks.filter(
+        (task) => task.taskID !== selectedTaskForDelete,
+      );
       setTasks(updatedTasks);
-    }
 
-    setSelectedTaskForDelete(null);
-    setDeleteModalOpen(false);
+      deleteMutation.mutate(
+        { id: selectedTaskForDelete },
+        {
+          onSuccess: () => {
+            statusData.forEach((statusItem) => {
+              statusItem.refetch();
+            });
+          },
+          onError: (error) => {
+            console.log(error);
+            setTasks(tasks);
+          },
+        },
+      );
+
+      setDeleteModalOpen(false);
+      setTasks(tasks);
+    }
   };
 
-  // RENDER
   const renderStatusContainerHeader = (status: Status) => {
     return (
       <Grid item container alignItems={"center"}>
@@ -225,7 +312,7 @@ const TasksContent = (): ReactElement => {
 
         <Grid item xs={1}>
           <StyledCreateTaskIconButton display={status}>
-            <IconButton onClick={() => handleCreateModalState()}>
+            <IconButton onClick={handleCreateModalState}>
               <AddIcon />
             </IconButton>
           </StyledCreateTaskIconButton>
@@ -237,8 +324,8 @@ const TasksContent = (): ReactElement => {
   const renderTaskDetailsCards = (task: AllTasksResponse, index: number) => {
     if (task.status === Status.Backlog || task.status === Status.OnHold) {
       return (
-        <Draggable key={task.taskID} draggableId={task.taskID} index={index}>
-          {provided => (
+        <Draggable key={task?.id} draggableId={`${task?.id}`} index={index}>
+          {(provided) => (
             <Stack
               ref={provided.innerRef}
               {...provided.draggableProps}
@@ -248,7 +335,9 @@ const TasksContent = (): ReactElement => {
                 data={task}
                 handleViewDetails={handleViewDetailsModalState}
                 handleEdit={handleUpdateModalState}
-                onDelete={() => handleDeleteModalState(task)}
+                onDelete={() => {
+                  handleDeleteModalState(task.id as string);
+                }}
               />
             </Stack>
           )}
@@ -260,7 +349,7 @@ const TasksContent = (): ReactElement => {
           data={task}
           handleViewDetails={handleViewDetailsModalState}
           handleEdit={handleUpdateModalState}
-          onDelete={() => handleDeleteModalState(task)}
+          onDelete={() => handleDeleteModalState(task.id as string)}
         />
       );
     }
@@ -272,23 +361,27 @@ const TasksContent = (): ReactElement => {
         <CreateOrUpdateTask
           open={createModalOpen}
           complexities={complexities}
+          funcionalities={functionality}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
+          refetchTasks={refetchTasks}
         />
         <CreateOrUpdateTask
           open={updateModalOpen}
           update
           complexities={complexities}
+          funcionalities={functionality}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}
           onClose={handleCloseUpdateModalState}
+          refetchTasks={refetchTasks}
         />
         <ViewTaskDetails
           open={viewDetailsModalOpen}
           username={username}
-          task={selectedTask}
+          task={selectedTask as AllTasksResponse}
           onSave={handleUpdateTask}
           onClose={handleCloseViewDetailsModalState}
         />
@@ -297,25 +390,26 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderNoTask = () => {
-    if (tasks.length === 0) {
+    if (tasks?.length === 0) {
       return (
-        <NoDataContainer>
-          <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
-          <Typography variant='h5' fontWeight='bold'>
+        <Stack sx={taskContentStyles.noData}>
+          <img src={NoTask} alt="error" />
+          <Typography variant="h5" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
-          <Typography variant='body2' fontWeight='bold'>
+          <Typography variant="body2" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.started)}
-            <StyledLink
-              underline='hover'
-              variant='body2'
-              fontWeight='bold'
-              onClick={() => handleCreateModalState()}
+            <Link
+              underline="hover"
+              variant="body2"
+              fontWeight="bold"
+              onClick={handleCreateModalState}
+              sx={taskContentStyles.link}
             >
               {t(LocalizationKey.tasks.errorMessage.created)}
-            </StyledLink>
+            </Link>
           </Typography>
-        </NoDataContainer>
+        </Stack>
       );
     }
 
@@ -329,24 +423,65 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name='teamFilter'
-                placeholder='Team Name'
-                options={teamOptions}
+                name="teamFilter"
+                placeholder="Team Name"
+                options={
+                  !_.isEmpty(teamOptionsApi) ? teamOptionsApi : teamOptions
+                }
                 onChange={handleTeamFilter}
                 value={selectedTeam}
               />
             </Grid>
           </Grid>
 
-          <StyledDivider />
+          <Divider sx={taskContentStyles.divider} />
 
-          <TaskGridContainer
+          <Grid
             container
             spacing={1}
-            justifyContent='space-between'
+            justifyContent="space-between"
+            sx={taskContentStyles.taskGridContainer}
           >
-            {Object.values(Status).map(status => {
-              const filteredData = tasks.filter(task => task.status === status);
+            {Object.values(Status).map((status) => {
+              const filteredData = tasks
+                ?.filter((task) => task.status === status)
+                .map((task) => {
+                  if (
+                    task.createdDate &&
+                    !isNaN(new Date(task.createdDate).getTime())
+                  ) {
+                    const createdDate = new Date(task.createdDate);
+                    const formattedCreatedDate = `${createdDate
+                      .getFullYear()
+                      .toString()
+                      .padStart(4, "0")}-${(createdDate.getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}-${createdDate
+                      .getDate()
+                      .toString()
+                      .padStart(2, "0")}`;
+                    task.createdDate = formattedCreatedDate;
+                  }
+
+                  if (
+                    task.completionDate &&
+                    !isNaN(new Date(task.completionDate).getTime())
+                  ) {
+                    const completionDate = new Date(task.completionDate);
+                    const formattedCompletionDate = `${completionDate
+                      .getFullYear()
+                      .toString()
+                      .padStart(4, "0")}-${(completionDate.getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}-${completionDate
+                      .getDate()
+                      .toString()
+                      .padStart(2, "0")}`;
+                    task.completionDate = formattedCompletionDate;
+                  }
+
+                  return task;
+                });
 
               return (
                 <Grid
@@ -356,7 +491,7 @@ const TasksContent = (): ReactElement => {
                   key={status}
                 >
                   <Droppable droppableId={status}>
-                    {provided => (
+                    {(provided) => (
                       <StatusContainer
                         backgroundColor={status}
                         ref={provided.innerRef}
@@ -366,11 +501,14 @@ const TasksContent = (): ReactElement => {
 
                         <Divider />
 
-                        {filteredData.map((task, index) => (
-                          <Stack key={`${status}_${task.name}_${index}`}>
-                            {renderTaskDetailsCards(task, index)}
-                          </Stack>
-                        ))}
+                        <SimpleBarReact style={{ maxHeight: "410px" }}>
+                          {filteredData.map((task, index) => (
+                            <div key={`${status}_${task.id}_${index}`}>
+                              {renderTaskDetailsCards(task, index)}
+                            </div>
+                          ))}
+                        </SimpleBarReact>
+
                         {provided.placeholder}
                       </StatusContainer>
                     )}
@@ -378,7 +516,7 @@ const TasksContent = (): ReactElement => {
                 </Grid>
               );
             })}
-          </TaskGridContainer>
+          </Grid>
 
           {renderNoTask()}
         </PageContainer>
@@ -386,15 +524,13 @@ const TasksContent = (): ReactElement => {
 
       {renderTaskContentModals()}
 
-      <ErrorMessage error={errorMessage} type='alert' />
-
       <ConfirmModal
         open={deleteModalOpen}
-        onConfirm={handleDeleteTask}
+        onConfirm={() => handleDeleteTask()}
         onClose={handleCloseDeleteModalState}
-        message={`${t(LocalizationKey.tasks.taskDetails.deleteConfirm)} ${
-          selectedTaskForDelete?.name
-        }?`}
+        message={`${t(LocalizationKey.tasks.taskDetails.deleteConfirm)}
+         ${selectedTask?.name}
+        ?`}
       />
     </>
   );
