@@ -1,6 +1,8 @@
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import EventIcon from "@mui/icons-material/Event";
+import "simplebar-react/dist/simplebar.min.css";
 import { styled } from "@mui/material/styles";
+import SimpleBarReact from "simplebar-react";
 import theme from "~/theme";
 import {
   AccordionSummary,
@@ -269,6 +271,8 @@ export const NoDataContainer = styled(Stack)({
 });
 
 export const StyledLink = styled(Link)({ cursor: "pointer" });
+
+export const StyledSimpleBar = styled(SimpleBarReact)({ maxHeight: "410px" });
 
 export const styledScrollbar = {
   "*::-webkit-scrollbar": {

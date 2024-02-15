@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { Divider, Grid, IconButton, Stack } from "@mui/material";
 import "simplebar-react/dist/simplebar.min.css";
 import AddIcon from "@mui/icons-material/Add";
-import SimpleBarReact from "simplebar-react";
 import LocalizationKey from "~/i18n/key";
 
 import { useTasks } from "~/queries/tasks/Tasks";
@@ -21,6 +20,7 @@ import {
   StyledStatusContainer,
   StyledStatusTitle,
   calculateGridSize,
+  StyledSimpleBar,
 } from "./style";
 
 interface StatusContainer {
@@ -120,6 +120,8 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
     }
   };
 
+  // CRUD
+
   return (
     <>
       <Grid
@@ -139,14 +141,14 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
               <Divider />
 
-              <SimpleBarReact style={{ maxHeight: "410px" }}>
+              <StyledSimpleBar>
                 {tasks.map((task, index) => (
                   <Stack key={`${status}_${task.name}_${index}`}>
                     {renderTaskDetailsCards(task, index)}
                   </Stack>
                 ))}
                 {provided.placeholder}
-              </SimpleBarReact>
+              </StyledSimpleBar>
             </StyledStatusContainer>
           )}
         </Droppable>

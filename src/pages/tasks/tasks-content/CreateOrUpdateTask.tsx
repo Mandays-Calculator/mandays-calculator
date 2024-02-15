@@ -127,7 +127,14 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       complexityId: getComplexityDetails(taskData._complexity as string),
     };
 
-    postTasks.mutate(createData);
+    postTasks.mutate(createData, {
+      onSuccess: data => {
+        console.log("mama mo", data);
+      },
+      onError: error => {
+        console.log(error);
+      },
+    });
   };
 
   const handleUpdateTask = (taskData: AllTasksResponse) => {
@@ -142,7 +149,14 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       complexityId: getComplexityDetails(taskData._complexity as string),
     };
 
-    putTasks.mutate(updatedData);
+    putTasks.mutate(updatedData, {
+      onSuccess: data => {
+        console.log("mama mo", data);
+      },
+      onError: error => {
+        console.log(error);
+      },
+    });
   };
 
   // EVENT CHANGES

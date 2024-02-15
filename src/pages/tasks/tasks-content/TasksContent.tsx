@@ -44,7 +44,6 @@ const TasksContent = (): ReactElement => {
   const {
     state: { user },
   } = useUserAuth();
-  const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const userDetails = user;
   const complexities = useCommonOption("complexity");
   const functionalities = useCommonOption("function", "");
@@ -80,26 +79,13 @@ const TasksContent = (): ReactElement => {
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
 
-    // wait for a API change status only and update this
-    const draggedTask = tasks.find(task => task.id === draggableId);
-
     if (
       (sourceStatus === Status.Backlog &&
         destinationStatus === Status.OnHold) ||
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
-      if (draggedTask) {
-        const updatedTaskData = tasks.map(task => {
-          if (task.id === draggableId) {
-            return {
-              ...task,
-              status: destinationStatus,
-            };
-          }
-          return task;
-        });
-
-        setTasks(updatedTaskData);
+      if (draggableId) {
+        // Add Change Status
       }
     }
   };
@@ -143,23 +129,22 @@ const TasksContent = (): ReactElement => {
 
   // CRUD
   const handleCreateTask = (newTask: AllTasksResponse | null) => {
-    if (newTask) {
-      const createdData = [...tasks, newTask];
-
-      setTasks(createdData);
-    }
+    // if (newTask) {
+    //   const createdData = [...tasks, newTask];
+    //   setTasks(createdData);
+    // }
+    console.log(newTask);
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedData = tasks.map(task => {
-      if (task.id === updatedTask.id) {
-        return updatedTask;
-      }
-
-      return task;
-    });
-
-    setTasks(updatedData);
+    // const updatedData = tasks.map(task => {
+    //   if (task.id === updatedTask.id) {
+    //     return updatedTask;
+    //   }
+    //   return task;
+    // });
+    // setTasks(updatedData);
+    console.log(updatedTask);
   };
 
   const handleDeleteTask = () => {
@@ -170,8 +155,8 @@ const TasksContent = (): ReactElement => {
         { id: taskID },
         {
           onSuccess: () => {
-            const updatedTasks = tasks.filter(task => task.id !== taskID);
-            setTasks(updatedTasks);
+            // const updatedTasks = tasks.filter(task => task.id !== taskID);
+            // setTasks(updatedTasks);
             setSelectedTaskForDelete(null);
           },
           onError: error => {
@@ -220,29 +205,25 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderNoTask = () => {
-    if (tasks?.length === 0) {
-      return (
-        <NoDataContainer>
-          <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
-          <Typography variant='h5' fontWeight='bold'>
-            {t(LocalizationKey.tasks.errorMessage.error)}
-          </Typography>
-          <Typography variant='body2' fontWeight='bold'>
-            {t(LocalizationKey.tasks.errorMessage.started)}
-            <StyledLink
-              underline='hover'
-              variant='body2'
-              fontWeight='bold'
-              onClick={() => handleCreateModalState()}
-            >
-              {t(LocalizationKey.tasks.errorMessage.created)}
-            </StyledLink>
-          </Typography>
-        </NoDataContainer>
-      );
-    }
-
-    return null;
+    return (
+      <NoDataContainer>
+        <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
+        <Typography variant='h5' fontWeight='bold'>
+          {t(LocalizationKey.tasks.errorMessage.error)}
+        </Typography>
+        <Typography variant='body2' fontWeight='bold'>
+          {t(LocalizationKey.tasks.errorMessage.started)}
+          <StyledLink
+            underline='hover'
+            variant='body2'
+            fontWeight='bold'
+            onClick={() => handleCreateModalState()}
+          >
+            {t(LocalizationKey.tasks.errorMessage.created)}
+          </StyledLink>
+        </Typography>
+      </NoDataContainer>
+    );
   };
 
   return (
