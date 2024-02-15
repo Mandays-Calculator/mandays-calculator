@@ -21,6 +21,8 @@ interface QueryResponse<T> {
 export const useGetTasks = (
   teamId: string,
   status: string,
+  maxResults: number,
+  currentPage: number,
   config?: Omit<
     UseQueryOptions<QueryResponse<TasksResponse[]>, AxiosError>,
     "queryKey"
@@ -28,7 +30,13 @@ export const useGetTasks = (
 ): UseQueryResult<QueryResponse<TasksResponse[]>, AxiosError> => {
   return useQuery(
     "getTasks",
-    () => getTasks({ teamId: teamId, status: status }),
+    () =>
+      getTasks({
+        teamId: teamId,
+        status: status,
+        maxResults: maxResults,
+        currentPage: currentPage,
+      }),
     config,
   );
 };

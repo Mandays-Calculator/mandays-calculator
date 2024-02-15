@@ -15,7 +15,7 @@ export const initMandays: MandaysForm = {
   phases: [],
 };
 
-const constructData = (data: TaskType[]): TaskType[] => {
+const constructTasks = (data: TaskType[]): TaskType[] => {
   return (
     data?.map((task) => {
       return {
@@ -31,7 +31,7 @@ export const initializeTasksListData = (
   taskValues: TaskType[],
 ): TaskType[] | undefined => {
   if (tasksData && taskValues.length <= 0) {
-    const toBeTasks = constructData(tasksData);
+    const toBeTasks = constructTasks(tasksData);
     return toBeTasks;
   }
 };

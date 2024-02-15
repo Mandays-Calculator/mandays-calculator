@@ -2,6 +2,9 @@ import type { ReactElement } from "react";
 import type { CommonOption } from "~/queries/common/options";
 import type { MandaysForm } from "../..";
 
+import { useTranslation } from "react-i18next";
+import LocalizationKey from "~/i18n/key";
+
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -14,10 +17,11 @@ import {
   calculateTotalResourcesOrLeaves,
   roundOffValue,
 } from "../../utils/calculate";
+import { ExistingODC, Holiday } from "../types";
 
 interface Details {
   teamOptions: CommonOption;
-  existingODC: string[];
+  existingODC: ExistingODC[];
   formState: MandaysForm;
 }
 
@@ -33,6 +37,31 @@ const Details = ({
     teamId: formState?.summary?.teamId || "-",
   };
 
+  const { t } = useTranslation();
+  const {
+    mandaysCalculator: { summaryForm, summaryTableColumns },
+  } = LocalizationKey;
+
+  const renderResourceOrLeaves = (
+    odcValue: string,
+    type?: "numberOfResources" | "annualLeaves",
+  ): number => calculateTotalResourcesOrLeaves(formState, odcValue, type);
+
+  const renderTotalManHoursByODC = (existingODC: ExistingODC): number => {
+    const holidaysPerODC: string[] = existingODC.holidays.map(
+      (item: Holiday) => item.date,
+    );
+
+    const manHours = calculateTotalManHoursByOdc(
+      formState,
+      renderResourceOrLeaves(existingODC.value),
+      renderResourceOrLeaves(existingODC.value, "annualLeaves"),
+      holidaysPerODC as unknown as Holiday[],
+    );
+
+    return manHours / 8;
+  };
+
   return (
     <Grid container spacing={2} justifyContent="">
       <Grid xs={6} item>
@@ -40,7 +69,9 @@ const Details = ({
           <Stack direction="column" gap={2}>
             <Grid container>
               <Grid item xs={3}>
-                <Typography fontWeight={"bold"}>Start date:</Typography>
+                <Typography fontWeight={"bold"}>
+                  {t(summaryForm.startDate)}:
+                </Typography>
               </Grid>
               <Grid xs={6} item>
                 <Typography>
@@ -50,7 +81,9 @@ const Details = ({
             </Grid>
             <Grid container>
               <Grid item xs={3}>
-                <Typography fontWeight={"bold"}>End date:</Typography>
+                <Typography fontWeight={"bold"}>
+                  {t(summaryForm.endDate)}:
+                </Typography>
               </Grid>
               <Grid xs={6} item>
                 <Typography>
@@ -60,7 +93,9 @@ const Details = ({
             </Grid>
             <Grid container>
               <Grid item xs={3}>
-                <Typography fontWeight={"bold"}>Utilization:</Typography>
+                <Typography fontWeight={"bold"}>
+                  {t(summaryForm.utilization)}:
+                </Typography>
               </Grid>
               <Grid xs={6} item>
                 <Typography>{summaryData.utilization} %</Typography>
@@ -68,7 +103,9 @@ const Details = ({
             </Grid>
             <Grid container>
               <Grid item xs={3}>
-                <Typography fontWeight={"bold"}>Team:</Typography>
+                <Typography fontWeight={"bold"}>
+                  {t(summaryForm.team)}:
+                </Typography>
               </Grid>
               <Grid xs={6} item>
                 <Select
@@ -95,54 +132,40 @@ const Details = ({
             </Grid>
             <Grid container mb={1.5}>
               <Grid item xs={6}>
-                <Typography fontWeight={"bold"}>No. of Resources:</Typography>
+                <Typography fontWeight={"bold"}>
+                  {t(summaryForm.noOfResources)}:
+                </Typography>
               </Grid>
               {existingODC.map((exOdc: any, index: number) => (
                 <Grid item xs={2} key={index}>
-                  <Typography>
-                    {calculateTotalResourcesOrLeaves(formState, exOdc.value)}
-                  </Typography>
+                  <Typography>{renderResourceOrLeaves(exOdc.value)}</Typography>
                 </Grid>
               ))}
             </Grid>
             <Grid container mb={1.5}>
               <Grid item xs={6}>
-                <Typography fontWeight={"bold"}>Leaves:</Typography>
+                <Typography fontWeight={"bold"}>
+                  {t(summaryForm.leaves)}:
+                </Typography>
               </Grid>
               {existingODC.map((exOdc: any, index: number) => (
                 <Grid item xs={2} key={index}>
                   <Typography>
-                    {calculateTotalResourcesOrLeaves(
-                      formState,
-                      exOdc.value,
-                      "annualLeaves",
-                    )}
+                    {renderResourceOrLeaves(exOdc.value, "annualLeaves")}
                   </Typography>
                 </Grid>
               ))}
             </Grid>
             <Grid container>
               <Grid item xs={6}>
-                <Typography fontWeight={"bold"}>Total man-days:</Typography>
+                <Typography fontWeight={"bold"}>
+                  {t(summaryTableColumns.totalManDays)}:
+                </Typography>
               </Grid>
               {existingODC.map((exOdc: any, index: number) => (
                 <Grid item xs={2} key={index}>
                   <Typography>
-                    {roundOffValue(
-                      calculateTotalManHoursByOdc(
-                        formState,
-                        calculateTotalResourcesOrLeaves(formState, exOdc.value),
-                        calculateTotalResourcesOrLeaves(
-                          formState,
-                          exOdc.value,
-                          "annualLeaves",
-                        ),
-                        exOdc.holidays.map(
-                          (item: { date: string }) => item.date,
-                        ),
-                      ) / 8,
-                      "days",
-                    )}
+                    {roundOffValue(renderTotalManHoursByODC(exOdc), "days")}
                   </Typography>
                 </Grid>
               ))}

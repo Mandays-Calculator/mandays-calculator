@@ -125,6 +125,20 @@ const LocalizationKey = {
     },
   },
   mandaysCalculator: {
+    errorMessages: {
+      resourceRequired: "mandaysCalculator.errorMessages.resource.required",
+      pleaseSelect1Resource:
+        "mandaysCalculator.errorMessages.resource.pleaseSelect1Resource",
+      exceedResources:
+        "mandaysCalculator.errorMessages.resource.exceedResources",
+      assignedResource:
+        "mandaysCalculator.errorMessages.resource.assignedResource",
+      pleaseSelect1Task:
+        "mandaysCalculator.errorMessages.task.pleaseSelect1Task",
+      utilRateValidValue:
+        "mandaysCalculator.errorMessages.summary.utilRateValidValue",
+      endDateisLater: "mandaysCalculator.errorMessages.summary.endDate",
+    },
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
@@ -177,6 +191,8 @@ const LocalizationKey = {
       team: "mandaysCalculator.summary.form.team",
       utilization: "mandaysCalculator.summary.form.utilization",
       startDate: "mandaysCalculator.summary.form.startDate",
+      noOfResources: "mandaysCalculator.summary.form.noOfResources",
+      leaves: "mandaysCalculator.summary.form.leaves",
       endDate: "mandaysCalculator.summary.form.endDate",
     },
     tasksTitle: "mandaysCalculator.tasks.title",

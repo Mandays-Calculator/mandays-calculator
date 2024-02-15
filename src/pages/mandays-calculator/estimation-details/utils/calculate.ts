@@ -1,10 +1,11 @@
-import { CommonOption } from "~/queries/common/options";
+import type { CommonOption } from "~/queries/common/options";
+import type { MandaysForm } from "../types";
+import type { Holiday } from "../summary/types";
 import {
   getAllHolidays,
   getTotalResourcesCount,
   networkDays,
 } from "../summary/utils/mapper";
-import type { MandaysForm } from "../types";
 
 interface CalculateTotalManHrsEstParams {
   resources: [string, number][];
@@ -219,7 +220,7 @@ export const calculateTotalManHoursByOdc = (
   formState: MandaysForm,
   numberOfResources: number,
   numberOfLeaves: number,
-  holidays: string[],
+  holidays: Holiday[],
 ): number => {
   const checkKeys = ["summary", "resources", "legends", "phases"];
   if (checkKeys.every((item) => formState.hasOwnProperty(item))) {

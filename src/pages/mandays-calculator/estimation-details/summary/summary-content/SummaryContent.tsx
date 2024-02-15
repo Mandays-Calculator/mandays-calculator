@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import type { ExistingODC, ResourceData } from "../types";
 import type { MandaysForm } from "../..";
 
 import { useMemo } from "react";
@@ -24,7 +25,7 @@ import {
 } from "../../utils/calculate";
 
 import Details from "../details";
-import { ResourceData, getExistingODC } from "../utils/mapper";
+import { getExistingODC } from "../utils/mapper";
 
 roundOffValue;
 
@@ -71,7 +72,7 @@ const SummaryContent = ({
 
   const totalMandaysUtilization = useMemo(() => {
     const calculatedValues =
-      existingODC.map((exODC: any) =>
+      existingODC.map((exODC: ExistingODC) =>
         roundOffValue(
           calculateTotalManHoursByOdc(
             formState,
@@ -81,18 +82,20 @@ const SummaryContent = ({
               exODC.value,
               "annualLeaves",
             ),
-            exODC.holidays.map((item: { date: string }) => item.date),
+            exODC.holidays.map((item: any) => item.date),
           ) / 8,
           "days",
         ),
       ) || [];
     return calculatedValues.length > 0
-      ? calculatedValues.reduce((a: number, b: number) => a + b)
+      ? calculatedValues.reduce(
+          (a: number | string, b: number | string) => Number(a) + Number(b),
+        )
       : 0;
   }, [existingODC, formState, totalManHours]);
 
   const OTDays = roundOffValue(
-    totalManHours / 8 - totalMandaysUtilization,
+    totalManHours / 8 - Number(totalMandaysUtilization),
     "days",
   );
 

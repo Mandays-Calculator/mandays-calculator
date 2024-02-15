@@ -7,7 +7,8 @@ export type EstimationParentFormKeys =
   | "summary"
   | "legends"
   | "phases"
-  | "tasks";
+  | "tasks"
+  | "resources";
 
 export interface EstimationDetailsProps {
   isExposed?: boolean;

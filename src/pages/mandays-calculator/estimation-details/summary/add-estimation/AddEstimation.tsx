@@ -1,5 +1,6 @@
 import { useEffect, type ReactElement } from "react";
 import type { MandaysForm } from "../..";
+import type { WrapperProps } from "../types";
 
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
@@ -20,13 +21,8 @@ import { useCommonOption } from "~/queries/common/options";
 import { ErrorMessage } from "~/components";
 import { getFieldError } from "~/components/form/utils";
 import { useUserAuth } from "~/hooks/user";
-import { parentFormKeys } from "../../utils/constants";
 
-interface WrapperProps {
-  title: ReactElement;
-  field: ReactElement;
-  fieldSize?: number;
-}
+import { parentFormKeys } from "../../utils/constants";
 
 const Wrapper = (props: WrapperProps): ReactElement => {
   const { title, field, fieldSize } = props;
@@ -58,13 +54,13 @@ const AddEstimation = (): ReactElement => {
   });
 
   useEffect(() => {
-    if (values.summary.teamId) {
+    if (values.summary?.teamId) {
       const teamName = teams.find(
-        (team) => team.value === values.summary.teamId,
+        (team) => team.value === values.summary?.teamId,
       );
       setFieldValue(`${formParentKey}.teamName`, teamName?.label);
     }
-  }, [values.summary.teamId]);
+  }, [values?.summary?.teamId]);
 
   return (
     <Stack direction="column" spacing={2} sx={{ pt: 5 }}>

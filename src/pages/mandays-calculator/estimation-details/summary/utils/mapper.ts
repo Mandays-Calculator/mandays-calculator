@@ -1,13 +1,6 @@
-import { CommonOption } from "~/queries/common/options";
-import { MandaysForm, Phase, Resource } from "../..";
-
-export interface ResourceData {
-  [careerStep: string]: {
-    odcId: string;
-    numberOfResources: number;
-    annualLeaves?: string;
-  }[];
-}
+import type { CommonOption } from "~/queries/common/options";
+import type { MandaysForm, Phase, Resource } from "../..";
+import type { ExistingODC, Holiday, ResourceData } from "../types";
 
 export const getAllOdcIds = (data: ResourceData): string[] => {
   const odcIds: Set<string> = new Set();
@@ -27,10 +20,12 @@ export const getAllOdcIds = (data: ResourceData): string[] => {
 export const getExistingODC = (
   ODCData: CommonOption,
   resoureState: ResourceData,
-): any => {
+): ExistingODC[] => {
   if (ODCData && resoureState) {
     const existingODC = getAllOdcIds(resoureState);
-    return ODCData.filter((odc) => existingODC.includes(odc.value));
+    return ODCData.filter((odc) =>
+      existingODC.includes(odc.value),
+    ) as ExistingODC[];
   }
   return [];
 };
@@ -46,7 +41,7 @@ export const getExistingODC = (
 export const networkDays = (
   startDate: Date | string | number,
   endDate: Date | string | number,
-  holidays: any,
+  holidays: Holiday[],
 ): number => {
   startDate = new Date(startDate);
   endDate = new Date(endDate);
@@ -65,7 +60,9 @@ export const networkDays = (
     if (
       currentDate.getDay() !== 0 &&
       currentDate.getDay() !== 6 &&
-      !holidays.includes(currentDate.toISOString().split("T")[0])
+      !holidays.includes(
+        currentDate.toISOString().split("T")[0] as unknown as Holiday,
+      )
     ) {
       workingDays++;
     }
@@ -80,7 +77,7 @@ export const networkDays = (
  * @returns
  */
 
-export const getAllHolidays = (odcs: any): any => {
+export const getAllHolidays = (odcs: CommonOption): Holiday[] => {
   let allHolidays: any = [];
   odcs.forEach((odc: any) => {
     if (odc.holidays && Array.isArray(odc.holidays)) {
