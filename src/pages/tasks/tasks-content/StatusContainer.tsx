@@ -89,7 +89,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
       if (task.status === Status.Backlog || task.status === Status.OnHold) {
         return (
           <Draggable key={task.id} draggableId={task?.id} index={index}>
-            {provided => (
+            {(provided) => (
               <Stack
                 ref={provided.innerRef}
                 {...provided.draggableProps}
@@ -129,7 +129,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         key={status}
       >
         <Droppable droppableId={status}>
-          {provided => (
+          {(provided) => (
             <StyledStatusContainer
               backgroundColor={status}
               ref={provided.innerRef}
@@ -152,7 +152,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         </Droppable>
       </Grid>
 
-      <ErrorMessage error={errorMessage} type='alert' />
+      <ErrorMessage error={errorMessage} type="alert" />
     </>
   );
 };
