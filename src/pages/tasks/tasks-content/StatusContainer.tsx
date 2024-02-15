@@ -22,6 +22,7 @@ import {
   StyledStatusTitle,
   calculateGridSize,
 } from "./style";
+import React from "react";
 
 interface StatusContainer {
   status: Status;
@@ -33,6 +34,8 @@ interface StatusContainer {
 }
 
 const StatusContainer = (props: StatusContainer): ReactElement => {
+  const scrollableNodeRef = React.createRef<HTMLDivElement>();
+
   const {
     status,
     teamId,
@@ -44,12 +47,13 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
   const { t } = useTranslation();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
+  const [page, setPage] = useState<number>(1);
 
-  const { data: tasksData } = useTasks(
+  const { data: tasksData, refetch } = useTasks(
     teamId,
     StatusValues[status].toString(),
-    "5",
-    "1",
+    "10",
+    page.toString(),
   );
 
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -61,9 +65,21 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         setErrorMessage("");
       }, 3000);
     } else if (tasksData) {
-      setTasks(tasksData.data);
+      setTasks((prevTasks) => [...prevTasks, ...tasksData.data]);
     }
   }, [tasksData]);
+
+  const handleScroll = (event: React.UIEvent) => {
+    const target = event.target as HTMLDivElement;
+
+    const isAtBottom =
+      target.scrollHeight - target.scrollTop === target.clientHeight;
+
+    if (isAtBottom) {
+      setPage((prevPage) => prevPage + 1);
+      refetch();
+    }
+  };
 
   // RENDER
   const renderStatusContainerHeader = (status: Status) => {
@@ -139,7 +155,13 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
               <Divider />
 
-              <SimpleBarReact style={{ maxHeight: "410px" }}>
+              <SimpleBarReact
+                style={{ maxHeight: "410px" }}
+                scrollableNodeProps={{
+                  ref: scrollableNodeRef,
+                  onScroll: handleScroll,
+                }}
+              >
                 {tasks.map((task, index) => (
                   <Stack key={`${status}_${task.name}_${index}`}>
                     {renderTaskDetailsCards(task, index)}
