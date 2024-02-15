@@ -66,8 +66,8 @@ export const withInputController = <Type extends FormikValues>(
       }
     };
 
-    const handleAutoComplete = (data: Type): void => {
-      form.setFieldValue(name, data);
+    const handleAutoComplete = (_: Type, value: SelectObject): void => {
+      form.setFieldValue(name, value);
     };
 
     const getInputChange = ():
