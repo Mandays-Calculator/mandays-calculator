@@ -1,4 +1,4 @@
-import { type ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import type { MandaysForm } from "../..";
 
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ import { useCommonOption } from "~/queries/common/options";
 import { ErrorMessage } from "~/components";
 import { getFieldError } from "~/components/form/utils";
 import { useUserAuth } from "~/hooks/user";
+import { parentFormKeys } from "../../utils/constants";
 
 interface WrapperProps {
   title: ReactElement;
@@ -46,14 +47,24 @@ const AddEstimation = (): ReactElement => {
     mandaysCalculator: { summaryForm },
   } = LocalizationKey;
 
-  const { t } = useTranslation();
-  const { errors } = useFormikContext<MandaysForm>();
+  const formParentKey = parentFormKeys.summary;
 
+  const { errors, values, setFieldValue } = useFormikContext<MandaysForm>();
+  const { t } = useTranslation();
   const user = useUserAuth();
 
   const teams = useCommonOption("team", {
     projectId: user.state.selectedProject?.value,
   });
+
+  useEffect(() => {
+    if (values.summary.teamId) {
+      const teamName = teams.find(
+        (team) => team.value === values.summary.teamId,
+      );
+      setFieldValue(`${formParentKey}.teamName`, teamName?.label);
+    }
+  }, [values.summary.teamId]);
 
   return (
     <Stack direction="column" spacing={2} sx={{ pt: 5 }}>
@@ -64,7 +75,7 @@ const AddEstimation = (): ReactElement => {
           </Typography>
         }
         fieldSize={4}
-        field={<ControlledTextField name="summary.estimationName" />}
+        field={<ControlledTextField name={`${formParentKey}.estimationName`} />}
       />
 
       <Wrapper
@@ -77,7 +88,7 @@ const AddEstimation = (): ReactElement => {
           <>
             <ControlledSelect
               options={teams}
-              name="summary.teamId"
+              name={`${formParentKey}.teamId`}
               error={!!getFieldError(errors.summary, "teamId")}
             />
             <ErrorMessage
@@ -99,7 +110,7 @@ const AddEstimation = (): ReactElement => {
               <Grid item sx={{ mr: 1 }}>
                 <ControlledNumberInput
                   placeholder=""
-                  name="summary.utilizationRate"
+                  name={`${formParentKey}.utilizationRate`}
                   error={!!errors.summary?.utilizationRate}
                 />
               </Grid>
@@ -127,7 +138,7 @@ const AddEstimation = (): ReactElement => {
         fieldSize={3}
         field={
           <ControlledDatePicker
-            name="summary.startDate"
+            name={`${formParentKey}.startDate`}
             helperText={getFieldError(errors.summary, "startDate")}
             error={!!getFieldError(errors.summary, "startDate")}
           />
@@ -142,7 +153,7 @@ const AddEstimation = (): ReactElement => {
         fieldSize={3}
         field={
           <ControlledDatePicker
-            name="summary.endDate"
+            name={`${formParentKey}.endDate`}
             error={!!getFieldError(errors.summary, "endDate")}
             helperText={getFieldError(errors.summary, "endDate")}
           />

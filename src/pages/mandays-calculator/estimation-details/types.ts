@@ -3,6 +3,11 @@ import { TasksResponse } from "~/api/mandays-est-tool";
 import { CommonOption } from "~/queries/common/options";
 
 export type EstimationDetailsMode = "edit" | "add" | "view";
+export type EstimationParentFormKeys =
+  | "summary"
+  | "legends"
+  | "phases"
+  | "tasks";
 
 export interface EstimationDetailsProps {
   isExposed?: boolean;
@@ -31,6 +36,7 @@ interface SummaryForm {
   utilizationRate: number | string;
   startDate: string;
   endDate: string;
+  teamName?: string; // for team name reference
 }
 
 export type LegendColumn = {

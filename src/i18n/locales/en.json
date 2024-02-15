@@ -303,6 +303,9 @@
       "excel": "Excel"
     },
     "estimation": {
+      "label": {
+        "loader": "Loading estimation .. "
+      },
       "title": "Estimation",
       "estimationColumns": {
         "taskName": "Task Name",

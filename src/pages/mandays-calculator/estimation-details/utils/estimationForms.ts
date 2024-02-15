@@ -30,7 +30,6 @@ const { common } = LocalizationKey;
  * Custom hooks for handling the Mandays form using Formik.
  * Provides a useFormik instance with initial values, validation schema, and submission callback.
  */
-
 export const useMandaysForm = ({
   getCareerStepSingleVal,
   onSubmit,

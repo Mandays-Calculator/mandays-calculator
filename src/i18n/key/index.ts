@@ -203,6 +203,7 @@ const LocalizationKey = {
     },
     estimation: {
       title: "mandaysCalculator.estimation.title",
+      labelLoader: "mandaysCalculator.estimation.label.loader",
       estimationColumns: {
         taskName: "mandaysCalculator.estimation.estimationColumns.taskName",
         complexity: "mandaysCalculator.estimation.estimationColumns.complexity",
