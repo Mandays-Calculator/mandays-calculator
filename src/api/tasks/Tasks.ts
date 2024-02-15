@@ -6,6 +6,7 @@ import type {
   CreateTask,
   UpdateTask,
   Team,
+  ForGetTags,
 } from ".";
 
 import { getEnvConfig } from "~/utils/env-config";
@@ -75,5 +76,13 @@ export const getTeam = async (userId: string): BaseResponse<Team[]> => {
   const response = await axios.get<Team[]>(
     `${apiBasePath}/users/${userId}/teams`,
   );
+  return response.data;
+};
+
+export const getTags = async (): BaseResponse<ForGetTags> => {
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+
+  const response = await axios.get(`${apiBasePath}/tags`);
+
   return response.data;
 };

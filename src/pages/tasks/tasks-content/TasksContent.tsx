@@ -9,7 +9,7 @@ import { SelectChangeEvent, Typography, Grid } from "@mui/material";
 import LocalizationKey from "~/i18n/key";
 
 import { useCommonOption } from "~/queries/common/options";
-import { useDeleteTask } from "~/queries/tasks/Tasks";
+import { useDeleteTask, useGetTags } from "~/queries/tasks/Tasks";
 import { Select, PageContainer } from "~/components";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
@@ -47,6 +47,12 @@ const TasksContent = (): ReactElement => {
   const userDetails = user;
   const complexities = useCommonOption("complexity");
   const functionalities = useCommonOption("function", "");
+  const tagsValue = useGetTags();
+
+  const tagsOption = tagsValue.data?.map((e) => ({
+    label: e.name,
+    value: e.id,
+  }));
 
   const [selectedTeam, setSelectedTeam] = useState<string | null>("");
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
@@ -159,7 +165,7 @@ const TasksContent = (): ReactElement => {
             // setTasks(updatedTasks);
             setSelectedTaskForDelete(null);
           },
-          onError: error => {
+          onError: (error) => {
             console.log(error);
           },
         },
@@ -178,6 +184,7 @@ const TasksContent = (): ReactElement => {
           teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
           functionalities={functionalities}
+          tagsOption={tagsOption as SelectObject[]}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
@@ -188,6 +195,7 @@ const TasksContent = (): ReactElement => {
           teamId={TEAM_ID} // change this when team api is integrated
           complexities={complexities}
           functionalities={functionalities}
+          tagsOption={tagsOption as SelectObject[]}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}
@@ -233,7 +241,7 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name='teamFilter'
+                name="teamFilter"
                 placeholder={t(LocalizationKey.tasks.teamFilter)}
                 options={teamOptions}
                 onChange={handleTeamFilter}
@@ -247,9 +255,9 @@ const TasksContent = (): ReactElement => {
           <TaskGridContainer
             container
             spacing={1}
-            justifyContent='space-between'
+            justifyContent="space-between"
           >
-            {Object.values(Status).map(status => {
+            {Object.values(Status).map((status) => {
               if (status !== Status.Invalid) {
                 return (
                   <StatusContainer

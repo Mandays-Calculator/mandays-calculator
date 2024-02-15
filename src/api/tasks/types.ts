@@ -122,12 +122,12 @@ export interface DeleteTaskId {
   id: string;
 }
 
-export interface GetFunctionality<T> {
-  data: T;
-  status: number;
+export interface ForGetFunctionality extends Omit<Functionality, "isActive"> {
+  id: string;
+  active: boolean;
 }
 
-export interface ForGetFunctionality extends Omit<Functionality, "isActive"> {
+export interface ForGetTags extends Omit<Tag[], "isActive"> {
   id: string;
   active: boolean;
 }
