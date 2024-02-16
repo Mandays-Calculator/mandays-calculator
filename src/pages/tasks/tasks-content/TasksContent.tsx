@@ -30,10 +30,11 @@ import {
 import StatusContainer from "./StatusContainer";
 
 const teamOptions = [
-  { value: "MC", label: "MC" },
-  { value: "BME", label: "BME" },
-  { value: "eMPF", label: "eMPF" },
-  { value: "CMT", label: "CMT" },
+  { value: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2", label: "DEV" },
+  { value: "8a457495-c67f-11ee-94d4-a0291978916e", label: "CMT" },
+  { value: "8a44ceed-c67f-11ee-94d4-a0291978916e", label: "eMPF" },
+  { value: "8a4447d4-c67f-11ee-94d4-a0291978916e", label: "BME" },
+  { value: "8a43b748-c67f-11ee-94d4-a0291978916e", label: "MC" },
 ];
 
 const TEAM_ID = "a2eb9f01-6e4e-11ee-8624-a0291936d1c2";
@@ -50,6 +51,7 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const userDetails = user;
+  // const teams = useCommonOption("team_userid", userDetails?.id);
   const complexities = useCommonOption("complexity");
   const functionalities = useCommonOption("function", functionalityParam);
   const tagsValue = useGetTags();
@@ -59,7 +61,7 @@ const TasksContent = (): ReactElement => {
     value: e.id,
   }));
 
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(""); // will be updated once the team is integrated
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(TEAM_ID); // will be updated once the team is integrated
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
     null,
   );

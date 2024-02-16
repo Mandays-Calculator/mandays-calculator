@@ -19,7 +19,7 @@ import { useQuery, UseQueryResult } from "react-query";
 
 import { getUserList } from "~/api/user-management/UserManagement";
 import type { UserListResponse } from "~/api/user-management";
-import { getFunctionality } from "~/api/tasks/Tasks";
+import { getFunctionality, getTeamsByUserId } from "~/api/tasks/Tasks";
 import { getComplexities } from "~/api/complexity";
 import { getProjects } from "~/api/projects";
 import { getODC } from "~/api/odc/ODC";
@@ -80,6 +80,11 @@ const transformDataToOption = (
           value: item.projectId,
         }));
       case "function":
+        return data.map((item: CommonResponseDataObj) => ({
+          label: item.name,
+          value: item.id,
+        }));
+      case "team_userid":
         return data.map((item: CommonResponseDataObj) => ({
           label: item.name,
           value: item.id,
@@ -172,6 +177,15 @@ const getCommonOption = <T>(
       return useQuery<Team[], Error>(
         ["teams", params],
         () => getTeams(params),
+        {
+          staleTime: Infinity,
+          cacheTime: cacheTime,
+        },
+      );
+    case "team_userid":
+      return useQuery(
+        ["getTeamsByUserId", params],
+        () => getTeamsByUserId(params),
         {
           staleTime: Infinity,
           cacheTime: cacheTime,

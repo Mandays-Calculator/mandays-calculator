@@ -71,12 +71,15 @@ export const getFunctionality = async (
   return response.data;
 };
 
-export const getTeam = async (userId: string): BaseResponse<Team[]> => {
+export const getTeamsByUserId = async (
+  userId: string,
+): BaseResponse<Team[]> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
 
   const response = await axios.get<Team[]>(
     `${apiBasePath}/users/${userId}/teams`,
   );
+
   return response.data;
 };
 

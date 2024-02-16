@@ -19,7 +19,7 @@ export interface Team {
   id: string;
   name?: string;
   projectId?: string;
-  isActive?: boolean;
+  active?: boolean;
   createdDate?: string | null;
   lastUpdatedDate?: string | null;
 }

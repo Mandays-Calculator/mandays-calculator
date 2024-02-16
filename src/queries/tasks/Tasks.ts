@@ -6,7 +6,6 @@ import type {
   TaskResponse,
   CreateTask,
   UpdateTask,
-  Team,
   ForGetTags,
 } from "~/api/tasks";
 
@@ -22,7 +21,6 @@ import {
   deleteTask,
   postTask,
   getTasks,
-  getTeam,
   getTags,
 } from "~/api/tasks/Tasks";
 
@@ -65,15 +63,7 @@ export const useDeleteTask = (): UseMutationResult<
 > => {
   return useMutation<TaskResponse, AxiosError, DeleteTaskId>(
     "deleteTask",
-    (params) => deleteTask(params.id),
-  );
-};
-
-export const useGetTeam = (
-  userId: string,
-): UseQueryResult<QueryResponse<Team[]>, AxiosError> => {
-  return useQuery<QueryResponse<Team[]>, AxiosError>(["getTeam", userId], () =>
-    getTeam(userId),
+    params => deleteTask(params.id),
   );
 };
 
