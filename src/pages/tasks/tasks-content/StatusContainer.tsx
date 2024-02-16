@@ -1,9 +1,8 @@
 import type { AllTasksResponse } from "~/api/tasks";
-import type { ReactElement } from "react";
+import React, { useEffect, useRef, useState, ReactElement } from "react";
 
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 
 import { Divider, Grid, IconButton, Stack } from "@mui/material";
 import "simplebar-react/dist/simplebar.min.css";
@@ -22,7 +21,6 @@ import {
   calculateGridSize,
   StyledSimpleBar,
 } from "./style";
-import React from "react";
 
 interface StatusContainer {
   status: Status;
@@ -58,6 +56,10 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const [loading, setLoading] = useState(false);
+
+  const tasksDataRef = useRef(tasksData);
+
   useEffect(() => {
     if (tasksData && tasksData.hasOwnProperty("errorCode")) {
       setErrorMessage(t(LocalizationKey.tasks.errorMessage.fetch));
@@ -65,21 +67,44 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         setErrorMessage("");
       }, 3000);
     } else if (tasksData) {
-      setTasks(prevTasks => [...prevTasks, ...tasksData.data]);
+      setTasks((prevTasks) => [...prevTasks, ...tasksData.data]);
     }
+  }, [tasksData]);
+
+  useEffect(() => {
+    tasksDataRef.current = tasksData;
   }, [tasksData]);
 
   const handleScroll = (event: React.UIEvent) => {
     const target = event.target as HTMLDivElement;
 
     const isAtBottom =
-      target.scrollHeight - target.scrollTop === target.clientHeight;
+      target.scrollHeight - target.scrollTop <= target.clientHeight + 100;
 
-    if (isAtBottom) {
-      setPage(prevPage => prevPage + 1);
-      refetch();
+    if (tasksDataRef.current !== undefined) {
+      if (
+        isAtBottom &&
+        !loading &&
+        page < tasksDataRef.current?.page.lastPage
+      ) {
+        setLoading(true);
+        setPage((prevPage) => prevPage + 1);
+      }
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (tasksDataRef.current !== undefined) {
+        if (page > 1 && page <= tasksDataRef.current?.page.lastPage) {
+          await refetch();
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [page, refetch]);
 
   // RENDER
   const renderStatusContainerHeader = (status: Status) => {
@@ -105,7 +130,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
       if (task.status === Status.Backlog || task.status === Status.OnHold) {
         return (
           <Draggable key={task.id} draggableId={task?.id} index={index}>
-            {provided => (
+            {(provided) => (
               <Stack
                 ref={provided.innerRef}
                 {...provided.draggableProps}
@@ -147,7 +172,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         key={status}
       >
         <Droppable droppableId={status}>
-          {provided => (
+          {(provided) => (
             <StyledStatusContainer
               backgroundColor={status}
               ref={provided.innerRef}
@@ -175,7 +200,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         </Droppable>
       </Grid>
 
-      <ErrorMessage error={errorMessage} type='alert' />
+      <ErrorMessage error={errorMessage} type="alert" />
     </>
   );
 };
