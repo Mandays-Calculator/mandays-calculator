@@ -272,7 +272,20 @@ export const NoDataContainer = styled(Stack)({
 
 export const StyledLink = styled(Link)({ cursor: "pointer" });
 
-export const StyledSimpleBar = styled(SimpleBarReact)({ maxHeight: "410px" });
+export const StyledSimpleBar = styled(SimpleBarReact)({
+  [theme.breakpoints.up("sm")]: {
+    maxHeight: "180px", // Adjust the value for small screens
+  },
+  [theme.breakpoints.up("md")]: {
+    maxHeight: "240px", // Default value for medium screens
+  },
+  [theme.breakpoints.up("lg")]: {
+    maxHeight: "320px", // Adjust the value for large screens
+  },
+  [theme.breakpoints.up("xl")]: {
+    maxHeight: "420px", // Adjust the value for extra-large screens
+  },
+});
 
 export const styledScrollbar = {
   "*::-webkit-scrollbar": {

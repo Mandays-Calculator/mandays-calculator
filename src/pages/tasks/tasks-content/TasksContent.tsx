@@ -39,7 +39,7 @@ const teamOptions = [
 const TEAM_ID = "a2eb9f01-6e4e-11ee-8624-a0291936d1c2";
 
 const functionalityParam = {
-  teamId: TEAM_ID,
+  teamId: TEAM_ID, // will be updated once the team is integrated
   name: "",
 };
 
@@ -54,12 +54,12 @@ const TasksContent = (): ReactElement => {
   const functionalities = useCommonOption("function", functionalityParam);
   const tagsValue = useGetTags();
 
-  const tagsOption = tagsValue.data?.map((e) => ({
+  const tagsOption = tagsValue.data?.map(e => ({
     label: e.name,
     value: e.id,
   }));
 
-  const [selectedTeam, setSelectedTeam] = useState<string | null>("");
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(""); // will be updated once the team is integrated
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
     null,
   );
@@ -170,7 +170,7 @@ const TasksContent = (): ReactElement => {
             // setTasks(updatedTasks);
             setSelectedTaskForDelete(null);
           },
-          onError: (error) => {
+          onError: error => {
             console.log(error);
           },
         },
@@ -218,25 +218,30 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderNoTask = () => {
-    return (
-      <NoDataContainer>
-        <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
-        <Typography variant="h5" fontWeight="bold">
-          {t(LocalizationKey.tasks.errorMessage.error)}
-        </Typography>
-        <Typography variant="body2" fontWeight="bold">
-          {t(LocalizationKey.tasks.errorMessage.started)}
-          <StyledLink
-            underline="hover"
-            variant="body2"
-            fontWeight="bold"
-            onClick={() => handleCreateModalState()}
-          >
-            {t(LocalizationKey.tasks.errorMessage.created)}
-          </StyledLink>
-        </Typography>
-      </NoDataContainer>
-    );
+    // will update once api is integrated
+    if (TEAM_ID.length === 0) {
+      return (
+        <NoDataContainer>
+          <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
+          <Typography variant='h5' fontWeight='bold'>
+            {t(LocalizationKey.tasks.errorMessage.error)}
+          </Typography>
+          <Typography variant='body2' fontWeight='bold'>
+            {t(LocalizationKey.tasks.errorMessage.started)}
+            <StyledLink
+              underline='hover'
+              variant='body2'
+              fontWeight='bold'
+              onClick={() => handleCreateModalState()}
+            >
+              {t(LocalizationKey.tasks.errorMessage.created)}
+            </StyledLink>
+          </Typography>
+        </NoDataContainer>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -246,7 +251,7 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name="teamFilter"
+                name='teamFilter'
                 placeholder={t(LocalizationKey.tasks.teamFilter)}
                 options={teamOptions}
                 onChange={handleTeamFilter}
@@ -260,9 +265,9 @@ const TasksContent = (): ReactElement => {
           <TaskGridContainer
             container
             spacing={1}
-            justifyContent="space-between"
+            justifyContent='space-between'
           >
-            {Object.values(Status).map((status) => {
+            {Object.values(Status).map(status => {
               if (status !== Status.Invalid) {
                 return (
                   <StatusContainer
@@ -277,7 +282,6 @@ const TasksContent = (): ReactElement => {
               }
             })}
           </TaskGridContainer>
-
           {renderNoTask()}
         </PageContainer>
       </DragDropContext>

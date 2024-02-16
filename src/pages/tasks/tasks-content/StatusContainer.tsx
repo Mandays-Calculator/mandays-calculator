@@ -158,7 +158,6 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
               <Divider />
 
               <StyledSimpleBar
-                style={{ maxHeight: "410px" }}
                 scrollableNodeProps={{
                   ref: scrollableNodeRef,
                   onScroll: handleScroll,
