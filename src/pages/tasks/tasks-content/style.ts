@@ -283,7 +283,7 @@ export const StyledSimpleBar = styled(SimpleBarReact)({
     maxHeight: "320px", // Adjust the value for large screens
   },
   [theme.breakpoints.up("xl")]: {
-    maxHeight: "420px", // Adjust the value for extra-large screens
+    maxHeight: "410px", // Adjust the value for extra-large screens
   },
 });
 
