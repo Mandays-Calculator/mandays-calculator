@@ -113,6 +113,10 @@ export interface UpdateTask {
   complexityId: string;
 }
 
+export interface FucntionalityParams {
+  teamId: string;
+  name: string;
+}
 export interface TaskResponse extends GenericErrorResponse {
   status: number;
   data: boolean;

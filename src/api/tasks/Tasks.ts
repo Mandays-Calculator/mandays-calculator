@@ -7,6 +7,7 @@ import type {
   UpdateTask,
   Team,
   ForGetTags,
+  FucntionalityParams,
 } from ".";
 
 import { getEnvConfig } from "~/utils/env-config";
@@ -61,11 +62,11 @@ export const deleteTask = async (id: string): BaseResponse<TaskResponse> => {
 };
 
 export const getFunctionality = async (
-  name?: string,
+  params: FucntionalityParams,
 ): BaseResponse<ForGetFunctionality> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
   const response = await axios.get<ForGetFunctionality[]>(
-    `${apiBasePath}/functionalities?name=${name}`,
+    `${apiBasePath}/functionalities?teamId=${params.teamId}&name=${params.name}`,
   );
   return response.data;
 };

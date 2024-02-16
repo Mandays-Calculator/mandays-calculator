@@ -38,6 +38,11 @@ const teamOptions = [
 
 const TEAM_ID = "a2eb9f01-6e4e-11ee-8624-a0291936d1c2";
 
+const functionalityParam = {
+  teamId: TEAM_ID,
+  name: "",
+};
+
 const TasksContent = (): ReactElement => {
   const { t } = useTranslation();
 
@@ -46,7 +51,7 @@ const TasksContent = (): ReactElement => {
   } = useUserAuth();
   const userDetails = user;
   const complexities = useCommonOption("complexity");
-  const functionalities = useCommonOption("function", "");
+  const functionalities = useCommonOption("function", functionalityParam);
   const tagsValue = useGetTags();
 
   const tagsOption = tagsValue.data?.map((e) => ({
@@ -216,15 +221,15 @@ const TasksContent = (): ReactElement => {
     return (
       <NoDataContainer>
         <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
-        <Typography variant='h5' fontWeight='bold'>
+        <Typography variant="h5" fontWeight="bold">
           {t(LocalizationKey.tasks.errorMessage.error)}
         </Typography>
-        <Typography variant='body2' fontWeight='bold'>
+        <Typography variant="body2" fontWeight="bold">
           {t(LocalizationKey.tasks.errorMessage.started)}
           <StyledLink
-            underline='hover'
-            variant='body2'
-            fontWeight='bold'
+            underline="hover"
+            variant="body2"
+            fontWeight="bold"
             onClick={() => handleCreateModalState()}
           >
             {t(LocalizationKey.tasks.errorMessage.created)}
