@@ -56,7 +56,7 @@ const TasksContent = (): ReactElement => {
   const functionalities = useCommonOption("function", functionalityParam);
   const tagsValue = useGetTags();
 
-  const tagsOption = tagsValue.data?.map(e => ({
+  const tagsOption = tagsValue.data?.map((e) => ({
     label: e.name,
     value: e.id,
   }));
@@ -172,7 +172,7 @@ const TasksContent = (): ReactElement => {
             // setTasks(updatedTasks);
             setSelectedTaskForDelete(null);
           },
-          onError: error => {
+          onError: (error) => {
             console.log(error);
           },
         },
@@ -225,15 +225,15 @@ const TasksContent = (): ReactElement => {
       return (
         <NoDataContainer>
           <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
-          <Typography variant='h5' fontWeight='bold'>
+          <Typography variant="h5" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
-          <Typography variant='body2' fontWeight='bold'>
+          <Typography variant="body2" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.started)}
             <StyledLink
-              underline='hover'
-              variant='body2'
-              fontWeight='bold'
+              underline="hover"
+              variant="body2"
+              fontWeight="bold"
               onClick={() => handleCreateModalState()}
             >
               {t(LocalizationKey.tasks.errorMessage.created)}
@@ -253,7 +253,7 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name='teamFilter'
+                name="teamFilter"
                 placeholder={t(LocalizationKey.tasks.teamFilter)}
                 options={teamOptions}
                 onChange={handleTeamFilter}
@@ -267,12 +267,13 @@ const TasksContent = (): ReactElement => {
           <TaskGridContainer
             container
             spacing={1}
-            justifyContent='space-between'
+            justifyContent="space-between"
           >
-            {Object.values(Status).map(status => {
+            {Object.values(Status).map((status, index) => {
               if (status !== Status.Invalid) {
                 return (
                   <StatusContainer
+                    key={index}
                     status={status}
                     teamId={TEAM_ID}
                     handleViewDetailsModalState={handleViewDetailsModalState}
