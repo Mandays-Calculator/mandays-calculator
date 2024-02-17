@@ -73,12 +73,8 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         setErrorMessage("");
       }, 3000);
     } else if (tasksData) {
-      setTasks((prevTasks) => [...prevTasks, ...tasksData.data]);
+      setTasks(prevTasks => [...prevTasks, ...tasksData.data]);
     }
-  }, [tasksData]);
-
-  useEffect(() => {
-    tasksDataRef.current = tasksData;
   }, [tasksData]);
 
   useEffect(() => {
@@ -99,7 +95,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         page < tasksDataRef.current?.page.lastPage
       ) {
         setLoading(true);
-        setPage((prevPage) => prevPage + 1);
+        setPage(prevPage => prevPage + 1);
       }
     }
   };
@@ -141,7 +137,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
       if (task.status === Status.Backlog || task.status === Status.OnHold) {
         return (
           <Draggable key={task.id} draggableId={task?.id} index={index}>
-            {(provided) => (
+            {provided => (
               <Stack
                 ref={provided.innerRef}
                 {...provided.draggableProps}
@@ -183,7 +179,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         key={status}
       >
         <Droppable droppableId={status}>
-          {(provided) => (
+          {provided => (
             <StyledStatusContainer
               backgroundColor={status}
               ref={provided.innerRef}
@@ -211,7 +207,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         </Droppable>
       </Grid>
 
-      <ErrorMessage error={errorMessage} type="alert" />
+      <ErrorMessage error={errorMessage} type='alert' />
     </>
   );
 };
