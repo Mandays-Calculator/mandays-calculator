@@ -74,7 +74,7 @@ export const getFunctionality = async (
 export const getTeamsByUserId = async (
   userId: string,
 ): BaseResponse<Team[]> => {
-  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+  const { apiBasePath } = getEnvConfig();
 
   const response = await axios.get<Team[]>(
     `${apiBasePath}/users/${userId}/teams`,

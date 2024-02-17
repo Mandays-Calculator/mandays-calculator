@@ -29,20 +29,7 @@ import {
 } from "./style";
 import StatusContainer from "./StatusContainer";
 
-const teamOptions = [
-  { value: "a2eb9f01-6e4e-11ee-8624-a0291936d1c2", label: "DEV" },
-  { value: "8a457495-c67f-11ee-94d4-a0291978916e", label: "CMT" },
-  { value: "8a44ceed-c67f-11ee-94d4-a0291978916e", label: "eMPF" },
-  { value: "8a4447d4-c67f-11ee-94d4-a0291978916e", label: "BME" },
-  { value: "8a43b748-c67f-11ee-94d4-a0291978916e", label: "MC" },
-];
-
 const TEAM_ID = "a2eb9f01-6e4e-11ee-8624-a0291936d1c2";
-
-const functionalityParam = {
-  teamId: TEAM_ID, // will be updated once the team is integrated
-  name: "",
-};
 
 const TasksContent = (): ReactElement => {
   const { t } = useTranslation();
@@ -51,9 +38,14 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const userDetails = user;
-  // const teams = useCommonOption("team_userid", userDetails?.id);
+  const teams = useCommonOption("team_userid", userDetails?.id);
   const complexities = useCommonOption("complexity");
-  const functionalities = useCommonOption("function", functionalityParam);
+  const [selectedTeam, setSelectedTeam] = useState<string>(TEAM_ID);
+
+  const functionalities = useCommonOption("function", {
+    teamId: selectedTeam,
+    name: "",
+  });
   const tagsValue = useGetTags();
 
   const tagsOption = tagsValue.data?.map(e => ({
@@ -61,7 +53,6 @@ const TasksContent = (): ReactElement => {
     value: e.id,
   }));
 
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(TEAM_ID); // will be updated once the team is integrated
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
     null,
   );
@@ -188,7 +179,7 @@ const TasksContent = (): ReactElement => {
       <>
         <CreateOrUpdateTask
           open={createModalOpen}
-          teamId={TEAM_ID} // change this when team api is integrated
+          teamId={selectedTeam}
           complexities={complexities}
           functionalities={functionalities}
           tagsOption={tagsOption as SelectObject[]}
@@ -199,7 +190,7 @@ const TasksContent = (): ReactElement => {
         <CreateOrUpdateTask
           open={updateModalOpen}
           update
-          teamId={TEAM_ID} // change this when team api is integrated
+          teamId={selectedTeam}
           complexities={complexities}
           functionalities={functionalities}
           tagsOption={tagsOption as SelectObject[]}
@@ -255,7 +246,7 @@ const TasksContent = (): ReactElement => {
               <Select
                 name='teamFilter'
                 placeholder={t(LocalizationKey.tasks.teamFilter)}
-                options={teamOptions}
+                options={teams}
                 onChange={handleTeamFilter}
                 value={selectedTeam}
               />
@@ -274,7 +265,7 @@ const TasksContent = (): ReactElement => {
                 return (
                   <StatusContainer
                     status={status}
-                    teamId={TEAM_ID}
+                    teamId={selectedTeam}
                     handleViewDetailsModalState={handleViewDetailsModalState}
                     handleCreateModalState={handleCreateModalState}
                     handleUpdateModalState={handleUpdateModalState}

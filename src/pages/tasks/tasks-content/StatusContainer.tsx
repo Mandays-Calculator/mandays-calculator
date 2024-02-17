@@ -59,6 +59,12 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
+    setTasks([]);
+    setPage(1);
+    refetch();
+  }, [teamId]);
+
+  useEffect(() => {
     if (tasksData && tasksData.hasOwnProperty("errorCode")) {
       setErrorMessage(t(LocalizationKey.tasks.errorMessage.fetch));
       setTimeout(() => {
@@ -69,6 +75,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
     }
   }, [tasksData]);
 
+  // OTHERS
   const handleScroll = (event: React.UIEvent) => {
     const target = event.target as HTMLDivElement;
 
