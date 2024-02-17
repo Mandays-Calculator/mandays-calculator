@@ -4,6 +4,7 @@ import { GenericErrorResponse } from "../types";
 export interface QueryResponse<T> {
   status: number;
   data: T;
+  page: Page;
 }
 
 export interface Functionality {
@@ -69,6 +70,12 @@ export interface Complexity {
   lastUpdatedDate?: string;
 }
 
+export interface Page {
+  currentPage: number;
+  maxResults: number;
+  totalCount: number;
+  lastPage: number;
+}
 export interface AllTasksResponse {
   id?: string;
   name: string;
@@ -86,6 +93,7 @@ export interface AllTasksResponse {
   createdDate?: string;
   lastUpdatedDate?: string;
   sprint: string;
+  page?: Page;
 }
 
 export interface CreateOrUpdateFunctionality {

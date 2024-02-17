@@ -40,19 +40,19 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
     >
       <GridRelativeContainer container spacing={2} display={"flex"}>
         <Grid item xs={12}>
-          <TaskDetailsCardDetails type='title'>
+          <TaskDetailsCardDetails type="title">
             {data?.name}
           </TaskDetailsCardDetails>
         </Grid>
 
         <Grid item xs={12}>
-          <TaskDetailsCardDetails type='description'>
+          <TaskDetailsCardDetails type="description">
             {data?.description}
           </TaskDetailsCardDetails>
         </Grid>
 
         <Grid item xs={12}>
-          <TaskDetailsCardDetails type='createDate'>
+          <TaskDetailsCardDetails type="createDate">
             <StyledEventIcon />
             {data?.createdDate ? moment(data.createdDate).format("L") : ""}
           </TaskDetailsCardDetails>
@@ -60,7 +60,9 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
 
         <Grid item xs={12}>
           <Typography>
-            {t(LocalizationKey.tasks.taskDetails.sprint) + data?.sprint}
+            {data?.sprint
+              ? t(LocalizationKey.tasks.taskDetails.sprint) + data.sprint
+              : t(LocalizationKey.tasks.taskDetails.sprint) + ""}
           </Typography>
         </Grid>
 
@@ -71,16 +73,16 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           </Typography>
         </Grid>
 
-        <Grid item container spacing={1} alignItems='center' xs={10}>
+        <Grid item container spacing={1} alignItems="center" xs={10}>
           <Grid item>
-            <CommentContainer display='flex' alignItems='center'>
+            <CommentContainer display="flex" alignItems="center">
               <StyledTextsmsOutlinedIcon />
               {data?.comments?.length}
             </CommentContainer>
           </Grid>
 
           {data?.tags?.map((tag, index) => (
-            <Grid item>
+            <Grid item key={index}>
               <TaskTags status={tag?.name} key={index}>
                 {tag?.name}
               </TaskTags>
@@ -90,16 +92,16 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
 
         <TaskActionContainer status={data?.status ?? Status.Backlog}>
           <EditOutlinedIcon
-            color='action'
-            onClick={e => {
+            color="action"
+            onClick={(e) => {
               e.stopPropagation();
               handleEdit(data);
             }}
           />
 
           <DeleteOutlinedIcon
-            color='error'
-            onClick={e => {
+            color="error"
+            onClick={(e) => {
               e.stopPropagation();
               onDelete(data);
             }}
