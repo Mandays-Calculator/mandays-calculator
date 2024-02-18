@@ -7,6 +7,7 @@ import type {
   CreateTask,
   UpdateTask,
   ForGetTags,
+  UpdateTaskStatus,
 } from "~/api/tasks";
 
 import {
@@ -22,6 +23,7 @@ import {
   postTask,
   getTasks,
   getTags,
+  patchUpdateTaskStatus,
 } from "~/api/tasks/Tasks";
 
 export const useTasks = (
@@ -53,6 +55,17 @@ export const useUpdateTask = (): UseMutationResult<
   return useMutation<QueryResponse<AllTasksResponse>, AxiosError, UpdateTask>(
     "putUpdateTask",
     putUpdateTask,
+  );
+};
+
+export const useUpdateTaskStatus = (): UseMutationResult<
+  BaseResponse<TaskResponse>,
+  AxiosError,
+  UpdateTaskStatus
+> => {
+  return useMutation<BaseResponse<TaskResponse>, AxiosError, UpdateTaskStatus>(
+    "patchUpdateTaskStatus",
+    patchUpdateTaskStatus,
   );
 };
 

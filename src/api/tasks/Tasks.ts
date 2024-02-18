@@ -8,6 +8,7 @@ import type {
   Team,
   ForGetTags,
   FucntionalityParams,
+  UpdateTaskStatus,
 } from ".";
 
 import { getEnvConfig } from "~/utils/env-config";
@@ -48,6 +49,19 @@ export const putUpdateTask = async (
     `${apiBasePath}/tasks/${param.id}`,
     param,
   );
+  return response.data;
+};
+
+export const patchUpdateTaskStatus = async (
+  param: UpdateTaskStatus,
+): BaseResponse<TaskResponse> => {
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+
+  const response = await axios.patch<TaskResponse>(
+    `${apiBasePath}/tasks/${param.id}`,
+    param.body,
+  );
+
   return response.data;
 };
 

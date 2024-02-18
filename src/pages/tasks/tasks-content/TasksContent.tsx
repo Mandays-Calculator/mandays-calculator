@@ -1,4 +1,4 @@
-import type { AllTasksResponse } from "~/api/tasks/types";
+import type { AllTasksResponse, UpdateTaskStatus } from "~/api/tasks/types";
 import type { ReactElement } from "react";
 
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -9,14 +9,18 @@ import { SelectChangeEvent, Typography, Grid } from "@mui/material";
 import LocalizationKey from "~/i18n/key";
 
 import { useCommonOption } from "~/queries/common/options";
-import { useDeleteTask, useGetTags } from "~/queries/tasks/Tasks";
+import {
+  useDeleteTask,
+  useGetTags,
+  useUpdateTaskStatus,
+} from "~/queries/tasks/Tasks";
 import { Select, PageContainer } from "~/components";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
 
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import ViewTaskDetails from "./ViewTaskDetails";
-import { Status } from "./utils";
+import { Status, StatusValues } from "./utils";
 
 import NoTask from "~/assets/img/empty_tasks.png";
 
@@ -38,38 +42,48 @@ const TasksContent = (): ReactElement => {
     state: { user },
   } = useUserAuth();
   const userDetails = user;
+
+  // DROPDOWN OPTIONS
   const teams = useCommonOption("team_userid", userDetails?.id);
-  const complexities = useCommonOption("complexity");
   const [selectedTeam, setSelectedTeam] = useState<string>(TEAM_ID);
 
+  const complexities = useCommonOption("complexity");
   const functionalities = useCommonOption("function", {
     teamId: selectedTeam,
     name: "",
   });
-  const tagsValue = useGetTags();
 
-  const tagsOption = tagsValue.data?.map((e) => ({
+  const tagsValue = useGetTags();
+  const tagsOption = tagsValue.data?.map(e => ({
     label: e.name,
     value: e.id,
   }));
 
+  // TASK SELECTION
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
     null,
   );
   const [selectedTaskForDelete, setSelectedTaskForDelete] =
     useState<AllTasksResponse | null>(null);
+  const [hasDraggedStatus, setHasDraggedStatus] = useState<boolean>(false);
 
+  // MODALS
   const [viewDetailsModalOpen, setViewDetailsModalOpen] =
     useState<boolean>(false);
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
+  const updateStatusMutation = useUpdateTaskStatus();
   const deleteMutation = useDeleteTask();
 
   // OTHERS
   const handleTeamFilter = (e: SelectChangeEvent<unknown>) => {
     setSelectedTeam(e.target.value as string);
+  };
+
+  const resetHasDraggedStatus = () => {
+    setHasDraggedStatus(false);
   };
 
   // DRAG N DROP
@@ -82,6 +96,12 @@ const TasksContent = (): ReactElement => {
 
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
+    const updateStatus: UpdateTaskStatus = {
+      id: draggableId,
+      body: {
+        statusId: StatusValues[destinationStatus as Status],
+      },
+    };
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -89,7 +109,16 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggableId) {
-        // Add Change Status
+        updateStatusMutation.mutate(updateStatus, {
+          onSuccess: async data => {
+            if (await data) {
+              setHasDraggedStatus(true);
+            }
+          },
+          onError: error => {
+            console.log(error);
+          },
+        });
       }
     }
   };
@@ -163,7 +192,7 @@ const TasksContent = (): ReactElement => {
             // setTasks(updatedTasks);
             setSelectedTaskForDelete(null);
           },
-          onError: (error) => {
+          onError: error => {
             console.log(error);
           },
         },
@@ -216,15 +245,15 @@ const TasksContent = (): ReactElement => {
       return (
         <NoDataContainer>
           <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
-          <Typography variant="h5" fontWeight="bold">
+          <Typography variant='h5' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
-          <Typography variant="body2" fontWeight="bold">
+          <Typography variant='body2' fontWeight='bold'>
             {t(LocalizationKey.tasks.errorMessage.started)}
             <StyledLink
-              underline="hover"
-              variant="body2"
-              fontWeight="bold"
+              underline='hover'
+              variant='body2'
+              fontWeight='bold'
               onClick={() => handleCreateModalState()}
             >
               {t(LocalizationKey.tasks.errorMessage.created)}
@@ -244,7 +273,7 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name="teamFilter"
+                name='teamFilter'
                 placeholder={t(LocalizationKey.tasks.teamFilter)}
                 options={teams}
                 onChange={handleTeamFilter}
@@ -258,7 +287,7 @@ const TasksContent = (): ReactElement => {
           <TaskGridContainer
             container
             spacing={1}
-            justifyContent="space-between"
+            justifyContent='space-between'
           >
             {Object.values(Status).map((status, index) => {
               if (status !== Status.Invalid) {
@@ -267,6 +296,8 @@ const TasksContent = (): ReactElement => {
                     key={index}
                     status={status}
                     teamId={selectedTeam}
+                    hasDraggedStatus={hasDraggedStatus}
+                    resetHasDraggedStatus={resetHasDraggedStatus}
                     handleViewDetailsModalState={handleViewDetailsModalState}
                     handleCreateModalState={handleCreateModalState}
                     handleUpdateModalState={handleUpdateModalState}

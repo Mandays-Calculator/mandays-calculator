@@ -121,6 +121,13 @@ export interface UpdateTask {
   complexityId: string;
 }
 
+export interface UpdateTaskStatus {
+  id: string;
+  body: {
+    statusId: number;
+  };
+}
+
 export interface FucntionalityParams {
   teamId: string;
   name: string;

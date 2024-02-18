@@ -25,6 +25,8 @@ import {
 interface StatusContainer {
   status: Status;
   teamId: string;
+  hasDraggedStatus: boolean;
+  resetHasDraggedStatus: () => void;
   handleViewDetailsModalState: (task: AllTasksResponse) => void;
   handleCreateModalState: () => void;
   handleUpdateModalState: (task: AllTasksResponse) => void;
@@ -37,6 +39,8 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   const {
     status,
     teamId,
+    hasDraggedStatus,
+    resetHasDraggedStatus,
     handleViewDetailsModalState,
     handleCreateModalState,
     handleUpdateModalState,
@@ -61,9 +65,16 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   const tasksDataRef = useRef(tasksData);
 
   useEffect(() => {
-    setTasks([]);
-    setPage(1);
-    refetch();
+    if (hasDraggedStatus) {
+      if (status === Status.Backlog || status === Status.OnHold) {
+        refreshTaskList();
+        resetHasDraggedStatus();
+      }
+    }
+  }, [hasDraggedStatus]);
+
+  useEffect(() => {
+    refreshTaskList();
   }, [teamId]);
 
   useEffect(() => {
@@ -80,6 +91,19 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   useEffect(() => {
     tasksDataRef.current = tasksData;
   }, [tasksData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (tasksDataRef.current !== undefined) {
+        if (page > 1 && page <= tasksDataRef.current?.page.lastPage) {
+          await refetch();
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+  }, [page, refetch]);
 
   // OTHERS
   const handleScroll = (event: React.UIEvent) => {
@@ -100,18 +124,11 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (tasksDataRef.current !== undefined) {
-        if (page > 1 && page <= tasksDataRef.current?.page.lastPage) {
-          await refetch();
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchData();
-  }, [page, refetch]);
+  const refreshTaskList = () => {
+    setTasks([]);
+    setPage(1);
+    refetch();
+  };
 
   // RENDER
   const renderStatusContainerHeader = (status: Status) => {
@@ -167,8 +184,6 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
       return null;
     }
   };
-
-  // CRUD
 
   return (
     <>
