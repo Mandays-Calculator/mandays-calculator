@@ -20,11 +20,11 @@ export const getItemStorage = (key: string, type: STORAGE = "local"): any => {
  */
 export const removeStateStorage = (
   type: STORAGE = "local",
-  items: string[] = []
+  items: string[] = [],
 ): void => {
   if (type === "session") {
     [...items, SESSION_STORAGE_ITEMS.mcUser].map((item: string) =>
-      sessionStorage.removeItem(item)
+      sessionStorage.removeItem(item),
     );
   }
   if (type === "local")
@@ -41,7 +41,7 @@ export const removeStateStorage = (
 export const setItemStorage = (
   key: string,
   objectValue: Object,
-  type: STORAGE = "local"
+  type: STORAGE = "local",
 ) => {
   if (type === "local") {
     localStorage.setItem(key, JSON.stringify(objectValue));
@@ -52,7 +52,7 @@ export const setItemStorage = (
 };
 
 export const getUser = (): LoginResponse | null => {
-  const user = getItemStorage(SESSION_STORAGE_ITEMS.mcUser, "session");
+  const user = getItemStorage(SESSION_STORAGE_ITEMS.mcUser, "local");
   if (Object.keys(user).length > 0) {
     return user as LoginResponse;
   }

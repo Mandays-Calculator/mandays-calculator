@@ -52,7 +52,7 @@ export const login = createAsyncThunk(
             !config.encryptData,
           ),
         },
-        "session",
+        "local",
       );
 
       // Save token properties to cookie storage
