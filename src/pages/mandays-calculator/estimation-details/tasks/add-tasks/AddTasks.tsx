@@ -27,7 +27,7 @@ const AddTasks = (): ReactElement => {
   const droppableList: Status[] = ["unselected", "selected"];
   const filteredValues: string[] = ["name", "description"];
 
-  const taskStatus: string = "1";
+  const taskStatus: string = "1"; // backlog
   const maxResults: number = 100;
   const currentPage: number = 1;
 
@@ -48,7 +48,6 @@ const AddTasks = (): ReactElement => {
   const tasks: TaskType[] = getIn(values, "tasks");
 
   useEffect(() => {
-    console.log(tasksData);
     const toBeTask = initializeTasksListData(
       tasksData.data?.data as unknown as TaskType[],
       values.tasks,
@@ -116,8 +115,8 @@ const AddTasks = (): ReactElement => {
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       <StyledTitle variant="h5" color="primary">
                         {droppable === "selected"
-                          ? "Selected Task"
-                          : "Task List"}
+                          ? t(mandaysCalculator.selectedTask)
+                          : t(mandaysCalculator.tasksListLabel)}
                       </StyledTitle>
                       <TextField
                         name={`mandays-${droppable}`}

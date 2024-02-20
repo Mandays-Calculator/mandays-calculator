@@ -15,6 +15,8 @@ import { useUserAuth } from "~/hooks/user";
 import { useCommonOption } from "~/queries/common/options";
 import { Table } from "~/components";
 
+import LocalizationKey from "~/i18n/key";
+
 import { SummaryListColumns } from "~/pages/mandays-calculator/utils/columns";
 
 import {
@@ -26,6 +28,7 @@ import {
 
 import Details from "../details";
 import { getExistingODC } from "../utils/mapper";
+import { checkFormKeys } from "../../utils/constants";
 
 roundOffValue;
 
@@ -37,6 +40,9 @@ const SummaryContent = ({
   const { t } = useTranslation();
   const location = useLocation();
   const form = useFormikContext<MandaysForm>();
+  const {
+    mandaysCalculator: { summaryLabels },
+  } = LocalizationKey;
   const formState = type === "review" ? location.state : form.values;
   const user = useUserAuth();
 
@@ -62,8 +68,7 @@ const SummaryContent = ({
   );
 
   const totalManHours = useMemo((): number => {
-    const checkKeys = ["summary", "resources", "legends", "phases"];
-    if (checkKeys.every((item) => formState.hasOwnProperty(item))) {
+    if (checkFormKeys.every((item) => formState.hasOwnProperty(item))) {
       const value = calculateTotalManHoursPerPhase(formState);
       return value;
     }
@@ -99,6 +104,25 @@ const SummaryContent = ({
     "days",
   );
 
+  const fieldValues = [
+    {
+      label: `${t(summaryLabels.grandTotal)}: `,
+      value: `${roundOffValue(totalManHours)} ${t(summaryLabels.hrs)}`,
+    },
+    {
+      label: `${t(summaryLabels.numberOfDays)}: `,
+      value: `${roundOffValue(totalManHours / 8, "days")} ${t(
+        summaryLabels.days,
+      )}`,
+    },
+    {
+      label: `${t(summaryLabels.numberOfOTDays)}: `,
+      value: `${Number(OTDays) > 0 ? Number(OTDays) : 0} ${t(
+        summaryLabels.days,
+      )}`,
+    },
+  ];
+
   return (
     <Stack direction="column" gap={2}>
       <Details
@@ -111,39 +135,17 @@ const SummaryContent = ({
         data={functions}
         name="mandays-calculator"
       />
-      <Grid container>
-        <Grid item xs={8.1}></Grid>
-        <Grid item xs={3.9}>
-          <Stack direction={"row"} gap={2}>
-            <Typography>Grand Total:</Typography>
-            <Typography fontWeight={"bold"}>
-              {roundOffValue(totalManHours)} hrs
-            </Typography>
-          </Stack>
+      {fieldValues.map((item, key) => (
+        <Grid container key={key}>
+          <Grid item xs={8.1}></Grid>
+          <Grid item xs={3.9}>
+            <Stack direction={"row"} gap={2}>
+              <Typography>{item.label}</Typography>
+              <Typography fontWeight={"bold"}>{item.value}</Typography>
+            </Stack>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={8.1}></Grid>
-        <Grid item xs={3.9}>
-          <Stack direction={"row"} gap={2}>
-            <Typography># of days:</Typography>
-            <Typography fontWeight={"bold"}>
-              {roundOffValue(totalManHours / 8, "days")} days
-            </Typography>
-          </Stack>
-        </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={8.1}></Grid>
-        <Grid item xs={3.9}>
-          <Stack direction={"row"} gap={2}>
-            <Typography># of OT days:</Typography>
-            <Typography fontWeight={"bold"}>
-              {Number(OTDays) > 0 ? Number(OTDays) : 0} days
-            </Typography>
-          </Stack>
-        </Grid>
-      </Grid>
+      ))}
     </Stack>
   );
 };

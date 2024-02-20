@@ -81,10 +81,14 @@ const phaseSchema = (careerSteps: string[], t: TFunction) => {
                         .number()
                         .test(
                           "resource-count-validation",
-                          t(errorMessages.resourceRequired, { key: key }),
+                          t(errorMessages.exceedResources, { key: key }),
                           function () {
                             const valueContext = this.options
                               .context as MandaysForm;
+                            const checkPhaseIndex =
+                              this.path.match(/phases\[(\d+)\]/);
+                            const phaseIndex =
+                              (checkPhaseIndex && checkPhaseIndex[1]) || 0;
                             const availableResources =
                               calculateTotalResourcesByCareerStep(
                                 valueContext,
@@ -94,7 +98,10 @@ const phaseSchema = (careerSteps: string[], t: TFunction) => {
                               calculateTotalResourcesByCareerStep(
                                 valueContext,
                                 "phase",
+                                Number(phaseIndex),
                               );
+
+                            console.log(valueResource, "check");
                             if (valueResource.hasOwnProperty(key)) {
                               return (
                                 valueResource[key] <= availableResources[key]

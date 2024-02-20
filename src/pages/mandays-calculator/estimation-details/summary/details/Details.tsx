@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import type { CommonOption } from "~/queries/common/options";
+import type { ExistingODC, Holiday } from "../types";
 import type { MandaysForm } from "../..";
 
 import { useTranslation } from "react-i18next";
@@ -17,7 +18,6 @@ import {
   calculateTotalResourcesOrLeaves,
   roundOffValue,
 } from "../../utils/calculate";
-import { ExistingODC, Holiday } from "../types";
 
 interface Details {
   teamOptions: CommonOption;

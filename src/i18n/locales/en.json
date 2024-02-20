@@ -274,10 +274,21 @@
         "endDate": "End Date",
         "noOfResources": "No. of Resources",
         "leaves": "Leaves"
+      },
+      "labels": {
+        "grandTotal": "Grand Total",
+        "hrs": "hrs",
+        "numberOfDays": "# of days",
+        "numberOfOTDays": "# of OT days",
+        "days": "days"
       }
     },
     "resourceList": {
       "title": "Resources",
+      "label": {
+        "totalResources": "Total Resources",
+        "addODC": "Add ODC"
+      },
       "table": {
         "columns": {
           "odc": "ODC",
@@ -304,10 +315,16 @@
           "i07": "I07"
         }
       },
+      "labels": {
+        "grandTotalManhours": "Grand total man hours: {{key}} Hours",
+        "grandTotalManDays": "Grand total man days: {{key}} Days",
+        "noTaskSelected": "No Task selected. Please select a task in Task tab."
+      },
       "noTaskLabel": "No task.",
       "noSelectedTaskLabel": "No Data.",
       "descriptionLabel": "Description",
-      "tasksListLabel": "Tasks list"
+      "tasksListLabel": "Tasks list",
+      "selectedTask": "Selected Task"
     },
     "legend": {
       "title": "Legend",
@@ -321,7 +338,8 @@
     },
     "estimation": {
       "label": {
-        "loader": "Loading estimation .. "
+        "loader": "Loading estimation .. ",
+        "addPhase": "Add Phase"
       },
       "title": "Estimation",
       "estimationColumns": {
