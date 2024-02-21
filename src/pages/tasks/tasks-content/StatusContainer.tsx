@@ -1,4 +1,4 @@
-import type { AllTasksResponse } from "~/api/tasks";
+import type { AllTasksResponse, ForTaskStateChange } from "~/api/tasks";
 import React, { useEffect, useRef, useState, ReactElement } from "react";
 
 import { Draggable, Droppable } from "react-beautiful-dnd";
@@ -25,8 +25,8 @@ import {
 interface StatusContainer {
   status: Status;
   teamId: string;
-  hasDraggedStatus: boolean;
-  resetHasDraggedStatus: () => void;
+  hasTaskStateChange: ForTaskStateChange | null;
+  resetHasTaskStateChange: () => void;
   handleViewDetailsModalState: (task: AllTasksResponse) => void;
   handleCreateModalState: () => void;
   handleUpdateModalState: (task: AllTasksResponse) => void;
@@ -39,8 +39,8 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   const {
     status,
     teamId,
-    hasDraggedStatus,
-    resetHasDraggedStatus,
+    hasTaskStateChange,
+    resetHasTaskStateChange,
     handleViewDetailsModalState,
     handleCreateModalState,
     handleUpdateModalState,
@@ -65,13 +65,30 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   const tasksDataRef = useRef(tasksData);
 
   useEffect(() => {
-    if (hasDraggedStatus) {
-      if (status === Status.Backlog || status === Status.OnHold) {
-        refreshTaskList();
-        resetHasDraggedStatus();
+    if (hasTaskStateChange) {
+      switch (hasTaskStateChange.type) {
+        case "change_status":
+          if (status === Status.Backlog || status === Status.OnHold) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
+        case "create_task":
+          if (status === Status.Backlog) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
+        case "update_task":
+        case "delete_task":
+          if (status === hasTaskStateChange.task?.status) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
       }
     }
-  }, [hasDraggedStatus]);
+  }, [hasTaskStateChange]);
 
   useEffect(() => {
     refreshTaskList();
@@ -94,11 +111,18 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (tasksDataRef.current !== undefined) {
-        if (page > 1 && page <= tasksDataRef.current?.page.lastPage) {
+      try {
+        if (
+          tasksDataRef.current &&
+          page > 1 &&
+          page <= tasksDataRef.current.page.lastPage
+        ) {
           await refetch();
-          setLoading(false);
         }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -124,10 +148,10 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
     }
   };
 
-  const refreshTaskList = () => {
+  const refreshTaskList = async () => {
     setTasks([]);
     setPage(1);
-    refetch();
+    await refetch();
   };
 
   // RENDER

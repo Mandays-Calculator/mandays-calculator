@@ -1,14 +1,13 @@
 import type {
   ForGetFunctionality,
+  FucntionalityParams,
   AllTasksResponse,
-  QueryResponse,
+  UpdateTaskStatus,
   TaskResponse,
   CreateTask,
   UpdateTask,
-  Team,
   ForGetTags,
-  FucntionalityParams,
-  UpdateTaskStatus,
+  Team,
 } from ".";
 
 import { getEnvConfig } from "~/utils/env-config";
@@ -29,10 +28,10 @@ export const getTasks = async (
 
 export const postTask = async (
   param: CreateTask,
-): BaseResponse<QueryResponse<CreateTask>> => {
+): BaseResponse<AllTasksResponse> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
 
-  const response = await axios.post<QueryResponse<CreateTask>>(
+  const response = await axios.post<AllTasksResponse>(
     `${apiBasePath}/tasks`,
     param,
   );
@@ -42,13 +41,14 @@ export const postTask = async (
 
 export const putUpdateTask = async (
   param: UpdateTask,
-): BaseResponse<QueryResponse<AllTasksResponse>> => {
+): BaseResponse<AllTasksResponse> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
 
-  const response = await axios.put<QueryResponse<AllTasksResponse>>(
+  const response = await axios.put<AllTasksResponse>(
     `${apiBasePath}/tasks/${param.id}`,
     param,
   );
+
   return response.data;
 };
 
@@ -79,9 +79,11 @@ export const getFunctionality = async (
   params: FucntionalityParams,
 ): BaseResponse<ForGetFunctionality> => {
   const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+
   const response = await axios.get<ForGetFunctionality[]>(
     `${apiBasePath}/functionalities?teamId=${params.teamId}&name=${params.name}`,
   );
+
   return response.data;
 };
 

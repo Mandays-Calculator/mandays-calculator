@@ -1,4 +1,8 @@
-import type { AllTasksResponse, UpdateTaskStatus } from "~/api/tasks/types";
+import type {
+  AllTasksResponse,
+  ForTaskStateChange,
+  UpdateTaskStatus,
+} from "~/api/tasks/types";
 import type { ReactElement } from "react";
 
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -65,7 +69,8 @@ const TasksContent = (): ReactElement => {
   );
   const [selectedTaskForDelete, setSelectedTaskForDelete] =
     useState<AllTasksResponse | null>(null);
-  const [hasDraggedStatus, setHasDraggedStatus] = useState<boolean>(false);
+  const [hasTaskStateChange, setHasTaskStateChange] =
+    useState<ForTaskStateChange | null>(null);
 
   // MODALS
   const [viewDetailsModalOpen, setViewDetailsModalOpen] =
@@ -82,8 +87,8 @@ const TasksContent = (): ReactElement => {
     setSelectedTeam(e.target.value as string);
   };
 
-  const resetHasDraggedStatus = () => {
-    setHasDraggedStatus(false);
+  const resetHasTaskStateChange = () => {
+    setHasTaskStateChange(null);
   };
 
   // DRAG N DROP
@@ -112,7 +117,12 @@ const TasksContent = (): ReactElement => {
         updateStatusMutation.mutate(updateStatus, {
           onSuccess: async (data) => {
             if (await data) {
-              setHasDraggedStatus(true);
+              const result: ForTaskStateChange = {
+                type: "change_status",
+                status: true,
+              };
+
+              setHasTaskStateChange(result);
             }
           },
           onError: (error) => {
@@ -162,22 +172,25 @@ const TasksContent = (): ReactElement => {
 
   // CRUD
   const handleCreateTask = (newTask: AllTasksResponse | null) => {
-    // if (newTask) {
-    //   const createdData = [...tasks, newTask];
-    //   setTasks(createdData);
-    // }
-    console.log(newTask);
+    if (newTask) {
+      const result: ForTaskStateChange = {
+        type: "create_task",
+        task: newTask,
+      };
+
+      setHasTaskStateChange(result);
+    }
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    // const updatedData = tasks.map(task => {
-    //   if (task.id === updatedTask.id) {
-    //     return updatedTask;
-    //   }
-    //   return task;
-    // });
-    // setTasks(updatedData);
-    console.log(updatedTask);
+    if (updatedTask) {
+      const result: ForTaskStateChange = {
+        type: "update_task",
+        task: updatedTask,
+      };
+
+      setHasTaskStateChange(result);
+    }
   };
 
   const handleDeleteTask = () => {
@@ -188,8 +201,12 @@ const TasksContent = (): ReactElement => {
         { id: taskID },
         {
           onSuccess: () => {
-            // const updatedTasks = tasks.filter(task => task.id !== taskID);
-            // setTasks(updatedTasks);
+            const result: ForTaskStateChange = {
+              type: "delete_task",
+              task: selectedTaskForDelete,
+            };
+
+            setHasTaskStateChange(result);
             setSelectedTaskForDelete(null);
           },
           onError: (error) => {
@@ -296,8 +313,8 @@ const TasksContent = (): ReactElement => {
                     key={index}
                     status={status}
                     teamId={selectedTeam}
-                    hasDraggedStatus={hasDraggedStatus}
-                    resetHasDraggedStatus={resetHasDraggedStatus}
+                    hasTaskStateChange={hasTaskStateChange}
+                    resetHasTaskStateChange={resetHasTaskStateChange}
                     handleViewDetailsModalState={handleViewDetailsModalState}
                     handleCreateModalState={handleCreateModalState}
                     handleUpdateModalState={handleUpdateModalState}

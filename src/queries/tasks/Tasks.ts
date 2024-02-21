@@ -40,21 +40,19 @@ export const useTasks = (
 };
 
 export const usePostTasks = (): UseMutationResult<
-  QueryResponse<CreateTask>,
+  AllTasksResponse,
   AxiosError,
   CreateTask
 > => {
-  return useMutation<QueryResponse<CreateTask>, AxiosError, CreateTask>(
-    postTask,
-  );
+  return useMutation<AllTasksResponse, AxiosError, CreateTask>(postTask);
 };
 
 export const useUpdateTask = (): UseMutationResult<
-  QueryResponse<AllTasksResponse>,
+  AllTasksResponse,
   AxiosError,
   UpdateTask
 > => {
-  return useMutation<QueryResponse<AllTasksResponse>, AxiosError, UpdateTask>(
+  return useMutation<AllTasksResponse, AxiosError, UpdateTask>(
     "putUpdateTask",
     putUpdateTask,
   );
