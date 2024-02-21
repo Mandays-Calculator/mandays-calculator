@@ -8,6 +8,7 @@ import type {
   UpdateTask,
   ForGetTags,
   UpdateTaskStatus,
+  GetComments,
 } from "~/api/tasks";
 
 import {
@@ -24,6 +25,7 @@ import {
   getTasks,
   getTags,
   patchUpdateTaskStatus,
+  getComments,
 } from "~/api/tasks/Tasks";
 
 export const useTasks = (
@@ -82,4 +84,11 @@ export const useDeleteTask = (): UseMutationResult<
 
 export const useGetTags = (): UseQueryResult<ForGetTags, AxiosError> => {
   return useQuery("getTags", getTags);
+};
+
+export const useComments = (
+): UseQueryResult<QueryResponse<GetComments[]>, AxiosError> => {
+  return useQuery(`getComments`, () =>
+    getComments(),
+  );
 };

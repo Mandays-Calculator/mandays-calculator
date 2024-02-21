@@ -104,3 +104,13 @@ export const getTags = async (): BaseResponse<ForGetTags> => {
 
   return response.data;
 };
+
+export const getComments = async (
+  // taskId: string,
+): BaseResponse<ForGetFunctionality> => {
+  const { apiBasePath } = getEnvConfig("mandaysEstimateService");
+  const response = await axios.get<ForGetFunctionality[]>(
+    `${apiBasePath}/task/8de5ce04-cc8c-11ee-ab4a-00090faa0001/comments`,
+  );
+  return response.data;
+};

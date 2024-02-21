@@ -34,6 +34,7 @@ import {
   TaskTags,
 } from "./style.ts";
 import { Status } from "./utils";
+import { useComments } from "~/queries/tasks/Tasks.ts";
 
 interface ViewTaskDetailsProps {
   open: boolean;
@@ -60,6 +61,10 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
   useEffect(() => {
     setNewTask(task);
   }, [task]);
+
+  const getComments = useComments();
+
+  console.log(getComments);
 
   const handleSaveTask = (): void => {
     if (currentTask) {

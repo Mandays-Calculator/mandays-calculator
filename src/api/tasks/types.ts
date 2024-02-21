@@ -128,6 +128,12 @@ export interface UpdateTaskStatus {
   };
 }
 
+export interface GetComments {
+  id: string;
+  description: string;
+  createdDate: string;
+}
+
 export interface FucntionalityParams {
   teamId: string;
   name: string;
