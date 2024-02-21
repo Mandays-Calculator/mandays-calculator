@@ -130,7 +130,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
     postTasks.mutate(createData, {
       onSuccess: data => {
-        console.log("mama mo", data);
+        if (onCreateTask) {
+          onCreateTask(data);
+        }
       },
       onError: error => {
         console.log(error);
@@ -152,7 +154,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
     putTasks.mutate(updatedData, {
       onSuccess: data => {
-        console.log("mama mo", data);
+        if (update && onUpdateTask) {
+          onUpdateTask(data);
+        }
       },
       onError: error => {
         console.log(error);
@@ -194,7 +198,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     const _selectedTags = e as string[];
     let tags: Tag[] = [];
 
-    _selectedTags.map((selectedTag) => {
+    _selectedTags.map(selectedTag => {
       const findSelectedTag = _.find(
         tagsOption,
         _.matchesProperty("value", selectedTag),
@@ -231,10 +235,14 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
   const resetCreation = () => {
     setTask(initialTaskState);
+    createOrUpdateForm.resetForm();
   };
 
   const onCloseCreateOrUpdateTask = () => {
-    resetCreation();
+    if (!update) {
+      console.log("what");
+      resetCreation();
+    }
     onClose();
   };
 
@@ -247,7 +255,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             ? t(LocalizationKey.tasks.updateTask.modalTitle)
             : t(LocalizationKey.tasks.createTask.modalTitle)
         }
-        maxWidth="sm"
+        maxWidth='sm'
         onClose={onCloseCreateOrUpdateTask}
       >
         <CloseContainer>
@@ -260,7 +268,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <ControlledTextField
-                name="name"
+                name='name'
                 label={t(LocalizationKey.tasks.createTask.label.taskTitle)}
                 placeholder={t(
                   LocalizationKey.tasks.createTask.placeholder.taskTitle,
@@ -271,7 +279,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
             <Grid item xs={12}>
               <ControlledTextField
-                name="description"
+                name='description'
                 label={t(LocalizationKey.tasks.createTask.label.description)}
                 placeholder={t(
                   LocalizationKey.tasks.createTask.placeholder.description,
@@ -288,7 +296,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   {t(LocalizationKey.tasks.createTask.label.functionality)}
                 </CreateOrUpdateLabel>
                 <ControlledSelect
-                  name="_functionality"
+                  name='_functionality'
                   placeholder={t(
                     LocalizationKey.tasks.createTask.placeholder.functionality,
                   )}
@@ -299,17 +307,17 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
               <Grid item xs={12} sm={6}>
                 <ComplexityLabel
-                  direction="row"
+                  direction='row'
                   spacing={1}
                   onClick={() => handleOpenComplexity()}
                 >
                   <CreateOrUpdateLabel>
                     {t(LocalizationKey.tasks.createTask.label.complexity)}
                   </CreateOrUpdateLabel>
-                  <InfoOutlinedIcon fontSize="small" />
+                  <InfoOutlinedIcon fontSize='small' />
                 </ComplexityLabel>
                 <ControlledSelect
-                  name="_complexity"
+                  name='_complexity'
                   placeholder={t(
                     LocalizationKey.tasks.createTask.placeholder.complexity,
                   )}
@@ -324,7 +332,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 {t(LocalizationKey.tasks.createTask.label.tags)}
               </CreateOrUpdateLabel>
               <ControlledSelect
-                name="_tags"
+                name='_tags'
                 placeholder={t(
                   LocalizationKey.tasks.createTask.placeholder.tags,
                 )}
@@ -335,8 +343,8 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             </Grid>
           </Grid>
 
-          <Stack direction="row" justifyContent="flex-end" marginTop={"10px"}>
-            <CustomButton type="submit" colorVariant="primary">
+          <Stack direction='row' justifyContent='flex-end' marginTop={"10px"}>
+            <CustomButton type='submit' colorVariant='primary'>
               {update
                 ? t(LocalizationKey.tasks.updateTask.btnLabel.update)
                 : t(LocalizationKey.tasks.createTask.btnLabel.create)}

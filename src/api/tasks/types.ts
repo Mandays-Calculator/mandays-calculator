@@ -150,3 +150,9 @@ export interface ForGetTags extends Omit<Tag[], "isActive"> {
   id: string;
   active: boolean;
 }
+
+export interface ForTaskStateChange {
+  type: "change_status" | "create_task" | "update_task" | "delete_task";
+  task?: AllTasksResponse;
+  status?: boolean;
+}
