@@ -39,10 +39,11 @@ export const createSubmitValue = (
   return {
     createdBy: userId,
     basicInfo: {
-      ...data.summary,
+      teamId: data.summary.teamId,
+      utilizationRate: data.summary.utilizationRate,
       estimationName:
         data.summary.estimationName ||
-        `${data.summary.teamId}(${dateFormat(
+        `${data.summary.teamName}(${dateFormat(
           data.summary.endDate,
           "yyyy-MM-DD",
         )}-${dateFormat(data.summary.startDate, "yyyy-MM-DD")})`,

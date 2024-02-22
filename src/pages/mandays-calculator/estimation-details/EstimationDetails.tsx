@@ -137,9 +137,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     }
   };
 
-  const handleNext = useCallback((): void => {
+  const handleNext = useCallback(async (): Promise<void> => {
     if (mode === "add" || mode === "edit") {
-      mandaysForm.validateForm();
+      await mandaysForm.validateForm();
       const formError = mandaysForm.errors;
       const currentTab = Object.keys(mandaysForm.values)[activeTab];
       if (validateCount > 0) {
@@ -154,7 +154,14 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     } else {
       setActiveTab(activeTab + 1);
     }
-  }, [mode, mandaysForm.values, mandaysForm.errors, validateCount, activeTab]);
+  }, [
+    mode,
+    mandaysForm.values,
+    mandaysForm.errors,
+    validateCount,
+    activeTab,
+    setValidateCount,
+  ]);
 
   const renderIconOrImage = (isGeneratingPDF: boolean): ReactNode => {
     return isGeneratingPDF ? (
@@ -215,7 +222,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   ];
 
   if (estimationLoading) {
-    return <PageLoader labelOnLoad="Loading estimation .. " />;
+    return (
+      <PageLoader labelOnLoad={t(mandaysCalculator.estimation.labelLoader)} />
+    );
   }
 
   return (

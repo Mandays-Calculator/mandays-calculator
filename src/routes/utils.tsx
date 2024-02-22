@@ -12,23 +12,24 @@ export const seperateRoutesByType = (type: RouteTypeParam): RouteType[] => {
   if (type === "public") {
     return routesConfig.filter(
       (routeItem: RouteType) =>
-        !_.isUndefined(routeItem.protected) && routeItem.protected === false
+        !_.isUndefined(routeItem.protected) && routeItem.protected === false,
     );
   }
   return routesConfig.filter(
     (routeItem: RouteType) =>
-      _.isUndefined(routeItem.protected) || routeItem.protected === true
+      _.isUndefined(routeItem.protected) || routeItem.protected === true,
   );
 };
 export const getPermittedRoute = (
   permittedPaths: string[],
-  privateRoutes: RouteType[]
+  privateRoutes: RouteType[],
 ): RouteType[] => {
   return privateRoutes.map((privRoute: RouteType) => {
     const isPermitted = permittedPaths.some(
       (permittedPath) =>
         (privRoute.path && privRoute.path.startsWith(`${permittedPath}/`)) ||
-        privRoute.path === permittedPath
+        privRoute.path === permittedPath ||
+        privRoute.disabledPermissionChecking === true,
     );
 
     if (!isPermitted) {
