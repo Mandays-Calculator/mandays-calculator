@@ -61,7 +61,7 @@ const projectListReducer = (
           ...response,
           projectId: response.projectId,
           prjName: response.name,
-          noOfTeams: response.teams?.length,
+          noOfTeams: response.teams?.length || 0,
           noOfUsers: userCount,
         };
       });
