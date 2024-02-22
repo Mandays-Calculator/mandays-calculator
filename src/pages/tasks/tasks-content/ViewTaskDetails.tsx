@@ -18,7 +18,7 @@ import {
   Grid,
 } from "@mui/material";
 
-import { TextField, Modal, ConfirmModal } from "~/components";
+import { Modal, ConfirmModal } from "~/components";
 import { CheckBox } from "~/components/form";
 
 import {
@@ -65,7 +65,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
   console.log(getComments);
 
-  const handleSaveTask = (): void => {
+  const handleCloseViewTaskDetails = (): void => {
     setNewComment(defaultComment);
     onClose();
   };
@@ -184,21 +184,21 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
         open={open}
         title={currentTask?.name}
         maxWidth='sm'
-        onClose={onClose}
+        onClose={handleCloseViewTaskDetails}
         sx={styledScrollbar}
       >
         <CloseContainer>
-          <IconButton onClick={handleSaveTask}>
+          <IconButton onClick={() => handleCloseViewTaskDetails()}>
             <CloseIcon />
           </IconButton>
         </CloseContainer>
 
-        <ViewTaskDetailsContainer container spacing={2} type='outer'>
+        <ViewTaskDetailsContainer container spacing={1} type='outer'>
           <Grid item xs={12}>
             <ViewTaskDetailsLabel>
               {t(LocalizationKey.tasks.viewTaskDetails.label.description)}
             </ViewTaskDetailsLabel>
-            <Typography>{currentTask?.description}</Typography>
+            <Typography>{currentTask?.description || ""}</Typography>
           </Grid>
 
           <ViewTaskDetailsContainer item container type='inner' xs={12}>
@@ -206,13 +206,13 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.functionality)}
               </ViewTaskDetailsLabel>
-              <Typography>{currentTask?.functionality?.name}</Typography>
+              <Typography>{currentTask?.functionality?.name || ""}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.complexity)}
               </ViewTaskDetailsLabel>
-              <Typography>{currentTask?.complexity?.name}</Typography>
+              <Typography>{currentTask?.complexity?.name || ""}</Typography>
             </Grid>
           </ViewTaskDetailsContainer>
 
@@ -236,7 +236,11 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                         .completionDate,
                     )}
                   </ViewTaskDetailsLabel>
-                  <Typography>{currentTask?.completionDate}</Typography>
+                  <Typography>
+                    {currentTask?.completionDate
+                      ? moment(currentTask.completionDate).format("L")
+                      : ""}
+                  </Typography>
                 </>
               ) : null}
               {currentTask?.status === Status.InProgress ? (
@@ -257,7 +261,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             </ViewTaskDetailsLabel>
             <Typography>
               {t(LocalizationKey.tasks.viewTaskDetails.placeholder.sprint)}
-              {currentTask?.sprint}
+              {currentTask?.sprint || ""}
             </Typography>
           </ViewTaskDetailsContainer>
 
