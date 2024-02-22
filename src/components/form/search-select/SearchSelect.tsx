@@ -57,6 +57,7 @@ export const SearchSelect = <
     placeholder = "Please Input",
     value,
     onChange,
+    error,
     popperSX,
     ...rest
   } = props;
@@ -74,7 +75,7 @@ export const SearchSelect = <
         <Popper {...props} placement="bottom-start" sx={popperSX} />
       )}
       renderInput={(params) => (
-        <TextField {...params} placeholder={placeholder} />
+        <TextField {...params} placeholder={placeholder} error={error} />
       )}
     />
   );

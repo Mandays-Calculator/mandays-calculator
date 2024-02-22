@@ -1,4 +1,10 @@
-import type { OdcParam, CreateOdcParam, UpdateOdcParam, CreateHoliday, HolidayParam } from "~/api/odc";
+import type {
+  OdcParam,
+  CreateOdcParam,
+  UpdateOdcParam,
+  CreateHoliday,
+  HolidayParam,
+} from "~/api/odc";
 
 import moment from "moment";
 
@@ -6,7 +12,7 @@ export const IsDuplicate = (
   arr: OdcParam[],
   value: string,
   name: string,
-  id: string
+  id: string,
 ): boolean => {
   const newArr: boolean[] = [];
   arr.map((v: any) => {
@@ -29,26 +35,27 @@ export const AddFormat = (obj: OdcParam): CreateOdcParam => {
   const cDate = moment().format("YYYY-MM-DD HH:MM:SS");
 
   if (
-    (obj.holidays !== undefined && obj.holidays !== null) &&
+    obj.holidays !== undefined &&
+    obj.holidays !== null &&
     obj.holidays?.length > -1
   ) {
     obj.holidays?.map((value: HolidayParam) => {
       const date = moment(value.date).format("YYYY-MM-DD");
       arr.push({
-          odcId: value.odcId,
-          date: date,
-          recurring: value.recurring,
-          name: value.name,
-          createdDate: cDate,
-          lastUpdatedDate: value.lastUpdatedDate,
-        });
+        odcId: value.odcId,
+        date: date,
+        recurring: value.recurring,
+        name: value.name,
+        createdDate: cDate,
+        lastUpdatedDate: value.lastUpdatedDate,
+      });
     });
   }
 
   return {
     name: obj.name,
     abbreviation: obj.abbreviation,
-    location: obj.location,
+    location: obj.location.value,
     holidays: arr,
     active: obj.active,
     createdDate: cDate,
@@ -110,9 +117,9 @@ export const AddHoliday = (odcId: string) => {
     createDate: null,
     lastUpdatedDate: null,
   };
-}
+};
 
-export function removeItem<T>(arr: Array<T>, value: T): Array<T> { 
+export function removeItem<T>(arr: Array<T>, value: T): Array<T> {
   const index = arr.indexOf(value);
   if (index > -1) {
     arr.splice(index, 1);
