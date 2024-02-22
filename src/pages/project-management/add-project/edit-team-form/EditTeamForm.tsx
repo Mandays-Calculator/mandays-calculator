@@ -31,7 +31,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const { values, setValues } = useFormikContext<AddTeamFormType>();
 
   let team: TeamObject = values.teams.find(
-    (_val, index) => index === teamIndex
+    (_val, index) => index === teamIndex,
   ) as TeamObject;
 
   const [projectName, setProjectName] = useState<string>(values.projectName);
@@ -117,7 +117,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
 
     for (const user of users) {
       const isMemberExists = originTableData.find(
-        (originMember) => originMember.id == user.id
+        (originMember) => originMember.id == user.id,
       );
       if (!isMemberExists) newMembers.push(user);
     }
