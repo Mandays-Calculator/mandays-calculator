@@ -174,7 +174,7 @@ const getCommonOption = <T>(
         },
       );
     case "team":
-      return useQuery<Team[], Error>(
+      return useQuery<Team[] | undefined, Error>(
         ["teams", params],
         () => getTeams(params),
         {

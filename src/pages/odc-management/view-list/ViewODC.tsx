@@ -21,12 +21,16 @@ const ViewODC = (props: ViewProps): ReactElement => {
   const { data, setFormContext, setIdx, setSuccessError, country } = props;
 
   const { t } = useTranslation();
-  const { odc: { btnlabel, placeholder } } = LocalizationKey;
-  
+  const {
+    odc: { btnlabel, placeholder },
+  } = LocalizationKey;
+
   const [filterData, setFilterData] = useState<OdcParam[]>([]);
 
   useEffect(() => {
-    setFilterData(data?.filter((obj: OdcParam) => (obj.active).toString() === "true"));
+    setFilterData(
+      data?.filter((obj: OdcParam) => obj.active.toString() === "true"),
+    );
   }, [data]);
 
   const handleAdd = (): void => {
@@ -35,24 +39,26 @@ const ViewODC = (props: ViewProps): ReactElement => {
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const handleLowerCase = (value: string): string => value.toLocaleLowerCase();
+    const handleLowerCase = (value: string): string =>
+      value.toLocaleLowerCase();
 
     setFilterData(
-      data?.filter(
-        (obj: OdcParam) => {
-          const value = handleLowerCase(event.target.value);
-          return obj.active === true &&
-          (
-            handleLowerCase(obj.name).includes(value) ||
+      data?.filter((obj: OdcParam) => {
+        const value = handleLowerCase(event.target.value);
+        return (
+          obj.active === true &&
+          (handleLowerCase(obj.name).includes(value) ||
             handleLowerCase(obj.abbreviation).includes(value) ||
-            handleLowerCase(obj.location).includes(value)
-          )
-        }
-      )
+            handleLowerCase(obj.location.value).includes(value))
+        );
+      }),
     );
   };
 
-  const odcListColumn = useMemo(() => ODCColumns(t, setFormContext, setIdx, setSuccessError, country), []);
+  const odcListColumn = useMemo(
+    () => ODCColumns(t, setFormContext, setIdx, setSuccessError, country),
+    [],
+  );
 
   return (
     <>
@@ -72,11 +78,7 @@ const ViewODC = (props: ViewProps): ReactElement => {
       </Grid>
 
       <Box marginTop="14px">
-        <Table
-          name="ODCTable"
-          columns={odcListColumn}
-          data={filterData}
-        />
+        <Table name="ODCTable" columns={odcListColumn} data={filterData} />
       </Box>
     </>
   );

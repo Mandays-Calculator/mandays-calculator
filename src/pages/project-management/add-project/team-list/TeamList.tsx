@@ -27,22 +27,22 @@ const TeamList = (props: TeamListProps): ReactElement => {
         },
       }}
     >
-      {values?.teams.length ? (
+      {values?.teams?.length ? (
         values?.teams?.map((_team, index) => {
           return (
-              <TeamListCard
-                isReadOnly={readonly}
-                isDefault={false}
-                key={index}
-                teamIndex={index}
-                teamObject={_team}
-                toggleEdit={(teamIndex) => toggleEdit(teamIndex)}
-              />
+            <TeamListCard
+              isReadOnly={readonly}
+              isDefault={false}
+              key={index}
+              teamIndex={index}
+              teamObject={_team}
+              toggleEdit={(teamIndex) => toggleEdit(teamIndex)}
+            />
           );
         })
       ) : (
         <StyledContainer $isDefault={true} key={0}>
-          <Typography fontWeight='bold'>Default</Typography>
+          <Typography fontWeight="bold">Default</Typography>
         </StyledContainer>
       )}
     </Stack>

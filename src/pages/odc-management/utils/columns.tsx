@@ -8,7 +8,10 @@ import { IconButton } from "@mui/material";
 import moment from "moment";
 
 import { SvgIcon } from "~/components";
-import { ControlledTextField, ControlledDatePicker } from "~/components/form/controlled";
+import {
+  ControlledTextField,
+  ControlledDatePicker,
+} from "~/components/form/controlled";
 import { CustomButton } from "~/components/form/button";
 import LocalizationKey from "~/i18n/key";
 
@@ -16,7 +19,9 @@ import { SucErrData } from "../utils";
 
 type ODCColumnType = Column<OdcParam> & { id?: string };
 
-const { odc: { label, btnlabel } } = LocalizationKey;
+const {
+  odc: { label, btnlabel },
+} = LocalizationKey;
 
 export const ODCColumns = (
   t: TFunction<"translation", undefined>,
@@ -34,12 +39,12 @@ export const ODCColumns = (
       Header: t(label.location),
       accessor: "location",
       Cell: ({ row }: CellProps<OdcParam>) => {
-        const loc = country?.find((countryValue: SelectObject) =>
-          countryValue.value === row.original.location
+        const loc = country?.find(
+          (countryValue: SelectObject) =>
+            countryValue.value === (row.original.location as unknown as string),
         );
-        return (
-        <>{loc?.label}</>
-      )},
+        return <>{loc?.label}</>;
+      },
     },
     {
       Header: t(label.abbreviation),
@@ -49,7 +54,9 @@ export const ODCColumns = (
       Header: t(label.noHolidays),
       id: "holidays",
       Cell: ({ row }: CellProps<OdcParam>) => (
-        <>{row.original.holidays === null ? 0 : row.original.holidays?.length}</>
+        <>
+          {row.original.holidays === null ? 0 : row.original.holidays?.length}
+        </>
       ),
     },
     {
@@ -92,7 +99,11 @@ export const AddHolidayColumn = (
       accessor: "date",
       Cell: ({ row }: CellProps<HolidayParam>) => {
         let valueDate = "";
-        if (row.original.date !== undefined && row.original.date !== null && row.original.date !== "")
+        if (
+          row.original.date !== undefined &&
+          row.original.date !== null &&
+          row.original.date !== ""
+        )
           valueDate = moment(row.original.date).format("yyyy/MM/DD");
 
         return (
@@ -133,12 +144,16 @@ export const EditHolidayColumn = (
       accessor: "date",
       Cell: ({ row }: CellProps<HolidayParam>) => {
         let valueDate = "";
-        if (row.original.date !== undefined && row.original.date !== null && row.original.date !== "")
+        if (
+          row.original.date !== undefined &&
+          row.original.date !== null &&
+          row.original.date !== ""
+        )
           valueDate = moment(row.original.date).format("yyyy/MM/DD");
 
         return (
           <>
-            {(holIdx.includes(row.original.id) || row.original.id === 0) ? (
+            {holIdx.includes(row.original.id) || row.original.id === 0 ? (
               <>
                 <ControlledDatePicker
                   name={`holidays.${row.index}.date`}
@@ -150,7 +165,7 @@ export const EditHolidayColumn = (
               <>{valueDate}</>
             )}
           </>
-        )
+        );
       },
     },
     {
@@ -159,7 +174,7 @@ export const EditHolidayColumn = (
       Cell: ({ row }: CellProps<HolidayParam>) => {
         return (
           <>
-            {(holIdx.includes(row.original.id) || row.original.id === 0) ? (
+            {holIdx.includes(row.original.id) || row.original.id === 0 ? (
               <ControlledTextField
                 name={`holidays.${row.index}.name`}
                 value={row.original.name}
@@ -176,7 +191,7 @@ export const EditHolidayColumn = (
       id: "actions",
       Cell: ({ row }: CellProps<HolidayParam>) => (
         <>
-          {(!holIdx.includes(row.original.id) && row.original.id !== 0) && (
+          {!holIdx.includes(row.original.id) && row.original.id !== 0 && (
             <>
               <IconButton
                 onClick={() => {
@@ -198,7 +213,7 @@ export const EditHolidayColumn = (
               </IconButton>
             </>
           )}
-          {(holIdx.includes(row.original.id)) && (
+          {holIdx.includes(row.original.id) && (
             <CustomButton
               type="button"
               onClick={() => handleUpdateHoliday(row.original)}

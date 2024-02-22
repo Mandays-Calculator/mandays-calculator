@@ -132,7 +132,6 @@ const AddODC = (props: AddProps): ReactElement => {
 
   const handleClose = (): void => setFormContext("");
 
-  console.log(values, "values");
   const handleError = (error: string | undefined): boolean => {
     return error !== undefined;
   };
@@ -146,7 +145,7 @@ const AddODC = (props: AddProps): ReactElement => {
             label={t(label.name)}
             id="name"
             error={handleError(errors.name) || nameUnqError}
-            helperText={getFieldError(errors, "name") || nameUnqErrorMsg}
+            helperText={getFieldError(errors as any, "name") || nameUnqErrorMsg}
           />
         </Grid>
         <Grid item xs={4.5}>
@@ -155,9 +154,17 @@ const AddODC = (props: AddProps): ReactElement => {
             name={"location"}
             id="location"
             options={country}
-            error={handleError(errors.location)}
+            error={
+              errors.location
+                ? errors.location.label !== ""
+                  ? true
+                  : false
+                : false
+            }
           />
-          <StyledError>{getFieldError(errors, "location")}</StyledError>
+          <StyledError>
+            {getFieldError(errors as any, "location.label")}
+          </StyledError>
         </Grid>
         <Grid item xs={3}>
           <ControlledTextField
@@ -166,7 +173,7 @@ const AddODC = (props: AddProps): ReactElement => {
             id="abbreviation"
             error={handleError(errors.abbreviation) || abbrUnqError}
             helperText={
-              getFieldError(errors, "abbreviation") || abbrUnqErrorMsg
+              getFieldError(errors as any, "abbreviation") || abbrUnqErrorMsg
             }
           />
         </Grid>
