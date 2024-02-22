@@ -66,6 +66,8 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
   const updateStatusMutation = useUpdateTaskStatus();
 
+  const HIDDEN_COMPONENT = true; // remove after demo or API is ok.
+
   useEffect(() => {
     setCurrentTask(task);
   }, [task]);
@@ -325,7 +327,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             ))}
           </ViewTaskDetailsContainer>
 
-          {renderCommentSection()}
+          {HIDDEN_COMPONENT ? null : renderCommentSection()}
         </ViewTaskDetailsContainer>
       </Modal>
 

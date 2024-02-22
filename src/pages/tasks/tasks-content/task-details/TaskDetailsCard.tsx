@@ -32,6 +32,8 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
   const { data, handleViewDetails, handleEdit, onDelete } = props;
   const { t } = useTranslation();
 
+  const HIDDEN_COMPONENT = true; // remove after demo or API is ok.
+
   return (
     <StyledPaper
       status={data?.status ?? Status.Backlog}
@@ -40,19 +42,19 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
     >
       <GridRelativeContainer container spacing={2} display={"flex"}>
         <Grid item xs={12}>
-          <TaskDetailsCardDetails type="title">
+          <TaskDetailsCardDetails type='title'>
             {data?.name}
           </TaskDetailsCardDetails>
         </Grid>
 
         <Grid item xs={12}>
-          <TaskDetailsCardDetails type="description">
+          <TaskDetailsCardDetails type='description'>
             {data?.description}
           </TaskDetailsCardDetails>
         </Grid>
 
         <Grid item xs={12}>
-          <TaskDetailsCardDetails type="createDate">
+          <TaskDetailsCardDetails type='createDate'>
             <StyledEventIcon />
             {data?.createdDate ? moment(data.createdDate).format("L") : ""}
           </TaskDetailsCardDetails>
@@ -73,9 +75,9 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           </Typography>
         </Grid>
 
-        <Grid item container spacing={1} alignItems="center" xs={10}>
+        <Grid item container spacing={1} alignItems='center' xs={10}>
           <Grid item>
-            <CommentContainer display="flex" alignItems="center">
+            <CommentContainer display='flex' alignItems='center'>
               <StyledTextsmsOutlinedIcon />
               {data?.comments?.length}
             </CommentContainer>
@@ -91,17 +93,19 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
         </Grid>
 
         <TaskActionContainer status={data?.status ?? Status.Backlog}>
-          <EditOutlinedIcon
-            color="action"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEdit(data);
-            }}
-          />
+          {HIDDEN_COMPONENT ? null : (
+            <EditOutlinedIcon
+              color='action'
+              onClick={e => {
+                e.stopPropagation();
+                handleEdit(data);
+              }}
+            />
+          )}
 
           <DeleteOutlinedIcon
-            color="error"
-            onClick={(e) => {
+            color='error'
+            onClick={e => {
               e.stopPropagation();
               onDelete(data);
             }}
