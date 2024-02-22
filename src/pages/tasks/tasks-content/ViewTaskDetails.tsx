@@ -61,6 +61,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
   const [currentTask, setCurrentTask] = useState<AllTasksResponse | null>(task);
   const [openMarkCompleted, setOpenMarkCompleted] = useState<boolean>(false);
+  const [newlyMarkCompleted, setNewlyMarkCompleted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<Comment>(defaultComment);
 
   const updateStatusMutation = useUpdateTaskStatus();
@@ -77,13 +78,14 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
     setNewComment(defaultComment);
     onClose();
 
-    if (currentTask?.status === Status.Completed) {
+    if (newlyMarkCompleted) {
       const result: ForTaskStateChange = {
         type: "mark_completed",
         status: true,
       };
 
       handleHasTaskStateChange(result);
+      setNewlyMarkCompleted(false);
     }
   };
 
@@ -104,6 +106,8 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
               status: Status.Completed,
               completionDate: moment().format("L"),
             });
+
+            setNewlyMarkCompleted(true);
             setOpenMarkCompleted(false);
           }
         },
