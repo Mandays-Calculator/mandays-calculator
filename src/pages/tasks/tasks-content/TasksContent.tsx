@@ -81,7 +81,7 @@ const TasksContent = (): ReactElement => {
     const destinationStatus = destination.droppableId;
 
     // wait for a API change status only and update this
-    const draggedTask = tasks.find(task => task.id === draggableId);
+    const draggedTask = tasks.find((task) => task.id === draggableId);
 
     if (
       (sourceStatus === Status.Backlog &&
@@ -89,7 +89,7 @@ const TasksContent = (): ReactElement => {
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
       if (draggedTask) {
-        const updatedTaskData = tasks.map(task => {
+        const updatedTaskData = tasks.map((task) => {
           if (task.id === draggableId) {
             return {
               ...task,
@@ -151,7 +151,7 @@ const TasksContent = (): ReactElement => {
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedData = tasks.map(task => {
+    const updatedData = tasks.map((task) => {
       if (task.id === updatedTask.id) {
         return updatedTask;
       }
@@ -170,11 +170,11 @@ const TasksContent = (): ReactElement => {
         { id: taskID },
         {
           onSuccess: () => {
-            const updatedTasks = tasks.filter(task => task.id !== taskID);
+            const updatedTasks = tasks.filter((task) => task.id !== taskID);
             setTasks(updatedTasks);
             setSelectedTaskForDelete(null);
           },
-          onError: error => {
+          onError: (error) => {
             console.log(error);
           },
         },
@@ -224,15 +224,15 @@ const TasksContent = (): ReactElement => {
       return (
         <NoDataContainer>
           <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
-          <Typography variant='h5' fontWeight='bold'>
+          <Typography variant="h5" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.error)}
           </Typography>
-          <Typography variant='body2' fontWeight='bold'>
+          <Typography variant="body2" fontWeight="bold">
             {t(LocalizationKey.tasks.errorMessage.started)}
             <StyledLink
-              underline='hover'
-              variant='body2'
-              fontWeight='bold'
+              underline="hover"
+              variant="body2"
+              fontWeight="bold"
               onClick={() => handleCreateModalState()}
             >
               {t(LocalizationKey.tasks.errorMessage.created)}
@@ -252,11 +252,12 @@ const TasksContent = (): ReactElement => {
           <Grid container>
             <Grid item xs={calculateGridSize(Object.values(Status).length)}>
               <Select
-                name='teamFilter'
+                name="teamFilter"
                 placeholder={t(LocalizationKey.tasks.teamFilter)}
                 options={teamOptions}
                 onChange={handleTeamFilter}
                 value={selectedTeam}
+                disableNoneOption={true}
               />
             </Grid>
           </Grid>
@@ -266,9 +267,9 @@ const TasksContent = (): ReactElement => {
           <TaskGridContainer
             container
             spacing={1}
-            justifyContent='space-between'
+            justifyContent="space-between"
           >
-            {Object.values(Status).map(status => {
+            {Object.values(Status).map((status) => {
               if (status !== Status.Invalid) {
                 return (
                   <StatusContainer

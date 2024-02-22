@@ -12,6 +12,7 @@ import { Table } from "~/components";
 import LocalizationKey from "~/i18n/key";
 
 import { ODCColumns, SucErrData } from "../utils";
+import { filterDataByValue } from "~/utils/helpers";
 
 const StyledTextField = styled(TextField)(() => ({
   width: "100%",
@@ -39,19 +40,16 @@ const ViewODC = (props: ViewProps): ReactElement => {
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const handleLowerCase = (value: string): string =>
-      value.toLocaleLowerCase();
+    const handleLowerCase = (value: string): string => value.toLowerCase();
+
+    const inputValue = handleLowerCase(event.target.value);
 
     setFilterData(
-      data?.filter((obj: OdcParam) => {
-        const value = handleLowerCase(event.target.value);
-        return (
-          obj.active === true &&
-          (handleLowerCase(obj.name).includes(value) ||
-            handleLowerCase(obj.abbreviation).includes(value) ||
-            handleLowerCase(obj.location.value).includes(value))
-        );
-      }),
+      filterDataByValue(
+        data.filter((odc) => odc.active && odc),
+        inputValue,
+        ["name", "abbreviation", "location"],
+      ),
     );
   };
 
