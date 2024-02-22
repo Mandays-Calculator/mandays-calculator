@@ -15,6 +15,7 @@ import {
   useRequestHandler,
 } from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
+import { dateToMilliseconds } from "~/utils/date";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
 import { ErrorMessage, Form, SvgIcon } from "~/components";
@@ -103,7 +104,9 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     const updateProjectParams = {
       name: projectName,
       projectId: selectedProject?.projectId,
-      dateCreated: selectedProject?.dateCreated,
+      dateCreated: dateToMilliseconds(
+        selectedProject?.dateCreated ?? Date.now(),
+      ),
       lastUpdatedDate: Date.now(),
       active: selectedProject?.active,
       teams: teamForm.map(
@@ -121,8 +124,8 @@ const AddProject = (props: ProjectListProps): ReactElement => {
           active: active ?? true,
           teamName,
           teamLead: teamLead.value,
-          dateCreated: dateCreated ?? Date.now(),
-          lastUpdatedDate: lastUpdatedDate ?? Date.now(),
+          dateCreated: dateToMilliseconds(dateCreated ?? Date.now()),
+          lastUpdatedDate: dateToMilliseconds(lastUpdatedDate ?? Date.now()),
           teamMembers: team.teamMembers.map(({ id }) => id),
         }),
       ),
