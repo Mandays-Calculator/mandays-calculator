@@ -81,7 +81,6 @@ const Estimation = (props: EstimationProps): ReactElement => {
     }
   }, [mode, form.values.tasks]);
 
-  console.log(form.values.phases, "pjases");
   const estimationTabs = form.values.phases.map(
     (phase, phaseIndex: number) => ({
       label:
