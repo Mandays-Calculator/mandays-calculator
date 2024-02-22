@@ -21,6 +21,7 @@ export interface TeamLead {
 }
 
 export interface TeamObject {
+  id?: string;
   projectId?: string;
   teamId?: string;
   active?: boolean;

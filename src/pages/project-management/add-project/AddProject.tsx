@@ -71,8 +71,6 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   );
 
   const onSubmit = async (): Promise<void> => {
-    if (createProjectStatus.loading) return;
-
     const { projectName, teams: teamForm } = projectForm.values;
 
     if (selectedProject) {
@@ -112,15 +110,15 @@ const AddProject = (props: ProjectListProps): ReactElement => {
       teams: teamForm.map(
         ({
           teamName,
-          teamId,
           teamLead,
           active,
+          id,
           dateCreated,
           lastUpdatedDate,
           ...team
         }) => ({
           projectId: selectedProject?.projectId,
-          teamId: teamId ?? null,
+          teamId: id ?? null,
           active: active ?? true,
           teamName,
           teamLead: teamLead.value,
