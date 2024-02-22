@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import type { EstimationColumn } from "../../utils/types";
 import type { ApiCommonOptions, Estimations, MandaysForm } from "..";
 
-import React, { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
 import { Typography } from "@mui/material";
@@ -81,6 +81,7 @@ const Estimation = (props: EstimationProps): ReactElement => {
     }
   }, [mode, form.values.tasks]);
 
+  console.log(form.values.phases, "pjases");
   const estimationTabs = form.values.phases.map(
     (phase, phaseIndex: number) => ({
       label:
@@ -106,9 +107,10 @@ const Estimation = (props: EstimationProps): ReactElement => {
         ),
       content: (
         <>
-          {phase.functionalities.map((func, funcIndex: number) => (
-            <React.Fragment key={func.id}>
-              <StyledAccordion title={func.name} sx={{ mb: 2 }}>
+          {phase.functionalities.map((func, funcIndex: number) => {
+            console.log(func, "fuc");
+            return (
+              <StyledAccordion title={func.name} sx={{ mb: 2 }} key={func.id}>
                 <Table<EstimationColumn>
                   name="parent-table-estimation"
                   data={(func.estimations as EstimationColumn[]) || []}
@@ -119,8 +121,8 @@ const Estimation = (props: EstimationProps): ReactElement => {
                   )}
                 />
               </StyledAccordion>
-            </React.Fragment>
-          ))}
+            );
+          })}
           <Stack direction={"row"} display={"flex"} justifyContent={"flex-end"}>
             <StyledFooter>
               <Typography fontWeight={"bold"}>

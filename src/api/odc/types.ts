@@ -22,7 +22,20 @@ export interface CreateOdcParam {
   lastUpdatedDate: string | null;
 }
 
-export interface UpdateOdcParam extends Omit<OdcParam, "holidays"> {}
+export interface UpdateOdcParam
+  extends Omit<
+    {
+      id: string;
+      name: string;
+      abbreviation: string;
+      location: string;
+      holidays: HolidayParam[] | null;
+      active: boolean;
+      createdDate: string | null;
+      lastUpdatedDate: string | null;
+    },
+    "holidays"
+  > {}
 
 export interface DeleteOdcParam {
   id: string;

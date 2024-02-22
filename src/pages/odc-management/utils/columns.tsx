@@ -41,7 +41,7 @@ export const ODCColumns = (
       Cell: ({ row }: CellProps<OdcParam>) => {
         const loc = country?.find(
           (countryValue: SelectObject) =>
-            countryValue.value === row.original.location.value,
+            countryValue.value === (row.original.location as unknown as string),
         );
         return <>{loc?.label}</>;
       },

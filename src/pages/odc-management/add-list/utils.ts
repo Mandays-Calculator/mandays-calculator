@@ -70,7 +70,7 @@ export const EditFormat = (obj: OdcParam): UpdateOdcParam => {
     id: obj.id,
     name: obj.name,
     abbreviation: obj.abbreviation,
-    location: obj.location,
+    location: (obj.location as unknown as SelectObject).value,
     active: obj.active,
     createdDate: obj.createdDate,
     lastUpdatedDate: date,
