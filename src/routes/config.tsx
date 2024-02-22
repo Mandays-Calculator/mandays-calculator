@@ -68,10 +68,6 @@ export const routes: RouteType[] = [
     element: <ErrorPage type="development-mode" />,
   },
   {
-    path: "account-info",
-    element: <ErrorPage type="development-mode" />,
-  },
-  {
     path: "history",
     element: <History />,
     pageTitle: "History",

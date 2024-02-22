@@ -30,7 +30,14 @@ import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
 import { StyledError } from "./styles";
 
 const AddODC = (props: AddProps): ReactElement => {
-  const { apiData, data, formContext, setFormContext, setSuccessError, country } = props;
+  const {
+    apiData,
+    data,
+    formContext,
+    setFormContext,
+    setSuccessError,
+    country,
+  } = props;
 
   const { t } = useTranslation();
   const {
@@ -41,7 +48,7 @@ const AddODC = (props: AddProps): ReactElement => {
     initialValues: NewODCData,
     validationSchema: IntValuesSchema(t),
     validateOnChange: false,
-    onSubmit: (): void => { },
+    onSubmit: (): void => {},
   });
 
   const { values, setValues, errors } = ODCForm;
@@ -86,7 +93,7 @@ const AddODC = (props: AddProps): ReactElement => {
       "isAddHolidaySuccess",
       "isUpdateOdcError",
       "isAddHolidayError",
-      setSuccessError
+      setSuccessError,
     );
 
     if (isUpdateOdcSuccess || isAddOdcSuccess) setFormContext("");
@@ -102,7 +109,7 @@ const AddODC = (props: AddProps): ReactElement => {
       apiData,
       values.abbreviation,
       "abbreviation",
-      values.id
+      values.id,
     );
     setAbbrUnqError(isAbbrError);
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
@@ -125,6 +132,7 @@ const AddODC = (props: AddProps): ReactElement => {
 
   const handleClose = (): void => setFormContext("");
 
+  console.log(values, "values");
   const handleError = (error: string | undefined): boolean => {
     return error !== undefined;
   };
@@ -147,7 +155,8 @@ const AddODC = (props: AddProps): ReactElement => {
             name={"location"}
             id="location"
             options={country}
-            error={handleError(errors.location)} />
+            error={handleError(errors.location)}
+          />
           <StyledError>{getFieldError(errors, "location")}</StyledError>
         </Grid>
         <Grid item xs={3}>

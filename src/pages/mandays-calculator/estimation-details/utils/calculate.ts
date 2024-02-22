@@ -1,10 +1,16 @@
-import { CommonOption } from "~/queries/common/options";
+import type { CommonOption } from "~/queries/common/options";
+import type { MandaysForm } from "../types";
+import type { Holiday } from "../summary/types";
+
+import { isUndefined } from "lodash";
+
 import {
   getAllHolidays,
   getTotalResourcesCount,
   networkDays,
 } from "../summary/utils/mapper";
-import type { MandaysForm } from "../types";
+
+import { checkFormKeys } from "./constants";
 
 interface CalculateTotalManHrsEstParams {
   resources: [string, number][];
@@ -46,6 +52,7 @@ export const calculateTotalResourcesOrLeaves = (
 export const calculateTotalResourcesByCareerStep = (
   data: MandaysForm,
   type: "phase" | "resource" = "resource",
+  phaseIndex?: number,
 ): Record<string, number> => {
   const totalResourcesByCareerStep: Record<string, number> = {};
 
@@ -94,7 +101,11 @@ export const calculateTotalResourcesByCareerStep = (
         });
       });
     };
-    data.phases.forEach(processPhase);
+    if (!isUndefined(phaseIndex)) {
+      processPhase(data.phases[phaseIndex]);
+    } else {
+      data.phases.forEach(processPhase);
+    }
     return totalResourcesByCareerStep;
   }
 
@@ -183,8 +194,7 @@ export const calculateTotalManHours = (
   existingODC: CommonOption,
   resources: any,
 ): number => {
-  const checkKeys = ["summary", "resources", "legends", "phases"];
-  if (checkKeys.every((item) => formState.hasOwnProperty(item))) {
+  if (checkFormKeys.every((item) => formState.hasOwnProperty(item))) {
     const resourcesLeaves = getTotalResourcesCount(
       formState.resources,
       "annualLeaves",
@@ -219,10 +229,9 @@ export const calculateTotalManHoursByOdc = (
   formState: MandaysForm,
   numberOfResources: number,
   numberOfLeaves: number,
-  holidays: string[],
+  holidays: Holiday[],
 ): number => {
-  const checkKeys = ["summary", "resources", "legends", "phases"];
-  if (checkKeys.every((item) => formState.hasOwnProperty(item))) {
+  if (checkFormKeys.every((item) => formState.hasOwnProperty(item))) {
     const workingDays = networkDays(
       formState.summary.startDate,
       formState.summary.endDate,

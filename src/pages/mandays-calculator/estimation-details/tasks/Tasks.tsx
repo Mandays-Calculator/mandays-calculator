@@ -29,7 +29,7 @@ const Tasks = (props: TaskProps): ReactElement => {
   const { t } = useTranslation();
   const form = useFormikContext<MandaysForm>();
   const {
-    mandaysCalculator: { summaryTableColumns },
+    mandaysCalculator: { taskGrandTotalManDays, taskGrandTotalManHours },
   } = LocalizationKey;
 
   const totalManHours = useMemo(
@@ -43,6 +43,7 @@ const Tasks = (props: TaskProps): ReactElement => {
       content: data.functionalities.map((functionalities) => {
         return (
           <Stack
+            key={data.id}
             mt={1}
             width={form.values.phases.length <= 2 ? "327%" : "197%"}
           >
@@ -91,14 +92,16 @@ const Tasks = (props: TaskProps): ReactElement => {
           <Box width="auto">
             <Stack justifyContent="space-between" flexDirection="row">
               <Typography fontWeight="600" fontSize="0.875rem">
-                Grand {t(summaryTableColumns.totalManHours)}:{" "}
-                {roundOffValue(totalManHours, "hours")} Hours
+                {t(taskGrandTotalManHours, {
+                  key: roundOffValue(totalManHours, "hours"),
+                })}
               </Typography>
             </Stack>
             <Stack justifyContent="space-between" flexDirection="row" mt={0.5}>
               <Typography fontWeight="600" fontSize="0.875rem">
-                Grand {t(summaryTableColumns.totalManDays)}:{" "}
-                {roundOffValue(totalManHours / 8, "days")} Days
+                {t(taskGrandTotalManDays, {
+                  key: roundOffValue(totalManHours / 8, "days"),
+                })}
               </Typography>
             </Stack>
           </Box>

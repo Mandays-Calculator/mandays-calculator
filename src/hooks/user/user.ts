@@ -38,7 +38,7 @@ export const checkUserAuthentication = (): {
   status: boolean;
   mcUser: LoginResponse | null;
 } => {
-  const mcUser = getItemStorage(SESSION_STORAGE_ITEMS.mcUser, "session");
+  const mcUser = getItemStorage(SESSION_STORAGE_ITEMS.mcUser, "local");
   const storedToken = getUserToken();
 
   if (

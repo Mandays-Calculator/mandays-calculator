@@ -125,6 +125,20 @@ const LocalizationKey = {
     },
   },
   mandaysCalculator: {
+    errorMessages: {
+      resourceRequired: "mandaysCalculator.errorMessages.resource.required",
+      pleaseSelect1Resource:
+        "mandaysCalculator.errorMessages.resource.pleaseSelect1Resource",
+      exceedResources:
+        "mandaysCalculator.errorMessages.resource.exceedResources",
+      assignedResource:
+        "mandaysCalculator.errorMessages.resource.assignedResource",
+      pleaseSelect1Task:
+        "mandaysCalculator.errorMessages.task.pleaseSelect1Task",
+      utilRateValidValue:
+        "mandaysCalculator.errorMessages.summary.utilRateValidValue",
+      endDateisLater: "mandaysCalculator.errorMessages.summary.endDate",
+    },
     generatingPDFLabel: "mandaysCalculator.generatingPDFLabel",
     label: "mandaysCalculator.label",
     sprintListLabel: "mandaysCalculator.sprintList.label",
@@ -153,11 +167,22 @@ const LocalizationKey = {
       totalManHours: "mandaysCalculator.summary.table.columns.totalManHours",
       totalManDays: "mandaysCalculator.summary.table.columns.totalManDays",
     },
+    summaryLabels: {
+      grandTotal: "mandaysCalculator.summary.labels.grandTotal",
+      hrs: "mandaysCalculator.summary.labels.hrs",
+      numberOfDays: "mandaysCalculator.summary.labels.numberOfDays",
+      numberOfOTDays: "mandaysCalculator.summary.labels.numberOfOTDays",
+      days: "mandaysCalculator.summary.labels.days",
+    },
     summaryTitle: "mandaysCalculator.summary.title",
     summaryTitle2: "mandaysCalculator.summary.title2",
     summarySubtitle: "mandaysCalculator.summary.subtitle",
     resourcesTitle: "mandaysCalculator.resourceList.title",
     resourceList: {
+      labels: {
+        totalResources: "mandaysCalculator.resourceList.label.totalResources",
+        addODC: "mandaysCalculator.resourceList.label.addODC",
+      },
       errorMessage: {
         duplicateODC:
           "mandaysCalculator.resourceList.errorMessage.duplicateODC",
@@ -177,13 +202,18 @@ const LocalizationKey = {
       team: "mandaysCalculator.summary.form.team",
       utilization: "mandaysCalculator.summary.form.utilization",
       startDate: "mandaysCalculator.summary.form.startDate",
+      noOfResources: "mandaysCalculator.summary.form.noOfResources",
+      leaves: "mandaysCalculator.summary.form.leaves",
       endDate: "mandaysCalculator.summary.form.endDate",
     },
     tasksTitle: "mandaysCalculator.tasks.title",
+    taskGrandTotalManHours: "mandaysCalculator.tasks.labels.grandTotalManhours",
+    taskGrandTotalManDays: "mandaysCalculator.tasks.labels.grandTotalManDays",
     noTaskLabel: "mandaysCalculator.tasks.toTaskLabel",
     noSelectedTaskLabel: "mandaysCalculator.tasks.noSelectedTaskLabel",
     taskDescriptionLabel: "mandaysCalculator.tasks.descriptionLabel",
     tasksListLabel: "mandaysCalculator.tasks.tasksListLabel",
+    selectedTask: "mandaysCalculator.tasks.selectedTask",
     tasksTableColumns: {
       tasks: "mandaysCalculator.tasks.table.columns.tasks",
       complexity: "mandaysCalculator.tasks.table.columns.complexity",
@@ -203,6 +233,8 @@ const LocalizationKey = {
     },
     estimation: {
       title: "mandaysCalculator.estimation.title",
+      labelLoader: "mandaysCalculator.estimation.label.loader",
+      addPhaseLabel: "mandaysCalculator.estimation.label.addPhase",
       estimationColumns: {
         taskName: "mandaysCalculator.estimation.estimationColumns.taskName",
         complexity: "mandaysCalculator.estimation.estimationColumns.complexity",

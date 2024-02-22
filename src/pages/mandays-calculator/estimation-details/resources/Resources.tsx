@@ -35,7 +35,7 @@ const Resources = (props: ResourcesProps): ReactElement => {
   const parentFieldName = "resources";
   const isInput: boolean = inputView.includes(mode);
   const {
-    mandaysCalculator: { resourceListTableColumns },
+    mandaysCalculator: { resourceListTableColumns, resourceList },
   } = LocalizationKey;
   const careerLevels = apiCommonOptions.careerSteps || [];
 
@@ -143,7 +143,8 @@ const Resources = (props: ResourcesProps): ReactElement => {
         <Grid container>
           <Grid textAlign={"left"}>
             <Typography variant="subtitle1" fontWeight="bold" color="primary">
-              Total Resources: {<strong>{totalResource}</strong>}
+              {t(resourceList.labels.totalResources)}:{" "}
+              {<strong>{totalResource}</strong>}
             </Typography>
           </Grid>
         </Grid>
