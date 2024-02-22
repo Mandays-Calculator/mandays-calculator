@@ -36,7 +36,7 @@ const AuthenticatedApp = (): ReactElement => {
     if (status && mcUser) {
       dispatch(updateUserState(mcUser));
     } else {
-      removeStateStorage("session");
+      removeStateStorage("local");
     }
     setLoadingAuth(false);
   }, []);
@@ -45,6 +45,7 @@ const AuthenticatedApp = (): ReactElement => {
     axiosInit();
   }, [isAuthenticated]);
 
+  console.log(useUserAuth(), "check");
   const AuthIdleApp = useIdleTimer(
     (): ReactElement => (
       <Layout>

@@ -50,7 +50,7 @@ describe("useUserAuth", () => {
       result.current.logout();
     });
 
-    expect(removeStateStorage).toHaveBeenCalledWith("session");
+    expect(removeStateStorage).toHaveBeenCalledWith("local");
   });
 });
 

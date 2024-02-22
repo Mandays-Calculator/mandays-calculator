@@ -94,12 +94,12 @@ export const userSlice = createSlice({
         const { onSuccess, onFailure } = action.meta.arg;
         if (action.type.endsWith("fulfilled")) {
           onSuccess?.(action.payload);
-          removeStateStorage("session");
+          removeStateStorage("local");
           removeCookie(cookieAuthKey);
           window.location.reload();
         } else if (action.type.endsWith("rejected")) {
           onFailure?.(action.error);
-          removeStateStorage("session");
+          removeStateStorage("local");
           removeCookie(cookieAuthKey);
           window.location.reload();
         }
