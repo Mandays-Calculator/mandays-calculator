@@ -66,6 +66,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
   const [isEditError, setIsEditError] = useState<boolean>(false);
   const EditUser = useEditUser(currentUser?.id ?? "");
+  console.log(EditUser, "edit user");
   const [status, callApi] = useRequestHandler(
     EditUser.mutate,
     () => setIsEditSuccess(true),
@@ -73,7 +74,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   );
   const projectOptions = commonOptionsAPI("project");
   const teamOptions = commonOptionsAPI("team");
-
+  console.log(values, "values");
   const EditUserForm: UserManagementForms = {
     firstName: values?.updateFirstName ?? "",
     lastName: values?.updateLastName ?? "",
