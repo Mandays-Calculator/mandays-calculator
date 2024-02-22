@@ -82,7 +82,7 @@ const phaseSchema = (careerSteps: string[], t: TFunction) => {
                         .test(
                           "resource-count-validation",
                           t(errorMessages.exceedResources, { key: key }),
-                          function () {
+                          function (val) {
                             const valueContext = this.options
                               .context as MandaysForm;
                             const checkPhaseIndex =
@@ -101,7 +101,7 @@ const phaseSchema = (careerSteps: string[], t: TFunction) => {
                                 Number(phaseIndex),
                               );
 
-                            console.log(valueResource, "check");
+                            console.log(val, availableResources, "check");
                             if (valueResource.hasOwnProperty(key)) {
                               return (
                                 valueResource[key] <= availableResources[key]
