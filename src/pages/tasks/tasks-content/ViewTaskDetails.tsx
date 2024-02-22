@@ -65,6 +65,11 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
   console.log(getComments);
 
+  const handleCloseViewTaskDetails = (): void => {
+    setNewComment(defaultComment);
+    onClose();
+  };
+
   const handleConfirmMarkCompleted: () => void = () => {
     if (currentTask) {
       setNewTask({
@@ -105,8 +110,8 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
       <AccordionComment defaultExpanded square>
         <AccordionCommentTitle
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="taskdetails-comment-panel"
-          id="taskdetails-comment-panel-header"
+          aria-controls='taskdetails-comment-panel'
+          id='taskdetails-comment-panel-header'
         >
           {t(LocalizationKey.tasks.viewTaskDetails.label.comments)}
         </AccordionCommentTitle>
@@ -114,8 +119,8 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
           <ViewTaskDetailsContainer
             item
             container
-            type="comment"
-            alignItems="center"
+            type='comment'
+            alignItems='center'
             xs={12}
           >
             <Grid item xs={2} sm={1}>
@@ -124,7 +129,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
             <Grid item xs={10} sm={11}>
               <CommentTexbox
-                name="comment"
+                name='comment'
                 placeholder={t(
                   LocalizationKey.tasks.viewTaskDetails.placeholder.comments,
                 )}
@@ -133,10 +138,10 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                 maxRows={10}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">
+                    <InputAdornment position='end'>
                       <IconButton
-                        aria-label="Send"
-                        edge="end"
+                        aria-label='Send'
+                        edge='end'
                         onClick={() => handleAddComment()}
                       >
                         <SendOutlinedIcon />
@@ -145,21 +150,21 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                   ),
                 }}
                 value={newComment.description}
-                onChange={(e) =>
+                onChange={e =>
                   setNewComment({ ...newComment, description: e.target.value })
                 }
               />
             </Grid>
           </ViewTaskDetailsContainer>
 
-          <Grid item container alignItems="center" xs={12} spacing={1.5}>
+          <Grid item container alignItems='center' xs={12} spacing={1.5}>
             {(currentTask?.comments || []).map((comment, index) => (
               <React.Fragment key={comment.id || index}>
                 <Grid item xs={2} sm={1}>
                   <Avatar alt={getAvatarAlt(comment?.user)} />
                 </Grid>
 
-                <Grid item container xs={10} sm={11} alignItems="center">
+                <Grid item container xs={10} sm={11} alignItems='center'>
                   <ViewCommentContainerBox key={index}>
                     <ViewTaskDetailsLabel>{`${comment?.user?.firstName} ${comment?.user?.lastName}`}</ViewTaskDetailsLabel>
                     <Typography>{comment?.description}</Typography>
@@ -178,17 +183,17 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
       <Modal
         open={open}
         title={currentTask?.name}
-        maxWidth="sm"
-        onClose={onClose}
+        maxWidth='sm'
+        onClose={handleCloseViewTaskDetails}
         sx={styledScrollbar}
       >
         <CloseContainer>
-          <IconButton onClick={onClose}>
+          <IconButton onClick={() => handleCloseViewTaskDetails()}>
             <CloseIcon />
           </IconButton>
         </CloseContainer>
 
-        <ViewTaskDetailsContainer container type="outer">
+        <ViewTaskDetailsContainer container spacing={1} type='outer'>
           <Grid item xs={12}>
             <ViewTaskDetailsLabel>
               {t(LocalizationKey.tasks.viewTaskDetails.label.description)}
@@ -196,22 +201,22 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             <Typography>{currentTask?.description || ""}</Typography>
           </Grid>
 
-          <ViewTaskDetailsContainer item container type="inner" xs={12}>
+          <ViewTaskDetailsContainer item container type='inner' xs={12}>
             <Grid item xs={12} sm={6}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.functionality)}
               </ViewTaskDetailsLabel>
-              <Typography>{currentTask?.functionality?.name}</Typography>
+              <Typography>{currentTask?.functionality?.name || ""}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.complexity)}
               </ViewTaskDetailsLabel>
-              <Typography>{currentTask?.complexity?.name}</Typography>
+              <Typography>{currentTask?.complexity?.name || ""}</Typography>
             </Grid>
           </ViewTaskDetailsContainer>
 
-          <ViewTaskDetailsContainer item container type="inner" xs={12}>
+          <ViewTaskDetailsContainer item container type='inner' xs={12}>
             <Grid item xs={12} sm={6}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.createdDate)}
@@ -231,7 +236,11 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                         .completionDate,
                     )}
                   </ViewTaskDetailsLabel>
-                  <Typography>{currentTask?.completionDate}</Typography>
+                  <Typography>
+                    {currentTask?.completionDate
+                      ? moment(currentTask.completionDate).format("L")
+                      : ""}
+                  </Typography>
                 </>
               ) : null}
               {currentTask?.status === Status.InProgress ? (
@@ -246,20 +255,20 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             </Grid>
           </ViewTaskDetailsContainer>
 
-          <ViewTaskDetailsContainer item type="inner" xs={12}>
+          <ViewTaskDetailsContainer item type='inner' xs={12}>
             <ViewTaskDetailsLabel>
               {t(LocalizationKey.tasks.viewTaskDetails.label.sprint)}
             </ViewTaskDetailsLabel>
             <Typography>
               {t(LocalizationKey.tasks.viewTaskDetails.placeholder.sprint)}
-              {currentTask?.sprint}
+              {currentTask?.sprint || ""}
             </Typography>
           </ViewTaskDetailsContainer>
 
           <ViewTaskDetailsContainer
             item
             container
-            type="inner"
+            type='inner'
             xs={12}
             spacing={1}
           >
