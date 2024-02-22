@@ -3,6 +3,16 @@ import type { Complexity } from "~/api/tasks";
 import type { Gender, Role } from "../user";
 import type { OdcParam } from "../odc";
 
+export interface ShareLinkResponse {
+  status: number;
+  data: {};
+}
+
+export interface ShareLinkParams {
+  expirationDate: number;
+  mandaysEstimationId: string;
+}
+
 export interface EstimationResponse {
   id: string;
   name: string;
@@ -78,6 +88,9 @@ interface Phase {
   ];
 }
 
+export interface EstimationLinkDetailResponse extends EstimationDetailResponse {
+  id: string;
+}
 export interface EstimationDetailResponse {
   summary: Summary;
   resources: {

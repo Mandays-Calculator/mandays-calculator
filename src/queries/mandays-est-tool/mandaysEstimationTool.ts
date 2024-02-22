@@ -4,11 +4,13 @@ import { useQuery } from "react-query";
 
 import {
   getEstimationDetails,
+  getEstimationLinkDetails,
   getEstimations,
   getTasks,
 } from "~/api/mandays-est-tool/";
 import {
   EstimationDetailResponse,
+  EstimationLinkDetailResponse,
   EstimationResponse,
   TasksResponse,
 } from "~/api/mandays-est-tool/types";
@@ -52,4 +54,12 @@ export const useGetEstimationDetails = (
   estimationId: string,
 ): UseQueryResult<QueryResponse<EstimationDetailResponse>, AxiosError> => {
   return useQuery("getEstimations", () => getEstimationDetails(estimationId));
+};
+
+export const useGetEstimationLinkDetails = (
+  linkCode: string,
+): UseQueryResult<QueryResponse<EstimationLinkDetailResponse>, AxiosError> => {
+  return useQuery("getEstimationsLinkDetails", () =>
+    getEstimationLinkDetails(linkCode),
+  );
 };

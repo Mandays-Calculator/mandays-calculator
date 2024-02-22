@@ -6,18 +6,20 @@ import { useState, useEffect } from "react";
 import { Grid, Typography, Stack } from "@mui/material";
 
 import LocalizationKey from "~/i18n/key";
-import { Form, Modal, ErrorMessage } from "~/components";
+import { Form, Modal, ErrorMessage, Alert } from "~/components";
 import {
   ControlledSelect,
   ControlledTextField,
 } from "~/components/form/controlled";
 import { getFieldError } from "~/components/form/utils";
+import { useShareLink } from "~/mutations/mandays-est-tool";
+import { useRequestHandler } from "~/hooks/request-handler";
 
 import { useShareMandaysForm } from "../../utils/estimationForms";
-
 import GeneratedLink from "./generated-link";
 import { timeTypeOptions, expiryOptions, hrsNo } from "./utils";
 import { StyledBackButton, StyledGenerateButton } from "./styles";
+import { useGetEstimationLinkDetails } from "~/queries/mandays-est-tool/mandaysEstimationTool";
 
 type ShareModalProps = {
   isShare: boolean;
@@ -38,18 +40,51 @@ const ShareModal = ({
   } = LocalizationKey;
   const [isLinkGeneratedSuccess, setIsLinkGeneratedSuccess] =
     useState<boolean>(false);
-
+  const ShareLink = useShareLink();
+  const [isSuccess, setSuccess] = useState<boolean>(false);
+  const [isError, setError] = useState<boolean>(false);
+  const [status, callApi] = useRequestHandler(
+    ShareLink.mutate,
+    () => setSuccess(true),
+    () => setError(true),
+  );
+  const linkDetails = useGetEstimationLinkDetails(
+    "WxiraGT57t2MjS1TI1EJRzwT0h70l6mafvYI9t5VWBWmkmYDZv",
+  ).data;
+  console.log(linkDetails, "test");
   const shareForm = useShareMandaysForm({
     onSubmit: (values: ShareFormValues) => {
       console.log("total hours", hrsNo(values));
       handleSubmit(values);
       setIsLinkGeneratedSuccess(true);
+      callApi({
+        expirationDate: Number(values.shareBy),
+        mandaysEstimationId: "497ba4ce-c0df-11ee-8772-a0291936d285",
+      });
     },
   });
 
   const handleClick = (): void => {
     setIsShare(false);
     shareForm.resetForm();
+  };
+  const renderAlert = (): ReactElement | undefined => {
+    if (!isSuccess) {
+      return (
+        <Alert
+          open={isError}
+          message={"There is a problem in your submitted data. Please check"}
+          type={"error"}
+        />
+      );
+    }
+    return (
+      <Alert
+        open={isSuccess}
+        message={"Link successfully generated"}
+        type={"success"}
+      />
+    );
   };
 
   useEffect(
@@ -145,6 +180,7 @@ const ShareModal = ({
             </Grid>
           )}
         </Form>
+        {!status.loading && renderAlert()}
       </Stack>
     </Modal>
   );
