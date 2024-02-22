@@ -249,7 +249,7 @@ const TasksContent = (): ReactElement => {
           open={viewDetailsModalOpen}
           userDetails={userDetails}
           task={selectedTask}
-          onSave={handleUpdateTask}
+          // onSave={handleUpdateTask}
           onClose={handleCloseViewDetailsModalState}
         />
       </>

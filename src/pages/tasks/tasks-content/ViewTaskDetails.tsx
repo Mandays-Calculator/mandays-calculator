@@ -18,7 +18,7 @@ import {
   Grid,
 } from "@mui/material";
 
-import { TextField, Modal, ConfirmModal } from "~/components";
+import { Modal, ConfirmModal } from "~/components";
 import { CheckBox } from "~/components/form";
 
 import {
@@ -40,12 +40,11 @@ interface ViewTaskDetailsProps {
   open: boolean;
   userDetails: User | null;
   task: AllTasksResponse | null;
-  onSave: (updatedTask: AllTasksResponse) => void;
   onClose: () => void;
 }
 
 const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
-  const { open, userDetails, task, onSave, onClose } = props;
+  const { open, userDetails, task, onClose } = props;
   const { t } = useTranslation();
 
   const defaultComment: Comment = {
@@ -65,14 +64,6 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
   const getComments = useComments();
 
   console.log(getComments);
-
-  const handleSaveTask = (): void => {
-    if (currentTask) {
-      onSave(currentTask);
-      setNewComment(defaultComment);
-      onClose();
-    }
-  };
 
   const handleConfirmMarkCompleted: () => void = () => {
     if (currentTask) {
@@ -192,27 +183,17 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
         sx={styledScrollbar}
       >
         <CloseContainer>
-          <IconButton onClick={handleSaveTask}>
+          <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </CloseContainer>
 
         <ViewTaskDetailsContainer container type="outer">
           <Grid item xs={12}>
-            <TextField
-              name="taskDescription"
-              label={t(LocalizationKey.tasks.viewTaskDetails.label.description)}
-              placeholder={t(
-                LocalizationKey.tasks.viewTaskDetails.placeholder.description,
-              )}
-              fullWidth
-              multiline
-              onChange={(e) =>
-                currentTask &&
-                setNewTask({ ...currentTask, description: e.target.value })
-              }
-              value={currentTask?.description || ""}
-            />
+            <ViewTaskDetailsLabel>
+              {t(LocalizationKey.tasks.viewTaskDetails.label.description)}
+            </ViewTaskDetailsLabel>
+            <Typography>{currentTask?.description || ""}</Typography>
           </Grid>
 
           <ViewTaskDetailsContainer item container type="inner" xs={12}>
