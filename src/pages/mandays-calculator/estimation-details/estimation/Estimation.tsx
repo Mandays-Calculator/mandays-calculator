@@ -155,8 +155,6 @@ const Estimation = (props: EstimationProps): ReactElement => {
     }
   };
 
-  console.log(form.values, "forn values");
-
   return (
     <Stack gap={2}>
       <Stack
