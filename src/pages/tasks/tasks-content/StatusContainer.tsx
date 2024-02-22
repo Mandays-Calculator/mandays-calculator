@@ -1,14 +1,12 @@
-import type { AllTasksResponse } from "~/api/tasks";
-import type { ReactElement } from "react";
+import type { AllTasksResponse, ForTaskStateChange } from "~/api/tasks";
+import React, { useEffect, useRef, useState, ReactElement } from "react";
 
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 
 import { Divider, Grid, IconButton, Stack } from "@mui/material";
 import "simplebar-react/dist/simplebar.min.css";
 import AddIcon from "@mui/icons-material/Add";
-import SimpleBarReact from "simplebar-react";
 import LocalizationKey from "~/i18n/key";
 
 import { useTasks } from "~/queries/tasks/Tasks";
@@ -21,11 +19,14 @@ import {
   StyledStatusContainer,
   StyledStatusTitle,
   calculateGridSize,
+  StyledSimpleBar,
 } from "./style";
 
 interface StatusContainer {
   status: Status;
   teamId: string;
+  hasTaskStateChange: ForTaskStateChange | null;
+  resetHasTaskStateChange: () => void;
   handleViewDetailsModalState: (task: AllTasksResponse) => void;
   handleCreateModalState: () => void;
   handleUpdateModalState: (task: AllTasksResponse) => void;
@@ -33,9 +34,13 @@ interface StatusContainer {
 }
 
 const StatusContainer = (props: StatusContainer): ReactElement => {
+  const scrollableNodeRef = React.createRef<HTMLDivElement>();
+
   const {
     status,
     teamId,
+    hasTaskStateChange,
+    resetHasTaskStateChange,
     handleViewDetailsModalState,
     handleCreateModalState,
     handleUpdateModalState,
@@ -44,15 +49,56 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
   const { t } = useTranslation();
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
+  const [page, setPage] = useState<number>(1);
 
-  const { data: tasksData } = useTasks(
+  const { data: tasksData, refetch } = useTasks(
     teamId,
     StatusValues[status].toString(),
-    "5",
-    "1",
+    "10",
+    page.toString(),
   );
 
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [loading, setLoading] = useState(false);
+
+  const tasksDataRef = useRef(tasksData);
+
+  useEffect(() => {
+    if (hasTaskStateChange) {
+      switch (hasTaskStateChange.type) {
+        case "change_status":
+          if (status === Status.Backlog || status === Status.OnHold) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
+        case "create_task":
+          if (status === Status.Backlog) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
+        case "update_task":
+        case "delete_task":
+          if (status === hasTaskStateChange.task?.status) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
+        case "mark_completed":
+          if (status === Status.InProgress || status === Status.Completed) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
+      }
+    }
+  }, [hasTaskStateChange]);
+
+  useEffect(() => {
+    refreshTaskList();
+  }, [teamId]);
 
   useEffect(() => {
     if (tasksData && tasksData.hasOwnProperty("errorCode")) {
@@ -61,9 +107,58 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         setErrorMessage("");
       }, 3000);
     } else if (tasksData) {
-      setTasks(tasksData.data);
+      setTasks(prevTasks => [...prevTasks, ...tasksData.data]);
     }
   }, [tasksData]);
+
+  useEffect(() => {
+    tasksDataRef.current = tasksData;
+  }, [tasksData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (
+          tasksDataRef.current &&
+          page > 1 &&
+          page <= tasksDataRef.current.page.lastPage
+        ) {
+          await refetch();
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [page, refetch]);
+
+  // OTHERS
+  const handleScroll = (event: React.UIEvent) => {
+    const target = event.target as HTMLDivElement;
+
+    const isAtBottom =
+      target.scrollHeight - target.scrollTop <= target.clientHeight + 100;
+
+    if (tasksDataRef.current !== undefined) {
+      if (
+        isAtBottom &&
+        !loading &&
+        page < tasksDataRef.current?.page.lastPage
+      ) {
+        setLoading(true);
+        setPage(prevPage => prevPage + 1);
+      }
+    }
+  };
+
+  const refreshTaskList = async () => {
+    setTasks([]);
+    setPage(1);
+    await refetch();
+  };
 
   // RENDER
   const renderStatusContainerHeader = (status: Status) => {
@@ -139,14 +234,19 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
               <Divider />
 
-              <SimpleBarReact style={{ maxHeight: "410px" }}>
+              <StyledSimpleBar
+                scrollableNodeProps={{
+                  ref: scrollableNodeRef,
+                  onScroll: handleScroll,
+                }}
+              >
                 {tasks.map((task, index) => (
                   <Stack key={`${status}_${task.name}_${index}`}>
                     {renderTaskDetailsCards(task, index)}
                   </Stack>
                 ))}
                 {provided.placeholder}
-              </SimpleBarReact>
+              </StyledSimpleBar>
             </StyledStatusContainer>
           )}
         </Droppable>

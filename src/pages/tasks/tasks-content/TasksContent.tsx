@@ -1,5 +1,9 @@
-import type { AllTasksResponse } from "~/api/tasks/types";
 import type { ReactElement } from "react";
+import type {
+  ForTaskStateChange,
+  AllTasksResponse,
+  UpdateTaskStatus,
+} from "~/api/tasks/types";
 
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
@@ -9,14 +13,18 @@ import { SelectChangeEvent, Typography, Grid } from "@mui/material";
 import LocalizationKey from "~/i18n/key";
 
 import { useCommonOption } from "~/queries/common/options";
-import { useDeleteTask } from "~/queries/tasks/Tasks";
 import { Select, PageContainer } from "~/components";
 import { ConfirmModal } from "~/components";
 import { useUserAuth } from "~/hooks/user";
+import {
+  useUpdateTaskStatus,
+  useDeleteTask,
+  useGetTags,
+} from "~/queries/tasks/Tasks";
 
 import CreateOrUpdateTask from "./CreateOrUpdateTask";
 import ViewTaskDetails from "./ViewTaskDetails";
-import { Status } from "./utils";
+import { Status, StatusValues } from "./utils";
 
 import NoTask from "~/assets/img/empty_tasks.png";
 
@@ -29,13 +37,6 @@ import {
 } from "./style";
 import StatusContainer from "./StatusContainer";
 
-const teamOptions = [
-  { value: "MC", label: "MC" },
-  { value: "BME", label: "BME" },
-  { value: "eMPF", label: "eMPF" },
-  { value: "CMT", label: "CMT" },
-];
-
 const TEAM_ID = "a2eb9f01-6e4e-11ee-8624-a0291936d1c2";
 
 const TasksContent = (): ReactElement => {
@@ -44,29 +45,55 @@ const TasksContent = (): ReactElement => {
   const {
     state: { user },
   } = useUserAuth();
-  const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const userDetails = user;
-  const complexities = useCommonOption("complexity");
-  const functionalities = useCommonOption("function", "");
 
-  const [selectedTeam, setSelectedTeam] = useState<string | null>("");
+  // DROPDOWN OPTIONS
+  const teams = useCommonOption("team_userid", userDetails?.id);
+  const [selectedTeam, setSelectedTeam] = useState<string>(TEAM_ID);
+
+  const complexities = useCommonOption("complexity");
+  const functionalities = useCommonOption("function", {
+    teamId: selectedTeam,
+    name: "",
+  });
+
+  const tagsValue = useGetTags();
+  const tagsOption = tagsValue.data?.map((e) => ({
+    label: e.name,
+    value: e.id,
+  }));
+
+  // TASK SELECTION
   const [selectedTask, setSelectedTask] = useState<AllTasksResponse | null>(
     null,
   );
   const [selectedTaskForDelete, setSelectedTaskForDelete] =
     useState<AllTasksResponse | null>(null);
+  const [hasTaskStateChange, setHasTaskStateChange] =
+    useState<ForTaskStateChange | null>(null);
 
+  // MODALS
   const [viewDetailsModalOpen, setViewDetailsModalOpen] =
     useState<boolean>(false);
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
+  // CRUD
+  const updateStatusMutation = useUpdateTaskStatus();
   const deleteMutation = useDeleteTask();
 
   // OTHERS
   const handleTeamFilter = (e: SelectChangeEvent<unknown>) => {
     setSelectedTeam(e.target.value as string);
+  };
+
+  const handleHasTaskStateChange = (result: ForTaskStateChange) => {
+    setHasTaskStateChange(result);
+  };
+
+  const resetHasTaskStateChange = () => {
+    setHasTaskStateChange(null);
   };
 
   // DRAG N DROP
@@ -79,27 +106,34 @@ const TasksContent = (): ReactElement => {
 
     const sourceStatus = source.droppableId;
     const destinationStatus = destination.droppableId;
-
-    // wait for a API change status only and update this
-    const draggedTask = tasks.find((task) => task.id === draggableId);
+    const updateStatus: UpdateTaskStatus = {
+      id: draggableId,
+      body: {
+        statusId: StatusValues[destinationStatus as Status],
+      },
+    };
 
     if (
       (sourceStatus === Status.Backlog &&
         destinationStatus === Status.OnHold) ||
       (sourceStatus === Status.OnHold && destinationStatus === Status.Backlog)
     ) {
-      if (draggedTask) {
-        const updatedTaskData = tasks.map((task) => {
-          if (task.id === draggableId) {
-            return {
-              ...task,
-              status: destinationStatus,
-            };
-          }
-          return task;
-        });
+      if (draggableId) {
+        updateStatusMutation.mutate(updateStatus, {
+          onSuccess: async (data) => {
+            if (await data) {
+              const result: ForTaskStateChange = {
+                type: "change_status",
+                status: true,
+              };
 
-        setTasks(updatedTaskData);
+              handleHasTaskStateChange(result);
+            }
+          },
+          onError: (error) => {
+            console.log(error);
+          },
+        });
       }
     }
   };
@@ -144,22 +178,24 @@ const TasksContent = (): ReactElement => {
   // CRUD
   const handleCreateTask = (newTask: AllTasksResponse | null) => {
     if (newTask) {
-      const createdData = [...tasks, newTask];
+      const result: ForTaskStateChange = {
+        type: "create_task",
+        task: newTask,
+      };
 
-      setTasks(createdData);
+      handleHasTaskStateChange(result);
     }
   };
 
   const handleUpdateTask = (updatedTask: AllTasksResponse): void => {
-    const updatedData = tasks.map((task) => {
-      if (task.id === updatedTask.id) {
-        return updatedTask;
-      }
+    if (updatedTask) {
+      const result: ForTaskStateChange = {
+        type: "update_task",
+        task: updatedTask,
+      };
 
-      return task;
-    });
-
-    setTasks(updatedData);
+      handleHasTaskStateChange(result);
+    }
   };
 
   const handleDeleteTask = () => {
@@ -170,8 +206,12 @@ const TasksContent = (): ReactElement => {
         { id: taskID },
         {
           onSuccess: () => {
-            const updatedTasks = tasks.filter((task) => task.id !== taskID);
-            setTasks(updatedTasks);
+            const result: ForTaskStateChange = {
+              type: "delete_task",
+              task: selectedTaskForDelete,
+            };
+
+            handleHasTaskStateChange(result);
             setSelectedTaskForDelete(null);
           },
           onError: (error) => {
@@ -190,9 +230,10 @@ const TasksContent = (): ReactElement => {
       <>
         <CreateOrUpdateTask
           open={createModalOpen}
-          teamId={TEAM_ID} // change this when team api is integrated
+          teamId={selectedTeam}
           complexities={complexities}
           functionalities={functionalities}
+          tagsOption={tagsOption as SelectObject[]}
           onCreateTask={handleCreateTask}
           onOpenCreateTask={handleCreateModalState}
           onClose={handleCloseCreateModalState}
@@ -200,9 +241,10 @@ const TasksContent = (): ReactElement => {
         <CreateOrUpdateTask
           open={updateModalOpen}
           update
-          teamId={TEAM_ID} // change this when team api is integrated
+          teamId={selectedTeam}
           complexities={complexities}
           functionalities={functionalities}
+          tagsOption={tagsOption as SelectObject[]}
           currentTask={selectedTask}
           onUpdateTask={handleUpdateTask}
           onOpenUpdateTask={handleUpdateModalState}
@@ -212,7 +254,7 @@ const TasksContent = (): ReactElement => {
           open={viewDetailsModalOpen}
           userDetails={userDetails}
           task={selectedTask}
-          onSave={handleUpdateTask}
+          handleHasTaskStateChange={handleHasTaskStateChange}
           onClose={handleCloseViewDetailsModalState}
         />
       </>
@@ -220,7 +262,8 @@ const TasksContent = (): ReactElement => {
   };
 
   const renderNoTask = () => {
-    if (tasks?.length === 0) {
+    // will update once api is integrated
+    if (TEAM_ID.length === 0) {
       return (
         <NoDataContainer>
           <img src={NoTask} alt={t(LocalizationKey.tasks.noTask)} />
@@ -254,7 +297,7 @@ const TasksContent = (): ReactElement => {
               <Select
                 name="teamFilter"
                 placeholder={t(LocalizationKey.tasks.teamFilter)}
-                options={teamOptions}
+                options={teams}
                 onChange={handleTeamFilter}
                 value={selectedTeam}
                 disableNoneOption={true}
@@ -269,12 +312,15 @@ const TasksContent = (): ReactElement => {
             spacing={1}
             justifyContent="space-between"
           >
-            {Object.values(Status).map((status) => {
+            {Object.values(Status).map((status, index) => {
               if (status !== Status.Invalid) {
                 return (
                   <StatusContainer
+                    key={index}
                     status={status}
-                    teamId={TEAM_ID}
+                    teamId={selectedTeam}
+                    hasTaskStateChange={hasTaskStateChange}
+                    resetHasTaskStateChange={resetHasTaskStateChange}
                     handleViewDetailsModalState={handleViewDetailsModalState}
                     handleCreateModalState={handleCreateModalState}
                     handleUpdateModalState={handleUpdateModalState}
@@ -284,7 +330,6 @@ const TasksContent = (): ReactElement => {
               }
             })}
           </TaskGridContainer>
-
           {renderNoTask()}
         </PageContainer>
       </DragDropContext>
