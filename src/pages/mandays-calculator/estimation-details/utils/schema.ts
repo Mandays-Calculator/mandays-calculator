@@ -85,27 +85,13 @@ const phaseSchema = (careerSteps: string[], t: TFunction) => {
                           function (val) {
                             const valueContext = this.options
                               .context as MandaysForm;
-                            const checkPhaseIndex =
-                              this.path.match(/phases\[(\d+)\]/);
-                            const phaseIndex =
-                              (checkPhaseIndex && checkPhaseIndex[1]) || 0;
                             const availableResources =
                               calculateTotalResourcesByCareerStep(
                                 valueContext,
                                 "resource",
                               );
-                            const valueResource =
-                              calculateTotalResourcesByCareerStep(
-                                valueContext,
-                                "phase",
-                                Number(phaseIndex),
-                              );
-
-                            console.log(val, availableResources, "check");
-                            if (valueResource.hasOwnProperty(key)) {
-                              return (
-                                valueResource[key] <= availableResources[key]
-                              );
+                            if (val) {
+                              return val <= availableResources[key];
                             }
                             return true;
                           },
