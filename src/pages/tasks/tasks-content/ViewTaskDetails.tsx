@@ -1,9 +1,14 @@
-import type { AllTasksResponse, Comment } from "~/api/tasks";
+import type {
+  ForTaskStateChange,
+  AllTasksResponse,
+  UpdateTaskStatus,
+  Comment,
+} from "~/api/tasks";
 import type { User } from "~/api/user/types.ts";
 import type { ReactElement } from "react";
 
-import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -33,18 +38,19 @@ import {
   CommentTexbox,
   TaskTags,
 } from "./style.ts";
-import { Status } from "./utils";
-import { useComments } from "~/queries/tasks/Tasks.ts";
+import { Status, StatusValues } from "./utils";
+import { useComments, useUpdateTaskStatus } from "~/queries/tasks/Tasks.ts";
 
 interface ViewTaskDetailsProps {
   open: boolean;
   userDetails: User | null;
   task: AllTasksResponse | null;
+  handleHasTaskStateChange: (result: ForTaskStateChange) => void;
   onClose: () => void;
 }
 
 const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
-  const { open, userDetails, task, onClose } = props;
+  const { open, userDetails, task, handleHasTaskStateChange, onClose } = props;
   const { t } = useTranslation();
 
   const defaultComment: Comment = {
@@ -53,12 +59,14 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
     description: "",
   };
 
-  const [currentTask, setNewTask] = useState<AllTasksResponse | null>(task);
-  const [openMarkCompleted, setMarkCompleted] = useState<boolean>(false);
+  const [currentTask, setCurrentTask] = useState<AllTasksResponse | null>(task);
+  const [openMarkCompleted, setOpenMarkCompleted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<Comment>(defaultComment);
 
+  const updateStatusMutation = useUpdateTaskStatus();
+
   useEffect(() => {
-    setNewTask(task);
+    setCurrentTask(task);
   }, [task]);
 
   const getComments = useComments();
@@ -68,27 +76,52 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
   const handleCloseViewTaskDetails = (): void => {
     setNewComment(defaultComment);
     onClose();
+
+    if (currentTask?.status === Status.Completed) {
+      const result: ForTaskStateChange = {
+        type: "mark_completed",
+        status: true,
+      };
+
+      handleHasTaskStateChange(result);
+    }
   };
 
   const handleConfirmMarkCompleted: () => void = () => {
-    if (currentTask) {
-      setNewTask({
-        ...currentTask,
-        status: Status.Completed,
-        completionDate: moment().format("L"),
+    if (currentTask && currentTask?.id) {
+      const updateStatus: UpdateTaskStatus = {
+        id: currentTask?.id,
+        body: {
+          statusId: StatusValues[Status.Completed],
+        },
+      };
+
+      updateStatusMutation.mutate(updateStatus, {
+        onSuccess: async data => {
+          if (await data) {
+            setCurrentTask({
+              ...currentTask,
+              status: Status.Completed,
+              completionDate: moment().format("L"),
+            });
+            setOpenMarkCompleted(false);
+          }
+        },
+        onError: error => {
+          console.log(error);
+        },
       });
-      setMarkCompleted(false);
     }
   };
 
   const handleCloseMarkCompleted: () => void = () => {
-    setMarkCompleted(false);
+    setOpenMarkCompleted(false);
   };
 
   const handleAddComment = (): void => {
     if (currentTask && newComment.description.trim() !== "") {
       const updatedComments = [...(currentTask?.comments || []), newComment];
-      setNewTask({ ...currentTask, comments: updatedComments });
+      setCurrentTask({ ...currentTask, comments: updatedComments });
       setNewComment(defaultComment);
     }
   };
@@ -249,7 +282,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                     LocalizationKey.tasks.viewTaskDetails.label.markComplete,
                   )}
                   checked={openMarkCompleted}
-                  onClick={() => setMarkCompleted(true)}
+                  onClick={() => setOpenMarkCompleted(true)}
                 />
               ) : null}
             </Grid>

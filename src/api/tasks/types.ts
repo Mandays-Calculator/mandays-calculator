@@ -158,7 +158,12 @@ export interface ForGetTags extends Omit<Tag[], "isActive"> {
 }
 
 export interface ForTaskStateChange {
-  type: "change_status" | "create_task" | "update_task" | "delete_task";
+  type:
+    | "change_status"
+    | "create_task"
+    | "update_task"
+    | "delete_task"
+    | "mark_completed";
   task?: AllTasksResponse;
   status?: boolean;
 }

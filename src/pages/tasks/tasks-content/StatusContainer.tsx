@@ -86,6 +86,12 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
             resetHasTaskStateChange();
           }
           break;
+        case "mark_completed":
+          if (status === Status.InProgress || status === Status.Completed) {
+            refreshTaskList();
+            resetHasTaskStateChange();
+          }
+          break;
       }
     }
   }, [hasTaskStateChange]);

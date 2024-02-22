@@ -1,9 +1,9 @@
+import type { ReactElement } from "react";
 import type {
-  AllTasksResponse,
   ForTaskStateChange,
+  AllTasksResponse,
   UpdateTaskStatus,
 } from "~/api/tasks/types";
-import type { ReactElement } from "react";
 
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
@@ -79,12 +79,17 @@ const TasksContent = (): ReactElement => {
   const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
+  // CRUD
   const updateStatusMutation = useUpdateTaskStatus();
   const deleteMutation = useDeleteTask();
 
   // OTHERS
   const handleTeamFilter = (e: SelectChangeEvent<unknown>) => {
     setSelectedTeam(e.target.value as string);
+  };
+
+  const handleHasTaskStateChange = (result: ForTaskStateChange) => {
+    setHasTaskStateChange(result);
   };
 
   const resetHasTaskStateChange = () => {
@@ -122,7 +127,7 @@ const TasksContent = (): ReactElement => {
                 status: true,
               };
 
-              setHasTaskStateChange(result);
+              handleHasTaskStateChange(result);
             }
           },
           onError: error => {
@@ -178,7 +183,7 @@ const TasksContent = (): ReactElement => {
         task: newTask,
       };
 
-      setHasTaskStateChange(result);
+      handleHasTaskStateChange(result);
     }
   };
 
@@ -189,7 +194,7 @@ const TasksContent = (): ReactElement => {
         task: updatedTask,
       };
 
-      setHasTaskStateChange(result);
+      handleHasTaskStateChange(result);
     }
   };
 
@@ -206,7 +211,7 @@ const TasksContent = (): ReactElement => {
               task: selectedTaskForDelete,
             };
 
-            setHasTaskStateChange(result);
+            handleHasTaskStateChange(result);
             setSelectedTaskForDelete(null);
           },
           onError: error => {
@@ -249,6 +254,7 @@ const TasksContent = (): ReactElement => {
           open={viewDetailsModalOpen}
           userDetails={userDetails}
           task={selectedTask}
+          handleHasTaskStateChange={handleHasTaskStateChange}
           onClose={handleCloseViewDetailsModalState}
         />
       </>
