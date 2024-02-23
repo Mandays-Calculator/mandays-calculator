@@ -58,8 +58,6 @@ const projectListReducer = (
           userCount += (team.teamMembers ?? []).length + (hasTeamLead ? 1 : 0);
         });
 
-        console.log(response, "data");
-
         return {
           ...response,
           projectId: response.projectId,
