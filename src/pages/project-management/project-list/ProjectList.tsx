@@ -54,7 +54,8 @@ const projectListReducer = (
         let userCount = 0;
 
         response.teams?.forEach((team) => {
-          userCount += (team.teamMembers ?? []).length;
+          const hasTeamLead = team?.teamLead?.lastName !== "";
+          userCount += (team.teamMembers ?? []).length + (hasTeamLead ? 1 : 0);
         });
 
         return {
