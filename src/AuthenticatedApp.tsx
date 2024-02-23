@@ -45,7 +45,6 @@ const AuthenticatedApp = (): ReactElement => {
     axiosInit();
   }, [isAuthenticated]);
 
-  console.log(useUserAuth(), "check");
   const AuthIdleApp = useIdleTimer(
     (): ReactElement => (
       <Layout>

@@ -38,18 +38,21 @@ const TeamListCard = (props: TeamListCardProps): ReactElement => {
 
     setValues({
       ...values,
-      teams: values.teams.filter((_val, index) => index !== teamIndex),
+      teams: values?.teams.filter((_val, index) => index !== teamIndex),
     });
   };
   return (
     <StyledContainer
       $isDefault={isDefault}
-      sx={ isReadOnly ? {} : { cursor: "pointer" }}
+      sx={isReadOnly ? {} : { cursor: "pointer" }}
       onClick={() => toggleEdit(teamIndex)}
     >
       <Typography fontWeight="bold">{teamObject.teamName}</Typography>
       <Typography fontWeight="bold">{teamObject.teamLead?.label}</Typography>
-      <IconButton onClick={($event) => handleDeleteCard($event)} sx={{visibility: isReadOnly ? "hidden" : "visible"}}>
+      <IconButton
+        onClick={($event) => handleDeleteCard($event)}
+        sx={{ visibility: isReadOnly ? "hidden" : "visible" }}
+      >
         <SvgIcon name="delete" color="error" $size={2} />
       </IconButton>
     </StyledContainer>
