@@ -5,5 +5,6 @@ export const accountInfoRoutes: RouteType[] = [
   {
     path: "account-info",
     element: <AccountInfo />,
+    protected: false,
   },
 ];
