@@ -30,7 +30,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   const { t } = useTranslation();
   const { values, setValues } = useFormikContext<AddTeamFormType>();
 
-  let team: TeamObject = values.teams.find(
+  let team: TeamObject = values?.teams.find(
     (_val, index) => index === teamIndex,
   ) as TeamObject;
 
@@ -66,7 +66,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
       setTeamLeadError(false);
     }
     if (projectName !== "" && teamName !== "" && teamLead.value !== "") {
-      let teams = values.teams.map((_val, index) => {
+      let teams = values?.teams.map((_val, index) => {
         if (index === teamIndex) {
           return { ..._val, teamName, teamLead, teamMembers: tableData };
         }
@@ -189,7 +189,7 @@ const EditTeamForm = (props: EditTeamFormProps): ReactElement => {
   };
 
   useEffect(() => {
-    const teamMembers = values.teams[teamIndex].teamMembers;
+    const teamMembers = values?.teams[teamIndex].teamMembers;
     initializeSelectedMembers(teamMembers as unknown as User[]);
   }, []);
 

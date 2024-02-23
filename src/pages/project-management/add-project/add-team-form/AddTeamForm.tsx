@@ -41,7 +41,7 @@ const AddTeamForm = (props: AddTeamFormProps): ReactElement => {
       setValues({
         ...values,
         teams: [
-          ...values.teams,
+          ...(values.teams || []),
           { teamName: teamName, teamLead: teamLead, teamMembers: [] },
         ],
       });
