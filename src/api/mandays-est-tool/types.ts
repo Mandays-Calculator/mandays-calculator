@@ -4,8 +4,15 @@ import type { Gender, Role } from "../user";
 import type { OdcParam } from "../odc";
 
 export interface ShareLinkResponse {
-  status: number;
-  data: {};
+  data: {
+    id: number;
+    linkType: string;
+    uri: string;
+    data: string;
+    expirationInSec: number;
+    createdBy: string;
+    createdDate: number;
+  };
 }
 
 export interface ShareLinkParams {
@@ -88,10 +95,11 @@ interface Phase {
   ];
 }
 
-export interface EstimationLinkDetailResponse extends EstimationDetailResponse {
-  id: string;
+export interface EstimationLinkDetailResponse {
+  data: EstimationDetailResponse;
 }
 export interface EstimationDetailResponse {
+  id: string;
   summary: Summary;
   resources: {
     [key: number]: ResourceDetails[];

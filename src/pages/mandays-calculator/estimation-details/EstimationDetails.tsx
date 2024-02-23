@@ -44,7 +44,7 @@ import { initMandays } from "./utils/initialValue";
 import { useExportMandaysForm, useMandaysForm } from "./utils/estimationForms";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
-  const { isExposed } = props;
+  const { isExposed, linkDetails } = props;
   const { mandaysCalculator } = LocalizationKey;
   const location = useLocation();
 
@@ -58,7 +58,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [isExport, setIsExport] = useState<boolean>(false);
   const [isShare, setIsShare] = useState<boolean>(false);
-
   const estimationId = location.pathname.split("/")[2];
   const mode = state?.mode || "view";
 
@@ -67,7 +66,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       setValidateCount(0);
     };
   }, [location.pathname]);
-
   const complexities = useCommonOption("complexity");
   const careerSteps = useCommonOption("career_step");
   const odcList = useCommonOption("odc");
@@ -93,7 +91,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       estimationName: estimationName,
     });
   };
-
   const constructInitialValue = useCallback((): MandaysForm => {
     if (mode === "edit" || mode === "view") {
       return estimationData
@@ -105,7 +102,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const mandaysForm = useMandaysForm({
     getCareerStepSingleVal: getCareerStepSingleVal,
-    initialValue: constructInitialValue(),
+    initialValue: isExposed
+      ? (linkDetails?.data as unknown as MandaysForm)
+      : constructInitialValue(),
     onSubmit: (val) => {
       navigate("../mandays-estimation-tool/summary", {
         state: { ...val, mode: mode },
@@ -136,7 +135,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       goBack();
     }
   };
-
   const handleNext = useCallback(async (): Promise<void> => {
     if (mode === "add" || mode === "edit") {
       await mandaysForm.validateForm();
@@ -301,7 +299,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
           handleSubmit={() => console.log("submit share modal")}
         />
       )}
-      {estimationError && (
+      {isExposed !== true && estimationError && (
         <Alert
           type="error"
           duration={3000}

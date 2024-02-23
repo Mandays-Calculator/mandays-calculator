@@ -17,6 +17,7 @@ type RenderLinkProps = {
   link: string;
   setIsShare: (value: boolean) => void;
   t: TFunction<"translation", undefined>;
+  estimationCode?: string;
 };
 
 const StyledCopyLinkButton = styled(Button)`
@@ -28,7 +29,7 @@ const StyledCopyLinkButton = styled(Button)`
 `;
 
 const GeneratedLink = (props: RenderLinkProps): ReactElement => {
-  const { link, setIsShare, t } = props;
+  const { link, setIsShare, t, estimationCode } = props;
   const {
     mandaysCalculator: { modal },
   } = LocalizationKey;
@@ -73,7 +74,7 @@ const GeneratedLink = (props: RenderLinkProps): ReactElement => {
             color="primary"
             onClick={() =>
               window.open(
-                `${window.location.origin}/mandays-estimation-detail`,
+                `${window.location.origin}/mandays-estimation-detail/${estimationCode}`,
                 "_blank",
                 "noreferrer",
               )

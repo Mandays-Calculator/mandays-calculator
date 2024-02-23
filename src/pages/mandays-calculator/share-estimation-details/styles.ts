@@ -1,4 +1,6 @@
+import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Stack } from "@mui/system";
 
 export const StyledContainer = styled("div")`
   height: 100%;
@@ -15,3 +17,25 @@ export const StyledImageContainer = styled("div")`
     height: auto;
   }
 `;
+
+export const StyledFooterContainer = styled("div")`
+  .css-1f1fvv9-MuiPaper-root-MuiAppBar-root {
+    bottom: auto;
+  }
+`;
+
+export const StyledHeader = styled(Stack)({
+  background: "#2C8ED1",
+  borderRadius: "10px",
+  height: "60px",
+  width: "100%",
+  justifyContent: "space-between",
+  alignItems: "center",
+  flexDirection: "row",
+});
+
+export const StyledText = styled(Typography)({
+  color: "#FEFEFE",
+  fontSize: "1.5rem",
+  fontWeight: "600",
+});

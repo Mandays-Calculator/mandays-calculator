@@ -56,10 +56,9 @@ export const useGetEstimationDetails = (
   return useQuery("getEstimations", () => getEstimationDetails(estimationId));
 };
 
-export const useGetEstimationLinkDetails = (
-  linkCode: string,
-): UseQueryResult<QueryResponse<EstimationLinkDetailResponse>, AxiosError> => {
-  return useQuery("getEstimationsLinkDetails", () =>
-    getEstimationLinkDetails(linkCode),
+export const useGetEstimationLinkDetails = (linkCode: string) => {
+  return useQuery<EstimationLinkDetailResponse, Error>(
+    ["getEstimationLinkDetails", linkCode],
+    () => getEstimationLinkDetails(linkCode),
   );
 };

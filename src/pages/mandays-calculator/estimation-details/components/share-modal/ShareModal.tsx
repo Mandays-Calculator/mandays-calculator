@@ -19,7 +19,7 @@ import { useShareMandaysForm } from "../../utils/estimationForms";
 import GeneratedLink from "./generated-link";
 import { timeTypeOptions, expiryOptions, hrsNo } from "./utils";
 import { StyledBackButton, StyledGenerateButton } from "./styles";
-import { useGetEstimationLinkDetails } from "~/queries/mandays-est-tool/mandaysEstimationTool";
+import { useParams } from "react-router-dom";
 
 type ShareModalProps = {
   isShare: boolean;
@@ -43,15 +43,15 @@ const ShareModal = ({
   const ShareLink = useShareLink();
   const [isSuccess, setSuccess] = useState<boolean>(false);
   const [isError, setError] = useState<boolean>(false);
+  const [estimationCode, setEstimationCode] = useState<string>();
   const [status, callApi] = useRequestHandler(
     ShareLink.mutate,
-    () => setSuccess(true),
+    (data) => {
+      setSuccess(true), setEstimationCode(JSON.parse(data.data.data).code);
+    },
     () => setError(true),
   );
-  const linkDetails = useGetEstimationLinkDetails(
-    "WxiraGT57t2MjS1TI1EJRzwT0h70l6mafvYI9t5VWBWmkmYDZv",
-  ).data;
-  console.log(linkDetails, "test");
+  const { estimationId } = useParams();
   const shareForm = useShareMandaysForm({
     onSubmit: (values: ShareFormValues) => {
       console.log("total hours", hrsNo(values));
@@ -59,11 +59,10 @@ const ShareModal = ({
       setIsLinkGeneratedSuccess(true);
       callApi({
         expirationDate: Number(values.shareBy),
-        mandaysEstimationId: "497ba4ce-c0df-11ee-8772-a0291936d285",
+        mandaysEstimationId: estimationId as string,
       });
     },
   });
-
   const handleClick = (): void => {
     setIsShare(false);
     shareForm.resetForm();
@@ -149,7 +148,8 @@ const ShareModal = ({
             renderExpirationSelection()}
           {isLinkGeneratedSuccess && (
             <GeneratedLink
-              link={`${window.location.origin}/mandays-estimation-details?isShared=true`}
+              estimationCode={estimationCode}
+              link={`${window.location.origin}/mandays-estimation-detail/${estimationCode}`}
               setIsShare={setIsShare}
               t={t}
             />

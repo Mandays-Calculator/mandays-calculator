@@ -14,7 +14,7 @@ export const mandaysCalculatorRoutes: RouteType[] = [
     element: <EstimationDetails />,
   },
   {
-    path: "mandays-estimation-detail",
+    path: "mandays-estimation-detail/:estimationId",
     element: <ShareEstimationDetails />,
     protected: false,
   },
