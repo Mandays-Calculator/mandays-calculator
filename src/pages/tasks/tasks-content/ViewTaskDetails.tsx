@@ -1,9 +1,14 @@
-import type { AllTasksResponse, Comment } from "~/api/tasks";
+import type {
+  ForTaskStateChange,
+  AllTasksResponse,
+  UpdateTaskStatus,
+  Comment,
+} from "~/api/tasks";
 import type { User } from "~/api/user/types.ts";
 import type { ReactElement } from "react";
 
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
 
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -18,7 +23,7 @@ import {
   Grid,
 } from "@mui/material";
 
-import { TextField, Modal, ConfirmModal } from "~/components";
+import { Modal, ConfirmModal } from "~/components";
 import { CheckBox } from "~/components/form";
 
 import {
@@ -33,18 +38,19 @@ import {
   CommentTexbox,
   TaskTags,
 } from "./style.ts";
-import { Status } from "./utils";
+import { Status, StatusValues } from "./utils";
+import { useComments, useUpdateTaskStatus } from "~/queries/tasks/Tasks.ts";
 
 interface ViewTaskDetailsProps {
   open: boolean;
   userDetails: User | null;
   task: AllTasksResponse | null;
-  onSave: (updatedTask: AllTasksResponse) => void;
+  handleHasTaskStateChange: (result: ForTaskStateChange) => void;
   onClose: () => void;
 }
 
 const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
-  const { open, userDetails, task, onSave, onClose } = props;
+  const { open, userDetails, task, handleHasTaskStateChange, onClose } = props;
   const { t } = useTranslation();
 
   const defaultComment: Comment = {
@@ -53,41 +59,75 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
     description: "",
   };
 
-  const [currentTask, setNewTask] = useState<AllTasksResponse | null>(task);
-  const [openMarkCompleted, setMarkCompleted] = useState<boolean>(false);
+  const [currentTask, setCurrentTask] = useState<AllTasksResponse | null>(task);
+  const [openMarkCompleted, setOpenMarkCompleted] = useState<boolean>(false);
+  const [newlyMarkCompleted, setNewlyMarkCompleted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<Comment>(defaultComment);
 
+  const updateStatusMutation = useUpdateTaskStatus();
+
+  const HIDDEN_COMPONENT = true; // remove after demo or API is ok.
+
   useEffect(() => {
-    setNewTask(task);
+    setCurrentTask(task);
   }, [task]);
 
-  const handleSaveTask = (): void => {
-    if (currentTask) {
-      onSave(currentTask);
-      setNewComment(defaultComment);
-      onClose();
+  const getComments = useComments();
+
+  console.log(getComments);
+
+  const handleCloseViewTaskDetails = (): void => {
+    setNewComment(defaultComment);
+    onClose();
+
+    if (newlyMarkCompleted) {
+      const result: ForTaskStateChange = {
+        type: "mark_completed",
+        status: true,
+      };
+
+      handleHasTaskStateChange(result);
+      setNewlyMarkCompleted(false);
     }
   };
 
   const handleConfirmMarkCompleted: () => void = () => {
-    if (currentTask) {
-      setNewTask({
-        ...currentTask,
-        status: Status.Completed,
-        completionDate: moment().format("L"),
+    if (currentTask && currentTask?.id) {
+      const updateStatus: UpdateTaskStatus = {
+        id: currentTask?.id,
+        body: {
+          statusId: StatusValues[Status.Completed],
+        },
+      };
+
+      updateStatusMutation.mutate(updateStatus, {
+        onSuccess: async data => {
+          if (await data) {
+            setCurrentTask({
+              ...currentTask,
+              status: Status.Completed,
+              completionDate: moment().format("L"),
+            });
+
+            setNewlyMarkCompleted(true);
+            setOpenMarkCompleted(false);
+          }
+        },
+        onError: error => {
+          console.log(error);
+        },
       });
-      setMarkCompleted(false);
     }
   };
 
   const handleCloseMarkCompleted: () => void = () => {
-    setMarkCompleted(false);
+    setOpenMarkCompleted(false);
   };
 
   const handleAddComment = (): void => {
     if (currentTask && newComment.description.trim() !== "") {
       const updatedComments = [...(currentTask?.comments || []), newComment];
-      setNewTask({ ...currentTask, comments: updatedComments });
+      setCurrentTask({ ...currentTask, comments: updatedComments });
       setNewComment(defaultComment);
     }
   };
@@ -158,7 +198,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
 
           <Grid item container alignItems='center' xs={12} spacing={1.5}>
             {(currentTask?.comments || []).map((comment, index) => (
-              <>
+              <React.Fragment key={comment.id || index}>
                 <Grid item xs={2} sm={1}>
                   <Avatar alt={getAvatarAlt(comment?.user)} />
                 </Grid>
@@ -169,7 +209,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                     <Typography>{comment?.description}</Typography>
                   </ViewCommentContainerBox>
                 </Grid>
-              </>
+              </React.Fragment>
             ))}
           </Grid>
         </AccordionCommentDetails>
@@ -183,31 +223,21 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
         open={open}
         title={currentTask?.name}
         maxWidth='sm'
-        onClose={onClose}
+        onClose={handleCloseViewTaskDetails}
         sx={styledScrollbar}
       >
         <CloseContainer>
-          <IconButton onClick={handleSaveTask}>
+          <IconButton onClick={() => handleCloseViewTaskDetails()}>
             <CloseIcon />
           </IconButton>
         </CloseContainer>
 
-        <ViewTaskDetailsContainer container type='outer'>
+        <ViewTaskDetailsContainer container spacing={1} type='outer'>
           <Grid item xs={12}>
-            <TextField
-              name='taskDescription'
-              label={t(LocalizationKey.tasks.viewTaskDetails.label.description)}
-              placeholder={t(
-                LocalizationKey.tasks.viewTaskDetails.placeholder.description,
-              )}
-              fullWidth
-              multiline
-              onChange={e =>
-                currentTask &&
-                setNewTask({ ...currentTask, description: e.target.value })
-              }
-              value={currentTask?.description || ""}
-            />
+            <ViewTaskDetailsLabel>
+              {t(LocalizationKey.tasks.viewTaskDetails.label.description)}
+            </ViewTaskDetailsLabel>
+            <Typography>{currentTask?.description || ""}</Typography>
           </Grid>
 
           <ViewTaskDetailsContainer item container type='inner' xs={12}>
@@ -215,13 +245,13 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.functionality)}
               </ViewTaskDetailsLabel>
-              <Typography>{currentTask?.functionality?.name}</Typography>
+              <Typography>{currentTask?.functionality?.name || ""}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <ViewTaskDetailsLabel>
                 {t(LocalizationKey.tasks.viewTaskDetails.label.complexity)}
               </ViewTaskDetailsLabel>
-              <Typography>{currentTask?.complexity?.name}</Typography>
+              <Typography>{currentTask?.complexity?.name || ""}</Typography>
             </Grid>
           </ViewTaskDetailsContainer>
 
@@ -245,7 +275,11 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                         .completionDate,
                     )}
                   </ViewTaskDetailsLabel>
-                  <Typography>{currentTask?.completionDate}</Typography>
+                  <Typography>
+                    {currentTask?.completionDate
+                      ? moment(currentTask.completionDate).format("L")
+                      : ""}
+                  </Typography>
                 </>
               ) : null}
               {currentTask?.status === Status.InProgress ? (
@@ -254,7 +288,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
                     LocalizationKey.tasks.viewTaskDetails.label.markComplete,
                   )}
                   checked={openMarkCompleted}
-                  onClick={() => setMarkCompleted(true)}
+                  onClick={() => setOpenMarkCompleted(true)}
                 />
               ) : null}
             </Grid>
@@ -266,7 +300,7 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
             </ViewTaskDetailsLabel>
             <Typography>
               {t(LocalizationKey.tasks.viewTaskDetails.placeholder.sprint)}
-              {currentTask?.sprint}
+              {currentTask?.sprint || ""}
             </Typography>
           </ViewTaskDetailsContainer>
 
@@ -283,15 +317,17 @@ const ViewTaskDetails = (props: ViewTaskDetailsProps): ReactElement => {
               </ViewTaskDetailsLabel>
             </Grid>
             {(currentTask?.tags ?? []).map((tag, index) => (
-              <Grid item>
-                <TaskTags status={tag?.name} key={index}>
-                  {tag?.name}
-                </TaskTags>
-              </Grid>
+              <React.Fragment key={tag?.id || index}>
+                <Grid item>
+                  <TaskTags status={tag?.name} key={index}>
+                    {tag?.name}
+                  </TaskTags>
+                </Grid>
+              </React.Fragment>
             ))}
           </ViewTaskDetailsContainer>
 
-          {renderCommentSection()}
+          {HIDDEN_COMPONENT ? null : renderCommentSection()}
         </ViewTaskDetailsContainer>
       </Modal>
 

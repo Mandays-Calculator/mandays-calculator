@@ -1,7 +1,10 @@
 export const NewODCData = {
   id: "",
   name: "",
-  location: "",
+  location: {
+    label: "",
+    value: "",
+  },
   abbreviation: "",
   holidays: null,
   active: true,

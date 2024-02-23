@@ -30,7 +30,6 @@ import {
 import { CreateOrUpdateLabel, ComplexityLabel, CloseContainer } from "./style";
 import ComplexityDetails from "./complexity-details";
 
-import { TAG_OPTIONS } from "~/__tests__/pages/tasks/utils/utils";
 import { Status, StatusValues } from "./utils";
 
 interface CreateOrUpdateTaskProps {
@@ -39,6 +38,7 @@ interface CreateOrUpdateTaskProps {
   teamId: string;
   complexities: SelectObject[];
   functionalities: SelectObject[];
+  tagsOption: SelectObject[];
   currentTask?: AllTasksResponse | null;
   onCreateTask?: (task: AllTasksResponse) => void;
   onUpdateTask?: (task: AllTasksResponse) => void;
@@ -72,6 +72,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     teamId,
     complexities,
     functionalities,
+    tagsOption,
     currentTask,
     onCreateTask,
     onUpdateTask,
@@ -127,7 +128,16 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       complexityId: getComplexityDetails(taskData._complexity as string),
     };
 
-    postTasks.mutate(createData);
+    postTasks.mutate(createData, {
+      onSuccess: data => {
+        if (onCreateTask) {
+          onCreateTask(data);
+        }
+      },
+      onError: error => {
+        console.log(error);
+      },
+    });
   };
 
   const handleUpdateTask = (taskData: AllTasksResponse) => {
@@ -142,7 +152,16 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
       complexityId: getComplexityDetails(taskData._complexity as string),
     };
 
-    putTasks.mutate(updatedData);
+    putTasks.mutate(updatedData, {
+      onSuccess: data => {
+        if (update && onUpdateTask) {
+          onUpdateTask(data);
+        }
+      },
+      onError: error => {
+        console.log(error);
+      },
+    });
   };
 
   // EVENT CHANGES
@@ -181,7 +200,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
     _selectedTags.map(selectedTag => {
       const findSelectedTag = _.find(
-        TAG_OPTIONS,
+        tagsOption,
         _.matchesProperty("value", selectedTag),
       );
 
@@ -216,10 +235,14 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
   const resetCreation = () => {
     setTask(initialTaskState);
+    createOrUpdateForm.resetForm();
   };
 
   const onCloseCreateOrUpdateTask = () => {
-    resetCreation();
+    if (!update) {
+      console.log("what");
+      resetCreation();
+    }
     onClose();
   };
 
@@ -315,7 +338,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 )}
                 multiple={true}
                 fullWidth
-                options={TAG_OPTIONS}
+                options={tagsOption}
               />
             </Grid>
           </Grid>

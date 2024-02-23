@@ -4,6 +4,7 @@ import { GenericErrorResponse } from "../types";
 export interface QueryResponse<T> {
   status: number;
   data: T;
+  page: Page;
 }
 
 export interface Functionality {
@@ -19,7 +20,7 @@ export interface Team {
   id: string;
   name?: string;
   projectId?: string;
-  isActive?: boolean;
+  active?: boolean;
   createdDate?: string | null;
   lastUpdatedDate?: string | null;
 }
@@ -69,6 +70,12 @@ export interface Complexity {
   lastUpdatedDate?: string;
 }
 
+export interface Page {
+  currentPage: number;
+  maxResults: number;
+  totalCount: number;
+  lastPage: number;
+}
 export interface AllTasksResponse {
   id?: string;
   name: string;
@@ -86,6 +93,7 @@ export interface AllTasksResponse {
   createdDate?: string;
   lastUpdatedDate?: string;
   sprint: string;
+  page?: Page;
 }
 
 export interface CreateOrUpdateFunctionality {
@@ -113,6 +121,23 @@ export interface UpdateTask {
   complexityId: string;
 }
 
+export interface UpdateTaskStatus {
+  id: string;
+  body: {
+    statusId: number;
+  };
+}
+
+export interface GetComments {
+  id: string;
+  description: string;
+  createdDate: string;
+}
+
+export interface FucntionalityParams {
+  teamId: string;
+  name: string;
+}
 export interface TaskResponse extends GenericErrorResponse {
   status: number;
   data: boolean;
@@ -122,12 +147,23 @@ export interface DeleteTaskId {
   id: string;
 }
 
-export interface GetFunctionality<T> {
-  data: T;
-  status: number;
-}
-
 export interface ForGetFunctionality extends Omit<Functionality, "isActive"> {
   id: string;
   active: boolean;
+}
+
+export interface ForGetTags extends Omit<Tag[], "isActive"> {
+  id: string;
+  active: boolean;
+}
+
+export interface ForTaskStateChange {
+  type:
+    | "change_status"
+    | "create_task"
+    | "update_task"
+    | "delete_task"
+    | "mark_completed";
+  task?: AllTasksResponse;
+  status?: boolean;
 }

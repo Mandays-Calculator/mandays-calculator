@@ -44,10 +44,12 @@ export const getTeams = async ({
   projectId,
 }: {
   projectId: string;
-}): Promise<Team[]> => {
+}): Promise<Team[] | undefined> => {
   const { apiBasePath } = getEnvConfig();
-  const response = await axios.get<Promise<Team[]>>(
-    `${apiBasePath}/projects/${projectId}/teams`,
-  );
-  return response.data;
+  if (projectId) {
+    const response = await axios.get<Promise<Team[]>>(
+      `${apiBasePath}/projects/${projectId}/teams`,
+    );
+    return response.data;
+  }
 };

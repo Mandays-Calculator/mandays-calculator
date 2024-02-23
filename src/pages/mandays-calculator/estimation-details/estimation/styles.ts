@@ -1,5 +1,6 @@
-import { Accordion, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import { CustomButton } from "~/components/form/button";
+import { Accordion } from "~/components";
 
 export const StyledTabContainer = styled("div")`
   max-width: 98%;

@@ -32,6 +32,8 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
   const { data, handleViewDetails, handleEdit, onDelete } = props;
   const { t } = useTranslation();
 
+  const HIDDEN_COMPONENT = true; // remove after demo or API is ok.
+
   return (
     <StyledPaper
       status={data?.status ?? Status.Backlog}
@@ -60,7 +62,9 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
 
         <Grid item xs={12}>
           <Typography>
-            {t(LocalizationKey.tasks.taskDetails.sprint) + data?.sprint}
+            {data?.sprint
+              ? t(LocalizationKey.tasks.taskDetails.sprint) + data.sprint
+              : t(LocalizationKey.tasks.taskDetails.sprint) + ""}
           </Typography>
         </Grid>
 
@@ -80,7 +84,7 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
           </Grid>
 
           {data?.tags?.map((tag, index) => (
-            <Grid item>
+            <Grid item key={index}>
               <TaskTags status={tag?.name} key={index}>
                 {tag?.name}
               </TaskTags>
@@ -89,13 +93,15 @@ const TaskDetailsCard = (props: TaskDetailsCardProps): ReactElement => {
         </Grid>
 
         <TaskActionContainer status={data?.status ?? Status.Backlog}>
-          <EditOutlinedIcon
-            color='action'
-            onClick={e => {
-              e.stopPropagation();
-              handleEdit(data);
-            }}
-          />
+          {HIDDEN_COMPONENT ? null : (
+            <EditOutlinedIcon
+              color='action'
+              onClick={e => {
+                e.stopPropagation();
+                handleEdit(data);
+              }}
+            />
+          )}
 
           <DeleteOutlinedIcon
             color='error'

@@ -28,7 +28,11 @@ export const removeStateStorage = (
     );
   }
   if (type === "local")
-    [[...items].map((item: string) => localStorage.removeItem(item))];
+    [
+      [...items, SESSION_STORAGE_ITEMS.mcUser].map((item: string) =>
+        localStorage.removeItem(item),
+      ),
+    ];
 };
 
 /**

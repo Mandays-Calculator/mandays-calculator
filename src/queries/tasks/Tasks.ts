@@ -6,7 +6,9 @@ import type {
   TaskResponse,
   CreateTask,
   UpdateTask,
-  Team,
+  ForGetTags,
+  UpdateTaskStatus,
+  GetComments,
 } from "~/api/tasks";
 
 import {
@@ -21,7 +23,9 @@ import {
   deleteTask,
   postTask,
   getTasks,
-  getTeam,
+  getTags,
+  patchUpdateTaskStatus,
+  getComments,
 } from "~/api/tasks/Tasks";
 
 export const useTasks = (
@@ -36,23 +40,32 @@ export const useTasks = (
 };
 
 export const usePostTasks = (): UseMutationResult<
-  QueryResponse<CreateTask>,
+  AllTasksResponse,
   AxiosError,
   CreateTask
 > => {
-  return useMutation<QueryResponse<CreateTask>, AxiosError, CreateTask>(
-    postTask,
-  );
+  return useMutation<AllTasksResponse, AxiosError, CreateTask>(postTask);
 };
 
 export const useUpdateTask = (): UseMutationResult<
-  QueryResponse<AllTasksResponse>,
+  AllTasksResponse,
   AxiosError,
   UpdateTask
 > => {
-  return useMutation<QueryResponse<AllTasksResponse>, AxiosError, UpdateTask>(
+  return useMutation<AllTasksResponse, AxiosError, UpdateTask>(
     "putUpdateTask",
     putUpdateTask,
+  );
+};
+
+export const useUpdateTaskStatus = (): UseMutationResult<
+  BaseResponse<TaskResponse>,
+  AxiosError,
+  UpdateTaskStatus
+> => {
+  return useMutation<BaseResponse<TaskResponse>, AxiosError, UpdateTaskStatus>(
+    "patchUpdateTaskStatus",
+    patchUpdateTaskStatus,
   );
 };
 
@@ -67,10 +80,13 @@ export const useDeleteTask = (): UseMutationResult<
   );
 };
 
-export const useGetTeam = (
-  userId: string,
-): UseQueryResult<QueryResponse<Team[]>, AxiosError> => {
-  return useQuery<QueryResponse<Team[]>, AxiosError>(["getTeam", userId], () =>
-    getTeam(userId),
+export const useGetTags = (): UseQueryResult<ForGetTags, AxiosError> => {
+  return useQuery("getTags", getTags);
+};
+
+export const useComments = (
+): UseQueryResult<QueryResponse<GetComments[]>, AxiosError> => {
+  return useQuery(`getComments`, () =>
+    getComments(),
   );
 };
