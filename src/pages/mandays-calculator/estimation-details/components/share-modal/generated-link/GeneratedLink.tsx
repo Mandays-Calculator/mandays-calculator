@@ -17,6 +17,7 @@ type RenderLinkProps = {
   link: string;
   setIsShare: (value: boolean) => void;
   t: TFunction<"translation", undefined>;
+  estimationCode?: string;
 };
 
 const StyledCopyLinkButton = styled(Button)`
@@ -71,13 +72,7 @@ const GeneratedLink = (props: RenderLinkProps): ReactElement => {
           <StyledLinkButton
             variant="contained"
             color="primary"
-            onClick={() =>
-              window.open(
-                `${window.location.origin}/mandays-estimation-detail`,
-                "_blank",
-                "noreferrer",
-              )
-            }
+            onClick={() => window.open(link, "_blank", "noreferrer")}
           >
             {t(modal.redirect)}
           </StyledLinkButton>

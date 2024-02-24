@@ -4,6 +4,9 @@ import {
   CreateEstimationParam,
   deleteEstimation,
   createEstimation,
+  ShareLinkParams,
+  ShareLinkResponse,
+  mandaysEstimationShareLink,
 } from "~/api/mandays-est-tool";
 
 export const useDeleteEstimation = () => {
@@ -17,5 +20,12 @@ export const useCreateEstimation = () => {
   return useMutation<{ id: string }, AxiosError, CreateEstimationParam>(
     "addEstimation",
     (params) => createEstimation(params),
+  );
+};
+
+export const useShareLink = () => {
+  return useMutation<ShareLinkResponse, AxiosError, ShareLinkParams>(
+    "shareLink",
+    (params) => mandaysEstimationShareLink(params),
   );
 };

@@ -59,7 +59,7 @@ const SummaryContent = ({
 
   const existingODC = getExistingODC(
     odcList || [],
-    formState.resources as unknown as ResourceData,
+    formState?.resources as unknown as ResourceData,
   );
 
   const summaryColumn = useMemo(

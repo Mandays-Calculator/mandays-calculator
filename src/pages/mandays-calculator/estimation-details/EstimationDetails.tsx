@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Location, useLocation, useNavigate } from "react-router-dom";
 import { Grid, Typography } from "@mui/material";
-
+import { isUndefined } from "lodash";
 import {
   Alert,
   CustomTab,
@@ -44,7 +44,7 @@ import { initMandays } from "./utils/initialValue";
 import { useExportMandaysForm, useMandaysForm } from "./utils/estimationForms";
 
 const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
-  const { isExposed } = props;
+  const { isExposed, linkDetails } = props;
   const { mandaysCalculator } = LocalizationKey;
   const location = useLocation();
 
@@ -58,7 +58,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState<boolean>(false);
   const [isExport, setIsExport] = useState<boolean>(false);
   const [isShare, setIsShare] = useState<boolean>(false);
-
   const estimationId = location.pathname.split("/")[2];
   const mode = state?.mode || "view";
 
@@ -68,17 +67,19 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     };
   }, [location.pathname]);
 
-  const complexities = useCommonOption("complexity");
-  const careerSteps = useCommonOption("career_step");
-  const odcList = useCommonOption("odc");
+  const complexities = !isExposed ? useCommonOption("complexity") : [];
+  const careerSteps = !isExposed ? useCommonOption("career_step") : [];
+  const odcList = !isExposed ? useCommonOption("odc") : [];
   const {
     data: estimationData,
     isError: estimationError,
     isLoading: estimationLoading,
-  } = useGetEstimationDetails(estimationId);
+  } = !isExposed
+    ? useGetEstimationDetails(estimationId)
+    : { data: { data: [] }, isError: false, isLoading: false };
 
   const getCareerStepSingleVal: string[] = careerSteps.map(
-    (item) => item.label,
+    (item: { label: string }) => item.label,
   );
 
   const switchTab = (tabId: number): void => {
@@ -105,7 +106,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
 
   const mandaysForm = useMandaysForm({
     getCareerStepSingleVal: getCareerStepSingleVal,
-    initialValue: constructInitialValue(),
+    initialValue: isExposed
+      ? (linkDetails?.data as unknown as MandaysForm)
+      : constructInitialValue(),
     onSubmit: (val) => {
       navigate("../mandays-estimation-tool/summary", {
         state: { ...val, mode: mode },
@@ -114,6 +117,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   });
 
   const estimationName = mandaysForm.values?.summary?.estimationName || "-";
+
   const exportForm = useExportMandaysForm({
     onSubmit: (values) => {
       const { exportBy } = values;
@@ -221,7 +225,12 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     },
   ];
 
-  if (estimationLoading) {
+  if (
+    estimationLoading ||
+    (isExposed && isUndefined(linkDetails)) ||
+    isUndefined(mandaysForm) ||
+    isUndefined(mandaysForm.values)
+  ) {
     return (
       <PageLoader labelOnLoad={t(mandaysCalculator.estimation.labelLoader)} />
     );
@@ -280,6 +289,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                 handleNext={handleNext}
                 handleSave={() => mandaysForm.submitForm()}
                 length={stepperObject.length - 1}
+                isExposed={isExposed}
               />
             )}
           </Form>
@@ -294,14 +304,9 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
         />
       )}
       {isShare && (
-        <ShareModal
-          isShare={isShare}
-          setIsShare={setIsShare}
-          t={t}
-          handleSubmit={() => console.log("submit share modal")}
-        />
+        <ShareModal isShare={isShare} setIsShare={setIsShare} t={t} />
       )}
-      {estimationError && (
+      {isExposed !== true && estimationError && (
         <Alert
           type="error"
           duration={3000}

@@ -72,3 +72,15 @@ export const dateFormat = (date: string, format?: string): string => {
     ? formattedDate.format(format || "yyyy-MM-dd")
     : "-";
 };
+
+export function dateToMilliseconds(dateString: string | number) {
+  var date = new Date(dateString);
+
+  if (isNaN(date.getTime())) {
+    return "Invalid Date";
+  }
+
+  var milliseconds = date.getTime();
+
+  return milliseconds;
+}

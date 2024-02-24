@@ -40,6 +40,7 @@ export type User = {
   joiningDate: string;
   roles: Role[];
   active: boolean;
+  image: string;
 };
 
 export interface UserPermissionResponse {

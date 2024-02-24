@@ -3,6 +3,9 @@ import type {
   EstimationResponse,
   EstimationDetailResponse,
   CreateEstimationParam,
+  ShareLinkResponse,
+  ShareLinkParams,
+  EstimationLinkDetailResponse,
 } from "./types";
 
 import axios from "axios";
@@ -82,4 +85,48 @@ export const createEstimation = async (
     params,
   );
   return response.data;
+};
+export const getEstimationLinkDetails = async (
+  linkCode: string,
+): BaseResponse<EstimationLinkDetailResponse> => {
+  const response = await axios.get<EstimationLinkDetailResponse>(
+    `http://localhost:18001/mandays-estimations/links?code=${linkCode}`,
+  );
+  return response.data;
+};
+
+export const mandaysEstimationShareLink = async (
+  params: ShareLinkParams,
+): Promise<ShareLinkResponse> => {
+  const { apiBasePath } = getEnvConfig();
+
+  const response = await axios.post<ShareLinkResponse>(
+    `${apiBasePath}/links/mandays-estimations`,
+    {
+      ...params,
+    },
+  );
+  return response.data;
+};
+
+export const getEstimationHistory = async ({
+  projectId,
+  userId,
+}: {
+  projectId: string;
+  userId: string;
+}): BaseResponse<EstimationResponse[]> => {
+  const apiBasePath = getApiBasePath();
+  if (projectId && userId) {
+    const response = await axios.get<EstimationResponse[]>(
+      `${apiBasePath}/mandays-estimations/histories`,
+      {
+        params: {
+          projectId: projectId,
+          userId: userId,
+        },
+      },
+    );
+    return response.data;
+  }
 };
