@@ -3,14 +3,20 @@ import type { Column } from "react-table";
 
 export interface HistoryData {
   id: string;
-  sprintName: string;
-  team: string;
+  name: string;
+  team: {
+    active: boolean;
+    id: string;
+    lastUpdatedDate: string;
+    name: string;
+    projectId: string;
+  };
   startDate: string;
   endDate: string;
 }
 
 export interface HistoryColumns {
-  sprintName: string;
+  name: string;
   team: string;
   startedDate: string;
   endDate: string;

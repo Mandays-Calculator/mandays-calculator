@@ -2,16 +2,18 @@ import type { ReactElement } from "react";
 import type { EstimationColumn } from "../../utils/types";
 import type { ApiCommonOptions, Estimations, MandaysForm } from "..";
 
-import React, { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormikContext } from "formik";
-import { Typography, styled } from "@mui/material";
+import { Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 
-import { Accordion, Table, CustomTab } from "~/components";
+import { Table, CustomTab } from "~/components";
 import { ControlledTextField } from "~/components/form/controlled";
 import { getFieldError } from "~/components/form/utils";
 import { FormErrors } from "~/components/form/types";
+
+import LocalizationKey from "~/i18n/key";
 
 import { EstimationListColumns } from "../../utils/columns";
 import { initializeformPhaseValue } from "../utils/initialValue";
@@ -19,30 +21,31 @@ import {
   calculateTotalManHoursPerPhase,
   roundOffValue,
 } from "../utils/calculate";
-import { StyledTabContainer } from "./styles";
+import {
+  StyledTabContainer,
+  StyledAccordion,
+  StyledFooter,
+  StyledButton,
+} from "./styles";
 
 interface EstimationProps {
   mode: EstimationDetailsMode;
   apiCommonOptions: ApiCommonOptions;
 }
 
-const StyledAccordion = styled(Accordion)(() => ({
-  [`& .MuiAccordionSummary-root`]: {
-    borderBottom: "1px solid #E1E0E0",
-    background: "#D7EFFF",
-  },
-}));
-
-const StyledFooter = styled("div")(() => ({
-  display: "flex",
-  justifyContent: "flex-end",
-  flexDirection: "column",
-}));
-
 const Estimation = (props: EstimationProps): ReactElement => {
   const { mode } = props;
   const form = useFormikContext<MandaysForm>();
   const { t } = useTranslation();
+
+  const {
+    mandaysCalculator: {
+      taskGrandTotalManDays,
+      taskGrandTotalManHours,
+      noSelectedTaskLabel,
+      estimation: { addPhaseLabel },
+    },
+  } = LocalizationKey;
   const mappedCareerSteps = Object.entries(form.values.resources)
     .map(
       (resource) =>
@@ -84,6 +87,7 @@ const Estimation = (props: EstimationProps): ReactElement => {
         mode === "edit" || "add" ? (
           <>
             <ControlledTextField
+              sx={{ maxWidth: 200 }}
               name={`phases[${phaseIndex}].name`}
               error={
                 !!getFieldError(
@@ -102,9 +106,10 @@ const Estimation = (props: EstimationProps): ReactElement => {
         ),
       content: (
         <>
-          {phase.functionalities.map((func, funcIndex: number) => (
-            <React.Fragment key={func.id}>
-              <StyledAccordion title={func.name} sx={{ mb: 2 }}>
+          {phase.functionalities.map((func, funcIndex: number) => {
+            console.log(func, "fuc");
+            return (
+              <StyledAccordion title={func.name} sx={{ mb: 2 }} key={func.id}>
                 <Table<EstimationColumn>
                   name="parent-table-estimation"
                   data={(func.estimations as EstimationColumn[]) || []}
@@ -115,16 +120,17 @@ const Estimation = (props: EstimationProps): ReactElement => {
                   )}
                 />
               </StyledAccordion>
-            </React.Fragment>
-          ))}
+            );
+          })}
           <Stack direction={"row"} display={"flex"} justifyContent={"flex-end"}>
             <StyledFooter>
               <Typography fontWeight={"bold"}>
-                Grand Total Man Hours: {totalManHours} hours.
+                {t(taskGrandTotalManHours, { key: totalManHours })}
               </Typography>
               <Typography fontWeight={"bold"}>
-                Grand Total Man Days: {roundOffValue(totalManHours / 8, "days")}{" "}
-                days.
+                {t(taskGrandTotalManDays, {
+                  key: roundOffValue(totalManHours / 8, "days"),
+                })}
               </Typography>
             </StyledFooter>
           </Stack>
@@ -137,6 +143,19 @@ const Estimation = (props: EstimationProps): ReactElement => {
     (item) => item.dndStatus === "selected",
   );
 
+  const handleAddPhase = (): void => {
+    const initialPhase = form.values.phases[0];
+    if (initialPhase) {
+      form.setFieldValue("phases", [
+        ...form.values.phases,
+        {
+          ...initialPhase,
+          name: "",
+        },
+      ]);
+    }
+  };
+
   return (
     <Stack gap={2}>
       <Stack
@@ -146,13 +165,16 @@ const Estimation = (props: EstimationProps): ReactElement => {
       >
         {mode === "add" && hasSelectedTask ? (
           <StyledTabContainer>
+            <StyledButton onClick={handleAddPhase}>
+              {t(addPhaseLabel)}
+            </StyledButton>
             <CustomTab tabs={estimationTabs} />
           </StyledTabContainer>
         ) : (
           <Typography
             sx={{ textAlign: "center", padding: "5rem", margin: "0 auto" }}
           >
-            No Task selected. Please select a task in Task tab.
+            {t(noSelectedTaskLabel)}
           </Typography>
         )}
       </Stack>

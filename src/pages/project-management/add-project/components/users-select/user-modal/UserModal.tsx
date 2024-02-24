@@ -1,5 +1,6 @@
 import { Avatar, Box, Divider, Grid, Stack, Typography } from "@mui/material";
-
+import _ from "lodash";
+import { toUpperCaseNames } from "~/utils/helpers";
 import { ErrorMessage, Select, TextField } from "~/components";
 import { Modal } from "~/components/modal";
 import { CustomButton } from "~/components/form/button";
@@ -35,7 +36,6 @@ const UserModal = (props: UserModal) => {
   const odc = useCommonOption("odc");
 
   const [triggerTimeout] = useTimeout();
-
   const handleSelectUser = (): void => {
     if (selectedUser === null) {
       setErrorMessage("Please select a user");
@@ -56,14 +56,20 @@ const UserModal = (props: UserModal) => {
       careerStep: string;
     },
   ): UserListData[] => {
+    const uniqUsers = _.uniqBy(
+      users,
+      (user) =>
+        (user as unknown as UserListData).firstName.toLocaleLowerCase() +
+        (user as unknown as UserListData).lastName.toLocaleLowerCase(),
+    ) as unknown as UserListData[];
     if (filterValues.careerStep || filterValues.odc) {
-      return users.filter(
+      return uniqUsers.filter(
         (user) =>
           (user.careerStep === filterValues.careerStep && user) ||
           (user.odc?.id === filterValues.odc && user),
       );
     }
-    return users;
+    return uniqUsers;
   };
 
   return (
@@ -133,11 +139,14 @@ const UserModal = (props: UserModal) => {
                       <Avatar alt={`${user.lastName} ${user.firstName}`} />
                       <CardInfoContainer>
                         <Typography>
-                          {user.lastName}, {user.firstName}{" "}
-                          {user.middleName ?? ""}
+                          {toUpperCaseNames(user.lastName)},{" "}
+                          {toUpperCaseNames(user.firstName)}{" "}
+                          {toUpperCaseNames(user.middleName ?? "")}
                         </Typography>
-                        <Typography>{user.odc?.abbreviation ?? "-"}</Typography>
-                        <Typography>{user.careerStep}</Typography>
+                        <Typography>{user.email ?? "-"}</Typography>
+                        <Typography>
+                          <strong>{user.careerStep}</strong> - {user.employeeId}
+                        </Typography>
                       </CardInfoContainer>
                     </CardContainer>
                   </Grid>

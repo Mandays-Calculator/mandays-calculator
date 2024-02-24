@@ -6,6 +6,7 @@ export type CommonType =
   | "function"
   | "project"
   | "team"
+  | "team_userid"
   | "career_step"
   | "country"
   | "holidays"

@@ -73,7 +73,6 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   );
   const projectOptions = commonOptionsAPI("project");
   const teamOptions = commonOptionsAPI("team");
-
   const EditUserForm: UserManagementForms = {
     firstName: values?.updateFirstName ?? "",
     lastName: values?.updateLastName ?? "",

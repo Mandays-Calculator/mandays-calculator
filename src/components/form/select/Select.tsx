@@ -26,6 +26,7 @@ interface SelectProps extends BaseInputProps<MuiSelectProps> {
   name: string;
   sx?: SxProps;
   labelOnly?: boolean; // Added prop to display as label only
+  disableNoneOption?: boolean;
 }
 
 export const Select = (props: SelectProps): ReactElement => {
@@ -40,6 +41,7 @@ export const Select = (props: SelectProps): ReactElement => {
     onChange,
     value,
     labelOnly,
+    disableNoneOption,
     ...rest
   } = props;
 
@@ -167,7 +169,7 @@ export const Select = (props: SelectProps): ReactElement => {
         {...rest}
       >
         {renderSearchOptions()}
-        {renderNoneOptions()}
+        {!disableNoneOption && renderNoneOptions()}
       </MuiSelect>
     </FormControl>
   );

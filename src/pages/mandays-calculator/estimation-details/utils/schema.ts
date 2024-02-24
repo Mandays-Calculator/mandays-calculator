@@ -6,6 +6,7 @@ import { MandaysForm } from "..";
 
 const {
   common: { errorMessage },
+  mandaysCalculator: { errorMessages },
 } = LocalizationKey;
 /**
  * Set of schemas for validation in mandays form
@@ -22,7 +23,7 @@ const resourceSchema = (t: TFunction, careerSteps: string[]) => {
               odcId: yup.string().required(t(errorMessage.required)),
               numberOfResources: yup
                 .number()
-                .min(1, "Must have at least 1 resource")
+                .min(1, t(errorMessages.resourceRequired))
                 .required(t(errorMessage.required)),
               annualLeaves: yup.string(),
             }),
@@ -47,7 +48,7 @@ const resourceSchema = (t: TFunction, careerSteps: string[]) => {
     ) // Test that must have atleast 1 resource filled
     .test(
       "at-least-one-odcId",
-      "Please select at least 1 resource.",
+      t(errorMessages.pleaseSelect1Resource),
       function (values) {
         if (Object.values(values).length > 0) {
           return Object.values(values).some((item: any) => item.length > 0);
@@ -57,10 +58,10 @@ const resourceSchema = (t: TFunction, careerSteps: string[]) => {
     );
 };
 
-const phaseSchema = (careerSteps: string[]) => {
+const phaseSchema = (careerSteps: string[], t: TFunction) => {
   return yup.array().of(
     yup.object().shape({
-      name: yup.string().required("Phase name is required"),
+      name: yup.string().required(t(errorMessage.required)),
       functionalities: yup.array().of(
         yup.object().shape({
           id: yup.string(),
@@ -80,8 +81,8 @@ const phaseSchema = (careerSteps: string[]) => {
                         .number()
                         .test(
                           "resource-count-validation",
-                          `${key} must not exceed available resources`,
-                          function () {
+                          t(errorMessages.exceedResources, { key: key }),
+                          function (val) {
                             const valueContext = this.options
                               .context as MandaysForm;
                             const availableResources =
@@ -89,15 +90,8 @@ const phaseSchema = (careerSteps: string[]) => {
                                 valueContext,
                                 "resource",
                               );
-                            const valueResource =
-                              calculateTotalResourcesByCareerStep(
-                                valueContext,
-                                "phase",
-                              );
-                            if (valueResource.hasOwnProperty(key)) {
-                              return (
-                                valueResource[key] <= availableResources[key]
-                              );
+                            if (val) {
+                              return val <= availableResources[key];
                             }
                             return true;
                           },
@@ -110,7 +104,7 @@ const phaseSchema = (careerSteps: string[]) => {
               })
               .test(
                 "resource-must-have-value",
-                "Must have atleast assigned resource",
+                t(errorMessages.assignedResource),
                 function (value) {
                   return Object.values(value.resourceCountByTasks).some(
                     (resource) => resource !== 0,
@@ -124,15 +118,17 @@ const phaseSchema = (careerSteps: string[]) => {
   );
 };
 
-const taskSchema = yup
-  .array()
-  .test(
-    "at-least-one-selected",
-    "Please select at least 1 task",
-    function (tasks) {
-      if (tasks) return tasks.some((task) => task.dndStatus === "selected");
-    },
-  );
+const taskSchema = (t: TFunction) => {
+  return yup
+    .array()
+    .test(
+      "at-least-one-selected",
+      t(errorMessages.pleaseSelect1Task),
+      function (tasks) {
+        if (tasks) return tasks.some((task) => task.dndStatus === "selected");
+      },
+    );
+};
 
 const summarySchema = (t: TFunction) => {
   return yup.object({
@@ -141,24 +137,17 @@ const summarySchema = (t: TFunction) => {
     utilizationRate: yup
       .number()
       .required(t(errorMessage.required))
-      .min(
-        1,
-        "Utilization rate should not be zero. Please provide a valid value.",
-      ),
+      .min(1, t(errorMessages.utilRateValidValue)),
     startDate: yup.string().required(t(errorMessage.required)),
     endDate: yup
       .string()
       .required(t(errorMessage.required))
-      .test(
-        "is-later",
-        "End date must be later than start date",
-        function (endDate) {
-          const { startDate } = this.parent;
-          return (
-            !startDate || !endDate || new Date(startDate) < new Date(endDate)
-          );
-        },
-      ),
+      .test("is-later", t(errorMessages.endDateisLater), function (endDate) {
+        const { startDate } = this.parent;
+        return (
+          !startDate || !endDate || new Date(startDate) < new Date(endDate)
+        );
+      }),
   });
 };
 
@@ -169,7 +158,7 @@ export const estimationDetailsSchema = (
   return yup.object().shape({
     summary: summarySchema(t),
     resources: resourceSchema(t, careerSteps),
-    tasks: taskSchema,
-    phases: phaseSchema(careerSteps),
+    tasks: taskSchema(t),
+    phases: phaseSchema(careerSteps, t),
   });
 };

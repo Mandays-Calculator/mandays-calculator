@@ -213,6 +213,21 @@
     "label": "All rights reserved."
   },
   "mandaysCalculator": {
+    "errorMessages": {
+      "resource": {
+        "required": "Must have at least 1 resource",
+        "pleaseSelect1Resource": "Please select at least 1 resource.",
+        "exceedResources": "{{key}} must not exceed available resources",
+        "assignedResource": "Must have atleast assigned resource"
+      },
+      "task": {
+        "pleaseSelect1Task": "Please select at least 1 task"
+      },
+      "summary": {
+        "utilRateValidValue": "Utilization rate should not be zero. Please provide a valid value.",
+        "endDate": "End date must be later than start date"
+      }
+    },
     "title": "Mandays Calculator",
     "label": "Current Estimation",
     "generatingPDFLabel": "Generating your PDF. Please wait ...",
@@ -256,11 +271,24 @@
         "team": "Team",
         "utilization": "Utilization Rate",
         "startDate": "Start Date",
-        "endDate": "End Date"
+        "endDate": "End Date",
+        "noOfResources": "No. of Resources",
+        "leaves": "Leaves"
+      },
+      "labels": {
+        "grandTotal": "Grand Total",
+        "hrs": "hrs",
+        "numberOfDays": "# of days",
+        "numberOfOTDays": "# of OT days",
+        "days": "days"
       }
     },
     "resourceList": {
       "title": "Resources",
+      "label": {
+        "totalResources": "Total Resources",
+        "addODC": "Add ODC"
+      },
       "table": {
         "columns": {
           "odc": "ODC",
@@ -287,10 +315,16 @@
           "i07": "I07"
         }
       },
+      "labels": {
+        "grandTotalManhours": "Grand total man hours: {{key}} Hours",
+        "grandTotalManDays": "Grand total man days: {{key}} Days",
+        "noTaskSelected": "No Task selected. Please select a task in Task tab."
+      },
       "noTaskLabel": "No task.",
       "noSelectedTaskLabel": "No Data.",
       "descriptionLabel": "Description",
-      "tasksListLabel": "Tasks list"
+      "tasksListLabel": "Tasks list",
+      "selectedTask": "Selected Task"
     },
     "legend": {
       "title": "Legend",
@@ -303,6 +337,10 @@
       "excel": "Excel"
     },
     "estimation": {
+      "label": {
+        "loader": "Loading estimation .. ",
+        "addPhase": "Add Phase"
+      },
       "title": "Estimation",
       "estimationColumns": {
         "taskName": "Task Name",
@@ -378,7 +416,8 @@
       "created": "create a task",
       "fetch": "Unable to fetch data."
     },
-    "noTask": "A default picture showing that there are no tasks displayed."
+    "noTask": "A default picture showing that there are no tasks displayed.",
+    "teamFilter": "Team Name"
   },
   "history": {
     "button": {
@@ -386,6 +425,10 @@
     },
     "filter": {
       "placeholder": "Enter Keyword  to  filter  list.."
+    },
+    "label": {
+      "loadingHistory": "Loading estimation history ...",
+      "noEstimation": "No estimation found"
     }
   },
   "userManagement": {

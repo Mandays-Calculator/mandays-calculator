@@ -15,6 +15,7 @@ import {
   useRequestHandler,
 } from "~/hooks/request-handler";
 import { useErrorHandler } from "~/hooks/error-handler";
+import { dateToMilliseconds } from "~/utils/date";
 import { PageContainer } from "~/components/page-container";
 import { ControlledTextField } from "~/components/form/controlled";
 import { ErrorMessage, Form, SvgIcon } from "~/components";
@@ -70,8 +71,6 @@ const AddProject = (props: ProjectListProps): ReactElement => {
   );
 
   const onSubmit = async (): Promise<void> => {
-    if (createProjectStatus.loading) return;
-
     const { projectName, teams: teamForm } = projectForm.values;
 
     if (selectedProject) {
@@ -103,26 +102,28 @@ const AddProject = (props: ProjectListProps): ReactElement => {
     const updateProjectParams = {
       name: projectName,
       projectId: selectedProject?.projectId,
-      dateCreated: selectedProject?.dateCreated,
+      dateCreated: dateToMilliseconds(
+        selectedProject?.dateCreated ?? Date.now(),
+      ),
       lastUpdatedDate: Date.now(),
       active: selectedProject?.active,
       teams: teamForm.map(
         ({
           teamName,
-          teamId,
           teamLead,
           active,
+          id,
           dateCreated,
           lastUpdatedDate,
           ...team
         }) => ({
           projectId: selectedProject?.projectId,
-          teamId: teamId ?? null,
+          teamId: id ?? null,
           active: active ?? true,
           teamName,
           teamLead: teamLead.value,
-          dateCreated: dateCreated ?? Date.now(),
-          lastUpdatedDate: lastUpdatedDate ?? Date.now(),
+          dateCreated: dateToMilliseconds(dateCreated ?? Date.now()),
+          lastUpdatedDate: dateToMilliseconds(lastUpdatedDate ?? Date.now()),
           teamMembers: team.teamMembers.map(({ id }) => id),
         }),
       ),

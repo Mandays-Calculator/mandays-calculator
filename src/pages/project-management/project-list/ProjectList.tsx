@@ -54,14 +54,15 @@ const projectListReducer = (
         let userCount = 0;
 
         response.teams?.forEach((team) => {
-          userCount += (team.teamMembers ?? []).length;
+          const hasTeamLead = team?.teamLead?.lastName !== "";
+          userCount += (team.teamMembers ?? []).length + (hasTeamLead ? 1 : 0);
         });
 
         return {
           ...response,
           projectId: response.projectId,
           prjName: response.name,
-          noOfTeams: response.teams?.length,
+          noOfTeams: response.teams?.length || 0,
           noOfUsers: userCount,
         };
       });

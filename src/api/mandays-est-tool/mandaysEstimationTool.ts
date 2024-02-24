@@ -16,13 +16,17 @@ const getApiBasePath = (): ApiBasePath | string => {
 export const getTasks = async ({
   teamId,
   status,
+  maxResults,
+  currentPage,
 }: {
   teamId: string;
   status: string;
+  maxResults: number;
+  currentPage: number;
 }): BaseResponse<TasksResponse[]> => {
   const apiBasePath = getApiBasePath();
   const response = await axios.get<TasksResponse[]>(
-    `${apiBasePath}/tasks?teamId=${teamId}&statusId=${status}`,
+    `${apiBasePath}/tasks?teamId=${teamId}&statusId=${status}&maxResults=${maxResults}&currentPage=${currentPage}`,
   );
   return response.data;
 };
@@ -78,4 +82,26 @@ export const createEstimation = async (
     params,
   );
   return response.data;
+};
+
+export const getEstimationHistory = async ({
+  projectId,
+  userId,
+}: {
+  projectId: string;
+  userId: string;
+}): BaseResponse<EstimationResponse[]> => {
+  const apiBasePath = getApiBasePath();
+  if (projectId && userId) {
+    const response = await axios.get<EstimationResponse[]>(
+      `${apiBasePath}/mandays-estimations/histories`,
+      {
+        params: {
+          projectId: projectId,
+          userId: userId,
+        },
+      },
+    );
+    return response.data;
+  }
 };

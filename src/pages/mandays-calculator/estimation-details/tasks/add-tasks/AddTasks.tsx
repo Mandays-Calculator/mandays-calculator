@@ -27,7 +27,10 @@ const AddTasks = (): ReactElement => {
   const droppableList: Status[] = ["unselected", "selected"];
   const filteredValues: string[] = ["name", "description"];
 
-  const taskStatus: string = "1";
+  const taskStatus: string = "1"; // backlog
+  const maxResults: number = 100;
+  const currentPage: number = 1;
+
   const { t } = useTranslation();
   const { mandaysCalculator } = LocalizationKey;
   const { values, setValues } = useFormikContext<MandaysForm>();
@@ -35,19 +38,24 @@ const AddTasks = (): ReactElement => {
   const [notSelected, setNotSelected] = useState<string>("");
   const [selected, setSelected] = useState<string>("");
 
-  const tasksData = useGetTasks(values.summary.teamId, taskStatus);
+  const tasksData = useGetTasks(
+    values.summary.teamId,
+    taskStatus,
+    maxResults,
+    currentPage,
+  );
 
   const tasks: TaskType[] = getIn(values, "tasks");
 
   useEffect(() => {
     const toBeTask = initializeTasksListData(
-      tasksData.data as unknown as TaskType[],
+      tasksData.data?.data as unknown as TaskType[],
       values.tasks,
     );
     if (toBeTask) {
       setValues({ ...values, tasks: toBeTask });
     }
-  }, [tasksData.data]);
+  }, [tasksData.data?.data]);
 
   const handleDragEnd = (result: DropResult): void => {
     const { destination, draggableId } = result;
@@ -107,8 +115,8 @@ const AddTasks = (): ReactElement => {
                     <div ref={provided.innerRef} {...provided.droppableProps}>
                       <StyledTitle variant="h5" color="primary">
                         {droppable === "selected"
-                          ? "Selected Task"
-                          : "Task List"}
+                          ? t(mandaysCalculator.selectedTask)
+                          : t(mandaysCalculator.tasksListLabel)}
                       </StyledTitle>
                       <TextField
                         name={`mandays-${droppable}`}

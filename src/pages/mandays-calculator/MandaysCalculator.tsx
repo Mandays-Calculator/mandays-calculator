@@ -3,11 +3,14 @@ import type { ReactElement } from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { isArray } from "lodash";
 import { Grid } from "@mui/material";
 
 import { SvgIcon, PageContainer, Table, PageLoader } from "~/components";
 import { CustomButton } from "~/components/form/button";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
+
+import LocalizationKey from "~/i18n/key";
 
 import { useTimeout } from "~/hooks/timeout";
 import { useUserAuth } from "~/hooks/user";
@@ -15,12 +18,10 @@ import { useRequestHandler } from "~/hooks/request-handler";
 
 import { useDeleteEstimation } from "~/mutations/mandays-est-tool";
 import { useGetEstimations } from "~/queries/mandays-est-tool/mandaysEstimationTool";
-import LocalizationKey from "~/i18n/key";
 
 import { AlertRenderer } from "./components/alert-renderer";
 import { SprintListColumns } from "./utils/columns";
 import { StyledSprintLabel } from "./styles";
-import { isArray } from "lodash";
 
 const MandaysCalculator = (): ReactElement => {
   const { mandaysCalculator } = LocalizationKey;

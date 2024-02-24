@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 
 import {
   getEstimationDetails,
+  getEstimationHistory,
   getEstimations,
   getTasks,
 } from "~/api/mandays-est-tool/";
@@ -21,6 +22,8 @@ interface QueryResponse<T> {
 export const useGetTasks = (
   teamId: string,
   status: string,
+  maxResults: number,
+  currentPage: number,
   config?: Omit<
     UseQueryOptions<QueryResponse<TasksResponse[]>, AxiosError>,
     "queryKey"
@@ -28,7 +31,13 @@ export const useGetTasks = (
 ): UseQueryResult<QueryResponse<TasksResponse[]>, AxiosError> => {
   return useQuery(
     "getTasks",
-    () => getTasks({ teamId: teamId, status: status }),
+    () =>
+      getTasks({
+        teamId: teamId,
+        status: status,
+        maxResults: maxResults,
+        currentPage: currentPage,
+      }),
     config,
   );
 };
@@ -44,4 +53,11 @@ export const useGetEstimationDetails = (
   estimationId: string,
 ): UseQueryResult<QueryResponse<EstimationDetailResponse>, AxiosError> => {
   return useQuery("getEstimations", () => getEstimationDetails(estimationId));
+};
+
+export const useGetEstimationHistory = (params: {
+  projectId: string;
+  userId: string;
+}): UseQueryResult<QueryResponse<EstimationResponse[]>, AxiosError> => {
+  return useQuery("getEstimationsHistory", () => getEstimationHistory(params));
 };

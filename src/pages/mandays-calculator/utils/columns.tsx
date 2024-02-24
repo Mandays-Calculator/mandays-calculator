@@ -40,7 +40,7 @@ import {
 } from "../estimation-details/utils/calculate";
 import { MandaysForm } from "../estimation-details";
 import { FormikErrors } from "formik";
-import { getMultipliedEstimations } from "../estimation-details/summary/utils/mapper";
+import { getResourceEstimationPerFunction } from "../estimation-details/summary/utils/mapper";
 
 const {
   mandaysCalculator: {
@@ -120,7 +120,7 @@ export const SummaryListColumns = ({
       Header: t(summaryTableColumns.totalManHours),
       accessor: "totalManHours",
       Cell: ({ row }) => {
-        const multipliedEstimations = getMultipliedEstimations(
+        const multipliedEstimations = getResourceEstimationPerFunction(
           formValues as MandaysForm,
           row.index,
         );
@@ -138,7 +138,7 @@ export const SummaryListColumns = ({
       Header: t(summaryTableColumns.totalManDays),
       accessor: "totalManDays",
       Cell: ({ row }) => {
-        const multipliedEstimations = getMultipliedEstimations(
+        const multipliedEstimations = getResourceEstimationPerFunction(
           formValues as MandaysForm,
           row.index,
         );
@@ -189,9 +189,9 @@ export const TasksListColumns = ({
         };
         return (
           <Grid container key={row.index}>
-            {carrerLvlData.data.map((data) => {
+            {carrerLvlData.data.map((data, index) => {
               return (
-                <Grid item xs={2.4}>
+                <Grid item xs={2.4} key={index}>
                   {data.carrerLvl}
                   <Typography mt={3}>{data.value}</Typography>
                 </Grid>

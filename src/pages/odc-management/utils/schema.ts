@@ -4,19 +4,22 @@ import * as yup from "yup";
 
 import LocalizationKey from "~/i18n/key";
 
-const { odc: { validationInfo } } = LocalizationKey;
+const {
+  odc: { validationInfo },
+} = LocalizationKey;
 
 export const IntValuesSchema = (t: TFunction) => {
   return yup.object().shape({
     id: yup.string().defined(),
-    name: yup
-      .string()
-      .required(t(validationInfo.nameReq))
-      .default(""),
+    name: yup.string().required(t(validationInfo.nameReq)).default(""),
     location: yup
-      .string()
-      .required(t(validationInfo.locReq))
-      .default(""),
+      .object()
+      .shape({
+        value: yup.string().required(t(validationInfo.locReq)).default(""),
+        label: yup.string().required(t(validationInfo.locReq)).default(""),
+      })
+      .required(validationInfo.locReq)
+      .default(() => ({})),
     abbreviation: yup.string().default(""),
     holidays: yup
       .array()
@@ -29,7 +32,7 @@ export const IntValuesSchema = (t: TFunction) => {
           name: yup.string().default(""),
           createdDate: yup.string().nullable(),
           lastUpdatedDate: yup.string().nullable(),
-        })
+        }),
       )
       .nullable(),
     active: yup.boolean().default(true),

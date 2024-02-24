@@ -1,17 +1,14 @@
-import { CommonOption } from "~/queries/common/options";
-import { MandaysForm, Phase, Resource } from "../..";
+import type { CommonOption } from "~/queries/common/options";
+import type { MandaysForm, Phase, Resource } from "../..";
+import type { ExistingODC, Holiday, ResourceData } from "../types";
 
-export interface ResourceData {
-  [careerStep: string]: {
-    odcId: string;
-    numberOfResources: number;
-    annualLeaves?: string;
-  }[];
-}
-
+/**
+ *
+ * @param data Formvalues resources
+ * @returns all existing odc id in the resource form values
+ */
 export const getAllOdcIds = (data: ResourceData): string[] => {
   const odcIds: Set<string> = new Set();
-
   Object.values(data).forEach((resources) => {
     resources.forEach((resource) => {
       const { odcId } = resource;
@@ -24,13 +21,21 @@ export const getAllOdcIds = (data: ResourceData): string[] => {
   return Array.from(odcIds);
 };
 
+/**
+ *
+ * @param ODCData Common option ODC from API
+ * @param resoureState form values Resources
+ * @returns all Existing odc with values from API
+ */
 export const getExistingODC = (
   ODCData: CommonOption,
   resoureState: ResourceData,
-): any => {
+): ExistingODC[] => {
   if (ODCData && resoureState) {
     const existingODC = getAllOdcIds(resoureState);
-    return ODCData.filter((odc) => existingODC.includes(odc.value));
+    return ODCData.filter((odc) =>
+      existingODC.includes(odc.value),
+    ) as ExistingODC[];
   }
   return [];
 };
@@ -42,11 +47,10 @@ export const getExistingODC = (
  * @param holidays
  * @returns
  */
-
 export const networkDays = (
   startDate: Date | string | number,
   endDate: Date | string | number,
-  holidays: any,
+  holidays: Holiday[],
 ): number => {
   startDate = new Date(startDate);
   endDate = new Date(endDate);
@@ -65,7 +69,9 @@ export const networkDays = (
     if (
       currentDate.getDay() !== 0 &&
       currentDate.getDay() !== 6 &&
-      !holidays.includes(currentDate.toISOString().split("T")[0])
+      !holidays.includes(
+        currentDate.toISOString().split("T")[0] as unknown as Holiday,
+      )
     ) {
       workingDays++;
     }
@@ -80,12 +86,12 @@ export const networkDays = (
  * @returns
  */
 
-export const getAllHolidays = (odcs: any): any => {
-  let allHolidays: any = [];
+export const getAllHolidays = (odcs: CommonOption): Holiday[] => {
+  let allHolidays: Holiday[] = [];
   odcs.forEach((odc: any) => {
     if (odc.holidays && Array.isArray(odc.holidays)) {
       allHolidays = allHolidays.concat(
-        odc.holidays.map((holiday: any) => holiday.date),
+        odc.holidays.map((holiday: { date: string }) => holiday.date),
       );
     }
   });
@@ -93,11 +99,19 @@ export const getAllHolidays = (odcs: any): any => {
   return allHolidays;
 };
 
+/**
+ *
+ * @param data Form values resource
+ * @param itemKey  annualLeaves or resourceCount
+ * @returns total value of annual leaves or resource per ODC
+ */
 export const getTotalResourcesCount = (
   data: Resource,
   itemKey: keyof Resource,
 ) => {
-  const result: any = {};
+  const result: {
+    [key: string]: number;
+  } = {};
   for (const key in data) {
     if (data.hasOwnProperty(key) && Array.isArray(data[key])) {
       let totalResources = 0;
@@ -125,8 +139,14 @@ interface MultipliedEstimation {
   careerStep: number;
   manHours: number;
 }
-
-export const getMultipliedEstimations = (
+/**
+ * 
+ * @param formState 
+ * @param funcIndex 
+ * @returns  list of resources with multiplied manHours based on estimations
+    {careerStep: 'I03', manHours: 8}
+ */
+export const getResourceEstimationPerFunction = (
   formState: MandaysForm,
   funcIndex: number,
 ): MultipliedEstimation[] => {

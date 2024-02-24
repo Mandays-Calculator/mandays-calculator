@@ -30,7 +30,14 @@ import { IsDuplicate, AddFormat, EditFormat, AddHolidayFormat } from ".";
 import { StyledError } from "./styles";
 
 const AddODC = (props: AddProps): ReactElement => {
-  const { apiData, data, formContext, setFormContext, setSuccessError, country } = props;
+  const {
+    apiData,
+    data,
+    formContext,
+    setFormContext,
+    setSuccessError,
+    country,
+  } = props;
 
   const { t } = useTranslation();
   const {
@@ -41,7 +48,7 @@ const AddODC = (props: AddProps): ReactElement => {
     initialValues: NewODCData,
     validationSchema: IntValuesSchema(t),
     validateOnChange: false,
-    onSubmit: (): void => { },
+    onSubmit: (): void => {},
   });
 
   const { values, setValues, errors } = ODCForm;
@@ -86,7 +93,7 @@ const AddODC = (props: AddProps): ReactElement => {
       "isAddHolidaySuccess",
       "isUpdateOdcError",
       "isAddHolidayError",
-      setSuccessError
+      setSuccessError,
     );
 
     if (isUpdateOdcSuccess || isAddOdcSuccess) setFormContext("");
@@ -102,7 +109,7 @@ const AddODC = (props: AddProps): ReactElement => {
       apiData,
       values.abbreviation,
       "abbreviation",
-      values.id
+      values.id,
     );
     setAbbrUnqError(isAbbrError);
     if (isAbbrError) setAbbrUnqErrorMsg(t(validationInfo.abbrUnq));
@@ -138,7 +145,7 @@ const AddODC = (props: AddProps): ReactElement => {
             label={t(label.name)}
             id="name"
             error={handleError(errors.name) || nameUnqError}
-            helperText={getFieldError(errors, "name") || nameUnqErrorMsg}
+            helperText={getFieldError(errors as any, "name") || nameUnqErrorMsg}
           />
         </Grid>
         <Grid item xs={4.5}>
@@ -147,8 +154,17 @@ const AddODC = (props: AddProps): ReactElement => {
             name={"location"}
             id="location"
             options={country}
-            error={handleError(errors.location)} />
-          <StyledError>{getFieldError(errors, "location")}</StyledError>
+            error={
+              errors.location
+                ? errors.location.label !== ""
+                  ? true
+                  : false
+                : false
+            }
+          />
+          <StyledError>
+            {getFieldError(errors as any, "location.label")}
+          </StyledError>
         </Grid>
         <Grid item xs={3}>
           <ControlledTextField
@@ -157,7 +173,7 @@ const AddODC = (props: AddProps): ReactElement => {
             id="abbreviation"
             error={handleError(errors.abbreviation) || abbrUnqError}
             helperText={
-              getFieldError(errors, "abbreviation") || abbrUnqErrorMsg
+              getFieldError(errors as any, "abbreviation") || abbrUnqErrorMsg
             }
           />
         </Grid>

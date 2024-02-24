@@ -1,13 +1,15 @@
+import type { AxiosError } from "axios";
 import type {
   AllTasksResponse,
-  CreateTask,
-  DeleteId,
   QueryResponse,
+  DeleteTaskId,
   TaskResponse,
-  Team,
+  CreateTask,
   UpdateTask,
+  ForGetTags,
+  UpdateTaskStatus,
+  GetComments,
 } from "~/api/tasks";
-import { AxiosError } from "axios";
 
 import {
   UseMutationResult,
@@ -17,11 +19,13 @@ import {
 } from "react-query";
 
 import {
-  deleteTask,
-  getTasks,
-  getTeam,
-  postTask,
   putUpdateTask,
+  deleteTask,
+  postTask,
+  getTasks,
+  getTags,
+  patchUpdateTaskStatus,
+  getComments,
 } from "~/api/tasks/Tasks";
 
 export const useTasks = (
@@ -31,46 +35,58 @@ export const useTasks = (
   pageNum: string,
 ): UseQueryResult<QueryResponse<AllTasksResponse[]>, AxiosError> => {
   return useQuery(`getTasks-${status}`, () =>
-    getTasks(id, status,  maxItems, pageNum),
+    getTasks(id, status, maxItems, pageNum),
   );
 };
 
 export const usePostTasks = (): UseMutationResult<
-  QueryResponse<CreateTask>,
+  AllTasksResponse,
   AxiosError,
   CreateTask
 > => {
-  return useMutation<QueryResponse<CreateTask>, AxiosError, CreateTask>(
-    postTask,
-  );
+  return useMutation<AllTasksResponse, AxiosError, CreateTask>(postTask);
 };
 
 export const useUpdateTask = (): UseMutationResult<
-  QueryResponse<UpdateTask>,
+  AllTasksResponse,
   AxiosError,
   UpdateTask
 > => {
-  return useMutation<QueryResponse<UpdateTask>, AxiosError, UpdateTask>(
+  return useMutation<AllTasksResponse, AxiosError, UpdateTask>(
     "putUpdateTask",
     putUpdateTask,
+  );
+};
+
+export const useUpdateTaskStatus = (): UseMutationResult<
+  BaseResponse<TaskResponse>,
+  AxiosError,
+  UpdateTaskStatus
+> => {
+  return useMutation<BaseResponse<TaskResponse>, AxiosError, UpdateTaskStatus>(
+    "patchUpdateTaskStatus",
+    patchUpdateTaskStatus,
   );
 };
 
 export const useDeleteTask = (): UseMutationResult<
   TaskResponse,
   AxiosError,
-  DeleteId
+  DeleteTaskId
 > => {
-  return useMutation<TaskResponse, AxiosError, DeleteId>(
+  return useMutation<TaskResponse, AxiosError, DeleteTaskId>(
     "deleteTask",
-    (params) => deleteTask(params.id),
+    params => deleteTask(params.id),
   );
 };
 
-export const useGetTeam = (
-  userId: string,
-): UseQueryResult<QueryResponse<Team[]>, AxiosError> => {
-  return useQuery<QueryResponse<Team[]>, AxiosError>(["getTeam", userId], () =>
-    getTeam(userId),
+export const useGetTags = (): UseQueryResult<ForGetTags, AxiosError> => {
+  return useQuery("getTags", getTags);
+};
+
+export const useComments = (
+): UseQueryResult<QueryResponse<GetComments[]>, AxiosError> => {
+  return useQuery(`getComments`, () =>
+    getComments(),
   );
 };
