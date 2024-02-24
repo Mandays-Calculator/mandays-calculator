@@ -29,7 +29,7 @@ const StyledCopyLinkButton = styled(Button)`
 `;
 
 const GeneratedLink = (props: RenderLinkProps): ReactElement => {
-  const { link, setIsShare, t, estimationCode } = props;
+  const { link, setIsShare, t } = props;
   const {
     mandaysCalculator: { modal },
   } = LocalizationKey;
@@ -72,13 +72,7 @@ const GeneratedLink = (props: RenderLinkProps): ReactElement => {
           <StyledLinkButton
             variant="contained"
             color="primary"
-            onClick={() =>
-              window.open(
-                `${window.location.origin}/mandays-estimation-detail/${estimationCode}`,
-                "_blank",
-                "noreferrer",
-              )
-            }
+            onClick={() => window.open(link, "_blank", "noreferrer")}
           >
             {t(modal.redirect)}
           </StyledLinkButton>

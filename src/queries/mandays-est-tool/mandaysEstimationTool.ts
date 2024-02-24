@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import {
   getEstimationDetails,
   getEstimationLinkDetails,
+  getEstimationHistory,
   getEstimations,
   getTasks,
 } from "~/api/mandays-est-tool/";
@@ -61,4 +62,11 @@ export const useGetEstimationLinkDetails = (linkCode: string) => {
     ["getEstimationLinkDetails", linkCode],
     () => getEstimationLinkDetails(linkCode),
   );
+};
+
+export const useGetEstimationHistory = (params: {
+  projectId: string;
+  userId: string;
+}): UseQueryResult<QueryResponse<EstimationResponse[]>, AxiosError> => {
+  return useQuery("getEstimationsHistory", () => getEstimationHistory(params));
 };

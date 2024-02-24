@@ -18,12 +18,6 @@ export const StyledImageContainer = styled("div")`
   }
 `;
 
-export const StyledFooterContainer = styled("div")`
-  .css-1f1fvv9-MuiPaper-root-MuiAppBar-root {
-    bottom: auto;
-  }
-`;
-
 export const StyledHeader = styled(Stack)({
   background: "#2C8ED1",
   borderRadius: "10px",
@@ -39,3 +33,10 @@ export const StyledText = styled(Typography)({
   fontSize: "1.5rem",
   fontWeight: "600",
 });
+
+export const ShareMandaysContainer = styled("div")(({ theme }) => ({
+  background: theme.palette.secondary.light,
+  height: "100vh",
+  overflowX: "scroll",
+  paddingBottom: "28px",
+}));

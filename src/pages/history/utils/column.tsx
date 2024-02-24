@@ -21,11 +21,12 @@ export const HistoryColumns = ({
   return [
     {
       Header: t(sprintListTableColumns.sprintName),
-      accessor: "sprintName",
+      accessor: "name",
     },
     {
       Header: t(sprintListTableColumns.team),
       accessor: "team",
+      Cell: ({ row }) => <>{row.original.team.name}</>,
     },
     {
       Header: t(sprintListTableColumns.startedDate),

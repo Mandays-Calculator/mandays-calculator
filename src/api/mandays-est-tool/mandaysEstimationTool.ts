@@ -108,3 +108,25 @@ export const mandaysEstimationShareLink = async (
   );
   return response.data;
 };
+
+export const getEstimationHistory = async ({
+  projectId,
+  userId,
+}: {
+  projectId: string;
+  userId: string;
+}): BaseResponse<EstimationResponse[]> => {
+  const apiBasePath = getApiBasePath();
+  if (projectId && userId) {
+    const response = await axios.get<EstimationResponse[]>(
+      `${apiBasePath}/mandays-estimations/histories`,
+      {
+        params: {
+          projectId: projectId,
+          userId: userId,
+        },
+      },
+    );
+    return response.data;
+  }
+};

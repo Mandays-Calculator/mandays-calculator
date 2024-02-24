@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Location, useLocation, useNavigate } from "react-router-dom";
 import { Grid, Typography } from "@mui/material";
-
+import { isUndefined } from "lodash";
 import {
   Alert,
   CustomTab,
@@ -66,17 +66,20 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       setValidateCount(0);
     };
   }, [location.pathname]);
-  const complexities = useCommonOption("complexity");
-  const careerSteps = useCommonOption("career_step");
-  const odcList = useCommonOption("odc");
+
+  const complexities = !isExposed ? useCommonOption("complexity") : [];
+  const careerSteps = !isExposed ? useCommonOption("career_step") : [];
+  const odcList = !isExposed ? useCommonOption("odc") : [];
   const {
     data: estimationData,
     isError: estimationError,
     isLoading: estimationLoading,
-  } = useGetEstimationDetails(estimationId);
+  } = !isExposed
+    ? useGetEstimationDetails(estimationId)
+    : { data: { data: [] }, isError: false, isLoading: false };
 
   const getCareerStepSingleVal: string[] = careerSteps.map(
-    (item) => item.label,
+    (item: { label: string }) => item.label,
   );
 
   const switchTab = (tabId: number): void => {
@@ -91,6 +94,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       estimationName: estimationName,
     });
   };
+
   const constructInitialValue = useCallback((): MandaysForm => {
     if (mode === "edit" || mode === "view") {
       return estimationData
@@ -113,6 +117,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
   });
 
   const estimationName = mandaysForm.values?.summary?.estimationName || "-";
+
   const exportForm = useExportMandaysForm({
     onSubmit: (values) => {
       const { exportBy } = values;
@@ -135,6 +140,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       goBack();
     }
   };
+
   const handleNext = useCallback(async (): Promise<void> => {
     if (mode === "add" || mode === "edit") {
       await mandaysForm.validateForm();
@@ -219,7 +225,12 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
     },
   ];
 
-  if (estimationLoading) {
+  if (
+    estimationLoading ||
+    (isExposed && isUndefined(linkDetails)) ||
+    isUndefined(mandaysForm) ||
+    isUndefined(mandaysForm.values)
+  ) {
     return (
       <PageLoader labelOnLoad={t(mandaysCalculator.estimation.labelLoader)} />
     );
@@ -278,6 +289,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
                 handleNext={handleNext}
                 handleSave={() => mandaysForm.submitForm()}
                 length={stepperObject.length - 1}
+                isExposed={isExposed}
               />
             )}
           </Form>
@@ -292,12 +304,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
         />
       )}
       {isShare && (
-        <ShareModal
-          isShare={isShare}
-          setIsShare={setIsShare}
-          t={t}
-          handleSubmit={() => console.log("submit share modal")}
-        />
+        <ShareModal isShare={isShare} setIsShare={setIsShare} t={t} />
       )}
       {isExposed !== true && estimationError && (
         <Alert

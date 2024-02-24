@@ -135,7 +135,11 @@ export const Table = <T extends object>(props: TableProps<T>): ReactElement => {
                 })}
                 {rows.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={columns.length} align="center">
+                    <TableCell
+                      colSpan={columns.length}
+                      align="center"
+                      sx={{ p: 5 }}
+                    >
                       {noDataLabel || t(common.noDataLabel)}
                     </TableCell>
                   </TableRow>

@@ -10,11 +10,16 @@ export const mandaysCalculatorRoutes: RouteType[] = [
     element: <EstimationDetails />,
   },
   {
+    path: "shared-mandays-estimation-tool/:estimationId",
+    element: <EstimationDetails />,
+    disabledPermissionChecking: true,
+  },
+  {
     path: "mandays-estimation-tool/add-sprint",
     element: <EstimationDetails />,
   },
   {
-    path: "mandays-estimation-detail/:estimationId",
+    path: "mandays-estimation-detail/:estimationId/:estimationCode/:createdDate/:expirationInSec",
     element: <ShareEstimationDetails />,
     protected: false,
   },

@@ -24,6 +24,7 @@ const AlertRenderer = ({
           type="error"
           message={t(common.errorMessage.genericError)}
           open={isErrorLoadingEstimations}
+          duration={3000}
         />
       )}
       {successMessage && (

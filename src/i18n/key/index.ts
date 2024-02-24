@@ -321,6 +321,8 @@ const LocalizationKey = {
   history: {
     detailsBtn: "history.button.details",
     filterPlacholder: "history.filter.placeholder",
+    loadingHistory: "history.label.loadingHistory",
+    noEstimation: "history.label.noEstimation",
   },
   userManagement: {
     label: {
