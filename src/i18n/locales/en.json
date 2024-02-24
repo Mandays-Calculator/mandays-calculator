@@ -425,6 +425,10 @@
     },
     "filter": {
       "placeholder": "Enter Keyword  to  filter  list.."
+    },
+    "label": {
+      "loadingHistory": "Loading estimation history ...",
+      "noEstimation": "No estimation found"
     }
   },
   "userManagement": {
