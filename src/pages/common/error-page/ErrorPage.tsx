@@ -20,7 +20,8 @@ interface ErrorPageProps {
     | "permission-error"
     | "permission-denied"
     | "configuration-error"
-    | "development-mode";
+    | "development-mode"
+    | "expired-link";
 }
 
 const ErrorPage = (props: ErrorPageProps): ReactElement => {
@@ -97,6 +98,20 @@ const ErrorPage = (props: ErrorPageProps): ReactElement => {
             <Typography variant="body2" fontWeight="bold">
               {t(common.pageInProgressDesc)}
             </Typography>
+          </>
+        );
+      case "expired-link":
+        return (
+          <>
+            <Typography variant="h5" fontWeight="bold">
+              Shared Link Expired!
+            </Typography>
+            <Typography variant="body2" fontWeight="bold">
+              Your link has expired. Try requesting from administrator again.
+            </Typography>
+            <CustomButton type="button" onClick={() => navigate("./login")}>
+              {t(common.okayBtn)}
+            </CustomButton>
           </>
         );
       default:

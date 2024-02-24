@@ -1,5 +1,8 @@
 import { CareerSteps } from "~/api/common";
-import { TasksResponse } from "~/api/mandays-est-tool";
+import {
+  EstimationLinkDetailResponse,
+  TasksResponse,
+} from "~/api/mandays-est-tool";
 import { CommonOption } from "~/queries/common/options";
 
 export type EstimationDetailsMode = "edit" | "add" | "view";
@@ -12,6 +15,7 @@ export type EstimationParentFormKeys =
 
 export interface EstimationDetailsProps {
   isExposed?: boolean;
+  linkDetails?: EstimationLinkDetailResponse;
 }
 export type ExportFormValues = {
   exportBy: string;

@@ -12,11 +12,19 @@ type ActionButtonsProps = {
   activeTab: number;
   length: number;
   mode: "view" | "edit" | "add";
+  isExposed?: boolean;
 };
 
 const ActionButtons = (props: ActionButtonsProps): ReactElement => {
-  const { handleBackEvent, handleNext, handleSave, activeTab, length, mode } =
-    props;
+  const {
+    handleBackEvent,
+    handleNext,
+    handleSave,
+    activeTab,
+    length,
+    mode,
+    isExposed,
+  } = props;
   const { common } = LocalizationKey;
   const { t } = useTranslation();
 
@@ -27,13 +35,17 @@ const ActionButtons = (props: ActionButtonsProps): ReactElement => {
       flexDirection={"row"}
       gap={2}
     >
-      <CustomButton
-        colorVariant="neutral"
-        onClick={handleBackEvent}
-        type="button"
-      >
-        {t(common.backBtn)}
-      </CustomButton>
+      {isExposed && activeTab === 0 ? (
+        <></>
+      ) : (
+        <CustomButton
+          colorVariant="neutral"
+          onClick={handleBackEvent}
+          type="button"
+        >
+          {t(common.backBtn)}
+        </CustomButton>
+      )}
       {activeTab < length && (
         <>
           {((mode === "view" && activeTab < 3) ||

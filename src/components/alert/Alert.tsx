@@ -25,7 +25,7 @@ const renderTitle = (type: AlertTypes | undefined): string => {
 };
 
 const Alert = (props: AlertProps): ReactElement => {
-  const { type = "error", open, duration = 5000, message } = props;
+  const { type = "error", open, duration = 3000, message } = props;
   const [openAlert, setOpenAlert] = useState<boolean>(open);
 
   useEffect(() => {

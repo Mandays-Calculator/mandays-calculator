@@ -16,7 +16,7 @@ const AppRoutes = ({
   rolePermissions?: Permission[];
 }): ReactElement => {
   const permissions = rolePermissions.map((role) =>
-    role.path.replace(/^\//, "")
+    role.path.replace(/^\//, ""),
   );
   const publicRoutes = seperateRoutesByType("public");
   const privateRoutes = seperateRoutesByType("private");
