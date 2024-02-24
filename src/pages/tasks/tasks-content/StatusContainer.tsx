@@ -51,16 +51,13 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   const [tasks, setTasks] = useState<AllTasksResponse[]>([]);
   const [page, setPage] = useState<number>(1);
 
-  const { data: tasksData, refetch } = useTasks(
-    teamId,
-    StatusValues[status].toString(),
-    "10",
-    page.toString(),
-  );
+  const {
+    data: tasksData,
+    refetch,
+    isLoading,
+  } = useTasks(teamId, StatusValues[status].toString(), "10", page.toString());
 
   const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const [loading, setLoading] = useState(false);
 
   const tasksDataRef = useRef(tasksData);
 
@@ -70,26 +67,22 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         case "change_status":
           if (status === Status.Backlog || status === Status.OnHold) {
             refreshTaskList();
-            resetHasTaskStateChange();
           }
           break;
         case "create_task":
           if (status === Status.Backlog) {
             refreshTaskList();
-            resetHasTaskStateChange();
           }
           break;
         case "update_task":
         case "delete_task":
           if (status === hasTaskStateChange.task?.status) {
             refreshTaskList();
-            resetHasTaskStateChange();
           }
           break;
         case "mark_completed":
           if (status === Status.InProgress || status === Status.Completed) {
             refreshTaskList();
-            resetHasTaskStateChange();
           }
           break;
       }
@@ -97,7 +90,19 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
   }, [hasTaskStateChange]);
 
   useEffect(() => {
-    refreshTaskList();
+    setTasks([]);
+
+    if (scrollableNodeRef.current) {
+      scrollableNodeRef.current.scrollTop = 0;
+    }
+
+    if (page !== 1) {
+      setPage(1);
+    }
+
+    refetch().catch(error => {
+      console.log(error);
+    });
   }, [teamId]);
 
   useEffect(() => {
@@ -115,6 +120,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
     tasksDataRef.current = tasksData;
   }, [tasksData]);
 
+  // useEffect for lazy loading
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -127,12 +133,21 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
         }
       } catch (error) {
         console.error(error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchData();
+  }, [page, refetch]);
+
+  // useEffect for reset list
+  useEffect(() => {
+    if (hasTaskStateChange) {
+      refetch()
+        .then(() => resetHasTaskStateChange())
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }, [page, refetch]);
 
   // OTHERS
@@ -145,19 +160,32 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
     if (tasksDataRef.current !== undefined) {
       if (
         isAtBottom &&
-        !loading &&
+        !isLoading &&
         page < tasksDataRef.current?.page.lastPage
       ) {
-        setLoading(true);
         setPage(prevPage => prevPage + 1);
       }
     }
   };
 
-  const refreshTaskList = async () => {
+  const refreshTaskList = () => {
+    if (scrollableNodeRef.current) {
+      scrollableNodeRef.current.scrollTop = 0;
+    }
+
     setTasks([]);
-    setPage(1);
-    await refetch();
+
+    if (page !== 1) {
+      setPage(1);
+    } else {
+      if (hasTaskStateChange) {
+        refetch()
+          .then(() => resetHasTaskStateChange())
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    }
   };
 
   // RENDER
