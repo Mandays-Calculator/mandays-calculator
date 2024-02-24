@@ -100,9 +100,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
       setPage(1);
     }
 
-    refetch().catch(error => {
-      console.log(error);
-    });
+    refetchIndicator();
   }, [teamId]);
 
   useEffect(() => {
@@ -141,13 +139,7 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
 
   // useEffect for reset list
   useEffect(() => {
-    if (hasTaskStateChange) {
-      refetch()
-        .then(() => resetHasTaskStateChange())
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    refetchIndicator();
   }, [page, refetch]);
 
   // OTHERS
@@ -178,13 +170,21 @@ const StatusContainer = (props: StatusContainer): ReactElement => {
     if (page !== 1) {
       setPage(1);
     } else {
-      if (hasTaskStateChange) {
-        refetch()
-          .then(() => resetHasTaskStateChange())
-          .catch(error => {
-            console.log(error);
-          });
-      }
+      refetchIndicator();
+    }
+  };
+
+  const refetchIndicator = () => {
+    if (hasTaskStateChange) {
+      refetch()
+        .then(() => resetHasTaskStateChange())
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      refetch().catch(error => {
+        console.log(error);
+      });
     }
   };
 
