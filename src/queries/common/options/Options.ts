@@ -61,7 +61,7 @@ const transformDataToOption = (
         }));
       case "gender":
         return data.map((item: CommonResponseDataObj) => ({
-          label: `${item.name}`,
+          label: `${item.name.replaceAll("_", " ")}`,
           value: item.id,
         }));
       case "career_step":

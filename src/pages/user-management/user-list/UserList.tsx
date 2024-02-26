@@ -4,12 +4,13 @@ import type { UserListData } from "~/api/user-management/types";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { PageLoader, Table } from "~/components";
+import { Alert, PageLoader, Table } from "~/components";
 import { EditUserModal } from "~/pages/user-management/user-management-modal/edit-user-modal";
 import { ConfirmModal } from "~/components/modal/confirm-modal";
 import { useDeleteUser } from "~/mutations/user-management";
 
 import { userListColumns } from "./utils";
+import LocalizationKey from "~/i18n/key";
 
 interface UserListProps {
   userListData?: UserListData[];
@@ -27,14 +28,16 @@ const UserList = ({
   const { t } = useTranslation();
   const DeleteUser = useDeleteUser();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [successDelete, setSuccessDelete] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
-  const [currentUserData, setCurrentUserData] = useState<UserListData>();
   const [currentUser, setCurrentUser] = useState<string>("");
   const [rowId, setRowId] = useState<number>(0);
 
-  const handleEditUser = (currentSelectedUser: UserListData): void => {
+  const { userManagement } = LocalizationKey;
+
+  const handleEditUser = (userId: string): void => {
     setEditModalOpen(true);
-    setCurrentUserData(currentSelectedUser);
+    setCurrentUser(userId);
   };
 
   const handleDeleteUser = (userId: string, rowId: number): void => {
@@ -62,12 +65,14 @@ const UserList = ({
           data={userListData}
         />
 
-        <EditUserModal
-          onEditUser={(): void => {}}
-          currentUser={currentUserData}
-          open={editModalOpen}
-          onClose={() => setEditModalOpen(false)}
-        />
+        {editModalOpen && (
+          <EditUserModal
+            onEditUser={(): void => {}}
+            userId={currentUser}
+            open={editModalOpen}
+            onClose={() => setEditModalOpen(false)}
+          />
+        )}
 
         <ConfirmModal
           onConfirmWithIndex={(): void => {
@@ -76,19 +81,25 @@ const UserList = ({
               {
                 onSuccess: () => {
                   setDeleteModalOpen(false);
+                  setSuccessDelete(true);
                   refetch();
-                },
-                onError: (error) => {
-                  console.log(error);
                 },
               },
             );
           }}
-          message={t("Are you sure you want to delete this User?")}
+          message={t(userManagement.confirmMessage.deleteUser)}
           open={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
           selectedRow={rowId}
         />
+        {successDelete && (
+          <Alert
+            type="success"
+            open={true}
+            duration={3000}
+            message={t(userManagement.successMessage.deleteUser)}
+          />
+        )}
       </>
     );
   }

@@ -19,8 +19,10 @@ export const renderGender = (gender: Gender): string => {
     case "MALE":
       return "2";
     case "NON_BINARY":
+    case "NON BINARY":
       return "3";
     case "PREFER_NOT_TO_SAY":
+    case "PREFER NOT TO SAY":
       return "4";
     default:
       return "";
@@ -66,7 +68,7 @@ export const UserManagementSchema = (t: TFunction) => {
     employeeId: yup.string().required(t(common.errorMessage.required)),
     gender: yup.string().required(t(common.errorMessage.required)),
     middleName: yup.string(),
-    odcId: yup.string(),
+    odcId: yup.string().required(t(common.errorMessage.required)),
     suffix: yup.string(),
     email: yup
       .string()
@@ -74,7 +76,7 @@ export const UserManagementSchema = (t: TFunction) => {
       .required(t(common.errorMessage.required)),
     projectName: yup.string(),
     teamName: yup.string(),
-    roles: yup.array(),
+    roles: yup.array().min(1, "Must have at least 1 role"),
     joiningDate: yup
       .string()
       .when("recentlyJoinedlaterDate", (recentlyJoinedlaterDate, schema) => {
