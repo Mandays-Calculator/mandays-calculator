@@ -32,6 +32,8 @@ import ComplexityDetails from "./complexity-details";
 
 import { Status, StatusValues } from "./utils";
 
+import * as yup from "yup";
+
 interface CreateOrUpdateTaskProps {
   open: boolean;
   update?: boolean;
@@ -101,9 +103,21 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     }
   }, [currentTask]);
 
+  const handleError = (error: string | undefined): boolean => {
+    return error !== undefined;
+  };
+  const createOrUpdateSchema = yup.object({
+    name: yup.string().required("This field is required"),
+    description: yup.string().required("This field is required"),
+    _functionality: yup.string().required("This field is required"),
+    _tags: yup.array(yup.string()).required("This field is required"),
+    _complexity: yup.string().required("This field is required"),
+  });
+
   // CRUD
   const createOrUpdateForm = useFormik({
     initialValues: task,
+    validationSchema: createOrUpdateSchema,
     onSubmit: (e: AllTasksResponse) => createOrUpdateFormSubmit(e),
   });
 
@@ -129,12 +143,12 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     };
 
     postTasks.mutate(createData, {
-      onSuccess: data => {
+      onSuccess: (data) => {
         if (onCreateTask) {
           onCreateTask(data);
         }
       },
-      onError: error => {
+      onError: (error) => {
         console.log(error);
       },
     });
@@ -153,12 +167,12 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     };
 
     putTasks.mutate(updatedData, {
-      onSuccess: data => {
+      onSuccess: (data) => {
         if (update && onUpdateTask) {
           onUpdateTask(data);
         }
       },
-      onError: error => {
+      onError: (error) => {
         console.log(error);
       },
     });
@@ -198,7 +212,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
     const _selectedTags = e as string[];
     let tags: Tag[] = [];
 
-    _selectedTags.map(selectedTag => {
+    _selectedTags.map((selectedTag) => {
       const findSelectedTag = _.find(
         tagsOption,
         _.matchesProperty("value", selectedTag),
@@ -255,7 +269,7 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             ? t(LocalizationKey.tasks.updateTask.modalTitle)
             : t(LocalizationKey.tasks.createTask.modalTitle)
         }
-        maxWidth='sm'
+        maxWidth="sm"
         onClose={onCloseCreateOrUpdateTask}
       >
         <CloseContainer>
@@ -268,7 +282,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <ControlledTextField
-                name='name'
+                name="name"
+                helperText={createOrUpdateForm.errors.name}
+                error={handleError(createOrUpdateForm.errors.name)}
                 label={t(LocalizationKey.tasks.createTask.label.taskTitle)}
                 placeholder={t(
                   LocalizationKey.tasks.createTask.placeholder.taskTitle,
@@ -279,7 +295,8 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
             <Grid item xs={12}>
               <ControlledTextField
-                name='description'
+                name="description"
+                helperText={createOrUpdateForm.errors.description}
                 label={t(LocalizationKey.tasks.createTask.label.description)}
                 placeholder={t(
                   LocalizationKey.tasks.createTask.placeholder.description,
@@ -296,7 +313,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                   {t(LocalizationKey.tasks.createTask.label.functionality)}
                 </CreateOrUpdateLabel>
                 <ControlledSelect
-                  name='_functionality'
+                  name="_functionality"
+                  helperText={createOrUpdateForm.errors._functionality}
+                  error={handleError(createOrUpdateForm.errors._functionality)}
                   placeholder={t(
                     LocalizationKey.tasks.createTask.placeholder.functionality,
                   )}
@@ -307,17 +326,19 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
 
               <Grid item xs={12} sm={6}>
                 <ComplexityLabel
-                  direction='row'
+                  direction="row"
                   spacing={1}
                   onClick={() => handleOpenComplexity()}
                 >
                   <CreateOrUpdateLabel>
                     {t(LocalizationKey.tasks.createTask.label.complexity)}
                   </CreateOrUpdateLabel>
-                  <InfoOutlinedIcon fontSize='small' />
+                  <InfoOutlinedIcon fontSize="small" />
                 </ComplexityLabel>
                 <ControlledSelect
-                  name='_complexity'
+                  name="_complexity"
+                  helperText={createOrUpdateForm.errors._complexity}
+                  error={handleError(createOrUpdateForm.errors._complexity)}
                   placeholder={t(
                     LocalizationKey.tasks.createTask.placeholder.complexity,
                   )}
@@ -332,7 +353,9 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
                 {t(LocalizationKey.tasks.createTask.label.tags)}
               </CreateOrUpdateLabel>
               <ControlledSelect
-                name='_tags'
+                name="_tags"
+                helperText={createOrUpdateForm.errors._tags}
+                error={handleError(createOrUpdateForm.errors._tags)}
                 placeholder={t(
                   LocalizationKey.tasks.createTask.placeholder.tags,
                 )}
@@ -343,8 +366,12 @@ const CreateOrUpdateTask = (props: CreateOrUpdateTaskProps): ReactElement => {
             </Grid>
           </Grid>
 
-          <Stack direction='row' justifyContent='flex-end' marginTop={"10px"}>
-            <CustomButton type='submit' colorVariant='primary'>
+          <Stack direction="row" justifyContent="flex-end" marginTop={"10px"}>
+            <CustomButton
+              type="submit"
+              colorVariant="primary"
+              disabled={!createOrUpdateForm.isValid}
+            >
               {update
                 ? t(LocalizationKey.tasks.updateTask.btnLabel.update)
                 : t(LocalizationKey.tasks.createTask.btnLabel.create)}
