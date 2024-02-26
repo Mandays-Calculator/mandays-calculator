@@ -93,7 +93,7 @@
         },
         "forgotPassword": {
           "required": "Please enter your email.",
-          "incorrectEmail": "Incorrect Email"
+          "incorrectEmail": "Incorrect Email."
         },
         "login": {
           "usernameRequired": "Username is required.",
