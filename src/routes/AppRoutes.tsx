@@ -30,7 +30,7 @@ const AppRoutes = ({
         ...errorHandlerRoutes,
         ...authRoutes.map((routeItem: RouteType) => ({
           ...routeItem,
-          element: <Navigate to="/" />,
+          element: <Navigate to="/dashboard" />,
         })),
       ]
     : [
