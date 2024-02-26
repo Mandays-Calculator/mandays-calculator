@@ -71,6 +71,7 @@ const LocalizationKey = {
     },
     placeholder: "forgotPassword.placeholder",
     errorRequired: "common.errorMessage.auth.forgotPassword.required",
+    incorrectEmail: "common.errorMessage.auth.forgotPassword.incorrectEmail"
   },
   footerLabel: "footer.label",
   common: {

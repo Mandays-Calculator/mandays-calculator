@@ -92,7 +92,8 @@
           "confirmRequired": "Confirm Password is required."
         },
         "forgotPassword": {
-          "required": "Please enter your email."
+          "required": "Please enter your email.",
+          "incorrectEmail": "Incorrect Email."
         },
         "login": {
           "usernameRequired": "Username is required.",
@@ -107,7 +108,7 @@
     },
     "label": {
       "signIn": "Sign In",
-      "userName": "Username",
+      "userName": "Email",
       "password": "Password",
       "forgotPassword": "Forgot Password"
     },
@@ -115,7 +116,7 @@
       "signIn": "Sign In"
     },
     "placeholder": {
-      "userName": "Enter Username",
+      "userName": "Enter Email",
       "password": "Enter Password"
     }
   },
@@ -136,7 +137,7 @@
       "uppercase": "Password must contain an uppercase letter",
       "lowercase": "Password must contain a lowercase letter",
       "number": "Password must contain a number",
-      "symbol": "Password must contain one of the following symbols (#$-_!)",
+      "symbol": "Password must contain at least one special character or symbol",
       "match": "New password and confirm new password must match."
     },
     "placeholder": {
