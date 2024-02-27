@@ -80,6 +80,7 @@
       "fieldRequired": "{{field}} is required.",
       "unauthorized": "Your session has expired. Please login again.",
       "genericError": "There is a problem with your request. Please contact your system administrator.",
+      "genericErrorSubmit": "There is a problem in your submitted data. Please check",
       "auth": {
         "changePassword": {
           "minLength": "Password must be at least 8 characters long.",
@@ -92,7 +93,8 @@
           "confirmRequired": "Confirm Password is required."
         },
         "forgotPassword": {
-          "required": "Please enter your email."
+          "required": "Please enter your email.",
+          "incorrectEmail": "Incorrect Email."
         },
         "login": {
           "usernameRequired": "Username is required.",
@@ -107,7 +109,7 @@
     },
     "label": {
       "signIn": "Sign In",
-      "userName": "Username",
+      "userName": "Email",
       "password": "Password",
       "forgotPassword": "Forgot Password"
     },
@@ -115,7 +117,7 @@
       "signIn": "Sign In"
     },
     "placeholder": {
-      "userName": "Enter Username",
+      "userName": "Enter Email",
       "password": "Enter Password"
     }
   },
@@ -136,7 +138,7 @@
       "uppercase": "Password must contain an uppercase letter",
       "lowercase": "Password must contain a lowercase letter",
       "number": "Password must contain a number",
-      "symbol": "Password must contain one of the following symbols (#$-_!)",
+      "symbol": "Password must contain at least one special character or symbol",
       "match": "New password and confirm new password must match."
     },
     "placeholder": {
@@ -433,7 +435,12 @@
     }
   },
   "userManagement": {
+    "title": "User Management",
     "label": {
+      "editUser": "Edit User",
+      "addUser": "Add User",
+      "cancel": "Cancel",
+      "save": "Save",
       "firstName": "First Name",
       "lastName": "Last Name",
       "middleName": "Middle Name",
@@ -452,6 +459,14 @@
     },
     "errorMessage": {
       "email": "Invalid email format."
+    },
+    "successMessage": {
+      "updated": "User successfully updated",
+      "added": "User successfully added",
+      "deleted": "User successfully deleted"
+    },
+    "confirmMessage": {
+      "deleteUser": "Are you sure you want to delete this User?"
     }
   },
   "complexity": {

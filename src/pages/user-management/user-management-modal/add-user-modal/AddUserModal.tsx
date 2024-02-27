@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { FormikContextType } from "formik";
+import { type FormikContextType } from "formik";
 import type { UserManagementForms } from "~/pages/user-management/types";
 
 import { useState } from "react";
@@ -14,7 +14,6 @@ import {
   RadioGroup,
   Stack,
 } from "@mui/material";
-import moment from "moment";
 
 import {
   ControlledDatePicker,
@@ -62,7 +61,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   isError,
 }): ReactElement => {
   const { t } = useTranslation();
-  const { userManagement } = LocalizationKey;
+  const { userManagement, common } = LocalizationKey;
   const [selectedJoinedDate, setSelectedJoinedDate] =
     useState("recentlyJoined");
 
@@ -86,7 +85,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
       return (
         <Alert
           open={isError}
-          message={"There is a problem in your submitted data. Please check"}
+          message={t(common.errorMessage.genericErrorSubmit)}
           type={"error"}
         />
       );
@@ -94,7 +93,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
     return (
       <Alert
         open={isSuccess}
-        message={"User successfully added"}
+        message={t(userManagement.successMessage.addUser)}
         type={"success"}
       />
     );
@@ -102,7 +101,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
-        <StyledModalTitle>Add User</StyledModalTitle>
+        <StyledModalTitle>{t(userManagement.label.addUser)}</StyledModalTitle>
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
@@ -159,6 +158,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               <ControlledSelect
                 name="gender"
                 options={genderValueNumToStr()}
+                placeholder="Gender"
                 error={!!form.errors.gender}
                 value={form.values.gender || ""}
               />
@@ -217,7 +217,6 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
                 {selectedJoinedDate == "recentlyJoined" ? (
                   <ControlledDatePicker
                     name="joiningDate"
-                    value={moment().format("YYYY-MM-DD")}
                     dateFormat="yyyy/MM/dd"
                     disabled
                   />
@@ -253,7 +252,11 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               options={odcOptions}
               name="odcId"
               value={form.values.odcId || ""}
+              helperText={getFieldError(form.errors as FormErrors, "odcId")}
             />
+            <StyledError>
+              {getFieldError(form.errors as FormErrors, "odcId")}
+            </StyledError>
           </Grid>
           <Grid item xs={5}>
             <StyledTitle mb={0.5}>{t(userManagement.label.roles)}</StyledTitle>
@@ -263,6 +266,9 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
               name="roles"
               value={form.values.roles || ""}
             />
+            <StyledError>
+              {getFieldError(form.errors as FormErrors, "roles")}
+            </StyledError>
           </Grid>
           <Grid item xs={7}>
             <StyledTitle mb={0.5}>
@@ -295,7 +301,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             onClick={onClose}
             style={{ marginRight: 16 }}
           >
-            Cancel
+            {t(userManagement.label.cancel)}
           </CustomButton>
           <CustomButton
             type="submit"
@@ -303,7 +309,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({
             color="primary"
             onClick={() => OnSubmit()}
           >
-            Add User
+            {t(userManagement.label.addUser)}
           </CustomButton>
           {!status.loading && renderAlert()}
         </Box>

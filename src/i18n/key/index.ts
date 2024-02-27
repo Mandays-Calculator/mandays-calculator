@@ -71,6 +71,7 @@ const LocalizationKey = {
     },
     placeholder: "forgotPassword.placeholder",
     errorRequired: "common.errorMessage.auth.forgotPassword.required",
+    incorrectEmail: "common.errorMessage.auth.forgotPassword.incorrectEmail"
   },
   footerLabel: "footer.label",
   common: {
@@ -107,6 +108,7 @@ const LocalizationKey = {
     },
     errorMessage: {
       genericError: "common.errorMessage.genericError",
+      genericErrorSubmit: "common.errorMessage.genericErrorSubmit",
       required: "common.errorMessage.required",
       fieldRequired: "common.errorMessage.fieldRequired",
       unauthorized: "common.errorMessage.unauthorized",
@@ -326,7 +328,12 @@ const LocalizationKey = {
     noEstimation: "history.label.noEstimation",
   },
   userManagement: {
+    title: "userManagement.title",
     label: {
+      editUser: "userManagement.label.editUser",
+      cancel: "userManagement.label.cancel",
+      addUser: "userManagement.label.addUser",
+      save: "userManagement.label.save",
       firstName: "userManagement.label.firstName",
       lastName: "userManagement.label.lastName",
       middleName: "userManagement.label.middleName",
@@ -343,9 +350,16 @@ const LocalizationKey = {
       teamId: "userManagement.label.teamId",
       roles: "userManagement.label.roles",
     },
-
     errorMessage: {
       email: "userManagement.errorMessage.email",
+    },
+    successMessage: {
+      updateUser: "userManagement.successMessage.updated",
+      addUser: "userManagement.successMessage.added",
+      deleteUser: "userManagement.successMessage.deleted",
+    },
+    confirmMessage: {
+      deleteUser: "userManagement.confirmMessage.deleted",
     },
   },
   odc: {

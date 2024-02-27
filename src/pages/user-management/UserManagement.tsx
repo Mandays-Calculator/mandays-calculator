@@ -23,11 +23,13 @@ import LocalizationKey from "~/i18n/key";
 import { UserManagementFormValues, UserManagementSchema } from "./utils";
 import UserList from "./user-list";
 import Header from "./header";
+
 const UserManagement = (): ReactElement => {
   const { t } = useTranslation();
   const AddUser = useAddUser();
   const [successAddUser, setSuccessAddUser] = useState<boolean>(false);
   const [errorAddUser, setErrorAddUser] = useState<boolean>(false);
+
   const [status, callApi] = useRequestHandler(
     AddUser.mutate,
     () => setSuccessAddUser(true),
@@ -37,8 +39,12 @@ const UserManagement = (): ReactElement => {
     initialValues: UserManagementFormValues,
     validationSchema: UserManagementSchema(t),
     validateOnChange: false,
-
     onSubmit: (values) => {
+      const joiningDateValue = moment(values.joiningDate);
+      const isValidJoiningDate = joiningDateValue.isValid()
+        ? joiningDateValue.format("YYYY-MM-DD")
+        : moment(new Date()).format("YYYY-MM-DD");
+
       const AddUserForm: UserManagementForms = {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -49,9 +55,7 @@ const UserManagement = (): ReactElement => {
         employeeId: values.employeeId,
         odcId: values.odcId || "",
         careerStep: values.careerStep || "",
-        joiningDate:
-          moment(values.joiningDate).format("YYYY-MM-DD") ||
-          moment().format("YYYY-MM-DD"),
+        joiningDate: isValidJoiningDate,
         projectId: values.projectId || "",
         teamId: values.teamId || "",
         roles: values.roles || [],
@@ -120,7 +124,7 @@ const UserManagement = (): ReactElement => {
 
   return (
     <>
-      <Title title="User Management" />
+      <Title title={t(LocalizationKey.userManagement.title)} />
       <PageContainer>
         <Form instance={UserManagementForm}>
           <Stack direction={"column"} spacing={2}>

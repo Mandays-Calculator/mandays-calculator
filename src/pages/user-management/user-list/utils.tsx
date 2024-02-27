@@ -60,7 +60,7 @@ export const userListColumns = ({
           <>
             <IconButton
               onClick={() => {
-                onEditUser(row.original);
+                onEditUser(row.original.id);
               }}
               data-testid="test-edit-user-btn"
             >
