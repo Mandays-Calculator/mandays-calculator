@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
@@ -16,7 +16,7 @@ const ImageUpload = ({
   initialValue,
   setFieldValue,
 }: ImageUploadProps): ReactElement => {
-  const [base64Image, setBase64Image] = useState<string>(initialValue);
+  const [base64Image, setBase64Image] = useState<string>("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -31,6 +31,16 @@ const ImageUpload = ({
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    if (initialValue) {
+      setBase64Image(initialValue);
+    }
+
+    return () => {
+      setBase64Image("");
+    };
+  }, [initialValue]);
 
   return (
     <ImageUploadContainer>

@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import type { UserListData } from "~/api/user-management/types";
 import type {
   UpdateUserManagementParams,
   UserManagementForms,
@@ -8,7 +7,7 @@ import type {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Box, Dialog, Grid, Stack, Typography, styled } from "@mui/material";
+import { Box, Dialog, Grid, Stack } from "@mui/material";
 import { useFormikContext } from "formik";
 import moment from "moment";
 
@@ -18,11 +17,17 @@ import {
   ControlledTextField,
 } from "~/components/form/controlled";
 import { CustomButton } from "~/components/form/button";
-import { useUserList } from "~/queries/user-management/UserManagement";
+
+import {
+  useUserByID,
+  useUserList,
+} from "~/queries/user-management/UserManagement";
+
 import { useEditUser } from "~/mutations/user-management";
 import { useRequestHandler } from "~/hooks/request-handler";
-import { Alert, ImageUpload } from "~/components";
+import { ImageUpload } from "~/components";
 import LocalizationKey from "~/i18n/key";
+
 import {
   genderValueNumToStr,
   commonOptionsAPI,
@@ -30,39 +35,29 @@ import {
   renderGender,
 } from "~/pages/user-management/utils";
 
-const StyledModalTitle = styled(Typography)({
-  fontWeight: 600,
-  fontStyle: "normal",
-  fontFamily: "Montserrat",
-  color: "#414145",
-  fontSize: "1.125rem",
-  paddingBottom: "18px",
-});
-const StyledTitle = styled(Typography)({
-  color: "#414145",
-  fontSize: 14,
-  fontFamily: "Montserrat",
-  fontWeight: "400",
-  wordWrap: "break-word",
-});
+import { StyledModalTitle, StyledTitle } from "./styles";
+import AlertRenderer from "./AlertRenderer";
 
 interface EditUserModalProps {
   onEditUser: () => void;
   open: boolean;
   onClose: () => void;
-  currentUser?: UserListData;
+  userId: string;
 }
 export const EditUserModal: React.FC<EditUserModalProps> = ({
   open,
   onClose,
-  currentUser,
+  userId,
 }): ReactElement => {
-  const date = moment(currentUser?.joiningDate).format("YYYY-MM-DD");
   const { t } = useTranslation();
   const { userManagement } = LocalizationKey;
   const { values } = useFormikContext<UserManagementForms>();
   const { refetch } = useUserList();
+  const selectedUser = useUserByID(userId);
 
+  const currentUser = selectedUser.data?.data;
+
+  const date = moment(currentUser?.joiningDate).format("YYYY-MM-DD");
   const [isEditSuccess, setIsEditSuccess] = useState<boolean>(false);
   const [isEditError, setIsEditError] = useState<boolean>(false);
   const EditUser = useEditUser(currentUser?.id ?? "");
@@ -73,12 +68,15 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   );
   const projectOptions = commonOptionsAPI("project");
   const teamOptions = commonOptionsAPI("team");
+
   const EditUserForm: UserManagementForms = {
     firstName: values?.updateFirstName ?? "",
     lastName: values?.updateLastName ?? "",
     middleName: values?.updateMiddleName ?? "",
     suffix: values?.updateSuffix ?? "",
-    gender: Number(values?.updateGender) ?? 0,
+    gender: isNaN(Number(values.updateGender))
+      ? renderGender(values?.updateGender)
+      : Number(values.updateGender),
     email: values?.updateEmail ?? "",
     employeeId: values?.updateEmployeeId ?? "",
     odcId: values?.updateOdcId ?? "",
@@ -89,17 +87,20 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
     roles: values?.updateRoles ?? [],
     image: values.updateImage || "",
   };
-  const submit = () => {
+
+  const submit = async () => {
     callApi(EditUserForm);
   };
+
   const form = useFormikContext<UpdateUserManagementParams>();
+
   useEffect(() => {
     form.setValues({
       updateFirstName: currentUser?.firstName ?? "",
       updateLastName: currentUser?.lastName ?? "",
       updateMiddleName: currentUser?.middleName ?? "",
       updateSuffix: currentUser?.suffix ?? "",
-      updateGender: currentUser?.gender ?? "",
+      updateGender: renderGender(currentUser?.gender) ?? "",
       updateEmail: currentUser?.email ?? "",
       updateImage: currentUser?.image ?? "",
       updateEmployeeId: currentUser?.employeeId ?? "",
@@ -112,6 +113,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
       updateRoles: currentUser?.roles ?? [],
     });
   }, [currentUser]);
+
   useEffect(() => {
     if (isEditSuccess) {
       setTimeout(() => {
@@ -126,7 +128,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
   return (
     <Dialog maxWidth={"md"} open={open} onClose={onClose}>
       <Stack width={"58rem"} padding={"2rem"}>
-        <StyledModalTitle>Edit User</StyledModalTitle>
+        <StyledModalTitle>{t(userManagement.label.editUser)}</StyledModalTitle>
         <Grid container columnSpacing={1.5} rowGap={1}>
           <Grid item xs={3.5}>
             <Stack>
@@ -168,8 +170,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
               </StyledTitle>
               <ControlledSelect
                 name="updateGender"
+                placeholder="Gender"
                 options={genderValueNumToStr()}
-                value={renderGender(form.values.updateGender) || ""}
               />
             </Grid>
           </Grid>
@@ -253,27 +255,17 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({
             onClick={onClose}
             style={{ marginRight: 16 }}
           >
-            Cancel
+            {t(userManagement.label.cancel)}
           </CustomButton>
           <CustomButton variant="contained" color="primary" onClick={submit}>
-            Save
+            {t(userManagement.label.save)}
           </CustomButton>
-          {!status.loading && (
-            <>
-              <Alert
-                open={isEditError}
-                message={
-                  "There is a problem in your submitted data. Please check"
-                }
-                type={"error"}
-              />
-              <Alert
-                open={isEditSuccess}
-                message={"User successfully updated"}
-                type={"success"}
-              />
-            </>
-          )}
+          <AlertRenderer
+            status={status}
+            isEditError={isEditError}
+            isEditSuccess={isEditSuccess}
+            selectedUser={selectedUser}
+          />
         </Box>
       </Stack>
     </Dialog>

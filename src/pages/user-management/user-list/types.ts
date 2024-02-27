@@ -4,7 +4,7 @@ import { UserListData } from "~/api/user-management/types";
 
 export type UserColumnsProps = {
   t: TFunction<"translation", undefined>;
-  onEditUser: (currentUserData: UserListData) => void;
+  onEditUser: (userId: string) => void;
   onDeleteUser: (userId: string, rowId: number) => void;
 };
 

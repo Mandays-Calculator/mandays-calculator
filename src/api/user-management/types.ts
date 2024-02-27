@@ -63,3 +63,46 @@ export interface GetUsersParam {
   roles?: string;
   keyword?: string;
 }
+
+interface ODC {
+  id: string;
+  name: string;
+  abbreviation: string;
+  location: string;
+  holidays: any; // You might want to specify a more specific type for holidays
+  active: boolean;
+}
+
+interface Team {
+  id: string;
+  name: string;
+}
+
+interface Project {
+  id: string;
+  name: string;
+  teams: Team[];
+}
+
+interface UserData {
+  id: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  email: string;
+  joiningDate: string;
+  roles: string[];
+  odc: ODC;
+  gender: string;
+  employeeId: string;
+  careerStep: string;
+  projects: Project[];
+  active: boolean;
+  fullName: string;
+  suffix: string;
+  image: string;
+}
+
+export interface GetUserByIdResponse {
+  data: UserData;
+}
