@@ -228,6 +228,7 @@
         "endDate": "End date must be later than start date"
       }
     },
+    "sharedLinkSuccessMessage":"Link successfully generated",
     "title": "Mandays Calculator",
     "label": "Current Estimation",
     "generatingPDFLabel": "Generating your PDF. Please wait ...",

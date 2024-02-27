@@ -66,7 +66,6 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       setValidateCount(0);
     };
   }, [location.pathname]);
-
   const complexities = !isExposed ? useCommonOption("complexity") : [];
   const careerSteps = !isExposed ? useCommonOption("career_step") : [];
   const odcList = !isExposed ? useCommonOption("odc") : [];
@@ -306,6 +305,7 @@ const EstimationDetails = (props: EstimationDetailsProps): ReactElement => {
       {isShare && (
         <ShareModal isShare={isShare} setIsShare={setIsShare} t={t} />
       )}
+
       {isExposed !== true && estimationError && (
         <Alert
           type="error"
