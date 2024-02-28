@@ -127,6 +127,7 @@ const LocalizationKey = {
     },
   },
   mandaysCalculator: {
+    sharedLinkSuccessMessage: "mandaysCalculator.sharedLinkSuccessMessage",
     errorMessages: {
       resourceRequired: "mandaysCalculator.errorMessages.resource.required",
       pleaseSelect1Resource:

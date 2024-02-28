@@ -90,8 +90,8 @@ const ShareModal = ({
       return (
         <Alert
           open={isError}
-          message={"There is a problem in your submitted data. Please check"}
           duration={3000}
+          message={t(LocalizationKey.common.errorMessage.genericError)}
           type={"error"}
         />
       );
@@ -99,7 +99,7 @@ const ShareModal = ({
     return (
       <Alert
         open={isSuccess}
-        message={"Link successfully generated"}
+        message={t(LocalizationKey.mandaysCalculator.sharedLinkSuccessMessage)}
         duration={3000}
         type={"success"}
       />
@@ -107,7 +107,7 @@ const ShareModal = ({
   };
 
   useEffect(() => setSuccess(false), [shareForm?.values?.shareBy]);
-
+  const team = "Registration team";
   const renderExpirationSelection = (): ReactElement => {
     return (
       <Grid container sx={{ mt: 1 }}>
@@ -145,7 +145,7 @@ const ShareModal = ({
           >
             {t(modal.shareTitle)}
             <Typography variant="body1" color={"primary"}>
-              {t(modal.shareSubtitle)}: Registration team
+              {t(modal.shareSubtitle)}: {team}
             </Typography>
           </Typography>
         </Stack>

@@ -89,8 +89,9 @@ export const createEstimation = async (
 export const getEstimationLinkDetails = async (
   linkCode: string,
 ): BaseResponse<EstimationLinkDetailResponse> => {
+  const apiBasePath = getApiBasePath();
   const response = await axios.get<EstimationLinkDetailResponse>(
-    `http://localhost:18001/mandays-estimations/links?code=${linkCode}`,
+    `${apiBasePath}/mandays-estimations/links?code=${linkCode}`,
   );
   return response.data;
 };
