@@ -6,4 +6,5 @@ export type {
   DeleteUserParam,
   DeleteUserResponse,
   GetUsersParam,
+  GetUserByIdResponse,
 } from "./types";

@@ -8,6 +8,7 @@ import {
   DeleteUserParam,
   GetUsersParam,
 } from ".";
+import { GetUserByIdResponse } from "./types";
 
 export const getUserList = async (
   params: GetUsersParam | undefined,
@@ -48,6 +49,7 @@ export const EditUser = async (
   });
   return res;
 };
+
 export const DeleteUser = async (
   param: DeleteUserParam,
 ): Promise<DeleteUserResponse> => {
@@ -55,5 +57,14 @@ export const DeleteUser = async (
   const res = await axios.delete<DeleteUserResponse>(
     `${apiBasePath}/users/${param.id}`,
   );
+  return res.data;
+};
+
+export const getUserById = async (
+  userId: string,
+): Promise<GetUserByIdResponse> => {
+  const { apiBasePath } = getEnvConfig();
+  const apiUrl = `${apiBasePath}/users/${userId}`;
+  const res = await axios.get<GetUserByIdResponse>(apiUrl);
   return res.data;
 };

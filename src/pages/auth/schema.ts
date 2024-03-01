@@ -12,7 +12,10 @@ export const loginSchema = (t: TFunction) => {
 };
 export const forgotPasswordSchema = (t: TFunction) => {
   return yup.object({
-    usernameOrEmail: yup.string().required(t(forgotPassword.errorRequired)),
+    usernameOrEmail: yup
+      .string()
+      .email(t(forgotPassword.incorrectEmail))
+      .required(t(forgotPassword.errorRequired)),
   });
 };
 
